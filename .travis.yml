@@ -7,12 +7,14 @@ script:
 - mvn install
 before_deploy:
 - export TAF_VERSION=$(ls target/TestAutomationFramework-*.jar)
+- export MVN_PROJECT_VERSION=${project.version}
 deploy:
   provider: releases
   api_key:
     secure: ejSn6qq9bhvh8LbW1kPoD75XX+TD4iP0aPLzv4pd6oDklXXjivwolZ7re/ztLEYv3yAvmdlEfsnIg7cLtyyWaAweHCjfKwUEx6qeiavP3GpbJ8p3X8Od3GYjWHotsu674GIIllyQbJ5l07PlmZNd7Swc7jfUkf29Yqlz5ekI6uWoDcIc3OS3n7P/nJcePX16On0OulSwrb9TPAOFKjH89gKdUJa0/CpyxPKu+to5G0fdh90C93j5wljArlwi/q8mrftCTq0h38LoprZbIcDFjhENQLUhdeRH7Bj3ZJDFqzYrCedXlxctp5m4mn0DP1gtxPNJx/EkynLvBPt6Kfoc3VyINlhGm0h750DFNwTRKW77jONtZdg+j3AWVCQyHt29DT3x0Hbr6btyMeovIJ78npkjaTVxw3/xj2TfwQPyH1W257iN7r6502rln1Fe70QzASl7we7mEV2smgezxopotPHukG4ZQc7YsDTmnPp7mWizLQhUFUNnUV9YjvOQ67yN3tnFbZrktvbE4pR7QVNoG7UdlxSuqv/nuiSfsknI4RW1+KV9IFvt26YfquT58DNNSnKinS4z8uf2zys/ZI9KH7ba0QcY9cC+hT2xXVIR0git4LKuBMA7PK4ktU42+KSMajmHvrPgQwwAevat3SScdaKvSezDIsV/DxzxR1cIXWg=
   skip_cleanup: true
-  file: "${TAF_VERSION}"
+  #file: "${TAF_VERSION}"
+  file: "target/TestAutomationFramework-${MVN_PROJECT_VERSION}.jar"
   overwrite: true
   on:
     tags: true

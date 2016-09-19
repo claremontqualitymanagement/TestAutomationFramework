@@ -148,10 +148,12 @@
             <name>TestAutomationFramework</name>
             <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
         </repository>
+        <!--
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        -->
     </distributionManagement>
 
     <properties>
