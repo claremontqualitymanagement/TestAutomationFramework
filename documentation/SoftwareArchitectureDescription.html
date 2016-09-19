@@ -1,0 +1,978 @@
+<html>
+  <head>
+      <title>SAD AutoTest</title>
+      <meta charset="UTF-8">
+      <meta name="description" content="Test automation framework introduction">
+
+      <style>
+          body             { background-color: darkGrey; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: large; }
+          td               { padding: 5px; }
+          table#structure  { background-color: white; border-spacing: 5px; border-collapse: separate; }
+          table#info       { background-color: white; border-spacing: 5px; border-collapse: separate; }
+          table#packages   { background-color: white; }
+          td.framed        { border: 2px solid darkGrey; }
+          td.topText       { vertical-align: top; }
+          td.midText       { vertical-align: center; }
+          td#user          { background-color: beige; }
+          td#tests         { background-color: gainsboro; }
+          td#applicationDescription { background-color: lavender; }
+          td#testActions   { background-color: lightBlue; }
+          td#pageObject    { background-color: lightblue; }
+          td#navigation    { background-color: lightBlue; }
+          td#dataFactory   { background-color: lightBlue; }
+          td#integrations  { background-color: azure; }
+          td#unitTest      { background-color: azure; }
+          td#framework     { background-color: cornSilk; }
+          td.frameworkContent { background-color: bisque; }
+          td#runner        { background-color: lightGrey; }
+          td#drivers       { background-color: lightYellow; }
+          td.driverBox     { background-color: paleGoldenRod; }
+          td#sut           { background-color: pink; }
+          td#driverAbstractions { background-color: cyan; }
+          td.driverAbstraction { background-color: lightBlue; }
+          td.figureText    { background-color: honeyDew; text-align: center; }
+          td.testCase      { background-color: pink; }
+          td#testrun       { background-color: azure; }
+          td.testSet       { background-color: beige; }
+          td.testCaseLog           { background-color: cornSilk; }
+          td.testCaseData  { background-color: paleGoldenRod; }
+          td#summaryLogBox { background-color: lavender; }
+          td#settings      { background-color: lightblue; }
+          td.darkCell      { background-color: deepSkyBlue; }
+          td.knownError    { background-color: lightSalmon; }
+          td#indexPane     { background-color: honeyDew; padding: 40px; }
+          td#contentPane   { background-color: honeyDew; padding: 40px; }
+          h1               { color: darkSlateBlue; }
+          h2               { color: darkBlue; }
+          p                { color: darkSlateGrey; }
+          a                { color: darkSlateGrey; }
+          table#logFrame   { background-color: white; border-spacing: 5px; }
+          pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+                             margin-bottom: 10px;
+                             overflow: auto;
+                             width: auto;
+                             padding: 5px;
+                             background-color: #eee;
+                             width: 650px!ie7;
+                             padding-bottom: 20px!ie7;
+                             max - height: 600px;
+             }
+
+      </style>
+  </head>
+  <body>
+    <table id="fullPage">
+        <tr id="pageHeader">
+            <td colspan="2" class="darkCell">
+                <img src="http://www.claremont.se/wp-content/themes/claremont_rebooted/static/img/logo.png">
+            </td>
+        </tr>
+        <tr>
+            <td id="indexPane" class="topText" width="220">
+                <h2>Table of content</h2>
+                <p>
+                    <a href="#introduction"><b>Introduction</b></a><br>
+                    <a href="#basics">Basics</a><br>
+                    <a href="#structuralLayout">Structural layout</a><br>
+                    <a href="#informationStructure">Information structure</a><br>
+                    <a href="#packagesHeading">Packages</a><br>
+                    <a href="#dependencies">Dependencies</a>
+                </p>
+                <p>
+                    <a href="#usage"><b>Usage instructions</b></a><br>
+                    <a href="#codingGuidelines">Coding guidelines for framework</a><br>
+                    <a href="#namingConvention">Naming conventions</a><br>
+                    <a href="#knownErrorUsage">Known error management</a>
+                </p>
+                <p>
+                    <a href="#closingRemarks"><b>Closing remarks</b></a><br>
+                    <a href="#attributions">Attributions</a><br>
+                    <a href="#references">References</a>
+                </p>
+            </td>
+            <td id="contentPane">
+                <h1 id="introduction">Software architecture description (SAD) for test automation solution</h1>
+                <p>
+                    This document tries to explain the concepts applied to the
+                    test automation solution as well as the intention and the
+                    structural layout of the system.
+                </p>
+                <br>
+
+                <h2 id="basics">Basic concepts</h2>
+                <p>The solution is intended to reside on fundamentally sound architecture
+                    principles, with thought given to independence and integration of concerns
+                    internally in code and components.
+                </p>
+                <p>
+                    The test automation framework was developed with ease of use and minimum maintenance in mind. It is developed around a few central concepts and ideas that has been turned into features.
+                </P>
+
+                <h3>Extendability</h3>
+                <p>
+                    This solution is implemented with object factory patterns and a plug-in structure for implementing different driver support to ease extendability and adaptation.
+                </p>
+
+                <h3>Separation of concerns</h3>
+                <p>
+                    The framework is component based and should be a different entity than the test and the application description all-together.<br>
+                    This makes version management of the framework as one component and the application description and tests as one component possible.
+                </p>
+
+                <h3>Page classes with object definitions</h3>
+                <p>
+                    Element descriptions defined as static objects in classes - and not their actual run time version. This makes it possible to only update in one place when the GUI changes.
+                </p>
+
+                <h3>Abstraction between driver, runner and framework</h3>
+                <p>
+                    This makes it possible to update driver or runner when new tools come in fashion or the technology in the system under test is updated so the driver has do be updated.
+                </p>
+
+                <h3>Ease of debugging</h3>
+                <p>
+                    Logging levels for different types of testCaseLog entries, both navigational, verificational or framework derived ones as well as screenshots and extra info to the testCaseLog when errors occur.<br>
+                    Test case data is stated and managed in a controlled fashion.
+                </p>
+
+                <h3>Ease of understanding test result</h3>
+                <p>
+                    Summary report is presented in different channels, with statistics, links to detailed test results, grouping of similar errors, presentation of known errors and more.
+                </p>
+
+                <h3>No nagging</h3>
+                <p>
+                    Support for grouping of errors if several test cases encounter similar errors and support for managing known errors that are treated different from new errors.<br>
+                    Known errors can be entered both for individual test cases and for whole test sets at a time.
+                </p>
+                <p>
+                    Basically only the information you kneed, when you need it.
+                </p>
+
+                <h3>Ease of test case implementation for non-technical staff</h3>
+                <p>
+                    The use of Test Actions and pre-defined GUI-objects makes script creation intuitive through IDE auto-completion.
+                </p>
+
+                <h3>Portable tool solution</h3>
+                <p>
+                    Included tools are all open-source and Java compatible for platform support, scalability and portability.<br>
+                    Tools and architecture are also chosen to be able to interact with multiple types of interfaces and technologies - for example different web browsers.
+                </p>
+
+                <h3>Support for CI/CD</h3>
+                <p>
+                    Using standard Java and standard Java components integration with CI servers are ensured.
+                </p>
+                <br>
+
+                <h2 id="structuralLayout">Intended structural layout</h2>
+                <p>
+                    Given that this documentation is included in the code itself,
+                    the code itself might be alterable. However, the intended structural
+                    layout is described below.
+                </p>
+
+                <table id="structure">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td id="integrations" class="framed">External integrations</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="framed" id="user">
+                            User
+                        </td>
+                        <td class="framed midText" id="tests">
+                            Test<br>specifications
+                        </td>
+                        <td class="framed topText" id="applicationDescription">
+                            Application description
+                            <table>
+                                <tr>
+                                    <td class="framed midText fillHeight" rowspan="3" id="testActions">
+                                        Test actions
+                                    </td>
+                                    <td class="framed midText" id="pageObject">Page/dialogue<br>description</td>
+                                </tr>
+                                <tr>
+                                    <td class="framed midText" id="navigation">Navigation<br>mechanisms</td>
+                                </tr>
+                                <tr>
+                                    <td class="framed midText" id="dataFactory" >Data factory</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="framed" id="framework">
+                            Framework
+                            <table>
+                                <tr>
+                                    <td class="framed frameworkContent" id="logging">Logging</td>
+                                </tr>
+                                <tr>
+                                    <td class="framed frameworkContent" id="reporting">Reporting</td>
+                                </tr>
+                                <tr>
+                                    <td class="framed frameworkContent" id="entities">Entity management</td>
+                                </tr>
+                                <tr>
+                                    <td class="framed frameworkContent" id="cli">CLI runner</td>
+                                </tr>
+                                <tr>
+                                    <td class="framed frameworkContent" id="support">Support methods</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="framed runner" id="runner">
+                            Runner
+                        </td>
+                        <td class="framed toptext" id="driverAbstractions">
+                            Driver abstraction
+                            <table>
+                                <tr class="fillHeight">
+                                    <td class="framed midText driverAbstraction">
+                                        Driver abstraction<br>layer for driver 1
+                                    </td>
+                                </tr>
+                                <tr class="fillHeight">
+                                    <td class="framed midText driverAbstraction">
+                                        Driver abstraction<br>layer for driver 2
+                                    </td>
+                                </tr>
+                                <tr class="fillHeight">
+                                    <td class="framed midText driverAbstraction">
+                                        Driver abstraction<br>layer for driver 3
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="framed topText" id="drivers">
+                            Drivers
+                            <table>
+                                <tr>
+                                    <td class="framed midText driverBox" >
+                                        3rd party<br>driver 1
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="framed midText driverBox" >
+                                        3rd party<br>driver 2
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="framed midText driverBox" >
+                                        3rd party<br>driver 3
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="framed" id="sut">System<br>under<br>test</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td id="unitTest" class="framed" colspan="3">Unit tests</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="figureText" colspan="8"><i>Figure 1, intended explanation of components internally</i></td>
+                    </tr>
+                </table>
+
+                <p>
+                    The user describes the tests in test specifications. The test specifications consist
+                    of test action calls. The test actions make use of GUI elements described in page
+                    objects and navigational components that also make use of GUI elements of page objects,
+                    but possibly also from test data factories.
+                </p>
+                <p>
+                    The use of these application description components are not mandatory, but encouraged.
+                </p>
+                <p>
+                    The framework makes sure the test runs and the results are reported correctly. The
+                    framework make sure the interaction with the GUI elements are carried out by the driver
+                    abstraction layer. The driver abstraction layer is simply a layer that makes shifting
+                    driver easier when new technologies or test tools come in fashion.
+                </p>
+                <p>
+                    The framework is a component that can be version managed apart from application related code for the system under test.
+                </p>
+                <p>
+                    Application related code are the <i>test</i> part above and the <i>application description</i> part.
+                </p>
+                <br>
+
+                <h2 id="informationStructure">Information structure</h2>
+                <p>
+                    The information entities in the system include:
+                </p>
+                <ul>
+                    <li>Test run</li>
+                    <li>Test set</li>
+                    <li>Test case</li>
+                </ul>
+                <table id="info">
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td id="testRun" class="framed">
+                                        TestRun
+                                        <table>
+                                            <tr>
+                                                <td id="settings" class="framed" rowspan="2">
+                                                    Settings
+                                                </td>
+                                                <td class="testSet framed">
+                                                    TestSet1
+                                                    <table>
+                                                        <tr>
+                                                            <td class="testCase framed">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="testCase" rowspan="2">
+                                                                            TestCaseA
+                                                                        </td>
+                                                                        <td class="testCaseLog framed">
+                                                                            Log
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="testCaseData framed">
+                                                                            Data
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="testCase framed">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="testCase">
+                                                                            TestCaseB
+                                                                        </td>
+                                                                        <td class="testCaseLog framed">
+                                                                            Log
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="knownError framed">
+                                                                            KnownError
+                                                                        </td>
+                                                                        <td class="testCaseData framed">
+                                                                            Data
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td id="summaryLogBox" class="framed" rowspan="2">
+                                                    Summary<br>Report
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="testSet framed">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                TestSet2
+                                                            </td>
+                                                            <td class="knownError framed">
+                                                                KnownError
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table>
+                                                        <tr>
+                                                            <td class="testCase framed">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="testCase" rowspan="2">
+                                                                            TestCaseC
+                                                                        </td>
+                                                                        <td class="testCaseLog framed">
+                                                                            Log
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="testCaseData framed">
+                                                                            Data
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="testCase framed">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="testCase" rowspan="2">
+                                                                            TestCaseD
+                                                                        </td>
+                                                                        <td class="testCaseLog framed">
+                                                                            Log
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="testCaseData framed">
+                                                                            Data
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="figureText">
+                            <i>Figure2: Information structure</i>
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                    Each test execution is a new <i>test run</i>.<br>
+                    A <i>test run</i> can run tests from many <i>test sets</i>.<br>
+                    Each <i>test set</i> consists of one or more <i>test cases</i>.
+                </p>
+                <p>
+                    Known errors can be stated for both test cases and test sets.
+                    Displaying known errors are suppressed unless they are encountered.
+                    If encountered they are displayed both in the summary report and
+                    the test case logs for the test cases where they were identified.
+                </p>
+                <p>
+                    <b>Test case logging</b><br>
+                    Information about events during execution of a <i>test case</i> is gathered in a test case testCaseLog
+                    of the <i>Log</i> class, consisting of <i>testCaseLog posts</i>. After execution of a test case the testCaseLog
+                    is saved as HTML document and/or a test document for the test case. Screenshots that has been
+                    taken during execution is referenced into the testCaseLog files.<br>If no errors are encountered during
+                    execution of a test case the debug testCaseLog posts are cleaned out prior to saving the testCaseLog.
+                </p>
+                <p>
+                    <b>Test run summary report</b><br>
+                    After each test case execution the test testCaseLog is being analyzed for the summary report that is
+                    produced after each test run if the test case count for test cases executed is more than one.
+                    This number is chosen due to debugging or creation of test cases often makes you run single
+                    test cases, and the fact that a summary makes minimum sense if only one test case has been executed.
+                </p>
+                <p>
+                    At the end of a test run the test summary report is being compiled and saved, if more than
+                    one test case has been executed.
+                </p>
+                <p>
+                    <b>Test case data</b><br>
+                    Each test case has a list of test data used during test execution. This mechanism is implemented
+                    for ease of debugging, and is displayed in the test case testCaseLog generated after test case execution.
+                </p>
+                <p>
+                    If no test case data is saved during execution the test case data section of the test case testCaseLog
+                    is suppressed.
+                </p>
+                <br>
+
+                <br>
+                <br>
+                <hr>
+                <br>
+                <br>
+
+                <h1 id="usage">Usage instruction for test implementers</h1>
+                <p>
+                    This chapter contain usage instructions for people mainly interested in using this framework.
+                    It aims at describing ways of working and best practices.
+                </p>
+                <h2>Interpreting logs</h2>
+                <p>
+                    The better one get at analyzing the logs, the easier it get to perform maintenance tasks for the test automation, and lesser time is spent on debugging.
+                    A lot of effort has been put into get the logs easily read.
+                </p>
+                <p>
+                    Logs are saved to a testRunLogFolder in the baseLogFolder specified in the settings.
+                    The test run log folder is named from the time it ran and the test set name.
+                </p>
+                    <pre>
+                        <i>20160923_165101_se.claremont.homepage.admintests</i>
+                    </pre>
+                <p>
+                    There are several types of logs and the information in the logs depend on the situation. Generally a lot of data is assessed but only relevant data is displayed.
+                </p>
+                <p>
+                    Screenshots taken during test run, and other debugging info, is also saved to the test run log folder.
+                </p>
+                <br>
+                <h3>Test summary report</h3>
+                <p>
+                    The test summary report is produced as the last step of a test run, but only if two or more test cases has been run. Running a single test case is assumed to be a
+                    script debugging activity, and a summary report makes minimal sense if only one test case is run.
+                </p>
+                <p>
+                    The summary report is always saved to the testRunLogFolder in the baseLogFolder specified in the settings. It always has the same name:
+                </p>
+                <pre>
+
+                    <i>_summaryReport.html</i>
+                </pre>
+                <p>
+                    The underscore character in the report name is there to make sure the summary is always on top if the folder content is listed in alphabetical order.
+                </p>
+                <p>
+                    The summary report always shows a <b>statistics</b> summary of the test cases executed and a <b>listing</b> of the results of each test case - with links to the test case logs.
+                </p>
+                <p>
+                    If <b>known errors</b> are registered for test cases or test sets in the test run they are displayed as encountered (marked with yellow color) if encountered, or listed
+                    as not encountered - and possibly fixed - bugs if not encountered.
+                </p>
+                <p>
+                    <b>New errors</b> are displayed in their own section - with the test cases where they were encountered as well as links to the test case logs.
+                </p>
+                <br>
+                <h3>Test case logs</h3>
+                <p>
+                    There are two types of test case logs. One is purely text based. It is used to print output to console, for ease of debugging from an IDE.
+                    The other is HTML based for a friendlier format and to be able to present test results better. Both log types are saved in the testRunLogFolder
+                    that is created in the baseLogFolder the beginning of a test run.
+                </p>
+                <p>
+                    The test case logs includes <b>test data</b> used during execution, timestamps and log rows. If <b>known errors</b> are encountered during execution these
+                    are marked separately.
+                </p>
+                <p>
+                    If <b>screenshots</b> are taken during test execution a thumbnail picture of the screenshot is displayed in the HTML log. On mouse-over it gets slightly larger,
+                    and if it is clicked it is opened in full size in a new browser window or browser tab.
+                </p>
+                <p>
+                    Debug log posts are considered unimportant if the test case is passed and are suppressed when creating the test case logs if execution and all verifications
+                    are successful.
+                </p>
+                <br>
+                <br>
+                <hr>
+                <br>
+                <h2>Implementing a test class</h2>
+                <p>
+                    Test classes is the runner entity of a collection of test cases. In this framework the test classes generally extend the TestSet class in order to get
+                    full logging possibilities.
+                </p>
+                <p>
+                    The syntax of the test runner (for example JUnit) is fully usable in a test class. An example of a test class would be:
+                </p>
+                <pre>
+
+public class DemoTests extends TestSet {
+    @Rule public TestName currentTestName = new TestName();
+    private DemoTestActions app;
+
+
+    @Before
+    public void testSetup(){
+        startUpTestCase(currentTestName.getMethodName());
+        app = new DemoTestActions(currentTestCase);
+        name = this.getClass().getSimpleName();
+    }
+
+    @After
+    public void testTearDown(){
+        wrapUpTestCase();
+    }
+
+    @AfterClass
+    public static void ClassTearDown(){
+        CliTestRunner.testRun.summaryReport.evaluateTestSet(CliTestRunner.testRun.currentTestSet);
+        CliTestRunner.testRun.summaryReport.writeReport();
+    }
+
+    @Test
+    public void dummyTest1(){
+        app.logIn();
+        app.logOut();
+    }
+}
+
+                </pre>
+                <p>
+                    It might be worth noting that the technology specific classes of the test automation
+                    is being kept away from the test class. Instead this is used in the test action class.
+                </p>
+                <h3>Implementing test cases</h3>
+                <p>
+                    A test class can consist of many test cases. The test case is run to completion, or
+                    until some error that is considered to severe to continue is encountered. If a test
+                    case is interrupted so severely that it can't continue it will be closed down and reported
+                    before the execution of the next test case will be performed.
+                </p>
+                <p>
+                    Test cases are marked with the '@Test' keyword of the test runner (JUnit) in order to be able to be discovered as tests by the runner.
+                </p>
+                <pre>
+
+@Test
+public void dummyTest1(){
+    app.logIn();
+    app.logOut();
+}
+                </pre>
+                <p>
+                    The convention of using <i>app</i> as the test action object instance eases for non-programmers to implement test cases since the
+                    auto-completion feature of modern IDEs is very helpful to know what to do.
+                </p>
+                <br>
+                <h2>Implementing a test actions class</h2>
+                <p>
+                    Since several test cases might share test steps it is beneficial to gather the test steps as test actions in a test actions class
+                    for the application under test.
+                </p>
+                <p>
+                    An example of a test actions class can be seen below. This class also utilizes a separate navigation mechanism class in order to keep
+                    the test actions short and reduce code maintenance. The navigation mechanism class also has the benefit of turing navigation into a pattern,
+                    making logging more consistent and thorough. It also makes test execution robust since checks for correct application state can be
+                    implemented with ease.
+                </p>
+                <pre>
+
+class DemoTestActions {
+    final WebInteractionMethods web;
+    final DemoNavigationMechanism nav;
+    final TestCase testCase;
+
+
+    public DemoTestActions(TestCase testCase){
+        this.testCase = testCase;
+        web = new WebInteractionMethods(testCase);
+        nav = new DemoNavigationMechanism(web);
+    }
+
+    public void logIn(){
+        nav.navigateToLoginPage();
+        web.click(DemoLoginPage.loggaInButton());
+        web.verifyTextOnCurrentPage("Logged in");
+    }
+
+    public void logOut(){
+        nav.loggedIn();
+        web.click(DemoLandingPage.loggaUtButton());
+        web.verifyTextOnCurrentPage("Logged out");
+    }
+}
+
+                </pre>
+                <p>
+                    Inside the test actions class technology specific commands are issued and most verifications are being made.
+                </p>
+                <p>
+                    The test actions class should be able to keep package-private in most cases.
+                </p>
+                <br>
+                <br>
+                <h2 id="knownErrorUsage">Adding a known error</h2>
+                <p>
+                    It's annoying having the test automation solution reporting deviations from expected results when you know about the error already.<br>
+                    Known errors can be added to both test cases and test sets. Known errors are treated differently than errors that has not been entered
+                    as known errors (un-registered deviations are considered 'new errors'). The easiest way is to add it directly in the test description.
+                </p>
+                <pre>
+
+         @Test
+         public void testCaseNumber1() {
+              currentTestCase.addKnownError("My pages cannot yet be opened.", "The current page title was expected to be 'My pages', but was*");
+              ...
+         }
+                </pre>
+                If this error is triggered (all the stated pattern strings are found on testCaseLog rows for the test case) the test case is considered to have triggered a known error.
+                <p>
+                    Known errors can also be stated for full test sets:
+                </p>
+                <pre>
+
+      public class DemoTests extends TestSet {
+          DemoTestActions demoTestActions ;
+
+          @BeforeClass
+          public void ClassInitialize(){
+              addKnownError("My pages cannot yet be opened.", "The current page title was expected to be 'My pages', but was*");
+          }
+                </pre>
+                <p>
+                    Matching only occur in testCaseLog post entries containing erroneous messages. Log rows are considered erroneous if they fall into the following testCaseLog levels:<br>
+                </p>
+                <ul>
+                    <li>Verification failed</li>
+                    <li>Verification problem</li>
+                    <li>Execution problem</li>
+                    <li>Framework error</li>
+                </ul>
+
+                <br>
+                <br>
+                <hr>
+                <br>
+                <br>
+
+                <h1 id="coding">Usage instruction for framework maintenance</h1>
+
+                <h2 id="namingConvention">Naming conventions</h2>
+                <h3>Driver</h3>
+                <p>
+                    A driver is a component that interacts with an interface for us. Most drivers are third party drivers, like Selenium WebDriver, Jasmine, SoapUI, Sikuli or similar.
+                </p>
+
+                <h3>Runner</h3>
+                <p>
+                    A runner is the component used to run the test and to collect and gather test result status as well as providing assert library at runtime. This test automation
+                    solution utilizes JUnit as a test runner. The reason for choosing JUnit is the possibility for parallel test execution and the Assume command providing the
+                    possibility to mark some test case results as suspect at runtime.
+                </p>
+
+                <h3>Framework</h3>
+                <p>
+                    A framework provides structure and enhanced logging to the test automation solution. It's basically the stuff between the driver and the test in the top most figure of this document.
+                </p>
+
+                <h3>Data factory</h3>
+                <p>
+                    A data factory is a helper class that manages test data and makes sure a test case has valid test data to work with. The data factory might for example use mechanisms like:<br>
+                </p>
+                <ul>
+                    <li>Data generation in system under test using for example SQL</li>
+                    <li>Backup/restore possibilities of atomic entities or whole databases</li>
+                    <li>Searching for relevant data to use in the system under test</li>
+                    <li>Using API:s to construct data in the system under test simulating an external system providing data</li>
+                    <li>Running scripts and batches to make sure data is in a relevant state</li>
+                </ul>
+                Sometimes the need for time travelling possibilities has to be implemented in the system under test to fast-forward long term time dependant processes.
+
+                <h2 id="codingGuidelines">Coding guidelines</h2>
+
+                <h3>Self-contained solution</h3>
+                <p>
+                    Make sure all dependencies are taken care of through the maven pom file.
+                </p>
+                <p>
+                    Also pay attention to the code structure and make sure it can run as a runnable jar file from the command line.
+                </p>
+
+                <h3>Comments</h3>
+                <p>
+                    Write javadocs style comments for all public methods of any class.
+                </p>
+
+                <h3>Scan for security weaknesses</h3>
+                <p>
+                    Scan all code for weak access restrictions to classes and methods.
+                </p>
+
+                <h3>Document code structure in readable format</h3>
+                <p>
+                    Describe conceptual design of features in this document to make it easy for new people to understand code structure.
+                </p>
+
+                <h3>Write unit tests for framework methods</h3>
+                <p>
+                    Methods and classes in framework and support classes should be covered with unit tests.
+                    <br>
+                    Unit tests should include null input tests.
+                </p>
+                <p>
+                    Unit tests should be placed in the same package as the classes they test to keep separation of concerns
+                    while enabling package-private access to ensure testability.
+                    <br>
+                    Unit test classes are named as the class they test, but with the suffix '_Tests'. Normally unit test classes
+                    do not extend the TestSet class.
+                </p>
+
+                <h3>Run the unit tests before check-in</h3>
+                <p>
+                    The unit tests should be run green before each check-in. Anyone who breaks the build when it could have been prevented by running
+                    proper tests will have to provide compensation in beer, stuffed animals, cookies or cake.
+                </p>
+
+                <h3>Logging element names</h3>
+                <p>
+                    When designing a glue class for a new driver it's beneficial to use log identification strings for elements without any quotation marks around
+                    the object name since the log file is split for quotation marks to understand what is data element in data elements. Generally this is not
+                    beneficial for log row similarity checking for error grouping.
+                </p>
+
+                <h3>Naming syntax</h3>
+
+                <p>
+                    <b>Classes</b> are substantives written with initial capital letter, and capital letters for all words in classes <i>MyClass</i>.<br>
+                    <b>Methods</b> are verbs written with initial small letter, but with capital initial letters for all consecutive words, e.g. <i>myMethod</i>.<br>
+                    <b>Variables</b> are written with initial small letter, but with capital initial letters for all consecutive words, just like methods. E.g <i>myVariable</i>.<br>
+                    <b>Constants</b> are written with purely capital letters and underscore sign between words, e.g. <i>MY_GLOBAL_CONSTANT</i>.<br>
+                    <b>Enum names</b> are classes in Java. Hence they are written with initial capital letter. <i>MyEnumName</i>.<br>
+                    <b>Enum values</b> are constants, and are written like constants, e.g. <i>MY_ENUM_VALUE</i>. Note: There is a method for converting a enum value to friendly
+                    string with initial capital letter and space character instead of underscore.
+                </p>
+
+                <br>
+                <hr>
+                <br>
+
+                <h2>Creating a plug-in</h2>
+                <p>
+                    This framework support two kinds of plugins. Either new driver plugins, or new reporting plugins.
+                </p>
+                <table id="pluginStructure" style="border: 1px solid grey; background-color: white; ">
+                    <tr>
+                        <td style="background-color: cornSilk; ">
+                            <table id="reporters">
+                                <tr>
+                                    <td style="background-color: aqua;">
+                                        TestCaseLogReporterHTMLLogFile
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: white;">
+                                        TestCaseLogReporterPureTextBasedLogFile
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: aqua; ">
+                                        TestCaseLogReporterToStandardOut
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: white;">
+                                        ...and so on...
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td id="reporterFactory" style="background-color: lavender; ">
+                            TestCaseLogReporterFactory
+                        </td>
+                        <td style="background-color: lightBlue; font-size: 130%; font-weight: bold; ">
+                            Framework
+                        </td>
+                        <td style="background-color: lavender;">
+                            Driver abstraction<br>(GuiDriver/GuiElement)
+                        </td>
+                        <td style="background-color: cornSilk; ">
+                            <table>
+                                <tr>
+                                    <td style="background-color: aqua;">
+                                        WebDriverGlueCode<br>(WebBrowser/WebPage/DomElement)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: white; ">
+                                        FestDriverGlueCode<br>(SwingWindow/SwingElement)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: aqua; ">
+                                        RestSupport
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: white; ">
+                                        ...and so on...
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <h3>GUI Driver plugins</h3>
+                <p>
+                    Support for new third party drivers can be achieved by creating a "glue class" that makes the driver methods implement the <i>GuiDriver</i> interface.
+                    It is strongly encouraged to also implement an abstraction of GUI elements used, by letting them imlement the <i>GuiElement</i> interface. In the long
+                    run this makes it easy to substitute driver when new ones emerge.
+                </p>
+                <h3>Reporting plugin</h3>
+                <p>
+                    This framework has its own reporting mechanism out of the box, but you might want to propagate test results to a test management system in order
+                    for the test results to be easily followed up upon, or for ease of communication purposes.
+                </p>
+                <p>
+                    Currently reporting plugins are only implemented at the test case level. To introduce new reporting mechanism, or to discontinue some of the old
+                    ones, create a class implementing the <i>TestCaseLogReporter</i> interface, and make sure the <i>TestCase</i> class '<i>reporters</i>' field adds an instance of that class.
+                </p>
+
+                <br>
+                <hr>
+                <br>
+
+                <h2 id="packagesHeading">Packages in framework</h2>
+                <p>
+                    The framework code has been divided into packages for ease of understanding.
+                </p>
+                <p>
+                    Packages:
+                </p>
+                <table id="packages" style="border: 1px solid grey;">
+                    <tr>
+                        <td><b>se.claremont.autotest.common</b></td><td>Core functionality of the framework. Logging, test entities, management of known errors.</td>
+                    </tr>
+                    <tr>
+                        <td><b>se.claremont.autotest.support</b></td><td>Optional methods for data management, static methods and debugging.</td>
+                    </tr>
+                    <tr>
+                        <td><b><i>Driver glue code</i></b></td><td>A package for each driver. For example <i>'se.claremont.autotest.webdrivergluecode'</i>.</td>
+                    </tr>
+                    <tr>
+                        <td><b><i>Technology/interface support packages</i></b></td><td>A package to enable access to each technology or interface type. For example <i>'se.claremont.autotest.websupport'</i></td>.
+                    </tr>
+                </table>
+                <br>
+
+                <h2 id="dependencies">Current dependencies</h2>
+                <p>
+                    Several dependencies are used in the solution. These are referenced via the maven pom-file.
+                </p>
+                <p>
+                    Current dependencies include:
+                </p>
+                <table style="background-color: white; border: 1px solid grey;" id="dependenciesList">
+                    <tr><td>JUnit</td><td>Test runner.</td></tr>
+                    <tr><td>Selenium WebDriver</td><td>Driver for web based systems. Chosen for multi-browser support.</td></tr>
+                    <tr><td>OkHttp3</td><td>HTTP driver, for REST interface support.</td></tr>
+                </table>
+
+
+                <br>
+                <br>
+                <hr>
+                <br>
+                <br>
+
+                <h1 id="closingRemarks">Closing remarks</h1>
+
+                <h2 id="attributions">Attributions</h2>
+                <p>
+                    This framework was developed and is being maintained by Claremont AB.
+                </p>
+                <br>
+
+                <h2 id="references">References and other documentation</h2>
+                <p>
+                    Method documentation can be generated from comments in the code.<br>
+                    Example documents and code samples can be found within this project.<br>
+                    An introduction to the framework is being developed.<br>
+                    Sample logs, suggested implementation strategy, driver suggestions and so forth may be requested.
+                </p>
+                <br>
+                <br>
+                <br>
+            </td>
+        </tr>
+    </table>
+  </body>
+</html>

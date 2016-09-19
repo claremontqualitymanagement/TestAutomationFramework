@@ -1,0 +1,71 @@
+Doing
+=========
+CLI interface
+Get ObjectFactory for Logger to ready state
+
+To do
+=========
+Find appropriate location for Javadocs
+Create reporter factory for test set too
+New crunch to create more unit tests
+Bug: Fix debug rows seem to be line-broken in HTML report
+plus/minus sign (or other indicator) as indication icon for expandable sections of html log
+Make sure Javadoc comments exist everywhere applicable
+Check for similar errors in summary
+Document that known errors only work on text testCaseLog phrases
+Formatting of HTML styles - make reports pretty
+Document more examples
+Support for radiobuttons
+Support for dropdown
+Overriding settings from command prompt
+Split solution in stand-alone framework component and SUT related stuff
+Email report
+Saving desktop image upon error, and not just browser content
+WebDriver toString() should be Overridden
+Multi-browser support
+Only displaying the most relevant testCaseLog rows in summary report
+Add links to text testCaseLog from html testCaseLog
+Implement support for parallel execution
+
+Done
+===========
+Get rid of java 1.5 warnings
+Implement toggleable sections for components in HTML test case log
+Saving of html body upon error
+Merge CliTestRunner and DiagnosticRun classes and choose by run time parameters
+Move runSettings.properties file to better location
+More REST service calls - put, delete
+Minimum table width in html log
+Test case data
+Abstraction for GUI elements
+Component support for test case testCaseLog (from callstack?)
+REST service support
+Remove ugly dependencies between Settings class and LogFolder class (and TestRun class?)
+Support for known errors on TestSet
+Support for known errors on TestCase
+Support for known errors in reporting
+Unit tests for framework
+Automatic data formatting in html testCaseLog
+Screenshot better represented in html testCaseLog
+Both HTML and text testCaseLog
+Support for comparing similar LogPosts
+Summary report
+Error grouping if several test cases has the same error
+Summary report should take more than one test at the time...
+WebDriver should not be where it is
+Check for duplicate test cases registered for known error
+Add links to detailed reports from summary report
+Compile auto-documentation
+BUG: Summary reports known errors multiple times
+Screenshot name derived from test case name rather than not
+BUG: Known errors don't work at all times (with both known and new errors it get misreported)
+Create Diagnostics tool
+Make sure known errors that are not encountered are listed in summary report
+BUG: Test case name should not be 'invoked'
+Test name from callstack
+Make regex work for known errors
+TestSet name in TestCase should be set correctly with ease (reflection)
+Check in to git
+Asses new runner that treats Assume better
+Clean out un-used code parts
+Make sure the known error documentation for TestSet is correct

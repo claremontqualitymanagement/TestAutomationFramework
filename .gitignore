@@ -1,0 +1,10 @@
+target
+.DS_Store
+test
+prv
+doc
+.idea
+TestAutomationFramework.iml
+out
+.iml
+drivers
