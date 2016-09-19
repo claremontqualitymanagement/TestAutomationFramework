@@ -1,4 +1,8 @@
 language: java
+jdk:
+  - oraclejdk8
+#  - oraclejdk7
+#  - openjdk6
 script:
 - mvn install
 before_deploy:
