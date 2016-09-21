@@ -8,3 +8,7 @@ TestAutomationFramework.iml
 out
 .iml
 drivers
+.travis.yml.161020
+CORE/
+PRV/
+src/main/java/se/claremont/tools/

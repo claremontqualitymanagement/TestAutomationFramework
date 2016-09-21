@@ -1,7 +1,9 @@
 package se.claremont.autotest.common;
 
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -22,11 +24,37 @@ public class Settings {
      * Default values for Settings parameters
      */
     private void loadDefaults(){
-        setValueForProperty("baseLogFolder", "C:\\Temp\\");
-        setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
-        setValueForProperty("testRunLogFolder", "");
-        setValueForProperty("chromeDriverPathToExe", "C:\\Temp\\chromedriver.exe");
-        setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+
+        //macintosh
+        if( new Utils().getOS().toLowerCase().contains( "mac" ) ) {
+            System.out.println( "Congratulation you are a winner using a macintosh!!!" );
+
+            setValueForProperty("baseLogFolder", "/Users/magnusolsson/Temp/");
+            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValueForProperty("testRunLogFolder", "/Users/magnusolsson/Temp/");
+            setValueForProperty("chromeDriverPathToExe", "/Users/magnusolsson/Temp/chromedriver.exe");
+            setValueForProperty("firefoxPathToBrowserExe", "/Applications/Firefox.app\\");
+
+            try {
+                File f = new File( getValueForProperty("baseLogFolder") + "runSettings.properties" );
+                if( f.exists() && f.isFile() ) {
+                    System.out.println( "*** " + f.getAbsolutePath() );
+                }
+            }
+            catch (Exception e) {
+                System.err.println("You got problem: " + e.getStackTrace());
+            }
+
+        }
+        // lets assume jvm is running upon windows os.
+        else {
+            setValueForProperty("baseLogFolder", "C:\\Temp\\");
+            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValueForProperty("testRunLogFolder", "");
+            setValueForProperty("chromeDriverPathToExe", "C:\\Temp\\chromedriver.exe");
+            setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+        }
+
     }
 
     /**

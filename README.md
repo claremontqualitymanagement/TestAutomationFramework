@@ -4,7 +4,11 @@ Test Automation Framework - TAF
 An Test Automated Framework brought to you from the Claremont team.
 
 
-Build project using Maven command:mvn clean install
+Building instructions:
+Using Maven command:mvn clean install
+
+Running instructions:
+- With jar file: java -jar -Dapp.properties="<absolut path to runSettings.properties file>"
 
 
 [![travis build](https://img.shields.io/travis/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://travis-ci.org/claremontqualitymanagement/TestAutomationFramework)
