@@ -23,10 +23,10 @@ public class Settings {
      * Default values for Settings parameters
      */
     private void loadDefaults(){
-        setValueForProperty("baseLogFolder", "." + File.separator + "TAF" + File.separator);
+        setValueForProperty("baseLogFolder", System.getProperty("java.io.tmpdir") + "TAF" + File.separator);
         setValueForProperty("pathToLogo", "");
         setValueForProperty("testRunLogFolder", "");
-        setValueForProperty("chromeDriverPathToExe", "." + File.separator + "TAF" + File.separator + "chromedriver.exe");
+        setValueForProperty("chromeDriverPathToExe", System.getProperty("java.io.tmpdir") + "TAF" + File.separator + "chromedriver.exe");
         setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
         setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
         setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
