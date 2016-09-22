@@ -1,5 +1,6 @@
 package se.claremont.autotest.support;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -8,10 +9,13 @@ import java.util.Date;
  * Created by jordam on 2016-08-18.
  */
 class Personnummer {
+    Date date;
     int checkDigit;
+    int threeDigits;
 
     /**
      * Create a new personnummer from string
+     *
      * @param instring string to parse for Personnummer
      */
     public Personnummer(String instring){
@@ -27,6 +31,11 @@ class Personnummer {
                 fourLastDigits = instring.substring(6);
             }
         }
+    }
+
+    public @Override String toString(){
+        SimpleDateFormat personnummerFormat = new SimpleDateFormat("yyMMdd");
+        return personnummerFormat.format(date) + "-" + Integer.toString(threeDigits) + Integer.toString(checkDigit);
     }
 
 }

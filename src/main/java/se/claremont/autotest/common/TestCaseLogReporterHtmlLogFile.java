@@ -35,6 +35,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     @SuppressWarnings("unused")
     enum HtmlLogStyleNames{
         KNOWN_ERROR,
+        KNOWN_ERRORS_NOT_ENCOUNTERED,
         TIMESTAMP,
         STRIPED,
         LOG_ROW,
@@ -119,17 +120,20 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         System.out.println("Saving html report to '" + testCase.pathToHtmlLog + "'.");
         StringBuilder html = new StringBuilder();
         html.append("<html>").append(LF).append(LF);
-        html.append("  <head>").append(LF).append(LF);
-        html.append("    <title>Test testCaseLog ").append(testCase.testName).append("</title>").append(LF);
-        html.append("    <meta charset=\"UTF-8\">").append(LF);
-        html.append("    <meta name=\"description\" content=\"Test case result for test run for test case ").append(testCase.testName).append("\">").append(LF);
-        html.append("    <style>").append(LF);
-        html.append(       styles() );
-        html.append("    </style>").append(LF).append(LF);
-        html.append(     scriptSection());
-        html.append("  </head>").append(LF).append(LF);
+        html.append(htmlSectionHtmlHead());
         html.append("  <body onload=\"onLoad()\">").append(LF).append(LF);
+        html.append(htmlSectionBodyHeader());
+        html.append(htmlSectionEncounteredKnownErrors());
+        html.append(htmlSectionTestCaseData());
+        html.append(htmlSectionNonEncounteredKnownTestCaseErrors());
+        html.append(htmlSectionTestCaseLogEntries());
+        html.append("  </body>").append(LF).append(LF);
+        html.append("</html>").append(LF);
+        SupportMethods.saveToFile(html.toString(), testCase.pathToHtmlLog);
+    }
 
+    private String htmlSectionBodyHeader(){
+        StringBuilder html = new StringBuilder();
         html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString())).append("\">").append(LF);
         html.append("      <img id=\"logo\" src=\"").append(TestRun.settings.getValueForProperty("pathToLogo")).append("\">").append(LF);
         html.append("      <h1>Test results for test case '").append(testCase.testName).append("'</h1>").append(LF);
@@ -139,20 +143,35 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         html.append("        Stop time:  ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime)).append(LF);
         html.append("      </p>").append(LF);
         html.append("    </div>").append(LF).append(LF);
+        return html.toString();
+    }
 
-        //If found errors are judged to be known errors, these are stated together here
-        if(testCase.testCaseKnownErrorsList.size() > 0){
-            html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
-            html.append("      <h2>Encountered known errors</h2>").append(LF);
-            html.append("      <table>").append(LF);
-            for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
-                html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
-            }
-            html.append("      </table>").append(LF);
-            html.append("    </div>").append(LF).append(LF);
-        }
+    private String htmlSectionHtmlHead(){
+        StringBuilder html = new StringBuilder();
+        html.append("  <head>").append(LF).append(LF);
+        html.append("    <title>Test testCaseLog ").append(testCase.testName).append("</title>").append(LF);
+        html.append("    <meta charset=\"UTF-8\">").append(LF);
+        html.append("    <meta name=\"description\" content=\"Test case result for test run for test case ").append(testCase.testName).append("\">").append(LF);
+        html.append("    <style>").append(LF);
+        html.append(       styles() );
+        html.append("    </style>").append(LF).append(LF);
+        html.append(     scriptSection());
+        html.append("  </head>").append(LF).append(LF);
+        return html.toString();
+    }
 
-        //TestCaseLog section for test case DATA recorded during runtime
+    private String htmlSectionTestCaseLogEntries(){
+        StringBuilder html = new StringBuilder();
+        html.append("      <h2>Test case testCaseLog entries</h2>").append(LF);
+        html.append("      <label><input type=\"checkbox\" id=\"showDebugCheckbox\" onchange=\"showDebug(this)\">Suppress debug rows</label>").append(LF);
+        html.append("      <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString())).append("\">").append(LF);
+        html.append( testStepLogPostSections(testCase));
+        html.append("      </table>").append(LF);
+        return html.toString();
+    }
+
+    private String htmlSectionTestCaseData(){
+        StringBuilder html = new StringBuilder();
         if(testCase.testCaseData.size() > 0){
             html.append("      <h2>Test case data</h2>").append(LF);
             html.append("      <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
@@ -160,29 +179,78 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
             html.append("        <tbody class=\"additionalDataSection\">").append(LF);
             for(ValuePair valuePair : testCase.testCaseData){
                 html.append("        <tr><td class=\"").
-                     append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
-                     append("\">").append(valuePair.parameter).append("</td><td class=\"").
-                     append(enumMemberNameToLower(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_VALUE.toString()))).
-                     append("\">").append(valuePair.value).append("</tr>").append(LF);
+                        append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
+                        append("\">").append(valuePair.parameter).append("</td><td class=\"").
+                        append(enumMemberNameToLower(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_VALUE.toString()))).
+                        append("\">").append(valuePair.value).append("</tr>").append(LF);
             }
             html.append("        </tbody>").append(LF);
             html.append("      </table>").append(LF);
         }
+        return html.toString();
+    }
 
-        //TestCaseLog post list, with debug info filtered out if everything went well and no errors occurred
-        html.append("      <h2>Test case testCaseLog entries</h2>").append(LF);
-        html.append("      <label><input type=\"checkbox\" id=\"showDebugCheckbox\" onchange=\"showDebug(this)\">Suppress debug rows</label>").append(LF);
-        html.append("      <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString())).append("\">").append(LF);
-        html.append( testStepLogPostSections(testCase));
-        //for( LogPost logPost : testCase.testCaseLog.logPosts){
-        //    if((!errorsEncountered && logPost.logLevel.equals(LogLevel.DEBUG))) continue;
-        //    html.append("        ").append(logPost.toHtmlTableRow()).append(LF);
-        //}
-        html.append("      </table>").append(LF);
+    private String htmlSectionEncounteredKnownErrors(){
+        StringBuilder html = new StringBuilder();
+        boolean knownErrorsEncountered = false;
+        for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
+            if(knownError.encountered()) {
+                knownErrorsEncountered = true;
+                break;
+            }
+        }
+        if(!knownErrorsEncountered){
+            for(KnownError knownError : testCase.testSetKnownErrors.knownErrors){
+                if(knownError.encountered()){
+                    knownErrorsEncountered = true;
+                    break;
+                }
+            }
+        }
+        if(knownErrorsEncountered){
+            html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
+            html.append("      <h2>Encountered known errors</h2>").append(LF);
+            html.append("      <table>").append(LF);
+            for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
+                if(knownError.encountered()){
+                    html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
+                }
+            }
+            for(KnownError knownError : testCase.testSetKnownErrors.knownErrors){
+                if(knownError.encountered()){
+                    html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
+                }
+            }
+            html.append("      </table>").append(LF);
+            html.append("    </div>").append(LF).append(LF);
+        }
+        return html.toString();
+    }
 
-        html.append("  </body>").append(LF).append(LF);
-        html.append("</html>").append(LF);
-        SupportMethods.saveToFile(html.toString(), testCase.pathToHtmlLog);
+
+    private String htmlSectionNonEncounteredKnownTestCaseErrors(){
+        StringBuilder html = new StringBuilder();
+        boolean hasKnownErrorsNotEncountered = false;
+        for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
+            if(!knownError.encountered()) {
+                hasKnownErrorsNotEncountered = true;
+                break;
+            }
+        }
+        if(hasKnownErrorsNotEncountered){
+            html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS_NOT_ENCOUNTERED.toString())).append("\">").append(LF);
+            html.append("      <h2>Known test case errors that were not encountered (possibly fixed)</h2>").append(LF);
+            html.append("      <table>").append(LF);
+            for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
+                if(!knownError.encountered()){
+                    html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
+                }
+            }
+            html.append("      </table>").append(LF);
+            html.append("    </div>").append(LF).append(LF);
+        }
+        return html.toString();
+
     }
 
     private String testStepLogPostSections(TestCase testCase){

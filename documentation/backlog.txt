@@ -1,15 +1,18 @@
 Doing
 =========
-CLI interface
-Get ObjectFactory for Logger to ready state
+Make CLI interface run classes
+Merge maven pom.xml files to make runnable jar, minimum jar, javadocs, dependencies and so forth
 
 To do
 =========
 Find appropriate location for Javadocs
-Create reporter factory for test set too
+Document settings management
+Document new TestRunReportFactory
 New crunch to create more unit tests
 Bug: Fix debug rows seem to be line-broken in HTML report
+Bug: Progress bar in summary report behaves badly
 plus/minus sign (or other indicator) as indication icon for expandable sections of html log
+Include Javadoc in maven build
 Make sure Javadoc comments exist everywhere applicable
 Check for similar errors in summary
 Document that known errors only work on text testCaseLog phrases
@@ -17,21 +20,26 @@ Formatting of HTML styles - make reports pretty
 Document more examples
 Support for radiobuttons
 Support for dropdown
-Overriding settings from command prompt
 Split solution in stand-alone framework component and SUT related stuff
-Email report
 Saving desktop image upon error, and not just browser content
 WebDriver toString() should be Overridden
 Multi-browser support
 Only displaying the most relevant testCaseLog rows in summary report
 Add links to text testCaseLog from html testCaseLog
+Try making the object factories work from outside code base (by using settings)
+Try making the plugins work from outside the code base (by using jar files in file directory)
 Implement support for parallel execution
 
 Done
 ===========
 Get rid of java 1.5 warnings
+Get ObjectFactory for Logger to ready state
+Bug: Sometimes TestCaseHtmlLog get wrong status of test case. Known errors found, but still got status ONLY_NEW_ERRORS
+Email report
+Create reporter factory for test set too
 Implement toggleable sections for components in HTML test case log
 Saving of html body upon error
+Overriding settings from command prompt
 Merge CliTestRunner and DiagnosticRun classes and choose by run time parameters
 Move runSettings.properties file to better location
 More REST service calls - put, delete

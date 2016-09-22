@@ -24,7 +24,9 @@ public class CliTestRunner {
                 LF + LF +
                 "If test classes are listed as arguments the output of those tests are displayed. This output can be quite extensive, and sometimes it is beneficial to make sure you can read it all." +
                 LF +
-                "Test output from test classes extending the TestSet class is saved to the output log folder." + LF;
+                "Test output from test classes extending the TestSet class is saved to the output log folder." + LF + LF +
+                "Settings from file can be overwritten by stating them as arguments using equal sign in between parameter name and parameter value:" + LF +
+                "emailRecipients=firstName.lastName@organization.com" + LF + LF;
     }
 
     /**
@@ -46,7 +48,7 @@ public class CliTestRunner {
                         TestCase_Tests.class,
                         TestSet_Tests.class,
                         ValuePair_Tests.class,
-                        SummaryReport_Tests.class
+                        HtmlSummaryReport_Tests.class
                 );
 
                 if(result.getFailures().size() > 0) System.out.println();
@@ -58,6 +60,9 @@ public class CliTestRunner {
                 System.out.println("Over all diagnostics result. Successful: " + result.wasSuccessful());
             }else if(arg.contains("help")||arg.contains("man")||arg.contains("-h")){
                 System.out.print(helpText());
+            } else if(arg.contains("=")){
+                testRun.settings.setValueForProperty(arg.split("=")[0].trim(), arg.split("=")[1].trim());
+                System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");
             } else {
                 try {
                     Result result = JUnitCore.runClasses(Class.forName(arg));

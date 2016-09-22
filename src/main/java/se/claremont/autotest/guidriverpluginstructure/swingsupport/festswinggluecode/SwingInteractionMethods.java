@@ -62,6 +62,26 @@ public class SwingInteractionMethods implements GuiDriver{
     }
 
     @Override
+    public boolean isDisplayed(GuiElement guiElement) {
+        return false;
+    }
+
+    @Override
+    public boolean isNotDisplayed(GuiElement guiElement) {
+        return false;
+    }
+
+    @Override
+    public void verifyObjectIsDisplayed(GuiElement guiElement) {
+
+    }
+
+    @Override
+    public void verifyObjectIsNotDisplayed(GuiElement guiElement) {
+
+    }
+
+    @Override
     public void chooseRadioButton(GuiElement guiElement, String text) {
 
     }

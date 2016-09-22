@@ -15,6 +15,8 @@
           td.midText       { vertical-align: center; }
           td#user          { background-color: beige; }
           td#tests         { background-color: gainsboro; }
+          td.logLevelDescription { font-style: normal; color: grey; }
+          td.logLevelName        { font-style: bold; color: blue; }
           td#applicationDescription { background-color: lavender; }
           td#testActions   { background-color: lightBlue; }
           td#pageObject    { background-color: lightblue; }
@@ -45,7 +47,8 @@
           h1               { color: darkSlateBlue; }
           h2               { color: darkBlue; }
           p                { color: darkSlateGrey; }
-          a                { color: darkSlateGrey; }
+          a                { color: darkSlateGrey; text-decoration: none; }
+          a:hover          { color: indigo; text-decoration: underline; }
           table#logFrame   { background-color: white; border-spacing: 5px; }
           pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
                              margin-bottom: 10px;
@@ -53,6 +56,17 @@
                              width: auto;
                              padding: 5px;
                              background-color: #eee;
+                             width: 650px!ie7;
+                             padding-bottom: 20px!ie7;
+                             max - height: 600px;
+             }
+          pre.cli         { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+                             margin-bottom: 10px;
+                             overflow: auto;
+                             width: auto;
+                             padding: 5px;
+                             background-color: black;
+                             color: white;
                              width: 650px!ie7;
                              padding-bottom: 20px!ie7;
                              max - height: 600px;
@@ -75,21 +89,31 @@
                     <a href="#basics">Basics</a><br>
                     <a href="#structuralLayout">Structural layout</a><br>
                     <a href="#informationStructure">Information structure</a><br>
-                    <a href="#packagesHeading">Packages</a><br>
-                    <a href="#dependencies">Dependencies</a>
                 </p>
                 <p>
-                    <a href="#usage"><b>Usage instructions</b></a><br>
-                    <a href="#codingGuidelines">Coding guidelines for framework</a><br>
+                    <a href="#usage"><b>Usage instructions for test implementers</b></a><br>
+                    <a href="#logInterpretation">Log interpretation</a><br>
+                    <a href="#testClassImplemention">Test class creation</a><br>
+                    <a href="#testCaseImplementation">Test case implementation</a><br>
+                    <a href="#testActionClassImplementation">Test actions</a><br>
+                    <a href="#knownErrorUsage">Known error management</a><br>
+                    <a href="#commandLineInterface">Command line interface usage</a><br>
+                </p>
+                <p>
+                    <a href="#codingInstructions"><b>Usage instructions for framework maintenance</b></a><br>
                     <a href="#namingConvention">Naming conventions</a><br>
-                    <a href="#knownErrorUsage">Known error management</a>
+                    <a href="#codingGuidelines">Coding guidelines</a><br>
+                    <a href="#plugins">Plugin structure</a><br>
+                    <a href="#packagesHeading">Packages</a><br>
+                    <a href="#dependencies">Dependencies</a><br>
                 </p>
                 <p>
                     <a href="#closingRemarks"><b>Closing remarks</b></a><br>
                     <a href="#attributions">Attributions</a><br>
-                    <a href="#references">References</a>
+                    <a href="#references">References</a><br>
                 </p>
             </td>
+
             <td id="contentPane">
                 <h1 id="introduction">Software architecture description (SAD) for test automation solution</h1>
                 <p>
@@ -498,7 +522,7 @@
                     This chapter contain usage instructions for people mainly interested in using this framework.
                     It aims at describing ways of working and best practices.
                 </p>
-                <h2>Interpreting logs</h2>
+                <h2 id="logInterpretation">Interpreting logs</h2>
                 <p>
                     The better one get at analyzing the logs, the easier it get to perform maintenance tasks for the test automation, and lesser time is spent on debugging.
                     A lot of effort has been put into get the logs easily read.
@@ -508,6 +532,7 @@
                     The test run log folder is named from the time it ran and the test set name.
                 </p>
                     <pre>
+
                         <i>20160923_165101_se.claremont.homepage.admintests</i>
                     </pre>
                 <p>
@@ -557,6 +582,33 @@
                     If <b>screenshots</b> are taken during test execution a thumbnail picture of the screenshot is displayed in the HTML log. On mouse-over it gets slightly larger,
                     and if it is clicked it is opened in full size in a new browser window or browser tab.
                 </p>
+                <h4 id="logLevelsExplained">Log level usages explained</h4>
+                <table style="background-color: white;">
+                    <tr>
+                        <td class="logLevelName">Info</td><td class="logLevelDescription">is for relevant contextual information</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Verification passed</td><td class="logLevelDescription">is used when a verification is performed with result deemed as ok</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Verification failed</td><td class="logLevelDescription">is used when a verification is performed with result with a deviation from expected oracle</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Verification problem</td><td class="logLevelDescription">is used when a verification couldn't be performed, for some reason</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Executed</td><td class="logLevelDescription">is for actions performed. Generally used for navigation description</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Execution problem</td><td class="logLevelDescription">is used when execution of an action could not be carried out</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Framework error</td><td class="logLevelDescription">is when an unhandled exception occurs</td>
+                    </tr>
+                    <tr>
+                        <td class="logLevelName">Deviation extra info</td><td class="logLevelDescription">is complimentary information for debugging purposes when a deviation from expected behavior occurs</td>
+                    </tr>
+                </table>
                 <p>
                     Debug log posts are considered unimportant if the test case is passed and are suppressed when creating the test case logs if execution and all verifications
                     are successful.
@@ -565,7 +617,7 @@
                 <br>
                 <hr>
                 <br>
-                <h2>Implementing a test class</h2>
+                <h2 id="testClassImplemention">Implementing a test class</h2>
                 <p>
                     Test classes is the runner entity of a collection of test cases. In this framework the test classes generally extend the TestSet class in order to get
                     full logging possibilities.
@@ -594,8 +646,8 @@ public class DemoTests extends TestSet {
 
     @AfterClass
     public static void ClassTearDown(){
-        CliTestRunner.testRun.summaryReport.evaluateTestSet(CliTestRunner.testRun.currentTestSet);
-        CliTestRunner.testRun.summaryReport.writeReport();
+        CliTestRunner.testRun.htmlSummaryReport.evaluateTestSet(CliTestRunner.testRun.currentTestSet);
+        CliTestRunner.testRun.htmlSummaryReport.writeReport();
     }
 
     @Test
@@ -610,7 +662,7 @@ public class DemoTests extends TestSet {
                     It might be worth noting that the technology specific classes of the test automation
                     is being kept away from the test class. Instead this is used in the test action class.
                 </p>
-                <h3>Implementing test cases</h3>
+                <h3 id="testCaseImplementation">Implementing test cases</h3>
                 <p>
                     A test class can consist of many test cases. The test case is run to completion, or
                     until some error that is considered to severe to continue is encountered. If a test
@@ -633,7 +685,7 @@ public void dummyTest1(){
                     auto-completion feature of modern IDEs is very helpful to know what to do.
                 </p>
                 <br>
-                <h2>Implementing a test actions class</h2>
+                <h2 id="testActionClassImplementation">Implementing a test actions class</h2>
                 <p>
                     Since several test cases might share test steps it is beneficial to gather the test steps as test actions in a test actions class
                     for the application under test.
@@ -720,11 +772,52 @@ class DemoTestActions {
 
                 <br>
                 <br>
+                <h2 id="commandLineInterface">Using the command line interface</h2>
+                <p>
+                    A command line interface is provided with this solution. For some instances this might be helpful for continuous integration and continuous deploy purposes.
+                </p>
+                <p>
+                    The runnable jar file that can be produced from the solution can be used in a few different ways.
+                </p>
+                <p>
+                    If used straight off it will run the test classes provided as arguments.
+                </p>
+                <p>
+                    Example:
+                </p>
+                <pre class="cli">
+
+        C:\>java -jar autotest.jar MyTestClass.class
+                </pre>
+                <p>
+                    However, any argument containing an equal-sign ('=') will be treated as a test run parameter. If a test run parameter with
+                    the same parameter name exist in the test run settings file the given parameter value will be used instead of the one in the file.
+                </p>
+                <p>
+                    Example:
+                </p>
+                <pre class="cli">
+
+        C:\>java -jar autotest.jar MyTestClass.class emailRecipients=firstname.lastname@company.com,firstname2.lastname2@company.com
+                </pre>
+                <p>
+                    If the word '<b><i>diagnostics</i></b>' is encountered among the arguments this will trigger a self-check by running both the unit
+                    tests and the smoke tests checking the installation environment (read ability for file locations and so forth).
+                </p>
+
+                <p>
+                    If the jar is invoked without parameters, or with parameters like 'help' or 'man' a short help text will be displayed.
+                </p>
+
+                <br>
+                <br>
                 <hr>
                 <br>
                 <br>
 
-                <h1 id="coding">Usage instruction for framework maintenance</h1>
+
+
+                <h1 id="codingInstructions">Usage instruction for framework maintenance</h1>
 
                 <h2 id="namingConvention">Naming conventions</h2>
                 <h3>Driver</h3>
@@ -825,17 +918,23 @@ class DemoTestActions {
                 <hr>
                 <br>
 
-                <h2>Creating a plug-in</h2>
+                <h2 id="plugins">Creating a plug-in</h2>
                 <p>
-                    This framework support two kinds of plugins. Either new driver plugins, or new reporting plugins.
+                    This framework support three kinds of plugins. Either new driver plugins, or new reporting plugins for test runs, or new reporting plugins for test cases.
                 </p>
-                <table id="pluginStructure" style="border: 1px solid grey; background-color: white; ">
+                <table id="pluginStructure" style="border: 0px solid grey; border-style: border-collapse;">
                     <tr>
+                        <td style="background-color: lightBlue; font-size: 130%; font-weight: bold; " rowspan="3">
+                            Framework
+                        </td>
+                        <td id="reporterFactory" style="background-color: lavender; ">
+                            TestCaseLogReporterFactory
+                        </td>
                         <td style="background-color: cornSilk; ">
                             <table id="reporters">
                                 <tr>
                                     <td style="background-color: aqua;">
-                                        TestCaseLogReporterHTMLLogFile
+                                        TestCaseLogReporterHtmlLogFile
                                     </td>
                                 </tr>
                                 <tr>
@@ -855,12 +954,8 @@ class DemoTestActions {
                                 </tr>
                             </table>
                         </td>
-                        <td id="reporterFactory" style="background-color: lavender; ">
-                            TestCaseLogReporterFactory
-                        </td>
-                        <td style="background-color: lightBlue; font-size: 130%; font-weight: bold; ">
-                            Framework
-                        </td>
+                    </tr>
+                    <tr>
                         <td style="background-color: lavender;">
                             Driver abstraction<br>(GuiDriver/GuiElement)
                         </td>
@@ -889,21 +984,90 @@ class DemoTestActions {
                             </table>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="background-color: lavender;">
+                            TestRunReporterFactory
+                        </td>
+                        <td style="background-color: cornSilk;">
+                            <table>
+                                <tr>
+                                    <td style="background-color: lavender;">
+                                        TestRunReporterEmailReport
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: white;">
+                                        TestRunReporterHtmlSummaryReportFile
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: lavender;">
+                                        ...and so on...
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                 </table>
                 <h3>GUI Driver plugins</h3>
                 <p>
-                    Support for new third party drivers can be achieved by creating a "glue class" that makes the driver methods implement the <i>GuiDriver</i> interface.
-                    It is strongly encouraged to also implement an abstraction of GUI elements used, by letting them imlement the <i>GuiElement</i> interface. In the long
+                    Support for new third party drivers can be achieved by creating a "glue class" that makes the driver methods implement the <b><i>GuiDriver</i></b> interface.
+                    It is strongly encouraged to also implement an abstraction of GUI elements used, by letting them imlement the <b><i>GuiElement</i></b> interface. In the long
                     run this makes it easy to substitute driver when new ones emerge.
                 </p>
+                <p>
+                    Generally speaking the <b><i>GuiDriver</i></b> interface implementation methods could be grouped in a few categories.<br>
+                    For explanations of the log levels mentioned below, please see the <a href="#logLevelsExplained">Log levels section</a>.
+                </p>
+
+                <h4>Navigational methods</h4>
+                <p>
+                    Methods like for example <i>click()</i>, or <i>write()</i>. These are used to drive the test flow forward. Generally speaking the navigational methods return void,
+                    and only log the following log levels to the test case log.
+                </p>
+                <ul>
+                    <li>Executed</li>
+                    <li>Execution problem</li>
+                    <li>Framework error</li>
+                </ul>
+                <p>
+                    Navigational methods might stop further test case execution if the problems are severe.
+                </p>
+
+                <h4>Flow control methdos</h4>
+                <p>
+                    Methods like for example <i>isDisplayed()</i>, <i>isNotDisplayed()</i> act to support execution and flow in a test case. These methods return true or false and only
+                    log debug log levels.
+                </p>
+
+                <h4>Verification methods</h4>
+                <p>
+                    Verification methods are used to assess states of something, like <i>verifyObjectIsDisplayed()</i>. They generally doesn't have return values, but log results to the test case log in the following log levels.
+                </p>
+                <ul>
+                    <li>Debug</li>
+                    <li>Verification passed</li>
+                    <li>Verification failed</li>
+                    <li>Verification problem</li>
+                    <li>Framework error</li>
+                </ul>
                 <h3>Reporting plugin</h3>
                 <p>
                     This framework has its own reporting mechanism out of the box, but you might want to propagate test results to a test management system in order
                     for the test results to be easily followed up upon, or for ease of communication purposes.
                 </p>
                 <p>
-                    Currently reporting plugins are only implemented at the test case level. To introduce new reporting mechanism, or to discontinue some of the old
-                    ones, create a class implementing the <i>TestCaseLogReporter</i> interface, and make sure the <i>TestCase</i> class '<i>reporters</i>' field adds an instance of that class.
+                    Currently reporting plugins are only implemented at the test case level and the test run level.
+                </p>
+                <h4>Implementing a new test case reporter plugin</h4>
+                <p>
+                    To introduce new reporting mechanism for test cases, or to discontinue some of the old
+                    ones, create a class implementing the <b><i>TestCaseLogReporter</i></b> interface, and make sure the <b><i>TestCase</i></b> class '<b><i>reporters</i></b>' field adds an instance of that class.
+                </p>
+                <h4>Implementing a new test run reporter plugin</h4>
+                <p>
+                    To introduce new reporting mechanisms for test runs, or to discontinue some of the old
+                    ones, create a class implementing the <b><i>TestRunReporter</i></b> interface, and make sure the <b><i>TestRun</i></b> class '<b><i>reporters</i></b>' field adds an instance of that class.
                 </p>
 
                 <br>

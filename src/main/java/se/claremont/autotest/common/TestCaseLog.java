@@ -86,7 +86,6 @@ class TestCaseLog {
         logPosts.add(logPost);
     }
 
-
     /**
      * Used when logging benefits from being different between HTML formatted testCaseLog info and other testCaseLog info.
      *

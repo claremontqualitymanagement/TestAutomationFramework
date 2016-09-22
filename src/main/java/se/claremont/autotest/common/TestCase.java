@@ -45,6 +45,7 @@ public class TestCase {
         addTestCaseData("Test case name", testName);
         startTime = new Date();
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
+        testCaseLog.log(LogLevel.INFO, "Running tests on machine with OS " + System.getProperty("OS.name"));
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
         reporters.add(new TestCaseLogReporterHtmlLogFile(this));
         setLogFolderIfNotAlreadySet();
@@ -77,7 +78,7 @@ public class TestCase {
         logKnownErrors();
         evaluateResultStatus();
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + SupportMethods.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
-        CliTestRunner.testRun.summaryReport.evaluateTestCase(this);
+        CliTestRunner.testRun.reporters.evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
         reported = true;
         assertExecutionResultsToTestRunner();
@@ -197,7 +198,7 @@ public class TestCase {
         for(LogPost logPost : testCaseLog.onlyErroneousLogPosts()){
             if(logPost.identifiedToBePartOfKnownError){
                 knownErrorsEncountered = true;
-                if(newErrorsEncountered) break;
+                if(newErrorsEncountered) break; //if both are set to true: continue
             }else{
                 newErrorsEncountered = true;
                 if(knownErrorsEncountered) break;

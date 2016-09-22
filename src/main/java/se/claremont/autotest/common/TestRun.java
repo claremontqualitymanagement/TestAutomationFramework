@@ -5,9 +5,14 @@ package se.claremont.autotest.common;
  * Created by jordam on 2016-08-17.
  */
 public class TestRun {
-    public final SummaryReport summaryReport = new SummaryReport();
     public int fileCounter = 0;
     public TestSet currentTestSet = null;
     public static final Settings settings = new Settings();
+    public TestRunReporterFactory reporters = new TestRunReporterFactory();
+
+    TestRun(){
+        reporters.addTestRunReporter(new TestRunReporterHtmlSummaryReportFile());
+        reporters.addTestRunReporter(new TestRunReporterEmailReport());
+    }
 
 }

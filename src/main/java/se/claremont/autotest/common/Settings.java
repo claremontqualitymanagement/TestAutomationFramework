@@ -1,7 +1,6 @@
 package se.claremont.autotest.common;
 
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,37 +23,16 @@ public class Settings {
      * Default values for Settings parameters
      */
     private void loadDefaults(){
-
-        //macintosh
-        if( new Utils().getOS().toLowerCase().contains( "mac" ) ) {
-            System.out.println( "Congratulation you are a winner using a macintosh!!!" );
-
-            setValueForProperty("baseLogFolder", "/Users/magnusolsson/Temp/");
-            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
-            setValueForProperty("testRunLogFolder", "/Users/magnusolsson/Temp/");
-            setValueForProperty("chromeDriverPathToExe", "/Users/magnusolsson/Temp/chromedriver.exe");
-            setValueForProperty("firefoxPathToBrowserExe", "/Applications/Firefox.app\\");
-
-            try {
-                File f = new File( getValueForProperty("baseLogFolder") + "runSettings.properties" );
-                if( f.exists() && f.isFile() ) {
-                    System.out.println( "*** " + f.getAbsolutePath() );
-                }
-            }
-            catch (Exception e) {
-                System.err.println("You got problem: " + e.getStackTrace());
-            }
-
-        }
-        // lets assume jvm is running upon windows os.
-        else {
-            setValueForProperty("baseLogFolder", "C:\\Temp\\");
-            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
-            setValueForProperty("testRunLogFolder", "");
-            setValueForProperty("chromeDriverPathToExe", "C:\\Temp\\chromedriver.exe");
-            setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
-        }
-
+        setValueForProperty("baseLogFolder", "%TEMP%" + File.separator);
+        setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+        setValueForProperty("testRunLogFolder", "");
+        setValueForProperty("chromeDriverPathToExe", "%TEMP%" + File.separator + "chromedriver.exe");
+        setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
+        setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
+        setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
+        setValueForProperty("emailAccountPassword", "Claremont16!");
+        setValueForProperty("emailHostPort", "587");
+        setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
     }
 
     /**
@@ -66,11 +44,11 @@ public class Settings {
     public void setValueForProperty(String propertyName, String propertyValue){
         for (ValuePair valuePair : parameters){
             if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())){
-                valuePair.value = propertyValue;
+                valuePair.value = propertyValue.trim();
                 return;
             }
         }
-        parameters.add(new ValuePair(propertyName, propertyValue));
+        parameters.add(new ValuePair(propertyName, propertyValue.trim()));
     }
 
     /**
@@ -92,6 +70,16 @@ public class Settings {
         for(ValuePair valuePair : parameters){
             stringBuilder.append(valuePair.parameter).append("=").append(valuePair.value).append(SupportMethods.LF);
         }
+        return stringBuilder.toString();
+    }
+
+    String toHtmlTable(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<table class=\"settingsTable\">").append(SupportMethods.LF);
+        for(ValuePair valuePair : parameters){
+            stringBuilder.append("  <tr>").append(valuePair.parameter).append("</td><td>").append(valuePair.value).append("</td></tr>").append(SupportMethods.LF);
+        }
+        stringBuilder.append("</table>").append(SupportMethods.LF);
         return stringBuilder.toString();
     }
 

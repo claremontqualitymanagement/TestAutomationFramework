@@ -24,7 +24,7 @@ import java.nio.file.Paths;
  * Created by jordam on 2016-08-17.
  */
 public class WebInteractionMethods implements GuiDriver {
-    private WebDriver driver;
+    public WebDriver driver;
     private final TestCase testCase;
     @SuppressWarnings("CanBeFinal")
     private int standardTimeoutInSeconds = 5;
@@ -147,7 +147,7 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Sending accept to popup
      */
-    public void checkAlert() {
+    public void acceptAlert() {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 5);
             wait.until(ExpectedConditions.alertIsPresent());
@@ -157,6 +157,44 @@ public class WebInteractionMethods implements GuiDriver {
             //exception handling
         }
     }
+
+    /**
+     * Re-scaling the browser window to a new size.
+     *
+     * @param width The new width of the browser window
+     * @param height The new height of the browser window
+     */
+    public void setBrowserWindowSize(int width, int height) {
+        log(LogLevel.DEBUG, "Re-sizing the browser window from (width/height) " + driver.manage().window().getSize().width + "/" + driver.manage().window().getSize().height + " pixels to " + width + "/" + height + " pixels.");
+        try{
+            driver.manage().window().setSize(new Dimension(width, height));
+            log(LogLevel.EXECUTED, "Re-sized browser window to width " + width + " pixels and height " + height + " pixels.");
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not re-size browser window to height " + height + " and width " + width + " pixels");
+        }
+    }
+
+    /**
+     * Checks current value of given attribute for the element. For example the href value of a link, the src value of an image and so forth.
+     *
+     * @param linkElement The element to check attribute of
+     * @param attributeName The name of the attribute to check the value of
+     * @param expectedAttributevalue The expected attribute of the element
+     */
+    public void verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributevalue){
+        DomElement domElement = (DomElement) linkElement;
+        try{
+            WebElement element = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+            if(element.getAttribute("href").equals(expectedAttributevalue)){
+                log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " was found to have the expected attribute value of '" + expectedAttributevalue + "' for attribute '" + attributeName + "'.");
+            } else {
+                log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " was expected to have the value '" + expectedAttributevalue + "' for attribute '" + attributeName + "' but actually had the value of '" + element.getAttribute(attributeName) + "'.");
+            }
+        } catch (Exception e){
+            log(LogLevel.VERIFICATION_PROBLEM, "Could not check the attribute '" + attributeName + "' of element " + domElement.LogIdentification() + " (was expected to have the value '" + expectedAttributevalue + "'." + SupportMethods.LF + e.toString() );
+        }
+    }
+
 
     /**
      * Writes text to the given element.
@@ -357,6 +395,16 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Changing the standard timeout value for waiting for objects in the GUI for most methods.
+     *
+     * @param standardTimeoutInSeconds The new value for standard timeout, in seconds.
+     */
+    public void setStandardTimeout(int standardTimeoutInSeconds){
+        log(LogLevel.DEBUG, "Resetting standard timeout from " + this.standardTimeoutInSeconds + " seconds to " + standardTimeoutInSeconds + " seconds.");
+        this.standardTimeoutInSeconds = standardTimeoutInSeconds;
+    }
+
+    /**
      * Performing a click event on an element
      *
      * @param guiElement the GUI element to click
@@ -365,7 +413,7 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement element = (DomElement) guiElement;
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
         try {
-            WebElement webelement = getRuntimeElementWithTimeout(element, 15);
+            WebElement webelement = getRuntimeElementWithTimeout(element, standardTimeoutInSeconds);
             if(webelement == null){
                 log(LogLevel.DEBUG, "Element does not exist.");
                 log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + element.LogIdentification() + ".");
@@ -425,7 +473,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Checks if the given object exist in the GUI
+     * Checks if the given object exist in the HTML. Compare with verifyObjectIsDisplayed, that also checks if the element is visible in the GUI.
      *
      * @param guiElement The GUI element to find
      */
@@ -437,6 +485,93 @@ public class WebInteractionMethods implements GuiDriver {
             saveHtmlContentOfCurrentPage();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
+        }
+    }
+
+    /**
+     * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyObjectIsNotDisplayed(GuiElement guiElement){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could not be identified in the html.");
+            log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not be present.");
+        } else if(!webElement.isDisplayed()) {
+            log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could be identified in the html, but it's suppressed from being displayed in the GUI.");
+            log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not displayed.");
+        }else {
+            log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was identified as displayed although expected to not be displayed.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    /**
+     * Checks if the given element is displayed in the GUI.
+     *
+     * @param guiElement The element to check for
+     * @return Return true if the element is displayed
+     */
+    public boolean isDisplayed(GuiElement guiElement){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        boolean displayed = (webElement == null || !webElement.isDisplayed());
+        log(LogLevel.DEBUG, "Checking if " + domElement.LogIdentification() + " is displayed. Returning " + displayed + ".");
+        return displayed;
+    }
+
+    /**
+     * Checks if the given element is displayed in the GUI.
+     *
+     * @param guiElement The element to check for
+     * @return Return true if the element is not displayed
+     */
+    public boolean isNotDisplayed(GuiElement guiElement){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        boolean notDisplayed = (webElement == null || !webElement.isDisplayed());
+        log(LogLevel.DEBUG, "Checking if "  + domElement.LogIdentification() + " is not displayed. Returning " + notDisplayed + ".");
+        return notDisplayed;
+    }
+
+    /**
+     * Checks if the given object is displayed in the HTML. Compare with verifyObjectExistence, that checks if the element exist in the html.
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyObjectIsDisplayed(GuiElement guiElement){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be displayed but could not be identified at all.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        } else if(!webElement.isDisplayed()) {
+            log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " is present, but the display of the object is suppressed.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }else {
+            log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
+        }
+    }
+
+    /**
+     * Checks if the given object exist in the GUI
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyObjectDoesNotExist(GuiElement guiElement){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement != null){
+            log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to not be present but was able to be identified.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        } else {
+            log(LogLevel.VERIFICATION_PASSED, "Verified that the object " + domElement.LogIdentification() + " was not present.");
         }
     }
 
