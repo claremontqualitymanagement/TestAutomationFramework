@@ -36,17 +36,27 @@ public class WebDriverManager {
      * @return Appropriate implementation of WebDriver interface
      */
     public static WebDriver initializeWebDriver(WebBrowserType webBrowserType, TestCase testCase){
-        WebDriver driver;
-        System.setProperty("webdriver.chrome.driver", TestRun.settings.getValueForProperty("chromeDriverPathToExe"));
-        System.setProperty("webdriver.firefox.bin", TestRun.settings.getValueForProperty("firefoxPathToBrowserExe"));
+        WebDriver driver = null;
         switch (webBrowserType){
             case CHROME:
                 testCase.log(LogLevel.INFO, "Initializing Chrome driver '" + System.getProperty("webdriver.chrome.driver") + "'.");
-                driver = new ChromeDriver();
+                System.setProperty("webdriver.chrome.driver", TestRun.settings.getValueForProperty("chromeDriverPathToExe"));
+                try {
+                    driver = new ChromeDriver();
+                } catch (Exception e){
+                    testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize driver '" + SupportMethods.enumCapitalNameToFriendlyString(webBrowserType.toString()) + "'. " +
+                    "Expected to find Chrome driver at '" + TestRun.settings.getValueForProperty("chromeDriverPathToExe") + "' as stated by the 'chromeDriverPathToExe' parameter in settings.");
+                }
                 break;
             case FIREFOX:
+                System.setProperty("webdriver.firefox.bin", TestRun.settings.getValueForProperty("firefoxPathToBrowserExe"));
                 testCase.log(LogLevel.INFO, "Initializing Firefox driver '" + System.getProperty("webdriver.firefox.bin") + "'.");
-                driver = new FirefoxDriver();
+                try{
+                    driver = new FirefoxDriver();
+                } catch (Exception e){
+                    testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize driver '" + SupportMethods.enumCapitalNameToFriendlyString(webBrowserType.toString()) + "'. " +
+                            "Expected to find Firefox driver at '" + TestRun.settings.getValueForProperty("firefoxPathToBrowserExe") + "' as stated by the 'firefoxPathToBrowserExe' parameter in settings.");
+                }
                 break;
             case REMOTE_CHROME:
                 testCase.log(LogLevel.INFO, "Initializing remote Chrome driver.");
@@ -56,9 +66,6 @@ public class WebDriverManager {
                 testCase.log(LogLevel.INFO, "Initializing Firefox driver (default driver) '" + System.getProperty("webdriver.firefox.bin") + "'.");
                 driver = new FirefoxDriver();
                 break;
-        }
-        if(driver.getWindowHandle() == null){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize driver '" + SupportMethods.enumCapitalNameToFriendlyString(webBrowserType.toString()) + "'.");
         }
         return driver;
     }
