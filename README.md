@@ -17,3 +17,5 @@ Running instructions:
 [![downloads]()]()
 [![MIT License]()]()
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
+
+© 2016 Claremont AB
