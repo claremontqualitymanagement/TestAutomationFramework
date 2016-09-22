@@ -23,10 +23,10 @@ public class Settings {
      * Default values for Settings parameters
      */
     private void loadDefaults(){
-        setValueForProperty("baseLogFolder", "%TEMP%" + File.separator);
-        setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+        setValueForProperty("baseLogFolder", "." + File.separator + "TAF" + File.separator);
+        setValueForProperty("pathToLogo", "");
         setValueForProperty("testRunLogFolder", "");
-        setValueForProperty("chromeDriverPathToExe", "%TEMP%" + File.separator + "chromedriver.exe");
+        setValueForProperty("chromeDriverPathToExe", "." + File.separator + "TAF" + File.separator + "chromedriver.exe");
         setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
         setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
         setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
