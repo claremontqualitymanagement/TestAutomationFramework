@@ -8,7 +8,7 @@ import se.claremont.autotest.support.SupportMethods;
 /**
  * CLI runner class for the test automation framework
  *
- * Created by jordam on 2016-08-27.
+ * Created by jordam on 2016-08-27..
  */
 public class CliTestRunner {
 
