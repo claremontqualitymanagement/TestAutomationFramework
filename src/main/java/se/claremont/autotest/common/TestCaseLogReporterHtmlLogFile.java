@@ -328,25 +328,31 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     @SuppressWarnings("SameParameterValue")
     private String timeProgressGraph(Date wholeTimePeriodStartTime, Date wholeTimePeriodEndTime, Date partialEventStartTime, Date partialEventEndTime, int graphWidth){
-        ArrayList<Date> times = new ArrayList<>();
-        times.add(wholeTimePeriodEndTime);
-        times.add(wholeTimePeriodStartTime);
-        times.add(partialEventEndTime);
-        times.add(partialEventStartTime);
-        Collections.sort(times);
+        long wholePeriod = wholeTimePeriodEndTime.getTime() - wholeTimePeriodStartTime.getTime();
+        if (wholePeriod == 0) return "";
 
         StringBuilder sb = new StringBuilder();
-        sb.append("<span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(times.get(1)))
-                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(times.get(2))).append("\">");
+        sb.append("<span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
+                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\">");
         sb.append("<table class=\"timeGraph\" width=\"").append(graphWidth).append("\"><tr>");
-        long widthOfInitPartPercent = (graphWidth*(times.get(1).getTime() - times.get(0).getTime()))/(times.get(3).getTime() - times.get(0).getTime());
-        sb.append("<td width=\"").append(widthOfInitPartPercent).append("px\" class=\"before\"></td>");
-        if(times.get(2).getTime()-times.get(1).getTime() != 0){
-            long widthOfPartPercent = (graphWidth*(times.get(2).getTime() - times.get(1).getTime()))/(times.get(3).getTime() - times.get(0).getTime());
-            sb.append("<td width=\"").append(widthOfPartPercent).append("px\" class=\"during\"></td>");
+
+        if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
+            long widthOfInitPartPercent = (graphWidth*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime()))/wholePeriod;
+            sb.append("<td width=\"").append(widthOfInitPartPercent).append("px\" class=\"before\"><span title=\"Whole time period start time: " + wholeTimePeriodStartTime.getTime() + LF +
+                    "Part section start time: " + partialEventStartTime.getTime() + "\"></span></td>");
         }
-        long widthOfEndPartPercent = (graphWidth*(times.get(3).getTime() - times.get(2).getTime()))/(times.get(3).getTime() - times.get(0).getTime());
-        sb.append("<td width=\"").append(widthOfEndPartPercent).append("px\" class=\"after\"></td>");
+
+        if(partialEventEndTime.getTime()-partialEventStartTime.getTime() != 0){
+            long widthOfPartPercent = (graphWidth*(partialEventEndTime.getTime() - partialEventStartTime.getTime()))/wholePeriod;
+            sb.append("<td width=\"").append(widthOfPartPercent).append("px\" class=\"during\"><span title=\"Part section start time: " + partialEventStartTime.getTime() + LF +
+                    "Part section end time: " + partialEventEndTime.getTime() + "\"></span></td>");
+        }
+
+        if(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime() != 0){
+            long widthOfEndPartPercent = (graphWidth*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
+            sb.append("<td width=\"").append(widthOfEndPartPercent).append("px\" class=\"after\"><span title=\"Part section end time: " + partialEventEndTime.getTime() + LF +
+                    "Whole section end time: " + wholeTimePeriodEndTime.getTime() + "\"></span></td>");
+        }
         sb.append("</tr></table>");
         sb.append("</span>");
         return sb.toString();
