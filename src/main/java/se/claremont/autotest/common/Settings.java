@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class Settings {
     private final ArrayList<ValuePair> parameters = new ArrayList<>();
+    private final ArrayList<ValuePair> hiddenParameters = new ArrayList<>(); //Not displayed in reports
 
     public Settings(){
         loadDefaults();
@@ -46,7 +47,7 @@ public class Settings {
         setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
         setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
         setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
-        setValueForProperty("emailAccountPassword", "Claremont16!");
+        setValueForHiddenProperty("emailAccountPassword", "Claremont16!");
         setValueForProperty("emailHostPort", "587");
     }
 
@@ -67,6 +68,22 @@ public class Settings {
     }
 
     /**
+     * Sets a value for a a hidden property in settings. Not displayed in reports.
+     *
+     * @param propertyName Name of the property
+     * @param propertyValue Value of the property (will be treated as a string)
+     */
+    public void setValueForHiddenProperty(String propertyName, String propertyValue){
+        for (ValuePair valuePair : hiddenParameters){
+            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())){
+                valuePair.value = propertyValue.trim();
+                return;
+            }
+        }
+        hiddenParameters.add(new ValuePair(propertyName, propertyValue.trim()));
+    }
+
+    /**
      * Retrieves the current value for a property
      *
      * @param propertyName The name of the property to retrieve the value for
@@ -74,6 +91,20 @@ public class Settings {
      */
     public String getValueForProperty(String propertyName){
         for(ValuePair valuePair : parameters){
+            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())) return valuePair.value;
+        }
+        System.out.println("Sorry. Could not find parameter '" + propertyName + "' among settings parameters.");
+        return null;
+    }
+
+    /**
+     * Retrieves the current value for a property
+     *
+     * @param propertyName The name of the property to retrieve the value for
+     * @return Returns the string based value of the property
+     */
+    public String getValueForHiddenProperty(String propertyName){
+        for(ValuePair valuePair : hiddenParameters){
             if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())) return valuePair.value;
         }
         System.out.println("Sorry. Could not find parameter '" + propertyName + "' among settings parameters.");
