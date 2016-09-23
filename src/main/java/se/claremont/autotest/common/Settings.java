@@ -1,6 +1,7 @@
 package se.claremont.autotest.common;
 
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,16 +24,30 @@ public class Settings {
      * Default values for Settings parameters
      */
     private void loadDefaults(){
-        setValueForProperty("baseLogFolder", "%TEMP%" + File.separator);
-        setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
-        setValueForProperty("testRunLogFolder", "");
-        setValueForProperty("chromeDriverPathToExe", "%TEMP%" + File.separator + "chromedriver.exe");
+
+        //TODO: We need to figure out were to set root folder TAF, in mac jvm doesn't have sufficent rights!!!
+        //macintosh
+        if( Utils.getInstance().amIMacOS() ) {
+            //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);
+            setValueForProperty("baseLogFolder", Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator);
+            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValueForProperty("testRunLogFolder", "");
+            setValueForProperty("chromeDriverPathToExe", Utils.getInstance().getUserWorkingDirectory() + File.separator + "drivers" + File.separator + "chromedriver");
+            setValueForProperty("firefoxPathToBrowserExe", File.separator + "Applications" + File.separator + "Firefox.app" + File.separator);
+        }
+        // lets assume jvm is running upon windows os.
+        else {
+            setValueForProperty("baseLogFolder", "%TEMP%" + File.separator);
+            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValueForProperty("testRunLogFolder", "");
+            setValueForProperty("chromeDriverPathToExe", "%TEMP%" + File.separator + "chromedriver.exe");
+            setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+        }
         setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
         setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
         setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
         setValueForProperty("emailAccountPassword", "Claremont16!");
         setValueForProperty("emailHostPort", "587");
-        setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
     }
 
     /**

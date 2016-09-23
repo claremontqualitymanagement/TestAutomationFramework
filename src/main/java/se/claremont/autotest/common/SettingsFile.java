@@ -45,6 +45,7 @@ class SettingsFile {
         } catch (Exception e) {
             System.out.println("Could not load properties from file '" + filePath + "'.");
         }
+        //java -jar app.jar -Dapp.properties="/path/to/custom/app.properties"
         String externalFileName = System.getProperty("app.properties");
         InputStream fin = null;
         try {

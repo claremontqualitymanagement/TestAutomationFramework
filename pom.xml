@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>1.0-beta-36</version>
+    <version>1.0.1-beta44</version>
     <packaging>jar</packaging>
     <!--<packaging>pom</packaging>-->
 
