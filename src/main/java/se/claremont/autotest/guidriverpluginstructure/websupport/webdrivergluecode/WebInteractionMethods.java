@@ -208,6 +208,26 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    /**
+     * Checks current value of given attribute for the element towards a regular expression pattern. For example the href value of a link, the src value of an image and so forth.
+     *
+     * @param linkElement The element to check attribute of
+     * @param attributeName The name of the attribute to check the value of
+     * @param expectedAttributevalueAsRegex The expected attribute of the element, as regular expression pattern
+     */
+    public void verifyElementAttributeRegex(GuiElement linkElement, String attributeName, String expectedAttributevalueAsRegex){
+        DomElement domElement = (DomElement) linkElement;
+        try{
+            WebElement element = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+            if(SupportMethods.isRegexMatch(element.getAttribute("href"),expectedAttributevalueAsRegex)){
+                log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " was found to have the expected attribute value of '" + expectedAttributevalueAsRegex + "' for attribute '" + attributeName + "'.");
+            } else {
+                log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " was expected to have the value '" + expectedAttributevalueAsRegex + "' for attribute '" + attributeName + "' but actually had the value of '" + element.getAttribute(attributeName) + "'.");
+            }
+        } catch (Exception e){
+            log(LogLevel.VERIFICATION_PROBLEM, "Could not check the attribute '" + attributeName + "' of element " + domElement.LogIdentification() + " (was expected to have the value '" + expectedAttributevalueAsRegex + "'." + SupportMethods.LF + e.toString() );
+        }
+    }
 
     /**
      * Writes text to the given element.
@@ -257,7 +277,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Saves the current HTML of the page interacted with to the testCaseLog folder for debugging purposes and write a testCaseLog post about it
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
-    public void saveHtmlContentOfCurrentPage(){
+    private void saveHtmlContentOfCurrentPage(){
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".html";
         String html = driver.getPageSource();
         SupportMethods.saveToFile(html, filePath);
@@ -624,6 +644,40 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Checks if specified regular expression text pattern exist in the browser page source code
+     *
+     * @param textAsRegexPattern test string to find
+     */
+    public void verifyTextAsRegexPatternExistInPageSource(String textAsRegexPattern){
+        String pageSource = driver.getPageSource();
+        if(SupportMethods.isRegexMatch(pageSource, textAsRegexPattern)){
+            log(LogLevel.VERIFICATION_PASSED, "The regular expression pattern '" + textAsRegexPattern + "' could be found on the current page.");
+        }else {
+            log(LogLevel.VERIFICATION_FAILED, "The regular expression pattern '" + textAsRegexPattern + "' could not be found on the current page.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    /**
+     * Checks the web browser page title against expected result, written as a regular expression
+     *
+     * @param expectedTitleAsRegexPattern Expected regular expression pattern to match the current title of the web page
+     */
+    @SuppressWarnings("unused")
+    public void verifyPageTitleAsRegex(String expectedTitleAsRegexPattern){
+        String currentTitle = driver.getTitle();
+        if(SupportMethods.isRegexMatch(currentTitle, expectedTitleAsRegexPattern)){
+            log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + currentTitle + "', and that title matches the given regex pattern '" + expectedTitleAsRegexPattern + "'.");
+        }else {
+            log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to match the regex pattern '" + expectedTitleAsRegexPattern+ "' but was '" + currentTitle + "'.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+
+    /**
      * Checks the web browser page title against expected result
      *
      * @param expectedTitle Expected current title of the web page
@@ -635,6 +689,35 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + expectedTitle + "' as expected.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to be '" + expectedTitle + "' but was '" + currentTitle + "'.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    /**
+     * Checks that the web browser page title matches the expected title pattern within specified timeout
+     *
+     * @param expectedTitleAsRegexPattern Expected title pattern in a regular expression format, for the web page
+     * @param timeoutInSeconds Timeout in seconds
+     */
+    @SuppressWarnings("SameParameterValue")
+    public void verifyPageTitleAsRegexWithTimeout(String expectedTitleAsRegexPattern, int timeoutInSeconds){
+        double startTime = System.currentTimeMillis();
+        String currentTitle = driver.getTitle();
+        long retryPeriodInMS = 50;
+        while(!SupportMethods.isRegexMatch(currentTitle, expectedTitleAsRegexPattern) && System.currentTimeMillis() - startTime < timeoutInSeconds *1000){
+            try {
+                Thread.sleep(retryPeriodInMS);
+            } catch (InterruptedException e) {
+                log(LogLevel.FRAMEWORK_ERROR, "Could not put thread to sleep.");
+                e.printStackTrace();
+            }
+            currentTitle = driver.getTitle();
+        }
+        if(SupportMethods.isRegexMatch(currentTitle, expectedTitleAsRegexPattern)){
+            log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + currentTitle + "' and that title is found to be a match for given regular expression pattern '" + expectedTitleAsRegexPattern + "' (found after " + (System.currentTimeMillis() - startTime) + " milliseconds).");
+        }else {
+            log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to match the regular expression pattern '" + expectedTitleAsRegexPattern + "' but was '" + currentTitle + "' even after " + timeoutInSeconds + " milliseconds.");
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
         }
@@ -687,6 +770,23 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Verifies that the current text of the given element correspont to the expected text.
+     *
+     * @param guiElement The element to check the text of
+     * @param expectedText The expected text to find
+     */
+    public void verifyElementTextWithRegexPattern(GuiElement guiElement, String expectedTextAsRegexPattern){
+        String currentText = getText(guiElement);
+        if(SupportMethods.isRegexMatch(currentText, expectedTextAsRegexPattern)){
+            log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to be '" + currentText + ". It is a match with the regular expression pattern '" + expectedTextAsRegexPattern + "'.");
+        } else {
+            log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have match the regular expression pattern '" + expectedTextAsRegexPattern+ "', but it actually was '" + currentText + "'. Not a match.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    /**
      * Verifies that an element is enabled for interaction (displayed and enabled).
      *
      * @param guiElement The element to assess.
@@ -715,13 +815,14 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param tabNameForTabToSwitchTo The name of the tab to switch to.
      */
-    public void switchBrowserTab(String tabNameForTabToSwitchTo){
+    public void switchBrowserTabWithTabNameGivenAsRegexPattern(String tabNameAsRegexForTabToSwitchTo){
         String currentTabId = "";
         String initialTitle = "";
         try
         {
             initialTitle = driver.getTitle();
             currentTabId = driver.getWindowHandle();
+            log(LogLevel.DEBUG, "Switching browser tabs, trying to switch to a tab with title matching the regular expression pattern '" + tabNameAsRegexForTabToSwitchTo + "'. Initial browser tab title = '" + initialTitle + "' (tab id='" + currentTabId + "').");
         }
         catch (Exception e)
         {
@@ -734,9 +835,47 @@ public class WebInteractionMethods implements GuiDriver {
             if (currentTabId != tabId)
             {
                 driver.switchTo().window(tabId);
+                String tabName = driver.getTitle();
+                log(LogLevel.DEBUG, "Identified browser tab with tab title = '" + tabName + " (id='" + tabId + "').");
+                if(SupportMethods.isRegexMatch(driver.getTitle(), tabNameAsRegexForTabToSwitchTo) ){
+                    return;
+                }
             }
-            if(driver.getTitle().equals(tabNameForTabToSwitchTo) ){
-                return;
+        }
+        log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'. Matched with regular expression pattern '" + tabNameAsRegexForTabToSwitchTo + "'.");
+    }
+
+
+    /**
+     * Changes what browser tab is currently activated.
+     *
+     * @param tabNameForTabToSwitchTo The name of the tab to switch to.
+     */
+    public void switchBrowserTab(String tabNameForTabToSwitchTo){
+        String currentTabId = "";
+        String initialTitle = "";
+        try
+        {
+            initialTitle = driver.getTitle();
+            currentTabId = driver.getWindowHandle();
+            log(LogLevel.DEBUG, "Switching browser tabs, trying to switch to tab with title '" + tabNameForTabToSwitchTo + "'. Initial browser tab title = '" + initialTitle + "' (tab id='" + currentTabId + "').");
+        }
+        catch (Exception e)
+        {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not switch browser tab. Browser seem to be closed.");
+            return;
+        }
+
+        for (String tabId : driver.getWindowHandles())
+        {
+            if (currentTabId != tabId)
+            {
+                driver.switchTo().window(tabId);
+                String tabName = driver.getTitle();
+                log(LogLevel.DEBUG, "Identified browser tab with tab title = '" + tabName + " (id='" + tabId + "').");
+                if(driver.getTitle().equals(tabNameForTabToSwitchTo) ){
+                    return;
+                }
             }
         }
         log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'.");
@@ -778,7 +917,9 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement domElement = (DomElement)guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null) return false;
-        if(webElement.isEnabled() && webElement.isDisplayed()) return true;
+        boolean interactionable = (webElement.isEnabled() && webElement.isDisplayed());
+        log(LogLevel.DEBUG, "Checking if " + ((DomElement)guiElement).LogIdentification() + " is interactionable and " + String.valueOf(interactionable).toLowerCase().replace("true", "it seemt to be both displayed and enabled.").replace("false", " it isn't."));
+        if(interactionable) return true;
         return false;
     }
 
