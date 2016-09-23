@@ -204,10 +204,12 @@ class LogPost {
             logRowClass += " " + extraClassName;
         }
         sb.append("          <tr class=\"").append(logRowClass).append(" ").append(logLevel.toString().toLowerCase()).append("\">").append(SupportMethods.LF);
-        sb.append("            <td class=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
+        sb.append("            <div>").append(SupportMethods.LF);
+        sb.append("              <td class=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
         //sb.append("<td class=\"").append(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.testStepName.toString()).append("\"><span title=\"Test step in class: ").append(testStepClassName).append("\">").append(testStepName).append("</span></td>");
-        sb.append("            <td class=\"logPostLogLevel ").append(logLevel.toString().toLowerCase()).append("\">").append(logLevelToString(logLevel.toString())).append("</td>").append(SupportMethods.LF);
-        sb.append("            <td class=\"logMessage\">").append(substituteDataElements(rowMessage)).append("</td>").append(SupportMethods.LF);
+        sb.append("              <td class=\"logPostLogLevel ").append(logLevel.toString().toLowerCase()).append("\">").append(logLevelToString(logLevel.toString())).append("</td>").append(SupportMethods.LF);
+        sb.append("              <td class=\"logMessage\">").append(substituteDataElements(rowMessage)).append("</td>").append(SupportMethods.LF);
+        sb.append("            </div>").append(SupportMethods.LF);
         sb.append("          </tr>").append(SupportMethods.LF);
         return sb.toString();
     }
