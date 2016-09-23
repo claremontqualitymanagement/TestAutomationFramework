@@ -294,7 +294,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                     html.append(              logPosts.get(0).testStepName).append("<span class=\"testStepClassName\"> (in class '").append(logPosts.get(0).testStepClassName).append("')</span>").append(LF);
                     html.append("            </td>").append(LF);
                     html.append("            <td class=\"progressGraph\" style=\"display: inline;\">").append(LF);
-                    html.append("              ").append(timeProgressGraph(runStartTime, firstLogPostTime, lastLogPostTime, runEndTime, 150));
+                    html.append("              ").append(timeProgressGraph(runStartTime, firstLogPostTime, runEndTime, lastLogPostTime, 150));
                     html.append("            </td>").append(LF);
                     html.append("          </tr>").append(LF);
                     html.append("        </tbody>").append(LF);
