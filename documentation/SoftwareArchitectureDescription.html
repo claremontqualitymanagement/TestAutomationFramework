@@ -36,6 +36,7 @@
           td.testCase      { background-color: pink; }
           td#testrun       { background-color: azure; }
           td.testSet       { background-color: beige; }
+          table.notification { background-color: lightGreen; color: darkSlateGray; border: 2px solid darkSlateGray; width: 70%; }
           td.testCaseLog           { background-color: cornSilk; }
           td.testCaseData  { background-color: paleGoldenRod; }
           td#summaryLogBox { background-color: lavender; }
@@ -115,11 +116,12 @@
             </td>
 
             <td id="contentPane">
-                <h1 id="introduction">Software architecture description (SAD) for test automation solution</h1>
+                <h1 id="introduction">Documentation for test automation solution TAF</h1>
                 <p>
                     This document tries to explain the concepts applied to the
                     test automation solution as well as the intention and the
-                    structural layout of the system.
+                    structural layout of the system and how to get started using the framework,
+                    both as a tester who implements test cases, or a test automation framework maintenance person.
                 </p>
                 <br>
 
@@ -481,16 +483,16 @@
                     If encountered they are displayed both in the summary report and
                     the test case logs for the test cases where they were identified.
                 </p>
+                <h3>Test case logging</h3>
                 <p>
-                    <b>Test case logging</b><br>
                     Information about events during execution of a <i>test case</i> is gathered in a test case testCaseLog
                     of the <i>Log</i> class, consisting of <i>testCaseLog posts</i>. After execution of a test case the testCaseLog
                     is saved as HTML document and/or a test document for the test case. Screenshots that has been
                     taken during execution is referenced into the testCaseLog files.<br>If no errors are encountered during
                     execution of a test case the debug testCaseLog posts are cleaned out prior to saving the testCaseLog.
                 </p>
+                <h3>Test run summary report</h3>
                 <p>
-                    <b>Test run summary report</b><br>
                     After each test case execution the test testCaseLog is being analyzed for the summary report that is
                     produced after each test run if the test case count for test cases executed is more than one.
                     This number is chosen due to debugging or creation of test cases often makes you run single
@@ -500,8 +502,8 @@
                     At the end of a test run the test summary report is being compiled and saved, if more than
                     one test case has been executed.
                 </p>
+                <h3>Test case data</h3>
                 <p>
-                    <b>Test case data</b><br>
                     Each test case has a list of test data used during test execution. This mechanism is implemented
                     for ease of debugging, and is displayed in the test case testCaseLog generated after test case execution.
                 </p>
@@ -509,6 +511,21 @@
                     If no test case data is saved during execution the test case data section of the test case testCaseLog
                     is suppressed.
                 </p>
+                <h3>Settings</h3>
+                <p>
+                    Default settings are saved in a runSettings.properties file at first run. These settings may be altered
+                    from the file itself, or overridden when the test automation solution is used from the command line.
+                </p>
+                <table class="notification">
+                    <tr>
+                        <td>
+                            <h4>Note:</h4>
+                            Settings can be normal, or set as hidden properties. The hidden properties work in the same way, but
+                            are not displayed in reports. Hidden properties can for example be passwords.
+
+                        </td>
+                    </tr>
+                </table>
                 <br>
 
                 <br>
@@ -760,15 +777,28 @@ class DemoTestActions {
               addKnownError("My pages cannot yet be opened.", "The current page title was expected to be 'My pages', but was*");
           }
                 </pre>
-                <p>
-                    Matching only occur in testCaseLog post entries containing erroneous messages. Log rows are considered erroneous if they fall into the following testCaseLog levels:<br>
-                </p>
-                <ul>
-                    <li>Verification failed</li>
-                    <li>Verification problem</li>
-                    <li>Execution problem</li>
-                    <li>Framework error</li>
-                </ul>
+                <br>
+                <br>
+                <table class="notification">
+                    <tr>
+                        <td>
+                            <h4>Note:</h4>
+                            <p>
+                                Matching of log rows are being compared with the pure text output found in the standard output as well as the pure text based test case log file found in the log folder
+                                for the test case. It is NOT being done towards the HTML based logs at the moment.
+                            </p>
+                            <p>
+                                Matching only occur in testCaseLog post entries containing erroneous messages. Log rows are considered erroneous if they fall into the following testCaseLog levels:<br>
+                            </p>
+                            <ul>
+                                <li>Verification failed</li>
+                                <li>Verification problem</li>
+                                <li>Execution problem</li>
+                                <li>Framework error</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
 
                 <br>
                 <br>

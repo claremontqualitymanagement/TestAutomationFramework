@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Methods for interaction with web elements in a web page DOM. Utilizes Selenium WebDriver components.
@@ -773,7 +775,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Verifies that the current text of the given element correspont to the expected text.
      *
      * @param guiElement The element to check the text of
-     * @param expectedText The expected text to find
+     * @param expectedTextAsRegexPattern The expected text to find
      */
     public void verifyElementTextWithRegexPattern(GuiElement guiElement, String expectedTextAsRegexPattern){
         String currentText = getText(guiElement);
@@ -783,6 +785,51 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have match the regular expression pattern '" + expectedTextAsRegexPattern+ "', but it actually was '" + currentText + "'. Not a match.");
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    /**
+     * Clicks the row matching the given strings in a table
+     *
+     * @param guiTableElement The table element in the gui
+     * @param textsToFindOnRow the text strings to find
+     */
+    public void pickTableRow(GuiElement guiTableElement, String[] textsToFindOnRow){
+        DomElement domElement = (DomElement)guiTableElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        List<WebElement> rows = webElement.findElements(By.xpath(".//*"));
+        for (WebElement row : rows)
+        {
+            ArrayList<String> rowStrings = new ArrayList<String>();
+            boolean allValuesFoundInRow = false;
+            boolean someValueFoundInRow = false;
+            boolean valueMissingOnRow = false;
+            List<WebElement> cells = row.findElements(By.xpath(".//*"));
+            for(String textToFindOnRow : textsToFindOnRow)
+            {
+                boolean valueFoundOnRow = false;
+                for(WebElement cell : cells)
+                {
+                    rowStrings.add(cell.getText());
+                    if (cell.getText().contains(textToFindOnRow))
+                    {
+                        someValueFoundInRow = true;
+                    }
+                }
+                if (!valueFoundOnRow)
+                {
+                    valueMissingOnRow = true;
+                    break;
+                }
+
+            }
+            log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
+            if (!valueMissingOnRow)
+            {
+                allValuesFoundInRow = true;
+                row.click();
+                break;
+            }
         }
     }
 
@@ -813,7 +860,7 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Changes what browser tab is currently activated.
      *
-     * @param tabNameForTabToSwitchTo The name of the tab to switch to.
+     * @param tabNameAsRegexForTabToSwitchTo The name of the tab to switch to.
      */
     public void switchBrowserTabWithTabNameGivenAsRegexPattern(String tabNameAsRegexForTabToSwitchTo){
         String currentTabId = "";

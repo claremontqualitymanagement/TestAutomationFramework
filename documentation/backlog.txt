@@ -1,13 +1,11 @@
 Doing
 =========
 Make CLI interface run classes
-Merge maven pom.xml files to make runnable jar, minimum jar, javadocs, dependencies and so forth
 
 To do
 =========
 Find appropriate location for Javadocs
 Document settings management
-Document new TestRunReportFactory
 New crunch to create more unit tests
 Bug: Fix debug rows seem to be line-broken in HTML report
 Bug: Progress bar in summary report behaves badly
@@ -15,12 +13,12 @@ plus/minus sign (or other indicator) as indication icon for expandable sections 
 Include Javadoc in maven build
 Make sure Javadoc comments exist everywhere applicable
 Check for similar errors in summary
+Document how to use tests in Jenkins with this framework
 Document that known errors only work on text testCaseLog phrases
 Formatting of HTML styles - make reports pretty
 Document more examples
 Support for radiobuttons
 Support for dropdown
-Split solution in stand-alone framework component and SUT related stuff
 Saving desktop image upon error, and not just browser content
 WebDriver toString() should be Overridden
 Multi-browser support
@@ -33,8 +31,11 @@ Implement support for parallel execution
 Done
 ===========
 Get rid of java 1.5 warnings
+Implement support for web tables
 Get ObjectFactory for Logger to ready state
+Split solution in stand-alone framework component and SUT related stuff
 Bug: Sometimes TestCaseHtmlLog get wrong status of test case. Known errors found, but still got status ONLY_NEW_ERRORS
+Merge maven pom.xml files to make runnable jar, minimum jar, javadocs, dependencies and so forth
 Email report
 Create reporter factory for test set too
 Implement toggleable sections for components in HTML test case log
@@ -45,6 +46,7 @@ Move runSettings.properties file to better location
 More REST service calls - put, delete
 Minimum table width in html log
 Test case data
+Document new TestRunReportFactory
 Abstraction for GUI elements
 Component support for test case testCaseLog (from callstack?)
 REST service support
