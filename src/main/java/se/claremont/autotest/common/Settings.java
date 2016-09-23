@@ -123,7 +123,7 @@ public class Settings {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table class=\"settingsTable\">").append(SupportMethods.LF);
         for(ValuePair valuePair : parameters){
-            stringBuilder.append("  <tr>").append(valuePair.parameter).append("</td><td>").append(valuePair.value).append("</td></tr>").append(SupportMethods.LF);
+            stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(valuePair.parameter).append("</td><td class=\"settingsParameterValue\">").append(valuePair.value).append("</td></tr>").append(SupportMethods.LF);
         }
         stringBuilder.append("</table>").append(SupportMethods.LF);
         return stringBuilder.toString();
