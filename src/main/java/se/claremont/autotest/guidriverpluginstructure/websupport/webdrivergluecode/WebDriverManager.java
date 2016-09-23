@@ -39,8 +39,8 @@ public class WebDriverManager {
         WebDriver driver = null;
         switch (webBrowserType){
             case CHROME:
-                testCase.log(LogLevel.INFO, "Initializing Chrome driver '" + System.getProperty("webdriver.chrome.driver") + "'.");
                 System.setProperty("webdriver.chrome.driver", TestRun.settings.getValueForProperty("chromeDriverPathToExe"));
+                testCase.log(LogLevel.INFO, "Initializing Chrome driver '" + System.getProperty("webdriver.chrome.driver") + "'.");
                 try {
                     driver = new ChromeDriver();
                 } catch (Exception e){

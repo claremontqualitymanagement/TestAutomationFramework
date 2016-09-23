@@ -38,10 +38,10 @@ public class Settings {
         }
         // lets assume jvm is running upon windows os.
         else {
-            setValueForProperty("baseLogFolder", "%TEMP%" + File.separator);
+            setValueForProperty("baseLogFolder", System.getProperty("user.home") + File.separator + "TAF" + File.separator);
             setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
             setValueForProperty("testRunLogFolder", "");
-            setValueForProperty("chromeDriverPathToExe", "%TEMP%" + File.separator + "chromedriver.exe");
+            setValueForProperty("chromeDriverPathToExe", System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
             setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
         }
         setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
