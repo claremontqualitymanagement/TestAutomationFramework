@@ -1,6 +1,7 @@
 package se.claremont.autotest.support;
 
 import org.junit.Assert;
+import se.claremont.tools.Utils;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -38,6 +39,8 @@ public class SupportMethods {
             File file = new File(filePath);
             //noinspection ResultOfMethodCallIgnored
             file.getParentFile().mkdirs();
+            if( !Utils.getInstance().doesFileExists( filePath ) )
+                file.createNewFile();
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(filePath), "utf-8"));
             writer.write(content);

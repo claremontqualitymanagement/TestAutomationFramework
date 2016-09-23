@@ -1,6 +1,7 @@
 package se.claremont.autotest.common;
 
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
  */
 public class Settings {
     private final ArrayList<ValuePair> parameters = new ArrayList<>();
-    private final ArrayList<ValuePair> hiddenParameters = new ArrayList<>();
 
     public Settings(){
         loadDefaults();
@@ -24,14 +24,29 @@ public class Settings {
      * Default values for Settings parameters
      */
     private void loadDefaults(){
-        setValueForProperty("baseLogFolder", System.getProperty("java.io.tmpdir") + "TAF" + File.separator);
-        setValueForProperty("pathToLogo", "");
-        setValueForProperty("testRunLogFolder", "");
-        setValueForProperty("chromeDriverPathToExe", System.getProperty("java.io.tmpdir") + "TAF" + File.separator + "chromedriver.exe");
+
+        //TODO: We need to figure out were to set root folder TAF, in mac jvm doesn't have sufficent rights!!!
+        //macintosh
+        if( Utils.getInstance().amIMacOS() ) {
+            //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);
+            setValueForProperty("baseLogFolder", Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator);
+            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValueForProperty("testRunLogFolder", "");
+            setValueForProperty("chromeDriverPathToExe", Utils.getInstance().getUserWorkingDirectory() + File.separator + "drivers" + File.separator + "chromedriver");
+            setValueForProperty("firefoxPathToBrowserExe", File.separator + "Applications" + File.separator + "Firefox.app" + File.separator);
+        }
+        // lets assume jvm is running upon windows os.
+        else {
+            setValueForProperty("baseLogFolder", "%TEMP%" + File.separator);
+            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValueForProperty("testRunLogFolder", "");
+            setValueForProperty("chromeDriverPathToExe", "%TEMP%" + File.separator + "chromedriver.exe");
+            setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+        }
         setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
         setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
         setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
-        setValueForHiddenProperty("emailAccountPassword", "Claremont16!");
+        setValueForProperty("emailAccountPassword", "Claremont16!");
         setValueForProperty("emailHostPort", "587");
     }
 
@@ -51,16 +66,6 @@ public class Settings {
         parameters.add(new ValuePair(propertyName, propertyValue.trim()));
     }
 
-    public void setValueForHiddenProperty(String propertyName, String propertyValue){
-        for (ValuePair valuePair : hiddenParameters){
-            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())){
-                valuePair.value = propertyValue.trim();
-                return;
-            }
-        }
-        hiddenParameters.add(new ValuePair(propertyName, propertyValue.trim()));
-    }
-
     /**
      * Retrieves the current value for a property
      *
@@ -72,20 +77,6 @@ public class Settings {
             if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())) return valuePair.value;
         }
         System.out.println("Sorry. Could not find parameter '" + propertyName + "' among settings parameters.");
-        return null;
-    }
-
-    /**
-     * Retrieves the current value for a property
-     *
-     * @param propertyName The name of the property to retrieve the value for
-     * @return Returns the string based value of the property
-     */
-    public String getValueForHiddenProperty(String propertyName){
-        for(ValuePair valuePair : hiddenParameters){
-            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())) return valuePair.value;
-        }
-        System.out.println("Sorry. Could not find hidden parameter '" + propertyName + "' among settings hidden parameters.");
         return null;
     }
 

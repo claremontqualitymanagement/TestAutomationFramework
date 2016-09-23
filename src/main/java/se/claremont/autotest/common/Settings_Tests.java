@@ -13,7 +13,7 @@ public class Settings_Tests {
      @Test
     public void loadDefaults(){
          Settings settings = new Settings();
-         Assert.assertTrue(settings.getValueForProperty("baseLogFolder").equals("C:\\Temp\\"));
+         Assert.assertTrue( !settings.getValueForProperty("baseLogFolder").isEmpty() );
      }
 
     @Test
