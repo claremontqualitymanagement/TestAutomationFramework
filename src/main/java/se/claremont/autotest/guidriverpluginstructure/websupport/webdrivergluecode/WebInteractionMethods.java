@@ -66,6 +66,19 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Browser back button
+     */
+    public void goBack(){
+        try{
+            driver.navigate().back();
+            log(LogLevel.EXECUTED, "Navigating back in browser.");
+
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not navigate back in browser." + e.toString());
+        }
+    }
+
+    /**
      * Writes a testCaseLog post to the testCaseLog
      *
      * @param logLevel The testCaseLog level of the testCaseLog post
@@ -597,7 +610,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param text test string to find
      */
-    public void verifyTextOnCurrentPage(String text){
+    public void verifyTextExistOnCurrentPage(String text){
         DomElement domElement = new DomElement("//*[contains(text(),'" + text + "')]", DomElement.IdentificationType.BY_X_PATH);
         //List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + text + "')]"));
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
@@ -654,6 +667,119 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
         }
+    }
+
+    /**
+     * Verifies that the current text of the given element correspont to the expected text.
+     *
+     * @param guiElement The element to check the text of
+     * @param expectedText The expected text to find
+     */
+    public void verifyElementText(GuiElement guiElement, String expectedText){
+        String currentText = getText(guiElement);
+        if(currentText.equals(expectedText)){
+            log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to have the text '" + expectedText + "' as expected.");
+        } else {
+            log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have the text '" + expectedText + "', but it actually was '" + currentText + "'.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    /**
+     * Verifies that an element is enabled for interaction (displayed and enabled).
+     *
+     * @param guiElement The element to assess.
+     */
+    public void verifyIsEnabled(GuiElement guiElement){
+        if(isEnabled(guiElement)){
+            log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to be enabled as expected.");
+        }else {
+            WebElement webElement = getRuntimeElementWithTimeout((DomElement)guiElement, standardTimeoutInSeconds);
+            if(webElement == null) {
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled, but could not be identified.");
+                return;
+            }
+            if(!webElement.isDisplayed() && !webElement.isEnabled()){
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled, but it's neither displayed, nor enabled.");
+            }else if(webElement.isEnabled()){
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled. It seem to be enabled, but not displayed.");
+            }else{
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled. It's enabled, but not displayed and cannot be used for interaction.");
+            }
+        }
+    }
+
+    /**
+     * Changes what browser tab is currently activated.
+     *
+     * @param tabNameForTabToSwitchTo The name of the tab to switch to.
+     */
+    public void switchBrowserTab(String tabNameForTabToSwitchTo){
+        String currentTabId = "";
+        String initialTitle = "";
+        try
+        {
+            initialTitle = driver.getTitle();
+            currentTabId = driver.getWindowHandle();
+        }
+        catch (Exception e)
+        {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not switch browser tab. Browser seem to be closed.");
+            return;
+        }
+
+        for (String tabId : driver.getWindowHandles())
+        {
+            if (currentTabId != tabId)
+            {
+                driver.switchTo().window(tabId);
+            }
+            if(driver.getTitle().equals(tabNameForTabToSwitchTo) ){
+                return;
+            }
+        }
+        log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'.");
+
+    }
+
+    /**
+     * Closes the current browser tab. If it's the last one the browser is closed.
+     */
+    public void closeCurrentBrowserTab(){
+        log(LogLevel.FRAMEWORK_ERROR, "Close current browser tab is not yet implemented.");
+    }
+
+
+    /**
+     * Holds mouse cursor over given element
+     *
+     * @param guiElement Element to hover
+     */
+    public void hover(GuiElement guiElement){
+        String javaScript = "var evObj = document.createEvent('MouseEvents');" +
+                "evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);" +
+                "arguments[0].dispatchEvent(evObj);";
+        try{
+            ((JavascriptExecutor)driver).executeScript(javaScript, getRuntimeElementWithTimeout(((DomElement)guiElement), standardTimeoutInSeconds));
+            log(LogLevel.EXECUTED, "Hover over " + ((DomElement)guiElement).LogIdentification() + ".");
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not hover over " + ((DomElement)guiElement).LogIdentification() + ".");
+        }
+    }
+
+    /**
+     * Returns if the element is able to interact with (actually if it is displayed and enabled)
+     *
+     * @param guiElement The element to check
+     * @return Return true if the element is displayed and enabled.
+     */
+    public boolean isEnabled(GuiElement guiElement){
+        DomElement domElement = (DomElement)guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null) return false;
+        if(webElement.isEnabled() && webElement.isDisplayed()) return true;
+        return false;
     }
 
     /**
