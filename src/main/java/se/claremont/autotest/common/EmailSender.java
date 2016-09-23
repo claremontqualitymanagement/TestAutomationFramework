@@ -53,7 +53,7 @@ class EmailSender {
     public String sendThroughGmail(){
         String returnMessage = "";
         String username = CliTestRunner.testRun.settings.getValueForProperty("emailUserName");
-        String password = CliTestRunner.testRun.settings.getValueForProperty("emailPassword");
+        String password = CliTestRunner.testRun.settings.getValueForHiddenProperty("emailPassword");
         this.hostName = "smtp.gmail.com";
         this.hostServerPort = "587";
 
