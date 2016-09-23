@@ -5,6 +5,7 @@ Make CLI interface run classes
 To do
 =========
 Find appropriate location for Javadocs
+Get scripts for release management working
 Document settings management
 New crunch to create more unit tests
 Bug: Fix debug rows seem to be line-broken in HTML report
