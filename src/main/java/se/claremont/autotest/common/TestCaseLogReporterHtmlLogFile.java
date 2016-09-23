@@ -27,7 +27,8 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         this.testCase = testCase;
         if(testCase.testCaseLog.logPosts.size() > 0){
             this.runStartTime = testCase.testCaseLog.logPosts.get(0).date;
-            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        } else {
+            this.runStartTime = new Date();
         }
     }
 
@@ -120,6 +121,11 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     public void report(){
         testCase.log(LogLevel.DEBUG, "Saving html report to '" + testCase.pathToHtmlLog + "'.");
         System.out.println("Saving html report to '" + testCase.pathToHtmlLog + "'.");
+        if(testCase.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        } else {
+            this.runEndTime = new Date();
+        }
         StringBuilder html = new StringBuilder();
         html.append("<html>").append(LF).append(LF);
         html.append(htmlSectionHtmlHead());
