@@ -1,6 +1,8 @@
 package se.claremont.tools;
 
 import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by magnusolsson on 2016-09-21.
@@ -9,6 +11,8 @@ import java.io.File;
  *
  */
 public class Utils {
+
+    final Logger logger = LoggerFactory.getLogger( Utils.class );
 
     private static Utils instance = null;
 
@@ -27,7 +31,9 @@ public class Utils {
      * @return os for running jvm
      */
     public String getOS() {
-        return System.getProperty("os.name");
+        String os = System.getProperty("os.name");
+        logger.debug("JVM is running on OS: {}.", os);
+        return os;
     }
 
     /**
