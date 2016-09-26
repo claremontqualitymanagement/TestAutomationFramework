@@ -44,11 +44,13 @@ public class Settings {
             setValueForProperty("chromeDriverPathToExe", System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
             setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
         }
-        setValueForProperty("emailRecipients", "jorgen.damberg@gmail.com");
-        setValueForProperty("emailHostServerAddress", "smtp.gmail.com");
-        setValueForProperty("emailAccountUserName", "autotestcqm@gmail.com");
-        setValueForHiddenProperty("emailAccountPassword", "Claremont16!");
-        setValueForProperty("emailHostPort", "587");
+        setValueForProperty("emailRecipients", "");
+        setValueForProperty("emailSenderAddress", "");
+        setValueForProperty("emailHostAddress", "");
+        setValueForProperty("emailUserName", "");
+        setValueForHiddenProperty("emailPassword", "");
+        setValueForProperty("emailHostPort", "");
+        setValueForProperty("emailTypeSmtpOrGmail", "");
     }
 
     /**

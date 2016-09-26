@@ -17,17 +17,36 @@ class EmailSender {
     String subjectLine;
     String htmlContent;
     String hostServerPort;
+    EmailSendType emailSendType;
 
-    EmailSender(String hostName, String senderAddress, String[] recipientAddresses, String subjectLine, String htmlContent, String hostServerPort){
+    enum EmailSendType{
+        SMTP,
+        GMAIL
+    }
+
+    EmailSender(String hostName, String senderAddress, String[] recipientAddresses, String subjectLine, String htmlContent, String hostServerPort, String smtpOrGmail){
         this.hostName = hostName;
         this.senderAddress = senderAddress;
         this.recipientAddresses = recipientAddresses;
         this.subjectLine = subjectLine;
         this.htmlContent = htmlContent;
         this.hostServerPort = hostServerPort;
+        if(smtpOrGmail.toLowerCase().equals("smtp")){
+            this.emailSendType = EmailSendType.SMTP;
+        } else {
+            this.emailSendType = EmailSendType.GMAIL;
+        }
+
+        if(this.emailSendType == EmailSendType.GMAIL){
+            sendThroughGmail();
+        } else if(this.emailSendType == EmailSendType.SMTP){
+            sendThroughSmtp();
+        } else {
+            System.out.println("Cannot send email through un-implemented EmailSendType '" + this.emailSendType.toString() + "'.");
+        }
     }
 
-    private void send2() {
+    void sendThroughSmtp() {
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", hostName);
         Session session = Session.getDefaultInstance(properties);
@@ -58,8 +77,7 @@ class EmailSender {
         this.hostServerPort = "587";
 
         if(username == null || username.length() < 1) {
-            username = "autotestcqm@gmail.com";
-            password = "loadDefaults";
+            return "Cannot send mail. No email account user name set in settings.";
         }
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -104,10 +122,10 @@ class EmailSender {
         return returnMessage;
     }
 
-    public void send() {
+    public void sendThroughSmtpAdvanced() {
             Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.host", hostName);
+            props.put("mail.smtp.socketFactory.port", hostServerPort);
             props.put("mail.smtp.socketFactory.class",
                     "javax.net.ssl.SSLSocketFactory");
             props.put("mail.smtp.auth", "true");
