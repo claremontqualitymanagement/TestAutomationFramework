@@ -17,7 +17,9 @@ public class UtilsTest {
     @Test
     public void getOS() {
         Assert.assertTrue( !Utils.getInstance().getOS().equalsIgnoreCase("") );
-        Assert.assertTrue( Utils.getInstance().getOS().toLowerCase().contains("mac") || Utils.getInstance().getOS().toLowerCase().contains("win") );
+        Assert.assertTrue( Utils.getInstance().getOS().toLowerCase().contains("mac") ||
+                Utils.getInstance().getOS().toLowerCase().contains("linux") ||
+                Utils.getInstance().getOS().toLowerCase().contains("win") );
     }
 
 }
