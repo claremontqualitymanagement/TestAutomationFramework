@@ -21,7 +21,8 @@ class EmailSender {
 
     enum EmailSendType{
         SMTP,
-        GMAIL
+        GMAIL,
+        UNMANAGED
     }
 
     EmailSender(String hostName, String senderAddress, String[] recipientAddresses, String subjectLine, String htmlContent, String hostServerPort, String smtpOrGmail){
@@ -33,20 +34,27 @@ class EmailSender {
         this.hostServerPort = hostServerPort;
         if(smtpOrGmail.toLowerCase().equals("smtp")){
             this.emailSendType = EmailSendType.SMTP;
-        } else {
+        } else if(smtpOrGmail.toLowerCase().equals("gmail")){
             this.emailSendType = EmailSendType.GMAIL;
-        }
-
-        if(this.emailSendType == EmailSendType.GMAIL){
-            sendThroughGmail();
-        } else if(this.emailSendType == EmailSendType.SMTP){
-            sendThroughSmtp();
         } else {
-            System.out.println("Cannot send email through un-implemented EmailSendType '" + this.emailSendType.toString() + "'.");
+            this.emailSendType = EmailSendType.UNMANAGED;
         }
     }
 
-    void sendThroughSmtp() {
+    public String send(){
+        if(this.emailSendType == EmailSendType.GMAIL){
+            return sendThroughGmail();
+        } else if(this.emailSendType == EmailSendType.SMTP){
+            return sendThroughSmtp();
+        } else if(this.emailSendType == EmailSendType.UNMANAGED){
+            return "Cannot send email through un-implemented EmailSendType '" + this.emailSendType.toString() + "'.";
+        } else {
+            return "This is not supposed to be possible";
+        }
+
+    }
+
+    private String sendThroughSmtp() {
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", hostName);
         Session session = Session.getDefaultInstance(properties);
@@ -63,13 +71,13 @@ class EmailSender {
 
             Transport.send(message);
             System.out.println("Sent email message successfully.");
+            return "Sent email message successfully";
         }catch (MessagingException mex) {
-            System.out.println("Something went terribly wrong sending the email. " + mex.toString());
-            mex.printStackTrace();
+            return "Something went terribly wrong sending the email. " + mex.toString();
         }
     }
 
-    public String sendThroughGmail(){
+    private String sendThroughGmail(){
         String returnMessage = "";
         String username = CliTestRunner.testRun.settings.getValueForProperty("emailUserName");
         String password = CliTestRunner.testRun.settings.getValueForHiddenProperty("emailPassword");
@@ -110,19 +118,18 @@ class EmailSender {
                             "' using account '" + username + "' to mail host '" +
                             hostName + ":" + hostServerPort + "'." +
                             SupportMethods.LF;
-            System.out.println(returnMessage);
+            return returnMessage;
         } catch (MessagingException e) {
             returnMessage =                     SupportMethods.LF + SupportMethods.LF +
                     "Could not send email with subject '" + subjectLine +
                     "' using account '" + username + "' to mail host '" +
                     hostName + ":" + hostServerPort + "'. Firewall issues or authentication problems could be the culprit." +
                     SupportMethods.LF + SupportMethods.LF + e.toString() + SupportMethods.LF;
-            System.out.println(returnMessage);
+            return returnMessage;
         }
-        return returnMessage;
     }
 
-    public void sendThroughSmtpAdvanced() {
+    private void sendThroughSmtpAdvanced() {
             Properties props = new Properties();
             props.put("mail.smtp.host", hostName);
             props.put("mail.smtp.socketFactory.port", hostServerPort);

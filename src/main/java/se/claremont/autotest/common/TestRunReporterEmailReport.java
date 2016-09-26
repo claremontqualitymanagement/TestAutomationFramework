@@ -16,8 +16,15 @@ public class TestRunReporterEmailReport implements TestRunReporter{
             for(String recipient : recipientsString.split(",")){
                 recipients.add(recipient.trim());
             }
-            EmailSender emailSender = new EmailSender(TestRun.settings.getValueForProperty("emailHostAddress"), TestRun.settings.getValueForProperty("emailSenderAddress"), recipients.toArray(new String[0]), "AutoTest results", htmlSummaryReport.createReport(), TestRun.settings.getValueForProperty("emailHostPort"), TestRun.settings.getValueForProperty("emailTypeSmtpOrGmail"));
-            emailSender.sendThroughSmtp();
+            EmailSender emailSender = new EmailSender(
+                    TestRun.settings.getValueForProperty("emailHostAddress"),
+                    TestRun.settings.getValueForProperty("emailSenderAddress"),
+                    recipients.toArray(new String[0]),
+                    "AutoTest results",
+                    htmlSummaryReport.createReport(),
+                    TestRun.settings.getValueForProperty("emailHostPort"),
+                    TestRun.settings.getValueForProperty("emailTypeSmtpOrGmail"));
+            System.out.println(emailSender.send());
         }
     }
 
