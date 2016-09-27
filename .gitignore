@@ -1,6 +1,5 @@
 target
 .DS_Store
-src/main/java/se/claremont/demo/
 demo
 doc
 .idea
