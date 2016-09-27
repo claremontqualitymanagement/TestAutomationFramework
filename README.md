@@ -10,7 +10,9 @@ Using Maven command:mvn clean install
 Running instructions:
 - With jar file: java -jar -Dapp.properties="<absolut path to runSettings.properties file>"
 
-Read more about the documentation <a href="documentation/SoftwareArchitectureDescription.html">here</a>.
+Read more about the documentation [here](documentation/SoftwareArchitectureDescription.html).
+
+* <a href="documentation/SoftwareArchitectureDescription.html" target="_blank">here</a>.
 
 [![travis build](https://img.shields.io/travis/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://travis-ci.org/claremontqualitymanagement/TestAutomationFramework)
 [![codecov coverage](https://img.shields.io/codecov/c/github/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
