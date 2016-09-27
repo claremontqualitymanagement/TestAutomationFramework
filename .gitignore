@@ -7,6 +7,6 @@ doc
 TestAutomationFramework.iml
 out
 .iml
-drivers
+src/main/resources/drivers
 TAF
 *.log*
