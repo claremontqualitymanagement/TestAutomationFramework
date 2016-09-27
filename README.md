@@ -12,8 +12,6 @@ Running instructions:
 
 Read more about the documentation [here](documentation/SoftwareArchitectureDescription.html).
 
-* <a href="documentation/SoftwareArchitectureDescription.html" target="_blank">here</a>.
-
 [![travis build](https://img.shields.io/travis/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://travis-ci.org/claremontqualitymanagement/TestAutomationFramework)
 [![codecov coverage](https://img.shields.io/codecov/c/github/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
 [![versions]()]()

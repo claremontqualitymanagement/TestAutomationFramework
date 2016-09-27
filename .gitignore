@@ -1,6 +1,7 @@
 target
 .DS_Store
-prv
+src/main/java/se/claremont/demo/
+demo
 doc
 .idea
 TestAutomationFramework.iml
@@ -8,4 +9,4 @@ out
 .iml
 drivers
 TAF
-*.log
+*.log*
