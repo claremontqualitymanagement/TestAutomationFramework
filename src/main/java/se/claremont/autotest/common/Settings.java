@@ -4,7 +4,7 @@ import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Relevant test execution parameters. Usually used in a TestRun context.
@@ -13,6 +13,26 @@ import java.util.ArrayList;
 public class Settings {
     private final ArrayList<ValuePair> parameters = new ArrayList<>();
     private final ArrayList<ValuePair> hiddenParameters = new ArrayList<>(); //Not displayed in reports
+    HashMap<SettingParameters, String> values = new HashMap<>();
+
+    public enum SettingParameters{
+        EMAIL_SENDER_ADDRESS
+    }
+
+    public String getValue(SettingParameters settingParameters){
+        return values.get(settingParameters);
+    }
+
+    public void setValue(SettingParameters settingParameters, String value){
+        values.put(settingParameters, value);
+    }
+
+    // Man ska inte behöva ange värde för alla parametrar.
+    // Man ska kunna lägga till custom-värden när det behövs
+    // Det ska gå att hantera lösenord och liknande icke-utskriftgrejer separat
+    // Det ska gå att uppdatera värden i runtime
+    //
+
 
     public Settings(){
         loadDefaults();

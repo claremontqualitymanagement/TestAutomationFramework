@@ -53,6 +53,15 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    public void wait(int milliseconds){
+        try {
+            driver.manage().wait((long)milliseconds);
+            log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
+        } catch (InterruptedException e) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not wait the expected " + milliseconds + " milliseconds.");
+        }
+    }
+
     /**
      * Navigates to specified url
      *
