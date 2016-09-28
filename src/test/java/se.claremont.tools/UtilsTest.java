@@ -22,6 +22,7 @@ public class UtilsTest{
                 Utils.getInstance().getOS().toLowerCase().contains("win") );
     }
 
+    @Ignore //Takes to much time to run
     @Test
     public void sandboxPlayground(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
