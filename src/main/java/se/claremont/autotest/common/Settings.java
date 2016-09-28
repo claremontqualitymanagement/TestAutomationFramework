@@ -13,19 +13,6 @@ import java.util.*;
 public class Settings {
     private final ArrayList<ValuePair> parameters = new ArrayList<>();
     private final ArrayList<ValuePair> hiddenParameters = new ArrayList<>(); //Not displayed in reports
-    HashMap<SettingParameters, String> values = new HashMap<>();
-
-    public enum SettingParameters{
-        EMAIL_SENDER_ADDRESS
-    }
-
-    public String getValue(SettingParameters settingParameters){
-        return values.get(settingParameters);
-    }
-
-    public void setValue(SettingParameters settingParameters, String value){
-        values.put(settingParameters, value);
-    }
 
     // Man ska inte behöva ange värde för alla parametrar.
     // Man ska kunna lägga till custom-värden när det behövs
