@@ -5,20 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>1.0.1-beta57</version>
+    <version>1.0.1-beta55</version>
     <packaging>jar</packaging>
-    <!--<packaging>pom</packaging>-->
 
     <name>Test Automation Framework - TAF</name>
     <description>This is the core project from Claremont - TAF</description>
     <url>http://www.claremont.se</url>
 
-    <!--
-    <modules>
-        <module>CORE</module>
-        <module>PRV</module>
-    </modules>
-    -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <licenses>
         <license>
@@ -109,7 +105,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <!--<version>3.0.0-beta2</version>-->
+            <!--<version>2.53.1</version>-->
             <version>LATEST</version>
         </dependency>
         <dependency>
@@ -137,6 +133,11 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
             <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
         </dependency>
         <!--
         <dependency>
@@ -184,11 +185,15 @@
         -->
     </distributionManagement>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                    <excludes>
+                        <exclude>drivers</exclude>
+                    </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

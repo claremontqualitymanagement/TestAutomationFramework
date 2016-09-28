@@ -1,11 +1,11 @@
 target
 .DS_Store
-prv
+demo
 doc
 .idea
 TestAutomationFramework.iml
 out
 .iml
-drivers
+src/main/resources/drivers
 TAF
-*.log
+*.log*
