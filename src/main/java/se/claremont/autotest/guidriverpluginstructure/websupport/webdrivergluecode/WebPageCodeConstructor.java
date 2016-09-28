@@ -4,11 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import se.claremont.autotest.support.SupportMethods;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class for creating the DomElement descriptions for a draft page class for a WebDriver automation. It traverses the current page the WebDriver is at and try to identify the elements on it and create access methods for these.
+ *
  * Created by jordam on 2016-09-28.
  */
 public class WebPageCodeConstructor {
@@ -20,6 +21,12 @@ public class WebPageCodeConstructor {
         this.driver = driver;
     }
 
+    /**
+     * Static method to create output file with DomElement descriptions for the web page.
+     * @param driver The web driver instance.
+     * @param pathToOutputFile Path to the file to be written
+     * @return Returns a string with a draft page class
+     */
     public static String ConstructWebPageCode(WebDriver driver, String pathToOutputFile){
         WebPageCodeConstructor webPageCodeConstructor = new WebPageCodeConstructor(driver);
         String descriptors = webPageCodeConstructor.constructWebPageCode();
@@ -32,41 +39,95 @@ public class WebPageCodeConstructor {
         StringBuilder element = new StringBuilder();
         List<WebElement> webElements = driver.findElements(By.xpath("//*"));
         for(WebElement webElement : webElements){
-            if(webElement.getAttribute("id") != null){
-                String suggestedElementName = webElement.getAttribute("id") + webElement.getTagName().replace("a", "Link");
-                String suggestedElementConstrucorString = "\\\"\" + webElement.getAttribute(\"id\") + \"\", DomElement.IdentificationType.BY_ID";
-                constructors.add(new Constructor(suggestedElementName, suggestedElementConstrucorString));
+            System.out.println(webElement.toString());
+            if(webElement.getAttribute("id") != null && webElement.getAttribute("id").length() > 0){
+                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("id")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementConstrucorString = "\"" + webElement.getAttribute("id") + "\", DomElement.IdentificationType.BY_ID";
+                constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstrucorString));
             }
-            else if(webElement.getAttribute("name") != null){
-                String suggestedElementName = webElement.getAttribute("name") + webElement.getTagName().replace("a", "Link");
+            else if(webElement.getAttribute("name") != null && webElement.getAttribute("name").length() > 0){
+                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("name") + "\", DomElement.IdentificationType.BY_NAME";
-                constructors.add(new Constructor(suggestedElementName, suggestedElementConstrucorString));
+                constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstrucorString));
             }
             else if(webElement.getTagName().equals("a")){
-                if(webElement.getText() == null) continue;
-                String suggestedElementName = webElement.getText().replace(" ", "").replace(".", "_").replace("%", "").replace("a", "") + "Link";
+                if(webElement.getText() == null || webElement.getText().length() < 1) continue;
+                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + "Link";
                 String suggestedElementConstructor = "\"" + webElement.getText() + "\", DomElement.IdentificationType.BY_LINK_TEXT";
-                constructors.add(new Constructor(suggestedElementName, suggestedElementConstructor));
+                constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstructor));
             }
             else if(webElement.getText() != null && webElement.getText().length() > 0){
                 if(driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size() == 1){
-                    String suggestedElementName = webElement.getText().replace(" ", "").replace(".", "_").replace("%", "").replace("&", "") + webElement.getTagName().replace("a", "Link");
-                    String suggestedElementConstructorString = "\"//*[contains(text(),'" + webElement.getText() + "')]\", DomElement.IdentificationType.BY_XPATH";
-                    constructors.add(new Constructor(suggestedElementName, suggestedElementConstructorString));
+                    String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                    String suggestedElementConstructorString = "\"//*[contains(text(),'" + webElement.getText().replace("\"", "\\\"") + "')]\", DomElement.IdentificationType.BY_X_PATH";
+                    constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstructorString));
                 }
             }
         }
         return constructors.toString();
     }
 
+    private static String methodNameWithOnlySafeCharacters(String instring){
+        String returnString = "";
+        for(String spaceDividedWord : instring.split(" ")){
+            for(String dashDividedWord : spaceDividedWord.split("-")){
+                for(String underscoreDividedWord : dashDividedWord.split("_")){
+                    returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
+                }
+
+            }
+        }
+        return returnString.
+                replace(" ", "").
+                replace(",", "").
+                replace("–", "_").
+                replace(".", "_").
+                replace("%", "").
+                replace("&", "").
+                replace("$", "").
+                replace("\\", "_").
+                replace("\"", "").
+                replace("'", "").
+                replace("!", "").
+                replace("-", "_").
+                replace("©", "Copyright").
+                replace("å", "a").
+                replace("ä", "a").
+                replace("ö", "o").
+                replace("Å", "A").
+                replace("Ä", "A").
+                replace("Ö", "O");
+    }
+
+    private static String tagNameToElementSuffix(String tagName){
+        if(tagName.toLowerCase().equals("a")) return "Link";
+        if(tagName.toLowerCase().equals("li")) return "ListItem";
+        if(tagName.toLowerCase().equals("ul")) return "UnordereredList";
+        if(tagName.toLowerCase().equals("ol")) return "NumberedList";
+        if(tagName.toLowerCase().equals("h1")) return "MainHeading";
+        if(tagName.toLowerCase().equals("h2")) return "Heading";
+        if(tagName.toLowerCase().equals("h3")) return "SubHeading";
+        if(tagName.toLowerCase().equals("p")) return "Paragraph";
+        return firstUpperLetterTrailingLowerLetter(tagName);
+    }
+
+    private static String firstUpperLetterTrailingLowerLetter(String instring){
+        String returnString = instring.substring(0,1).toUpperCase();
+        if(instring.length() > 1){
+            returnString += instring.substring(1).toLowerCase();
+        }
+        return returnString;
+
+    }
+
     private class Constructors extends ArrayList<Constructor>{
         int elementCounter = 1;
 
-        public @Override boolean add(Constructor constructor){
+        public boolean addConstructor(Constructor constructor){
             if(hasUniqueName(constructor)){
                 this.add(constructor);
             } else {
-                constructor.elementName = constructor.elementName + elementCounter;
+                constructor.elementName = constructor.elementName + Integer.toString(elementCounter);
                 elementCounter++;
                 this.add(constructor);
             }
@@ -107,7 +168,7 @@ public class WebPageCodeConstructor {
         }
 
         public @Override String toString(){
-            return SupportMethods.LF + "public static DomElement " + elementName + "() {" + SupportMethods.LF + "    return new DomElement (" + constructorString + ");" + SupportMethods.LF;
+            return SupportMethods.LF + "public static DomElement " + elementName + "() {" + SupportMethods.LF + "    return new DomElement (" + constructorString + ");" + SupportMethods.LF + "}" + SupportMethods.LF;
         }
     }
 }
