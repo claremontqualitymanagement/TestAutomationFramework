@@ -113,6 +113,15 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    /**
+     * Creates the DomElements that are easily identified on current path to draft code in output file.
+     *
+     * @param outputPilePath File path to output file
+     */
+    public void mapCurrentPage(String outputPilePath){
+        WebPageCodeConstructor.ConstructWebPageCode(driver, outputPilePath);
+    }
+
 
     /**
      * Writes the input string to specified DOM element

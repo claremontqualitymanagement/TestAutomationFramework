@@ -12,7 +12,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-09-28.
  */
-public class WebPageCodeConstructor {
+class WebPageCodeConstructor {
     WebDriver driver;
     Constructors constructors = new Constructors();
 

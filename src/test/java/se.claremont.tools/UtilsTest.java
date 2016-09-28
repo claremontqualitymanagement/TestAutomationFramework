@@ -3,7 +3,6 @@ package se.claremont.tools;
 import org.junit.*;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
-import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebPageCodeConstructor;
 
 /**
  * Created by magnusolsson on 2016-09-23.
@@ -27,7 +26,7 @@ public class UtilsTest{
     public void sandboxPlayground(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
         web.navigate("https://www.typeandtell.com/sv/");
-        WebPageCodeConstructor.ConstructWebPageCode(web.driver, "C:\\Temp\\Output.txt");
+        web.mapCurrentPage("C:\\Temp\\Output.txt");
         web.makeSureDriverIsClosed();
     }
 
