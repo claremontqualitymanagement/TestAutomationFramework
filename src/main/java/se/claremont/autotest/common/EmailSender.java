@@ -79,10 +79,10 @@ class EmailSender {
 
     private String sendThroughGmail(){
         String returnMessage = "";
-        String username = CliTestRunner.testRun.settings.getValueForProperty("emailUserName");
-        String password = CliTestRunner.testRun.settings.getValueForHiddenProperty("emailPassword");
-        this.hostName = "smtp.gmail.com";
-        this.hostServerPort = "587";
+        String username = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
+        String password = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
+        this.hostName = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);
+        this.hostServerPort = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_PORT);
 
         if(username == null || username.length() < 1) {
             return "Cannot send mail. No email account user name set in settings.";
@@ -95,6 +95,7 @@ class EmailSender {
 
         String finalUsername = username;
         String finalPassword = password;
+        System.out.println(finalUsername);
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -105,7 +106,7 @@ class EmailSender {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(this.senderAddress));
+            message.setFrom(new InternetAddress(CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(String.join(",", recipientAddresses)));
             message.setSubject(subjectLine);

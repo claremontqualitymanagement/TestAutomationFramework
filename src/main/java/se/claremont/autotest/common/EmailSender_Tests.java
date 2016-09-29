@@ -13,6 +13,13 @@ public class EmailSender_Tests {
     @Test
     public void sendGmail(){
         String[] recipients = new String[] {"jorgen.damberg@claremont.se"};
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "Claremont!16");
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "autotestcqm@gmail.com");
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "gmail");
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "587");
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "smtp.gmail.com");
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "jorgen.damberg@gmail.com");
+        CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "jorgen.damberg@claremont.se");
         EmailSender emailSender = new EmailSender("smtp.google.com", "jorgen.damberg@gmail.com", recipients, "Test email", "<html><body><h1>content string headline</h1></body></html>", "587", "gmail");
         String returnMessage = emailSender.send();
         System.out.println(returnMessage);

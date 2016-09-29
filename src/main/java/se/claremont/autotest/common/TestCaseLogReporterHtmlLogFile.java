@@ -143,7 +143,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private String htmlSectionBodyHeader(){
         StringBuilder html = new StringBuilder();
         html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString())).append("\">").append(LF);
-        html.append("      <img id=\"logo\" src=\"").append(TestRun.settings.getValueForProperty("pathToLogo")).append("\">").append(LF);
+        html.append("      <img id=\"logo\" src=\"").append(TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO)).append("\">").append(LF);
         html.append("      <h1>Test results for test case '").append(testCase.testName).append("'</h1>").append(LF);
         html.append("      <p>").append(LF);
         html.append("        Status: ").append(SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString())).append("<br>").append(LF);

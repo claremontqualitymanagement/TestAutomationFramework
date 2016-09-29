@@ -4,36 +4,68 @@ import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Relevant test execution parameters. Usually used in a TestRun context.
+ * Secret items are not displayed in html report
+ *
  * Created by jordam on 2016-08-17.
  */
-public class Settings {
-    private final ArrayList<ValuePair> parameters = new ArrayList<>();
-    private final ArrayList<ValuePair> hiddenParameters = new ArrayList<>(); //Not displayed in reports
+public class Settings extends HashMap<String, String>{
 
-    HashMap<String, String> values = new HashMap<>();
-
+    //Some of these setting parameters are suppressed from log display in the summary report, where these settings othervice is displayed.
     public enum SettingParameters{
-        EMAIL_SENDER_ADDRESS
+        EMAIL_SENDER_ADDRESS         (),
+        EMAIL_ACCOUNT_USER_NAME      (),
+        EMAIL_ACCOUNT_USER_PASSWORD  (true),
+        EMAIL_SERVER_ADDRESS         (true),
+        EMAIL_SERVER_PORT            (true),
+        EMAIL_SMTP_OR_GMAIL          (true),
+        EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES(),
+        BASE_LOG_FOLDER              (),
+        PATH_TO_LOGO                 (true),
+        CHROME_DRIVER_PATH_TO_EXE    (),
+        FIREFOX_PATH_TO_BROWSER_EXE  (),
+        TEST_RUN_LOG_FOLDER          ();
+
+        private boolean isSuppressedFromLogDisplay;
+
+        private SettingParameters(){
+            this.isSuppressedFromLogDisplay = false;
+        }
+
+        private SettingParameters(boolean isSuppressedFromLogDisplay){
+            this.isSuppressedFromLogDisplay = isSuppressedFromLogDisplay;
+        }
+
+        public boolean isSuppressedFromLogDisplay(){
+            return isSuppressedFromLogDisplay;
+        }
+
+        public String friendlyName(){
+            return SupportMethods.stringToCapitalInitialCharacterForEachWordAndNoSpaces(this.toString().replace("_", " "));
+        }
     }
 
     public String getValue(SettingParameters settingParameters){
-        return values.get(settingParameters.toString());
+        return get(settingParameters.friendlyName());
     }
 
     public void setValue(SettingParameters settingParameters, String value){
-        values.put(settingParameters.toString(), value);
+        put(settingParameters.friendlyName(), value);
     }
 
     public void setCustomValue(String parameter, String value){
-        values.put(parameter, value);
+        put(parameter, value);
     }
 
     public String getCustomValue(String parameter){
-        return values.get(parameter);
+        return get(parameter);
     }
     // Man ska inte behöva ange värde för alla parametrar.
     // Man ska kunna lägga till custom-värden när det behövs
@@ -41,12 +73,46 @@ public class Settings {
     // Det ska gå att uppdatera värden i runtime
     //
 
+    void toFile(String outputFilePath){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String key : this.keySet()){
+            stringBuilder.append(key + "=" + this.get(key) + SupportMethods.LF);
+        }
+        SupportMethods.saveToFile(stringBuilder.toString(), outputFilePath);
+    }
 
+    void readFromFileIfItExistElseTryToCreateFile(String settingsFilePath){
+        List<String> lines = new ArrayList<>();
+        try (Stream<String> stream = Files.lines(Paths.get(settingsFilePath))) {
+            stream.forEach(lines::add);
+            for(String line : lines){
+                if(!line.contains("=")) continue;
+                setCustomValue(line.split("=")[0], line.split("=")[line.split("=").length-1]);
+            }
+        } catch (IOException e) { //No file exist yet
+            System.out.println("Could not read Settings from file '" + settingsFilePath + "'.");
+            try {
+                toFile(settingsFilePath);
+            }catch (Exception ex){
+                System.out.println("Could neither read Settings from file, nor write to file '" + settingsFilePath + "'. " + ex.toString());
+            }
+        }
+    }
+
+    boolean isSuppressedFromLogDisplay(String key){
+        try {
+            return SettingParameters.valueOf(key).isSuppressedFromLogDisplay();
+        } catch (Exception e){
+            return false;
+        }
+    }
+
+    /**
+     * Set up settings realm, reading settings from file if the file exist
+     */
     public Settings(){
         loadDefaults();
-        SettingsFile settingsFile = new SettingsFile(this, getValueForProperty("baseLogFolder") + "runSettings.properties");
-        settingsFile.readFromFile();
-        settingsFile.writeToFile();
+        readFromFileIfItExistElseTryToCreateFile(getValue(SettingParameters.BASE_LOG_FOLDER) + "runSettings.properties");
     }
 
     /**
@@ -58,102 +124,35 @@ public class Settings {
         //macintosh
         if( Utils.getInstance().amIMacOS() ) {
             //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);
-            setValueForProperty("baseLogFolder", Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator);
-            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
-            setValueForProperty("testRunLogFolder", "");
-            setValueForProperty("chromeDriverPathToExe", Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver");
-            setValueForProperty("firefoxPathToBrowserExe", File.separator + "Applications" + File.separator + "Firefox.app" + File.separator);
+            setValue(SettingParameters.BASE_LOG_FOLDER, Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator);
+            setValue(SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
+            setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver");
+            setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, File.separator + "Applications" + File.separator + "Firefox.app" + File.separator);
         }
         // lets assume jvm is running upon windows os.
         else {
-            setValueForProperty("baseLogFolder", System.getProperty("user.home") + File.separator + "TAF" + File.separator);
-            setValueForProperty("pathToLogo", "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
-            setValueForProperty("testRunLogFolder", "");
-            setValueForProperty("chromeDriverPathToExe", System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
-            setValueForProperty("firefoxPathToBrowserExe", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+            setValue(SettingParameters.BASE_LOG_FOLDER, System.getProperty("user.home") + File.separator + "TAF" + File.separator);
+            setValue(SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+            setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
+            setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
+            setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
         }
-        setValueForProperty("emailRecipients", "");
-        setValueForProperty("emailSenderAddress", "");
-        setValueForProperty("emailHostAddress", "");
-        setValueForProperty("emailUserName", "");
-        setValueForHiddenProperty("emailPassword", "");
-        setValueForProperty("emailHostPort", "");
-        setValueForProperty("emailTypeSmtpOrGmail", "");
-    }
-
-    /**
-     * Sets a value for a property in settings
-     *
-     * @param propertyName Name of the property
-     * @param propertyValue Value of the property (will be treated as a string)
-     */
-    public void setValueForProperty(String propertyName, String propertyValue){
-        for (ValuePair valuePair : parameters){
-            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())){
-                valuePair.value = propertyValue.trim();
-                return;
-            }
-        }
-        parameters.add(new ValuePair(propertyName, propertyValue.trim()));
-    }
-
-    /**
-     * Sets a value for a a hidden property in settings. Not displayed in reports.
-     *
-     * @param propertyName Name of the property
-     * @param propertyValue Value of the property (will be treated as a string)
-     */
-    public void setValueForHiddenProperty(String propertyName, String propertyValue){
-        for (ValuePair valuePair : hiddenParameters){
-            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())){
-                valuePair.value = propertyValue.trim();
-                return;
-            }
-        }
-        hiddenParameters.add(new ValuePair(propertyName, propertyValue.trim()));
-    }
-
-    /**
-     * Retrieves the current value for a property
-     *
-     * @param propertyName The name of the property to retrieve the value for
-     * @return Returns the string based value of the property
-     */
-    public String getValueForProperty(String propertyName){
-        for(ValuePair valuePair : parameters){
-            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())) return valuePair.value;
-        }
-        System.out.println("Sorry. Could not find parameter '" + propertyName + "' among settings parameters.");
-        return null;
-    }
-
-    /**
-     * Retrieves the current value for a property
-     *
-     * @param propertyName The name of the property to retrieve the value for
-     * @return Returns the string based value of the property
-     */
-    public String getValueForHiddenProperty(String propertyName){
-        for(ValuePair valuePair : hiddenParameters){
-            if(valuePair.parameter.toLowerCase().equals(propertyName.toLowerCase())) return valuePair.value;
-        }
-        System.out.println("Sorry. Could not find parameter '" + propertyName + "' among settings parameters.");
-        return null;
-    }
-
-    public @Override String toString(){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(ValuePair valuePair : parameters){
-            stringBuilder.append(valuePair.parameter).append("=").append(valuePair.value).append(SupportMethods.LF);
-        }
-        return stringBuilder.toString();
+        setValue(SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "");
+        setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");
+        setValue(SettingParameters.EMAIL_SERVER_ADDRESS, "");
+        setValue(SettingParameters.EMAIL_ACCOUNT_USER_NAME, "");
+        setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
+        setValue(SettingParameters.EMAIL_SERVER_PORT, "");
+        setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
     }
 
     String toHtmlTable(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table class=\"settingsTable\">").append(SupportMethods.LF);
-        for(ValuePair valuePair : parameters){
-            stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(valuePair.parameter).append("</td><td class=\"settingsParameterValue\">").append(valuePair.value).append("</td></tr>").append(SupportMethods.LF);
+        for(String key : keySet()){
+            if(isSuppressedFromLogDisplay(key)) continue;
+            stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(key).append("</td><td class=\"settingsParameterValue\">").append(get(key)).append("</td></tr>").append(SupportMethods.LF);
         }
         stringBuilder.append("</table>").append(SupportMethods.LF);
         return stringBuilder.toString();

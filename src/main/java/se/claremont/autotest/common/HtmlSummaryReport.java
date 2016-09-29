@@ -229,7 +229,7 @@ public class HtmlSummaryReport {
      * @return HTML section as string
      */
     private String htmlElementTitle(){
-        return "          <img src=\"" + TestRun.settings.getValueForProperty("pathToLogo") + "\">" + LF +
+        return "          <img src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "          <h1>Test report " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
     }
 

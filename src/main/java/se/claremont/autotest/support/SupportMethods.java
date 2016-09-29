@@ -103,6 +103,20 @@ public class SupportMethods {
         return Thread.currentThread().getStackTrace()[stacktraceLevel].getClassName();
     }
 
+    public static String stringToCapitalInitialCharacterForEachWordAndNoSpaces(String instring){
+        StringBuilder stringBuilder = new StringBuilder();
+        String[] words = instring.split(" ");
+        for(String word : words){
+            if(word.length() > 0){
+                stringBuilder.append(word.trim().substring(0,1).toUpperCase());
+                if(word.length() > 1){
+                    stringBuilder.append(word.trim().substring(1).toLowerCase());
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     /**
      * Matches a string with a regex pattern
      * @param instring the string to match

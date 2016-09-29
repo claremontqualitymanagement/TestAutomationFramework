@@ -61,7 +61,7 @@ public class CliTestRunner {
             }else if(arg.contains("help")||arg.contains("man")||arg.contains("-h")){
                 System.out.print(helpText());
             } else if(arg.contains("=")){
-                testRun.settings.setValueForProperty(arg.split("=")[0].trim(), arg.split("=")[1].trim());
+                testRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.split("=")[1].trim());
                 System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");
             } else {
                 try {

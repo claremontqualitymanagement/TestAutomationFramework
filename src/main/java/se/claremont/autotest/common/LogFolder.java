@@ -22,7 +22,7 @@ public class LogFolder {
      */
     public static void setLogFolder(String testSetName){
         if(testRunLogFolder == null){
-            baseLogFolder = TestRun.settings.getValueForProperty("baseLogFolder");
+            baseLogFolder = TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER);
             if(!baseLogFolder.endsWith("\\")){ baseLogFolder = baseLogFolder + "\\"; }
             testRunLogFolder = baseLogFolder + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + testSetName + "\\";
         }
