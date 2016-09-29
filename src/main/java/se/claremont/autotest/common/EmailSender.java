@@ -93,8 +93,8 @@ class EmailSender {
         props.put("mail.smtp.host", hostName);
         props.put("mail.smtp.port", hostServerPort);
 
-        String finalUsername = username;
-        String finalPassword = password;
+        final String finalUsername = username;
+        final String finalPassword = password;
         System.out.println(finalUsername);
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {

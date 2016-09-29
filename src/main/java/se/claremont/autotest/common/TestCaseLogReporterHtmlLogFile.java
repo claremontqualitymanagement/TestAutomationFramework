@@ -4,8 +4,6 @@ import se.claremont.autotest.support.SupportMethods;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -126,56 +124,52 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         } else {
             this.runEndTime = new Date();
         }
-        StringBuilder html = new StringBuilder();
-        html.append("<html>").append(LF).append(LF);
-        html.append(htmlSectionHtmlHead());
-        html.append("  <body onload=\"onLoad()\">").append(LF).append(LF);
-        html.append(htmlSectionBodyHeader());
-        html.append(htmlSectionEncounteredKnownErrors());
-        html.append(htmlSectionTestCaseData());
-        html.append(htmlSectionNonEncounteredKnownTestCaseErrors());
-        html.append(htmlSectionTestCaseLogEntries());
-        html.append("  </body>").append(LF).append(LF);
-        html.append("</html>").append(LF);
-        SupportMethods.saveToFile(html.toString(), testCase.pathToHtmlLog);
+        String html = "<html>" + LF + LF +
+                htmlSectionHtmlHead() +
+                "  <body onload=\"onLoad()\">" + LF + LF +
+                htmlSectionBodyHeader() +
+                htmlSectionEncounteredKnownErrors() +
+                htmlSectionTestCaseData() +
+                htmlSectionNonEncounteredKnownTestCaseErrors() +
+                htmlSectionTestCaseLogEntries() +
+                "  </body>" + LF + LF +
+                "</html>" + LF;
+        SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
     }
 
     private String htmlSectionBodyHeader(){
-        StringBuilder html = new StringBuilder();
-        html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString())).append("\">").append(LF);
-        html.append("      <img id=\"logo\" src=\"").append(TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO)).append("\">").append(LF);
-        html.append("      <h1>Test results for test case '").append(testCase.testName).append("'</h1>").append(LF);
-        html.append("      <p>").append(LF);
-        html.append("        Status: ").append(SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString())).append("<br>").append(LF);
-        html.append("        Start time: ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime)).append("<br>").append(LF);
-        html.append("        Stop time:  ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime)).append(LF);
-        html.append("      </p>").append(LF);
-        html.append("    </div>").append(LF).append(LF);
-        return html.toString();
+        String html = "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
+                "      <img id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
+                "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
+                "      <p>" + LF +
+                "        Status: " + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
+                "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
+                "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
+                "      </p>" + LF +
+                "    </div>" + LF + LF;
+        return html;
     }
 
     private String htmlSectionHtmlHead(){
-        StringBuilder html = new StringBuilder();
-        html.append("  <head>").append(LF).append(LF);
-        html.append("    <title>Test testCaseLog ").append(testCase.testName).append("</title>").append(LF);
-        html.append("    <meta charset=\"UTF-8\">").append(LF);
-        html.append("    <meta name=\"description\" content=\"Test case result for test run for test case ").append(testCase.testName).append("\">").append(LF);
-        html.append("    <style>").append(LF);
-        html.append(       styles() );
-        html.append("    </style>").append(LF).append(LF);
-        html.append(     scriptSection());
-        html.append("  </head>").append(LF).append(LF);
-        return html.toString();
+        String html = "  <head>" + LF + LF +
+                "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
+                "    <meta charset=\"UTF-8\">" + LF +
+                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\">" + LF +
+                "    <style>" + LF +
+                styles() +
+                "    </style>" + LF + LF +
+                scriptSection() +
+                "  </head>" + LF + LF;
+        return html;
     }
 
     private String htmlSectionTestCaseLogEntries(){
-        StringBuilder html = new StringBuilder();
-        html.append("      <h2>Test case testCaseLog entries</h2>").append(LF);
-        html.append("      <label><input type=\"checkbox\" id=\"showDebugCheckbox\" onchange=\"showDebug(this)\">Suppress debug rows</label>").append(LF);
-        html.append("      <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString())).append("\">").append(LF);
-        html.append( testStepLogPostSections(testCase));
-        html.append("      </table>").append(LF);
-        return html.toString();
+        String html = "      <h2>Test case testCaseLog entries</h2>" + LF +
+                "      <label><input type=\"checkbox\" id=\"showDebugCheckbox\" onchange=\"showDebug(this)\">Suppress debug rows</label>" + LF +
+                "      <table class=\"" + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + "\" id=\"" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "\">" + LF +
+                testStepLogPostSections(testCase) +
+                "      </table>" + LF;
+        return html;
     }
 
     private String htmlSectionTestCaseData(){
@@ -344,20 +338,17 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
         if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
             long widthOfInitPartPercent = (graphWidth*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfInitPartPercent).append("px\" class=\"before\"><span title=\"Whole time period start time: " + wholeTimePeriodStartTime.getTime() + LF +
-                    "Part section start time: " + partialEventStartTime.getTime() + "\"></span></td>");
+            sb.append("<td width=\"").append(widthOfInitPartPercent).append("px\" class=\"before\"><span title=\"Whole time period start time: ").append(wholeTimePeriodStartTime.getTime()).append(LF).append("Part section start time: ").append(partialEventStartTime.getTime()).append("\"></span></td>");
         }
 
         if(partialEventEndTime.getTime()-partialEventStartTime.getTime() != 0){
             long widthOfPartPercent = (graphWidth*(partialEventEndTime.getTime() - partialEventStartTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfPartPercent).append("px\" class=\"during\"><span title=\"Part section start time: " + partialEventStartTime.getTime() + LF +
-                    "Part section end time: " + partialEventEndTime.getTime() + "\"></span></td>");
+            sb.append("<td width=\"").append(widthOfPartPercent).append("px\" class=\"during\"><span title=\"Part section start time: ").append(partialEventStartTime.getTime()).append(LF).append("Part section end time: ").append(partialEventEndTime.getTime()).append("\"></span></td>");
         }
 
         if(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime() != 0){
             long widthOfEndPartPercent = (graphWidth*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfEndPartPercent).append("px\" class=\"after\"><span title=\"Part section end time: " + partialEventEndTime.getTime() + LF +
-                    "Whole section end time: " + wholeTimePeriodEndTime.getTime() + "\"></span></td>");
+            sb.append("<td width=\"").append(widthOfEndPartPercent).append("px\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>");
         }
         sb.append("</tr></table>");
         sb.append("</span>");

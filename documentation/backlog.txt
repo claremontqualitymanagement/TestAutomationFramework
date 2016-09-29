@@ -5,36 +5,43 @@ Make CLI interface run classes
 To do
 =========
 Find appropriate location for Javadocs
-Get scripts for release management working
-Document settings management
+Document new settings management
 New crunch to create more unit tests
 Bug: Fix debug rows seem to be line-broken in HTML report
-Bug: Progress bar in summary report behaves badly
+Bug: Test run log folder gets wrong name
+Bug: Probably one test run report is created per test set, not per test run..?
 plus/minus sign (or other indicator) as indication icon for expandable sections of html log
 Include Javadoc in maven build
 Make sure Javadoc comments exist everywhere applicable
 Check for similar errors in summary
 Document how to use tests in Jenkins with this framework
-Document that known errors only work on text testCaseLog phrases
-Formatting of HTML styles - make reports pretty
-Document more examples
-Support for radiobuttons
+Document that known errors only work on pure text testCaseLog phrases
+Formatting of HTML styles - make reports pretty: For example, change colors of green stuff
+Document more examples, and update existing with imports
+Document required email settings
+Append adjusted version of existing report plugin for ALM to framework
+Append existing Personnummergenerator in framework
+Append existing date calculator to framework
+Support for radiobuttons and checkboxes
 Support for dropdown
 Saving desktop image upon error, and not just browser content
-WebDriver toString() should be Overridden
-Multi-browser support
-Only displaying the most relevant testCaseLog rows in summary report
-Add links to text testCaseLog from html testCaseLog
+WebDriver toString() should be Overridden for relevant printouts
+Assess using list of LogPost class even for summary report
+Enable Multi-browser support
+Implement support for only displaying the most relevant testCaseLog rows for failed test cases in summary report (not all failed log rows)
+Add hyperlink to pure text based testCaseLog in html testCaseLog
 Try making the object factories work from outside code base (by using settings)
 Try making the plugins work from outside the code base (by using jar files in file directory)
 Implement support for parallel execution
 
 Done
 ===========
+Bug: Progress bar in summary report behaves badly
 Get rid of java 1.5 warnings
 Implement support for web tables
 Get ObjectFactory for Logger to ready state
 Split solution in stand-alone framework component and SUT related stuff
+Get scripts for release management working
 Bug: Sometimes TestCaseHtmlLog get wrong status of test case. Known errors found, but still got status ONLY_NEW_ERRORS
 Merge maven pom.xml files to make runnable jar, minimum jar, javadocs, dependencies and so forth
 Email report

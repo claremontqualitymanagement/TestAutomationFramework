@@ -63,7 +63,7 @@ public class Utils {
      * @return true if jvm is running on Mac OS X, otherwise false
      */
     public boolean amIMacOS() {
-        return getOS().toLowerCase().contains( "mac" ) ? true : false;
+        return getOS().toLowerCase().contains("mac");
     }
 
     /**
@@ -76,7 +76,7 @@ public class Utils {
 
     /**
      * Checks if pathToFile exists and is a file
-     * @param pathToFile
+     * @param pathToFile The path to the file to check existance of.
      * @return true if file path exists and is file
      */
     public boolean doesFileExists(String pathToFile) {

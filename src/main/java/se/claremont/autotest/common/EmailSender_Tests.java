@@ -3,8 +3,6 @@ package se.claremont.autotest.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Set;
-
 /**
  * Created by jordam on 2016-09-19.
  */

@@ -35,11 +35,11 @@ public class Settings extends HashMap<String, String>{
 
         private boolean isSuppressedFromLogDisplay;
 
-        private SettingParameters(){
+        SettingParameters(){
             this.isSuppressedFromLogDisplay = false;
         }
 
-        private SettingParameters(boolean isSuppressedFromLogDisplay){
+        SettingParameters(boolean isSuppressedFromLogDisplay){
             this.isSuppressedFromLogDisplay = isSuppressedFromLogDisplay;
         }
 
@@ -76,7 +76,7 @@ public class Settings extends HashMap<String, String>{
     void toFile(String outputFilePath){
         StringBuilder stringBuilder = new StringBuilder();
         for(String key : this.keySet()){
-            stringBuilder.append(key + "=" + this.get(key) + SupportMethods.LF);
+            stringBuilder.append(key).append("=").append(this.get(key)).append(SupportMethods.LF);
         }
         SupportMethods.saveToFile(stringBuilder.toString(), outputFilePath);
     }

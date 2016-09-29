@@ -8,12 +8,12 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-21.
  */
 class ErrorGroupingManager {
-    ArrayList<Error> errors = new ArrayList<Error>();
+    ArrayList<Error> errors = new ArrayList<>();
 
     /**
      * Must be run after evaluation of test case log towards known errors has been run
      *
-     * @param testCase
+     * @param testCase The test case to evaluate
      */
     void evaluateTestCase(TestCase testCase){
         for(LogPost logPost : testCase.testCaseLog.logPosts){
@@ -51,7 +51,7 @@ class ErrorGroupingManager {
     }
 
     private class Error{
-        ArrayList<LogPost>  logPosts  = new ArrayList<LogPost>();
+        ArrayList<LogPost>  logPosts  = new ArrayList<>();
         ArrayList<TestCase> testCases = new ArrayList<>();
 
 
