@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  */
 public class Utils {
 
-    final Logger logger = LoggerFactory.getLogger( Utils.class );
-
+    final static Logger logger = LoggerFactory.getLogger( Utils.class );
+ q
     private static Utils instance = null;
 
     protected Utils() {
@@ -87,16 +87,17 @@ public class Utils {
                 return true;
             }
         }
-        catch (Exception e) {
+        catch (Exception fe) {
             //System.err.println("You got problem: " + e.getStackTrace());
+            logger.debug( fe.getMessage() );
         }
         return false;
     }
 
     public static void main(String[] args) {
-        System.out.println( Utils.getInstance().getRootDirectory() );
-        System.out.println( Utils.getInstance().getOS() );
-        System.out.println( Utils.getInstance().getUserWorkingDirectory() );
+        logger.debug( Utils.getInstance().getRootDirectory() );
+        logger.debug( Utils.getInstance().getOS() );
+        logger.debug( Utils.getInstance().getUserWorkingDirectory() );
     }
 
 }
