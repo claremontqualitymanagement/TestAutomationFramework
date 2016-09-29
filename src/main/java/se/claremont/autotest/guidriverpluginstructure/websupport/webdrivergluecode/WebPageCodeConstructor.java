@@ -59,7 +59,12 @@ class WebPageCodeConstructor {
             else if(webElement.getText() != null && webElement.getText().length() > 0){
                 if(driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size() == 1){
                     String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
-                    String suggestedElementConstructorString = "\"//*[contains(text(),'" + webElement.getText().replace("\"", "\\\"") + "')]\", DomElement.IdentificationType.BY_X_PATH";
+                    String suggestedElementConstructorString = "";
+                    int numberOfElementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size();
+                    if(numberOfElementsFound != 1){
+                        suggestedElementConstructorString = "//Warning: " + numberOfElementsFound + " elements found for this xpath query. " + SupportMethods.LF;
+                    }
+                    suggestedElementConstructorString += "\"//*[contains(text(),'" + webElement.getText().replace("\"", "\\\"") + "')]\", DomElement.IdentificationType.BY_X_PATH";
                     constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstructorString));
                 }
             }
