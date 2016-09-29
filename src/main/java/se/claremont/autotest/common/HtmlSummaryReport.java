@@ -218,10 +218,9 @@ public class HtmlSummaryReport {
     }
 
     private String htmlElementSettings(){
-        StringBuilder html = new StringBuilder();
-        html.append("          <h2>Test run settings</h2>").append(LF);
-        html.append(CliTestRunner.testRun.settings.toHtmlTable());
-        return html.toString();
+        String html = "          <h2>Test run settings</h2>" + LF +
+                CliTestRunner.testRun.settings.toHtmlTable();
+        return html;
     }
 
     /**

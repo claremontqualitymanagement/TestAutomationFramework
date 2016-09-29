@@ -8,7 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for creating the DomElement descriptions for a draft page class for a WebDriver automation. It traverses the current page the WebDriver is at and try to identify the elements on it and create access methods for these.
+ * Class for creating the DomElement descriptions for a draft page class for a WebDriver automation.
+ * It traverses the current page the WebDriver is at and try to identify the elements on it and create
+ * access methods for these. This class should be used to speed up page object creation and maintenance.
+ * It should be possible to improve this class very much, but so far it produces code that is good
+ * enough to paste into an existing page class. Hence it saves time already although it takes some
+ * minutes to create the descriptors for large pages.
  *
  * Created by jordam on 2016-09-28.
  */
@@ -23,6 +28,7 @@ class WebPageCodeConstructor {
 
     /**
      * Static method to create output file with DomElement descriptions for the web page.
+     *
      * @param driver The web driver instance.
      * @param pathToOutputFile Path to the file to be written
      * @return Returns a string with a draft page class
@@ -34,6 +40,11 @@ class WebPageCodeConstructor {
         return descriptors;
     }
 
+    /**
+     * This is the actual method that produce the DomElements for the page, and returns them as a string.
+     *
+     * @return Returns a string with the relevant objects.
+     */
     private String constructWebPageCode(){
         List<String> domElementStrings = new ArrayList<>();
         StringBuilder element = new StringBuilder();
@@ -72,6 +83,12 @@ class WebPageCodeConstructor {
         return constructors.toString();
     }
 
+    /**
+     * Method naming should only consist of method name safe characters, and be formatted according to method naming conventions in java, and according to coding guidelines.
+     *
+     * @param instring The string to convert
+     * @return Returns the converted string
+     */
     private static String methodNameWithOnlySafeCharacters(String instring){
         String returnString = "";
         for(String spaceDividedWord : instring.split(" ")){

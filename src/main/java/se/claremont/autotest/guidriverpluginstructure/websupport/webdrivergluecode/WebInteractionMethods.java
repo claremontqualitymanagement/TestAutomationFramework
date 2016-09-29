@@ -818,23 +818,24 @@ public class WebInteractionMethods implements GuiDriver {
         List<WebElement> rows = webElement.findElements(By.xpath(".//*"));
         for (WebElement row : rows)
         {
-            ArrayList<String> rowStrings = new ArrayList<String>();
+            ArrayList<String> rowStrings = new ArrayList<>();
             boolean allValuesFoundInRow = false;
             boolean someValueFoundInRow = false;
             boolean valueMissingOnRow = false;
             List<WebElement> cells = row.findElements(By.xpath(".//*"));
             for(String textToFindOnRow : textsToFindOnRow)
             {
-                boolean valueFoundOnRow = false;
+                boolean thisValueFoundOnRow = false;
                 for(WebElement cell : cells)
                 {
                     rowStrings.add(cell.getText());
                     if (cell.getText().contains(textToFindOnRow))
                     {
+                        thisValueFoundOnRow = true;
                         someValueFoundInRow = true;
                     }
                 }
-                if (!valueFoundOnRow)
+                if (!thisValueFoundOnRow)
                 {
                     valueMissingOnRow = true;
                     break;
@@ -984,8 +985,7 @@ public class WebInteractionMethods implements GuiDriver {
         if(webElement == null) return false;
         boolean interactionable = (webElement.isEnabled() && webElement.isDisplayed());
         log(LogLevel.DEBUG, "Checking if " + ((DomElement)guiElement).LogIdentification() + " is interactionable and " + String.valueOf(interactionable).toLowerCase().replace("true", "it seemt to be both displayed and enabled.").replace("false", " it isn't."));
-        if(interactionable) return true;
-        return false;
+        return interactionable;
     }
 
     /**

@@ -25,8 +25,6 @@ public class TestRunReporterFactory {
     }
 
     public void report(){
-        for(TestRunReporter testRunReporter : reporters){
-            testRunReporter.report();
-        }
+        reporters.forEach(TestRunReporter::report);
     }
 }
