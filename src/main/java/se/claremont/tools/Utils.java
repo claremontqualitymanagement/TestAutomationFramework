@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class Utils {
 
     final static Logger logger = LoggerFactory.getLogger( Utils.class );
- q
+
     private static Utils instance = null;
 
     protected Utils() {
@@ -63,7 +63,7 @@ public class Utils {
      * @return true if jvm is running on Mac OS X, otherwise false
      */
     public boolean amIMacOS() {
-        return getOS().toLowerCase().contains("mac");
+        return getOS().toLowerCase().contains("mac")? true : false;
     }
 
     /**

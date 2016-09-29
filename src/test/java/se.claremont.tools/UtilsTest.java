@@ -4,6 +4,8 @@ import org.junit.*;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 
+import java.io.File;
+
 /**
  * Created by magnusolsson on 2016-09-23.
  */
@@ -22,12 +24,17 @@ public class UtilsTest{
                 Utils.getInstance().getOS().toLowerCase().contains("win") );
     }
 
-    @Ignore //Takes to much time to run
+    //@Ignore //Takes to much time to run
     @Test
     public void sandboxPlayground(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
+
         web.navigate("https://www.typeandtell.com/sv/");
-        web.mapCurrentPage("C:\\Temp\\Output.txt");
+        if( Utils.getInstance().amIMacOS() )
+            web.mapCurrentPage( Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator + "Temp" + File.separator + "Output.txt" );
+        else
+            web.mapCurrentPage("C:\\Temp\\Output.txt");
+
         web.makeSureDriverIsClosed();
     }
 
