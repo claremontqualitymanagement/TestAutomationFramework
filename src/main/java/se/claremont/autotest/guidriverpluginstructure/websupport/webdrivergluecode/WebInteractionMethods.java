@@ -53,6 +53,14 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    /**
+     *
+     * @return TestCase
+     */
+    public TestCase getTestCase(){
+        return testCase;
+    }
+
     public void wait(int milliseconds){
         try {
             driver.manage().wait((long)milliseconds);
