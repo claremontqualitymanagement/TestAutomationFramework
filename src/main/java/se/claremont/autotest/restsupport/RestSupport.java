@@ -104,8 +104,8 @@ public class RestSupport {
         return bodyString;
     }
 
-    public String getParameterValueFromResponseFromGetRequest(String url, String parameterName){
-        String parameterValue = JsonParser.get(responseBodyFromGetRequest(url), parameterName);
+    public Object getParameterValueFromResponseFromGetRequest(String url, String parameterName){
+        Object parameterValue = JsonParser.get(responseBodyFromGetRequest(url), parameterName);
         testCase.log(LogLevel.DEBUG, "Reading parameter value '" + parameterValue + "' for parameter '" + parameterName + "' from url '" + url + "'.");
         return parameterValue;
     }

@@ -884,15 +884,25 @@ public class WebInteractionMethods implements GuiDriver {
     public void verifyCurrentPageSourceWithW3validator(){
         RestSupport rest = new RestSupport(testCase);
         String responseJson = rest.responseBodyFromPostRequest("https://validator.w3.org/nu/?out=json", "text/html; charset=utf-8", driver.getPageSource());
+        if(JsonParser.childObjects(responseJson, "messages").size() == 0){
+            log(LogLevel.VERIFICATION_PASSED, "Checking of page content against W3C validator passed with no messages.");
+            return;
+        }
         for(String child : JsonParser.childObjects(responseJson, "messages")){
-            if(JsonParser.get(child, "type").toLowerCase().contains("info")){
-                log(LogLevel.INFO, "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"));
-            } else if(JsonParser.get(child, "type").toLowerCase().contains("error")){
-                log(LogLevel.VERIFICATION_FAILED, "W3C Validation error: " +  JsonParser.get(child, "message"));
+            if(JsonParser.get(child, "type").contains("info")){
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
+                        "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"),
+                        "W3C Validation information<br>" + JsonParser.get(child, "subType").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>");
+            } else if(JsonParser.get(child, "type").contains("error")){
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED,
+                        "W3C Validation error: " +  JsonParser.get(child, "message").toString() + " Extract: '" + JsonParser.get(child, "extract").toString() + "'.",
+                        "W3C Validation error<br>'" + JsonParser.get(child, "message").toString() + "'<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>");
             } else {
-                log(LogLevel.INFO, "W3C Validation " + JsonParser.get(child, "type") + ": " + JsonParser.get(child, "message"));
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
+                        "W3C Validation " + JsonParser.get(child, "type").toString() + ": " + JsonParser.get(child, "message").toString(),
+                        "W3C Validation information<br>" + JsonParser.get(child, "type").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>");
             }
-            log(LogLevel.DEBUG, "JSON response content: '" + child + "'.");
+            log(LogLevel.DEBUG, "W3C JSON response content: '" + child + "'.");
         }
     }
 

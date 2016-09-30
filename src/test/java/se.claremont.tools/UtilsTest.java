@@ -27,10 +27,12 @@ public class UtilsTest{
     @Ignore
     @Test
     public void sandBox(){
-        WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
         web.navigate("https://www.typeandtell.com/sv/");
         web.verifyCurrentPageSourceWithW3validator();
         web.makeSureDriverIsClosed();
+        testCase.report();
     }
 
     @Ignore //Takes to much time to run

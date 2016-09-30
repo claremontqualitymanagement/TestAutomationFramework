@@ -37,6 +37,9 @@ public class TestCase {
      * Setting up a new test case run and prepares it for execution
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
+        if(knownErrorsList == null){
+            knownErrorsList = new KnownErrorsList();
+        }
         testCaseLog = new TestCaseLog(testName);
         testSetName = SupportMethods.classNameAtStacktraceLevel(4);
         testSetKnownErrors = knownErrorsList;
