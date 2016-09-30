@@ -6,6 +6,8 @@ To do
 =========
 Find appropriate location for Javadocs
 Document new settings management
+Implement check towards W3C html content check
+Sort out email settings in the methods
 New crunch to create more unit tests
 Bug: Fix debug rows seem to be line-broken in HTML report
 Bug: Test run log folder gets wrong name

@@ -1,6 +1,7 @@
 package se.claremont.autotest.common;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -8,6 +9,7 @@ import org.junit.Test;
  */
 public class EmailSender_Tests {
 
+    @Ignore
     @Test
     public void sendGmail(){
         String[] recipients = new String[] {"jorgen.damberg@claremont.se"};
@@ -26,6 +28,7 @@ public class EmailSender_Tests {
         Assert.assertFalse("Impossible state", returnMessage.contains("This is not supposed to be possible"));
     }
 
+    @Ignore
     @Test
     public void SendSmtp(){
         Settings settings = new Settings();

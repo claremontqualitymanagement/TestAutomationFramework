@@ -2,6 +2,7 @@ package se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluec
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import se.claremont.autotest.common.CliTestRunner;
 import se.claremont.autotest.common.LogFolder;
@@ -851,6 +852,45 @@ public class WebInteractionMethods implements GuiDriver {
             }
         }
     }
+
+    public void executeJavascript(String script){
+        if (driver instanceof JavascriptExecutor) {
+            try {
+                ((JavascriptExecutor)driver).executeScript(script);
+                log(LogLevel.EXECUTED, "Executed the javascript '" + script + "'.");
+            }catch (Exception e){
+                log(LogLevel.EXECUTION_PROBLEM, "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
+            }
+        } else {
+            log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver doesn't seem to be compatible. Javascript that didn't run below:" + SupportMethods.LF + script);
+        }
+
+    }
+
+    public void W3CValidation(){
+        String pageSource = driver.getPageSource();
+        String originalUrl = driver.getCurrentUrl();
+        navigate("https://validator.w3.org/nu/");
+        click(new DomElement("docselect", DomElement.IdentificationType.BY_ID));
+
+        WebElement dropDownListBox = driver.findElement(By.id("docselect"));
+        org.openqa.selenium.support.ui.Select dropDown = new Select(dropDownListBox);
+        dropDown.selectByValue("textarea");
+
+        if (driver instanceof JavascriptExecutor) {
+            String javaScriptString = "document.getElementById(\"doc\").innerHTML = \"" + pageSource + "\";";
+            executeJavascript(javaScriptString);
+        } else {
+            driver.findElement(By.id("doc")).clear();
+            driver.findElement(By.id("doc")).sendKeys(pageSource);
+        }
+        click(new DomElement("submit", DomElement.IdentificationType.BY_ID));
+        for(WebElement element : driver.findElements(By.className("error"))){
+            log(LogLevel.VERIFICATION_FAILED, "Html validation error: '" + element.getText());
+        }
+        navigate(originalUrl);
+    }
+
 
     /**
      * Verifies that an element is enabled for interaction (displayed and enabled).

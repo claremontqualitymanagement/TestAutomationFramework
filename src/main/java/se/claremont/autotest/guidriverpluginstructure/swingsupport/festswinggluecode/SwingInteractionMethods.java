@@ -14,13 +14,6 @@ public class SwingInteractionMethods implements GuiDriver{
 
     private FrameFixture naive;
 
-    @Ignore
-    @Test
-    public void shouldChangeTextInTextFieldWhenClickingButton() {
-        naive.button("byeButton").click();
-        naive.label("messageLabel").requireText("Bye!");
-    }
-
     public void click(GuiElement guiElement){
         FrameFixture frameFixture = new FrameFixture(guiElement.name);
         SwingElement swingElement = (SwingElement) guiElement;

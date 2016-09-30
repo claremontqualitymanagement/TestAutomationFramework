@@ -22,6 +22,14 @@ public class UtilsTest{
                 Utils.getInstance().getOS().toLowerCase().contains("win") );
     }
 
+    @Test
+    public void sandBox(){
+        WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
+        web.navigate("https://www.typeandtell.com/sv/");
+        web.W3CValidation();
+        web.makeSureDriverIsClosed();
+    }
+
     @Ignore //Takes to much time to run
     @Test
     public void sandboxPlayground(){
