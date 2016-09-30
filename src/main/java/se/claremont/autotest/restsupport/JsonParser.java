@@ -20,6 +20,11 @@ public class JsonParser {
         return object.getString(parameterName);
     }
 
+    public static Integer getInt(String content, String parameterName){
+        JSONObject object = new JSONObject(content);
+        return object.getInt(parameterName);
+    }
+
     public static void verifyMandatoryFieldIsNotEmpty(String content, String mandatoryParameterName, TestCase testCase){
         JSONObject object;
         boolean parameterNameExist = true;

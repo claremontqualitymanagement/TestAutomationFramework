@@ -889,45 +889,31 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         for(String child : JsonParser.childObjects(responseJson, "messages")){
+            String lineNumberString = "";
+            try{
+                String lineNumber = Integer.toString(JsonParser.getInt(child, "lastline"));
+                lineNumberString = "<br>Line number " + JsonParser.getInt(child, "lastline");
+            } catch (Exception e) {
+                try {
+                    String lineNumber = Integer.toString(JsonParser.getInt(child, "lastLine"));
+                    lineNumberString = "<br>Line number " + JsonParser.getInt(child, "lastLine");
+                }catch (Exception ex){}
+            }
             if(JsonParser.get(child, "type").contains("info")){
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
                         "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"),
-                        "W3C Validation information<br>" + JsonParser.get(child, "subType").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>");
+                        "W3C Validation information<br>" + JsonParser.get(child, "subType").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>" + lineNumberString);
             } else if(JsonParser.get(child, "type").contains("error")){
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED,
                         "W3C Validation error: " +  JsonParser.get(child, "message").toString() + " Extract: '" + JsonParser.get(child, "extract").toString() + "'.",
-                        "W3C Validation error<br>'" + JsonParser.get(child, "message").toString() + "'<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>");
+                        "W3C Validation error<br>'" + JsonParser.get(child, "message").toString() + "'<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>" + lineNumberString);
             } else {
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
                         "W3C Validation " + JsonParser.get(child, "type").toString() + ": " + JsonParser.get(child, "message").toString(),
-                        "W3C Validation information<br>" + JsonParser.get(child, "type").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>");
+                        "W3C Validation information<br>" + JsonParser.get(child, "type").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>" + lineNumberString);
             }
-            log(LogLevel.DEBUG, "W3C JSON response content: '" + child + "'.");
+            log(LogLevel.DEBUG, "W3C JSON response content: '" + child.replace("<", "&lt;").replace(">", "&gt;") + "'.");
         }
-    }
-
-    public void W3CValidation(){
-        String pageSource = driver.getPageSource();
-        String originalUrl = driver.getCurrentUrl();
-        navigate("https://validator.w3.org/nu/");
-        click(new DomElement("docselect", DomElement.IdentificationType.BY_ID));
-
-        WebElement dropDownListBox = driver.findElement(By.id("docselect"));
-        org.openqa.selenium.support.ui.Select dropDown = new Select(dropDownListBox);
-        dropDown.selectByValue("textarea");
-
-        if (driver instanceof JavascriptExecutor) {
-            String javaScriptString = "document.getElementById(\"doc\").innerHTML = \"" + pageSource + "\";";
-            executeJavascript(javaScriptString);
-        } else {
-            driver.findElement(By.id("doc")).clear();
-            driver.findElement(By.id("doc")).sendKeys(pageSource);
-        }
-        click(new DomElement("submit", DomElement.IdentificationType.BY_ID));
-        for(WebElement element : driver.findElements(By.className("error"))){
-            log(LogLevel.VERIFICATION_FAILED, "Html validation error: '" + element.getText());
-        }
-        navigate(originalUrl);
     }
 
 
