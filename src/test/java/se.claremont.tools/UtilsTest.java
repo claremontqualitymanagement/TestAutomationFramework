@@ -24,6 +24,7 @@ public class UtilsTest{
                 Utils.getInstance().getOS().toLowerCase().contains("win") );
     }
 
+    @Ignore
     @Test
     public void sandBox(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
