@@ -28,7 +28,7 @@ public class UtilsTest{
     public void sandBox(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
         web.navigate("https://www.typeandtell.com/sv/");
-        web.W3CValidation();
+        web.verifyCurrentPageSourceWithW3validator();
         web.makeSureDriverIsClosed();
     }
 

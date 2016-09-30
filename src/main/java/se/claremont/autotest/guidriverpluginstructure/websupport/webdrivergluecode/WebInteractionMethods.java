@@ -11,6 +11,8 @@ import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
+import se.claremont.autotest.restsupport.JsonParser;
+import se.claremont.autotest.restsupport.RestSupport;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.io.File;
@@ -873,6 +875,25 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver doesn't seem to be compatible. Javascript that didn't run below:" + SupportMethods.LF + script);
         }
 
+    }
+
+
+    /**
+     * Check the page source for current page with the W3C Validator API for HTML consistency.
+     */
+    public void verifyCurrentPageSourceWithW3validator(){
+        RestSupport rest = new RestSupport(testCase);
+        String responseJson = rest.responseBodyFromPostRequest("https://validator.w3.org/nu/?out=json", "text/html; charset=utf-8", driver.getPageSource());
+        for(String child : JsonParser.childObjects(responseJson, "messages")){
+            if(JsonParser.get(child, "type").toLowerCase().contains("info")){
+                log(LogLevel.INFO, "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"));
+            } else if(JsonParser.get(child, "type").toLowerCase().contains("error")){
+                log(LogLevel.VERIFICATION_FAILED, "W3C Validation error: " +  JsonParser.get(child, "message"));
+            } else {
+                log(LogLevel.INFO, "W3C Validation " + JsonParser.get(child, "type") + ": " + JsonParser.get(child, "message"));
+            }
+            log(LogLevel.DEBUG, "JSON response content: '" + child + "'.");
+        }
     }
 
     public void W3CValidation(){

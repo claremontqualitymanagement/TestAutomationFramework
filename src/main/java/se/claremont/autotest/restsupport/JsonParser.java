@@ -1,8 +1,12 @@
 package se.claremont.autotest.restsupport;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for JSON data management and verification
@@ -40,6 +44,16 @@ public class JsonParser {
             }
             testCase.log(LogLevel.DEVIATION_EXTRA_INFO, "JSON content for where the parameter '" + mandatoryParameterName + "' was looked for: '" + content + "'.");
         }
+    }
+
+    public static List<String> childObjects(String content, String parentParameter){
+        ArrayList<String> returnString = new ArrayList<>();
+        JSONObject object = new JSONObject(content);
+        JSONArray children = object.getJSONArray(parentParameter);
+        for(Object child : children){
+            returnString.add(((JSONObject)child).toString());
+        }
+        return returnString;
     }
 
     public static void nodesToString(String content){
