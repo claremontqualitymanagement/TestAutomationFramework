@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>1.0.1-beta63</version>
+    <version>1.0.1-beta66</version>
     <packaging>jar</packaging>
 
     <name>Test Automation Framework - TAF</name>
