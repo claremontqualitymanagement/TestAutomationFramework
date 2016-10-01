@@ -30,7 +30,7 @@ public class UtilsTest{
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
         web.navigate("https://www.typeandtell.com/sv/");
-        web.verifyCurrentPageSourceWithW3validator();
+        web.verifyCurrentPageSourceWithW3validator(false);
         web.makeSureDriverIsClosed();
         testCase.report();
     }

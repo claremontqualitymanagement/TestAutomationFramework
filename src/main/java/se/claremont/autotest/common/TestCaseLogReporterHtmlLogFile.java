@@ -100,6 +100,9 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      font." + enumMemberNameToLower(HtmlLogStyleNames.DATA.toString()) + "               { color: blue; }" + LF +
                 "      tr.deviationSection       { font-size: 120%; font-weight: bold; color: red; }" + LF +
                 "      tr .noDeviationSection     { font-size: 110%; font-weight: bold; color: green; }" + LF +
+                "      font.w3cvalidationinfo    { color: darkgrey; font-weight: bold; }" + LF +
+                "      font.w3cvalidationerror   { color: red; font-weight: bold; }" + LF +
+                "      font.w3cvalidationother   { color: darkgrey; font-weight: bold; }" + LF +
                 "      tr.testDataTitleRow       { background-color: lightgrey; }" + LF +
                 "      pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
@@ -107,7 +110,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             width: auto;" + LF +
                 "                             padding: 5px;" + LF +
                 "                             background-color: #eee;" + LF +
-                "                             width: 650px!ie7;" + LF +
+                "                             width: 70%;" + LF +
                 "                             padding-bottom: 20px!ie7;"  + LF +
                 "                             max - height: 600px;" + LF +
                 "      }" + LF;

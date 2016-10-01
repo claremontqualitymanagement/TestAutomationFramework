@@ -881,38 +881,53 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Check the page source for current page with the W3C Validator API for HTML consistency.
      */
-    public void verifyCurrentPageSourceWithW3validator(){
+    public void verifyCurrentPageSourceWithW3validator(boolean verbose){
         RestSupport rest = new RestSupport(testCase);
         String responseJson = rest.responseBodyFromPostRequest("https://validator.w3.org/nu/?out=json", "text/html; charset=utf-8", driver.getPageSource());
+        if(responseJson == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not get any response from HTML validation service.");
+            return;
+        }
         if(JsonParser.childObjects(responseJson, "messages").size() == 0){
             log(LogLevel.VERIFICATION_PASSED, "Checking of page content against W3C validator passed with no messages.");
             return;
         }
+        LogLevel logLevel = LogLevel.INFO;
+
+        for(String child : JsonParser.childObjects(responseJson, "messages")) {
+            if(JsonParser.get(child, "type").contains("error")){
+                logLevel = LogLevel.VERIFICATION_FAILED;
+            }
+        }
+
+        StringBuilder textLogMessage = new StringBuilder();
+        StringBuilder htmlLogMessage = new StringBuilder();
+
         for(String child : JsonParser.childObjects(responseJson, "messages")){
             String lineNumberString = "";
             try{
-                String lineNumber = Integer.toString(JsonParser.getInt(child, "lastline"));
-                lineNumberString = "<br>Line number " + JsonParser.getInt(child, "lastline");
+                lineNumberString = " - At line number " + JsonParser.getInt(child, "lastline");
             } catch (Exception e) {
                 try {
-                    String lineNumber = Integer.toString(JsonParser.getInt(child, "lastLine"));
-                    lineNumberString = "<br>Line number " + JsonParser.getInt(child, "lastLine");
+                    lineNumberString = " - At line number " + JsonParser.getInt(child, "lastLine");
                 }catch (Exception ex){}
             }
-            if(JsonParser.get(child, "type").contains("info")){
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
-                        "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"),
-                        "W3C Validation information<br>" + JsonParser.get(child, "subType").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>" + lineNumberString);
+            if(verbose && JsonParser.get(child, "type").contains("info")){
+                textLogMessage.append(SupportMethods.LF + "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"));
+                htmlLogMessage.append("<p><font class=\"w3cvalidationinfo\">W3C Validation information info</font>" + lineNumberString + "<br>" + JsonParser.get(child, "subType").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
             } else if(JsonParser.get(child, "type").contains("error")){
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED,
-                        "W3C Validation error: " +  JsonParser.get(child, "message").toString() + " Extract: '" + JsonParser.get(child, "extract").toString() + "'.",
-                        "W3C Validation error<br>'" + JsonParser.get(child, "message").toString() + "'<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>" + lineNumberString);
-            } else {
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
-                        "W3C Validation " + JsonParser.get(child, "type").toString() + ": " + JsonParser.get(child, "message").toString(),
-                        "W3C Validation information<br>" + JsonParser.get(child, "type").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<br><pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre>" + lineNumberString);
+                textLogMessage.append(SupportMethods.LF + "W3C Validation error: " +  JsonParser.get(child, "message").toString() + " Extract: '" + JsonParser.get(child, "extract").toString() + "'.");
+                htmlLogMessage.append("<p><font class=\"w3cvalidationerror\">W3C Validation information: Error</font>" + lineNumberString + "<br>'" + JsonParser.get(child, "message").toString() + "'<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
+            } else if(verbose){
+                textLogMessage.append(SupportMethods.LF + "W3C Validation " + JsonParser.get(child, "type").toString() + ": " + JsonParser.get(child, "message").toString());
+                htmlLogMessage.append("<p><font class=\"w3validationother\">W3C Validation information</font>" + lineNumberString + "<br>" + JsonParser.get(child, "type").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
             }
             log(LogLevel.DEBUG, "W3C JSON response content: '" + child.replace("<", "&lt;").replace(">", "&gt;") + "'.");
+        }
+        if(logLevel == LogLevel.VERIFICATION_FAILED || (logLevel == LogLevel.INFO && verbose)){
+            testCase.logDifferentlyToTextLogAndHtmlLog(logLevel, textLogMessage.toString(), htmlLogMessage.toString());
+        } else {
+            testCase.log(LogLevel.VERIFICATION_PASSED, "No indications of anything in the HTML to act on after validation of HTML with W3C validation service.");
         }
     }
 
