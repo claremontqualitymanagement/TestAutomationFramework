@@ -1,6 +1,6 @@
 <html>
   <head>
-      <title>SAD AutoTest</title>
+      <title>TAF introduction</title>
       <meta charset="UTF-8">
       <meta name="description" content="Test automation framework introduction">
 
@@ -122,6 +122,7 @@
                     <a href="#understandingwebmethods">Understanding the web methods</a><br>
                     <a href="#automaticpageobjects">Automatic page object creation</a><br>
                     <a href="#w3c">Build in W3C validation</a><br>
+                    <a href="#javascriptexecution">Javascript execution</a><br>
                 </p>
                 <p>
                     <a href="#restintroduction"><b>REST support in TAF</b></a><br>
@@ -1207,14 +1208,22 @@ class DemoTestActions {
                 </p>
                 <h3 id="automaticpageobjects">Ease of getting started</h3>
                 <p>
-                    The method called mapCurrentPage() can be inserted into any script. It is useful for creating page objects for new pages. It parses the source code of a page and produces the DomElement object declarations
+                    The method called <i>mapCurrentPage()</i> can be inserted into any script. It is useful for creating page objects for new pages. It parses the source code of a page and produces the DomElement object declarations
                     it can identify on the current page. These are saved to a file and can be copied into any page class.
                 </p>
                 <h3 id="w3c">Technical test information with a single line of code</h3>
                 <p>
-                    One of the main concerns for multi-browser support is that different browsers treat html errors differently. With the verifyCurrentPageSourceWithW3validator() method the page source of the current page is validated
-                    with the W3C validator service through a REST call in the background. You can choose if the report should be verbose (including errors, information and warnings), or not (including only errors).
+                    One of the main concerns for multi-browser support is that different browsers treat html errors differently. With the <i>verifyCurrentPageSourceWithW3validator()</i> method the page source of the current page is validated
+                    with the W3C validator service through a REST call in the background. You can choose if the report should be <i>verbose</i> (including errors, information and warnings), or not (including only errors).
                 </p>
+
+                <h3 id="javascriptexecution">Versatile execution by executing javascripts</h3>
+                <p>
+                    Web technologies are developing fast. As one resort TAF has the mechanism to execute javascript directly in the test run, on the page you are corrently interacting with. This is done via the method <i>executeJavascript()</i>. Example:
+                </p>
+                <pre>
+                    web.executeJavascript("document.findElementById('demoStrangeRadioButton').innerHTML = 'changed'");
+                </pre>
 
                 <br>
                 <br>

@@ -6,7 +6,6 @@ To do
 =========
 Find appropriate location for Javadocs
 Document new settings management
-Implement check towards W3C html content check
 Sort out email settings in the methods
 New crunch to create more unit tests
 Bug: Fix debug rows seem to be line-broken in HTML report
@@ -24,8 +23,6 @@ Document required email settings
 Append adjusted version of existing report plugin for ALM to framework
 Append existing Personnummergenerator in framework
 Append existing date calculator to framework
-Support for radiobuttons and checkboxes
-Support for dropdown
 Saving desktop image upon error, and not just browser content
 WebDriver toString() should be Overridden for relevant printouts
 Assess using list of LogPost class even for summary report
@@ -43,6 +40,9 @@ Get rid of java 1.5 warnings
 Implement support for web tables
 Get ObjectFactory for Logger to ready state
 Split solution in stand-alone framework component and SUT related stuff
+Implement check towards W3C html content check
+Support for radiobuttons and checkboxes
+Support for dropdown
 Get scripts for release management working
 Bug: Sometimes TestCaseHtmlLog get wrong status of test case. Known errors found, but still got status ONLY_NEW_ERRORS
 Merge maven pom.xml files to make runnable jar, minimum jar, javadocs, dependencies and so forth
