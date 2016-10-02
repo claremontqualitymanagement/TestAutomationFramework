@@ -467,6 +467,10 @@ public class WebInteractionMethods implements GuiDriver {
         this.standardTimeoutInSeconds = standardTimeoutInSeconds;
     }
 
+    public void clickOnElementWithTheVisibleText(String visibleText){
+
+    }
+
     /**
      * Performing a click event on an element
      *
@@ -479,11 +483,25 @@ public class WebInteractionMethods implements GuiDriver {
             WebElement webelement = getRuntimeElementWithTimeout(element, standardTimeoutInSeconds);
             if(webelement == null){
                 log(LogLevel.DEBUG, "Element does not exist.");
-                log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + element.LogIdentification() + ".");
+                log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + element.LogIdentification() + " since it couldn't be identified.");
                 saveScreenshot();
                 saveHtmlContentOfCurrentPage();
                 haltFurtherExecution();
             } else{
+                if(!webelement.isDisplayed()){
+                    log(LogLevel.EXECUTION_PROBLEM, "Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
+                    saveScreenshot();
+                    saveHtmlContentOfCurrentPage();
+                    haltFurtherExecution();
+                    return;
+                }
+                if(!webelement.isEnabled()){
+                    log(LogLevel.EXECUTION_PROBLEM, "Found element " + element.LogIdentification() + " but it is not enabled.");
+                    saveScreenshot();
+                    saveHtmlContentOfCurrentPage();
+                    haltFurtherExecution();
+                    return;
+                }
                 webelement.click();
                 log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
             }
