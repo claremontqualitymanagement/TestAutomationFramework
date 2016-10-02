@@ -350,7 +350,7 @@ public class WebInteractionMethods implements GuiDriver {
      */
     private void haltFurtherExecution(){
         log(LogLevel.INFO, "Halting further execution due to perceived problems.");
-        //closeBrowser();
+        makeSureDriverIsClosed();
         testCase.report();
     }
 

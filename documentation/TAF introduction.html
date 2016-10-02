@@ -109,6 +109,15 @@
                     <a href="#dependencies">Dependencies</a><br>
                 </p>
                 <p>
+                    <a href="#webintroduction"><b>Web support in TAF</b></a><br>
+                    <a href="#understandingwebmethods">Understanding the web methods</a><br>
+                    <a href="#automaticpageobjects">Automatic page object creation</a><br>
+                    <a href="#w3c">Build in W3C validation</a>
+                </p>
+                <p>
+                    <a href="#restintroduction"><b>REST support in TAF</b></a>
+                </p>
+                <p>
                     <a href="#closingRemarks"><b>Closing remarks</b></a><br>
                     <a href="#attributions">Attributions</a><br>
                     <a href="#references">References</a><br>
@@ -1140,6 +1149,63 @@ class DemoTestActions {
                     <tr><td>OkHttp3</td><td>HTTP driver, for REST interface support.</td></tr>
                 </table>
 
+
+                <br>
+                <br>
+                <hr>
+                <br>
+                <br>
+
+                <h1 id="webintroduction">Web testing with TAF</h1>
+                <p>One of the key areas for TAF is the web testing part. TAF for web has been developed with robustness and precise and valuable logging in mind. </p>
+                <h2>Key concepts</h2>
+                <h3>Replacable driver</h3>
+                <p>
+                    Currently Selenium WebDriver is used as a driver. The primary motivator behind the choice of Selenium is that it is versatile, supports many browsers, has an active community,
+                    is comprehensive, is easy to find competence around. However, since implementation of methods are based upon the GuiDriver interface and the DomElement class rather than the
+                    WebElement class of Selenium itself, makes it easier to substitute the driver, should the need arise.
+                </p>
+                <h3 id="understandingwebmethods">Separation of method intent by naming convention</h3>
+                <p>
+                    Methods for interaction with web are generally divided into a few sub-groups, depending on their intent.
+                </p>
+                <ul>
+                    <li><b>Navigation methods</b>. Methods like for example click(), selectInDropDown(), selectRadioButton() are performed as step in a flow. They generally log to the log levels EXECUTED and return void.</li>
+                    <li><b>Execution flow control</b>. Methods like isEnabled(), isDisplayed() or getText() generally return boolean or String, and only log to the debug log level. They are used to control the flow of execution.</li>
+                    <li><b>Verification methods</b>. Methods containing the word verification generally return void and log to VERIFICATION_PASSED or VERIFICATION_FAILED log levels. If the check cannot be performed additional information
+                        is logged to the VERIFICATION_PROBLEM log level.</li>
+                </ul>
+                <p>
+                    When things do not go as expected, screenshots are saved, as is the html source of the current page. If the error is severe enough for valid continued testing the execution is ended for the rest of the test case.
+                </p>
+                <h3 id="automaticpageobjects">Ease of getting started</h3>
+                <p>
+                    The method called mapCurrentPage() can be inserted into any script. It is useful for creating page objects for new pages. It parses the source code of a page and produces the DomElement object declarations
+                    it can identify on the current page. These are saved to a file and can be copied into any page class.
+                </p>
+                <h3 id="w3c">Technical test information with a single line of code</h3>
+                <p>
+                    One of the main concerns for multi-browser support is that different browsers treat html errors differently. With the verifyCurrentPageSourceWithW3validator() method the page source of the current page is validated
+                    with the W3C validator service through a REST call in the background. You can choose if the report should be verbose (including errors, information and warnings), or not (including only errors).
+                </p>
+
+                <br>
+                <br>
+                <hr>
+                <br>
+                <br>
+
+                <h1 id="restintroduction">REST testing with TAF</h1>
+                <p>
+                    One of the most common methods for communicating between systems or between parts of a system is through REST. It is a stateless HTTP mechanism for transfering data. Almost all REST based communication has XML or JSON as data formats.
+                </p>
+                <p>
+                    Since REST is HTTP based (a protocol created for text transfering) it uses the PUT, GET, POST, or DELETE methods of the HTTP protocol to insert, update, query or delete data in the service at the other end.
+                </p>
+                <p>
+                    TAF utilizes the third party library OkHttp3 for HTTP support and the JSON library of Java itself for JSON management. The choice of OkHttp3 was based on it's ease of implementation, and for it being quite light-weight. The choice
+                    of JSOn library was out of laziness.
+                </p>
 
                 <br>
                 <br>
