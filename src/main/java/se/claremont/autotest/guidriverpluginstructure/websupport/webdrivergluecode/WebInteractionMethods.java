@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Methods for interaction with web elements in a web page DOM. Utilizes Selenium WebDriver components.
@@ -401,7 +402,38 @@ public class WebInteractionMethods implements GuiDriver {
                 returnElement = driver.findElement(By.name(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
                 returnElement = driver.findElement(By.cssSelector(element.recognitionString));
-            } else {
+            } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
+                List<WebElement> potentialMatches = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
+                if(potentialMatches.size() == 1){
+                    return potentialMatches.get(0);
+                } else if( potentialMatches.size() > 1){
+                    List<WebElement> visibleElements = new ArrayList<>();
+                    for(WebElement potentialMatch : potentialMatches){
+                        if(potentialMatch.isDisplayed()) visibleElements.add(potentialMatch);
+                    }
+                    if(visibleElements.size() == 1){
+                        return visibleElements.get(0);
+                    }
+                } else {
+                    potentialMatches = driver.findElements(By.xpath("//*[contains(text(), '" + element.recognitionString + "')]"));
+                    if(potentialMatches.size() == 1){
+                        returnElement = potentialMatches.get(0);
+                    } else {
+                        List<WebElement> visibleElements = new ArrayList<>();
+                        for(WebElement potentialMatch : potentialMatches){
+                            if(potentialMatch.isDisplayed()){
+                                visibleElements.add(potentialMatch);
+                            }
+                        }
+                        if(visibleElements.size() == 1){
+                            returnElement = visibleElements.get(0);
+                        } else {
+                            log(LogLevel.DEBUG, "Searched for element with the visible text '" + element.recognitionString + "' but found " + visibleElements.size() + " elements that was visible and matched the text string.");
+                        }
+
+                    }
+                }
+            }else {
                 returnElement = null;
             }
         }catch (Exception ignored){
@@ -1135,12 +1167,14 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("select")){
             log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
             return;
         }
 
@@ -1298,6 +1332,17 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("input") || !webElement.getAttribute("type").toLowerCase().equals("checkbox")){
+            List<WebElement> subElements = webElement.findElements(By.xpath("//input"));
+            if(subElements.size() == 1){
+                if(!subElements.get(0).isSelected() == expectedToBeTicked){
+                    subElements.get(0).click();
+                    log(LogLevel.EXECUTED, "Clicked the " + domElement.LogIdentification() + " to make it " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ".");
+                    return;
+                } else {
+                    log(LogLevel.EXECUTED, "Made sure that " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "un-ticked") + ". And it already was.");
+                    return;
+                }
+            }
             log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
             saveHtmlContentOfCurrentPage();
         }

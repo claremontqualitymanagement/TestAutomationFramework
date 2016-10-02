@@ -72,6 +72,30 @@ public class UtilsTest{
         testCase.report();
     }
 
+    @Ignore
+    @Test
+    public void radioButtonTest(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("file://c:/temp/taf.html");
+        DomElement dropdown = new DomElement("dropdown", DomElement.IdentificationType.BY_ID);
+        web.selectInDropdown(dropdown, "Volvon");
+        web.makeSureDriverIsClosed();
+        testCase.report();
+    }
+
+    @Ignore
+    @Test
+    public void checkBoxTest(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("file://c:/temp/taf.html");
+        DomElement dropdown = new DomElement("checkbox", DomElement.IdentificationType.BY_ID);
+        web.selectInDropdown(dropdown, "Volvo");
+        web.makeSureDriverIsClosed();
+        testCase.report();
+    }
+
     @Ignore //Takes to much time to run
     @Test
     public void sandboxPlayground(){

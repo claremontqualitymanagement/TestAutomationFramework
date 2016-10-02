@@ -23,7 +23,8 @@ public class DomElement implements GuiElement {
         BY_X_PATH,
         BY_ID,
         BY_CSS,
-        BY_NAME
+        BY_NAME,
+        BY_VISIBLE_TEXT
     }
 
     /**
@@ -47,35 +48,6 @@ public class DomElement implements GuiElement {
      */
     public String LogIdentification(){
         return name + " (declared in page class " + page + ")";
-    }
-
-
-    private class Button extends DomElement{
-        public Button(String recognitionString, IdentificationType identificationType){
-            super(recognitionString, identificationType);
-        }
-    }
-    private class InputField extends DomElement{
-        public InputField(String recognitionString, IdentificationType identificationType){
-            super(recognitionString, identificationType);
-        }
-    }
-    private class TextField extends DomElement{
-        public TextField(String recognitionString, IdentificationType identificationType){
-            super(recognitionString, identificationType);
-        }
-    }
-
-    private class RadioButton extends DomElement{
-        public RadioButton(String recognitionString, IdentificationType identificationType){
-            super(recognitionString, identificationType);
-        }
-    }
-
-    private class DropDown extends DomElement{
-        public DropDown(String recognitionString, IdentificationType identificationType){
-            super(recognitionString, identificationType);
-        }
     }
 
 
