@@ -467,9 +467,63 @@ public class WebInteractionMethods implements GuiDriver {
         this.standardTimeoutInSeconds = standardTimeoutInSeconds;
     }
 
+    /**
+     * In some cases you might want to click on an element with a visible text without declaring the element itself. Then use this method.
+     *
+     * @param visibleText The visible text of the element to find
+     */
     public void clickOnElementWithTheVisibleText(String visibleText){
-
+        List<WebElement> potentialClickObjects = driver.findElements(By.xpath("//*[.='" + visibleText + "']"));
+        if(potentialClickObjects.size() == 0){
+            log(LogLevel.DEBUG, "No exact match for string '" + visibleText + "' found. Trying to find elements containing the text instead.");
+            potentialClickObjects = driver.findElements(By.xpath("//*[contains(text(), '" + visibleText + "')]"));
+        }
+        if(potentialClickObjects.size() == 1){
+            if(!potentialClickObjects.get(0).isDisplayed()){
+                log(LogLevel.EXECUTION_PROBLEM, "Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is hidden from view.");
+                saveScreenshot();
+                saveHtmlContentOfCurrentPage();
+                haltFurtherExecution();
+            }
+            if(!potentialClickObjects.get(0).isEnabled()){
+                log(LogLevel.EXECUTION_PROBLEM, "Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is disabled.");
+                saveScreenshot();
+                saveHtmlContentOfCurrentPage();
+                haltFurtherExecution();
+            }
+            try {
+                potentialClickObjects.get(0).click();
+                log(LogLevel.EXECUTED, "Clicked the element with visible text '" + visibleText + "'.");
+            }catch (Exception e){
+                log(LogLevel.EXECUTION_PROBLEM, "Could not click the element with the visible text '" + visibleText + "'. Error message: " + e.getMessage());
+            }
+        }else{
+            List<WebElement> trulyClickableElements = new ArrayList<>();
+            for(WebElement potentialClickObject : potentialClickObjects){
+                if(potentialClickObject.isEnabled() && potentialClickObject.isDisplayed()){
+                    trulyClickableElements.add(potentialClickObject);
+                }
+            }
+            log(LogLevel.DEBUG, "Found " + potentialClickObjects.size() + " elements with the text '" + visibleText + "'. Out of those " + trulyClickableElements.size() + " was enabled and not hidden.");
+            if(trulyClickableElements.size() == 1){
+                try{
+                    trulyClickableElements.get(0).click();
+                    log(LogLevel.EXECUTED, "Clicked the element with the visible text '" + visibleText + "'.");
+                }catch (Exception e){
+                    log(LogLevel.FRAMEWORK_ERROR, "Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage());
+                    saveScreenshot();
+                    saveHtmlContentOfCurrentPage();
+                    haltFurtherExecution();
+                }
+            }else{
+                log(LogLevel.EXECUTION_PROBLEM, "Attempted to click element with visible text '" + visibleText + "', but severeal elements was found with that text.");
+                saveScreenshot();
+                saveHtmlContentOfCurrentPage();
+                haltFurtherExecution();
+            }
+        }
     }
+
 
     /**
      * Performing a click event on an element
