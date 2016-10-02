@@ -1,8 +1,6 @@
 package se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode;
 
 import org.fest.swing.fixture.FrameFixture;
-import org.junit.Ignore;
-import org.junit.Test;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;

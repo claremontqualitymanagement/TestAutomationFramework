@@ -16,6 +16,7 @@ import java.util.stream.Stream;
  *
  * Created by jordam on 2016-08-17.
  */
+@SuppressWarnings("SameParameterValue")
 public class Settings extends HashMap<String, String>{
 
     //Some of these setting parameters are suppressed from log display in the summary report, where these settings othervice is displayed.
@@ -73,7 +74,7 @@ public class Settings extends HashMap<String, String>{
     // Det ska gå att uppdatera värden i runtime
     //
 
-    void toFile(String outputFilePath){
+    private void toFile(String outputFilePath){
         StringBuilder stringBuilder = new StringBuilder();
         for(String key : this.keySet()){
             stringBuilder.append(key).append("=").append(this.get(key)).append(SupportMethods.LF);
@@ -81,7 +82,7 @@ public class Settings extends HashMap<String, String>{
         SupportMethods.saveToFile(stringBuilder.toString(), outputFilePath);
     }
 
-    void readFromFileIfItExistElseTryToCreateFile(String settingsFilePath){
+    private void readFromFileIfItExistElseTryToCreateFile(String settingsFilePath){
         List<String> lines = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(settingsFilePath))) {
             stream.forEach(lines::add);
@@ -99,7 +100,7 @@ public class Settings extends HashMap<String, String>{
         }
     }
 
-    boolean isSuppressedFromLogDisplay(String key){
+    private boolean isSuppressedFromLogDisplay(String key){
         try {
             return SettingParameters.valueOf(key).isSuppressedFromLogDisplay();
         } catch (Exception e){

@@ -21,14 +21,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 /**
  * Methods for interaction with web elements in a web page DOM. Utilizes Selenium WebDriver components.
  *
  * Created by jordam on 2016-08-17.
  */
+@SuppressWarnings("SameParameterValue")
 public class WebInteractionMethods implements GuiDriver {
+    @SuppressWarnings("WeakerAccess")
     public WebDriver driver;
     private final TestCase testCase;
     @SuppressWarnings("CanBeFinal")
@@ -106,6 +107,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param logLevel The testCaseLog level of the testCaseLog post
      * @param message The testCaseLog message string
      */
+    @SuppressWarnings("WeakerAccess")
     public void log(LogLevel logLevel, String message){
         testCase.log(logLevel, message);
     }
@@ -320,6 +322,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Saves a screenshot of the web browser content to the testCaseLog folder and writes a testCaseLog post about it.
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
+    @SuppressWarnings("WeakerAccess")
     public void saveScreenshot(){
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
         System.out.println("Saving screenshot of web browser content to '" + filePath + "'.");
@@ -1119,6 +1122,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param guiElement The element to check
      * @return Return true if the element is displayed and enabled.
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean isEnabled(GuiElement guiElement){
         DomElement domElement = (DomElement)guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
@@ -1349,7 +1353,6 @@ public class WebInteractionMethods implements GuiDriver {
         try {
             if(webElement.isSelected() == expectedToBeTicked){
                 log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
-                return;
             } else {
                 webElement.click();
                 log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it wasn't.");

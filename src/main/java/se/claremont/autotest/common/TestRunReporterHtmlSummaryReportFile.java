@@ -6,7 +6,7 @@ import se.claremont.autotest.support.SupportMethods;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
-    HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
+    private HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
 
     @Override
     public void report() {
@@ -35,7 +35,7 @@ public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
     /**
      * Writes the compiled summary report to a file in the test run catalogue.
      */
-    public void writeReport(){
+    private void writeReport(){
         if(reportShouldBeWritten()){
             SupportMethods.saveToFile(htmlSummaryReport.createReport(), LogFolder.testRunLogFolder + "_summary.html");
             LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary report saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");

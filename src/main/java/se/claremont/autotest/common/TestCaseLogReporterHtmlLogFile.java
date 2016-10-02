@@ -141,7 +141,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String htmlSectionBodyHeader(){
-        String html = "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
+        return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
                 "      <img id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
                 "      <p>" + LF +
@@ -150,11 +150,10 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
                 "      </p>" + LF +
                 "    </div>" + LF + LF;
-        return html;
     }
 
     private String htmlSectionHtmlHead(){
-        String html = "  <head>" + LF + LF +
+        return "  <head>" + LF + LF +
                 "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
                 "    <meta charset=\"UTF-8\">" + LF +
                 "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\">" + LF +
@@ -163,16 +162,14 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "    </style>" + LF + LF +
                 scriptSection() +
                 "  </head>" + LF + LF;
-        return html;
     }
 
     private String htmlSectionTestCaseLogEntries(){
-        String html = "      <h2>Test case testCaseLog entries</h2>" + LF +
+        return "      <h2>Test case testCaseLog entries</h2>" + LF +
                 "      <label><input type=\"checkbox\" id=\"showDebugCheckbox\" onchange=\"showDebug(this)\">Suppress debug rows</label>" + LF +
                 "      <table class=\"" + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + "\" id=\"" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "\">" + LF +
                 testStepLogPostSections(testCase) +
                 "      </table>" + LF;
-        return html;
     }
 
     private String htmlSectionTestCaseData(){

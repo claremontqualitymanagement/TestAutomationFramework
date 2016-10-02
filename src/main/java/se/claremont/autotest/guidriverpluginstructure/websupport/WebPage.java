@@ -5,5 +5,6 @@ package se.claremont.autotest.guidriverpluginstructure.websupport;
  *
  * Created by jordam on 2016-08-16.
  */
+@SuppressWarnings("WeakerAccess")
 public class WebPage {
 }

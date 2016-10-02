@@ -13,6 +13,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-09-09.
  */
+@SuppressWarnings("SameParameterValue")
 public class JsonParser {
 
     public static String get(String content, String parameterName){
@@ -56,7 +57,7 @@ public class JsonParser {
         JSONObject object = new JSONObject(content);
         JSONArray children = object.getJSONArray(parentParameter);
         for(Object child : children){
-            returnString.add(((JSONObject)child).toString());
+            returnString.add(child.toString());
         }
         return returnString;
     }

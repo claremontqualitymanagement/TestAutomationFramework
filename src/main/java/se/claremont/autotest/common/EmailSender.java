@@ -11,13 +11,13 @@ import java.util.Properties;
  * Created by jordam on 2016-09-18.
  */
 class EmailSender {
-    String hostName;
-    String senderAddress;
-    String[] recipientAddresses;
-    String subjectLine;
-    String htmlContent;
-    String hostServerPort;
-    EmailSendType emailSendType;
+    private String hostName;
+    private String senderAddress;
+    private String[] recipientAddresses;
+    private String subjectLine;
+    private String htmlContent;
+    private String hostServerPort;
+    private EmailSendType emailSendType;
 
     enum EmailSendType{
         SMTP,
@@ -79,10 +79,10 @@ class EmailSender {
 
     private String sendThroughGmail(){
         String returnMessage = "";
-        String username = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
-        String password = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
-        this.hostName = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);
-        this.hostServerPort = CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_PORT);
+        String username = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
+        String password = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
+        this.hostName = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);
+        this.hostServerPort = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_PORT);
 
         if(username == null || username.length() < 1) {
             return "Cannot send mail. No email account user name set in settings.";
@@ -106,7 +106,7 @@ class EmailSender {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
+            message.setFrom(new InternetAddress(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(String.join(",", recipientAddresses)));
             message.setSubject(subjectLine);

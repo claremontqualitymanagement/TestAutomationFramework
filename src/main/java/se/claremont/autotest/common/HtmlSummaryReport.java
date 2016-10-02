@@ -218,9 +218,8 @@ public class HtmlSummaryReport {
     }
 
     private String htmlElementSettings(){
-        String html = "          <h2>Test run settings</h2>" + LF +
-                CliTestRunner.testRun.settings.toHtmlTable();
-        return html;
+        return "          <h2>Test run settings</h2>" + LF +
+                TestRun.settings.toHtmlTable();
     }
 
     /**

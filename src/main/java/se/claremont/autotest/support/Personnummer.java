@@ -9,9 +9,9 @@ import java.util.Date;
  * Created by jordam on 2016-08-18.
  */
 class Personnummer {
-    Date date;
-    int checkDigit;
-    int threeDigits;
+    private Date date;
+    private int checkDigit;
+    private int threeDigits;
 
     /**
      * Create a new personnummer from string

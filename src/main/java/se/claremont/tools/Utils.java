@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Utils {
 
-    final static Logger logger = LoggerFactory.getLogger( Utils.class );
+    private final static Logger logger = LoggerFactory.getLogger( Utils.class );
 
     private static Utils instance = null;
 
-    protected Utils() {
+    private Utils() {
 
     }
 
@@ -63,13 +63,14 @@ public class Utils {
      * @return true if jvm is running on Mac OS X, otherwise false
      */
     public boolean amIMacOS() {
-        return getOS().toLowerCase().contains("mac")? true : false;
+        return getOS().toLowerCase().contains("mac");
     }
 
     /**
      *
      * @return root directory
      */
+    @SuppressWarnings("WeakerAccess")
     public String getRootDirectory() {
         return File.listRoots()[0].getAbsolutePath();
     }

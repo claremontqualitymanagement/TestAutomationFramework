@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterEmailReport implements TestRunReporter{
-    HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
+    private HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
 
     @Override
     public void report() {

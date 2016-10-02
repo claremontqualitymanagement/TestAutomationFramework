@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-21.
  */
 class ErrorGroupingManager {
-    ArrayList<Error> errors = new ArrayList<>();
+    private ArrayList<Error> errors = new ArrayList<>();
 
     /**
      * Must be run after evaluation of test case log towards known errors has been run

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterFactory {
-    ArrayList<TestRunReporter> reporters = new ArrayList<>();
+    private ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public void addTestRunReporter(TestRunReporter testRunReporter){
         reporters.add(testRunReporter);

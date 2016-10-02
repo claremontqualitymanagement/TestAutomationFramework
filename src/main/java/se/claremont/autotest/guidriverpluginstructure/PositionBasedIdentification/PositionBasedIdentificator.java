@@ -1,7 +1,6 @@
 package se.claremont.autotest.guidriverpluginstructure.PositionBasedIdentification;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jordam on 2016-10-02.

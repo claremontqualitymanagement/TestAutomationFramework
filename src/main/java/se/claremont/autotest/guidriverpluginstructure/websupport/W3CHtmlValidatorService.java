@@ -51,7 +51,7 @@ public class W3CHtmlValidatorService {
             } catch (Exception e) {
                 try {
                     lineNumberString = " - At line number " + JsonParser.getInt(child, "lastLine");
-                }catch (Exception ex){}
+                }catch (Exception ignored){}
             }
             if(verbose && JsonParser.get(child, "type").contains("info")){
                 textLogMessage.append(SupportMethods.LF + "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"));

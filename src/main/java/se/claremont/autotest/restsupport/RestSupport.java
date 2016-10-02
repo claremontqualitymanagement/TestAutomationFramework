@@ -85,6 +85,7 @@ public class RestSupport {
         return responseCode;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String responseBodyFromGetRequest(String url) {
         String bodyString = null;
         Request request = new Request.Builder().url(url).build();

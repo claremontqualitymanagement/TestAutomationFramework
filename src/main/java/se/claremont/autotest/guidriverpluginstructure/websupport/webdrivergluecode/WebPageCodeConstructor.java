@@ -18,8 +18,8 @@ import java.util.List;
  * Created by jordam on 2016-09-28.
  */
 class WebPageCodeConstructor {
-    WebDriver driver;
-    Constructors constructors = new Constructors();
+    private WebDriver driver;
+    private Constructors constructors = new Constructors();
 
     private WebPageCodeConstructor(WebDriver driver){
         if(driver == null) return;
@@ -33,6 +33,7 @@ class WebPageCodeConstructor {
      * @param pathToOutputFile Path to the file to be written
      * @return Returns a string with a draft page class
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static String ConstructWebPageCode(WebDriver driver, String pathToOutputFile){
         WebPageCodeConstructor webPageCodeConstructor = new WebPageCodeConstructor(driver);
         String descriptors = webPageCodeConstructor.constructWebPageCode();

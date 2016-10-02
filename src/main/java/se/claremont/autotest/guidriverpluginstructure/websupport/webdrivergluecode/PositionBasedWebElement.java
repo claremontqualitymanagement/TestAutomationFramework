@@ -6,6 +6,7 @@ import se.claremont.autotest.guidriverpluginstructure.PositionBasedIdentificatio
 /**
  * Created by jordam on 2016-10-02.
  */
+@SuppressWarnings("WeakerAccess")
 public class PositionBasedWebElement implements PositionBasedGuiElement{
     public int left;
     public int right;
