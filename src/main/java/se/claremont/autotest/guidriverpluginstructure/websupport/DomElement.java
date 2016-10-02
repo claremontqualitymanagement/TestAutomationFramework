@@ -1,6 +1,7 @@
 package se.claremont.autotest.guidriverpluginstructure.websupport;
 
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 
 /**
  * Object declaration mechanisms for web elements

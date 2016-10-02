@@ -5,6 +5,14 @@
       <meta name="description" content="Test automation framework introduction">
 
       <style>
+          @media print
+          {
+            .no-print, .no-print *
+            {
+                display: none !important;
+            }
+          }
+
           body             { background-color: darkGrey; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: large; }
           td               { padding: 5px; }
           table#structure  { background-color: white; border-spacing: 5px; border-collapse: separate; }
@@ -83,7 +91,7 @@
             </td>
         </tr>
         <tr>
-            <td id="indexPane" class="topText" width="220">
+            <td id="indexPane" class="topText no-print" width="220">
                 <h2>Table of content</h2>
                 <p>
                     <a href="#introduction"><b>Introduction</b></a><br>
@@ -99,6 +107,7 @@
                     <a href="#testActionClassImplementation">Test actions</a><br>
                     <a href="#knownErrorUsage">Known error management</a><br>
                     <a href="#commandLineInterface">Command line interface usage</a><br>
+                    <a href="#positionbased">Position based identification</a><br>
                 </p>
                 <p>
                     <a href="#codingInstructions"><b>Usage instructions for framework maintenance</b></a><br>
@@ -112,10 +121,10 @@
                     <a href="#webintroduction"><b>Web support in TAF</b></a><br>
                     <a href="#understandingwebmethods">Understanding the web methods</a><br>
                     <a href="#automaticpageobjects">Automatic page object creation</a><br>
-                    <a href="#w3c">Build in W3C validation</a>
+                    <a href="#w3c">Build in W3C validation</a><br>
                 </p>
                 <p>
-                    <a href="#restintroduction"><b>REST support in TAF</b></a>
+                    <a href="#restintroduction"><b>REST support in TAF</b></a><br>
                 </p>
                 <p>
                     <a href="#closingRemarks"><b>Closing remarks</b></a><br>
@@ -846,6 +855,24 @@ class DemoTestActions {
 
                 <p>
                     If the jar is invoked without parameters, or with parameters like 'help' or 'man' a short help text will be displayed.
+                </p>
+                <br>
+                <br>
+                <h2 id="positionbased">Position based object identification</h2>
+                <p>
+                    In some systems it's hard to identify elements from for example id's - either from developer laziness or from technology obstacles.
+                    Hence TAF contains a mechanism for identifying elements from their relative position to other elements, based on their location in the GUI.
+                </p>
+                <p>An exampleof how this could be applied would for example be:</p>
+                <pre>
+
+                    PositionBasedIdentificator.fromAllTheElements(elementsInWindow("Demo")).keepElementsOfType("button").atTheSameHeightAs(Button_Start).theObjectMostToTheLeft();
+                </pre>
+                <p>
+                    This mechanism always starts with a collection of elements, narrowing it down until a solid identification can be performed.
+                </p>
+                <p>
+                    Of course this identification mechanism is slower than most other identification mechansims and should therefore only be used when really nessesary.
                 </p>
 
                 <br>
