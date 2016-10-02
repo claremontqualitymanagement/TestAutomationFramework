@@ -1205,12 +1205,45 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
-    public void tickCheckbox(GuiElement checkboxElement){
-
-    }
-
-    public void unTickCheckbox(GuiElement checkboxElement){
-
+    /**
+     * Ticking or un-ticking checkboxes. Common code to reduce duplicated code.
+     *
+     * @param checkboxElement The element to interact with
+     * @param expectedToBeTicked True if expected to be ticked after procedure, false if expected to be un-ticked after procedure. If null is provided, execution will proceed without interaction.
+     */
+    public void manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
+        DomElement domElement = (DomElement)checkboxElement;
+        if (expectedToBeTicked == null){
+            log(LogLevel.DEBUG, "Leaving checkbox " + domElement.LogIdentification() + " without interaction since input was null.");
+            return;
+        }
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
+            return;
+        }
+        if(!webElement.getTagName().toLowerCase().equals("input") || !webElement.getAttribute("type").toLowerCase().equals("checkbox")){
+            log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
+            saveHtmlContentOfCurrentPage();
+        }
+        try {
+            if(webElement.isSelected() == expectedToBeTicked){
+                log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
+                return;
+            } else {
+                webElement.click();
+                log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it wasn't.");
+            }
+        } catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox.");
+            log(LogLevel.DEVIATION_EXTRA_INFO, e.getMessage());
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
+        }
     }
 
 
