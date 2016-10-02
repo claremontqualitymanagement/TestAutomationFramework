@@ -4,7 +4,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.*;
 import se.claremont.autotest.common.CliTestRunner;
 import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
@@ -13,8 +12,6 @@ import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
-import se.claremont.autotest.restsupport.JsonParser;
-import se.claremont.autotest.restsupport.RestSupport;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.io.File;
@@ -1057,61 +1054,71 @@ public class WebInteractionMethods implements GuiDriver {
      */
     private void selectInDropdownManager(GuiElement dropdownElement, ArrayList<String> selections){
         DomElement domElement = (DomElement) dropdownElement;
-        if(selections == null) {
-            log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since selected value was 'null'.");
+        if(selections == null ||selections.size() == 0) {
+            log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
             return;
         }
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
             saveScreenshot();
+            saveHtmlContentOfCurrentPage();
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("select")){
             log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
             saveScreenshot();
+            saveHtmlContentOfCurrentPage();
             return;
         }
 
         //Create Select element and log originally selected values
-        Select select = new Select(webElement);
-        List<String> selectedOptions = new ArrayList<>();
-        for(WebElement selectedOption : select.getAllSelectedOptions()){
-            selectedOptions.add(selectedOption.getText());
-        }
-        log(LogLevel.DEBUG, "Original selected values: '" + String.join("', '", selectedOptions) + "'.");
-
-        //Save logging info - what options actually was enabled
-        List<WebElement> options = select.getOptions();
-        List<String> optionStrings = new ArrayList<>();
-        for(WebElement option : options){
-            if(option.isDisplayed()){
-                optionStrings.add(option.getText() + String.valueOf(option.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
-            }else {
-                optionStrings.add(option.getText() + " (hidden field)" + String.valueOf(option.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
-            }
-        }
-
-        //Select options
-        if(select.isMultiple()){
-            select.deselectAll();
-        }
         boolean allSelectionsOkSoFar = true;
         List<String> nonSelectedStrings = new ArrayList<>();
-        for(String selection : selections){
-            boolean thisSelectionPerformed = false;
+        List<String> optionStrings = new ArrayList<>();
+        try{
+            Select select = new Select(webElement);
+            List<String> selectedOptions = new ArrayList<>();
+            for(WebElement selectedOption : select.getAllSelectedOptions()){
+                selectedOptions.add(selectedOption.getText());
+            }
+            log(LogLevel.DEBUG, "Initial selected value(s) in " + domElement.LogIdentification() + ": '" + String.join("', '", selectedOptions) + "'.");
+
+            //Save logging info - what options actually was enabled
+            List<WebElement> options = select.getOptions();
             for(WebElement option : options){
-                if(!option.isDisplayed() || !option.isEnabled()) continue;
-                if(option.getText().equals(selection)){
-                    select.selectByVisibleText(selection);
-                    thisSelectionPerformed = true;
-                    break;
+                if(option.isDisplayed()){
+                    optionStrings.add(option.getText() + String.valueOf(option.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+                }else {
+                    optionStrings.add(option.getText() + " (hidden field)" + String.valueOf(option.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
                 }
             }
-            if(!thisSelectionPerformed){
-                nonSelectedStrings.add(selection);
-                allSelectionsOkSoFar = false;
+
+            //Select options
+            if(select.isMultiple()){
+                select.deselectAll();
             }
+            for(String selection : selections){
+                boolean thisSelectionPerformed = false;
+                for(WebElement option : options){
+                    if(!option.isDisplayed() || !option.isEnabled()) continue;
+                    if(option.getText().equals(selection)){
+                        select.selectByVisibleText(selection);
+                        thisSelectionPerformed = true;
+                        break;
+                    }
+                }
+                if(!thisSelectionPerformed){
+                    nonSelectedStrings.add(selection);
+                    allSelectionsOkSoFar = false;
+                }
+            }
+        }catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Something went terribly bad while trying to select '" + String.join("', '", selections) + "' in " + domElement.LogIdentification() + ".");
+            log(LogLevel.DEVIATION_EXTRA_INFO, e.getMessage());
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
         }
 
         //Log results
@@ -1122,18 +1129,90 @@ public class WebInteractionMethods implements GuiDriver {
                     "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",
                     "Could not select:<ul><li>'" + String.join("'</li><li>'", nonSelectedStrings) + "'</li></ul> in element " + domElement.LogIdentification() + " when attempting to select: <ul><li>'" + String.join("'</li><li>'", selections) + "'</li></ul>. Available options are:<ul><li>'" + String.join("'</li><li>'", optionStrings) + "'</li></ul>.");
             saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
         }
     }
 
     /**
      * Chooses a selection in a radio button set
      *
-     * @param guiElement The element to interact with
-     * @param text The text of the element to choose
+     * @param radioButtonContainer The element to interact with
+     * @param text The visible text of the element to choose
      */
-    public void chooseRadioButton(GuiElement guiElement, String text){
-        log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' is not yet implemented.");
+    public void chooseRadioButton(GuiElement radioButtonContainer, String text){
+        DomElement domElement = (DomElement) radioButtonContainer;
+        if(text == null) {
+            log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
+            return;
+        }
+
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify radio button element " + domElement.LogIdentification() + " where '" + text + "' was supposed to be selected. Continuing test case execution nevertheless.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            return;
+        }
+        if(!webElement.getTagName().toLowerCase().equals("form")){
+            log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + text + "' in radio button set " + domElement.LogIdentification() + ". However the tag of the element is not 'form', but '" + webElement.getTagName() + "'.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            return;
+        }
+
+        List<String> optionStrings = new ArrayList<>();
+        boolean clicked = false;
+        try {
+            List<WebElement> optionButtons = webElement.findElements(By.xpath("//*[@type='radio'"));
+            if(optionButtons.size()==0){
+                log(LogLevel.FRAMEWORK_ERROR, "Could not identify any radiobuttons within " + domElement.LogIdentification() + ". Does it contain elements of type 'radio'?");
+                saveScreenshot();
+                saveHtmlContentOfCurrentPage();
+                return;
+            }
+            for(WebElement optionButton : optionButtons){
+                if(optionButton.isSelected()){
+                    log(LogLevel.DEBUG, "Initial selected value in " + domElement.LogIdentification() + " was '" + optionButton.getText() + "'.");
+                    if(optionButton.getText().equals(text)){
+                        log(LogLevel.EXECUTED, "Made sure the radiobutton " + domElement.LogIdentification() + " had the value '" + text + "' checked, and it already did.");
+                        return;
+                    }
+                }
+                if(optionButton.isDisplayed()){
+                    optionStrings.add(optionButton.getText() + " (value='" + optionButton.getAttribute("value") + "')" + String.valueOf(optionButton.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+                }else {
+                    optionStrings.add(optionButton.getText() + " (hidden field)" + String.valueOf(optionButton.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+                }
+            }
+            for (WebElement optionButton : optionButtons){
+                if(optionButton.getText().equals(text)){
+                    optionButton.click();
+                    log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
+                    clicked = true;
+                    return;
+                }
+            }
+            log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings + "'."));
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
+        }catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' crashed with error." + e.getMessage());
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
+        }
     }
+
+    public void tickCheckbox(GuiElement checkboxElement){
+
+    }
+
+    public void unTickCheckbox(GuiElement checkboxElement){
+
+    }
+
 
     /**
      * Verifies that an image looks as expected
