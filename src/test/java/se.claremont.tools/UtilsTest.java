@@ -2,6 +2,7 @@ package se.claremont.tools;
 
 import org.junit.*;
 import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 
 import java.io.File;
@@ -26,11 +27,47 @@ public class UtilsTest{
 
     @Ignore
     @Test
-    public void sandBox(){
+    public void w3cValidationTest(){
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
         web.navigate("https://www.typeandtell.com/sv/");
         web.verifyCurrentPageSourceWithW3validator(false);
+        web.makeSureDriverIsClosed();
+        testCase.report();
+    }
+
+    @Ignore
+    @Test
+    public void dropdownTest(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("https://validator.w3.org/nu/");
+        DomElement dropdown = new DomElement("docselect", DomElement.IdentificationType.BY_ID);
+        web.selectInDropdown(dropdown, "text input");
+        web.makeSureDriverIsClosed();
+        testCase.report();
+    }
+
+    @Ignore
+    @Test
+    public void dropdownTestValueDowsNotExist(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("https://validator.w3.org/nu/");
+        DomElement dropdown = new DomElement("docselect", DomElement.IdentificationType.BY_ID);
+        web.selectInDropdown(dropdown, "nonexistingChoice");
+        web.makeSureDriverIsClosed();
+        testCase.report();
+    }
+
+    @Ignore
+    @Test
+    public void dropdownTestNoSelectorElement(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("https://validator.w3.org/nu/");
+        DomElement dropdown = new DomElement("inputregion", DomElement.IdentificationType.BY_ID);
+        web.selectInDropdown(dropdown, "text input");
         web.makeSureDriverIsClosed();
         testCase.report();
     }

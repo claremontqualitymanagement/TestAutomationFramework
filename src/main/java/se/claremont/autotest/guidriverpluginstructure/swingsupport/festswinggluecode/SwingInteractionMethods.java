@@ -50,7 +50,7 @@ public class SwingInteractionMethods implements GuiDriver{
     }
 
     @Override
-    public void chooseInDropdown(GuiElement guiElement, String choice) {
+    public void selectInDropdown(GuiElement guiElement, String choice) {
 
     }
 

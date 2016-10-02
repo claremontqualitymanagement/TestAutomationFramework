@@ -14,7 +14,7 @@ public interface GuiDriver {
     void click                      (GuiElement guiElement);
     void write                      (GuiElement guiElement, String textToWrite);
     void chooseRadioButton          (GuiElement guiElement, String text);
-    void chooseInDropdown           (GuiElement guiElement, String choice);
+    void selectInDropdown(GuiElement guiElement, String choice);
 
     //General methods for debugging purposes. Writes 'Debug' log entries.
     String getText(GuiElement guiElement);

@@ -4,6 +4,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.*;
 import se.claremont.autotest.common.CliTestRunner;
 import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
@@ -321,7 +322,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Saves a screenshot of the web browser content to the testCaseLog folder and writes a testCaseLog post about it.
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
-    private void saveScreenshot(){
+    public void saveScreenshot(){
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
         System.out.println("Saving screenshot of web browser content to '" + filePath + "'.");
         CliTestRunner.testRun.fileCounter++;
@@ -1027,13 +1028,101 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Picks a value in a dropdown
+     * Selecting multiple choices in a dropdown element (deselects what's in it to begin with.
+     *
+     * @param dropdownElement The element to interact with
+     * @param selectedOptions The list of options to select, based on visible text
+     */
+    public void selectInMultipleChoiceDropdown(GuiElement dropdownElement, ArrayList<String> selectedOptions){
+        selectInDropdownManager(dropdownElement, selectedOptions);
+    }
+
+    /**
+     * Selecting an option in a dropdown element by visible text
      *
      * @param guiElement The element to interact with
-     * @param choice The value to choose
+     * @param selection The visible text of the option to choose
      */
-    public void chooseInDropdown(GuiElement guiElement, String choice){
-        log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseInDropdown()' is not yet implemented.");
+    public void selectInDropdown(GuiElement guiElement, String selection){
+        ArrayList<String> selectionsList = new ArrayList<>();
+        selectionsList.add(selection);
+        selectInDropdownManager(guiElement, selectionsList);
+    }
+
+    /**
+     * Picks a value in a selector dropdown
+     *
+     * @param dropdownElement The element to interact with
+     * @param selections The value(s) to choose
+     */
+    private void selectInDropdownManager(GuiElement dropdownElement, ArrayList<String> selections){
+        DomElement domElement = (DomElement) dropdownElement;
+        if(selections == null) {
+            log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since selected value was 'null'.");
+            return;
+        }
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
+            saveScreenshot();
+            return;
+        }
+        if(!webElement.getTagName().toLowerCase().equals("select")){
+            log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
+            saveScreenshot();
+            return;
+        }
+
+        //Create Select element and log originally selected values
+        Select select = new Select(webElement);
+        List<String> selectedOptions = new ArrayList<>();
+        for(WebElement selectedOption : select.getAllSelectedOptions()){
+            selectedOptions.add(selectedOption.getText());
+        }
+        log(LogLevel.DEBUG, "Original selected values: '" + String.join("', '", selectedOptions) + "'.");
+
+        //Save logging info - what options actually was enabled
+        List<WebElement> options = select.getOptions();
+        List<String> optionStrings = new ArrayList<>();
+        for(WebElement option : options){
+            if(option.isDisplayed()){
+                optionStrings.add(option.getText() + String.valueOf(option.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+            }else {
+                optionStrings.add(option.getText() + " (hidden field)" + String.valueOf(option.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+            }
+        }
+
+        //Select options
+        if(select.isMultiple()){
+            select.deselectAll();
+        }
+        boolean allSelectionsOkSoFar = true;
+        List<String> nonSelectedStrings = new ArrayList<>();
+        for(String selection : selections){
+            boolean thisSelectionPerformed = false;
+            for(WebElement option : options){
+                if(!option.isDisplayed() || !option.isEnabled()) continue;
+                if(option.getText().equals(selection)){
+                    select.selectByVisibleText(selection);
+                    thisSelectionPerformed = true;
+                    break;
+                }
+            }
+            if(!thisSelectionPerformed){
+                nonSelectedStrings.add(selection);
+                allSelectionsOkSoFar = false;
+            }
+        }
+
+        //Log results
+        if(allSelectionsOkSoFar){
+            log(LogLevel.EXECUTED, "Selected '" + String.join("', '", selections) + "' in element " + domElement.LogIdentification());
+        } else {
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
+                    "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",
+                    "Could not select:<ul><li>'" + String.join("'</li><li>'", nonSelectedStrings) + "'</li></ul> in element " + domElement.LogIdentification() + " when attempting to select: <ul><li>'" + String.join("'</li><li>'", selections) + "'</li></ul>. Available options are:<ul><li>'" + String.join("'</li><li>'", optionStrings) + "'</li></ul>.");
+            saveScreenshot();
+        }
     }
 
     /**
