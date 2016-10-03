@@ -7,7 +7,8 @@ script:
 - mvn install
 before_deploy:
 #- export TAF_VERSION=$(ls target/TestAutomationFramework-*.jar)
-- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
+#- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
+- export TAF_VERSION=$(find . -name *TestAutomationFramework-*dependencies.jar | grep -v "doc" | grep -v "sources")
 deploy:
   provider: releases
   api_key:
