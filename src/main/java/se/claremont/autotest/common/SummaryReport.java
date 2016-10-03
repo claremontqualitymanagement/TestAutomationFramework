@@ -219,7 +219,7 @@ public class SummaryReport {
      * @return HTML section as string
      */
     private String htmlElementTitle(){
-        return "          <img src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
+        return "          <img alt=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "          <h1>Test report " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
     }
 
@@ -293,7 +293,7 @@ public class SummaryReport {
                     }
                     if(!alreadyReported){
                         idsOfTestCases.add(testCase.uid.toString());
-                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
+                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog.replace("\\", "/")).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
                     }
                 }
                 html.append("              </ul>").append(LF);

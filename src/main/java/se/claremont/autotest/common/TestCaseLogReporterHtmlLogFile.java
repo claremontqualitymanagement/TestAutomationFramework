@@ -60,8 +60,10 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
         for(int i = 1; i < words.length ; i++){
             if(words[i].length() > 0){
-                sb.append(words[i].substring(0, 0).toUpperCase());
-                sb.append(words[i].substring(1).toLowerCase());
+                sb.append(words[i].substring(0, 1).toUpperCase());
+                if(words[i].length() > 1){
+                    sb.append(words[i].substring(1).toLowerCase());
+                }
             }
         }
         return sb.toString();
@@ -78,8 +80,9 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      td.before               { background-color: grey; }" + LF +
                 "      td.during               { background-color: blue; }" + LF +
                 "      td.after                { background-color: grey; }" + LF +
-                "      img.screenShot          { border: 0 none; width: 105px; background: #999; }" + LF +
-                "      img.screenShot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + LF +
+                "      img.screenshot          { border: 1px solid grey; width: 105px; background: #999; }" + LF +
+                "      .timeGraph              { width: 150px; }" + LF +
+                "      img.screenshot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + LF +
                 "      .testStepClassName      { color: grey; }" + LF +
                 "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: red; font-weight: bold; } " + LF +
                 "      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "             { background-color: white; width: 80%; }" + LF +
@@ -97,7 +100,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      td." + enumMemberNameToLower(LogLevel.DEBUG.toString()) + "                { color: Grey; }" + LF +
                 "      td." + enumMemberNameToLower(LogLevel.DEVIATION_EXTRA_INFO.toString()) + " { color: blue; }" + LF +
                 "      td.logMessage           { max-width: 99%; }" + LF +
-                "      font." + enumMemberNameToLower(HtmlLogStyleNames.DATA.toString()) + "               { color: blue; }" + LF +
+                "      span." + enumMemberNameToLower(HtmlLogStyleNames.DATA.toString()) + "               { color: blue; }" + LF +
                 "      tr.deviationSection       { font-size: 120%; font-weight: bold; color: red; }" + LF +
                 "      tr .noDeviationSection     { font-size: 110%; font-weight: bold; color: green; }" + LF +
                 "      font.w3cvalidationinfo    { color: darkgrey; font-weight: bold; }" + LF +
@@ -127,7 +130,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         } else {
             this.runEndTime = new Date();
         }
-        String html = "<html>" + LF + LF +
+        String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
                 htmlSectionHtmlHead() +
                 "  <body onload=\"onLoad()\">" + LF + LF +
                 htmlSectionBodyHeader() +
@@ -142,7 +145,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
-                "      <img id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
+                "      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
                 "      <p>" + LF +
                 "        Status: " + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
@@ -288,14 +291,16 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 }
                 if(hasErrors){
                     html.append("        <tbody class=\"sectionHeadline\">").append(LF);
-                    html.append("          <tr class=\"deviationSection\" onclick=\"toggleVisibilityByClass('").append(sectionClass).append("')\" style=\"display: block;\">").append(LF);
-                    html.append("            <td class=\"stepCounter\" style=\"display: inline;\">").append(LF);
+                    html.append("          <tr class=\"deviationSection\" onclick=\"toggleVisibilityByClass('").append(sectionClass).append("')\">").append(LF);
+                    html.append("            <td class=\"stepCounter\">").append(LF);
                     html.append("              Step ").append(sectionCounter);
                     html.append("            </td>").append(LF);
-                    html.append("            <td class=\"sectionName\" style=\"display: inline;\">").append(LF);
+                    html.append("            <td class=\"sectionName\" colspan=\"2\">").append(LF);
                     html.append(              logPosts.get(0).testStepName).append("<span class=\"testStepClassName\"> (in class '").append(logPosts.get(0).testStepClassName).append("')</span>").append(LF);
                     html.append("            </td>").append(LF);
-                    html.append("            <td class=\"progressGraph\" style=\"display: inline;\">").append(LF);
+                    html.append("          </tr>").append(LF);
+                    html.append("          <tr>").append(LF);
+                    html.append("            <td class=\"progressGraph\" colspan=\"3\">").append(LF);
                     html.append("              ").append(timeProgressGraph(runStartTime, runEndTime, firstLogPostTime, lastLogPostTime, 150));
                     html.append("            </td>").append(LF);
                     html.append("          </tr>").append(LF);
@@ -303,16 +308,18 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                     html.append("        <tbody class=\"deviationSectionTable ").append(sectionClass).append("\">").append(LF);
                 } else {
                     html.append("          <tbody class=\"sectionHeadline\">").append(LF);
-                    html.append("            <tr class=\"noDeviationSection\" onclick=\"toggleVisibilityByClass('").append(sectionClass).append("')\" style=\"display: block;\">").append(LF);
-                    html.append("            <td class=\"stepCounter\" style=\"display: inline;\">").append(LF);
-                    html.append("              Step ").append(sectionCounter);
-                    html.append("            </td>").append(LF);
-                    html.append("            <td class=\"sectionName\" style=\"display: inline;\">").append(LF);
-                    html.append(              logPosts.get(0).testStepName).append("<span class=\"testStepClassName\"> (in class '").append(logPosts.get(0).testStepClassName).append("')</span>").append(LF);
-                    html.append("            </td>").append(LF);
-                    html.append("            <td class=\"progressGraph\" style=\"display: inline;\">").append(LF);
-                    html.append("              ").append(timeProgressGraph(runStartTime, runEndTime, firstLogPostTime, lastLogPostTime, 150));
-                    html.append("            </td>").append(LF);
+                    html.append("            <tr class=\"noDeviationSection\" onclick=\"toggleVisibilityByClass('").append(sectionClass).append("')\">").append(LF);
+                    html.append("              <td class=\"stepCounter\">").append(LF);
+                    html.append("                 Step ").append(sectionCounter);
+                    html.append("               </td>").append(LF);
+                    html.append("               <td class=\"sectionName\" colspan=\"2\">").append(LF);
+                    html.append(                  logPosts.get(0).testStepName).append("<span class=\"testStepClassName\"> (in class '").append(logPosts.get(0).testStepClassName).append("')</span>").append(LF);
+                    html.append("               </td>").append(LF);
+                    html.append("             </tr>").append(LF);
+                    html.append("             <tr>").append(LF);
+                    html.append("              <td class=\"progressGraph\" colspan=\"3\">").append(LF);
+                    html.append("                ").append(timeProgressGraph(runStartTime, runEndTime, firstLogPostTime, lastLogPostTime, 150));
+                    html.append("              </td>").append(LF);
                     html.append("          </tr>").append(LF);
                     html.append("        </tbody>").append(LF);
                     html.append("        <tbody class=\"noDeviationSectionTable ").append(sectionClass).append("\">").append(LF);
@@ -320,7 +327,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 for(LogPost logPost : logPosts){
                     html.append(logPost.toHtmlTableRow(null));
                 }
-                html.append("        </tbody>").append(LF).append("      </td>").append(LF).append("    </tr>").append(LF);
+                html.append("        </tbody>").append(LF).append(LF);
             }
         }
         return html.toString();
@@ -333,25 +340,25 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
         StringBuilder sb = new StringBuilder();
         sb.append("<span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
-                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\">");
-        sb.append("<table class=\"timeGraph\" width=\"").append(graphWidth).append("\"><tr>");
+                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\"></span>");
+        sb.append("<table class=\"timeGraph\"><tr>");
 
         if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
-            long widthOfInitPartPercent = (graphWidth*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfInitPartPercent).append("px\" class=\"before\"><span title=\"Whole time period start time: ").append(wholeTimePeriodStartTime.getTime()).append(LF).append("Part section start time: ").append(partialEventStartTime.getTime()).append("\"></span></td>");
+            long widthOfInitPartPercent = 100*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime())/wholePeriod;
+            sb.append("<td width=\"").append(widthOfInitPartPercent).append("%\" class=\"before\"><span title=\"Whole time period start time: ").append(wholeTimePeriodStartTime.getTime()).append(LF).append("Part section start time: ").append(partialEventStartTime.getTime()).append("\"></span></td>");
         }
 
         if(partialEventEndTime.getTime()-partialEventStartTime.getTime() != 0){
-            long widthOfPartPercent = (graphWidth*(partialEventEndTime.getTime() - partialEventStartTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfPartPercent).append("px\" class=\"during\"><span title=\"Part section start time: ").append(partialEventStartTime.getTime()).append(LF).append("Part section end time: ").append(partialEventEndTime.getTime()).append("\"></span></td>");
+            long widthOfPartPercent = (100*(partialEventEndTime.getTime() - partialEventStartTime.getTime()))/wholePeriod;
+            sb.append("<td width=\"").append(widthOfPartPercent).append("%\" class=\"during\"><span title=\"Part section start time: ").append(partialEventStartTime.getTime()).append(LF).append("Part section end time: ").append(partialEventEndTime.getTime()).append("\"></span></td>");
         }
 
         if(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime() != 0){
-            long widthOfEndPartPercent = (graphWidth*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfEndPartPercent).append("px\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>");
+            long widthOfEndPartPercent = (100*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
+            sb.append("<td width=\"").append(widthOfEndPartPercent).append("%\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>");
         }
         sb.append("</tr></table>");
-        sb.append("</span>");
+        //sb.append("</span>");
         return sb.toString();
     }
 
@@ -414,11 +421,11 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "         {" + LF +
                 "          if(document.getElementById(\"showDebugCheckbox\").checked)" + LF +
                 "          {" + LF +
-                "              hideElementsByClass('debug');" + LF +
+                "              hideElementsByClass('logRowdebug');" + LF +
                 "          }" + LF +
                 "          else" + LF +
                 "          {" + LF +
-                "              unHideElementsByClass('debug');" + LF +
+                "              unHideElementsByClass('logRowdebug');" + LF +
                 "          }" + LF +
                 "         }" + LF +
                 LF +

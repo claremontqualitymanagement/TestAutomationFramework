@@ -72,7 +72,6 @@ public class UtilsTest{
         testCase.report();
     }
 
-    @Ignore
     @Test
     public void radioButtonTest(){
         TestCase testCase = new TestCase(null, "dummyName");
@@ -84,7 +83,6 @@ public class UtilsTest{
         testCase.report();
     }
 
-    @Ignore
     @Test
     public void checkBoxTest(){
         TestCase testCase = new TestCase(null, "dummyName");

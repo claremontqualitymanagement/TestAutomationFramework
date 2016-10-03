@@ -5,6 +5,8 @@ import se.claremont.autotest.support.SupportMethods;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static se.claremont.autotest.common.TestCaseLogReporterHtmlLogFile.enumMemberNameToLower;
+
 /**
  * A testCaseLog post for a test case execution testCaseLog.
  *
@@ -123,12 +125,12 @@ class LogPost {
         StringBuilder sb = new StringBuilder();
         if(instring.startsWith("Saved screenshot as '")){
             String[] parts = instring.split("'");
-            sb.append("Saved screenshot as '<font class\"").append(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()).append("\">").append(parts[1]).append("</font>'<br><a href=\"file://").append(parts[1]).append("\" target=\"_blank\"><img class=\"screenshot\" src=\"file://").append(parts[1]).append("\"></a>");
+            sb.append("Saved screenshot as '<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[1]).append("</span>'<br><a href=\"file://").append(parts[1].replace("\\", "/")).append("\" target=\"_blank\"><img class=\"screenshot\" alt=\"screenshot\" src=\"file://").append(parts[1].replace("\\", "/")).append("\"></a>");
         }else {
             String[] parts = instring.split("'");
             if(instring.startsWith("'")){
                 for(int i = 0; i < parts.length; i = i+2){
-                    sb.append("'<font class=\"").append(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()).append("\">").append(parts[i]).append("</font>'");
+                    sb.append("'<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[i]).append("</span>'");
                     if(i+1 < parts.length){
                         sb.append(parts[i+1]);
                     }
@@ -137,7 +139,7 @@ class LogPost {
                 for (int i = 0; i < parts.length; i = i+2){
                     sb.append(parts[i]);
                     if(i+1 < parts.length){
-                        sb.append("'<font class=\"").append(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()).append("\">").append(parts[i + 1]).append("</font>'");
+                        sb.append("'<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[i + 1]).append("</span>'");
                     }
                 }
             }
@@ -193,7 +195,7 @@ class LogPost {
     @SuppressWarnings("SameParameterValue")
     public String toHtmlTableRow(String extraClassName){
         StringBuilder sb = new StringBuilder();
-        String logRowClass = TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.LOG_ROW.toString());
+        String logRowClass = enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.LOG_ROW.toString());
         String rowMessage;
         if(htmlMessage == null || htmlMessage.length() == 0){
             rowMessage = message;
@@ -201,15 +203,15 @@ class LogPost {
           rowMessage = htmlMessage;
         }
         if(extraClassName != null && extraClassName.length() > 0){
-            logRowClass += " " + extraClassName;
+            logRowClass += extraClassName;
         }
-        sb.append("          <tr class=\"").append(logRowClass).append(" ").append(logLevel.toString().toLowerCase()).append("\">").append(SupportMethods.LF);
-        sb.append("            <div>").append(SupportMethods.LF);
-        sb.append("              <td class=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
+        sb.append("          <tr class=\"").append(logRowClass).append(logLevel.toString().toLowerCase()).append("\">").append(SupportMethods.LF);
+        //sb.append("            <div>").append(SupportMethods.LF);
+        sb.append("              <td class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
         //sb.append("<td class=\"").append(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.testStepName.toString()).append("\"><span title=\"Test step in class: ").append(testStepClassName).append("\">").append(testStepName).append("</span></td>");
         sb.append("              <td class=\"logPostLogLevel ").append(logLevel.toString().toLowerCase()).append("\">").append(logLevelToString(logLevel.toString())).append("</td>").append(SupportMethods.LF);
         sb.append("              <td class=\"logMessage\">").append(substituteDataElements(rowMessage)).append("</td>").append(SupportMethods.LF);
-        sb.append("            </div>").append(SupportMethods.LF);
+        //sb.append("            </div>").append(SupportMethods.LF);
         sb.append("          </tr>").append(SupportMethods.LF);
         return sb.toString();
     }

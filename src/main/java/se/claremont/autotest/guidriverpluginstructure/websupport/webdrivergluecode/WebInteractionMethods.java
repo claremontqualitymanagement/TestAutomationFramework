@@ -314,7 +314,7 @@ public class WebInteractionMethods implements GuiDriver {
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".html";
         String html = driver.getPageSource();
         SupportMethods.saveToFile(html, filePath);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath + "'.", "<a href=\"file://" + filePath + "\" target=\"_blank\">View saved page (source)</a>");
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"file://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
         CliTestRunner.testRun.fileCounter++;
     }
 
