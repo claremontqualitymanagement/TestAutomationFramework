@@ -36,7 +36,7 @@ public class SummaryReport {
     }
 
     private void appendTestCaseResultToSummary(TestCase testCase){
-        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"file://" + testCase.pathToHtmlLog + "\" target=\"_blank\">TestCaseLog</a></td></tr>" + LF;
+        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"file://" + testCase.pathToHtmlLog.replace("\\", "/") + "\" target=\"_blank\">TestCaseLog</a></td></tr>" + LF;
         //testCaseSummary += solvedKnownErrorsFromTestCaseLocalKnownErrorsList(testCase);
         switch (testCase.resultStatus){
             case PASSED:
@@ -183,7 +183,7 @@ public class SummaryReport {
         StringBuilder html = new StringBuilder();
         if(reportShouldBeWritten()){
             html.append("<!DOCTYPE html>").append(LF);
-            html.append("<html>").append(LF).append(LF);
+            html.append("<html lang=\"en\">").append(LF).append(LF);
             html.append("  <HEAD>").append(LF).append(LF);
             html.append("    <title>Test summary</title>").append(LF);
             html.append("    <meta charset=\"UTF-8\">").append(LF);
@@ -319,7 +319,7 @@ public class SummaryReport {
                 html.append("              ['").append(knownError.description).append("']").append(LF);
                 html.append("              <ul>").append(LF);
                 for(TestCase testCase : knownError.testCasesWhereErrorWasEncountered){
-                    html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
+                    html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog.replace("\\", "/")).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
                 }
                 html.append("            </ul>").append(LF);
                 html.append("          </p>").append(LF).append(LF);
@@ -412,7 +412,7 @@ public class SummaryReport {
         StringBuilder html = new StringBuilder();
         for(NewErrorInfo newErrorInfo : newErrorInfos){
             html.append("          <p>").append(LF);
-            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"file://").append(newErrorInfo.testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
+            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"file://").append(newErrorInfo.testCase.pathToHtmlLog.replace("\\", "/")).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             for(LogPost logRow : newErrorInfo.logEntries){
                 html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
             }
