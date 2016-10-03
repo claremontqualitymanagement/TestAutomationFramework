@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>1.0.1-beta66</version>
+    <version>1.0.1-beta70</version>
     <packaging>jar</packaging>
 
     <name>Test Automation Framework - TAF</name>
@@ -107,11 +107,13 @@
             <artifactId>selenium-java</artifactId>
             <!--<version>2.53.1</version>-->
             <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.4.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -123,27 +125,32 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160810</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
             <version>1.2.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-support</artifactId>
             <version>2.53.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <!--
@@ -165,16 +172,19 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.21</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.21</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.6.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -193,6 +203,7 @@
     </distributionManagement>
 
     <build>
+        <!--
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -201,6 +212,7 @@
                     </excludes>
             </resource>
         </resources>
+        -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -228,9 +240,21 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
                 <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -243,11 +267,17 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>se.claremont.autotest.common.CliTestRunner</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
