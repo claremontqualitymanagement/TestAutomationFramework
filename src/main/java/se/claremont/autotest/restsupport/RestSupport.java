@@ -46,6 +46,25 @@ public class RestSupport {
         return responseBodyString;
     }
 
+    public String responseBodyFromPutRequest(String url, String mediaType, String data) {
+        String responseBodyString = null;
+        Request request = new Request.Builder().put(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
+        Response response;
+        try{
+            testCase.log(LogLevel.DEBUG, "Executing REST PUT request '" + request.toString() + "'.");
+            response = restClient.newCall(request).execute();
+            try{
+                responseBodyString = response.body().string();
+            }catch (IOException e){
+                testCase.log(LogLevel.DEBUG, "Could not get response body content as string.");
+            }
+            testCase.log(LogLevel.EXECUTED, "Response for REST PUT action = '" + response.message() + "'. Response content: '" + responseBodyString + "'.");
+        } catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        }
+        return responseBodyString;
+    }
+
     public String responseBodyFromDeleteRequest(String url) {
         String responseBodyString = null;
         Request request = new Request.Builder().delete().url(url).build();
@@ -55,6 +74,9 @@ public class RestSupport {
             response = restClient.newCall(request).execute();
             try{
                 responseBodyString = response.body().string();
+
+                testCase.log(LogLevel.DEBUG, "Response status code =  '" + response.code() + "'.");
+                if(response.code() != 200) testCase.log(LogLevel.EXECUTION_PROBLEM, "Delete didn't end with status 200 (OK). Status code was '" + response.code() + "'.");
             }catch (IOException e){
                 testCase.log(LogLevel.DEBUG, "Could not get body content as string.");
             }
@@ -65,7 +87,6 @@ public class RestSupport {
         return responseBodyString;
     }
 
-    @SuppressWarnings("unused")
     public String responseCodeFromGetRequest(String url){
         String responseCode = null;
         Request request = new Request.Builder().url(url).build();
@@ -85,7 +106,8 @@ public class RestSupport {
         return responseCode;
     }
 
-    @SuppressWarnings("WeakerAccess")
+
+
     public String responseBodyFromGetRequest(String url) {
         String bodyString = null;
         Request request = new Request.Builder().url(url).build();
@@ -105,8 +127,8 @@ public class RestSupport {
         return bodyString;
     }
 
-    public Object getParameterValueFromResponseFromGetRequest(String url, String parameterName){
-        Object parameterValue = JsonParser.get(responseBodyFromGetRequest(url), parameterName);
+    public String getParameterValueFromResponseFromGetRequest(String url, String parameterName){
+        String parameterValue = JsonParser.get(responseBodyFromGetRequest(url), parameterName);
         testCase.log(LogLevel.DEBUG, "Reading parameter value '" + parameterValue + "' for parameter '" + parameterName + "' from url '" + url + "'.");
         return parameterValue;
     }
