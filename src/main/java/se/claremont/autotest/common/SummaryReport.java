@@ -158,6 +158,11 @@ public class SummaryReport {
                 "      #" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "               { color: darkgrey; }" + LF +
                 "      body               { color: darkslategrey; background-color: darkgrey; }" + LF +
                 "      table              { background-color: white; }" + LF +
+                "      td.resultsgraphpassed { background-color: lightgreen; height: 15px; }" + LF +
+                "      td.resultsgraphwarning { background-color: yellow; height: 15px; }" + LF +
+                "      td.resultsgraphunevaluated { background-color: grey; height: 15px; }" + LF +
+                "      td.resultsgraphboth          { background-color: orange; height: 15px; ]" + LF +
+                "      td.resultsgraphbad           { background-color: red; height: 15px; }" + LF +
                 "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: honeydew;; padding: 30px; }" + LF +
                 "      tr." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: lightgrey; }" + LF +
                 "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: black; }" + LF +
@@ -378,24 +383,23 @@ public class SummaryReport {
      * @return HTML section for hte results bar
      */
     private String resultsGraphBar(){
-        int barHeightInPixels = 15;
         StringBuilder bar = new StringBuilder();
         bar.append("          <table id=\"").append(HtmlStyleNames.RESULTS_BAR.toString()).append("\" width=\"").append(barWidthInPixels).append("\">").append(LF);
         bar.append("            <tr>").append(LF);
         if(successfulTestCases > 0){
-            bar.append("              <td bgcolor=\"green\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.successfulTestCases * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
+            bar.append("              <td class=\"resultsgraphpassed\" width=\"").append((this.successfulTestCases * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
         }
         if(testCasesWithOnlyKnownErrors > 0){
-            bar.append("              <td bgcolor=\"yellow\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.testCasesWithOnlyKnownErrors * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
+            bar.append("              <td class=\"resultsgraphwarning\" width=\"").append((this.testCasesWithOnlyKnownErrors * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
         }
         if(unevaluatedCount > 0){
-            bar.append("              <td bgcolor=\"gray\" height=\"").append(barHeightInPixels).append("\" width=\"").append(this.unevaluatedCount * 100 / numberOfTestCases()).append("%\"></td>").append(LF);
+            bar.append("              <td class=\"resultsgraphunevaluated\" width=\"").append(this.unevaluatedCount * 100 / numberOfTestCases()).append("%\"></td>").append(LF);
         }
         if(testCasesWithBothNewAndKnownErrors > 0){
-            bar.append("              <td bgcolor=\"orange\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.testCasesWithBothNewAndKnownErrors * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
+            bar.append("              <td class=\"resultsgraphboth\" width=\"").append((this.testCasesWithBothNewAndKnownErrors * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
         }
         if(failedTestCasesWithNewDeviations > 0){
-            bar.append("              <td bgcolor=\"red\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.failedTestCasesWithNewDeviations * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
+            bar.append("              <td class=\"resultsgraphbad\" width=\"").append((this.failedTestCasesWithNewDeviations * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
         }
         bar.append("            </tr>").append(LF);
         bar.append("          </table>").append(LF);
