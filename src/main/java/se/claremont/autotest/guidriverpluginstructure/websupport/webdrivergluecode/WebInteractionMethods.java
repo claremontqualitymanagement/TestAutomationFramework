@@ -1265,6 +1265,11 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("form")){
+            if(webElement.getTagName().toLowerCase().equals("input") && (webElement.getText().contains(text) || webElement.getAttribute("value").contains(text))){
+                webElement.click();
+                log(LogLevel.EXECUTED, "Clicked the '" + webElement.getAttribute("value") + "' radiobutton element.");
+                return;
+            }
             log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + text + "' in radio button set " + domElement.LogIdentification() + ". However the tag of the element is not 'form', but '" + webElement.getTagName() + "'.");
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -1274,7 +1279,8 @@ public class WebInteractionMethods implements GuiDriver {
         List<String> optionStrings = new ArrayList<>();
         boolean clicked = false;
         try {
-            List<WebElement> optionButtons = webElement.findElements(By.xpath("//*[@type='radio'"));
+            List<WebElement> optionButtons = webElement.findElements(By.xpath("//*[@type='radio']"));
+            log(LogLevel.DEBUG, "Found " + optionButtons.size() + " options for radiobutton.");
             if(optionButtons.size()==0){
                 log(LogLevel.FRAMEWORK_ERROR, "Could not identify any radiobuttons within " + domElement.LogIdentification() + ". Does it contain elements of type 'radio'?");
                 saveScreenshot();
@@ -1303,7 +1309,15 @@ public class WebInteractionMethods implements GuiDriver {
                     return;
                 }
             }
-            log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings + "'."));
+            for (WebElement optionButton : optionButtons){
+                if(optionButton.getAttribute("value").equals(text)){
+                    optionButton.click();
+                    log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
+                    clicked = true;
+                    return;
+                }
+            }
+            log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.");
             saveScreenshot();
             saveHtmlContentOfCurrentPage();
             haltFurtherExecution();

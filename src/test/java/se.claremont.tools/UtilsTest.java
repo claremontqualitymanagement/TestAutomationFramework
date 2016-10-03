@@ -78,8 +78,8 @@ public class UtilsTest{
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
         web.navigate("file://c:/temp/taf.html");
-        DomElement dropdown = new DomElement("dropdown", DomElement.IdentificationType.BY_ID);
-        web.selectInDropdown(dropdown, "Volvon");
+        DomElement radiobutton = new DomElement("radiobutton", DomElement.IdentificationType.BY_ID);
+        web.chooseRadioButton(radiobutton, " Male");
         web.makeSureDriverIsClosed();
         testCase.report();
     }
@@ -90,8 +90,8 @@ public class UtilsTest{
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
         web.navigate("file://c:/temp/taf.html");
-        DomElement dropdown = new DomElement("checkbox", DomElement.IdentificationType.BY_ID);
-        web.selectInDropdown(dropdown, "Volvo");
+        DomElement checkbox = new DomElement("//input[@type='checkbox'][@value='Bike']", DomElement.IdentificationType.BY_X_PATH);
+        web.manageCheckbox(checkbox, false);
         web.makeSureDriverIsClosed();
         testCase.report();
     }
