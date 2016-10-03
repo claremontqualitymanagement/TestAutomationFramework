@@ -1,5 +1,5 @@
 # TestAutomationFramework
-Test Automation Framework - TAF
+Test Automation Framework - TAF - "Never send a human to do a machine’s job".
 
 An Test Automated Framework brought to you from the Claremont team.
 
@@ -11,6 +11,8 @@ Running instructions:
 - With jar file: java -jar -Dapp.properties="<absolut path to runSettings.properties file>"
 
 Read more about the documentation [here](documentation/SoftwareArchitectureDescription.html).
+
+
 
 [![travis build](https://img.shields.io/travis/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://travis-ci.org/claremontqualitymanagement/TestAutomationFramework)
 [![codecov coverage](https://img.shields.io/codecov/c/github/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://github.com/claremontqualitymanagement/TestAutomationFramework)

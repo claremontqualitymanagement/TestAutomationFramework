@@ -17,7 +17,7 @@ public class CliTestRunner {
     private static final String LF = SupportMethods.LF;
 
     private static String helpText(){
-        return "Usage instruction: " + LF + LF +
+        return  "Usage instruction: " + LF + LF +
                 "Command line options consists of " +
                 "listed test classes to be run, or the keyword 'diagnostics' to run the unit tests and " +
                 "the diagnostics tests to ensure the local installation is ok. A diagnostic run output results from failed tests as debug information." +
