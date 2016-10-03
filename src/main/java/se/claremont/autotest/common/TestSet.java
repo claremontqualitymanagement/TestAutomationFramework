@@ -44,7 +44,7 @@ public class TestSet {
     /**
      * Procedures common for all test cases
      */
-    void startUpTestCase(String testName){
+    public void startUpTestCase(String testName){
         currentTestCase = new TestCase(knownErrorsList, testName);
     }
 
