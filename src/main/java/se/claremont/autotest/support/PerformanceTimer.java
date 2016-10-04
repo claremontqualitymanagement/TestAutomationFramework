@@ -46,6 +46,13 @@ public class PerformanceTimer {
     }
 
     /**
+     * Disposes this object
+     */
+    public void dispose(){
+        this.dispose();
+    }
+
+    /**
      * Checks if it has taken more than the stated amount of milliseconds
      *
      * @param milliseconds Number of milliseconds to use as threshold.
