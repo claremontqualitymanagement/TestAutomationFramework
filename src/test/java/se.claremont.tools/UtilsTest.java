@@ -4,6 +4,7 @@ import org.junit.*;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
+import se.claremont.autotest.support.PerformanceTimer;
 
 import java.io.File;
 
@@ -71,6 +72,20 @@ public class UtilsTest{
         web.makeSureDriverIsClosed();
         testCase.report();
     }
+
+    @Test
+    public void timerTests(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        PerformanceTimer timer = new PerformanceTimer("testTimer", testCase);
+        try {
+            Thread.sleep(500L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timer.stopAndLogTime();
+        testCase.report();
+    }
+
 
     @Test
     public void radioButtonTest(){
