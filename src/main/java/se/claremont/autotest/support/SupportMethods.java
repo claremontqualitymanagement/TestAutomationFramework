@@ -124,6 +124,7 @@ public class SupportMethods {
      * @return Return true if match is found
      */
     public static boolean isRegexMatch(String instring, String pattern){
+        if(pattern == null || instring == null) return false;
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(instring);
         return m.matches();
