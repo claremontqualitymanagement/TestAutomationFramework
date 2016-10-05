@@ -22,6 +22,7 @@ public class DomElement implements GuiElement {
         BY_LINK_TEXT,
         BY_X_PATH,
         BY_ID,
+        BY_CLASS,
         BY_CSS,
         BY_NAME,
         BY_VISIBLE_TEXT

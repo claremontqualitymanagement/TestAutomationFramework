@@ -376,6 +376,8 @@ public class WebInteractionMethods implements GuiDriver {
                 returnElement = driver.findElement(By.name(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
                 returnElement = driver.findElement(By.cssSelector(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
+                returnElement = driver.findElement(By.className(element.recognitionString));
             } else {
                 returnElement = null;
             }
@@ -405,6 +407,8 @@ public class WebInteractionMethods implements GuiDriver {
                 returnElement = driver.findElement(By.name(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
                 returnElement = driver.findElement(By.cssSelector(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
+                returnElement = driver.findElement(By.className(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
                 List<WebElement> potentialMatches = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
                 if(potentialMatches.size() == 1){

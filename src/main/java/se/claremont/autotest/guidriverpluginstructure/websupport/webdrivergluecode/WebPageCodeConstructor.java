@@ -57,6 +57,12 @@ class WebPageCodeConstructor {
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("id") + "\", DomElement.IdentificationType.BY_ID";
                 constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstrucorString));
             }
+            //https://suitcss.github.io/
+            else if( webElement.getAttribute("class") != null && webElement.getAttribute("class").length() > 0) {
+                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementConstrucorString = "\"" + webElement.getAttribute("class") + "\", DomElement.IdentificationType.BY_CLASS";
+                constructors.addConstructor(new Constructor(suggestedElementName, suggestedElementConstrucorString));
+            }
             else if(webElement.getAttribute("name") != null && webElement.getAttribute("name").length() > 0){
                 String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("name") + "\", DomElement.IdentificationType.BY_NAME";
@@ -93,6 +99,7 @@ class WebPageCodeConstructor {
     private static String methodNameWithOnlySafeCharacters(String instring){
         String returnString = "";
         for(String spaceDividedWord : instring.split(" ")){
+            //TODO: what if spaceDividedWord starts with --
             for(String dashDividedWord : spaceDividedWord.split("-")){
                 for(String underscoreDividedWord : dashDividedWord.split("_")){
                     returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
@@ -131,12 +138,14 @@ class WebPageCodeConstructor {
         if(tagName.toLowerCase().equals("h2")) return "Heading";
         if(tagName.toLowerCase().equals("h3")) return "SubHeading";
         if(tagName.toLowerCase().equals("p")) return "Paragraph";
+        if(tagName.toLowerCase().equals("div")) return "Div";
         return firstUpperLetterTrailingLowerLetter(tagName);
     }
 
     private static String firstUpperLetterTrailingLowerLetter(String instring){
-        String returnString = instring.substring(0,1).toUpperCase();
-        if(instring.length() > 1){
+        String returnString = "";
+        if( instring != null && instring.length() > 1){
+            returnString = instring.substring(0,1).toUpperCase();
             returnString += instring.substring(1).toLowerCase();
         }
         return returnString;
