@@ -4,6 +4,7 @@ Make CLI interface run classes
 
 To do
 =========
+Move this backlog to Trello, or GitHub.
 Find appropriate location for Javadocs
 Document new settings management
 Sort out email settings in the methods

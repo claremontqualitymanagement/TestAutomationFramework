@@ -991,7 +991,8 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void verifyCurrentPageSourceWithW3validator(boolean verbose){
         W3CHtmlValidatorService w3CHtmlValidatorService = new W3CHtmlValidatorService();
-        w3CHtmlValidatorService.verifyCurrentPageSourceWithW3validator(testCase, driver.getPageSource(), verbose);
+        boolean noErrorsFound = w3CHtmlValidatorService.verifyCurrentPageSourceWithW3validator(testCase, driver.getPageSource(), verbose);
+        if(!noErrorsFound) saveHtmlContentOfCurrentPage();
     }
 
 

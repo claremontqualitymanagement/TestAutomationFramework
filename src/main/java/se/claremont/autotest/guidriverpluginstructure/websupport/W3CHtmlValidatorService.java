@@ -21,23 +21,30 @@ public class W3CHtmlValidatorService {
      * @param testCase The test case to log verification results to.
      * @param pageSource The page HTML source code to validate
      * @param verbose If set to false only errors will be logged. If set to true also warnings and W3C information messages will be logged.
+     * @return Return false if errors are found, othervice true.
      */
-    public void verifyCurrentPageSourceWithW3validator(TestCase testCase, String pageSource, boolean verbose){
+    public boolean verifyCurrentPageSourceWithW3validator(TestCase testCase, String pageSource, boolean verbose){
+        if(pageSource == null || pageSource.length() == 0){
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Trying to check HTML with W3C, but the source seem to be empty.");
+            return false;
+        }
+        boolean noErrorsEncountered = true;
         RestSupport rest = new RestSupport(testCase);
         String responseJson = rest.responseBodyFromPostRequest("https://validator.w3.org/nu/?out=json", "text/html; charset=utf-8", pageSource);
         if(responseJson == null){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get any response from HTML validation service.");
-            return;
+            return false;
         }
         if(JsonParser.childObjects(responseJson, "messages").size() == 0){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Checking of page content against W3C validator passed with no messages.");
-            return;
+            return true;
         }
         LogLevel logLevel = LogLevel.INFO;
 
         for(String child : JsonParser.childObjects(responseJson, "messages")) {
             if(JsonParser.get(child, "type").contains("error")){
                 logLevel = LogLevel.VERIFICATION_FAILED;
+                noErrorsEncountered = false;
             }
         }
 
@@ -70,6 +77,7 @@ public class W3CHtmlValidatorService {
         } else {
             testCase.log(LogLevel.VERIFICATION_PASSED, "No indications of anything in the HTML to act on after validation of HTML with W3C validation service.");
         }
+        return noErrorsEncountered;
     }
 
 
