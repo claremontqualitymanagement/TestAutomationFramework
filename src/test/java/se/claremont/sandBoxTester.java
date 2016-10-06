@@ -1,29 +1,36 @@
-package se.claremont.tools;
+package se.claremont;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.support.PerformanceTimer;
+import se.claremont.tools.Utils;
 
 import java.io.File;
 
 /**
- * Created by magnusolsson on 2016-09-23.
+ * SandBox (UnitTest) containing various help tools for Test Automation Engineers.
+ *
+ * Created by magnusolsson on 2016-10-06.
  */
-public class UtilsTest{
+public class sandBoxTester {
 
-    @Test
-    public void getInstance(){
-        Assert.assertTrue( Utils.getInstance() != null );
-    }
+    private static String OUTPUT_FILE_PATH = "";
+    private static String ENDPOINT_TARGET_URL = "https://www.typeandtell.com/sv/";
+    private static String LOCAL_MOCH_HTML_FILE = "";
 
-    @Test
-    public void getOS() {
-        Assert.assertTrue( !Utils.getInstance().getOS().equalsIgnoreCase("") );
-        Assert.assertTrue( Utils.getInstance().getOS().toLowerCase().contains("mac") ||
-                Utils.getInstance().getOS().toLowerCase().contains("linux") ||
-                Utils.getInstance().getOS().toLowerCase().contains("win") );
+    @Before
+    public void whoIam() {
+        if( Utils.getInstance().amIMacOS() ) {
+            OUTPUT_FILE_PATH = Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator + "Temp" + File.separator + "Output.txt";
+            LOCAL_MOCH_HTML_FILE = "";
+        } else {
+            OUTPUT_FILE_PATH = "C:\\Temp\\Output.txt";
+            LOCAL_MOCH_HTML_FILE = "file://c:/temp/taf.html";
+        }
     }
 
     @Ignore
@@ -31,7 +38,7 @@ public class UtilsTest{
     public void w3cValidationTest(){
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
-        web.navigate("https://www.typeandtell.com/sv/");
+        web.navigate( ENDPOINT_TARGET_URL );
         web.verifyCurrentPageSourceWithW3validator(false);
         web.makeSureDriverIsClosed();
         testCase.report();
@@ -92,7 +99,7 @@ public class UtilsTest{
     public void radioButtonTest(){
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
-        web.navigate("file://c:/temp/taf.html");
+        web.navigate( LOCAL_MOCH_HTML_FILE );
         DomElement radiobutton = new DomElement("radiobutton", DomElement.IdentificationType.BY_ID);
         web.chooseRadioButton(radiobutton, " Male");
         web.makeSureDriverIsClosed();
@@ -104,7 +111,7 @@ public class UtilsTest{
     public void checkBoxTest(){
         TestCase testCase = new TestCase(null, "dummyName");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
-        web.navigate("file://c:/temp/taf.html");
+        web.navigate( LOCAL_MOCH_HTML_FILE );
         DomElement checkbox = new DomElement("//input[@type='checkbox'][@value='Bike']", DomElement.IdentificationType.BY_X_PATH);
         web.manageCheckbox(checkbox, false);
         web.makeSureDriverIsClosed();
@@ -116,11 +123,8 @@ public class UtilsTest{
     public void sandboxPlayground(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));
 
-        web.navigate("https://www.typeandtell.com/sv/");
-        if( Utils.getInstance().amIMacOS() )
-            web.mapCurrentPage( Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator + "Temp" + File.separator + "Output.txt" );
-        else
-            web.mapCurrentPage("C:\\Temp\\Output.txt");
+        web.navigate( ENDPOINT_TARGET_URL );
+        web.mapCurrentPage( OUTPUT_FILE_PATH );
 
         web.makeSureDriverIsClosed();
     }
