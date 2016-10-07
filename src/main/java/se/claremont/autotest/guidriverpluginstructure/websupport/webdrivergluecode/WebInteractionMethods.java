@@ -14,6 +14,8 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.support.SupportMethods;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -347,6 +349,47 @@ public class WebInteractionMethods implements GuiDriver {
             //e.printStackTrace();
         }
     }
+
+
+    /**
+     * Capture image of specific element to disk. Works by cropping a full screenshot to element.
+     *
+     * @param domElement The element to capture an image of.
+     * @param filePath The file name of the file to write the image to.
+     */
+    public void saveDomElementScreenshot(DomElement domElement, String filePath){
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " when trying to capture an image of it.");
+            saveScreenshot();
+            saveHtmlContentOfCurrentPage();
+            return;
+        }
+        File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        int ImageWidth = webElement.getSize().getWidth();
+        int ImageHeight = webElement.getSize().getHeight();
+        Point point = webElement.getLocation();
+        int xcord = point.getX();
+        int ycord = point.getY();
+
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(screen);
+        } catch (IOException e) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not read screenshot of full screenshot when trying to capture an image of " + domElement.LogIdentification() + ".");
+            return;
+        }
+
+        //cut Image using height, width and x y coordinates parameters.
+        BufferedImage dest = img.getSubimage(xcord, ycord, ImageWidth, ImageHeight);
+        try {
+            ImageIO.write(dest, "png", new File(filePath));
+        } catch (IOException e) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not write image of " + domElement.LogIdentification() + " to file '" + filePath + "'.");
+            return;
+        }
+    }
+
 
     /**
      * Halts further execution of the test case when further execution is considered non-valuable
