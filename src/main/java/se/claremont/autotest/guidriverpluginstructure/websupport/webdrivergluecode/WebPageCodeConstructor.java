@@ -135,7 +135,9 @@ class WebPageCodeConstructor {
     }
 
     private static String firstUpperLetterTrailingLowerLetter(String instring){
-        String returnString = instring.substring(0,1).toUpperCase();
+        if(instring == null || instring.length() < 1) return "";
+        String returnString;
+        returnString = instring.substring(0,1).toUpperCase();
         if(instring.length() > 1){
             returnString += instring.substring(1).toLowerCase();
         }
