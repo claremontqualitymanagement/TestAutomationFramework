@@ -60,6 +60,14 @@ public class Utils {
 
     /**
      *
+     * @return true if jvm is running on Windows, otherwise false
+     */
+    public boolean amIWindowsOS() {
+        return getOS().toLowerCase().contains("win");
+    }
+
+    /**
+     *
      * @return true if jvm is running on Mac OS X, otherwise false
      */
     public boolean amIMacOS() {
