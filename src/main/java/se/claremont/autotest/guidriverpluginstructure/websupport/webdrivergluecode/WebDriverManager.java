@@ -128,22 +128,25 @@ public class WebDriverManager {
                 long startTime = System.currentTimeMillis();
                 try {
                     //PhantomJsDriverManager.getInstance().setup();
-                    System.setProperty("phantomjs.binary.path", CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE));
                     driver = new PhantomJSDriver();
-                    testCase.log(LogLevel.EXECUTED, "Creating a PhantomJS session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
                 } catch (Exception e) {
-                    testCase.log(LogLevel.INFO, "Could not start PhantomJS driver. Error message: " + e.getMessage() + SupportMethods.LF + "Attempting harddisk scan for phantomjs.exe.");
-                    for(File browser : scanComputerForBrowsersAndRegisterTheirLocations()){
-                        if(browser.getName().equals("PhantomJS.exe")){
-                            CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE, browser.getAbsolutePath());
-                            System.setProperty("phantomjs.binary.path", browser.getAbsolutePath());
-                            testCase.log(LogLevel.DEBUG, "Found PhantomJS.exe at '" + browser.getAbsolutePath() + "'.");
-                            driver = new PhantomJSDriver();
-                            testCase.log(LogLevel.EXECUTED, "Creating a PhantomJS session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
-                            break;
+                    testCase.log(LogLevel.INFO, "Could not start PhantomJS driver through WebDriverManager libraries. Error message: " + e.getMessage() + SupportMethods.LF + "Attempting harddisk scan for phantomjs.exe.");
+                    try{
+                        System.setProperty("phantomjs.binary.path", CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE));
+                        driver = new PhantomJSDriver();
+                        testCase.log(LogLevel.EXECUTED, "Creating a PhantomJS session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+                    }catch (Exception ex){
+                        testCase.log(LogLevel.INFO, "Could not load PhantomJS driver from Settings variable '" + Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE.toString() + "', stating path '" + CliTestRunner.testRun.settings.getValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE) + "'. Initiating a harddisk scan for file.");
+                        for(File browser : scanComputerForBrowsersAndRegisterTheirLocations()){
+                            if(browser.getName().equals("PhantomJS.exe")){
+                                CliTestRunner.testRun.settings.setValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE, browser.getAbsolutePath());
+                                System.setProperty("phantomjs.binary.path", browser.getAbsolutePath());
+                                testCase.log(LogLevel.DEBUG, "Found PhantomJS.exe at '" + browser.getAbsolutePath() + "'.");
+                                driver = new PhantomJSDriver();
+                                break;
+                            }
                         }
                     }
-                    //testCase.log(LogLevel.DEVIATION_EXTRA_INFO, "A scan of the client computer found the following browsers: '" + String.join("', '", scanComputerForBrowsersAndRegisterTheirLocations()) + "'.");
                 }
                 if(driver != null){
                     testCase.log(LogLevel.EXECUTED, "Got hold of PhantomJS driver after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
