@@ -31,6 +31,7 @@ public class Settings extends HashMap<String, String>{
         BASE_LOG_FOLDER              (),
         PATH_TO_LOGO                 (true),
         CHROME_DRIVER_PATH_TO_EXE    (),
+        PHANTOMJS_PATH_TO_EXE        (),
         FIREFOX_PATH_TO_BROWSER_EXE  (),
         TEST_RUN_LOG_FOLDER          ();
 
@@ -146,6 +147,7 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
+        setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");
     }
 
     String toHtmlTable(){

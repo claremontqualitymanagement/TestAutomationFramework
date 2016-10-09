@@ -5,6 +5,8 @@ import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jordam on 2016-10-04.
@@ -29,6 +31,31 @@ public class FileTester {
             testCase.log(LogLevel.DEVIATION_EXTRA_INFO, "File content: " + SupportMethods.LF + fileContent);
         }
     }
+
+    /**
+     * Return a list of the files matching the file names provided, in the root folder and its sub-folders.
+     *
+     * @param rootFolder The root folder where search should be performed. Search includes sub-folders.
+     * @param fileNamesToFind File names to find. Exact matches.
+     * @return Returns a list of the files matching the query.
+     */
+    public static List<File> searchForSpecificFiles(File rootFolder, List<String> fileNamesToFind) {
+        List<File> matchingFiles = new ArrayList<>();
+        if(rootFolder == null || fileNamesToFind == null) { return matchingFiles; }
+        if(rootFolder.isDirectory()) {
+            for(File file : rootFolder.listFiles()) {
+                try{
+                    matchingFiles.addAll(searchForSpecificFiles(file, fileNamesToFind));
+                }catch (Exception ignore){
+
+                }
+            }
+        } else if(rootFolder.isFile() && fileNamesToFind.contains(rootFolder.getName())) {
+            matchingFiles.add(rootFolder);
+        }
+        return matchingFiles;
+    }
+
 
     public boolean fileExist(String filePath) {
         File f = new File(filePath);
