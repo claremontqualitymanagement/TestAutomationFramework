@@ -128,4 +128,18 @@ class KnownError {
         return true;
     }
 
+    public String toJson(){
+        ArrayList<String> patternStrings = new ArrayList<>();
+        StringBuilder json = new StringBuilder();
+        json.append("{").append(SupportMethods.LF);
+        json.append("   \"description\": \"").append(description).append("\",").append(SupportMethods.LF);
+        json.append("   \"logmessagespatterns\": [").append(SupportMethods.LF);
+        for(String pattern : regexpPatternMatchForLogString){
+            patternStrings.add("{\"logmessagepattern\": \"" + pattern + "\"}");
+        }
+        json.append(String.join("," + SupportMethods.LF, patternStrings)).append(SupportMethods.LF).append("]").append(SupportMethods.LF);
+        json.append("}").append(SupportMethods.LF);
+        return json.toString();
+    }
+
 }

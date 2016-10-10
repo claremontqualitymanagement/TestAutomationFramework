@@ -136,9 +136,11 @@ public class sandBoxTester {
     @Test
     public void phantomJSdriverTest(){
         TestCase testCase = new TestCase(null, "dummyName");
-        WebDriver driver = WebDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.PHANTOMJS, testCase);
+        WebDriver driver = WebDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME, testCase);
         driver.get("http://www.claremont.se");
         testCase.log(LogLevel.INFO, driver.getTitle());
+        testCase.log(LogLevel.INFO, testCase.toJson());
+        driver.close();
         testCase.report();
     }
 

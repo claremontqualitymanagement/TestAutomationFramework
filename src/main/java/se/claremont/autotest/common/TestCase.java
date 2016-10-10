@@ -23,7 +23,7 @@ public class TestCase {
     final String testSetName;
     final Date startTime;
     Date stopTime;
-    final List<ValuePair> testCaseData;
+    final TestCaseData testCaseData;
     final KnownErrorsList testCaseKnownErrorsList = new KnownErrorsList();
     private final KnownErrorsList testSetKnownErrorsEncounteredInThisTestCase = new KnownErrorsList();
     ResultStatus resultStatus = ResultStatus.UNEVALUATED;
@@ -44,7 +44,7 @@ public class TestCase {
         testSetName = SupportMethods.classNameAtStacktraceLevel(4);
         testSetKnownErrors = knownErrorsList;
         this.testName = testName;
-        testCaseData = new ArrayList<>();
+        testCaseData = new TestCaseData();
         addTestCaseData("Test case name", testName);
         startTime = new Date();
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
@@ -130,7 +130,7 @@ public class TestCase {
      */
     public void addTestCaseData(String parameterName, String parameterValue){
         testCaseLog.log(LogLevel.DEBUG, "Adding test case DATA parameter '" + parameterName + "' with parameter value '" + parameterValue + "'.");
-        testCaseData.add(new ValuePair(parameterName, parameterValue));
+        testCaseData.testCaseDataList.add(new ValuePair(parameterName, parameterValue));
     }
 
     /**
@@ -140,7 +140,7 @@ public class TestCase {
      */
     @SuppressWarnings("WeakerAccess")
     public List<String> valuesForTestCaseDataParameter(String parameterName){
-        List<String> returnStrings = testCaseData.stream().filter(valuePair -> valuePair.parameter.equals(parameterName)).map(valuePair -> valuePair.value).collect(Collectors.toList());
+        List<String> returnStrings = testCaseData.testCaseDataList.stream().filter(valuePair -> valuePair.parameter.equals(parameterName)).map(valuePair -> valuePair.value).collect(Collectors.toList());
         if(returnStrings.size() > 0){
             String logString = "Reading parameter values ";
             for(String returnString : returnStrings){
@@ -262,5 +262,42 @@ public class TestCase {
      */
     public @Override String toString(){
         return testName + " in class " + testSetName + " with testCaseLog " + testCaseLog.toString();
+    }
+
+    public String toJson(){
+        StringBuilder json = new StringBuilder();
+        json.append("{\"testCaseRunInstance\": {").append(SupportMethods.LF);
+        if(testSetName != null) json.append("   \"testSetName\": \"").append(testSetName).append("\",").append(SupportMethods.LF);
+        if(testName != null) json.append("   \"testName\": \"").append(testName).append("\",").append(SupportMethods.LF);
+        if(resultStatus != null) json.append("   \"status\": \"").append(SupportMethods.enumCapitalNameToFriendlyString(resultStatus.toString())).append("\",").append(SupportMethods.LF);
+        if(uid != null) json.append("   \"guid\": \"").append(uid.toString()).append("\",").append(SupportMethods.LF);
+        if(pathToHtmlLog != null) json.append("   \"pathToHtmlLog\": \"").append(pathToHtmlLog.replace("\\", "\\\\")).append("\",").append(SupportMethods.LF);
+        if(testCaseLog != null) json.append(testCaseLog.toJson()).append(",").append(SupportMethods.LF);
+        json.append("   \"reported\": ").append(String.valueOf(reported)).append(",").append(SupportMethods.LF);
+        if(startTime != null) json.append("   \"startTime\": \"").append(new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(startTime)).append("\",").append(SupportMethods.LF);
+        if(stopTime != null) json.append("   \"stopTime\": \"").append(new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(stopTime)).append("\",").append(SupportMethods.LF);
+        if(testCaseData != null) json.append(testCaseData.toJson()).append(",").append(SupportMethods.LF);
+        if(testCaseKnownErrorsList != null) json.append("   \"testCaseKnownErrorsList\": ").append(testCaseKnownErrorsList.toJson()).append(",").append(SupportMethods.LF);
+        if(testSetKnownErrorsEncounteredInThisTestCase != null) json.append("   \"testSetKnownErrorsEncounteredInThisTestCase\": ").append(testSetKnownErrorsEncounteredInThisTestCase.toJson()).append(",").append(SupportMethods.LF);
+        if(testSetKnownErrors != null) json.append("   \"testSetKnownErrors\": ").append(testSetKnownErrors.toJson()).append(SupportMethods.LF);
+        json.append("   }").append(SupportMethods.LF);
+        json.append("}").append(SupportMethods.LF);
+        return json.toString();
+    }
+
+    class TestCaseData {
+        List<ValuePair> testCaseDataList = new ArrayList<>();
+
+        public String toJson(){
+            StringBuilder json = new StringBuilder();
+            List<String> datastrings = new ArrayList<>();
+            json.append("\"testCaseData\": [").append(SupportMethods.LF);
+            for(ValuePair valuePair : testCaseDataList){
+                datastrings.add("{" + SupportMethods.LF + "    \"parameter\": \"" + valuePair.parameter + "\"," + SupportMethods.LF + "\"value\": \"" + valuePair.value + "\"" + SupportMethods.LF + "}");
+            }
+            json.append(String.join("," + SupportMethods.LF, datastrings));
+            json.append("    ]").append(SupportMethods.LF);
+            return json.toString();
+        }
     }
 }

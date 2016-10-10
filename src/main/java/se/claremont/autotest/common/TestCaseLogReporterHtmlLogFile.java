@@ -177,12 +177,12 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private String htmlSectionTestCaseData(){
         StringBuilder html = new StringBuilder();
-        if(testCase.testCaseData.size() > 0){
+        if(testCase.testCaseData.testCaseDataList.size() > 0){
             html.append("      <h2>Test case data</h2>").append(LF);
             html.append("      <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
             html.append("        <tr class=\"testDataTitleRow\" onclick=\"toggleVisibilityByClass('additionalDataSection')\"><td class=\"collapseIcon\">+</td><td>Test DATA saved during execution</td></tr>").append(LF);
             html.append("        <tbody class=\"additionalDataSection\">").append(LF);
-            for(ValuePair valuePair : testCase.testCaseData){
+            for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){
                 html.append("        <tr><td class=\"").
                         append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
                         append("\">").append(valuePair.parameter).append("</td><td class=\"").

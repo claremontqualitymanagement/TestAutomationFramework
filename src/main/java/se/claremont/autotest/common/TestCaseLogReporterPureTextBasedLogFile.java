@@ -27,9 +27,9 @@ public class TestCaseLogReporterPureTextBasedLogFile implements TestCaseLogRepor
     private String pureTextLogText(){
         StringBuilder logText = new StringBuilder(SupportMethods.LF + "Test case '" + testCase.testName + "'" + SupportMethods.LF + SupportMethods.LF);
         logText.append("Test status: ").append(SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString())).append(SupportMethods.LF).append(SupportMethods.LF);
-        if(testCase.testCaseData.size() > 0){
+        if(testCase.testCaseData.testCaseDataList.size() > 0){
             logText.append("Test case data:").append(SupportMethods.LF);
-            for(ValuePair valuePair : testCase.testCaseData){
+            for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){
                 logText.append(valuePair.toString()).append(SupportMethods.LF);
             }
             logText.append(SupportMethods.LF);

@@ -64,6 +64,22 @@ class TestCaseLog {
         return sb.toString();
     }
 
+    /**
+     * Returns the log post list in a serialized format, as a JSON object.
+     *
+     * @return Returns the log post list in a serialized format, as a JSON object.
+     */
+    public String toJson(){
+        StringBuilder json = new StringBuilder();
+        ArrayList<String> logPostStrings = new ArrayList<>();
+        json.append("\"logpostlist\": [").append(SupportMethods.LF);
+        for(LogPost logPost : logPosts){
+            logPostStrings.add(logPost.toJson());
+        }
+        json.append(String.join("," + SupportMethods.LF, logPostStrings));
+        json.append("]").append(SupportMethods.LF);
+        return json.toString();
+    }
 
     /**
      * Writes a testCaseLog post to the test case testCaseLog

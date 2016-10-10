@@ -1,5 +1,7 @@
 package se.claremont.autotest.common;
 
+import se.claremont.autotest.support.SupportMethods;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,5 +73,17 @@ class KnownErrorsList {
     public KnownErrorsList encounteredKnownErrors(){
         List<KnownError> encountered = knownErrors.stream().filter(KnownError::encountered).collect(Collectors.toList());
         return new KnownErrorsList(encountered);
+    }
+
+    public String toJson(){
+        StringBuilder json = new StringBuilder();
+        json.append("   {\"knownerrors\": [").append(SupportMethods.LF);
+        List<String> knownErrorStrings = new ArrayList<>();
+        for(KnownError knownError : knownErrors){
+            knownErrorStrings.add(knownError.toJson());
+        }
+        json.append(String.join("," + SupportMethods.LF, knownErrorStrings));
+        json.append("      ]").append(SupportMethods.LF).append("}").append(SupportMethods.LF);
+        return json.toString();
     }
 }
