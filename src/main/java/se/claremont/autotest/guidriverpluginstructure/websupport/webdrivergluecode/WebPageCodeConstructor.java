@@ -110,6 +110,10 @@ class WebPageCodeConstructor {
      */
     private static String methodNameWithOnlySafeCharacters(String instring){
         String returnString = "";
+        if(instring == null || instring.length() < 1){
+            return "";
+        }
+        if(Character.isDigit(instring.charAt(0))){ instring = "_" + instring; } //Method names cannot start with digits
         for(String spaceDividedWord : instring.split(" ")){
             //TODO: what if spaceDividedWord starts with --
             for(String dashDividedWord : spaceDividedWord.split("-")){
@@ -127,22 +131,32 @@ class WebPageCodeConstructor {
                 replace("%", "").
                 replace("&", "Proc").
                 replace("$", "Dollar").
+                replace("£", "Pound").
+                replace("€", "Euro").
                 replace("\\", "_").
                 replace("\"", "").
                 replace("'", "").
                 replace("!", "").
+                replace("?", "").
+                replace("é", "e").
+                replace("è", "e").
                 replace("-", "_").
+                replace("*", "_").
+                replace("+", "Plus").
                 replace("©", "Copyright").
                 replace("å", "a").
                 replace("ä", "a").
+                replace("|", "_").
                 replace("ö", "o").
                 replace("Å", "A").
                 replace("Ä", "A").
+                replace("=", "").
                 replace("@", "At").
                 replace("/", "_").
                 replace("(", "_").
                 replace(")", "_").
                 replace(";", "").
+                replace("^", "_").
                 replace(":", "").
                 replace("Ö", "O");
     }

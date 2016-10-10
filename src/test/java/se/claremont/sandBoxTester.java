@@ -3,8 +3,11 @@ package se.claremont;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
+import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.support.PerformanceTimer;
 import se.claremont.tools.Utils;
@@ -128,5 +131,16 @@ public class sandBoxTester {
 
         web.makeSureDriverIsClosed();
     }
+
+    @Ignore
+    @Test
+    public void phantomJSdriverTest(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebDriver driver = WebDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.PHANTOMJS, testCase);
+        driver.get("http://www.claremont.se");
+        testCase.log(LogLevel.INFO, driver.getTitle());
+        testCase.report();
+    }
+
 
 }
