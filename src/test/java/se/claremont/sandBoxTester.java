@@ -121,7 +121,7 @@ public class sandBoxTester {
         testCase.report();
     }
 
-    //@Ignore //Takes to much time to run
+    @Ignore //Takes to much time to run
     @Test
     public void sandboxPlayground(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummyName"));

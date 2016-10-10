@@ -110,12 +110,16 @@ class WebPageCodeConstructor {
      */
     private static String methodNameWithOnlySafeCharacters(String instring){
         String returnString = "";
+        instring = instring.trim();
         if(instring == null || instring.length() < 1){
             return "";
         }
-        if(Character.isDigit(instring.charAt(0))){ instring = "_" + instring; } //Method names cannot start with digits
+        if(Character.isDigit(instring.charAt(0))){
+            instring = "_" + instring;
+        } //Method names cannot start with digits
+        instring = instring.replaceAll("--", "-");
+
         for(String spaceDividedWord : instring.split(" ")){
-            //TODO: what if spaceDividedWord starts with --
             for(String dashDividedWord : spaceDividedWord.split("-")){
                 for(String underscoreDividedWord : dashDividedWord.split("_")){
                     returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
