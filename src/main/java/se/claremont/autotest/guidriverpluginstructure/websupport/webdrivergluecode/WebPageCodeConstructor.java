@@ -69,12 +69,6 @@ class WebPageCodeConstructor {
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("id") + "\", DomElement.IdentificationType.BY_ID";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
-            //https://suitcss.github.io/
-            else if( webElement.getAttribute("class") != null && webElement.getAttribute("class").length() > 0) {
-                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
-                String suggestedElementConstrucorString = "\"" + webElement.getAttribute("class") + "\", DomElement.IdentificationType.BY_CLASS";
-                constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
-            }
             else if(webElement.getAttribute("name") != null && webElement.getAttribute("name").length() > 0){
                 String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("name") + "\", DomElement.IdentificationType.BY_NAME";
@@ -85,6 +79,12 @@ class WebPageCodeConstructor {
                 String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + "Link";
                 String suggestedElementConstructor = "\"" + webElement.getText() + "\", DomElement.IdentificationType.BY_LINK_TEXT";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstructor));
+            }
+            //https://suitcss.github.io/
+            else if( webElement.getAttribute("class") != null && webElement.getAttribute("class").length() > 0) {
+                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementConstrucorString = "\"" + webElement.getAttribute("class") + "\", DomElement.IdentificationType.BY_CLASS";
+                constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getText() != null && webElement.getText().length() > 0){
                 if(driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size() == 1){
