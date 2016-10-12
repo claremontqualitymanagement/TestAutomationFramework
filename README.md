@@ -8,7 +8,7 @@ Building instructions:
 Using Maven command:mvn clean install
 
 Running instructions:
-- With jar file: java -jar -Dapp.properties="<absolut path to runSettings.properties file>"
+- With jar file: java -jar -DparameterName=parameterValue
 
 Read more about the documentation [here](documentation/SoftwareArchitectureDescription.html).
 
