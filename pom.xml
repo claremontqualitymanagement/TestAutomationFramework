@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v1.0.1-beta84</version>
+    <version>v1.0.1-beta85</version>
     <packaging>jar</packaging>
 
     <name>Test Automation Framework - TAF</name>
@@ -14,6 +14,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <TEST_SERVER>46.101.193.212</TEST_SERVER>
+        <TEST_SERVER_DEPLOY_PATH>/home/taf/</TEST_SERVER_DEPLOY_PATH>
+        <TEST_USER>taf</TEST_USER>
+        <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
     </properties>
 
     <licenses>
@@ -187,6 +191,16 @@
             <artifactId>log4j-core</artifactId>
             <version>2.6.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.53</version>
+        </dependency>
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant-jsch</artifactId>
+            <version>1.6.5</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
@@ -311,6 +325,28 @@
                 </configuration>
             </plugin>
             -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}" trust="true" failonerror="false">
+                            <fileset file="${project.basedir}/target/${project.artifactId}-${project.version}-jar-with-dependencies.jar" />
+                        </scp>
+                    </tasks>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-jsch</artifactId>
+                        <version>1.6.5</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.53</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 </project>
