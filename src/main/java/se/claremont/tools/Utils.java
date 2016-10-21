@@ -68,11 +68,20 @@ public class Utils {
 
     /**
      *
+     * @return true if jvm is running on Linux distribution otherwise false
+     */
+    public boolean amILinuxOS() {
+        return getOS().toLowerCase().contains("linux");
+    }
+
+    /**
+     *
      * @return true if jvm is running on Mac OS X, otherwise false
      */
     public boolean amIMacOS() {
         return getOS().toLowerCase().contains("mac");
     }
+
 
     /**
      *

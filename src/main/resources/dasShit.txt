@@ -1,0 +1,12 @@
+sudo apt-cache search java8
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install xvfb
+sudo apt-get install firefox
+sudo apt-get upgrade firefox
+dpkg -L xvfb
+
+xvfb-run firefox http://google.com
+xvfb-run --server-args "-screen 0 1024x768x16" firefox
+xvfb-run --server-args "-screen 0 1024x768x16" firefox http://google.com
+
+scp target/TypeAndTell-1.0.1-beta17-jar-with-dependencies.jar taf@46.101.193.212:/home/taf/
