@@ -13,6 +13,7 @@ public class TestRun {
     TestRun(){
         reporters.addTestRunReporter(new TestRunReporterHtmlSummaryReportFile());
         reporters.addTestRunReporter(new TestRunReporterEmailReport());
+        RestServer.start();
     }
 
 }

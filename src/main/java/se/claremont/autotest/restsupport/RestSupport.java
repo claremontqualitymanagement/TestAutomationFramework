@@ -3,6 +3,7 @@ package se.claremont.autotest.restsupport;
 import okhttp3.*;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.dataformats.JsonParser;
 
 import java.io.IOException;
 

@@ -1,16 +1,24 @@
 package se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode;
 
 import org.fest.swing.fixture.FrameFixture;
+import org.glassfish.jersey.jaxb.internal.XmlCollectionJaxbProvider;
+import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;
+import se.claremont.autotest.support.SupportMethods;
 
 /**
  * Created by jordam on 2016-09-18.
  */
 public class SwingInteractionMethods implements GuiDriver{
 
-    private FrameFixture naive;
+    public ApplicationManager applicationManager;
+    //private FrameFixture app = new FrameFixture();
+
+    public SwingInteractionMethods(String programStringAndArguments, TestCase testCase){
+        applicationManager = ApplicationManager.startProgram(programStringAndArguments, testCase);
+    }
 
     public void click(GuiElement guiElement){
         FrameFixture frameFixture = new FrameFixture(guiElement.name);

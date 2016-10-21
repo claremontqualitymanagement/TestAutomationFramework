@@ -6,6 +6,7 @@ import se.claremont.autotest.support.SupportMethods;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,6 +55,10 @@ public class FileTester {
             matchingFiles.add(rootFolder);
         }
         return matchingFiles;
+    }
+
+    public static List<File> searchForSpecificFiles(String rootFolder, List<String> fileNamesToFind){
+        return searchForSpecificFiles(new File(rootFolder), fileNamesToFind);
     }
 
 
@@ -114,4 +119,5 @@ public class FileTester {
         }
         return fileContent;
     }
+
 }

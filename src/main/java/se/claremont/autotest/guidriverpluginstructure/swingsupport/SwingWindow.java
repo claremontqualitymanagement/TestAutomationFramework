@@ -5,4 +5,5 @@ package se.claremont.autotest.guidriverpluginstructure.swingsupport;
  */
 @SuppressWarnings("WeakerAccess")
 public class SwingWindow {
+
 }

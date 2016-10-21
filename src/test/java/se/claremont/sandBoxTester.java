@@ -3,16 +3,22 @@ package se.claremont;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
+import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.SwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
+import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.support.PerformanceTimer;
 import se.claremont.tools.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SandBox (UnitTest) containing various help tools for Test Automation Engineers.
@@ -134,9 +140,50 @@ public class sandBoxTester {
 
     @Ignore
     @Test
+    public void testResponsive(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebDriverManager webDriverManager = new WebDriverManager(testCase);
+        WebDriver driver = webDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME);
+        driver.get("http://www.claremont.se");
+        List<Dimension> resolutions = new ArrayList<>();
+        resolutions.add(new Dimension(750, 480));
+        resolutions.add(new Dimension(1025, 650));
+        resolutions.add(new Dimension(2028, 900));
+        ResponsiveAnalysis responsiveAnalysis = new ResponsiveAnalysis(driver, resolutions, testCase);
+        responsiveAnalysis.performAnalysisAndReportResults();
+        driver.close();
+        testCase.report();
+    }
+
+
+    @Test
+    public void testDesktopScreenshot() {
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("https://www.claremont.se");
+        web.saveScreenshot();
+    }
+
+    @Ignore
+    @Test
+    public void testSwingApplicationStart(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        List<String> arguments = new ArrayList<>();
+        arguments.add("java.exe");
+        arguments.add("-jar");
+        arguments.add("C:\\Users\\jordam\\OneDrive\\Documents\\Claremont-jobb\\Alster\\QtpUsageAnalysis.jar");
+        SwingInteractionMethods s = new SwingInteractionMethods(String.join(" ", arguments), testCase);
+        ApplicationManager ap = s.applicationManager;
+        ap.listActiveRunningProcessesOnLocalMachine();
+        ap.getApplicationOutput();
+    }
+
+    @Ignore
+    @Test
     public void phantomJSdriverTest(){
         TestCase testCase = new TestCase(null, "dummyName");
-        WebDriver driver = WebDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME, testCase);
+        WebDriverManager wdm = new WebDriverManager(testCase);
+        WebDriver driver = wdm.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME);
         driver.get("http://www.claremont.se");
         testCase.log(LogLevel.INFO, driver.getTitle());
         testCase.log(LogLevel.INFO, testCase.toJson());

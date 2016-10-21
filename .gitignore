@@ -9,8 +9,3 @@ out
 src/main/resources/drivers
 TAF
 *.log*
-.gradle
-build
-gradle
-gradlew
-gradlew.bat
