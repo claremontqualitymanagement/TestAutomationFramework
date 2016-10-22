@@ -51,7 +51,10 @@ public class TestCase {
         addTestCaseData("Test case name", testName);
         startTime = new Date();
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
-        testCaseLog.log(LogLevel.INFO, "Running tests on machine with OS " + System.getProperty("OS.name"));
+        String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
+        testCaseLog.log(LogLevel.INFO, "Running tests on machine with OS " + System.getProperty("OS.name") + " and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
         reporters.add(new TestCaseLogReporterHtmlLogFile(this));
         setLogFolderIfNotAlreadySet();
