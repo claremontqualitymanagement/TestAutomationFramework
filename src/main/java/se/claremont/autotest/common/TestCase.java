@@ -81,7 +81,7 @@ public class TestCase {
             testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString(),
                     "Running process list deviation since test case start:<br>" + SupportMethods.LF + sb.toString().replace(SupportMethods.LF, "<br>" + SupportMethods.LF));
         } else {
-            testCaseLog.log(LogLevel.INFO, "No changes to what processes are running, from test case start, could be detected.");
+            testCaseLog.log(LogLevel.DEBUG, "No changes to what processes are running, from test case start until now, could be detected.");
         }
     }
 

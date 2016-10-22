@@ -32,18 +32,16 @@ public class ApplicationManager {
 
    public void startProgram(String program, List<String> arguments){
        programName = program;
-       arguments = arguments;
+       this.arguments = arguments;
        List<String> commands = new ArrayList<>();
-       Frame returnFrame = null;
        commands.add(program);
        commands.addAll(arguments);
         try {
             App app = new App(commands, testCase);
             (new Thread(app)).start();
-            testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
+            //testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
         } catch (Exception e){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Coult not start program '" + String.join(" ", commands) + "'. "  + e.getMessage());
-            System.out.println("Cannot start program '" + String.join(" ", commands) + "'. "  + e.getMessage());
         }
     }
 
