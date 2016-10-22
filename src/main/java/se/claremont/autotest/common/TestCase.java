@@ -2,6 +2,7 @@ package se.claremont.autotest.common;
 
 import org.junit.Assert;
 import org.junit.Assume;
+import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +33,8 @@ public class TestCase {
     final KnownErrorsList testSetKnownErrors;
     private final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     final UUID uid = UUID.randomUUID();
+    List<String> processesRunningAtTestCaseStart = new ArrayList<>();
+
 
     /**
      * Setting up a new test case run and prepares it for execution
@@ -52,6 +55,31 @@ public class TestCase {
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
         reporters.add(new TestCaseLogReporterHtmlLogFile(this));
         setLogFolderIfNotAlreadySet();
+        ApplicationManager applicationManager = new ApplicationManager(this);
+        processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
+    }
+
+    /**
+     * Compares the currently running processes on the executing machine with the ones that
+     * were running when the test case started, and reports the difference to the test case
+     * log in a log post.
+     */
+    public void writeProcessListDeviationsFromSystemStartToLog(){
+        ApplicationManager applicationManager = new ApplicationManager(this);
+        List<String> currentProcessesRunning = applicationManager.listActiveRunningProcessesOnLocalMachine();
+        List<String> copyOfProcessList = new ArrayList<>();
+        copyOfProcessList.addAll(processesRunningAtTestCaseStart);
+        currentProcessesRunning.removeAll(copyOfProcessList);
+        copyOfProcessList.removeAll(applicationManager.listActiveRunningProcessesOnLocalMachine());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Process(es) added since test case start: '" + String.join("', '", currentProcessesRunning) + "'." + SupportMethods.LF);
+        sb.append("Process(es) that has exited since test case start: '" + String.join("', '", copyOfProcessList) + "'." + SupportMethods.LF);
+        if(copyOfProcessList.size() > 0 || currentProcessesRunning.size() > 0){
+            testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString(),
+                    "Running process list deviation since test case start:<br>" + SupportMethods.LF + sb.toString().replace(SupportMethods.LF, "<br>" + SupportMethods.LF));
+        } else {
+            testCaseLog.log(LogLevel.INFO, "No changes to what processes are running, from test case start, could be detected.");
+        }
     }
 
     /**

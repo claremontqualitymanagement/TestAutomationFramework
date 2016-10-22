@@ -57,6 +57,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
             saveScreenshot();
             saveDesktopScreenshot();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -149,6 +150,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
         return text;
     }
@@ -237,6 +239,14 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * When a test case object is created a snapshot of running processes is created. This method makes a comparison
+     * of what processes that differs at the time of method execution compared to test case start.
+     */
+    public void writeRunningProcessListDeviationsSinceTestCaseStart(){
+        testCase.writeProcessListDeviationsFromSystemStartToLog();
+    }
+
+    /**
      * Writes text to the given element.
      *
      * @param guiElement The element to write to
@@ -252,6 +262,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -274,12 +285,14 @@ public class WebInteractionMethods implements GuiDriver {
                 saveScreenshot();
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
             }
         } catch (TextEnteringError textEnteringError) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter '" + text + "' in " + domElement.LogIdentification() + "-");
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -338,6 +351,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
         File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -501,6 +515,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
         }
@@ -525,6 +540,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -569,11 +585,13 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         } else if(!webElement.isDisplayed()) {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " is present, but the display of the object is suppressed.");
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
         }
@@ -592,6 +610,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Verified that the object " + domElement.LogIdentification() + " was not present.");
         }
@@ -610,6 +629,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
         }
@@ -631,6 +651,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -648,6 +669,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -666,6 +688,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -685,6 +708,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -715,6 +739,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -745,6 +770,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -763,6 +789,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -781,6 +808,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -1035,6 +1063,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("form")){
@@ -1047,6 +1076,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
 
@@ -1060,6 +1090,7 @@ public class WebInteractionMethods implements GuiDriver {
                 saveScreenshot();
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
                 return;
             }
             for(WebElement optionButton : optionButtons){
@@ -1098,6 +1129,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             haltFurtherExecution();
         }
     }
@@ -1231,6 +1263,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             haltFurtherExecution();
         }
     }
@@ -1271,6 +1304,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -1460,6 +1494,7 @@ public class WebInteractionMethods implements GuiDriver {
         saveScreenshot();
         saveDesktopScreenshot();
         saveHtmlContentOfCurrentPage();
+        writeRunningProcessListDeviationsSinceTestCaseStart();
         haltFurtherExecution();
     }
 

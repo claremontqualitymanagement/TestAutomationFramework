@@ -160,7 +160,8 @@ public class SupportMethods {
      * @param arguments Arguments to pass to the program
      */
     public static void startProgram(String program, List<String> arguments){
-        ApplicationManager.startProgram(program, arguments, new TestCase(null, "dummy"));
+        ApplicationManager am = new ApplicationManager(new TestCase(null, "dummyTestCase"));
+        am.startProgram(program, arguments);
     }
 
     /**
@@ -168,8 +169,9 @@ public class SupportMethods {
      *
      * @param programPathAndArgumentsString Program name, and path, and arguments.
      */
-    public static void startProgram(String programPathAndArgumentsString){
-        ApplicationManager.startProgram(programPathAndArgumentsString, new TestCase(null, "dummy"));
+    public static void startProgram(String programPathAndArgumentsString, TestCase testCase){
+        ApplicationManager am = new ApplicationManager(testCase);
+        am.startProgram(programPathAndArgumentsString);
     }
 
     /**

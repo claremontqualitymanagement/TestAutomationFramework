@@ -156,6 +156,7 @@ public class sandBoxTester {
     }
 
 
+    @Ignore
     @Test
     public void testDesktopScreenshot() {
         TestCase testCase = new TestCase(null, "dummyName");
@@ -168,14 +169,19 @@ public class sandBoxTester {
     @Test
     public void testSwingApplicationStart(){
         TestCase testCase = new TestCase(null, "dummyName");
+        SwingInteractionMethods s = new SwingInteractionMethods(testCase);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         List<String> arguments = new ArrayList<>();
         arguments.add("java.exe");
         arguments.add("-jar");
         arguments.add("C:\\Users\\jordam\\OneDrive\\Documents\\Claremont-jobb\\Alster\\QtpUsageAnalysis.jar");
-        SwingInteractionMethods s = new SwingInteractionMethods(String.join(" ", arguments), testCase);
-        ApplicationManager ap = s.applicationManager;
-        ap.listActiveRunningProcessesOnLocalMachine();
-        ap.getApplicationOutput();
+        s.startProgram(String.join(" ", arguments));
+
+        testCase.writeProcessListDeviationsFromSystemStartToLog(); //Should actually show one more java.exe instance. Need to be improved.
     }
 
     @Ignore

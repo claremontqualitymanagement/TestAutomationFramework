@@ -2,6 +2,7 @@ package se.claremont.autotest.guidriverpluginstructure.swingsupport.festswingglu
 
 import org.fest.swing.fixture.FrameFixture;
 import org.glassfish.jersey.jaxb.internal.XmlCollectionJaxbProvider;
+import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
@@ -12,12 +13,17 @@ import se.claremont.autotest.support.SupportMethods;
  * Created by jordam on 2016-09-18.
  */
 public class SwingInteractionMethods implements GuiDriver{
-
-    public ApplicationManager applicationManager;
+    TestCase testCase;
+    ApplicationManager applicationManager;
     //private FrameFixture app = new FrameFixture();
 
-    public SwingInteractionMethods(String programStringAndArguments, TestCase testCase){
-        applicationManager = ApplicationManager.startProgram(programStringAndArguments, testCase);
+    public SwingInteractionMethods(TestCase testCase){
+        this.testCase = testCase;
+    }
+
+    public void startProgram(String programStringAndArguments){
+        applicationManager = new ApplicationManager(testCase);
+        applicationManager.startProgram(programStringAndArguments);
     }
 
     public void click(GuiElement guiElement){
