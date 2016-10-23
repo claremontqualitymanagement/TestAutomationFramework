@@ -8,6 +8,7 @@ import se.claremont.tools.Utils;
 
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -20,36 +21,31 @@ import java.util.List;
 public class ApplicationManager {
 
     TestCase testCase;
-    Process process;
     BufferedReader output;
     String programName;
+    Process process;
     List<String> arguments;
 
     public ApplicationManager(TestCase testCase){
         this.testCase = testCase;
     }
 
-   public static ApplicationManager startProgram(String program, List<String> arguments, TestCase testCase){
-       ApplicationManager applicationManager = new ApplicationManager(testCase);
-       applicationManager.programName = program;
-       applicationManager.arguments = arguments;
+   public void startProgram(String program, List<String> arguments){
+       programName = program;
+       this.arguments = arguments;
        List<String> commands = new ArrayList<>();
-       Frame returnFrame = null;
        commands.add(program);
        commands.addAll(arguments);
         try {
-            applicationManager.process = new ProcessBuilder(commands).start();
-            System.out.println("Started program '" + String.join(" ", commands) + "'.");
-            testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
+            App app = new App(commands, testCase);
+            (new Thread(app)).start();
+            //testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
         } catch (Exception e){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Coult not start program '" + String.join(" ", commands) + "'. "  + e.getMessage());
-            System.out.println("Cannot start program '" + String.join(" ", commands) + "'. "  + e.getMessage());
         }
-       return applicationManager;
     }
 
-    public static ApplicationManager startProgram(String programAndArguments, TestCase testCase){
-        ApplicationManager applicationManager = new ApplicationManager(testCase);
+    public void startProgram(String programAndArguments){
         String program;
         List<String> arguments = new ArrayList<>();
         String[] stringComponents = programAndArguments.split(" ");
@@ -62,12 +58,11 @@ public class ApplicationManager {
                     }
                 }
             }
-            applicationManager = startProgram(program, arguments, testCase);
+            startProgram(program, arguments);
         } else {
-            applicationManager.testCase.log(LogLevel.EXECUTION_PROBLEM, "Must state program name at least, to start program.");
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Must state program name at least, to start program.");
             System.out.println("Must state program name at least, to start a program.");
         }
-        return applicationManager;
     }
 
     public List<String> listActiveRunningProcessesOnLocalMachine(){
@@ -84,7 +79,7 @@ public class ApplicationManager {
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
                 processes.add(line.split(" ")[0]);
-                System.out.println(line.split(" ")[0]); //<-- Parse data here.
+                //System.out.println(line.split(" ")[0]); //<-- Parse data here.
             }
             input.close();
         } catch (Exception err) {
@@ -97,6 +92,7 @@ public class ApplicationManager {
         StringBuilder sb = new StringBuilder();
         try {
             String line;
+            if(process == null) return "";
             BufferedReader input =
                     new BufferedReader(new InputStreamReader(process.getInputStream()));
             while ((line = input.readLine()) != null) {
@@ -110,5 +106,34 @@ public class ApplicationManager {
         }
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Output from application:" + SupportMethods.LF + sb.toString(), "Output from application:<br>" + SupportMethods.LF + sb.toString().replace(SupportMethods.LF, "<br>" + SupportMethods.LF));
         return sb.toString();
+    }
+
+    class App implements Runnable{
+        List<String> commands = new ArrayList<>();
+        TestCase testCase;
+        Process process;
+
+        public App(List<String> commands, TestCase testCase){
+            this.commands.addAll(commands);
+            this.testCase = testCase;
+        }
+
+        public Process getProcess(){
+            return process;
+        }
+
+        public void run(){
+            try {
+                if(commands == null || commands.size() < 1) {
+                    testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot start program with no name given.");
+                    return;
+                }
+                process = new ProcessBuilder(commands).start();
+                testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
+            } catch (IOException e) {
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot start program '" + String.join(" ", commands) + "'. Message: " + e.getMessage());
+            }
+        }
+
     }
 }

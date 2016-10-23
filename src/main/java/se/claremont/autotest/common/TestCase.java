@@ -2,6 +2,7 @@ package se.claremont.autotest.common;
 
 import org.junit.Assert;
 import org.junit.Assume;
+import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +33,8 @@ public class TestCase {
     final KnownErrorsList testSetKnownErrors;
     private final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     final UUID uid = UUID.randomUUID();
+    List<String> processesRunningAtTestCaseStart = new ArrayList<>();
+
 
     /**
      * Setting up a new test case run and prepares it for execution
@@ -48,11 +51,76 @@ public class TestCase {
         addTestCaseData("Test case name", testName);
         startTime = new Date();
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
-        testCaseLog.log(LogLevel.INFO, "Running tests on machine with OS " + System.getProperty("OS.name"));
+        String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
+        testCaseLog.log(LogLevel.INFO, "Running tests on machine with OS " + System.getProperty("OS.name") + " and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
         reporters.add(new TestCaseLogReporterHtmlLogFile(this));
         setLogFolderIfNotAlreadySet();
+        ApplicationManager applicationManager = new ApplicationManager(this);
+        processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
     }
+
+    /**
+     * Compares the currently running processes on the executing machine with the ones that
+     * were running when the test case started, and reports the difference to the test case
+     * log in a log post.
+     */
+    public void writeProcessListDeviationsFromSystemStartToLog(){
+        ApplicationManager applicationManager = new ApplicationManager(this);
+        List<String> currentProcessesRunning = applicationManager.listActiveRunningProcessesOnLocalMachine();
+
+        List<String> copyOfCurrentProcesses = new ArrayList<>();
+        copyOfCurrentProcesses.addAll(currentProcessesRunning);
+        List<String> copyOfProcessListAtStart = new ArrayList<>();
+        copyOfProcessListAtStart.addAll(processesRunningAtTestCaseStart);
+
+        for(int i = 0; i < copyOfCurrentProcesses.size(); i++){
+            for(int j = 0; j < copyOfProcessListAtStart.size(); j++){
+                if(copyOfProcessListAtStart.get(j).equals(copyOfCurrentProcesses.get(i))){
+                    copyOfProcessListAtStart = remove(copyOfCurrentProcesses.get(i), copyOfProcessListAtStart);
+                    copyOfCurrentProcesses = remove((copyOfCurrentProcesses.get(i)), copyOfCurrentProcesses);
+                    if(j != 0) j--;
+                    if(i != 0) i--;
+                    break;
+                }
+            }
+        }
+        if(copyOfCurrentProcesses.get(0).equals(copyOfProcessListAtStart.get(0))){
+            copyOfCurrentProcesses.remove(0);
+            copyOfProcessListAtStart.remove(0);
+        }
+        //currentProcessesRunning.removeAll(copyOfProcessListAtStart);
+        //copyOfProcessListAtStart.removeAll(applicationManager.listActiveRunningProcessesOnLocalMachine());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Process(es) added since test case start: '" + String.join("', '", copyOfCurrentProcesses) + "'." + SupportMethods.LF);
+        sb.append("Process(es) that has exited since test case start: '" + String.join("', '", copyOfProcessListAtStart) + "'." + SupportMethods.LF);
+        if(copyOfProcessListAtStart.size() > 0 || copyOfCurrentProcesses.size() > 0){
+            log(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString());
+        } else {
+            log(LogLevel.DEBUG, "No changes to what processes are running, from test case start until now, could be detected.");
+        }
+
+
+    }
+
+    private List<String> remove(String string, List<String> list){
+        boolean found = false;
+        int index = 0;
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).equals(string)){
+                index = i;
+                found = true;
+                break;
+            }
+        }
+        if(found){
+            list.remove(index);
+        }
+        return list;
+    }
+
 
     /**
      * Sets the log folder if no log folder is already set
