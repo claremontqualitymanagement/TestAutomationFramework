@@ -169,19 +169,31 @@ public class sandBoxTester {
     @Test
     public void testSwingApplicationStart(){
         TestCase testCase = new TestCase(null, "dummyName");
+        int javaProcessesBefore = numberOfJavaProcesses();
         SwingInteractionMethods s = new SwingInteractionMethods(testCase);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         List<String> arguments = new ArrayList<>();
         arguments.add("java.exe");
         arguments.add("-jar");
         arguments.add("C:\\Users\\jordam\\OneDrive\\Documents\\Claremont-jobb\\Alster\\QtpUsageAnalysis.jar");
         s.startProgram(String.join(" ", arguments));
+        testCase.writeProcessListDeviationsFromSystemStartToLog();
+        int javaProcessesAfter = numberOfJavaProcesses();
+        testCase.log(LogLevel.INFO, "Number of java processes before: " +javaProcessesBefore + ". Number of java processes after: " + javaProcessesAfter + ".");
+    }
 
-        testCase.writeProcessListDeviationsFromSystemStartToLog(); //Should actually show one more java.exe instance. Need to be improved.
+
+    private int numberOfJavaProcesses(){
+        ApplicationManager am = new ApplicationManager(new TestCase(null, "dummy"));
+        List<String> processes = new ArrayList<>();
+        int javaProcessCount = 0;
+        processes.addAll(am.listActiveRunningProcessesOnLocalMachine());
+        for(String string : processes){
+            if(string.equals("java.exe")){
+                javaProcessCount++;
+            }
+        }
+        return javaProcessCount;
+
     }
 
     @Ignore

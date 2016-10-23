@@ -70,20 +70,57 @@ public class TestCase {
     public void writeProcessListDeviationsFromSystemStartToLog(){
         ApplicationManager applicationManager = new ApplicationManager(this);
         List<String> currentProcessesRunning = applicationManager.listActiveRunningProcessesOnLocalMachine();
-        List<String> copyOfProcessList = new ArrayList<>();
-        copyOfProcessList.addAll(processesRunningAtTestCaseStart);
-        currentProcessesRunning.removeAll(copyOfProcessList);
-        copyOfProcessList.removeAll(applicationManager.listActiveRunningProcessesOnLocalMachine());
-        StringBuilder sb = new StringBuilder();
-        sb.append("Process(es) added since test case start: '" + String.join("', '", currentProcessesRunning) + "'." + SupportMethods.LF);
-        sb.append("Process(es) that has exited since test case start: '" + String.join("', '", copyOfProcessList) + "'." + SupportMethods.LF);
-        if(copyOfProcessList.size() > 0 || currentProcessesRunning.size() > 0){
-            testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString(),
-                    "Running process list deviation since test case start:<br>" + SupportMethods.LF + sb.toString().replace(SupportMethods.LF, "<br>" + SupportMethods.LF));
-        } else {
-            testCaseLog.log(LogLevel.DEBUG, "No changes to what processes are running, from test case start until now, could be detected.");
+
+        List<String> copyOfCurrentProcesses = new ArrayList<>();
+        copyOfCurrentProcesses.addAll(currentProcessesRunning);
+        List<String> copyOfProcessListAtStart = new ArrayList<>();
+        copyOfProcessListAtStart.addAll(processesRunningAtTestCaseStart);
+
+        for(int i = 0; i < copyOfCurrentProcesses.size(); i++){
+            for(int j = 0; j < copyOfProcessListAtStart.size(); j++){
+                if(copyOfProcessListAtStart.get(j).equals(copyOfCurrentProcesses.get(i))){
+                    copyOfProcessListAtStart = remove(copyOfCurrentProcesses.get(i), copyOfProcessListAtStart);
+                    copyOfCurrentProcesses = remove((copyOfCurrentProcesses.get(i)), copyOfCurrentProcesses);
+                    if(j != 0) j--;
+                    if(i != 0) i--;
+                    break;
+                }
+            }
         }
+        if(copyOfCurrentProcesses.get(0).equals(copyOfProcessListAtStart.get(0))){
+            copyOfCurrentProcesses.remove(0);
+            copyOfProcessListAtStart.remove(0);
+        }
+        //currentProcessesRunning.removeAll(copyOfProcessListAtStart);
+        //copyOfProcessListAtStart.removeAll(applicationManager.listActiveRunningProcessesOnLocalMachine());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Process(es) added since test case start: '" + String.join("', '", copyOfCurrentProcesses) + "'." + SupportMethods.LF);
+        sb.append("Process(es) that has exited since test case start: '" + String.join("', '", copyOfProcessListAtStart) + "'." + SupportMethods.LF);
+        if(copyOfProcessListAtStart.size() > 0 || copyOfCurrentProcesses.size() > 0){
+            log(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString());
+        } else {
+            log(LogLevel.DEBUG, "No changes to what processes are running, from test case start until now, could be detected.");
+        }
+
+
     }
+
+    private List<String> remove(String string, List<String> list){
+        boolean found = false;
+        int index = 0;
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).equals(string)){
+                index = i;
+                found = true;
+                break;
+            }
+        }
+        if(found){
+            list.remove(index);
+        }
+        return list;
+    }
+
 
     /**
      * Sets the log folder if no log folder is already set
