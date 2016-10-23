@@ -10,6 +10,7 @@ import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.support.SupportMethods;
@@ -36,11 +37,9 @@ public class WebInteractionMethods implements GuiDriver {
     private final TestCase testCase;
     @SuppressWarnings("CanBeFinal")
     private int standardTimeoutInSeconds = 5;
-
     private class NavigationError extends Exception{}
     private class TextEnteringError extends Exception{}
     private class BrowserClosingError extends Exception{}
-
 
     /**
      * Setting up the possibility to interact with web components
@@ -51,15 +50,18 @@ public class WebInteractionMethods implements GuiDriver {
         WebDriverManager.WebBrowserType webBrowser = WebDriverManager.WebBrowserType.CHROME;
         this.testCase = testCase;
         try{
-            driver = WebDriverManager.initializeWebDriver(webBrowser, testCase);
+            WebDriverManager webDriverManager = new WebDriverManager(testCase);
+            driver = webDriverManager.initializeWebDriver(webBrowser);
             driver.manage().window().maximize();
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
             saveScreenshot();
+            saveDesktopScreenshot();
         }
     }
 
     /**
+     * Returns the test case.
      *
      * @return TestCase
      */
@@ -67,26 +69,17 @@ public class WebInteractionMethods implements GuiDriver {
         return testCase;
     }
 
+    /**
+     * Pauses execution for a number of milliseconds.
+     *
+     * @param milliseconds The number of millseconds to wait.
+     */
     public void wait(int milliseconds){
         try {
             driver.manage().wait((long)milliseconds);
             log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
         } catch (InterruptedException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not wait the expected " + milliseconds + " milliseconds.");
-        }
-    }
-
-    /**
-     * Navigates to specified url
-     *
-     * @param url String formed url
-     * @throws NavigationError Error thrown if Navigation cannot be performed
-     */
-    private void goToUrl(String url) throws NavigationError{
-        try{
-            driver.get(url);
-        }catch (Exception e){
-            throw new NavigationError();
         }
     }
 
@@ -138,28 +131,6 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
 
-    /**
-     * Writes the input string to specified DOM element
-     *
-     * @param element Selenium WebElement to interact with
-     * @param text Text to enter
-     * @throws TextEnteringError Error thrown when text cannot be entered by sendKeys method
-     */
-    private void enterText(WebElement element, String text) throws TextEnteringError{
-        if(element != null){
-            try {
-                element.sendKeys(text);
-            }catch (Exception e){
-                log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "'.");
-                throw new TextEnteringError();
-            }
-            log(LogLevel.DEBUG, "Sending keys '" + text + "'.");
-        }else{
-            log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "' since the webElement was null.");
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-        }
-    }
 
     /**
      * Reads the text from an element
@@ -176,6 +147,7 @@ public class WebInteractionMethods implements GuiDriver {
         } else{
             log(LogLevel.EXECUTION_PROBLEM, "Could not retrieve text from element " + domElement.LogIdentification() + " since it could not be identified at runtime.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
         return text;
@@ -278,6 +250,7 @@ public class WebInteractionMethods implements GuiDriver {
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -299,25 +272,15 @@ public class WebInteractionMethods implements GuiDriver {
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not submit the text entered to " + domElement.LogIdentification() + ".");
                 saveScreenshot();
+                saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
             }
         } catch (TextEnteringError textEnteringError) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter '" + text + "' in " + domElement.LogIdentification() + "-");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
-    }
-
-    /**
-     * Saves the current HTML of the page interacted with to the testCaseLog folder for debugging purposes and write a testCaseLog post about it
-     * Used for provide debugging information when execution or verification problems (or errors) occur.
-     */
-    private void saveHtmlContentOfCurrentPage(){
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".html";
-        String html = driver.getPageSource();
-        SupportMethods.saveToFile(html, filePath);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"file://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
-        CliTestRunner.testRun.fileCounter++;
     }
 
     /**
@@ -350,6 +313,17 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    /**
+     * Saving desktop of full desktop rather than just the web browser
+     */
+    public void saveDesktopScreenshot(){
+        try {
+            RobotSwingInteractionMethods robotSwingInteractionMethods = new RobotSwingInteractionMethods(testCase);
+            robotSwingInteractionMethods.captureScreenshot();
+        } catch (Exception e){
+            testCase.log(LogLevel.DEBUG, "Could not take desktop screenshot: " + e.toString());
+        }
+    }
 
     /**
      * Capture image of specific element to disk. Works by cropping a full screenshot to element.
@@ -362,6 +336,7 @@ public class WebInteractionMethods implements GuiDriver {
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " when trying to capture an image of it.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             return;
         }
@@ -392,106 +367,6 @@ public class WebInteractionMethods implements GuiDriver {
 
 
     /**
-     * Halts further execution of the test case when further execution is considered non-valuable
-     */
-    private void haltFurtherExecution(){
-        log(LogLevel.INFO, "Halting further execution due to perceived problems.");
-        makeSureDriverIsClosed();
-        testCase.report();
-    }
-
-    /**
-     * Gets a runtime element from the WebDriver driver to be able to interact with it
-     *
-     * @param element Declared DomElement to interact with
-     * @return WebElement for WebDriver interaction
-     */
-    private WebElement getRuntimeElement(DomElement element){
-        WebElement returnElement = null;
-        try {
-            if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
-                returnElement = driver.findElement(By.linkText(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
-                returnElement = driver.findElement(By.id(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
-                returnElement = driver.findElement(By.xpath(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
-                returnElement = driver.findElement(By.name(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
-                returnElement = driver.findElement(By.cssSelector(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
-                returnElement = driver.findElement(By.className(element.recognitionString));
-            } else {
-                returnElement = null;
-            }
-        }catch (Exception e){
-            log(LogLevel.DEBUG, "Could not get element by '" + element.recognitionString +
-                    "' with identification technique '" + element.identificationType.toString() + "'.");
-        }
-        return returnElement;
-    }
-
-    /**
-     * Gets a runtime element from the WebDriver driver to be able to interact with it
-     *
-     * @param element Declared DomElement to interact with
-     * @return WebElement for WebDriver interaction
-     */
-    private WebElement getRuntimeElementWithoutLogging(DomElement element){
-        WebElement returnElement = null;
-        try {
-            if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
-                returnElement = driver.findElement(By.linkText(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
-                returnElement = driver.findElement(By.id(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
-                returnElement = driver.findElement(By.xpath(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
-                returnElement = driver.findElement(By.name(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
-                returnElement = driver.findElement(By.cssSelector(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
-                returnElement = driver.findElement(By.className(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
-                List<WebElement> potentialMatches = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
-                if(potentialMatches.size() == 1){
-                    return potentialMatches.get(0);
-                } else if( potentialMatches.size() > 1){
-                    List<WebElement> visibleElements = new ArrayList<>();
-                    for(WebElement potentialMatch : potentialMatches){
-                        if(potentialMatch.isDisplayed()) visibleElements.add(potentialMatch);
-                    }
-                    if(visibleElements.size() == 1){
-                        return visibleElements.get(0);
-                    }
-                } else {
-                    potentialMatches = driver.findElements(By.xpath("//*[contains(text(), '" + element.recognitionString + "')]"));
-                    if(potentialMatches.size() == 1){
-                        returnElement = potentialMatches.get(0);
-                    } else {
-                        List<WebElement> visibleElements = new ArrayList<>();
-                        for(WebElement potentialMatch : potentialMatches){
-                            if(potentialMatch.isDisplayed()){
-                                visibleElements.add(potentialMatch);
-                            }
-                        }
-                        if(visibleElements.size() == 1){
-                            returnElement = visibleElements.get(0);
-                        } else {
-                            log(LogLevel.DEBUG, "Searched for element with the visible text '" + element.recognitionString + "' but found " + visibleElements.size() + " elements that was visible and matched the text string.");
-                        }
-
-                    }
-                }
-            }else {
-                returnElement = null;
-            }
-        }catch (Exception ignored){
-        }
-        return returnElement;
-    }
-
-    /**
      * Checks for existence of given element. Actually waits for existence of the element during the timeout time
      *
      * @param guiElement The element to check existence of
@@ -510,33 +385,6 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public boolean exists(DomElement domElement){
         return getRuntimeElement(domElement) != null;
-    }
-
-    /**
-     * Gets a runtime element from the WebDriver driver to be able to interact with it
-     *
-     * @param element Declared DomElement to interact with
-     * @param timeoutInSeconds Number of seconds to wait for element before giving up on it
-     * @return WebElement for WebDriver interaction
-     */
-    private WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
-        WebElement returnElement = getRuntimeElementWithoutLogging(element);
-        long sleepTime = 50;
-        double startTickCount = System.currentTimeMillis();
-        while(returnElement == null && System.currentTimeMillis()- startTickCount < timeoutInSeconds *1000){
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            returnElement = getRuntimeElementWithoutLogging(element);
-        }
-        if(returnElement == null){
-            log(LogLevel.DEBUG, "Could not identify element " + element.LogIdentification() + " within the " + timeoutInSeconds + " second timeout.");
-        } else {
-            log(LogLevel.DEBUG, "Identified element " + element.LogIdentification() + " after " + (System.currentTimeMillis() - startTickCount) + " ms.");
-        }
-        return returnElement;
     }
 
     /**
@@ -561,18 +409,10 @@ public class WebInteractionMethods implements GuiDriver {
             potentialClickObjects = driver.findElements(By.xpath("//*[contains(text(), '" + visibleText + "')]"));
         }
         if(potentialClickObjects.size() == 1){
-            if(!potentialClickObjects.get(0).isDisplayed()){
-                log(LogLevel.EXECUTION_PROBLEM, "Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is hidden from view.");
-                saveScreenshot();
-                saveHtmlContentOfCurrentPage();
-                haltFurtherExecution();
-            }
-            if(!potentialClickObjects.get(0).isEnabled()){
-                log(LogLevel.EXECUTION_PROBLEM, "Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is disabled.");
-                saveScreenshot();
-                saveHtmlContentOfCurrentPage();
-                haltFurtherExecution();
-            }
+            if(!potentialClickObjects.get(0).isDisplayed())
+                errorManagementProcedures("Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is hidden from view.");
+            if(!potentialClickObjects.get(0).isEnabled())
+                errorManagementProcedures("Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is disabled.");
             try {
                 potentialClickObjects.get(0).click();
                 log(LogLevel.EXECUTED, "Clicked the element with visible text '" + visibleText + "'.");
@@ -592,16 +432,10 @@ public class WebInteractionMethods implements GuiDriver {
                     trulyClickableElements.get(0).click();
                     log(LogLevel.EXECUTED, "Clicked the element with the visible text '" + visibleText + "'.");
                 }catch (Exception e){
-                    log(LogLevel.FRAMEWORK_ERROR, "Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage());
-                    saveScreenshot();
-                    saveHtmlContentOfCurrentPage();
-                    haltFurtherExecution();
+                    errorManagementProcedures("Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage());
                 }
             }else{
-                log(LogLevel.EXECUTION_PROBLEM, "Attempted to click element with visible text '" + visibleText + "', but severeal elements was found with that text.");
-                saveScreenshot();
-                saveHtmlContentOfCurrentPage();
-                haltFurtherExecution();
+                errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but severeal elements was found with that text.");
             }
         }
     }
@@ -617,52 +451,18 @@ public class WebInteractionMethods implements GuiDriver {
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
         try {
             WebElement webelement = getRuntimeElementWithTimeout(element, standardTimeoutInSeconds);
-            if(webelement == null){
-                log(LogLevel.DEBUG, "Element does not exist.");
-                log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + element.LogIdentification() + " since it couldn't be identified.");
-                saveScreenshot();
-                saveHtmlContentOfCurrentPage();
-                haltFurtherExecution();
-            } else{
-                if(!webelement.isDisplayed()){
-                    log(LogLevel.EXECUTION_PROBLEM, "Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
-                    saveScreenshot();
-                    saveHtmlContentOfCurrentPage();
-                    haltFurtherExecution();
-                    return;
-                }
-                if(!webelement.isEnabled()){
-                    log(LogLevel.EXECUTION_PROBLEM, "Found element " + element.LogIdentification() + " but it is not enabled.");
-                    saveScreenshot();
-                    saveHtmlContentOfCurrentPage();
-                    haltFurtherExecution();
-                    return;
-                }
-                webelement.click();
-                log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
-            }
+            if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it couldn't be identified.");
+            if(!webelement.isDisplayed()) errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
+            if(!webelement.isEnabled()) errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
+            webelement.click();
+            log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
         }catch (Exception e){
             if(e.toString().contains("Other element would receive the click")){
                 log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");
             } else {
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR, "Could not click on element " + element.LogIdentification() + ". " + e.toString(), "Could not click och element " + element.LogIdentification() + ".<br>Error:<br><br>" + e.toString());
             }
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
-        }
-    }
-
-    /**
-     * Performing driver shutdown procedures
-     *
-     * @throws BrowserClosingError Error thrown when driver cannot close browser
-     */
-    private void closeBrowserDriver() throws BrowserClosingError{
-        try {
-            driver.close();
-        }catch (Exception e){
-            throw new BrowserClosingError();
+            errorManagementProcedures("Could not click element " + element.LogIdentification() + ".");
         }
     }
 
@@ -699,6 +499,7 @@ public class WebInteractionMethods implements GuiDriver {
         if(getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds) == null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be present but could not be identified.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
@@ -722,6 +523,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was identified as displayed although expected to not be displayed.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -765,10 +567,12 @@ public class WebInteractionMethods implements GuiDriver {
         if(webElement == null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be displayed but could not be identified at all.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         } else if(!webElement.isDisplayed()) {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " is present, but the display of the object is suppressed.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
@@ -786,6 +590,7 @@ public class WebInteractionMethods implements GuiDriver {
         if(webElement != null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to not be present but was able to be identified.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Verified that the object " + domElement.LogIdentification() + " was not present.");
@@ -803,6 +608,7 @@ public class WebInteractionMethods implements GuiDriver {
         if(getRuntimeElementWithTimeout(domElement, timeoutInSeconds) == null){
             log(LogLevel.VERIFICATION_PROBLEM, "Object " + domElement.LogIdentification() + " was expected to be present but was not identified.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Existence of object " + domElement.LogIdentification() + " verified.");
@@ -823,6 +629,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The text '" + text + "' could not be found on the current page.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -839,6 +646,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The regular expression pattern '" + textAsRegexPattern + "' could not be found on the current page.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -856,6 +664,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to match the regex pattern '" + expectedTitleAsRegexPattern+ "' but was '" + currentTitle + "'.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -874,6 +683,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to be '" + expectedTitle + "' but was '" + currentTitle + "'.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -903,6 +713,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to match the regular expression pattern '" + expectedTitleAsRegexPattern + "' but was '" + currentTitle + "' even after " + timeoutInSeconds + " milliseconds.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -932,6 +743,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to be '" + expectedTitle + "' but was '" + currentTitle + "' even after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -949,6 +761,7 @@ public class WebInteractionMethods implements GuiDriver {
         } else {
             log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have the text '" + expectedText + "', but it actually was '" + currentText + "'.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -966,6 +779,7 @@ public class WebInteractionMethods implements GuiDriver {
         } else {
             log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have match the regular expression pattern '" + expectedTextAsRegexPattern+ "', but it actually was '" + currentText + "'. Not a match.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
         }
     }
@@ -1037,9 +851,9 @@ public class WebInteractionMethods implements GuiDriver {
      * @param verbose If set to true warning messages will be logged, as well as extra debugging information from the W3C validation service. If set to false only errors will be logged.
      */
     public void verifyCurrentPageSourceWithW3validator(boolean verbose){
-        W3CHtmlValidatorService w3CHtmlValidatorService = new W3CHtmlValidatorService();
-        boolean noErrorsFound = w3CHtmlValidatorService.verifyCurrentPageSourceWithW3validator(testCase, driver.getPageSource(), verbose);
-        if(!noErrorsFound) saveHtmlContentOfCurrentPage();
+        W3CHtmlValidatorService w3CHtmlValidatorService = new W3CHtmlValidatorService(testCase, driver.getPageSource(), verbose);
+        w3CHtmlValidatorService.verifyPageSourceWithW3validator();
+        if(w3CHtmlValidatorService.failed()) saveHtmlContentOfCurrentPage();
     }
 
 
@@ -1203,6 +1017,146 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Chooses a selection in a radio button set
+     *
+     * @param radioButtonContainer The element to interact with
+     * @param text The visible text of the element to choose
+     */
+    public void chooseRadioButton(GuiElement radioButtonContainer, String text){
+        DomElement domElement = (DomElement) radioButtonContainer;
+        if(text == null) {
+            log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
+            return;
+        }
+
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify radio button element " + domElement.LogIdentification() + " where '" + text + "' was supposed to be selected. Continuing test case execution nevertheless.");
+            saveScreenshot();
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            return;
+        }
+        if(!webElement.getTagName().toLowerCase().equals("form")){
+            if(webElement.getTagName().toLowerCase().equals("input") && (webElement.getText().contains(text) || webElement.getAttribute("value").contains(text))){
+                webElement.click();
+                log(LogLevel.EXECUTED, "Clicked the '" + webElement.getAttribute("value") + "' radiobutton element.");
+                return;
+            }
+            log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + text + "' in radio button set " + domElement.LogIdentification() + ". However the tag of the element is not 'form', but '" + webElement.getTagName() + "'.");
+            saveScreenshot();
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            return;
+        }
+
+        List<String> optionStrings = new ArrayList<>();
+        boolean clicked = false;
+        try {
+            List<WebElement> optionButtons = webElement.findElements(By.xpath("//*[@type='radio']"));
+            log(LogLevel.DEBUG, "Found " + optionButtons.size() + " options for radiobutton.");
+            if(optionButtons.size()==0){
+                log(LogLevel.FRAMEWORK_ERROR, "Could not identify any radiobuttons within " + domElement.LogIdentification() + ". Does it contain elements of type 'radio'?");
+                saveScreenshot();
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                return;
+            }
+            for(WebElement optionButton : optionButtons){
+                if(optionButton.isSelected()){
+                    log(LogLevel.DEBUG, "Initial selected value in " + domElement.LogIdentification() + " was '" + optionButton.getText() + "'.");
+                    if(optionButton.getText().equals(text)){
+                        log(LogLevel.EXECUTED, "Made sure the radiobutton " + domElement.LogIdentification() + " had the value '" + text + "' checked, and it already did.");
+                        return;
+                    }
+                }
+                if(optionButton.isDisplayed()){
+                    optionStrings.add(optionButton.getText() + " (value='" + optionButton.getAttribute("value") + "')" + String.valueOf(optionButton.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+                }else {
+                    optionStrings.add(optionButton.getText() + " (hidden field)" + String.valueOf(optionButton.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
+                }
+            }
+            for (WebElement optionButton : optionButtons){
+                if(optionButton.getText().equals(text)){
+                    optionButton.click();
+                    log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
+                    clicked = true;
+                    return;
+                }
+            }
+            for (WebElement optionButton : optionButtons){
+                if(optionButton.getAttribute("value").equals(text)){
+                    optionButton.click();
+                    log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
+                    clicked = true;
+                    return;
+                }
+            }
+            errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.");
+        }catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' crashed with error." + e.getMessage());
+            saveScreenshot();
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
+        }
+    }
+
+    /**
+     * Ticking or un-ticking checkboxes. Common code to reduce duplicated code.
+     *
+     * @param checkboxElement The element to interact with
+     * @param expectedToBeTicked True if expected to be ticked after procedure, false if expected to be un-ticked after procedure. If null is provided, execution will proceed without interaction.
+     */
+    public void manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
+        DomElement domElement = (DomElement)checkboxElement;
+        if (expectedToBeTicked == null){
+            log(LogLevel.DEBUG, "Leaving checkbox " + domElement.LogIdentification() + " without interaction since input was null.");
+            return;
+        }
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null)
+            errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
+        if(!webElement.getTagName().toLowerCase().equals("input") || !webElement.getAttribute("type").toLowerCase().equals("checkbox")){
+            List<WebElement> subElements = webElement.findElements(By.xpath("//input"));
+            if(subElements.size() == 1){
+                if(!subElements.get(0).isSelected() == expectedToBeTicked){
+                    subElements.get(0).click();
+                    log(LogLevel.EXECUTED, "Clicked the " + domElement.LogIdentification() + " to make it " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ".");
+                    return;
+                } else {
+                    log(LogLevel.EXECUTED, "Made sure that " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "un-ticked") + ". And it already was.");
+                    return;
+                }
+            }
+            log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
+            saveHtmlContentOfCurrentPage();
+        }
+        try {
+            if(webElement.isSelected() == expectedToBeTicked){
+                log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
+            } else {
+                webElement.click();
+                log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it wasn't.");
+            }
+        } catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
+            errorManagementProcedures("This should not happen.");
+        }
+    }
+
+
+    /**
+     * Verifies that an image looks as expected
+     *
+     * @param guiElement The image to check
+     * @param pathToOracleImage The oracle image to compare with
+     */
+    public void verifyImage(GuiElement guiElement, String pathToOracleImage){
+        log(LogLevel.FRAMEWORK_ERROR, "Method 'verifyImage()' is not yet implemented.");
+    }
+
+    /**
      * Picks a value in a selector dropdown
      *
      * @param dropdownElement The element to interact with
@@ -1215,20 +1169,11 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        if(webElement == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
-            return;
-        }
-        if(!webElement.getTagName().toLowerCase().equals("select")){
-            log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
-            return;
-        }
+        if(webElement == null)
+            errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
+
+        if(!webElement.getTagName().toLowerCase().equals("select"))
+            errorManagementProcedures("Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
 
         //Create Select element and log originally selected values
         boolean allSelectionsOkSoFar = true;
@@ -1272,11 +1217,8 @@ public class WebInteractionMethods implements GuiDriver {
                 }
             }
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Something went terribly bad while trying to select '" + String.join("', '", selections) + "' in " + domElement.LogIdentification() + ".");
-            log(LogLevel.DEVIATION_EXTRA_INFO, e.getMessage());
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
+            log(LogLevel.FRAMEWORK_ERROR, "Something went terribly bad while trying to select '" + String.join("', '", selections) + "' in " + domElement.LogIdentification() + ". " + e.getMessage());
+            errorManagementProcedures("This should not happen.");
         }
 
         //Log results
@@ -1287,156 +1229,238 @@ public class WebInteractionMethods implements GuiDriver {
                     "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",
                     "Could not select:<ul><li>'" + String.join("'</li><li>'", nonSelectedStrings) + "'</li></ul> in element " + domElement.LogIdentification() + " when attempting to select: <ul><li>'" + String.join("'</li><li>'", selections) + "'</li></ul>. Available options are:<ul><li>'" + String.join("'</li><li>'", optionStrings) + "'</li></ul>.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             haltFurtherExecution();
         }
     }
 
+
     /**
-     * Chooses a selection in a radio button set
+     * Navigates to specified url
      *
-     * @param radioButtonContainer The element to interact with
-     * @param text The visible text of the element to choose
+     * @param url String formed url
+     * @throws NavigationError Error thrown if Navigation cannot be performed
      */
-    public void chooseRadioButton(GuiElement radioButtonContainer, String text){
-        DomElement domElement = (DomElement) radioButtonContainer;
-        if(text == null) {
-            log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
-            return;
+    private void goToUrl(String url) throws NavigationError{
+        try{
+            driver.get(url);
+        }catch (Exception e){
+            throw new NavigationError();
         }
+    }
 
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        if(webElement == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not identify radio button element " + domElement.LogIdentification() + " where '" + text + "' was supposed to be selected. Continuing test case execution nevertheless.");
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            return;
-        }
-        if(!webElement.getTagName().toLowerCase().equals("form")){
-            if(webElement.getTagName().toLowerCase().equals("input") && (webElement.getText().contains(text) || webElement.getAttribute("value").contains(text))){
-                webElement.click();
-                log(LogLevel.EXECUTED, "Clicked the '" + webElement.getAttribute("value") + "' radiobutton element.");
-                return;
+    /**
+     * Writes the input string to specified DOM element
+     *
+     * @param element Selenium WebElement to interact with
+     * @param text Text to enter
+     * @throws TextEnteringError Error thrown when text cannot be entered by sendKeys method
+     */
+    private void enterText(WebElement element, String text) throws TextEnteringError{
+        if(element != null){
+            try {
+                element.sendKeys(text);
+            }catch (Exception e){
+                log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "'.");
+                throw new TextEnteringError();
             }
-            log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + text + "' in radio button set " + domElement.LogIdentification() + ". However the tag of the element is not 'form', but '" + webElement.getTagName() + "'.");
+            log(LogLevel.DEBUG, "Sending keys '" + text + "'.");
+        }else{
+            log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "' since the webElement was null.");
             saveScreenshot();
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
-            return;
         }
+    }
 
-        List<String> optionStrings = new ArrayList<>();
-        boolean clicked = false;
+    /**
+     * Saves the current HTML of the page interacted with to the testCaseLog folder for debugging purposes and write a testCaseLog post about it
+     * Used for provide debugging information when execution or verification problems (or errors) occur.
+     */
+    private void saveHtmlContentOfCurrentPage(){
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".html";
+        String LF = SupportMethods.LF;
+        String htmlStyle =                 "          pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
+                "                             margin-bottom: 10px;" + LF +
+                "                             overflow: auto;" + LF +
+                "                             width: auto;" + LF +
+                "                             padding: 5px;" + LF +
+                "                             background-color: #eee;" + LF +
+                "                             width: 100%;" + LF +
+                "                             padding-bottom: 20px!ie7;"  + LF +
+                "                             max - height: 600px;" + LF +
+                "          }" + LF;
+
+        String html =
+                "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
+                "   <head>" + LF +
+                "      <title>Source code of page</title>" + LF +
+                "      <style>" +
+                htmlStyle +
+                "      </style>" + LF +
+                "   </head>" + LF +
+                "   <body>" + LF +
+                "         " + SupportMethods.htmlContentToDisplayableHtmlCode(driver.getPageSource()) + LF + LF +
+                "   </body>" + LF +
+                "</html>" + LF;
+        SupportMethods.saveToFile(html, filePath);
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"file://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
+        CliTestRunner.testRun.fileCounter++;
+    }
+
+
+    /**
+     * Halts further execution of the test case when further execution is considered non-valuable
+     */
+    private void haltFurtherExecution(){
+        log(LogLevel.INFO, "Halting further execution due to perceived problems.");
+        makeSureDriverIsClosed();
+        testCase.report();
+    }
+
+    /**
+     * Gets a runtime element from the WebDriver driver to be able to interact with it
+     *
+     * @param element Declared DomElement to interact with
+     * @return WebElement for WebDriver interaction
+     */
+    private WebElement getRuntimeElement(DomElement element){
+        WebElement returnElement = null;
         try {
-            List<WebElement> optionButtons = webElement.findElements(By.xpath("//*[@type='radio']"));
-            log(LogLevel.DEBUG, "Found " + optionButtons.size() + " options for radiobutton.");
-            if(optionButtons.size()==0){
-                log(LogLevel.FRAMEWORK_ERROR, "Could not identify any radiobuttons within " + domElement.LogIdentification() + ". Does it contain elements of type 'radio'?");
-                saveScreenshot();
-                saveHtmlContentOfCurrentPage();
-                return;
+            if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
+                returnElement = driver.findElement(By.linkText(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
+                returnElement = driver.findElement(By.id(element.recognitionString));
+            } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
+                returnElement = driver.findElement(By.xpath(element.recognitionString));
+            } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
+                returnElement = driver.findElement(By.name(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
+                returnElement = driver.findElement(By.cssSelector(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
+                returnElement = driver.findElement(By.className(element.recognitionString));
+            } else {
+                returnElement = null;
             }
-            for(WebElement optionButton : optionButtons){
-                if(optionButton.isSelected()){
-                    log(LogLevel.DEBUG, "Initial selected value in " + domElement.LogIdentification() + " was '" + optionButton.getText() + "'.");
-                    if(optionButton.getText().equals(text)){
-                        log(LogLevel.EXECUTED, "Made sure the radiobutton " + domElement.LogIdentification() + " had the value '" + text + "' checked, and it already did.");
-                        return;
+        }catch (Exception e){
+            log(LogLevel.DEBUG, "Could not get element by '" + element.recognitionString +
+                    "' with identification technique '" + element.identificationType.toString() + "'.");
+        }
+        return returnElement;
+    }
+
+    /**
+     * Gets a runtime element from the WebDriver driver to be able to interact with it
+     *
+     * @param element Declared DomElement to interact with
+     * @return WebElement for WebDriver interaction
+     */
+    private WebElement getRuntimeElementWithoutLogging(DomElement element){
+        WebElement returnElement = null;
+        try {
+            if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
+                returnElement = driver.findElement(By.linkText(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
+                returnElement = driver.findElement(By.id(element.recognitionString));
+            } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
+                returnElement = driver.findElement(By.xpath(element.recognitionString));
+            } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
+                returnElement = driver.findElement(By.name(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
+                returnElement = driver.findElement(By.cssSelector(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
+                returnElement = driver.findElement(By.className(element.recognitionString));
+            } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
+                List<WebElement> potentialMatches = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
+                if(potentialMatches.size() == 1){
+                    return potentialMatches.get(0);
+                } else if( potentialMatches.size() > 1){
+                    List<WebElement> visibleElements = new ArrayList<>();
+                    for(WebElement potentialMatch : potentialMatches){
+                        if(potentialMatch.isDisplayed()) visibleElements.add(potentialMatch);
+                    }
+                    if(visibleElements.size() == 1){
+                        return visibleElements.get(0);
+                    }
+                } else {
+                    potentialMatches = driver.findElements(By.xpath("//*[contains(text(), '" + element.recognitionString + "')]"));
+                    if(potentialMatches.size() == 1){
+                        returnElement = potentialMatches.get(0);
+                    } else {
+                        List<WebElement> visibleElements = new ArrayList<>();
+                        for(WebElement potentialMatch : potentialMatches){
+                            if(potentialMatch.isDisplayed()){
+                                visibleElements.add(potentialMatch);
+                            }
+                        }
+                        if(visibleElements.size() == 1){
+                            returnElement = visibleElements.get(0);
+                        } else {
+                            log(LogLevel.DEBUG, "Searched for element with the visible text '" + element.recognitionString + "' but found " + visibleElements.size() + " elements that was visible and matched the text string.");
+                        }
+
                     }
                 }
-                if(optionButton.isDisplayed()){
-                    optionStrings.add(optionButton.getText() + " (value='" + optionButton.getAttribute("value") + "')" + String.valueOf(optionButton.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
-                }else {
-                    optionStrings.add(optionButton.getText() + " (hidden field)" + String.valueOf(optionButton.isEnabled()).toLowerCase().replace("false", " (not enabled)").replace("true", ""));
-                }
+            }else {
+                returnElement = null;
             }
-            for (WebElement optionButton : optionButtons){
-                if(optionButton.getText().equals(text)){
-                    optionButton.click();
-                    log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
-                    clicked = true;
-                    return;
-                }
-            }
-            for (WebElement optionButton : optionButtons){
-                if(optionButton.getAttribute("value").equals(text)){
-                    optionButton.click();
-                    log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
-                    clicked = true;
-                    return;
-                }
-            }
-            log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.");
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
-        }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' crashed with error." + e.getMessage());
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
+        }catch (Exception ignored){
         }
+        return returnElement;
     }
 
     /**
-     * Ticking or un-ticking checkboxes. Common code to reduce duplicated code.
+     * Gets a runtime element from the WebDriver driver to be able to interact with it
      *
-     * @param checkboxElement The element to interact with
-     * @param expectedToBeTicked True if expected to be ticked after procedure, false if expected to be un-ticked after procedure. If null is provided, execution will proceed without interaction.
+     * @param element Declared DomElement to interact with
+     * @param timeoutInSeconds Number of seconds to wait for element before giving up on it
+     * @return WebElement for WebDriver interaction
      */
-    public void manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
-        DomElement domElement = (DomElement)checkboxElement;
-        if (expectedToBeTicked == null){
-            log(LogLevel.DEBUG, "Leaving checkbox " + domElement.LogIdentification() + " without interaction since input was null.");
-            return;
-        }
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        if(webElement == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
-            return;
-        }
-        if(!webElement.getTagName().toLowerCase().equals("input") || !webElement.getAttribute("type").toLowerCase().equals("checkbox")){
-            List<WebElement> subElements = webElement.findElements(By.xpath("//input"));
-            if(subElements.size() == 1){
-                if(!subElements.get(0).isSelected() == expectedToBeTicked){
-                    subElements.get(0).click();
-                    log(LogLevel.EXECUTED, "Clicked the " + domElement.LogIdentification() + " to make it " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ".");
-                    return;
-                } else {
-                    log(LogLevel.EXECUTED, "Made sure that " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "un-ticked") + ". And it already was.");
-                    return;
-                }
+    private WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
+        WebElement returnElement = getRuntimeElementWithoutLogging(element);
+        long sleepTime = 50;
+        double startTickCount = System.currentTimeMillis();
+        while(returnElement == null && System.currentTimeMillis()- startTickCount < timeoutInSeconds *1000){
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
-            saveHtmlContentOfCurrentPage();
+            returnElement = getRuntimeElementWithoutLogging(element);
         }
+        if(returnElement == null){
+            log(LogLevel.DEBUG, "Could not identify element " + element.LogIdentification() + " within the " + timeoutInSeconds + " second timeout.");
+        } else {
+            log(LogLevel.DEBUG, "Identified element " + element.LogIdentification() + " after " + (System.currentTimeMillis() - startTickCount) + " ms.");
+        }
+        return returnElement;
+    }
+
+    /**
+     * Performing driver shutdown procedures
+     *
+     * @throws BrowserClosingError Error thrown when driver cannot close browser
+     */
+    private void closeBrowserDriver() throws BrowserClosingError{
         try {
-            if(webElement.isSelected() == expectedToBeTicked){
-                log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
-            } else {
-                webElement.click();
-                log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it wasn't.");
-            }
-        } catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox.");
-            log(LogLevel.DEVIATION_EXTRA_INFO, e.getMessage());
-            saveScreenshot();
-            saveHtmlContentOfCurrentPage();
-            haltFurtherExecution();
+            driver.close();
+        }catch (Exception e){
+            throw new BrowserClosingError();
         }
     }
 
-
     /**
-     * Verifies that an image looks as expected
+     * Saves debug information and halts further execution.
      *
-     * @param guiElement The image to check
-     * @param pathToOracleImage The oracle image to compare with
+     * @param errorMessage The error message to write to the test case log as a EXECUTION_PROBLEM log post.
      */
-    public void verifyImage(GuiElement guiElement, String pathToOracleImage){
-        log(LogLevel.FRAMEWORK_ERROR, "Method 'verifyImage()' is not yet implemented.");
+    private void errorManagementProcedures(String errorMessage){
+        log(LogLevel.EXECUTION_PROBLEM, errorMessage);
+        saveScreenshot();
+        saveDesktopScreenshot();
+        saveHtmlContentOfCurrentPage();
+        haltFurtherExecution();
     }
 
 }

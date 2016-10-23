@@ -1,6 +1,9 @@
 package se.claremont.autotest.support;
 
 import org.junit.Assert;
+import se.claremont.autotest.common.LogLevel;
+import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.tools.Utils;
 
 import java.io.*;
@@ -8,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +81,11 @@ public class SupportMethods {
         return returnDate;
     }
 
+
+    public static String htmlContentToDisplayableHtmlCode(String htmlContent){
+        return "<pre>" + LF + LF + htmlContent.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + LF + LF + "</pre>" + LF;
+    }
+
     /**
      * Line-feed for current OS
      */
@@ -143,4 +152,50 @@ public class SupportMethods {
         return CAPITALIZED_STRING.substring(0, 1).toUpperCase() +
                 CAPITALIZED_STRING.substring(1).replace('_', ' ').toLowerCase();
     }
+
+    /**
+     * Starts a program.
+     *
+     * @param program Program path
+     * @param arguments Arguments to pass to the program
+     */
+    public static void startProgram(String program, List<String> arguments){
+        ApplicationManager.startProgram(program, arguments, new TestCase(null, "dummy"));
+    }
+
+    /**
+     * Starts a program.
+     *
+     * @param programPathAndArgumentsString Program name, and path, and arguments.
+     */
+    public static void startProgram(String programPathAndArgumentsString){
+        ApplicationManager.startProgram(programPathAndArgumentsString, new TestCase(null, "dummy"));
+    }
+
+    /**
+     * Read file content of specified file
+     *
+     * @param filePath The path to the file to read.
+     * @return The text content of the file.
+     */
+    public static String getFileContent(String filePath){
+        String fileContent = null;
+        try(BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            fileContent = sb.toString();
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not read content of file '" + filePath + "'. It does not seem to be found.");
+        } catch (IOException e) {
+            System.out.println("Could not get file content from file '" + filePath + "'. " + e.getMessage());
+        }
+        return fileContent;
+    }
+
 }
