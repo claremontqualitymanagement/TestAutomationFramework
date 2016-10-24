@@ -1,16 +1,19 @@
 # TestAutomationFramework
 Test Automation Framework - TAF - "Never send a human to do a machine’s job".
 
-An Test Automated Framework brought to you from the Claremont team.
+An Test Automated Framework brought to you from the [Claremont team](http://www.claremont.se).
 
 
 Building instructions:
 Using Maven command:mvn clean install
 
+
 Running instructions:
 - With jar file: java -jar -DparameterName=parameterValue
+- CI server integration e.g. Jenkins, Team City etc.
 
-Read more about the documentation [here](documentation/SoftwareArchitectureDescription.html).
+
+Read more about the documentation [here](http://46.101.193.212/TAF/documentation/TAF%20introduction.html).
 
 
 
