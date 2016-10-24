@@ -1,5 +1,7 @@
 package se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.common.TestCaseLogReporter;
@@ -19,6 +21,8 @@ import java.util.List;
  * Created by jordam on 2016-09-18.
  */
 public class ApplicationManager {
+
+    private final static Logger logger = LoggerFactory.getLogger( ApplicationManager.class );
 
     TestCase testCase;
     BufferedReader output;
@@ -61,7 +65,7 @@ public class ApplicationManager {
             startProgram(program, arguments);
         } else {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Must state program name at least, to start program.");
-            System.out.println("Must state program name at least, to start a program.");
+            logger.debug( "Must state program name at least, to start a program." );
         }
     }
 

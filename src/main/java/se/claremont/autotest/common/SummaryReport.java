@@ -1,6 +1,9 @@
 package se.claremont.autotest.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,6 +17,9 @@ import java.util.stream.Collectors;
  * Created by jordam on 2016-08-25.
  */
 public class SummaryReport {
+
+    private final static Logger logger = LoggerFactory.getLogger( SummaryReport.class );
+
     int successfulTestCases = 0;
     int failedTestCasesWithNewDeviations = 0;
     int testCasesWithOnlyKnownErrors = 0;
@@ -369,7 +375,7 @@ public class SummaryReport {
         if(reportShouldBeWritten()){
             SupportMethods.saveToFile(createReport(), LogFolder.testRunLogFolder + "_summary.html");
             LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary report saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
-            System.out.println(LF + logPost.toString());
+            logger.debug( LF + logPost.toString() );
         }
     }
 

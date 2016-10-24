@@ -2,10 +2,13 @@ package se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggl
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.CliTestRunner;
 import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
+import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,6 +23,8 @@ import java.nio.file.Paths;
  * Created by jordam on 2016-10-21.
  */
 public class RobotSwingInteractionMethods {
+
+    private final static Logger logger = LoggerFactory.getLogger( RobotSwingInteractionMethods.class );
     TestCase testCase;
 
     public RobotSwingInteractionMethods(TestCase testCase){
@@ -28,7 +33,7 @@ public class RobotSwingInteractionMethods {
 
     public void captureScreenshot(){
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
-        System.out.println("Saving screenshot of desktop to '" + filePath + "'.");
+        logger.debug( "Saving screenshot of desktop to '" + filePath + "'." );
         CliTestRunner.testRun.fileCounter++;
         try{
             Path file = Paths.get(filePath);

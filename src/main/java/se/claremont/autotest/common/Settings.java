@@ -1,5 +1,7 @@
 package se.claremont.autotest.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
@@ -18,6 +20,8 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("SameParameterValue")
 public class Settings extends HashMap<String, String>{
+
+    private final static Logger logger = LoggerFactory.getLogger( Settings.class );
 
     //Some of these setting parameters are suppressed from log display in the summary report, where these settings othervice is displayed.
     public enum SettingParameters{
@@ -92,11 +96,11 @@ public class Settings extends HashMap<String, String>{
                 setCustomValue(line.split("=")[0], line.split("=")[line.split("=").length-1]);
             }
         } catch (IOException e) { //No file exist yet
-            System.out.println("Could not read Settings from file '" + settingsFilePath + "'.");
+            logger.error( "Could not read Settings from file '" + settingsFilePath + "'.", e );
             try {
                 toFile(settingsFilePath);
             }catch (Exception ex){
-                System.out.println("Could neither read Settings from file, nor write to file '" + settingsFilePath + "'. " + ex.toString());
+                logger.error( "Could neither read Settings from file, nor write to file '" + settingsFilePath + "'. " + ex.toString(), ex );
             }
         }
     }

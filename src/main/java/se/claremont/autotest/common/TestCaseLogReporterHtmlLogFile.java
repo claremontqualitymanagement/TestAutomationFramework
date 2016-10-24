@@ -1,6 +1,9 @@
 package se.claremont.autotest.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +15,9 @@ import java.util.Date;
  * Created by jordam on 2016-08-27.
  */
 class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
+
+    private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
+
     private final TestCase testCase;
     private Date runStartTime;
     private Date runEndTime;
@@ -124,7 +130,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      */
     public void report(){
         testCase.log(LogLevel.DEBUG, "Saving html report to '" + testCase.pathToHtmlLog + "'.");
-        System.out.println("Saving html report to '" + testCase.pathToHtmlLog + "'.");
+        logger.debug( "Saving html report to '" + testCase.pathToHtmlLog + "'." );
         if(testCase.testCaseLog.logPosts.size() > 0){
             this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
         } else {

@@ -1,6 +1,9 @@
 package se.claremont.autotest.dataformats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.List;
  * Created by jordam on 2016-10-18.
  */
 public class CsvParser {
+    private final static Logger logger = LoggerFactory.getLogger( CsvParser.class );
     public Table csvContent;
 
     public CsvParser(FileReader fileReader){
@@ -51,9 +55,9 @@ public class CsvParser {
             }
             fileContent = sb.toString();
         } catch (FileNotFoundException e) {
-            System.out.println("Could not read content of file '" + fileReader.toString() + "'. It does not seem to be found.");
-        } catch (IOException e) {
-            System.out.println("Could not get file content from file '" + fileReader.toString() + "'. " + e.getMessage());
+            logger.error( "Could not read content of file '" + fileReader.toString() + "'. It does not seem to be found.", e );
+        } catch (IOException ioe) {
+            logger.error( "Could not get file content from file '" + fileReader.toString() + "'. " + ioe.getMessage(), ioe );
         }
         return fileContent;
     }

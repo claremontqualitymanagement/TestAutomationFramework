@@ -3,7 +3,11 @@ package se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluec
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +22,9 @@ import java.util.List;
  * Created by jordam on 2016-09-28.
  */
 class WebPageCodeConstructor {
+
+    private final static Logger logger = LoggerFactory.getLogger( WebPageCodeConstructor.class );
+
     private WebDriver driver;
     private Constructors constructors = new Constructors();
     List<String> methodNames = new ArrayList<>();
@@ -63,7 +70,6 @@ class WebPageCodeConstructor {
         StringBuilder element = new StringBuilder();
         List<WebElement> webElements = driver.findElements(By.xpath("//*"));
         for(WebElement webElement : webElements){
-            System.out.println(webElement.toString());
             if(webElement.getAttribute("id") != null && webElement.getAttribute("id").length() > 0){
                 String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("id")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("id") + "\", DomElement.IdentificationType.BY_ID";
@@ -233,7 +239,7 @@ class WebPageCodeConstructor {
         public Constructor(String elementName, String constructorString){
             this.elementName = elementName;
             this.constructorString = constructorString;
-            System.out.println("Creating: " + SupportMethods.LF + this.toString());
+            logger.debug( "Creating: " + SupportMethods.LF + this.toString() );
         }
 
         public @Override String toString(){

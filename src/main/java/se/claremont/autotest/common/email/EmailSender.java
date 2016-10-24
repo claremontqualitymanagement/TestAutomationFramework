@@ -1,5 +1,9 @@
-package se.claremont.autotest.common;
+package se.claremont.autotest.common.email;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.claremont.autotest.common.Settings;
+import se.claremont.autotest.common.TestRun;
 import se.claremont.autotest.support.SupportMethods;
 
 import javax.mail.*;
@@ -10,7 +14,10 @@ import java.util.Properties;
 /**
  * Created by jordam on 2016-09-18.
  */
-class EmailSender {
+public class EmailSender {
+
+    private final static Logger logger = LoggerFactory.getLogger( EmailSender.class );
+
     private String hostName;
     private String senderAddress;
     private String[] recipientAddresses;
@@ -25,7 +32,7 @@ class EmailSender {
         UNMANAGED
     }
 
-    EmailSender(String hostName, String senderAddress, String[] recipientAddresses, String subjectLine, String htmlContent, String hostServerPort, String smtpOrGmail){
+    public EmailSender(String hostName, String senderAddress, String[] recipientAddresses, String subjectLine, String htmlContent, String hostServerPort, String smtpOrGmail){
         this.hostName = hostName;
         this.senderAddress = senderAddress;
         this.recipientAddresses = recipientAddresses;
@@ -70,7 +77,7 @@ class EmailSender {
             message.setContent(htmlContent, "text/html");
 
             Transport.send(message);
-            System.out.println("Sent email message successfully.");
+            logger.debug( "Sent email message successfully." );
             return "Sent email message successfully";
         }catch (MessagingException mex) {
             return "Something went terribly wrong sending the email. " + mex.toString();
@@ -95,7 +102,7 @@ class EmailSender {
 
         final String finalUsername = username;
         final String finalPassword = password;
-        System.out.println(finalUsername);
+        logger.debug( "finalUsername= " + finalUsername );
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -158,7 +165,7 @@ class EmailSender {
 
                 Transport.send(message);
 
-                System.out.println("Done");
+                logger.debug( "Done" );
 
             } catch (MessagingException e) {
                 throw new RuntimeException(e);

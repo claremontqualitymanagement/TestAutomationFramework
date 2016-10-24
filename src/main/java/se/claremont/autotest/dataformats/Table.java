@@ -1,6 +1,9 @@
 package se.claremont.autotest.dataformats;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +13,7 @@ import java.util.List;
  * Created by jordam on 2016-10-18.
  */
 public class Table {
+    private final static Logger logger = LoggerFactory.getLogger( Table.class );
     Row headlineRow;
     List<Row> rows = new ArrayList<>();
 
@@ -68,7 +72,7 @@ public class Table {
 
     public List<Row> rowsWithMatchingValueForHeadline(String headlineName, String regexValueToMatch){
         if(!headLineExist(headlineName)) {
-            System.out.println("Cannot find headline '" + headlineName + "'. Registered headlines are '" + headlineRow.toString() + "'.");
+            logger.debug( "Cannot find headline '" + headlineName + "'. Registered headlines are '" + headlineRow.toString() + "'." );
             return null;
         }
         List<Row> matches = new ArrayList<>();
@@ -115,22 +119,28 @@ public class Table {
         return sb.toString();
     }
 
-    public @Override String toString(){
+    @Override
+    public String toString(){
         StringBuilder sb = new StringBuilder();
         List<Integer> columnCharacterCounts = columnCharacterCount();
-        if(headlineRow != null){
-            for(int i = 0; i < headlineRow.dataValueList.size() ; i++){
-                sb.append(bufferStringWithBlanksToLength(headlineRow.dataValueList.get(i), columnCharacterCounts.get(i)));
-            }
-            sb.append(SupportMethods.LF);
-        }
-        if(rows != null){
-            for(Row row : rows){
-                for(int i = 0; i < row.dataValueList.size() ; i++){
-                    sb.append(bufferStringWithBlanksToLength(row.dataValueList.get(i), columnCharacterCounts.get(i)));
+        try {
+            if (headlineRow != null) {
+                for (int i = 0; i < headlineRow.dataValueList.size(); i++) {
+                    sb.append(bufferStringWithBlanksToLength(headlineRow.dataValueList.get(i), columnCharacterCounts.get(i)));
                 }
                 sb.append(SupportMethods.LF);
             }
+            if (rows != null) {
+                for (Row row : rows) {
+                    for (int i = 0; i < row.dataValueList.size(); i++) {
+                        sb.append(bufferStringWithBlanksToLength(row.dataValueList.get(i), columnCharacterCounts.get(i)));
+                    }
+                    sb.append(SupportMethods.LF);
+                }
+            }
+        }
+        catch (NullPointerException ne) {
+            logger.error( ne.getMessage(), ne);
         }
         return sb.toString();
     }

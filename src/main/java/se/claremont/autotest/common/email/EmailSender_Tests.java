@@ -1,8 +1,11 @@
-package se.claremont.autotest.common;
+package se.claremont.autotest.common.email;
 
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import se.claremont.autotest.common.Settings;
+import se.claremont.autotest.common.TestRun;
+import se.claremont.autotest.common.email.EmailSender;
 
 /**
  * Created by jordam on 2016-09-19.

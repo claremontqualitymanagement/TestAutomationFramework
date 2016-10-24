@@ -1,6 +1,9 @@
 package se.claremont.autotest.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +17,9 @@ import static se.claremont.autotest.common.TestCaseLogReporterHtmlLogFile.enumMe
  */
 @SuppressWarnings("WeakerAccess")
 class LogPost {
+
+    private final static Logger logger = LoggerFactory.getLogger( LogPost.class );
+
     protected final LogLevel logLevel;
     protected final String message;
     private final String htmlMessage;
@@ -158,12 +164,12 @@ class LogPost {
         StringBuilder sb = new StringBuilder();
         String[] parts = instring.split("'");
         if(instring.startsWith("'a")){
-            System.out.println("Initial DATA element.");
+            logger.debug( "Initial DATA element." );
             for(int i = 1; i < parts.length; i = i+2){
-                System.out.println("Data " + i + ": '" + parts[i] + "'");
+                logger.debug( "Data " + i + ": '" + parts[i] + "'" );
                 sb.append("'...'");
                 if(i+1 < parts.length){
-                    System.out.println("Text " + i+1 + ": '" + parts[i+1] + "'");
+                    logger.debug( "Text " + i+1 + ": '" + parts[i+1] + "'" );
                     sb.append(parts[i+1]);
                 }
             }
@@ -171,9 +177,9 @@ class LogPost {
             System.out.println("Initial text element.");
             for (int i = 0; i < parts.length; i = i+2){
                 sb.append(parts[i]);
-                System.out.println("Text " + i + ": '" + parts[i] + "'");
+                logger.debug( "Text " + i + ": '" + parts[i] + "'" );
                 if(i+1 < parts.length){
-                    System.out.println("Data " + i+1 + ": '" + parts[i+1] + "'");
+                    logger.debug( "Data " + i+1 + ": '" + parts[i+1] + "'" );
                     sb.append("'...'");
                 }
             }

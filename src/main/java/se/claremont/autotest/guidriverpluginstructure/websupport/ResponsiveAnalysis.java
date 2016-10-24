@@ -1,9 +1,12 @@
 package se.claremont.autotest.guidriverpluginstructure.websupport;
 
 import org.openqa.selenium.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,6 +19,9 @@ import java.util.List;
  * Created by jordam on 2016-10-15.
  */
 public class ResponsiveAnalysis {
+
+    private final static Logger logger = LoggerFactory.getLogger( ResponsiveAnalysis.class );
+
     List<ResolutionAssessment> elementCollections = new ArrayList<>();
     //List<CompareElement> oddElements = new ArrayList<>();
     TestCase testCase;
@@ -46,7 +52,9 @@ public class ResponsiveAnalysis {
     }
 
     private void reportRunProblemsIfIdentified(){
-        if(testCase == null) System.out.println("Cannot log results for web analysis since no test case is given. Aborting.");
+        if(testCase == null) {
+            logger.debug( "Cannot log results for web analysis since no test case is given. Aborting." );
+        }
         if(resolutions.size() < 2) testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot compare resolutions if only one resolution is entered.");
         if(driver == null) testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot assess responsive web analysis for driver that is null.");
     }
@@ -251,14 +259,14 @@ public class ResponsiveAnalysis {
             }catch (Exception ignored3){}
             try {
                 this.innerHtml = webElement.getAttribute("innerHTML");
-                System.out.println(innerHtml);
+                logger.debug( innerHtml );
             }catch (Exception ignored4){}
             for(WebElement child : immediateChildren){
                 try {
                     if(child.isDisplayed()) assessmentChildElements.add(new AssessmentElement(child));
                 }catch (Exception ignored){} //Stale element
             }
-            System.out.println(this.toString());
+            logger.debug( this.toString() );
         }
 
         public @Override String toString(){
@@ -421,7 +429,7 @@ public class ResponsiveAnalysis {
             for(AssessmentElement assessmentElement2 : this.displayedElementsTreeRootNode.toListOfAssessmentElementsIncludingSubtree()){
                 if(assessmentElement.isEqualTo(assessmentElement2)) {
                     return true;
-                };
+                }
             }
             return false;
         }

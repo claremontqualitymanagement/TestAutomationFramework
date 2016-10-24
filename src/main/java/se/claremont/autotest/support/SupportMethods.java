@@ -1,6 +1,8 @@
 package se.claremont.autotest.support;
 
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
@@ -22,6 +24,8 @@ import java.util.regex.Pattern;
  */
 public class SupportMethods {
 
+    private final static Logger logger = LoggerFactory.getLogger( SupportMethods.class );
+
     /**
      * Saves text based content to a file. If the file folder doesn't exist it is created.
      * @param content test based file content
@@ -32,11 +36,12 @@ public class SupportMethods {
 
         if(filePath == null ){
             System.out.println("Could not write file to null file path.");
+            logger.debug( "Could not write file to null file path." );
             return;
         }
-        System.out.println("Writing file content to '" + filePath + "'.");
+        logger.debug( "Writing file content to '" + filePath + "'." );
         if(content == null){
-            System.out.println("Warning! Attempting to write a null string to file '." + filePath + "' Replacing null with empty string.");
+            logger.debug( "Warning! Attempting to write a null string to file '." + filePath + "' Replacing null with empty string." );
             content = "";
         }
         try {
@@ -99,6 +104,7 @@ public class SupportMethods {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
             System.out.println("level: " + i + ": " + stackTraceElements[i].getMethodName() + " in class " + stackTraceElements[i].getClassName());
+            logger.debug( "level: " + i + ": " + stackTraceElements[i].getMethodName() + " in class " + stackTraceElements[i].getClassName() );
         }
     }
 
@@ -192,10 +198,10 @@ public class SupportMethods {
                 line = br.readLine();
             }
             fileContent = sb.toString();
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not read content of file '" + filePath + "'. It does not seem to be found.");
-        } catch (IOException e) {
-            System.out.println("Could not get file content from file '" + filePath + "'. " + e.getMessage());
+        } catch (FileNotFoundException fnfe) {
+            logger.error( "Could not read content of file '" + filePath + "'. It does not seem to be found.", fnfe );
+        } catch (IOException ioe) {
+            logger.error( "Could not get file content from file '" + filePath + "'. " + ioe.getMessage() );
         }
         return fileContent;
     }

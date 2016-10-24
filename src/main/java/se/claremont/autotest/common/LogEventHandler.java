@@ -1,5 +1,8 @@
 package se.claremont.autotest.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -9,6 +12,9 @@ import javax.ws.rs.core.Request;
  */
 @Path("logevent")
 public class LogEventHandler {
+
+    private final static Logger logger = LoggerFactory.getLogger( LogEventHandler.class );
+
     public LogEventHandler() {
         super();
     }
@@ -17,7 +23,7 @@ public class LogEventHandler {
     @Consumes("application/json")
     @Produces("text/plain")
     public String postLogEvent(@Context Request request, String json) {
-        System.out.println("received event:" + json);
+        logger.debug( "received event:" + json );
         //LogEventRouter.sendPost(json);
         return "event received " + json;
     }

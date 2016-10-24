@@ -55,7 +55,7 @@ public class TableVerifier {
         UNEVALUATED,
         NO_MATCH,
         ALL_MATCH,
-        PARTIAL_MATCH;
+        PARTIAL_MATCH
     }
 
     class TableAssessor{

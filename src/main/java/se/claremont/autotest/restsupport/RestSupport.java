@@ -94,7 +94,7 @@ public class RestSupport {
      * @return Return true if the response status is 200, othervice false;
      */
     public boolean isRespondingToGetRequest(String url){
-        return responseCodeFromGetRequest(url).equals(200);
+        return responseCodeFromGetRequest(url).equals( "200" );
     }
 
     /**

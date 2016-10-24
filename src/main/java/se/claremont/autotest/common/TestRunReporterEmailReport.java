@@ -1,5 +1,7 @@
 package se.claremont.autotest.common;
 
+import se.claremont.autotest.common.email.EmailSender;
+
 import java.util.ArrayList;
 
 /**

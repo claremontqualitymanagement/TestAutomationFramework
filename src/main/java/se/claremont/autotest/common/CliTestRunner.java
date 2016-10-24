@@ -3,7 +3,10 @@ package se.claremont.autotest.common;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 /**
  * CLI runner class for the test automation framework
@@ -12,8 +15,9 @@ import se.claremont.autotest.support.SupportMethods;
  */
 public class CliTestRunner {
 
-    public static final TestRun testRun = new TestRun();
+    private final static Logger logger = LoggerFactory.getLogger( CliTestRunner.class );
 
+    public static final TestRun testRun = new TestRun();
     private static final String LF = SupportMethods.LF;
 
     private static String helpText(){
@@ -75,7 +79,7 @@ public class CliTestRunner {
             } catch (ClassNotFoundException e) {
                     System.out.println("Class with name '" + arg + "' not found.");
                     e.printStackTrace();
-
+                    logger.error( "Class with name '" + arg + "' not found.", e );
                 }
             }
         }

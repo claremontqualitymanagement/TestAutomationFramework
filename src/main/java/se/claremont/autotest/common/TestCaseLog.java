@@ -1,6 +1,9 @@
 package se.claremont.autotest.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -13,6 +16,9 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("SameParameterValue")
 class TestCaseLog {
+
+    private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
+
     final ArrayList<LogPost> logPosts = new ArrayList<>();
     static int maxNumberOfCharactersInLogLevelNames = 0;
     private String testCaseName = null;
@@ -98,7 +104,7 @@ class TestCaseLog {
             }
         }
         LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStep, testStepClassName);
-        System.out.println(logPost.toString());
+        logger.debug( logPost.toString() );
         logPosts.add(logPost);
     }
 
