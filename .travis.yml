@@ -4,13 +4,17 @@ jdk:
 #  - oraclejdk7
 #  - openjdk6
 script:
-- mvn install
+- mvn install antrun:run
 before_deploy:
 #- export TAF_VERSION=$(ls target/TestAutomationFramework-*.jar)
 #- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
+#- gem install mime-types -v 2.6.2
+#- rvm 1.9.3 do gem install octokit -v 4.3.0
 - export TAF_VERSION=$(find . -name *TestAutomationFramework-*dependencies.jar | grep -v "doc" | grep -v "sources")
 deploy:
   provider: releases
+  edge:
+    branch: releases-fix
   api_key:
     secure: BnKQnxJ308fLM2WRDwQqIaZeKj0xxngspNmLFZawFGnh/aAA8uoN0jJQfipYU0BNipeld3NivKvEijzArC9Jx1w5jcfegstYLC+Zc0qourgClRLgn/Nc4IaSOLJsMzyrs9WhNpGLd70EQhPDAsbbQl8PKoWJBot1Z2TxhZn8mcIs+tXCCK8Agso508PsrGe4kAQO3HWfnYx3fey6833GGKWfDCQcWeAIDZCJKpmi7O9NVZC8gHSnVNy1yDSakN4PQVkmyDNoBUdsiQMkQKS66JAMu1taIAZ0LhcdFtF2DbSG+oYmSvFHu/EnoMkbJKP+kbxSJVOvTW91+b1v4CplXkipYhld/nUK9aIFaaFCe67NAO7fegO19BK5N4i4NaRkvNCLDgdV18ePy9JURcofDsapWl74ntRcKVYn8ZqHThNe2rttlj+H10h5INO77JsyJ8iZqG6C31r4XrIRj7Kgzf3xzDJnPve/kdcdT0w0E5e2Mdf4+YPF9cilVgfBmiM4oj9ga5tMWrzQQ+T7z3y5OwKLiAsQHLLQfU1877roYNIdwKYKBPDWfL7Lh6XYBExMGVEbzBIAo5DjhszJgT00VNDQMZDGtXziyMfvOZ7d2ySYTfZT/mjx1BQEB5hHu+KPpfYKC6OqeJPps2QmwEuO61ERYTkq2lELUoU3p79hR4M=
   skip_cleanup: true
