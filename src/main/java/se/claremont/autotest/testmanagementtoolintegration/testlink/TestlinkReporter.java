@@ -1,8 +1,6 @@
 package se.claremont.autotest.testmanagementtoolintegration.testlink;
 
-import se.claremont.autotest.common.LogLevel;
-import se.claremont.autotest.common.TestCase;
-import se.claremont.autotest.common.TestCaseLog;
+import se.claremont.autotest.common.*;
 import se.claremont.autotest.support.SupportMethods;
 import testlink.api.java.client.TestLinkAPIClient;
 import testlink.api.java.client.TestLinkAPIException;
@@ -14,9 +12,12 @@ import testlink.api.java.client.TestLinkAPIResults;
  *
  * Created by jordam on 2016-10-25.
  */
-public class TestlinkReporter {
+public class TestlinkReporter implements TestRunReporter {
     public static String devKey;
     public static String url;
+    String testProjectName = null;
+    String buildName = null;
+    String userName = null;
     boolean hasReportedConfigText = false;
     TestCaseLog environmentIssuesLog = null;
     TestLinkAPIClient api = null;
@@ -27,9 +28,14 @@ public class TestlinkReporter {
      * @param devKey The API key that can be generated from within Testlink GUI (My settings), for a specified user.
      * @param url The url to the testlink installation API, for example 'http://127.0.0.1/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
      * @param environmentIssuesLog A possible log to report environment log posts to - prefferably for a full test run.
+     * @param testProjectName The project name in Testlink where the test case can be found.
+     * @param buildName A build name to pass to Testlink test results, e.g. 'AutomationExecution'.
+     * @param userName The user name that creates test cases in Testlink if they don't exist.
      */
-    public TestlinkReporter(String devKey, String url, TestCaseLog environmentIssuesLog){
+    public TestlinkReporter(String devKey, String url, TestCaseLog environmentIssuesLog, String testProjectName, String buildName, String userName){
         this.environmentIssuesLog = environmentIssuesLog;
+        this.buildName = buildName;
+        this.testProjectName = testProjectName;
         this.devKey = devKey;
         this.url = url;
         try {
@@ -45,21 +51,29 @@ public class TestlinkReporter {
         }
     }
 
+    @Deprecated
+    public void report(){
+        log(LogLevel.INFO, "The report() method of TestlinkReporter is not used. To report a test case result, use the evaluateTestCase() method.");
+    }
+
+    @Deprecated
+    public void evaluateTestSet(TestSet testSet){
+        log(LogLevel.INFO, "The evaluateTestSet() method of TestlinkReporter is not used. To report a test case result, use the evaluateTestCase() method.");
+    }
+
     /**
      * Reports the result of a test case to Testlink.
      *
-     * @param testProject The project name in Testlink where the test case can be found.
-     * @param buildName A build name to pass to Testlink test results, e.g. 'AutomationExecution'.
      * @param testCase The test case name in Testlink to report results to.
      */
-    public void reportResult(String testProject, String buildName, TestCase testCase){
+    public void evaluateTestCase(TestCase testCase){
         if(apiIsNotReady()) {
             reportApiProblem(testCase);
             return;
         }
         evaluateTestCaseIfNotAlreadyDone(testCase);
-        createTestCaseInTestlinkIfNotExistThere(testProject, testCase);
-        tryReportResults(testProject, buildName, testCase);
+        createTestCaseInTestlinkIfNotExistThere(testCase);
+        tryReportResults(testCase);
     }
 
     /**
@@ -78,13 +92,13 @@ public class TestlinkReporter {
         return sb.toString();
     }
 
-    private void createTestCaseInTestlinkIfNotExistThere(String testProject, TestCase testCase){
+    private void createTestCaseInTestlinkIfNotExistThere(TestCase testCase){
         try {
-            api.getTestCaseIDByName(testProject, testCase.testName, testCase.testSetName);
+            api.getTestCaseIDByName(testProjectName, testCase.testName, testCase.testSetName);
         }catch (Exception e){
             try {
-                api.createTestCase("name", testProject, testCase.testSetName, testCase.testName, "Test case automatically created by test automation execution.", "Step1", "ExpectedToPass", "Medium");
-                log(LogLevel.EXECUTED, "Creating test case '" + testCase.testName + "' in Testlink (in test suite '" + testCase.testSetName + "' and project '" + testProject + "').");
+                api.createTestCase(userName, testProjectName, testCase.testSetName, testCase.testName, "Test case automatically created by test automation execution.", "Step1", "ExpectedToPass", "Medium");
+                log(LogLevel.EXECUTED, "Creating test case '" + testCase.testName + "' in Testlink (in test suite '" + testCase.testSetName + "' and project '" + testProjectName + "').");
             } catch (TestLinkAPIException e1) {
                 log(LogLevel.EXECUTION_PROBLEM, "Tried to create test case in Testlink since the test case didn't exist. This did not work out as expected." + e1.getMessage());
             }
@@ -92,9 +106,9 @@ public class TestlinkReporter {
 
     }
 
-    private void tryReportResults(String testProject, String buildName, TestCase testCase){
+    private void tryReportResults(TestCase testCase){
         try{
-            doReportResult(testProject, testCase.testSetName, testCase.testName, buildName, testCase.testCaseLog.toString(), testlinkResultStatusFromTestCaseResultStatus(testCase.resultStatus));
+            doReportResult(testProjectName, testCase.testSetName, testCase.testName, buildName, testCase.testCaseLog.toString(), testlinkResultStatusFromTestCaseResultStatus(testCase.resultStatus));
             testCase.log(LogLevel.EXECUTED, "Reported results to Testlink.");
         }catch (Exception e){
             if(!hasReportedConfigText) {
