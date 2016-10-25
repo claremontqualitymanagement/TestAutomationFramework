@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v1.0.1-beta91</version>
+    <version>v1.0.1-beta92</version>
     <packaging>jar</packaging>
 
     <name>Test Automation Framework - TAF</name>
@@ -53,9 +53,9 @@
         </repository>
         -->
         <repository>
-            <id>mvnrepo</id>
-            <name>MVNrepository</name>
-            <url>http://mvnrepository.com</url>
+            <id>mvnrepository.com</id>
+            <name>MVNRepository</name>
+            <url>https://mvnrepository.com</url>
         </repository>
         <repository>
             <id>claremontqualitymanagement</id>
@@ -217,6 +217,11 @@
             <groupId>ant</groupId>
             <artifactId>ant-jsch</artifactId>
             <version>1.6.5</version>
+        </dependency>
+        <dependency>
+            <groupId>br.eti.kinoshita</groupId>
+            <artifactId>testlink-java-api</artifactId>
+            <version>1.9.14-0</version>
         </dependency>
     </dependencies>
 

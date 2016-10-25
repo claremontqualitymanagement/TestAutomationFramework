@@ -6,11 +6,24 @@ sudo apt-get install firefox
 sudo apt-get upgrade firefox
 dpkg -L xvfb
 
+sudo apt-get install google-chrome-stable
+sudo apt-get install -f
+sudo apt-get install google-chrome-stable
+
+sudo apt-get update
+
+sudo reboot
+
+*** Xvfb ***
+
 xvfb-run firefox http://google.com
 xvfb-run --server-args "-screen 0 1024x768x16" firefox
 xvfb-run --server-args "-screen 0 1024x768x16" firefox http://google.com
+xvfb-run --server-args "-screen 0 1024x768x16" google-chrome-stable http://google.com
 
 scp target/TypeAndTell-1.0.1-beta17-jar-with-dependencies.jar taf@46.101.193.212:/home/taf/
+scp google-chrome-stable_current_amd64.deb taf@46.101.193.212:/home/taf/
+
 
 *** git grejer ***
 

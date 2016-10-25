@@ -135,6 +135,7 @@ public class Settings extends HashMap<String, String>{
             setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
             setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, File.separator + "Applications" + File.separator + "Firefox.app" + File.separator);
+            setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "phantomjs-2.1-macosx" );
         }
         else if (Utils.getInstance().amILinuxOS() ) {
             //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);
@@ -142,7 +143,9 @@ public class Settings extends HashMap<String, String>{
             setValue(SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
             setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
             setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver");
+            //setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, File.separator + "usr" + File.separator + "bin" + File.separator + "google-chrome-stable");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, File.separator + "usr" + File.separator + "bin" + File.separator + "firefox");
+            setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "phantomjs-2.1.1-linux-x86_64" );
         }
         // lets assume jvm is running upon windows os.
         else {
@@ -151,6 +154,7 @@ public class Settings extends HashMap<String, String>{
             setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
             setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+            setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");
         }
         setValue(SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "");
         setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");
@@ -159,7 +163,6 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
-        setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");
     }
 
     String toHtmlTable(){
