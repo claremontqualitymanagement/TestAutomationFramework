@@ -1,3 +1,4 @@
+*** ubuntu grejer ***
 sudo apt-cache search java8
 sudo apt-get install openjdk-8-jdk
 sudo apt-get install xvfb
@@ -10,3 +11,22 @@ xvfb-run --server-args "-screen 0 1024x768x16" firefox
 xvfb-run --server-args "-screen 0 1024x768x16" firefox http://google.com
 
 scp target/TypeAndTell-1.0.1-beta17-jar-with-dependencies.jar taf@46.101.193.212:/home/taf/
+
+*** git grejer ***
+
+git fetch origin
+git branch development origin/development
+git checkout development
+
+kan behövas:
+git branch --set-upstream development origin/development
+
+git remote -v
+git push --set-upstream origin
+
+Kolla att allt ser ok ut med:
+git remote show origin
+
+* skapa en ny tag för byggnation via webhooks till TravisCI
+git tag v1.0.1-beta88
+git push origin v1.0.1-beta88
