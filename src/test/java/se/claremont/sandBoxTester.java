@@ -201,11 +201,24 @@ public class sandBoxTester {
     public void phantomJSdriverTest(){
         TestCase testCase = new TestCase(null, "dummyName");
         WebDriverManager wdm = new WebDriverManager(testCase);
-        WebDriver driver = wdm.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME);
+        WebDriver driver = wdm.initializeWebDriver(WebDriverManager.WebBrowserType.PHANTOMJS);
         driver.get("http://www.claremont.se");
         testCase.log(LogLevel.INFO, driver.getTitle());
         testCase.log(LogLevel.INFO, testCase.toJson());
         driver.close();
+        testCase.report();
+    }
+
+    @Ignore
+    @Test
+    public void testNewElementMethods(){
+        TestCase testCase = new TestCase(null, "dummyName");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("http://www.claremont.se");
+        DomElement kontaktLink = new DomElement("KONTAKT", DomElement.IdentificationType.BY_LINK_TEXT);
+        web.click(kontaktLink);
+        web.verifyTextExistOnCurrentPage("Birger Jarlsgatan 7");
+        web.makeSureDriverIsClosed();
         testCase.report();
     }
 

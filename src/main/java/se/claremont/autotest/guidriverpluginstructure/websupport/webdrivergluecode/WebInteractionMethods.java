@@ -4,8 +4,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.CliTestRunner;
 import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
@@ -16,7 +14,6 @@ import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswingglu
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,9 +32,6 @@ import java.util.List;
  */
 @SuppressWarnings("SameParameterValue")
 public class WebInteractionMethods implements GuiDriver {
-
-    private final static Logger logger = LoggerFactory.getLogger( WebInteractionMethods.class );
-
     @SuppressWarnings("WeakerAccess")
     public WebDriver driver;
     private final TestCase testCase;
@@ -81,7 +75,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param milliseconds The number of millseconds to wait.
      */
-    public synchronized void wait(int milliseconds){
+    public void wait(int milliseconds){
         try {
             driver.manage().wait((long)milliseconds);
             log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
@@ -309,7 +303,7 @@ public class WebInteractionMethods implements GuiDriver {
     @SuppressWarnings("WeakerAccess")
     public void saveScreenshot(){
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
-        logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
+        System.out.println("Saving screenshot of web browser content to '" + filePath + "'.");
         CliTestRunner.testRun.fileCounter++;
         byte[] fileImage = null;
         try{
@@ -381,6 +375,7 @@ public class WebInteractionMethods implements GuiDriver {
             ImageIO.write(dest, "png", new File(filePath));
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not write image of " + domElement.LogIdentification() + " to file '" + filePath + "'.");
+            return;
         }
     }
 
@@ -403,7 +398,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @return Return true if element is found
      */
     public boolean exists(DomElement domElement){
-        return getRuntimeElement(domElement) != null;
+        return getRuntimeElementWithoutLogging(domElement) != null;
     }
 
     /**
@@ -936,7 +931,7 @@ public class WebInteractionMethods implements GuiDriver {
 
         for (String tabId : driver.getWindowHandles())
         {
-            if ( !currentTabId.equals(tabId) )
+            if (currentTabId != tabId)
             {
                 driver.switchTo().window(tabId);
                 String tabName = driver.getTitle();
@@ -972,7 +967,7 @@ public class WebInteractionMethods implements GuiDriver {
 
         for (String tabId : driver.getWindowHandles())
         {
-            if ( !currentTabId.equals(tabId) )
+            if (currentTabId != tabId)
             {
                 driver.switchTo().window(tabId);
                 String tabName = driver.getTitle();
@@ -1364,89 +1359,93 @@ public class WebInteractionMethods implements GuiDriver {
      * @param element Declared DomElement to interact with
      * @return WebElement for WebDriver interaction
      */
-    private WebElement getRuntimeElement(DomElement element){
-        WebElement returnElement = null;
-        try {
-            if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
-                returnElement = driver.findElement(By.linkText(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
-                returnElement = driver.findElement(By.id(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
-                returnElement = driver.findElement(By.xpath(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
-                returnElement = driver.findElement(By.name(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
-                returnElement = driver.findElement(By.cssSelector(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
-                returnElement = driver.findElement(By.className(element.recognitionString));
-            } else {
-                returnElement = null;
-            }
-        }catch (Exception e){
-            log(LogLevel.DEBUG, "Could not get element by '" + element.recognitionString +
-                    "' with identification technique '" + element.identificationType.toString() + "'.");
-        }
-        return returnElement;
+    private WebElement getRuntimeElementWithoutLogging(DomElement element){
+        List<WebElement> relevantWebElements = gatherRelevantElements(element);
+        return mostRelevantElement(relevantWebElements, element);
     }
 
     /**
-     * Gets a runtime element from the WebDriver driver to be able to interact with it
+     * Gathers a list of relevant elements when trying to get hold of the WebElement corresponding to a DomElement.
      *
-     * @param element Declared DomElement to interact with
-     * @return WebElement for WebDriver interaction
+     * @param element The DomElement to find
+     * @return Returns a list of relevant matches for DomElement
      */
-    private WebElement getRuntimeElementWithoutLogging(DomElement element){
-        WebElement returnElement = null;
+    private List<WebElement> gatherRelevantElements(DomElement element){
+        List<WebElement> webElements = new ArrayList<>();
         try {
             if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
-                returnElement = driver.findElement(By.linkText(element.recognitionString));
+                webElements = driver.findElements(By.linkText(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
-                returnElement = driver.findElement(By.id(element.recognitionString));
+                webElements = driver.findElements(By.id(element.recognitionString));
             } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
-                returnElement = driver.findElement(By.xpath(element.recognitionString));
+                webElements = driver.findElements(By.xpath(element.recognitionString));
             } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
-                returnElement = driver.findElement(By.name(element.recognitionString));
+                webElements = driver.findElements(By.name(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
-                returnElement = driver.findElement(By.cssSelector(element.recognitionString));
+                webElements = driver.findElements(By.cssSelector(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
-                returnElement = driver.findElement(By.className(element.recognitionString));
+                webElements = driver.findElements(By.className(element.recognitionString));
             } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
-                List<WebElement> potentialMatches = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
-                if(potentialMatches.size() == 1){
-                    return potentialMatches.get(0);
-                } else if( potentialMatches.size() > 1){
-                    List<WebElement> visibleElements = new ArrayList<>();
-                    for(WebElement potentialMatch : potentialMatches){
-                        if(potentialMatch.isDisplayed()) visibleElements.add(potentialMatch);
-                    }
-                    if(visibleElements.size() == 1){
-                        return visibleElements.get(0);
-                    }
-                } else {
-                    potentialMatches = driver.findElements(By.xpath("//*[contains(text(), '" + element.recognitionString + "')]"));
-                    if(potentialMatches.size() == 1){
-                        returnElement = potentialMatches.get(0);
-                    } else {
-                        List<WebElement> visibleElements = new ArrayList<>();
-                        for(WebElement potentialMatch : potentialMatches){
-                            if(potentialMatch.isDisplayed()){
-                                visibleElements.add(potentialMatch);
-                            }
-                        }
-                        if(visibleElements.size() == 1){
-                            returnElement = visibleElements.get(0);
-                        } else {
-                            log(LogLevel.DEBUG, "Searched for element with the visible text '" + element.recognitionString + "' but found " + visibleElements.size() + " elements that was visible and matched the text string.");
-                        }
-
-                    }
+                webElements = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
+                if(webElements.size() == 0){
+                    webElements = driver.findElements(By.xpath("//*[contains(text(), '" + element.recognitionString + "')]"));
                 }
             }else {
-                returnElement = null;
+                log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
             }
-        }catch (Exception ignored){
+        }catch (Exception e){
+            log(LogLevel.DEBUG, "Tried to identify " + element.LogIdentification() + ", but something went wrong. " + e.getMessage());
         }
-        return returnElement;
+        return webElements;
+    }
+
+    /**
+     * If several elements are found, the displayed one is returned. If several still are displayed, returning the enabled one.
+     * @param webElements List of elements
+     * @param element The element (only for logging purposes)
+     * @return Returns a webElement, or null if none are found.
+     */
+    private WebElement mostRelevantElement(List<WebElement> webElements, DomElement element){
+        if (webElements.size() == 0) return null;
+        if (webElements.size() == 1) return webElements.get(0);
+
+        //More than one match - trying to find best, most relevant match
+        String debugString = "Found " + webElements.size() + " elements when trying to identify " + element.LogIdentification() + ". ";
+
+        List<WebElement> visibleElementsList = new ArrayList<>();
+        for(WebElement webElement : webElements){
+            if(webElement.isDisplayed()) visibleElementsList.add(webElement);
+        }
+
+        if(visibleElementsList.size() == 0){
+            log(LogLevel.DEBUG, debugString + "None of these elements were visible. Returning first match and holding thumbs this is the best match.");
+            return webElements.get(0);
+        }
+
+        if(visibleElementsList.size() == 1){
+            log(LogLevel.DEBUG, debugString + "Only one of these was visible. Returning that element, assuming that was the element meant.");
+            return visibleElementsList.get(0);
+        }
+
+        List<WebElement> enabledElements = new ArrayList<>();
+        for(WebElement visibleElement : visibleElementsList){
+            if(visibleElement.isEnabled()) enabledElements.add(visibleElement);
+        }
+
+        debugString += visibleElementsList.size() + " of these elements were visible, and out of these " + enabledElements.size() + " were enabled. ";
+
+        if(enabledElements.size() == 0){
+            log(LogLevel.DEBUG, debugString + "Using first visible match. No element was enabled, so no element seemed more likely than another.");
+            return visibleElementsList.get(0);
+        }
+
+        if(enabledElements.size() == 1){
+            log(LogLevel.DEBUG, debugString + "Assuming the only enabled element is the element to interact with.");
+            return enabledElements.get(0);
+        }
+
+        log(LogLevel.DEBUG, debugString + visibleElementsList.size() + " of these was visible. Returning the first match in hope of successful execution.");
+        return  visibleElementsList.get(0);
     }
 
     /**
@@ -1457,9 +1456,9 @@ public class WebInteractionMethods implements GuiDriver {
      * @return WebElement for WebDriver interaction
      */
     private WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
+        double startTickCount = System.currentTimeMillis();
         WebElement returnElement = getRuntimeElementWithoutLogging(element);
         long sleepTime = 50;
-        double startTickCount = System.currentTimeMillis();
         while(returnElement == null && System.currentTimeMillis()- startTickCount < timeoutInSeconds *1000){
             try {
                 Thread.sleep(sleepTime);
