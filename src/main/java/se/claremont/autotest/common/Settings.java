@@ -168,9 +168,9 @@ public class Settings extends HashMap<String, String>{
     String toHtmlTable(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table class=\"settingsTable\">").append(SupportMethods.LF);
-        for(String key : keySet()){
-            if(isSuppressedFromLogDisplay(key)) continue;
-            stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(key).append("</td><td class=\"settingsParameterValue\">").append(get(key)).append("</td></tr>").append(SupportMethods.LF);
+        for(SettingParameters valuePair : SettingParameters.values()){
+            if(valuePair.isSuppressedFromLogDisplay()) continue;
+            stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(valuePair.friendlyName()).append("</td><td class=\"settingsParameterValue\">").append(getValue(valuePair)).append("</td></tr>").append(SupportMethods.LF);
         }
         stringBuilder.append("</table>").append(SupportMethods.LF);
         return stringBuilder.toString();

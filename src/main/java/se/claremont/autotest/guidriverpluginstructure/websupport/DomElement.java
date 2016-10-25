@@ -2,6 +2,9 @@ package se.claremont.autotest.guidriverpluginstructure.websupport;
 
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Object declaration mechanisms for web elements
  *
@@ -12,7 +15,7 @@ public class DomElement implements GuiElement {
     @SuppressWarnings("WeakerAccess")
     public final String name;
     private final String page;
-    public final String recognitionString;
+    public final List<String> recognitionStrings;
     public final IdentificationType identificationType;
 
     /**
@@ -34,12 +37,30 @@ public class DomElement implements GuiElement {
      * @param identificationType what mechanism to use for identification
      */
     public DomElement (String recognitionString, IdentificationType identificationType){
+        this.recognitionStrings = new ArrayList<>();
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        //System.out.println(callingMethodUsingConstructor.getMethodName() + " " +  callingMethodUsingConstructor.getClassName());
         name = callingMethodUsingConstructor.getMethodName();
         page = callingMethodUsingConstructor.getClassName();
-        this.recognitionString = recognitionString;
+        this.recognitionStrings.add(recognitionString);
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Constructor for use for example with several languages
+     *
+     * @param alternativeRecognitionStrings An array of recognition strings for this element
+     * @param identificationType The method of identification
+     */
+    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType){
+        this.recognitionStrings = new ArrayList<>();
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        name = callingMethodUsingConstructor.getMethodName();
+        page = callingMethodUsingConstructor.getClassName();
+        for(String recognitionString : alternativeRecognitionStrings){
+            this.recognitionStrings.add(recognitionString);
+        }
         this.identificationType = identificationType;
     }
 
