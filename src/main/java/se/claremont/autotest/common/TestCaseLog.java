@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  */
 @SuppressWarnings("SameParameterValue")
-class TestCaseLog {
+public class TestCaseLog {
 
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
 

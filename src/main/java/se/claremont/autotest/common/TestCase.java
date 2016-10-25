@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
  * Created by jordam on 2016-08-17.
  */
 public class TestCase {
-    public final TestCaseLog testCaseLog;
+    public TestCaseLog testCaseLog;
     public String testName;
     String pathToHtmlLog;
-    final String testSetName;
+    public final String testSetName;
     final Date startTime;
     Date stopTime;
     final TestCaseData testCaseData;
     final KnownErrorsList testCaseKnownErrorsList = new KnownErrorsList();
     private final KnownErrorsList testSetKnownErrorsEncounteredInThisTestCase = new KnownErrorsList();
-    ResultStatus resultStatus = ResultStatus.UNEVALUATED;
+    public ResultStatus resultStatus = ResultStatus.UNEVALUATED;
     private boolean reported = false;
     @SuppressWarnings("WeakerAccess")
     final KnownErrorsList testSetKnownErrors;
@@ -242,7 +242,7 @@ public class TestCase {
     /**
      * When a test case is evaluated after a test run the result status is set
      */
-    enum ResultStatus{
+    public enum ResultStatus{
         UNEVALUATED,
         PASSED,
         FAILED_WITH_ONLY_KNOWN_ERRORS,
@@ -253,7 +253,7 @@ public class TestCase {
     /**
      * Evaluates test case execution testCaseLog to assess if the test case ran successfully, if known errors were encountered - or new errors. Return result status.
      */
-    void evaluateResultStatus(){
+    public void evaluateResultStatus(){
         ArrayList<LogPost> erroneousPosts = testCaseLog.onlyErroneousLogPosts();
         if(erroneousPosts.size() == 0) {
             resultStatus = ResultStatus.PASSED;

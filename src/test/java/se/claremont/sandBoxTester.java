@@ -12,6 +12,8 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnaly
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.support.PerformanceTimer;
+import se.claremont.autotest.support.SupportMethods;
+import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
 import se.claremont.tools.Utils;
 
 import java.io.File;
@@ -110,6 +112,7 @@ public class sandBoxTester extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
+    @Ignore
     @Test
     public void timerTests(){
         PerformanceTimer timer = new PerformanceTimer("testTimer", currentTestCase);
@@ -174,6 +177,7 @@ public class sandBoxTester extends TestSet{
         web.saveScreenshot();
     }
 
+    @Ignore
     @Test
     public void testSwingApplicationStart(){
         int javaProcessesBefore = numberOfJavaProcesses();
@@ -203,6 +207,7 @@ public class sandBoxTester extends TestSet{
 
     }
 
+    @Ignore
     @Test
     public void phantomJSdriverTest(){
         WebDriverManager wdm = new WebDriverManager(currentTestCase);
@@ -213,6 +218,7 @@ public class sandBoxTester extends TestSet{
         driver.close();
     }
 
+    @Ignore
     @Test
     public void testNewElementMethods(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
@@ -223,5 +229,12 @@ public class sandBoxTester extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
+    @Ignore
+    @Test
+    public void testTestlinkConnection(){
+        TestlinkReporter testlink = new TestlinkReporter("acfe1a1390663c86caa38cbb614e0aba", "http://172.16.13.49/testlink/lib/api/xmlrpc/v1/xmlrpc.php", currentTestCase.testCaseLog);
+        currentTestCase.log(LogLevel.INFO, testlink.setupInformation());
+        testlink.reportResult("dummyProject", "dummyBuildName", currentTestCase);
+    }
 
 }
