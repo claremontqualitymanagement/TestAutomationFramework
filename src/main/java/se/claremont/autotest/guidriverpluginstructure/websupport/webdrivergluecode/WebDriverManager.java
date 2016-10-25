@@ -13,6 +13,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import se.claremont.autotest.common.*;
 import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -115,7 +116,11 @@ public class WebDriverManager {
     }
 
     public static List<File> scanComputerForBrowsersAndRegisterTheirLocations(List<String> fileNames){
-        List<File> matchingFiles = FileTester.searchForSpecificFiles(new File("C:\\"), fileNames);
+        List<File> matchingFiles = null;
+        if( Utils.getInstance().amIWindowsOS() )
+            matchingFiles = FileTester.searchForSpecificFiles(new File("C:\\"), fileNames);
+        else if( Utils.getInstance().amIMacOS() || Utils.getInstance().amILinuxOS() )
+            matchingFiles = FileTester.searchForSpecificFiles(new File("/"), fileNames);
         return matchingFiles;
     }
 
