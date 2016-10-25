@@ -4,6 +4,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.CliTestRunner;
 import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
@@ -14,6 +16,7 @@ import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswingglu
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,6 +35,9 @@ import java.util.List;
  */
 @SuppressWarnings("SameParameterValue")
 public class WebInteractionMethods implements GuiDriver {
+
+    private final static Logger logger = LoggerFactory.getLogger( WebInteractionMethods.class );
+
     @SuppressWarnings("WeakerAccess")
     public WebDriver driver;
     private final TestCase testCase;
@@ -75,7 +81,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param milliseconds The number of millseconds to wait.
      */
-    public void wait(int milliseconds){
+    public synchronized void wait(int milliseconds){
         try {
             driver.manage().wait((long)milliseconds);
             log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
@@ -303,7 +309,7 @@ public class WebInteractionMethods implements GuiDriver {
     @SuppressWarnings("WeakerAccess")
     public void saveScreenshot(){
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
-        System.out.println("Saving screenshot of web browser content to '" + filePath + "'.");
+        logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
         CliTestRunner.testRun.fileCounter++;
         byte[] fileImage = null;
         try{
@@ -931,7 +937,7 @@ public class WebInteractionMethods implements GuiDriver {
 
         for (String tabId : driver.getWindowHandles())
         {
-            if (currentTabId != tabId)
+            if ( !currentTabId.equals(tabId) )
             {
                 driver.switchTo().window(tabId);
                 String tabName = driver.getTitle();
@@ -967,7 +973,7 @@ public class WebInteractionMethods implements GuiDriver {
 
         for (String tabId : driver.getWindowHandles())
         {
-            if (currentTabId != tabId)
+            if ( !currentTabId.equals(tabId) )
             {
                 driver.switchTo().window(tabId);
                 String tabName = driver.getTitle();
