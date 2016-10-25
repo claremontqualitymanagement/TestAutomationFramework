@@ -1373,25 +1373,27 @@ public class WebInteractionMethods implements GuiDriver {
     private List<WebElement> gatherRelevantElements(DomElement element){
         List<WebElement> webElements = new ArrayList<>();
         try {
-            if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
-                webElements = driver.findElements(By.linkText(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
-                webElements = driver.findElements(By.id(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
-                webElements = driver.findElements(By.xpath(element.recognitionString));
-            } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
-                webElements = driver.findElements(By.name(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
-                webElements = driver.findElements(By.cssSelector(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
-                webElements = driver.findElements(By.className(element.recognitionString));
-            } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
-                webElements = driver.findElements(By.xpath("//*[.='" + element.recognitionString + "']"));
-                if(webElements.size() == 0){
-                    webElements = driver.findElements(By.xpath("//*[contains(text(), '" + element.recognitionString + "')]"));
+            for(String recognitionString : element.recognitionStrings){
+                if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
+                    webElements.addAll(driver.findElements(By.linkText(recognitionString)));
+                } else if (element.identificationType == DomElement.IdentificationType.BY_ID) {
+                    webElements.addAll(driver.findElements(By.id(recognitionString)));
+                } else if(element.identificationType == DomElement.IdentificationType.BY_X_PATH) {
+                    webElements.addAll(driver.findElements(By.xpath(recognitionString)));
+                } else if(element.identificationType == DomElement.IdentificationType.BY_NAME) {
+                    webElements.addAll(driver.findElements(By.name(recognitionString)));
+                } else if (element.identificationType == DomElement.IdentificationType.BY_CSS){
+                    webElements.addAll(driver.findElements(By.cssSelector(recognitionString)));
+                } else if (element.identificationType == DomElement.IdentificationType.BY_CLASS){
+                    webElements.addAll(driver.findElements(By.className(recognitionString)));
+                } else if (element.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
+                    webElements.addAll(driver.findElements(By.xpath("//*[.='" + recognitionString + "']")));
+                    if(webElements.size() == 0){
+                        webElements.addAll(driver.findElements(By.xpath("//*[contains(text(), '" + recognitionString + "')]")));
+                    }
+                }else {
+                    log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
                 }
-            }else {
-                log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
             }
         }catch (Exception e){
             log(LogLevel.DEBUG, "Tried to identify " + element.LogIdentification() + ", but something went wrong. " + e.getMessage());
