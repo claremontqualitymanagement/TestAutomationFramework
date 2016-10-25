@@ -234,7 +234,7 @@ public class sandBoxTester extends TestSet{
     public void testTestlinkConnection(){
         TestlinkReporter testlink = new TestlinkReporter("acfe1a1390663c86caa38cbb614e0aba", "http://172.16.13.49/testlink/lib/api/xmlrpc/v1/xmlrpc.php", currentTestCase.testCaseLog);
         currentTestCase.log(LogLevel.INFO, testlink.setupInformation());
-        testlink.reportResult("dummyProject", "dummyBuildName", currentTestCase);
+        testlink.reportResult("dummyProject", "TestAutomationExecution", currentTestCase);
     }
 
 }
