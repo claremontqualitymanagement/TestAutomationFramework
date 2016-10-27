@@ -83,5 +83,6 @@ public class CliTestRunner {
                 }
             }
         }
+        System.exit(TestRun.exitCode);
     }
 }

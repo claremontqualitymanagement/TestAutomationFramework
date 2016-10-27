@@ -1,10 +1,13 @@
 package se.claremont.autotest.testmanagementtoolintegration.testlink;
 
 import se.claremont.autotest.common.*;
+import se.claremont.autotest.restsupport.JsonParser;
 import se.claremont.autotest.support.SupportMethods;
 import testlink.api.java.client.TestLinkAPIClient;
 import testlink.api.java.client.TestLinkAPIException;
 import testlink.api.java.client.TestLinkAPIResults;
+
+import java.util.ArrayList;
 
 
 /**
@@ -12,7 +15,8 @@ import testlink.api.java.client.TestLinkAPIResults;
  *
  * Created by jordam on 2016-10-25.
  */
-public class TestlinkReporter implements TestRunReporter {
+public class TestlinkReporter {
+    ArrayList<String> projects = new ArrayList<>();
     public static String devKey;
     public static String url;
     String testProjectName = null;
@@ -33,22 +37,31 @@ public class TestlinkReporter implements TestRunReporter {
      * @param userName The user name that creates test cases in Testlink if they don't exist.
      */
     public TestlinkReporter(String devKey, String url, TestCaseLog environmentIssuesLog, String testProjectName, String buildName, String userName){
+        String about = null;
         this.environmentIssuesLog = environmentIssuesLog;
         this.buildName = buildName;
+        this.userName = userName;
         this.testProjectName = testProjectName;
         this.devKey = devKey;
         this.url = url;
         try {
             api = new TestLinkAPIClient(devKey, url);
+            //about = api.about().toString();
         } catch (Exception e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not connect to Testlink at url '" + url + "' with the supplied devKey '" + devKey + "'. " + e.getMessage());
+            e.printStackTrace();
         }
-        if(!api.isConnected){
-            log(LogLevel.EXECUTION_PROBLEM, "Not connected to Testlink at url '" + url + "'. Are you sure you have enabled the API in Testlink config?" + SupportMethods.LF + setupInformation());
+/*        if(!api.isConnected){
+            if(api.connectErrorMsg.contains("Unable to create a XML-RPC client.")){
+                log(LogLevel.EXECUTION_PROBLEM, "Probably got the wrong url to Testlink RPC API? Current url = '" + url + "'.");
+            }
+            log(LogLevel.EXECUTION_PROBLEM, "Not connected to Testlink at url '" + url + "'. " + SupportMethods.LF + "Error msg: " + api.connectErrorMsg + SupportMethods.LF + "About: " + about + SupportMethods.LF + "Are you sure you have enabled the API in Testlink config?" + SupportMethods.LF + setupInformation());
             hasReportedConfigText = true;
         } else {
             log(LogLevel.INFO, "Connected to Testlink API at '" + url + "'. " + api.connectErrorMsg);
         }
+  */
+        this.projects = testlinkProjects();
     }
 
     @Deprecated
@@ -61,19 +74,97 @@ public class TestlinkReporter implements TestRunReporter {
         log(LogLevel.INFO, "The evaluateTestSet() method of TestlinkReporter is not used. To report a test case result, use the evaluateTestCase() method.");
     }
 
+    public String testlinkProjectsAndPlansListing(){
+        StringBuilder sb = new StringBuilder(SupportMethods.LF);
+        ArrayList<String> projects = testlinkProjects();
+        for(String project : projects){
+            sb.append("Project: '").append(project).append("'").append(SupportMethods.LF);
+            ArrayList<String> plans = testlinkTestPlans(project);
+            if(plans.size() == 0) continue;
+            sb.append("   Plans in '" + project + "':").append(SupportMethods.LF);
+            for (String plan : plans){
+                sb.append("   > '").append(plan).append("'").append(SupportMethods.LF);
+                ArrayList<String> suites = testlinkTestSuites(project, plan);
+                if(suites.size() == 0) continue;
+                sb.append("      Test suites in plan '" + plan + "':").append(SupportMethods.LF);
+                for (String suite : suites){
+                    sb.append("        > '").append(suite).append("'").append(SupportMethods.LF);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
     /**
      * Reports the result of a test case to Testlink.
      *
      * @param testCase The test case name in Testlink to report results to.
      */
-    public void evaluateTestCase(TestCase testCase){
+    public void evaluateTestCase(String testProjectName, String testPlanName, String testSuiteName, String testName, TestCase testCase){
+        log(LogLevel.INFO, "Evaluating test case '" + testCase.testName + "' in test suite '" + testCase.testSetName + "' for Testlink.");
+        TestlinkTestResult testResult = new TestlinkTestResult(testProjectName, testPlanName, testSuiteName, testName, testCase);
         if(apiIsNotReady()) {
             reportApiProblem(testCase);
-            return;
+            //return;
         }
         evaluateTestCaseIfNotAlreadyDone(testCase);
-        createTestCaseInTestlinkIfNotExistThere(testCase);
-        tryReportResults(testCase);
+        //createTestCaseInTestlinkIfNotExistThere(testCase, testResult);
+        tryReportResults(testCase, testResult);
+    }
+
+    public ArrayList<String> testlinkProjects(){
+        ArrayList<String> projects = new ArrayList<>();
+        String queryResult = null;
+        try {
+            queryResult = api.getProjects().toString();
+        } catch (TestLinkAPIException e) {
+            e.printStackTrace();
+        }
+        for(String entry : queryResult.split(",")){
+            if(entry.contains("=")){
+                if(entry.split("=")[0].trim().toLowerCase().equals("name")){
+                    projects.add(entry.split("=")[1].trim());
+                }
+            }
+        }
+        return projects;
+    }
+
+    public ArrayList<String> testlinkTestPlans(String projectName){
+        ArrayList<String> testPlans = new ArrayList<>();
+        String queryResult = "";
+        try {
+             queryResult = api.getProjectTestPlans(projectName).toString();
+        } catch (TestLinkAPIException e) {
+            e.printStackTrace();
+        }
+        for(String entry : queryResult.split(",")){
+            if(entry.contains("=")){
+                if(entry.split("=")[0].trim().toLowerCase().equals("name")){
+                    testPlans.add(entry.split("=")[1].trim());
+                }
+            }
+        }
+        return testPlans;
+    }
+
+
+    public ArrayList<String> testlinkTestSuites(String projectName, String testPlanName){
+        ArrayList<String> suites = new ArrayList<>();
+        String queryResult = null;
+        try {
+            queryResult = api.getTestSuitesForTestPlan(projectName, testPlanName).toString();
+        } catch (TestLinkAPIException e) {
+            e.printStackTrace();
+        }
+        for(String entry : queryResult.split(",")){
+            if(entry.contains("=")){
+                if(entry.split("=")[0].trim().toLowerCase().equals("name")){
+                    suites.add(entry.split("=")[1].trim());
+                }
+            }
+        }
+        return suites;
     }
 
     /**
@@ -92,28 +183,27 @@ public class TestlinkReporter implements TestRunReporter {
         return sb.toString();
     }
 
-    private void createTestCaseInTestlinkIfNotExistThere(TestCase testCase){
+    private void createTestCaseInTestlinkIfNotExistThere(TestCase testCase, TestlinkTestResult testlinkTestResult){
         try {
-            api.getTestCaseIDByName(testProjectName, testCase.testName, testCase.testSetName);
+            api.getTestCaseIDByName(testlinkTestResult.testProjectName, testlinkTestResult.testName, testlinkTestResult.testSuiteName);
         }catch (Exception e){
             try {
-                api.createTestCase(userName, testProjectName, testCase.testSetName, testCase.testName, "Test case automatically created by test automation execution.", "Step1", "ExpectedToPass", "Medium");
-                log(LogLevel.EXECUTED, "Creating test case '" + testCase.testName + "' in Testlink (in test suite '" + testCase.testSetName + "' and project '" + testProjectName + "').");
+                api.createTestCase(userName, testlinkTestResult.testProjectName, testlinkTestResult.testSuiteName, testlinkTestResult.testName, "Test case automatically created by test automation execution.", "Step1", "ExpectedToPass", "Medium");
+                log(LogLevel.EXECUTED, "Creating test case '" + testlinkTestResult.testName + "' in Testlink (in test suite '" + testlinkTestResult.testSuiteName + "' and project '" + testlinkTestResult.testProjectName + "').");
             } catch (TestLinkAPIException e1) {
                 log(LogLevel.EXECUTION_PROBLEM, "Tried to create test case in Testlink since the test case didn't exist. This did not work out as expected." + e1.getMessage());
             }
         }
-
     }
 
-    private void tryReportResults(TestCase testCase){
+    private void tryReportResults(TestCase testCase, TestlinkTestResult testlinkTestResult){
         try{
-            doReportResult(testProjectName, testCase.testSetName, testCase.testName, buildName, testCase.testCaseLog.toString(), testlinkResultStatusFromTestCaseResultStatus(testCase.resultStatus));
+            doReportResult(testlinkTestResult.testProjectName, testlinkTestResult.testPlanName, testlinkTestResult.testName, buildName, testCase.testCaseLog.toString(), testlinkResultStatusFromTestCaseResultStatus(testCase.resultStatus));
             testCase.log(LogLevel.EXECUTED, "Reported results to Testlink.");
         }catch (Exception e){
             if(!hasReportedConfigText) {
-                log(LogLevel.DEVIATION_EXTRA_INFO, setupInformation());
-                testCase.log(LogLevel.DEVIATION_EXTRA_INFO, setupInformation());
+                log(LogLevel.DEVIATION_EXTRA_INFO, setupInformation() + SupportMethods.LF + testlinkProjectsAndPlansListing());
+                testCase.log(LogLevel.DEVIATION_EXTRA_INFO, setupInformation() + SupportMethods.LF + testlinkProjectsAndPlansListing());
                 hasReportedConfigText = true;
             }
             log(LogLevel.EXECUTION_PROBLEM, "Error from TestlinkReporter: " + e.getMessage());
@@ -155,6 +245,24 @@ public class TestlinkReporter implements TestRunReporter {
             environmentIssuesLog.log(logLevel, message);
         }else {
             System.out.println(logLevel.toString() + ": " + message);
+        }
+    }
+
+    class TestlinkTestResult{
+        String testProjectName;
+        String testPlanName;
+        String testSuiteName;
+        String testName;
+        String notes;
+        String resultStatus;
+
+        public TestlinkTestResult(String testProjectName, String testPlanName, String testSuiteName, String testName, TestCase testCase){
+            this.testProjectName = testProjectName;
+            this.testPlanName = testPlanName;
+            this.testSuiteName = testSuiteName;
+            this.testName = testName;
+            this.notes = testCase.testCaseLog.toString();
+            this.resultStatus = testlinkResultStatusFromTestCaseResultStatus(testCase.resultStatus);
         }
     }
 }

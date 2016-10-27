@@ -278,10 +278,13 @@ public class TestCase {
 
         if(newErrorsEncountered && knownErrorsEncountered){
             resultStatus = ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS;
+            TestRun.exitCode = -1;
         } else if (newErrorsEncountered){
             resultStatus = ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
+            TestRun.exitCode = -1;
         } else {
             resultStatus = ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS;
+            TestRun.exitCode = -1;
         }
     }
 

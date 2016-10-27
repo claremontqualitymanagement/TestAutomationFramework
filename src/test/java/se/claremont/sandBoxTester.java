@@ -11,9 +11,11 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
+import se.claremont.autotest.restsupport.RestSupport;
 import se.claremont.autotest.support.PerformanceTimer;
 import se.claremont.autotest.support.SupportMethods;
 import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
+import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter2;
 import se.claremont.tools.Utils;
 
 import java.io.File;
@@ -229,12 +231,25 @@ public class sandBoxTester extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
+
+    @Ignore
+    @Test
+    public void testRestToTestlink(){
+        RestSupport rest = new RestSupport(currentTestCase);
+        rest.responseCodeFromGetRequest("http://172.16.13.49/testlink/lib/api/rest/v1/testprojects/Lekprojekt/testcases");
+    }
+
     @Ignore
     @Test
     public void testTestlinkConnection(){
-        TestlinkReporter testlink = new TestlinkReporter("acfe1a1390663c86caa38cbb614e0aba", "http://172.16.13.49/testlink/lib/api/xmlrpc/v1/xmlrpc.php", currentTestCase.testCaseLog, "specialTestProject", "TestAutomationExecutionBuild", "jordam");
-        currentTestCase.log(LogLevel.INFO, testlink.setupInformation());
-        testlink.evaluateTestCase(currentTestCase);
+        //TestlinkReporter2 testlink2 = new TestlinkReporter2("50980a19f7180911b06cf34da66478c0", "http://172.16.13.49/testlink/lib/api/xmlrpc/v1/xmlrpc.php");
+        //TestlinkReporter2.doIt("50980a19f7180911b06cf34da66478c0", "http://172.16.13.49/testlink/lib/api/xmlrpc/v1/xmlrpc.php", 1, 2, "1", 1);
+        TestlinkReporter testlink = new TestlinkReporter("2a861343a3dca60b876ca5b6567568de", "http://127.0.0.1:81/testlink/lib/api/xmlrpc/v1/xmlrpc.php", currentTestCase.testCaseLog, "Mina sidor", "Autotest", "joda");
+        //currentTestCase.log(LogLevel.INFO, testlink.testlinkProjectsAndPlansListing());
+
+
+        //currentTestCase.log(LogLevel.INFO, testlink.setupInformation());
+        testlink.evaluateTestCase("Mina sidor", "se.claremont.sandBoxTester", "se.claremont.sandBoxTester", "testTestlinkConnection", currentTestCase);
     }
 
 }
