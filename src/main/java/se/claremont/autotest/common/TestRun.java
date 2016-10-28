@@ -8,7 +8,7 @@ import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkRepo
  */
 public class TestRun {
     public int fileCounter = 0;
-    static int exitCode = 0;
+    public static int exitCode = 0;     //TODO: create exitCode table
     public TestSet currentTestSet = null;
     public static final Settings settings = new Settings();
     public TestRunReporterFactory reporters = new TestRunReporterFactory();

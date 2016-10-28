@@ -293,14 +293,16 @@ public class TestCase {
      * Also halts further test case execution.
      */
     private void assertExecutionResultsToTestRunner(){
-        if(resultStatus == ResultStatus.UNEVALUATED) evaluateResultStatus();
+        if(resultStatus == ResultStatus.UNEVALUATED)
+            evaluateResultStatus();
         if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
             Assert.assertFalse(testCaseLog.toString(), true);
+            TestRun.exitCode = -1;
         } else if(resultStatus == ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
             Assume.assumeTrue(false);
             Assert.assertFalse(testCaseLog.toString(), true);
+            TestRun.exitCode = -1;
         }
-
     }
 
 
