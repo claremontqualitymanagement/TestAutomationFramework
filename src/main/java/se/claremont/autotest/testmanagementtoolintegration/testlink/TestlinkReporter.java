@@ -108,7 +108,7 @@ public class TestlinkReporter {
             //return;
         }
         evaluateTestCaseIfNotAlreadyDone(testCase);
-        //createTestCaseInTestlinkIfNotExistThere(testCase, testResult);
+        createTestCaseInTestlinkIfNotExistThere(testCase, testResult);
         tryReportResults(testCase, testResult);
     }
 
@@ -183,12 +183,41 @@ public class TestlinkReporter {
         return sb.toString();
     }
 
-    private void createTestCaseInTestlinkIfNotExistThere(TestCase testCase, TestlinkTestResult testlinkTestResult){
+    private void createTestProjectInTestlinkIfNotExistThere(String testPlanName){
+        if(testlinkProjects().contains(testPlanName))return;
+        try{
+            log(LogLevel.DEBUG, api.createTestProject(testProjectName, testProjectName.substring(0,1), "").toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void createTestPlanInTestlinkIfNotExistThere(String testPlanName){
+        createTestProjectInTestlinkIfNotExistThere(testProjectName);
+        if(testlinkTestPlans(testProjectName).contains(testPlanName)) return;
+        log(LogLevel.INFO, "Test plan '" + testPlanName + "' does not exist in test project '" + testProjectName + "'.");
+    }
+
+    private void createTestSuiteInTestlinkIfNotExistThere(String testSuiteName, String testPlanName){
+        createTestPlanInTestlinkIfNotExistThere(testPlanName);
+        if(testlinkTestSuites(testProjectName, testPlanName).contains(testSuiteName)) return;
         try {
-            api.getTestCaseIDByName(testlinkTestResult.testProjectName, testlinkTestResult.testName, testlinkTestResult.testSuiteName);
+            log(LogLevel.DEBUG, api.createTestSuite(testProjectName, testSuiteName, "Automatically created from test automation TAF.").toString());
+        } catch (TestLinkAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void createTestCaseInTestlinkIfNotExistThere(TestCase testCase, TestlinkTestResult testlinkTestResult){
+        createTestProjectInTestlinkIfNotExistThere(testProjectName);
+        createTestPlanInTestlinkIfNotExistThere(testlinkTestResult.testPlanName);
+        createTestSuiteInTestlinkIfNotExistThere(testlinkTestResult.testSuiteName, testlinkTestResult.testPlanName);
+        try {
+            log(LogLevel.DEBUG, api.getTestCaseIDByName(testlinkTestResult.testProjectName, testlinkTestResult.testName, testlinkTestResult.testSuiteName).toString());
         }catch (Exception e){
             try {
-                api.createTestCase(userName, testlinkTestResult.testProjectName, testlinkTestResult.testSuiteName, testlinkTestResult.testName, "Test case automatically created by test automation execution.", "Step1", "ExpectedToPass", "Medium");
+                log(LogLevel.DEBUG, api.createTestCase(userName, testlinkTestResult.testProjectName, testlinkTestResult.testSuiteName, testlinkTestResult.testName, "Test case automatically created by test automation execution.", "Step1", "ExpectedToPass", "Medium").toString());
                 log(LogLevel.EXECUTED, "Creating test case '" + testlinkTestResult.testName + "' in Testlink (in test suite '" + testlinkTestResult.testSuiteName + "' and project '" + testlinkTestResult.testProjectName + "').");
             } catch (TestLinkAPIException e1) {
                 log(LogLevel.EXECUTION_PROBLEM, "Tried to create test case in Testlink since the test case didn't exist. This did not work out as expected." + e1.getMessage());

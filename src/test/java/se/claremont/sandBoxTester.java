@@ -247,6 +247,7 @@ public class sandBoxTester extends TestSet{
         TestlinkReporter testlink = new TestlinkReporter("2a861343a3dca60b876ca5b6567568de", "http://127.0.0.1:81/testlink/lib/api/xmlrpc/v1/xmlrpc.php", currentTestCase.testCaseLog, "Mina sidor", "Autotest", "joda");
         //currentTestCase.log(LogLevel.INFO, testlink.testlinkProjectsAndPlansListing());
 
+        //currentTestCase.log(LogLevel.INFO, testlink.testlinkProjectsAndPlansListing());
 
         //currentTestCase.log(LogLevel.INFO, testlink.setupInformation());
         testlink.evaluateTestCase("Mina sidor", "se.claremont.sandBoxTester", "se.claremont.sandBoxTester", "testTestlinkConnection", currentTestCase);

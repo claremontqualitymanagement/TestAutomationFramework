@@ -37,7 +37,8 @@ public class Settings extends HashMap<String, String>{
         CHROME_DRIVER_PATH_TO_EXE    (),
         PHANTOMJS_PATH_TO_EXE        (),
         FIREFOX_PATH_TO_BROWSER_EXE  (),
-        TEST_RUN_LOG_FOLDER          ();
+        TEST_RUN_LOG_FOLDER          (),
+        PLUGIN_FOLDER                ();
 
         private boolean isSuppressedFromLogDisplay;
 
@@ -163,6 +164,7 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
+        setValue(SettingParameters.PLUGIN_FOLDER, getValue(SettingParameters.BASE_LOG_FOLDER) + File.separator + "Plugins");
     }
 
     String toHtmlTable(){
