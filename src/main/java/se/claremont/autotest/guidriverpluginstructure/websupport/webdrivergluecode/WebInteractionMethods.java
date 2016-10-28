@@ -6,10 +6,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.CliTestRunner;
-import se.claremont.autotest.common.LogFolder;
-import se.claremont.autotest.common.LogLevel;
-import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.common.*;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
@@ -262,7 +259,27 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         try {
-            enterText(webElement, textToWrite);
+            enterText(webElement, textToWrite, false);
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
+            saveScreenshot();
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
+    }
+
+    /**
+     * Writes text to the given element after the element value has been cleared.
+     *
+     * @param guiElement The element to write to
+     * @param textToWrite The text to write
+     */
+    public void writeAfterClear(GuiElement guiElement, String textToWrite){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        try {
+            enterText(webElement, textToWrite, true);
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
             saveScreenshot();
@@ -282,7 +299,7 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement domElement = (DomElement) guiElement;
         try {
             WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-            enterText(webElement, text);
+            enterText(webElement, text, false);
             try{
                 webElement.submit();
                 log(LogLevel.DEBUG, "Submitted text '" + text + "' to " + domElement.LogIdentification() + ".");
@@ -1294,12 +1311,17 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param element Selenium WebElement to interact with
      * @param text Text to enter
+     * @param clearElement clears the existing element value
      * @throws TextEnteringError Error thrown when text cannot be entered by sendKeys method
      */
-    private void enterText(WebElement element, String text) throws TextEnteringError{
+    private void enterText(WebElement element, String text, boolean clearElement) throws TextEnteringError{
         if(element != null){
             try {
-                element.sendKeys(text);
+                if( clearElement ) {
+                    element.clear();
+                    log(LogLevel.DEBUG, "Clearing existing text " +  element.getText().toString() );
+                }
+                    element.sendKeys(text);
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "'.");
                 throw new TextEnteringError();
