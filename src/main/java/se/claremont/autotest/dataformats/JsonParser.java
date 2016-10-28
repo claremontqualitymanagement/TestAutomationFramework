@@ -22,8 +22,13 @@ public class JsonParser {
     }
 
     public static Integer getInt(String content, String parameterName){
+        if(content == null || parameterName == null) return null;
         JSONObject object = new JSONObject(content);
-        return object.getInt(parameterName);
+        Integer returnValue = null;
+        try{
+            returnValue = object.getInt(parameterName);
+        }catch (Exception ignored){}
+        return returnValue;
     }
 
     public static void verifyMandatoryFieldIsNotEmpty(String content, String mandatoryParameterName, TestCase testCase){
