@@ -218,11 +218,6 @@
             <artifactId>ant-jsch</artifactId>
             <version>1.6.5</version>
         </dependency>
-        <dependency>
-            <groupId>br.eti.kinoshita</groupId>
-            <artifactId>testlink-java-api</artifactId>
-            <version>1.9.14-0</version>
-        </dependency>
     </dependencies>
 
     <distributionManagement>

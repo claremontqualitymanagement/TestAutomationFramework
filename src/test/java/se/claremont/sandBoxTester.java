@@ -14,7 +14,6 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.webdriverglueco
 import se.claremont.autotest.restsupport.RestSupport;
 import se.claremont.autotest.support.PerformanceTimer;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
 import se.claremont.tools.Utils;
 
 import java.io.File;
@@ -231,20 +230,5 @@ public class sandBoxTester extends TestSet{
     }
 
 
-    @Ignore
-    @Test
-    public void testRestToTestlink(){
-        RestSupport rest = new RestSupport(currentTestCase);
-        rest.responseCodeFromGetRequest("http://172.16.13.49/testlink/lib/api/rest/v1/testprojects/Lekprojekt/testcases");
-    }
-
-    @Ignore
-    @Test
-    public void testTestlinkConnection(){
-        TestlinkReporter testlink = new TestlinkReporter("2a861343a3dca60b876ca5b6567568de", "http://127.0.0.1:81/testlink/lib/api/xmlrpc/v1/xmlrpc.php", currentTestCase.testCaseLog, "Mina sidor", "Autotest", "joda", false);
-        currentTestCase.log(LogLevel.INFO, "Information in testlink: " + SupportMethods.LF + testlink.testlinkProjectsAndPlansListing());
-        //currentTestCase.log(LogLevel.EXECUTION_PROBLEM, "Breaking the execution passed status.");
-        testlink.evaluateTestCase("Mina sidor", "se.claremont.sandBoxTester", "se.claremont.sandBoxTester", "testTestlinkConnection", currentTestCase);
-    }
 
 }
