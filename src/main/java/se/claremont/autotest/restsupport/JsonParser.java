@@ -8,6 +8,8 @@ import se.claremont.autotest.common.TestCase;
 import java.util.ArrayList;
 import java.util.List;
 
+import static se.claremont.autotest.dataformats.JsonParser.isJson;
+
 /**
  * Class for JSON data management and verification
  *
@@ -17,11 +19,13 @@ import java.util.List;
 public class JsonParser {
 
     public static String get(String content, String parameterName){
+        if(!isJson(content)) return null;
         JSONObject object = new JSONObject(content);
         return object.getString(parameterName);
     }
 
     public static Integer getInt(String content, String parameterName){
+        if(!isJson(content)) return null;
         JSONObject object = new JSONObject(content);
         return object.getInt(parameterName);
     }

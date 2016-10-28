@@ -17,13 +17,39 @@ import java.util.List;
 public class JsonParser {
 
     public static String get(String content, String parameterName){
-        JSONObject object = new JSONObject(content);
-        return object.getString(parameterName);
+        JSONObject object = null;
+        if(!isJson(content)) return null;
+        String returnValue = null;
+        try {
+            object = new JSONObject(content);
+        }catch (Exception e){
+            return null;
+        }
+        try {
+            returnValue = object.getString(parameterName);
+        }catch (Exception ignored){}
+        return returnValue;
+    }
+
+    public static boolean isJson(String content){
+        try {
+            JSONObject object = new JSONObject(content);
+            return true;
+        }catch (Exception e){
+            return  false;
+        }
     }
 
     public static Integer getInt(String content, String parameterName){
+        if(!isJson(content)) return null;
+
         if(content == null || parameterName == null) return null;
-        JSONObject object = new JSONObject(content);
+        JSONObject object = null;
+        try {
+            object = new JSONObject(content);
+        }catch (Exception ignored){
+            return null;
+        }
         Integer returnValue = null;
         try{
             returnValue = object.getInt(parameterName);
