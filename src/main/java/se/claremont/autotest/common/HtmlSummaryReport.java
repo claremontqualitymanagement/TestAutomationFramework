@@ -349,6 +349,7 @@ public class HtmlSummaryReport {
     private String htmlElementExecutedTestCasesStatusList(){
         return "          <h2>Test case summary</h2>" + LF +
                 "          <table class=\"" + HtmlStyleNames.STRIPED_ROWS.toString() + " " + HtmlStyleNames.HOVERABLE.toString() + "\" id=\"" + HtmlStyleNames.EXECUTED_TEST_CASES.toString() + "\">" + LF +
+                "            <tr><th>Test set</th><th>Test case name</th><th>Test status</th><th>Log</th></tr>" + LF +
                 "      " + testCaseSummary +
                 "          </table>" + LF;
     }

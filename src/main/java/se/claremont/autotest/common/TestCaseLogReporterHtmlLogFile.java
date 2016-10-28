@@ -164,14 +164,16 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private String htmlSectionHtmlHead(){
         return "  <head>" + LF + LF +
                 "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
-                "    <meta charset=\"UTF-8\">" + LF +
-                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\">" + LF +
+                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\"/>" + LF +
+                "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF +
                 "    <style>" + LF +
                 styles() +
                 "    </style>" + LF + LF +
                 scriptSection() +
                 "  </head>" + LF + LF;
     }
+
 
     private String htmlSectionTestCaseLogEntries(){
         return "      <h2>Test case testCaseLog entries</h2>" + LF +
