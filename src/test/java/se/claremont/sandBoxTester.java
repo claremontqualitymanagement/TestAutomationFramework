@@ -14,8 +14,8 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.webdriverglueco
 import se.claremont.autotest.restsupport.RestSupport;
 import se.claremont.autotest.support.PerformanceTimer;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
-import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter2;
+//import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
+//import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter2;
 import se.claremont.tools.Utils;
 
 import java.io.File;
@@ -239,6 +239,7 @@ public class sandBoxTester extends TestSet{
         rest.responseCodeFromGetRequest("http://172.16.13.49/testlink/lib/api/rest/v1/testprojects/Lekprojekt/testcases");
     }
 
+    /*
     @Ignore
     @Test
     public void testTestlinkConnection(){
@@ -251,5 +252,6 @@ public class sandBoxTester extends TestSet{
         //currentTestCase.log(LogLevel.INFO, testlink.setupInformation());
         testlink.evaluateTestCase("Mina sidor", "se.claremont.sandBoxTester", "se.claremont.sandBoxTester", "testTestlinkConnection", currentTestCase);
     }
+    */
 
 }

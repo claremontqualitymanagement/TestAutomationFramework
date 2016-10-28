@@ -220,8 +220,8 @@
         </dependency>
         <dependency>
             <groupId>br.eti.kinoshita</groupId>
-        <artifactId>testlink-java-api</artifactId>
-        <version>1.9.14-0</version>
+            <artifactId>testlink-java-api</artifactId>
+            <version>1.9.14-0</version>
         </dependency>
     </dependencies>
 

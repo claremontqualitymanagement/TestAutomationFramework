@@ -1,6 +1,6 @@
 package se.claremont.autotest.common;
 
-import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
+//import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
 
 /**
  * A test run is the entity of every time some set(s) of test cases are run.
