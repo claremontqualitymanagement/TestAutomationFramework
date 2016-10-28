@@ -1,10 +1,8 @@
 package se.claremont.autotest.pluginmanager;
 
-import com.sun.scenario.Settings;
 import se.claremont.autotest.common.Settings.SettingParameters;
 import se.claremont.autotest.common.TestRun;
 import se.claremont.autotest.filetestingsupport.FileTester;
-import se.claremont.autotest.support.SupportMethods;
 
 import java.io.File;
 import java.net.URLClassLoader;
