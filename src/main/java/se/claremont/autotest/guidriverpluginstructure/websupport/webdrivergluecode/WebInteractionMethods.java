@@ -79,6 +79,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @param milliseconds The number of millseconds to wait.
      */
     public synchronized void wait(int milliseconds){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         try {
             driver.manage().wait((long)milliseconds);
             log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
@@ -91,6 +96,11 @@ public class WebInteractionMethods implements GuiDriver {
      * Browser back button
      */
     public void goBack(){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         try{
             driver.navigate().back();
             log(LogLevel.EXECUTED, "Navigating back in browser.");
@@ -131,6 +141,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @param outputPilePath File path to output file
      */
     public void mapCurrentPage(String outputPilePath){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         WebPageCodeConstructor.ConstructWebPageCode(driver, outputPilePath);
     }
 
@@ -173,6 +188,10 @@ public class WebInteractionMethods implements GuiDriver {
      * Sending accept to popup
      */
     public void acceptAlert() {
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         try {
             WebDriverWait wait = new WebDriverWait(driver, 5);
             wait.until(ExpectedConditions.alertIsPresent());
@@ -190,6 +209,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @param height The new height of the browser window
      */
     public void setBrowserWindowSize(int width, int height) {
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         log(LogLevel.DEBUG, "Re-sizing the browser window from (width/height) " + driver.manage().window().getSize().width + "/" + driver.manage().window().getSize().height + " pixels to " + width + "/" + height + " pixels.");
         try{
             driver.manage().window().setSize(new Dimension(width, height));
@@ -325,6 +349,11 @@ public class WebInteractionMethods implements GuiDriver {
      */
     @SuppressWarnings("WeakerAccess")
     public void saveScreenshot(){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
         logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
         CliTestRunner.testRun.fileCounter++;
@@ -368,6 +397,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @param filePath The file name of the file to write the image to.
      */
     public void saveDomElementScreenshot(DomElement domElement, String filePath){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " when trying to capture an image of it.");
@@ -440,6 +474,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @param visibleText The visible text of the element to find
      */
     public void clickOnElementWithTheVisibleText(String visibleText){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         List<WebElement> potentialClickObjects = driver.findElements(By.xpath("//*[.='" + visibleText + "']"));
         if(potentialClickObjects.size() == 0){
             log(LogLevel.DEBUG, "No exact match for string '" + visibleText + "' found. Trying to find elements containing the text instead.");
@@ -684,6 +723,10 @@ public class WebInteractionMethods implements GuiDriver {
      * @param textAsRegexPattern test string to find
      */
     public void verifyTextAsRegexPatternExistInPageSource(String textAsRegexPattern){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String pageSource = driver.getPageSource();
         if(SupportMethods.isRegexMatch(pageSource, textAsRegexPattern)){
             log(LogLevel.VERIFICATION_PASSED, "The regular expression pattern '" + textAsRegexPattern + "' could be found on the current page.");
@@ -703,6 +746,10 @@ public class WebInteractionMethods implements GuiDriver {
      */
     @SuppressWarnings("unused")
     public void verifyPageTitleAsRegex(String expectedTitleAsRegexPattern){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String currentTitle = driver.getTitle();
         if(SupportMethods.isRegexMatch(currentTitle, expectedTitleAsRegexPattern)){
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + currentTitle + "', and that title matches the given regex pattern '" + expectedTitleAsRegexPattern + "'.");
@@ -723,6 +770,10 @@ public class WebInteractionMethods implements GuiDriver {
      */
     @SuppressWarnings("unused")
     public void verifyPageTitle(String expectedTitle){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String currentTitle = driver.getTitle();
         if(currentTitle.equals(expectedTitle)){
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + expectedTitle + "' as expected.");
@@ -744,6 +795,11 @@ public class WebInteractionMethods implements GuiDriver {
     @SuppressWarnings("SameParameterValue")
     public void verifyPageTitleAsRegexWithTimeout(String expectedTitleAsRegexPattern, int timeoutInSeconds){
         double startTime = System.currentTimeMillis();
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         String currentTitle = driver.getTitle();
         long retryPeriodInMS = 50;
         while(!SupportMethods.isRegexMatch(currentTitle, expectedTitleAsRegexPattern) && System.currentTimeMillis() - startTime < timeoutInSeconds *1000){
@@ -775,6 +831,10 @@ public class WebInteractionMethods implements GuiDriver {
     @SuppressWarnings("SameParameterValue")
     public void verifyPageTitleWithTimeout(String expectedTitle, int timeoutInSeconds){
         double startTime = System.currentTimeMillis();
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String currentTitle = driver.getTitle();
         long retryPeriodInMS = 50;
         while(!currentTitle.equals(expectedTitle) && System.currentTimeMillis() - startTime < timeoutInSeconds *1000){
@@ -882,6 +942,10 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     public void executeJavascript(String script){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         if (driver instanceof JavascriptExecutor) {
             try {
                 ((JavascriptExecutor)driver).executeScript(script);
@@ -902,6 +966,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @param verbose If set to true warning messages will be logged, as well as extra debugging information from the W3C validation service. If set to false only errors will be logged.
      */
     public void verifyCurrentPageSourceWithW3validator(boolean verbose){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         W3CHtmlValidatorService w3CHtmlValidatorService = new W3CHtmlValidatorService(testCase, driver.getPageSource(), verbose);
         w3CHtmlValidatorService.verifyPageSourceWithW3validator();
         if(w3CHtmlValidatorService.failed()) saveHtmlContentOfCurrentPage();
@@ -938,6 +1007,10 @@ public class WebInteractionMethods implements GuiDriver {
      * @param tabNameAsRegexForTabToSwitchTo The name of the tab to switch to.
      */
     public void switchBrowserTabWithTabNameGivenAsRegexPattern(String tabNameAsRegexForTabToSwitchTo){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String currentTabId = "";
         String initialTitle = "";
         try
@@ -974,6 +1047,10 @@ public class WebInteractionMethods implements GuiDriver {
      * @param tabNameForTabToSwitchTo The name of the tab to switch to.
      */
     public void switchBrowserTab(String tabNameForTabToSwitchTo){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String currentTabId = "";
         String initialTitle = "";
         try
@@ -1018,6 +1095,10 @@ public class WebInteractionMethods implements GuiDriver {
      * @param guiElement Element to hover
      */
     public void hover(GuiElement guiElement){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
         String javaScript = "var evObj = document.createEvent('MouseEvents');" +
                 "evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);" +
                 "arguments[0].dispatchEvent(evObj);";
@@ -1300,7 +1381,7 @@ public class WebInteractionMethods implements GuiDriver {
      */
     private void goToUrl(String url) throws NavigationError{
         try{
-            driver.get(url);
+            driver.navigate().to(url);
         }catch (Exception e){
             throw new NavigationError();
         }
@@ -1341,6 +1422,11 @@ public class WebInteractionMethods implements GuiDriver {
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
     private void saveHtmlContentOfCurrentPage(){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".html";
         String LF = SupportMethods.LF;
         String htmlStyle =                 "          pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
@@ -1399,6 +1485,11 @@ public class WebInteractionMethods implements GuiDriver {
      * @return Returns a list of relevant matches for DomElement
      */
     private List<WebElement> gatherRelevantElements(DomElement element){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
         List<WebElement> webElements = new ArrayList<>();
         try {
             for(String recognitionString : element.recognitionStrings){

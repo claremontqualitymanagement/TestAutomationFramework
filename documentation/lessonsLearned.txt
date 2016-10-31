@@ -1,0 +1,5 @@
+The LogPost should not contain a LogLevel enum. It should have used polymorfism to subtype different types of LogPosts for ease of maintenance.
+The plugin structure and architectural approach should be carried out early.
+Build mechanisms takes time to develop.
+Un-tangle code to a larger extent. Packages should be truly structured.
+Make it easy for people to get going as soon as possible. Create template projects, document thoroughly, and so forth.
