@@ -1603,7 +1603,7 @@ public class WebInteractionMethods implements GuiDriver {
      */
     private void closeBrowserDriver() throws BrowserClosingError{
         try {
-            driver.close();
+            driver.quit();
         }catch (Exception e){
             throw new BrowserClosingError();
         }
