@@ -83,6 +83,12 @@ public class CliTestRunner {
                 }
             }
         }
+
+        if( TestRun.exitCode == 0 )
+            logger.debug( "TAF RUNNING SUCCESSFULLY WITH exitCode= " + TestRun.exitCode );
+        else
+            logger.debug( "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode );
+
         System.exit(TestRun.exitCode);
     }
 }
