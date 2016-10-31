@@ -80,7 +80,11 @@ public class Settings extends HashMap<String, String>{
     // Det ska gå att uppdatera värden i runtime
     //
 
-    private void toFile(String outputFilePath){
+    /**
+     * Writes current Settings values into runSettings.properties file.
+     * @param outputFilePath file path to runSettings.properties
+     */
+    public void writeSettingsParametersToFile(String outputFilePath){
         StringBuilder stringBuilder = new StringBuilder();
         for(String key : this.keySet()){
             stringBuilder.append(key).append("=").append(this.get(key)).append(SupportMethods.LF);
@@ -99,7 +103,7 @@ public class Settings extends HashMap<String, String>{
         } catch (IOException e) { //No file exist yet
             logger.error( "Could not read Settings from file '" + settingsFilePath + "'.", e );
             try {
-                toFile(settingsFilePath);
+                writeSettingsParametersToFile(settingsFilePath);
             }catch (Exception ex){
                 logger.error( "Could neither read Settings from file, nor write to file '" + settingsFilePath + "'. " + ex.toString(), ex );
             }
