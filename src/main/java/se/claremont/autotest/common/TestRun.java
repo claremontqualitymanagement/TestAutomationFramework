@@ -8,7 +8,29 @@ package se.claremont.autotest.common;
  */
 public class TestRun {
     public int fileCounter = 0;
-    public static int exitCode = 0;     //TODO: create exitCode table
+
+    /**
+     * TAF and TA test(s) standard codes.
+     */
+    public enum ExitCodeTable {
+        INIT_OK                     (0),
+        RUN_TAF_ERROR_FATAL         (500),
+        RUN_TAF_ERROR_MODERATE      (400),
+        RUN_TEST_ERROR_FATAL        (501),
+        RUN_TEST_ERROR_MODERATE     (401);
+
+        private final int value;
+
+        ExitCodeTable(final int newValue) {
+            value = newValue;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    public static int exitCode = ExitCodeTable.INIT_OK.getValue();
+
     public TestSet currentTestSet = null;
     public static final Settings settings = new Settings();
     public TestRunReporterFactory reporters = new TestRunReporterFactory();

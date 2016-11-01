@@ -278,13 +278,12 @@ public class TestCase {
 
         if(newErrorsEncountered && knownErrorsEncountered){
             resultStatus = ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS;
-            TestRun.exitCode = -1;
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         } else if (newErrorsEncountered){
             resultStatus = ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
-            TestRun.exitCode = -1;
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
         } else {
             resultStatus = ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS;
-            TestRun.exitCode = -1;
         }
     }
 
@@ -297,11 +296,14 @@ public class TestCase {
             evaluateResultStatus();
         if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
             Assert.assertFalse(testCaseLog.toString(), true);
-            TestRun.exitCode = -1;
+            if( resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
+                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
+            else
+                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         } else if(resultStatus == ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
             Assume.assumeTrue(false);
             Assert.assertFalse(testCaseLog.toString(), true);
-            TestRun.exitCode = -1;
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         }
     }
 

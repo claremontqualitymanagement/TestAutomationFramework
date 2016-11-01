@@ -89,6 +89,7 @@ public class CliTestRunner {
         else
             logger.debug( "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode );
 
+        System.out.println( "TAF exits with exitCode= " + TestRun.exitCode );
         System.exit(TestRun.exitCode);
     }
 }
