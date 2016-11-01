@@ -187,7 +187,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String helpText(){
-        return  LF + "<b>Brief help for interpreting the log</b><br>" + LF +
+        return  LF + LF + "<b>Brief help for interpreting the log</b><br>" + LF +
                 "This test results log is divided into structured sections.<br>" + LF +
                 "   * First there is some statistics and overview information.<br>" + LF +
                 "   * The next section is test case data used during execution. If no test data was registered during test case execution this section is suppressed.<br>" + LF +
@@ -209,7 +209,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "<br><br>" +
                 "<b>Screenshots, images and references</b><br>" + LF +
                 "If screenshots exist in the log these will become larger upon hovering over them, and they till open in another browser window upon click.<br>" +
-                "Some other relevant information will also be displayed in another window upon click, for example saved html content." + LF;
+                "Some other relevant information will also be displayed in another window upon click, for example saved html content." + LF + LF;
     }
 
     private String htmlSectionHtmlHead(){

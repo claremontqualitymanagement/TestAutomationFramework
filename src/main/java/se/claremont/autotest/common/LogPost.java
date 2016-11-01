@@ -237,7 +237,7 @@ class LogPost {
         //String logRowClass = enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.LOG_ROW.toString());
         String rowMessage;
         if(htmlMessage == null || htmlMessage.length() == 0){
-            rowMessage = message;
+            rowMessage = message.replace(LF, "<br>").replace("\n", "<br>");
         } else {
           rowMessage = htmlMessage;
         }
