@@ -47,4 +47,5 @@ public class Settings_Tests {
         settings.setCustomValue(SupportMethods.stringToCapitalInitialCharacterForEachWordAndNoSpaces(Settings.SettingParameters.PATH_TO_LOGO.toString().replace("_", " ")), "that value");
         Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("that value"));
     }
+
 }
