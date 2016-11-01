@@ -86,6 +86,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
                 "      h1                      { font-size:24px; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
+                "      .ui-accordion .ui-accordion-content  { padding:0px; }" + LF +
                 "      table                   { border: 1px solid grey; }" + LF +
                 "      .pagetitle              { color: #99CCFF; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
@@ -115,7 +116,31 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             padding-bottom: 20px!ie7;"  + LF +
                 "                             max - height: 600px;" + LF +
                 "      }" + LF +
-                "      .footer                  { border: 0px none; width: 100%; color: #99CCFF; text-align: center; align: center; }" + LF;
+                "      .footer                  { border: 0px none; width: 100%; color: #99CCFF; text-align: center; align: center; }" + LF +
+                "            #help {\n" +
+                "                vertical-align: top;\n" +
+                "                float: right;\n" +
+                "                text-align: right;\n" +
+                "                color: grey;\n" +
+                "            }\n" +
+                "\n" +
+                "            #helpText {\n" +
+                "                visibility: hidden;\n" +
+                "                left: 50px;\n" +
+                "                width: auto;\n" +
+                "                background-color: darkslateblue;\n" +
+                "                color: #fff;\n" +
+                "                text-align: left;\n" +
+                "                padding: 15px 0;\n" +
+                "                border-radius: 6px;\n" +
+                "                position: absolute;\n" +
+                "                z-index: 1;\n" +
+                "            }\n" +
+                "\n" +
+                "            /* Show the tooltip text when you mouse over the tooltip container */\n" +
+                "            #help:hover #helpText {\n" +
+                "                visibility: visible;\n" +
+                "            }\n";
     }
 
     /**
@@ -147,6 +172,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
                 "      <img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\">" + LF +
                 "<span class=\"pagetitle\">Claremont TAF test case results log</span>" + LF +
+                "<span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() + "</span></span>" + LF +
                 status() + "<br>" + LF +
                 //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
@@ -156,6 +182,34 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
                 "      </p>" + LF +
                 "    </div>" + LF + LF;
+    }
+
+    private String helpText(){
+        return "<h2>Brief help for interpreting the log</h2>" + LF +
+                "This test results log is divided into structured sections.<br>" + LF +
+                "<ol>" + LF +
+                "   <li>First there is some statistics and overview information.</li>" + LF +
+                "   <li>The next section is test case data used during execution. If no test data was registered during test case execution this section is suppressed.</li>" + LF +
+                "   <li>The log entries from the test run is the main part of the test case log</li>" + LF +
+                "</ol>" + LF +
+                "<h3>Log sections and log behavior</h3>" + LF +
+                "<p>" + LF +
+                "The log entries are grouped in test steps that are named after the actions in the test case.<br>" + LF +
+                "Log sections with errors are expanded upon opening the log file." + LF +
+                "If a log section title is clicked the log section log content display is toggled.<br>" +
+                "</p><p>" + LF +
+                "<b>Progress bar</b><br>" + LF +
+                "Between log sections a thin line can be seen. This is a progress bar that indicate how much time was spent in this log section." + LF +
+                "</p><p>" +
+                "<b>Debug log rows diplay</b><br>" + LF +
+                "More detailed information is displayed if the <b>debug checkbox</b> is checked. Then even debug log entries are displayed." + LF +
+                "</p><p>" + LF +
+                "<b>Test step class name</b><br>" + LF +
+                "When hovering over a log section title the class name for the method producing the log entries are displayed in a tooltip." + LF +
+                "</p><p>" +
+                "<b>Screenshots, images and references</b><br>" + LF +
+                "If screenshots exist in the log these will become larger upon hovering over them, and they till open in another browser window upon click.<br>" +
+                "Some other relevant information will also be displayed in another window upon click, for example saved html content.</p>";
     }
 
     private String htmlSectionHtmlHead(){
