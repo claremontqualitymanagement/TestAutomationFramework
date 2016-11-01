@@ -58,6 +58,7 @@ public class WebDriverManager {
      * @return Appropriate implementation of WebDriver interface
      */
     public WebDriver initializeWebDriver(WebBrowserType webBrowserType){
+        testCase.log(LogLevel.DEBUG, "Attempting to initialize WebDriver for web browser type '" +  webBrowserType.toString() + "'.");
         WebDriver driver = null;
         if(testCase == null) { testCase = new TestCase(null, "dummy");}
         switch (webBrowserType) {
@@ -93,7 +94,10 @@ public class WebDriverManager {
 
         }
         if(driver == null){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize driver for browser '" + webBrowserType.toString() + "'.");
             logIdentifiedLocalBrowsersFromFileScan();
+        }else{
+            testCase.log(LogLevel.INFO, "Driver for browser '" + webBrowserType.toString() + "' achieved.");
         }
         return driver;
 

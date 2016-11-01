@@ -75,6 +75,8 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return sb.toString();
     }
 
+    //#99CCFF - Claremont blue
+
     /**
      * Used to append HTML style information to the HTML based testCaseLog
      * @return A HTML formatted string to incorporate in the style tag in the HTML testCaseLog
@@ -85,6 +87,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      h1                      { font-size:24px; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
                 "      table                   { border: 1px solid grey; }" + LF +
+                "      .pagetitle              { color: #99CCFF; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
                 LogPost.htmlStyleInformation() +
                 "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: red; font-weight: bold; } " + LF +
@@ -111,7 +114,8 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             width: 70%;" + LF +
                 "                             padding-bottom: 20px!ie7;"  + LF +
                 "                             max - height: 600px;" + LF +
-                "      }" + LF;
+                "      }" + LF +
+                "      .footer                  { border: 0px none; width: 100%; color: #99CCFF; text-align: center; align: center; }" + LF;
     }
 
     /**
@@ -133,6 +137,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 htmlSectionTestCaseData() +
                 htmlSectionNonEncounteredKnownTestCaseErrors() +
                 htmlSectionTestCaseLogEntries() +
+                footer() +
                 "  </body>" + LF + LF +
                 "</html>" + LF;
         SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
@@ -141,10 +146,12 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
                 "      <img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\">" + LF +
+                "<span class=\"pagetitle\">Claremont TAF test case results log</span>" + LF +
+                status() + "<br>" + LF +
                 //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
                 "      <p>" + LF +
-                "        Status: " + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
+                "        Result status: " + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
                 "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
                 "      </p>" + LF +
@@ -165,13 +172,26 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "  </head>" + LF + LF;
     }
 
+    private String footer(){
+        return "<table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF;
+    }
+
+    private String status(){
+        if(testCase.testCaseLog.hasEncounteredErrors()){
+            return "<p><font color=\"lightgrey\">Status: </font><b><font color=\"red\">&#x2717;</font></b></p>" + LF;
+        } else {
+            return "<p><font color=\"lightgrey\">Status: </font><b><font color=\"green\">&#x2713;</font></b></p>" + LF;
+        }
+    }
 
     private String htmlSectionTestCaseLogEntries(){
-        return "      <h2>Test case log</h2>" + LF +
+        return "<br>" + LF +
+                "      <h2>Test case log</h2>" + LF +
                 "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\"\">Show verbose debugging information</label>" + LF +
                 "     <div id=\"logpostlist\">" + LF + LF +
                 testStepLogPostSections(testCase) + LF +
-                "     </div>" + LF;
+                "     </div>" + LF +
+                "     <br><br>" + LF;
     }
 
     private String htmlSectionTestCaseData(){

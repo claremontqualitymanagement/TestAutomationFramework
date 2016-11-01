@@ -96,8 +96,8 @@ public class TestCaseLog {
      * @param message The string message of the testCaseLog
      */
     public void log(LogLevel logLevel, String message){
-        String testStep = "Framework";
-        String testStepClassName = "Framework";
+        String testStep = "Framework actions";
+        String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
             if(stackTraceElements[i].getMethodName().equals(testCaseName)){
@@ -118,8 +118,8 @@ public class TestCaseLog {
      * @param htmlFormattedMessage A HTML formatted testCaseLog message representation to be displayed within a HTML table cell tag
      */
     public void logDifferentlyToTextLogAndHtmlLog(LogLevel logLevel, String pureTextMessage, String htmlFormattedMessage){
-        String testStep = "Framework";
-        String testStepClassName = "Framework";
+        String testStep = "Framework actions";
+        String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
             if(stackTraceElements[i].getMethodName().equals(testCaseName)){

@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static se.claremont.autotest.support.SupportMethods.LF;
+import static se.claremont.autotest.support.SupportMethods.startProgram;
 
 /**
  * Created by jordam on 2016-11-01.
  */
 public class TestCaseLogSection {
      ArrayList<LogPost> logPostList = new ArrayList<>();
+    Date startTime;
+    Date stopTime;
 
      public TestCaseLogSection(ArrayList<LogPost> logPosts, Date testStartTime, Date testStopTime){
+         this.startTime = testStartTime;
+         this.stopTime = testStopTime;
          this.logPostList.addAll(logPosts);
          //if(logPosts.size() > 0){
          //    this.logPostList.add(new LogPost(LogLevel.INFO, "Time spent in this section compared to whole test<br>" + timeProgressGraph(testStartTime, testStopTime, logPostList.get(0).date, logPostList.get(logPostList.size() - 1).date, 300)));
@@ -27,13 +32,13 @@ public class TestCaseLogSection {
     }
 
     private static String htmlStyleInformationTimeGraph(){
-        return "         table.timegraph.padding                  { background-color: white; width: auto; }" + LF +
+        return "         table.timegraph.padding                  { background-color: white; width: 100%; }" + LF +
                 "         table.timegraph.datatabell               { font-weight: normal; border-color: white; width: auto; }" + LF +
                 "         tr.timegraph.rubrikrad                   { background-color:lightgrey; border: 1px solid grey;}" + LF +
                 "         td.timegraph                             { border: 1px solid grey; }" + LF +
-                "         td.timegraph.before                      { background-color: grey; }" + LF +
-                "         td.timegraph.during                      { background-color: blue; }" + LF +
-                "         td.timegraph.after                       { background-color: grey; }" + LF;
+                "         td.before                      { background-color: grey; }" + LF +
+                "         td.during                      { background-color: blue; }" + LF +
+                "         td.after                       { background-color: grey; }" + LF;
     }
 
     private boolean hasErrors(){
@@ -59,18 +64,20 @@ public class TestCaseLogSection {
     public String toHtml(){
         StringBuilder html = new StringBuilder();
         if(logPostList.size() > 0) {
+            html.append(timeProgressGraph(startTime, stopTime, logPostList.get(0).date, logPostList.get(logPostList.size() -1).date, 600)).append(LF);
             html.append("        <div class=\"expandable logsection level-" + highestLogLevel().toString().toLowerCase());
             if(hasErrors()){
                 html.append(" initially-expanded");
             }
             html.append("\">").append(LF);
-            html.append("           <h3 class=\"logsectiontitle ");
+            html.append("           <h3 title=\"Test step in class '" + logPostList.get(0).testStepClassName + "'\" class=\"logsectiontitle ");
             if(hasErrors()){
                 html.append("failed\">");
             }else {
                 html.append("passed\">");
             }
-            html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'   - in class: '" + logPostList.get(0).testStepClassName + "'</h3>").append(LF);
+            //html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'   - in class: '" + logPostList.get(0).testStepClassName + "'</h3>").append(LF);
+            html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'</h3>").append(LF);
             html.append("           <div class=\"expandable-content\">").append(LF);
             html.append("              <table class=\"logsectionlogposts\">").append(LF);
             for(LogPost logPost : logPostList){
@@ -93,7 +100,7 @@ public class TestCaseLogSection {
         StringBuilder sb = new StringBuilder();
         sb.append("<span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
                 .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\"></span>");
-        sb.append("<table class=\"timegraph\" width=\"" + graphWidth + "px\"><tr>");
+        sb.append("<table class=\"timegraph\" width=\"100%\"><tr>");
 
         if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
             long widthOfInitPartPercent = 100*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime())/wholePeriod;
