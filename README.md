@@ -3,6 +3,7 @@ Test Automation Framework - TAF - "Never send a human to do a machine’s job".
 
 An Test Automated Framework brought to you from the [Claremont team](http://www.claremont.se).
 
+![alt this is the cool Claremont TAF logo...](http://46.101.193.212/TAF/images/Taf3.png)
 
 Building instructions:
 Using Maven command:mvn clean install
