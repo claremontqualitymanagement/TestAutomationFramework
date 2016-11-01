@@ -15,9 +15,7 @@ import java.util.Date;
  * Created by jordam on 2016-08-27.
  */
 class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
-
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
-
     private final TestCase testCase;
     private Date runStartTime;
     private Date runEndTime;
@@ -75,6 +73,66 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return sb.toString();
     }
 
+    /**
+     * Compiles a test case result to html content in a format that could be inserted into a web page
+     *
+     * @return HTML
+     */
+    public String asHtmlSection(){
+        testCase.log(LogLevel.DEBUG, "Creating HTML log content.");
+        if(testCase.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        } else {
+            this.runEndTime = new Date();
+        }
+        return htmlSectionBodyHeader() +
+                htmlSectionEncounteredKnownErrors() +
+                htmlSectionTestCaseData() +
+                htmlSectionNonEncounteredKnownTestCaseErrors() +
+                htmlSectionTestCaseLogEntries() +
+                footer();
+    }
+
+    /**
+     * Saves the output of the test case to an HTML formatted text file
+     */
+    public void report(){
+        testCase.log(LogLevel.DEBUG, "Saving html report to '" + testCase.pathToHtmlLog + "'.");
+        logger.debug( "Saving html report to '" + testCase.pathToHtmlLog + "'." );
+        if(testCase.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        } else {
+            this.runEndTime = new Date();
+        }
+        String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
+                htmlSectionHtmlHead() +
+                "  <body>" + LF + LF +
+                asHtmlSection() +
+                "  </body>" + LF + LF +
+                "</html>" + LF;
+        SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
+    }
+
+
+    public String htmlSectionHtmlHead(){
+        return "  <head>" + LF + LF +
+                "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
+                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\"/>" + LF +
+                "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF + LF +
+                "    <link rel=\"stylesheet\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css\"/>\n" + LF + LF +
+                "    <style>" + LF +
+                styles() +
+                "    </style>" + LF + LF +
+                scriptSection() +
+                "  </head>" + LF + LF;
+    }
+
+    private String footer(){
+        return "      <table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF;
+                //"<img src=\"http://46.101.193.212/TAF/images/Taf3.png\" alt=\"TAF Logo\">";
+    }
+
     //#99CCFF - Claremont blue
 
     /**
@@ -117,60 +175,40 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             max - height: 600px;" + LF +
                 "      }" + LF +
                 "      .footer                  { border: 0px none; width: 100%; color: #99CCFF; text-align: center; align: center; }" + LF +
-                "            #help {" + LF +
-                "                vertical-align: top;" + LF +
-                "                float: right;" + LF +
-                "                text-align: right;" + LF +
-                "                color: grey;" + LF +
-                "            }" + LF +
-                "" + LF +
-                "            #helpText {" + LF +
-                "                visibility: hidden;" + LF +
-                "                left: 50px;" + LF +
-                "                width: auto;" + LF +
-                "                background-color: darkslateblue;" + LF +
-                "                color: #fff;" + LF +
-                "                text-align: left;" + LF +
-                "                padding: 15px 0;" + LF +
-                "                border-radius: 6px;" + LF +
-                "                position: absolute;" + LF +
-                "                z-index: 1;" + LF +
-                "            }" + LF +
-                "" + LF +
-                "            /* Show the tooltip text when you mouse over the tooltip container */" + LF +
-                "            #help:hover #helpText {" + LF +
-                "                visibility: visible;" + LF +
-                "            }" + LF;
+                htmlStyleHelpOverlay();
+
     }
 
-    /**
-     * Prints the output of the test case to an HTML formatted text file
-     */
-    public void report(){
-        testCase.log(LogLevel.DEBUG, "Saving html report to '" + testCase.pathToHtmlLog + "'.");
-        logger.debug( "Saving html report to '" + testCase.pathToHtmlLog + "'." );
-        if(testCase.testCaseLog.logPosts.size() > 0){
-            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
-        } else {
-            this.runEndTime = new Date();
-        }
-        String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
-                htmlSectionHtmlHead() +
-                "  <body>" + LF + LF +
-                htmlSectionBodyHeader() +
-                htmlSectionEncounteredKnownErrors() +
-                htmlSectionTestCaseData() +
-                htmlSectionNonEncounteredKnownTestCaseErrors() +
-                htmlSectionTestCaseLogEntries() +
-                footer() +
-                "  </body>" + LF + LF +
-                "</html>" + LF;
-        SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
+    private static String htmlStyleHelpOverlay(){
+         return  "            #help {" + LF +
+             "                vertical-align: top;" + LF +
+             "                float: right;" + LF +
+             "                text-align: right;" + LF +
+             "                color: grey;" + LF +
+             "            }" + LF +
+             "" + LF +
+             "            #helpText {" + LF +
+             "                visibility: hidden;" + LF +
+             "                left: 50px;" + LF +
+             "                width: auto;" + LF +
+             "                background-color: darkslateblue;" + LF +
+             "                color: #fff;" + LF +
+             "                text-align: left;" + LF +
+             "                padding: 15px 0;" + LF +
+             "                border-radius: 6px;" + LF +
+             "                position: absolute;" + LF +
+             "                z-index: 1;" + LF +
+             "            }" + LF +
+             "" + LF +
+             "            /* Show the tooltip text when you mouse over the tooltip container */" + LF +
+             "            #help:hover #helpText {" + LF +
+             "                visibility: visible;" + LF +
+             "            }" + LF;
     }
 
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
-                "      <img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\">" + LF +
+                "      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\">" + LF +
                 "      <span class=\"pagetitle\">Claremont TAF test case results log</span>" + LF +
                 "         <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() +
                 "         </span>" + LF +
@@ -209,25 +247,9 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "<br><br>" +
                 "<b>Screenshots, images and references</b><br>" + LF +
                 "If screenshots exist in the log these will become larger upon hovering over them, and they till open in another browser window upon click.<br>" +
-                "Some other relevant information will also be displayed in another window upon click, for example saved html content." + LF + LF;
-    }
-
-    private String htmlSectionHtmlHead(){
-        return "  <head>" + LF + LF +
-                "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
-                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\"/>" + LF +
-                "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
-                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF + LF +
-                "    <link rel=\"stylesheet\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css\"/>\n" + LF + LF +
-                "    <style>" + LF +
-                styles() +
-                "    </style>" + LF + LF +
-                scriptSection() +
-                "  </head>" + LF + LF;
-    }
-
-    private String footer(){
-        return "      <table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF;
+                "Some other relevant information will also be displayed in another window upon click, for example saved html content." + LF +
+                "<br><br>" + LF +
+                "More information could be reached by clicking the logo in the top left corner of this document and checking out the GitHub Wiki.<br>" + LF + LF;
     }
 
     private String status(){

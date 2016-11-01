@@ -49,6 +49,16 @@ public class ApplicationManager {
         }
     }
 
+    public void startProgramInSameJVM(String programAndArguments){
+        testCase.log(LogLevel.DEBUG, "Attempting to start program '" + programAndArguments + "'.");
+        try {
+            process = Runtime.getRuntime().exec(programAndArguments);
+            testCase.log(LogLevel.EXECUTED, "Started '" + programAndArguments + "' in same JVM.");
+        } catch (IOException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not start program '" + programAndArguments + "' in same JVM. " + e.getMessage());
+        }
+    }
+
     public void startProgram(String programAndArguments){
         String program;
         List<String> arguments = new ArrayList<>();
@@ -67,6 +77,17 @@ public class ApplicationManager {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Must state program name at least, to start program.");
             logger.debug( "Must state program name at least, to start a program." );
         }
+    }
+
+    public void killProgram(){
+        testCase.log(LogLevel.DEBUG, "Closing process '" + process.toString() + "'.");
+        process.destroyForcibly();
+        if(process.isAlive()){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not close process '" + process.toString() + "'.");
+        }else {
+            testCase.log(LogLevel.EXECUTED, "Closed application process.");
+        }
+
     }
 
     public List<String> listActiveRunningProcessesOnLocalMachine(){

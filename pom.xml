@@ -112,6 +112,7 @@
             <!--<version>2.53.1</version>-->
             <version>LATEST</version>
         </dependency>
+        <!-- For REST interactions -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
@@ -128,6 +129,7 @@
             <artifactId>json</artifactId>
             <version>20160810</version>
         </dependency>
+        <-- For mail sending of reports -->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
