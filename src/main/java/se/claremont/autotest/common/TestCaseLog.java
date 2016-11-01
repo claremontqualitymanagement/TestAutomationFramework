@@ -6,6 +6,8 @@ import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -149,6 +151,27 @@ public class TestCaseLog {
             return fails.get(0);
         }
         return null;
+    }
+
+    public ArrayList<TestCaseLogSection> toLogSections(){
+        String lastTestStepName = "";
+        if(logPosts.size() == 0) {
+            logPosts.add(new LogPost(LogLevel.DEBUG, "Nothing logged", "Nothing logged", this.testCaseName, "Nothing here", "Nothing here"));
+        }
+        Date startTime = logPosts.get(0).date;
+        Date stopTime = logPosts.get(logPosts.size() -1).date;
+        ArrayList<TestCaseLogSection> logSectionsList = new ArrayList<>();
+        ArrayList<LogPost> logPostsInTestStep = new ArrayList<>();
+        for(LogPost logPost : logPosts){
+            if(!logPost.testStepName.equals(lastTestStepName)){
+                logSectionsList.add(new TestCaseLogSection(logPostsInTestStep, startTime, stopTime));
+                logPostsInTestStep = new ArrayList<>();
+                lastTestStepName = logPost.testStepName;
+            }
+            logPostsInTestStep.add(logPost);
+        }
+        logSectionsList.add(new TestCaseLogSection(logPostsInTestStep, startTime, stopTime));
+        return logSectionsList;
     }
 
 }

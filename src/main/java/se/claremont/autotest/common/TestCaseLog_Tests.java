@@ -102,7 +102,7 @@ public class TestCaseLog_Tests {
     public void logDifferentlyToTextAndHtmlHtmlRepresentation(){
         TestCaseLog testCaseLog = new TestCaseLog("logDifferentlyToTextAndHtmlHtmlRepresentation");
         testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Testing", "<p><b>TestingHtml</b></p>");
-        Assert.assertTrue("Wrong text reported as html. Found to be '" + testCaseLog.logPosts.get(0).toHtmlTableRow(null) + "'.", testCaseLog.logPosts.get(0).toHtmlTableRow(null).contains("<p><b>TestingHtml</b></p>"));
+        Assert.assertTrue("Wrong text reported as html. Found to be '" + testCaseLog.logPosts.get(0).toHtmlTableRow() + "'.", testCaseLog.logPosts.get(0).toHtmlTableRow().contains("<p><b>TestingHtml</b></p>"));
     }
 
     @Test

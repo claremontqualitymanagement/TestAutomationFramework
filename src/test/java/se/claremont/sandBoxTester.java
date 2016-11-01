@@ -17,6 +17,7 @@ import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,6 +193,23 @@ public class sandBoxTester extends TestSet{
         currentTestCase.log(LogLevel.INFO, "Number of java processes before: " +javaProcessesBefore + ". Number of java processes after: " + javaProcessesAfter + ".");
     }
 
+    @Ignore
+    @Test
+    public void testApplicationStart(){
+        try {
+            Process p = Runtime.getRuntime().exec("java.exe -jar C:\\Users\\jordam\\OneDrive\\Documents\\Claremont-jobb\\Alster\\QtpUsageAnalysis.jar");
+            try {
+                Thread.sleep(3000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            p.destroyForcibly();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private int numberOfJavaProcesses(){
         ApplicationManager am = new ApplicationManager(currentTestCase);
@@ -223,9 +241,11 @@ public class sandBoxTester extends TestSet{
     public void testNewElementMethods(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("http://www.claremont.se");
+        currentTestCase.addTestCaseData("Test", "Testcontent");
         DomElement kontaktLink = new DomElement("KONTAKT", DomElement.IdentificationType.BY_LINK_TEXT);
         web.click(kontaktLink);
         web.verifyTextExistOnCurrentPage("Birger Jarlsgatan 7");
+        web.verifyPageTitle("fsdf");
         web.makeSureDriverIsClosed();
     }
 

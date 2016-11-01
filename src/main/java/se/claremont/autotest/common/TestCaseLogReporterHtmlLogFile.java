@@ -80,39 +80,28 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * @return A HTML formatted string to incorporate in the style tag in the HTML testCaseLog
      */
     private static String styles(){
-        return "      body                    { background-color: honeydew; }" + LF +
-                "      table                   { border: 1px solid black; margin-left: 10px;}" + LF +
-                "      table.timeGraph         { border: 0px solid white; margin-left: 0px; }" + LF +
-                "      td.before               { background-color: grey; }" + LF +
-                "      td.during               { background-color: blue; }" + LF +
-                "      td.after                { background-color: grey; }" + LF +
-                "      img.screenshot          { border: 1px solid grey; width: 105px; background: #999; }" + LF +
-                "      .timeGraph              { width: 150px; }" + LF +
-                "      img.screenshot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + LF +
-                "      .testStepClassName      { color: grey; }" + LF +
+        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: white; }" + LF +
+                "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
+                "      h1                      { font-size:24px; }" + LF +
+                "      h2                      { font-size:20px; }" + LF +
+                "      table                   { border: 1px solid grey; }" + LF +
+                TestCaseLogSection.htmlStyleInformation() +
+                LogPost.htmlStyleInformation() +
                 "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: red; font-weight: bold; } " + LF +
                 "      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "             { background-color: white; width: 80%; }" + LF +
                 "      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + " tr:hover     { background-color: lightgrey; }" + LF +
                 "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + " tr:nth-child(even)                 { background-color: #f2f2f2 }" + LF +
+                "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: floralwhite; }" + LF +
+                "     .logpost, .testdatapost                                { border-bottom: 1px solid lightgrey; }" + LF +
                 "      td.logPostLogLevel       { width: 130px; }" + LF +
-                "      td." + enumMemberNameToLower(HtmlLogStyleNames.TIMESTAMP.toString()) + "            { color: grey; width: 80px; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.VERIFICATION_PASSED.toString()) + "  { color: green; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.EXECUTED.toString()) + "             { color: black; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.VERIFICATION_FAILED.toString()) + "  { color: red; font-weight: bold; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.EXECUTION_PROBLEM.toString()) + "    { color: red; font-weight: bold; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.VERIFICATION_PROBLEM.toString()) + " { color: red; font-weight: bold; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.FRAMEWORK_ERROR.toString()) + "      { color: red; font-weight: bold; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.INFO.toString()) + "                 { color: blue; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.DEBUG.toString()) + "                { color: Grey; }" + LF +
-                "      td." + enumMemberNameToLower(LogLevel.DEVIATION_EXTRA_INFO.toString()) + " { color: blue; }" + LF +
                 "      td.logMessage           { max-width: 99%; }" + LF +
-                "      span." + enumMemberNameToLower(HtmlLogStyleNames.DATA.toString()) + "               { color: blue; }" + LF +
-                "      tr.deviationSection       { font-size: 120%; font-weight: bold; color: red; }" + LF +
-                "      tr .noDeviationSection     { font-size: 110%; font-weight: bold; color: green; }" + LF +
+                "      img.screenshot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + SupportMethods.LF +
+                "      img.screenshot          { border: 0px none; width:105px; background: #999; }" + LF +
+
+                //W3C checker
                 "      font.w3cvalidationinfo    { color: darkgrey; font-weight: bold; }" + LF +
                 "      font.w3cvalidationerror   { color: red; font-weight: bold; }" + LF +
                 "      font.w3cvalidationother   { color: darkgrey; font-weight: bold; }" + LF +
-                "      tr.testDataTitleRow       { background-color: lightgrey; }" + LF +
                 "      pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
                 "                             overflow: auto;" + LF +
@@ -138,7 +127,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
         String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
                 htmlSectionHtmlHead() +
-                "  <body onload=\"onLoad()\">" + LF + LF +
+                "  <body>" + LF + LF +
                 htmlSectionBodyHeader() +
                 htmlSectionEncounteredKnownErrors() +
                 htmlSectionTestCaseData() +
@@ -151,7 +140,8 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
-                "      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
+                "      <img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\">" + LF +
+                //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
                 "      <p>" + LF +
                 "        Status: " + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
@@ -166,7 +156,8 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
                 "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\"/>" + LF +
                 "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
-                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF + LF +
+                "    <link rel=\"stylesheet\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css\"/>\n" + LF + LF +
                 "    <style>" + LF +
                 styles() +
                 "    </style>" + LF + LF +
@@ -176,29 +167,30 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
 
     private String htmlSectionTestCaseLogEntries(){
-        return "      <h2>Test case testCaseLog entries</h2>" + LF +
-                "      <label><input type=\"checkbox\" id=\"showDebugCheckbox\" onchange=\"showDebug(this)\">Suppress debug rows</label>" + LF +
-                "      <table class=\"" + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + "\" id=\"" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "\">" + LF +
-                testStepLogPostSections(testCase) +
-                "      </table>" + LF;
+        return "      <h2>Test case log</h2>" + LF +
+                "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\"\">Show verbose debugging information</label>" + LF +
+                "     <div id=\"logpostlist\">" + LF + LF +
+                testStepLogPostSections(testCase) + LF +
+                "     </div>" + LF;
     }
 
     private String htmlSectionTestCaseData(){
         StringBuilder html = new StringBuilder();
         if(testCase.testCaseData.testCaseDataList.size() > 0){
-            html.append("      <h2>Test case data</h2>").append(LF);
-            html.append("      <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
-            html.append("        <tr class=\"testDataTitleRow\" onclick=\"toggleVisibilityByClass('additionalDataSection')\"><td class=\"collapseIcon\">+</td><td>Test DATA saved during execution</td></tr>").append(LF);
-            html.append("        <tbody class=\"additionalDataSection\">").append(LF);
+            html.append("      <div id=\"testdata\" class=\"testcasedata expandable\" >").append(LF);
+            html.append("         <h2>Test case data</h2>").append(LF);
+            html.append("         <div id=\"expandable_content\">").append(LF);
+            html.append("         <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
             for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){
-                html.append("        <tr><td class=\"").
+                html.append("           <tr><td class=\"").
                         append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
                         append("\">").append(valuePair.parameter).append("</td><td class=\"").
                         append(enumMemberNameToLower(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_VALUE.toString()))).
                         append("\">").append(valuePair.value).append("</tr>").append(LF);
             }
-            html.append("        </tbody>").append(LF);
-            html.append("      </table>").append(LF);
+            html.append("         </table>").append(LF);
+            html.append("         </div>").append(LF);
+            html.append("      </div>").append(LF).append(LF);
         }
         return html.toString();
     }
@@ -267,108 +259,15 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String testStepLogPostSections(TestCase testCase){
+        if(testCase.testCaseLog.logPosts.size() == 0) return null;
         StringBuilder html = new StringBuilder();
-//        html.append("        <tr><td colspan=\"3\">Log posts</td></tr>").append(LF);
- //       html.append("        <tr><th>Time</th><th>Log level</th><th>Message</th></tr>").append(LF);
-        String lastTestStepName = "";
-        ArrayList<ArrayList<LogPost>> logSectionList = new ArrayList<>();
-        ArrayList<LogPost> logPostsInTestStep = new ArrayList<>();
-        for(LogPost logPost : testCase.testCaseLog.logPosts){
-            if(!logPost.testStepName.equals(lastTestStepName)){
-                logSectionList.add(logPostsInTestStep);
-                logPostsInTestStep = new ArrayList<>();
-                lastTestStepName = logPost.testStepName;
-            }
-            logPostsInTestStep.add(logPost);
-        }
-        logSectionList.add(logPostsInTestStep);
-        int sectionCounter = 0;
-        for(ArrayList<LogPost> logPosts : logSectionList){
-            if(logPosts.size() > 0){
-                Date firstLogPostTime = logPosts.get(0).date;
-                Date lastLogPostTime = logPosts.get(logPosts.size()-1).date;
-                if(logPosts.size() == 0) continue;
-                sectionCounter++;
-                String sectionClass = sectionCounter + logPosts.get(0).testStepName;
-                boolean hasErrors = false;
-                for(LogPost logPost : logPosts){
-                    if(logPost.isFail()){
-                        hasErrors = true;
-                        break;
-                    }
-                }
-                if(hasErrors){
-                    html.append("        <tbody class=\"sectionHeadline\">").append(LF);
-                    html.append("          <tr class=\"deviationSection\" onclick=\"toggleVisibilityByClass('").append(sectionClass).append("')\">").append(LF);
-                    html.append("            <td class=\"stepCounter\">").append(LF);
-                    html.append("              Step ").append(sectionCounter);
-                    html.append("            </td>").append(LF);
-                    html.append("            <td class=\"sectionName\" colspan=\"2\">").append(LF);
-                    html.append(              logPosts.get(0).testStepName).append("<span class=\"testStepClassName\"> (in class '").append(logPosts.get(0).testStepClassName).append("')</span>").append(LF);
-                    html.append("            </td>").append(LF);
-                    html.append("          </tr>").append(LF);
-                    html.append("          <tr>").append(LF);
-                    html.append("            <td class=\"progressGraph\" colspan=\"3\">").append(LF);
-                    html.append("              ").append(timeProgressGraph(runStartTime, runEndTime, firstLogPostTime, lastLogPostTime, 150));
-                    html.append("            </td>").append(LF);
-                    html.append("          </tr>").append(LF);
-                    html.append("        </tbody>").append(LF);
-                    html.append("        <tbody class=\"deviationSectionTable ").append(sectionClass).append("\">").append(LF);
-                } else {
-                    html.append("          <tbody class=\"sectionHeadline\">").append(LF);
-                    html.append("            <tr class=\"noDeviationSection\" onclick=\"toggleVisibilityByClass('").append(sectionClass).append("')\">").append(LF);
-                    html.append("              <td class=\"stepCounter\">").append(LF);
-                    html.append("                 Step ").append(sectionCounter);
-                    html.append("               </td>").append(LF);
-                    html.append("               <td class=\"sectionName\" colspan=\"2\">").append(LF);
-                    html.append(                  logPosts.get(0).testStepName).append("<span class=\"testStepClassName\"> (in class '").append(logPosts.get(0).testStepClassName).append("')</span>").append(LF);
-                    html.append("               </td>").append(LF);
-                    html.append("             </tr>").append(LF);
-                    html.append("             <tr>").append(LF);
-                    html.append("              <td class=\"progressGraph\" colspan=\"3\">").append(LF);
-                    html.append("                ").append(timeProgressGraph(runStartTime, runEndTime, firstLogPostTime, lastLogPostTime, 150));
-                    html.append("              </td>").append(LF);
-                    html.append("          </tr>").append(LF);
-                    html.append("        </tbody>").append(LF);
-                    html.append("        <tbody class=\"noDeviationSectionTable ").append(sectionClass).append("\">").append(LF);
-                }
-                for(LogPost logPost : logPosts){
-                    html.append(logPost.toHtmlTableRow(null));
-                }
-                html.append("        </tbody>").append(LF).append(LF);
-            }
+        ArrayList<TestCaseLogSection> logSections = testCase.testCaseLog.toLogSections();
+        for(TestCaseLogSection testCaseLogSection : logSections){
+            html.append(testCaseLogSection.toHtml());
         }
         return html.toString();
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private String timeProgressGraph(Date wholeTimePeriodStartTime, Date wholeTimePeriodEndTime, Date partialEventStartTime, Date partialEventEndTime, int graphWidth){
-        long wholePeriod = wholeTimePeriodEndTime.getTime() - wholeTimePeriodStartTime.getTime();
-        if (wholePeriod == 0) return "";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("<span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
-                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\"></span>");
-        sb.append("<table class=\"timeGraph\"><tr>");
-
-        if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
-            long widthOfInitPartPercent = 100*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime())/wholePeriod;
-            sb.append("<td width=\"").append(widthOfInitPartPercent).append("%\" class=\"before\"><span title=\"Whole time period start time: ").append(wholeTimePeriodStartTime.getTime()).append(LF).append("Part section start time: ").append(partialEventStartTime.getTime()).append("\"></span></td>");
-        }
-
-        if(partialEventEndTime.getTime()-partialEventStartTime.getTime() != 0){
-            long widthOfPartPercent = (100*(partialEventEndTime.getTime() - partialEventStartTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfPartPercent).append("%\" class=\"during\"><span title=\"Part section start time: ").append(partialEventStartTime.getTime()).append(LF).append("Part section end time: ").append(partialEventEndTime.getTime()).append("\"></span></td>");
-        }
-
-        if(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime() != 0){
-            long widthOfEndPartPercent = (100*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfEndPartPercent).append("%\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>");
-        }
-        sb.append("</tr></table>");
-        //sb.append("</span>");
-        return sb.toString();
-    }
 
     /**
      * Line feed/Form feed for relevant OS
@@ -376,68 +275,25 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private static final String LF = SupportMethods.LF;
 
     private String scriptSection(){
-        return "<script>" + LF +
-                LF +
-                "    function onLoad()" + LF +
-                "    {" + LF +
-                "          hideElementsByClass('noDeviationSectionTable');" + LF +
-                "          unHideElementsByClass('DeviationSectionTable');" + LF +
-                "          hideElementsByClass('additionalDataSection');" + LF +
-                "          document.getElementById(\"showDebugCheckbox\").checked = true;" + LF +
-                "          showDebug();" + LF +
-                "      }" + LF +
-                LF +
-                "    function toggleVisibilityByClass(className)" + LF +
-                "         {" + LF +
-                "          var classElements = document.getElementsByClassName(className);" + LF +
-                "          for (i = 0; i < classElements.length; i++)" + LF +
-                "          {" + LF +
-                "              if(classElements[i].style.display == 'block')" + LF +
-                "              {" + LF +
-                "                  classElements[i].style.display = 'none';" + LF +
-                "              }" + LF +
-                "              else if(classElements[i].style.display == 'none')" + LF +
-                "              {" + LF +
-                "                  classElements[i].style.display = 'block';" + LF +
-                "              }" + LF +
-                "              else" + LF +
-                "              {" + LF +
-                "                  classElements[i].style.display = 'block';" + LF +
-                "              }" + LF +
-                "          }" + LF +
+        return "      <script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>" + LF +
+                "      <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js\"></script>" + LF +
+                "      <script type=\"text/javascript\">" + LF + LF +
+                "         function showDebug(shouldShowDebug){" + LF +
+                "           $(\".logpost.debug\").toggle(shouldShowDebug);" + LF +
                 "         }" + LF +
-                LF +
-                "         function unHideElementsByClass(className)" + LF +
-                "         {" + LF +
-                "          var classElements = document.getElementsByClassName(className);" + LF +
-                "          for (i = 0; i < classElements.length; i++)" + LF +
-                "          {" + LF +
-                "              classElements[i].style.display = 'block';" + LF +
-                "          }" + LF +
-                "         }" + LF +
-                LF +
-                "         function hideElementsByClass(className)" + LF +
-                "         {" + LF +
-                "          var classElements = document.getElementsByClassName(className);" + LF +
-                "          for (i = 0; i < classElements.length; i++)" + LF +
-                "          {" + LF +
-                "              classElements[i].style.display = 'none';" + LF +
-                "          }" + LF +
-                "         }" + LF +
-                LF +
-                "         function showDebug()" + LF +
-                "         {" + LF +
-                "          if(document.getElementById(\"showDebugCheckbox\").checked)" + LF +
-                "          {" + LF +
-                "              hideElementsByClass('logRowdebug');" + LF +
-                "          }" + LF +
-                "          else" + LF +
-                "          {" + LF +
-                "              unHideElementsByClass('logRowdebug');" + LF +
-                "          }" + LF +
-                "         }" + LF +
-                LF +
+                "" + LF +
+                "         $(function() {" + LF +
+                "           $(\"#showDebugCheckbox\").on(\"click\", function(evt) {" + LF +
+                "              var shouldShowDebug = $(this).prop(\"checked\");" + LF +
+                "              showDebug(shouldShowDebug);" + LF +
+                "           });" + LF +
+                "           showDebug(false);" + LF +
+                "           $(\".expandable\").accordion({ collapsible: true, active: false, heightStyle: \"content\" });" + LF +
+                "           $(\".expandable.initially-expanded\").accordion(\"option\", \"active\", 0);" + LF +
+                "         });" + LF +
+                "" + LF +
                 "      </script>" + LF;
     }
+
 
 }

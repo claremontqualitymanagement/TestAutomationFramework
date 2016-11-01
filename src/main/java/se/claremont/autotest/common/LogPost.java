@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static se.claremont.autotest.common.TestCaseLogReporterHtmlLogFile.enumMemberNameToLower;
+import static se.claremont.autotest.support.SupportMethods.LF;
 
 /**
  * A testCaseLog post for a test case execution testCaseLog.
@@ -211,32 +212,40 @@ class LogPost {
                 "}" + SupportMethods.LF;
     }
 
+    public static String htmlStyleInformation(){
+        return  "      span." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()) + "               { color: blue; }" + LF +
+                "      td." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString()) + "            { color: grey; width: 80px; }" + LF +
+                "      td.logpostloglevel.debug                 { color: darkgrey; }" + LF +
+                "      td.logpostloglevel.verification-passed   { color: green; }" + LF +
+                "      td.logpostloglevel.verification-failed   { color: red; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.verification-problem  { color: red; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.execution-problem     { color: red; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.executed              { color: black; }" + LF +
+                "      td.logpostloglevel.deviation-extra-info  { color: blue; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.info                  { color: blue; }" + LF +
+                "      td.logpostloglevel.framework-error       { color: red; font-weight: bold; }" + LF;
+    }
 
     /**
      * Used for HTML formatting for HTML based logs
      * @return Returns a table row element in HTML syntax
      */
     @SuppressWarnings("SameParameterValue")
-    public String toHtmlTableRow(String extraClassName){
+    public String toHtmlTableRow(){
         StringBuilder sb = new StringBuilder();
-        String logRowClass = enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.LOG_ROW.toString());
+        String logRowClass = this.logLevel.toString().toLowerCase().replace("_", "-");
+        //String logRowClass = enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.LOG_ROW.toString());
         String rowMessage;
         if(htmlMessage == null || htmlMessage.length() == 0){
             rowMessage = message;
         } else {
           rowMessage = htmlMessage;
         }
-        if(extraClassName != null && extraClassName.length() > 0){
-            logRowClass += extraClassName;
-        }
-        sb.append("          <tr class=\"").append(logRowClass).append(logLevel.toString().toLowerCase()).append("\">").append(SupportMethods.LF);
-        //sb.append("            <div>").append(SupportMethods.LF);
-        sb.append("              <td class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
-        //sb.append("<td class=\"").append(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.testStepName.toString()).append("\"><span title=\"Test step in class: ").append(testStepClassName).append("\">").append(testStepName).append("</span></td>");
-        sb.append("              <td class=\"logPostLogLevel ").append(logLevel.toString().toLowerCase()).append("\">").append(logLevelToString(logLevel.toString())).append("</td>").append(SupportMethods.LF);
-        sb.append("              <td class=\"logMessage\">").append(substituteDataElements(rowMessage)).append("</td>").append(SupportMethods.LF);
-        //sb.append("            </div>").append(SupportMethods.LF);
-        sb.append("          </tr>").append(SupportMethods.LF);
+        sb.append("              <tr class=\"logpost ").append(logRowClass).append("\">").append(SupportMethods.LF);
+        sb.append("                 <td class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
+        sb.append("                 <td class=\"logpostloglevel " + logRowClass + "\">").append(logLevelToString(logLevel.toString())).append("</td>").append(SupportMethods.LF);
+        sb.append("                 <td class=\"logmessage\">").append(substituteDataElements(rowMessage)).append("</td>").append(SupportMethods.LF);
+        sb.append("              </tr>").append(SupportMethods.LF);
         return sb.toString();
     }
 

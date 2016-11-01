@@ -19,6 +19,8 @@ public class SwingInteractionMethods implements GuiDriver{
 
     public SwingInteractionMethods(TestCase testCase){
         this.testCase = testCase;
+        FrameFixture ff = new FrameFixture("Hej");
+        ff.maximize();
     }
 
     public void startProgram(String programStringAndArguments){
