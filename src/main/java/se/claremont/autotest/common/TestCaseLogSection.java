@@ -77,7 +77,7 @@ public class TestCaseLogSection {
                 html.append("passed\">");
             }
             //html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'   - in class: '" + logPostList.get(0).testStepClassName + "'</h3>").append(LF);
-            html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'</h3>").append(LF);
+            html.append("Test step: '<b>" + logPostList.get(0).testStepName.replace("<", "_").replace(">", "_") + "</b>'</h3>").append(LF);
             html.append("           <div class=\"expandable-content\">").append(LF);
             html.append("              <table class=\"logsectionlogposts\">").append(LF);
             for(LogPost logPost : logPostList){
@@ -98,26 +98,25 @@ public class TestCaseLogSection {
         if (wholePeriod == 0) return "";
 
         StringBuilder sb = new StringBuilder();
-        sb.append("<span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
-                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\"></span>");
-        sb.append("<table class=\"timegraph\" width=\"100%\"><tr>");
+        sb.append("        <span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
+                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\"></span>").append(LF);
+        sb.append("        <table class=\"timegraph\" width=\"100%\">").append(LF).append("           <tr>").append(LF);
 
         if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
             long widthOfInitPartPercent = 100*(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime())/wholePeriod;
-            sb.append("<td width=\"").append(widthOfInitPartPercent).append("%\" class=\"before\"><span title=\"Whole time period start time: ").append(wholeTimePeriodStartTime.getTime()).append(LF).append("Part section start time: ").append(partialEventStartTime.getTime()).append("\"></span></td>");
+            sb.append("              <td width=\"").append(widthOfInitPartPercent).append("%\" class=\"before\"><span title=\"Whole time period start time: ").append(wholeTimePeriodStartTime.getTime()).append(LF).append("Part section start time: ").append(partialEventStartTime.getTime()).append("\"></span></td>").append(LF);
         }
 
         if(partialEventEndTime.getTime()-partialEventStartTime.getTime() != 0){
             long widthOfPartPercent = (100*(partialEventEndTime.getTime() - partialEventStartTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfPartPercent).append("%\" class=\"during\"><span title=\"Part section start time: ").append(partialEventStartTime.getTime()).append(LF).append("Part section end time: ").append(partialEventEndTime.getTime()).append("\"></span></td>");
+            sb.append("              <td width=\"").append(widthOfPartPercent).append("%\" class=\"during\"><span title=\"Part section start time: ").append(partialEventStartTime.getTime()).append(LF).append("Part section end time: ").append(partialEventEndTime.getTime()).append("\"></span></td>").append(LF);
         }
 
         if(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime() != 0){
             long widthOfEndPartPercent = (100*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
-            sb.append("<td width=\"").append(widthOfEndPartPercent).append("%\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>");
+            sb.append("              <td width=\"").append(widthOfEndPartPercent).append("%\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>").append(LF);
         }
-        sb.append("</tr></table>");
-        //sb.append("</span>");
+        sb.append("           </tr>").append(LF).append("        </table>").append(LF);
         return sb.toString();
     }
 

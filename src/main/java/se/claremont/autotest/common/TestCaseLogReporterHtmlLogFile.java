@@ -82,7 +82,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * @return A HTML formatted string to incorporate in the style tag in the HTML testCaseLog
      */
     private static String styles(){
-        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: white; }" + LF +
+        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: honeydew; }" + LF +
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
                 "      h1                      { font-size:24px; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
@@ -117,30 +117,30 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             max - height: 600px;" + LF +
                 "      }" + LF +
                 "      .footer                  { border: 0px none; width: 100%; color: #99CCFF; text-align: center; align: center; }" + LF +
-                "            #help {\n" +
-                "                vertical-align: top;\n" +
-                "                float: right;\n" +
-                "                text-align: right;\n" +
-                "                color: grey;\n" +
-                "            }\n" +
-                "\n" +
-                "            #helpText {\n" +
-                "                visibility: hidden;\n" +
-                "                left: 50px;\n" +
-                "                width: auto;\n" +
-                "                background-color: darkslateblue;\n" +
-                "                color: #fff;\n" +
-                "                text-align: left;\n" +
-                "                padding: 15px 0;\n" +
-                "                border-radius: 6px;\n" +
-                "                position: absolute;\n" +
-                "                z-index: 1;\n" +
-                "            }\n" +
-                "\n" +
-                "            /* Show the tooltip text when you mouse over the tooltip container */\n" +
-                "            #help:hover #helpText {\n" +
-                "                visibility: visible;\n" +
-                "            }\n";
+                "            #help {" + LF +
+                "                vertical-align: top;" + LF +
+                "                float: right;" + LF +
+                "                text-align: right;" + LF +
+                "                color: grey;" + LF +
+                "            }" + LF +
+                "" + LF +
+                "            #helpText {" + LF +
+                "                visibility: hidden;" + LF +
+                "                left: 50px;" + LF +
+                "                width: auto;" + LF +
+                "                background-color: darkslateblue;" + LF +
+                "                color: #fff;" + LF +
+                "                text-align: left;" + LF +
+                "                padding: 15px 0;" + LF +
+                "                border-radius: 6px;" + LF +
+                "                position: absolute;" + LF +
+                "                z-index: 1;" + LF +
+                "            }" + LF +
+                "" + LF +
+                "            /* Show the tooltip text when you mouse over the tooltip container */" + LF +
+                "            #help:hover #helpText {" + LF +
+                "                visibility: visible;" + LF +
+                "            }" + LF;
     }
 
     /**
@@ -171,8 +171,10 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
                 "      <img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\">" + LF +
-                "<span class=\"pagetitle\">Claremont TAF test case results log</span>" + LF +
-                "<span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() + "</span></span>" + LF +
+                "      <span class=\"pagetitle\">Claremont TAF test case results log</span>" + LF +
+                "         <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() +
+                "         </span>" + LF +
+                "      </span>" + LF +
                 status() + "<br>" + LF +
                 //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
@@ -185,31 +187,29 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String helpText(){
-        return "<h2>Brief help for interpreting the log</h2>" + LF +
+        return  LF + "<b>Brief help for interpreting the log</b><br>" + LF +
                 "This test results log is divided into structured sections.<br>" + LF +
-                "<ol>" + LF +
-                "   <li>First there is some statistics and overview information.</li>" + LF +
-                "   <li>The next section is test case data used during execution. If no test data was registered during test case execution this section is suppressed.</li>" + LF +
-                "   <li>The log entries from the test run is the main part of the test case log</li>" + LF +
-                "</ol>" + LF +
-                "<h3>Log sections and log behavior</h3>" + LF +
-                "<p>" + LF +
+                "   * First there is some statistics and overview information.<br>" + LF +
+                "   * The next section is test case data used during execution. If no test data was registered during test case execution this section is suppressed.<br>" + LF +
+                "   * The log entries from the test run is the main part of the test case log<br>" + LF +
+                "<br>" + LF +
+                "<b>Log sections and log behavior</b>" + LF +
                 "The log entries are grouped in test steps that are named after the actions in the test case.<br>" + LF +
                 "Log sections with errors are expanded upon opening the log file." + LF +
                 "If a log section title is clicked the log section log content display is toggled.<br>" +
-                "</p><p>" + LF +
+                "<br>" + LF +
                 "<b>Progress bar</b><br>" + LF +
                 "Between log sections a thin line can be seen. This is a progress bar that indicate how much time was spent in this log section." + LF +
-                "</p><p>" +
+                "<br><br>" +
                 "<b>Debug log rows diplay</b><br>" + LF +
                 "More detailed information is displayed if the <b>debug checkbox</b> is checked. Then even debug log entries are displayed." + LF +
-                "</p><p>" + LF +
+                "<br><br>" + LF +
                 "<b>Test step class name</b><br>" + LF +
                 "When hovering over a log section title the class name for the method producing the log entries are displayed in a tooltip." + LF +
-                "</p><p>" +
+                "<br><br>" +
                 "<b>Screenshots, images and references</b><br>" + LF +
                 "If screenshots exist in the log these will become larger upon hovering over them, and they till open in another browser window upon click.<br>" +
-                "Some other relevant information will also be displayed in another window upon click, for example saved html content.</p>";
+                "Some other relevant information will also be displayed in another window upon click, for example saved html content." + LF;
     }
 
     private String htmlSectionHtmlHead(){
@@ -227,21 +227,21 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String footer(){
-        return "<table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF;
+        return "      <table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF;
     }
 
     private String status(){
         if(testCase.testCaseLog.hasEncounteredErrors()){
-            return "<p><font color=\"lightgrey\">Status: </font><b><font color=\"red\">&#x2717;</font></b></p>" + LF;
+            return "      <p><font color=\"lightgrey\">Status: </font><b><font color=\"red\">&#x2717;</font></b></p>" + LF;
         } else {
-            return "<p><font color=\"lightgrey\">Status: </font><b><font color=\"green\">&#x2713;</font></b></p>" + LF;
+            return "      <p><font color=\"lightgrey\">Status: </font><b><font color=\"green\">&#x2713;</font></b></p>" + LF;
         }
     }
 
     private String htmlSectionTestCaseLogEntries(){
         return "<br>" + LF +
                 "      <h2>Test case log</h2>" + LF +
-                "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\"\">Show verbose debugging information</label>" + LF +
+                "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\">Show verbose debugging information</label>" + LF +
                 "     <div id=\"logpostlist\">" + LF + LF +
                 testStepLogPostSections(testCase) + LF +
                 "     </div>" + LF +

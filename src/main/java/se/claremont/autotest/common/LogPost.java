@@ -221,7 +221,7 @@ class LogPost {
                 "      td.logpostloglevel.verification-problem  { color: red; font-weight: bold; }" + LF +
                 "      td.logpostloglevel.execution-problem     { color: red; font-weight: bold; }" + LF +
                 "      td.logpostloglevel.executed              { color: black; }" + LF +
-                "      td.logpostloglevel.deviation-extra-info  { color: blue; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.deviation-extra-info  { color: blue; }" + LF +
                 "      td.logpostloglevel.info                  { color: blue; }" + LF +
                 "      td.logpostloglevel.framework-error       { color: red; font-weight: bold; }" + LF;
     }
@@ -243,8 +243,8 @@ class LogPost {
         }
         sb.append("              <tr class=\"logpost ").append(logRowClass).append("\">").append(SupportMethods.LF);
         sb.append("                 <td class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
-        sb.append("                 <td class=\"logpostloglevel " + logRowClass + "\">").append(logLevelToString(logLevel.toString())).append("</td>").append(SupportMethods.LF);
-        sb.append("                 <td class=\"logmessage\">").append(substituteDataElements(rowMessage)).append("</td>").append(SupportMethods.LF);
+        sb.append("                 <td class=\"logpostloglevel " + logRowClass + "\">").append(logLevelToString(logLevel.toString().trim())).append("</td>").append(SupportMethods.LF);
+        sb.append("                 <td class=\"logmessage\">").append(LF).append(LF).append(substituteDataElements(rowMessage)).append(LF).append(LF).append("                 </td>").append(SupportMethods.LF);
         sb.append("              </tr>").append(SupportMethods.LF);
         return sb.toString();
     }
