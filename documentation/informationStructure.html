@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>informationStructure</title>
+    <style>
+          @media print
+          {
+            .no-print, .no-print *
+            {
+                display: none !important;
+            }
+          }
+
+          body             { background-color: darkGrey; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: large; }
+          td               { padding: 5px; }
+          table#structure  { background-color: white; border-spacing: 5px; border-collapse: separate; }
+          table#info       { background-color: white; border-spacing: 5px; border-collapse: separate; }
+          table#packages   { background-color: white; }
+          td.framed        { border: 2px solid darkGrey; }
+          td.topText       { vertical-align: top; }
+          td.midText       { vertical-align: center; }
+          td#user          { background-color: beige; }
+          td#tests         { background-color: gainsboro; }
+          td.logLevelDescription { font-style: normal; color: grey; }
+          td.logLevelName        { font-style: bold; color: blue; }
+          td#applicationDescription { background-color: lavender; }
+          td#testActions   { background-color: lightBlue; }
+          td#pageObject    { background-color: lightblue; }
+          td#navigation    { background-color: lightBlue; }
+          td#dataFactory   { background-color: lightBlue; }
+          td#integrations  { background-color: azure; }
+          td#unitTest      { background-color: azure; }
+          td#framework     { background-color: cornSilk; }
+          td.frameworkContent { background-color: bisque; }
+          td#runner        { background-color: lightGrey; }
+          td#drivers       { background-color: lightYellow; }
+          td.driverBox     { background-color: paleGoldenRod; }
+          td#sut           { background-color: pink; }
+          td#driverAbstractions { background-color: cyan; }
+          td.driverAbstraction { background-color: lightBlue; }
+          td.figureText    { background-color: honeyDew; text-align: center; }
+          td.testCase      { background-color: pink; }
+          td#testrun       { background-color: azure; }
+          td.testSet       { background-color: beige; }
+          table.notification { background-color: lightGreen; color: darkSlateGray; border: 2px solid darkSlateGray; width: 70%; }
+          td.testCaseLog           { background-color: cornSilk; }
+          td.testCaseData  { background-color: paleGoldenRod; }
+          td#summaryLogBox { background-color: lavender; }
+          td#settings      { background-color: lightblue; }
+          td.darkCell      { background-color: deepSkyBlue; }
+          td.knownError    { background-color: lightSalmon; }
+          td#indexPane     { background-color: honeyDew; padding: 40px; width: 220px; }
+          td#contentPane   { background-color: honeyDew; padding: 40px; }
+          h1               { color: darkSlateBlue; }
+          h2               { color: darkBlue; }
+          p                { color: darkSlateGrey; }
+          a                { color: darkSlateGrey; text-decoration: none; }
+          a:hover          { color: indigo; text-decoration: underline; }
+          table#logFrame   { background-color: white; border-spacing: 5px; }
+          pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+                             margin-bottom: 10px;
+                             overflow: auto;
+                             width: auto;
+                             padding: 5px;
+                             background-color: #eee;
+                             width: 650px!ie7;
+                             padding-bottom: 20px!ie7;
+                             max - height: 600px;
+             }
+          pre.cli         { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+                             margin-bottom: 10px;
+                             overflow: auto;
+                             width: auto;
+                             padding: 5px;
+                             background-color: black;
+                             color: white;
+                             width: 650px!ie7;
+                             padding-bottom: 20px!ie7;
+                             max - height: 600px;
+             }
+
+      </style>
+</head>
+<body>
+<table id="info">
+    <tbody><tr>
+        <td>
+            <table>
+                <tbody><tr>
+                    <td id="testRun" class="framed">
+                        TestRun
+                        <table>
+                            <tbody><tr>
+                                <td id="settings" class="framed" rowspan="2">
+                                    Settings
+                                </td>
+                                <td class="testSet framed">
+                                    TestSet1
+                                    <table>
+                                        <tbody><tr>
+                                            <td class="testCase framed">
+                                                <table>
+                                                    <tbody><tr>
+                                                        <td class="testCase" rowspan="2">
+                                                            TestCaseA
+                                                        </td>
+                                                        <td class="testCaseLog framed">
+                                                            Log
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="testCaseData framed">
+                                                            Data
+                                                        </td>
+                                                    </tr>
+                                                    </tbody></table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="testCase framed">
+                                                <table>
+                                                    <tbody><tr>
+                                                        <td class="testCase">
+                                                            TestCaseB
+                                                        </td>
+                                                        <td class="testCaseLog framed">
+                                                            Log
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="knownError framed">
+                                                            KnownError
+                                                        </td>
+                                                        <td class="testCaseData framed">
+                                                            Data
+                                                        </td>
+                                                    </tr>
+                                                    </tbody></table>
+                                            </td>
+                                        </tr>
+                                        </tbody></table>
+                                </td>
+                                <td id="summaryLogBox" class="framed" rowspan="2">
+                                    Summary<br>Report
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="testSet framed">
+                                    <table>
+                                        <tbody><tr>
+                                            <td>
+                                                TestSet2
+                                            </td>
+                                            <td class="knownError framed">
+                                                KnownError
+                                            </td>
+                                        </tr>
+                                        </tbody></table>
+                                    <table>
+                                        <tbody><tr>
+                                            <td class="testCase framed">
+                                                <table>
+                                                    <tbody><tr>
+                                                        <td class="testCase" rowspan="2">
+                                                            TestCaseC
+                                                        </td>
+                                                        <td class="testCaseLog framed">
+                                                            Log
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="testCaseData framed">
+                                                            Data
+                                                        </td>
+                                                    </tr>
+                                                    </tbody></table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="testCase framed">
+                                                <table>
+                                                    <tbody><tr>
+                                                        <td class="testCase" rowspan="2">
+                                                            TestCaseD
+                                                        </td>
+                                                        <td class="testCaseLog framed">
+                                                            Log
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="testCaseData framed">
+                                                            Data
+                                                        </td>
+                                                    </tr>
+                                                    </tbody></table>
+                                            </td>
+                                        </tr>
+                                        </tbody></table>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                    </td>
+                </tr>
+                </tbody></table>
+        </td>
+    </tr>
+    <tr>
+        <td class="figureText">
+            <i>Figure2: Information structure</i>
+        </td>
+    </tr>
+    </tbody></table>
+</body>
+</html>
