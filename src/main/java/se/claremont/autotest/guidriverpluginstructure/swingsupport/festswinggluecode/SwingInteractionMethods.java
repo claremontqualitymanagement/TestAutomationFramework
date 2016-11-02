@@ -41,6 +41,16 @@ public class SwingInteractionMethods implements GuiDriver{
         applicationManager.killProgram();
     }
 
+    public void sleep(int millisecondsToSleep){
+        testCase.log(LogLevel.DEBUG, "Sleeping for " + millisecondsToSleep + " milliseconds.");
+        try {
+            Thread.sleep(millisecondsToSleep);
+        } catch (InterruptedException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Hey! Could not sleep. Tried sleeping for " + millisecondsToSleep + " milliseconds.");
+            e.printStackTrace();
+        }
+    }
+
     public Object loadClassInJar(String pathToJar, String pathToClass, String methodName, TestCase testCase){
         Object returnObject = null;
         URL url = null;

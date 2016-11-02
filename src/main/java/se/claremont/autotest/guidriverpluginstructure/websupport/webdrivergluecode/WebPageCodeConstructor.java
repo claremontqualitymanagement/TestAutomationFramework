@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,30 +70,30 @@ class WebPageCodeConstructor {
         List<WebElement> webElements = driver.findElements(By.xpath("//*"));
         for(WebElement webElement : webElements){
             if(webElement.getAttribute("id") != null && webElement.getAttribute("id").length() > 0){
-                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("id")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getAttribute("id")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("id") + "\", DomElement.IdentificationType.BY_ID";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getAttribute("name") != null && webElement.getAttribute("name").length() > 0){
-                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("name") + "\", DomElement.IdentificationType.BY_NAME";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getTagName().equals("a")){
                 if(webElement.getText() == null || webElement.getText().length() < 1) continue;
-                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + "Link";
+                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + "Link";
                 String suggestedElementConstructor = "\"" + webElement.getText() + "\", DomElement.IdentificationType.BY_LINK_TEXT";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstructor));
             }
             //https://suitcss.github.io/
             else if( webElement.getAttribute("class") != null && webElement.getAttribute("class").length() > 0) {
-                String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("class") + "\", DomElement.IdentificationType.BY_CLASS";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getText() != null && webElement.getText().length() > 0){
                 if(driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size() == 1){
-                    String suggestedElementName = methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                    String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
                     String suggestedElementConstructorString = "";
                     int numberOfElementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size();
                     if(numberOfElementsFound != 1){
@@ -108,69 +107,6 @@ class WebPageCodeConstructor {
         return constructors.toString();
     }
 
-    /**
-     * Method naming should only consist of method name safe characters, and be formatted according to method naming conventions in java, and according to coding guidelines.
-     *
-     * @param instring The string to convert
-     * @return Returns the converted string
-     */
-    private static String methodNameWithOnlySafeCharacters(String instring){
-        String returnString = "";
-        instring = instring.trim();
-        if(instring == null || instring.length() < 1){
-            return "";
-        }
-        if(Character.isDigit(instring.charAt(0))){
-            instring = "_" + instring;
-        } //Method names cannot start with digits
-        instring = instring.replaceAll("--", "-");
-
-        for(String spaceDividedWord : instring.split(" ")){
-            for(String dashDividedWord : spaceDividedWord.split("-")){
-                for(String underscoreDividedWord : dashDividedWord.split("_")){
-                    returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
-                }
-
-            }
-        }
-        return returnString.
-                replace(" ", "").
-                replace(",", "").
-                replace("–", "_").
-                replace(".", "_").
-                replace("%", "").
-                replace("&", "Proc").
-                replace("$", "Dollar").
-                replace("£", "Pound").
-                replace("€", "Euro").
-                replace("\\", "_").
-                replace("\"", "").
-                replace("'", "").
-                replace("!", "").
-                replace("?", "").
-                replace("é", "e").
-                replace("è", "e").
-                replace("-", "_").
-                replace("*", "_").
-                replace("+", "Plus").
-                replace("©", "Copyright").
-                replace("å", "a").
-                replace("ä", "a").
-                replace("|", "_").
-                replace("ö", "o").
-                replace("Å", "A").
-                replace("Ä", "A").
-                replace("=", "").
-                replace("@", "At").
-                replace("/", "_").
-                replace("(", "_").
-                replace(")", "_").
-                replace(";", "").
-                replace("^", "_").
-                replace(":", "").
-                replace("Ö", "O");
-    }
-
     private static String tagNameToElementSuffix(String tagName){
         if(tagName.toLowerCase().equals("a")) return "Link";
         if(tagName.toLowerCase().equals("li")) return "ListItem";
@@ -181,18 +117,7 @@ class WebPageCodeConstructor {
         if(tagName.toLowerCase().equals("h3")) return "SubHeading";
         if(tagName.toLowerCase().equals("p")) return "Paragraph";
         if(tagName.toLowerCase().equals("div")) return "Div";
-        return firstUpperLetterTrailingLowerLetter(tagName);
-    }
-
-    private static String firstUpperLetterTrailingLowerLetter(String instring){
-        if(instring == null || instring.length() < 1) return "";
-        String returnString;
-        returnString = instring.substring(0,1).toUpperCase();
-        if(instring.length() > 1){
-            returnString += instring.substring(1).toLowerCase();
-        }
-        return returnString;
-
+        return SupportMethods.firstUpperLetterTrailingLowerLetter(tagName);
     }
 
     private class Constructors extends ArrayList<Constructor>{

@@ -7,7 +7,7 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import qtpUsageAnalysis.GUI;
+//import qtpUsageAnalysis.GUI;
 import se.claremont.autotest.common.*;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingApplication;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;
@@ -253,16 +253,18 @@ public class sandBoxTester extends TestSet{
     @Ignore
     @Test
     public void testSwingFestApplicationAttach(){
-        GUI gui = new GUI();
+        /*GUI gui = new GUI();
         gui.setVisible(true);
         SwingApplication sa = new SwingApplication(gui);
         SwingWindow mainWindow = new SwingWindow(sa, "QTP license server log file reformatter");
         SwingElement.Button browse = new SwingElement.Button(mainWindow, "Browse...");
         SwingInteractionMethods s = new SwingInteractionMethods(currentTestCase);
-        s.click(browse);
-    }
 
-//Todo: Remove dependency to test jar
+        s.click(browse);
+        s.sleep(3000);
+        mainWindow.map();*/
+
+    }
 
     @Ignore
     @Test

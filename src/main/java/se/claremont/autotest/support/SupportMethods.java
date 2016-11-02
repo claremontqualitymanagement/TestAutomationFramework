@@ -206,4 +206,81 @@ public class SupportMethods {
         return fileContent;
     }
 
+    /**
+     * Method naming should only consist of method name safe characters, and be formatted according to method naming conventions in java, and according to coding guidelines.
+     *
+     * @param instring The string to convert
+     * @return Returns the converted string
+     */
+    public static String methodNameWithOnlySafeCharacters(String instring){
+        if(instring == null || instring.length() < 1){
+            return "";
+        }
+        instring = instring.trim();
+        String returnString = "";
+
+        for(String spaceDividedWord : instring.split(" ")){
+            for(String dashDividedWord : spaceDividedWord.split("-")){
+                for(String underscoreDividedWord : dashDividedWord.split("_")){
+                    returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
+                }
+
+            }
+        }
+
+        returnString = returnString.replaceAll("--", "-").
+                replace(" ", "").
+                replace(",", "").
+                replace("–", "_").
+                replace(".", "_").
+                replace("%", "").
+                replace("&", "Proc").
+                replace("$", "Dollar").
+                replace("£", "Pound").
+                replace("€", "Euro").
+                replace("\\", "_").
+                replace("\"", "").
+                replace("'", "").
+                replace("!", "").
+                replace("?", "").
+                replace("é", "e").
+                replace("è", "e").
+                replace("-", "_").
+                replace("*", "_").
+                replace("+", "Plus").
+                replace("©", "Copyright").
+                replace("å", "a").
+                replace("ä", "a").
+                replace("|", "_").
+                replace("ö", "o").
+                replace("Å", "A").
+                replace("Ä", "A").
+                replace("=", "").
+                replace("@", "At").
+                replace("/", "_").
+                replace("(", "_").
+                replace(")", "_").
+                replace(";", "").
+                replace("^", "_").
+                replace(":", "").
+                replace("__", "_").
+                replace("Ö", "O");
+
+
+        if(Character.isDigit(returnString.charAt(0))){
+            returnString = "_" + returnString;
+        } //Method names cannot start with digits
+        return returnString;
+    }
+
+    public static String firstUpperLetterTrailingLowerLetter(String instring){
+        if(instring == null || instring.length() < 1) return "";
+        String returnString;
+        returnString = instring.substring(0,1).toUpperCase();
+        if(instring.length() > 1){
+            returnString += instring.substring(1).toLowerCase();
+        }
+        return returnString;
+
+    }
 }
