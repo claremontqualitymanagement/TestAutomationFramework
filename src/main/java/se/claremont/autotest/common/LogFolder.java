@@ -1,5 +1,6 @@
 package se.claremont.autotest.common;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,8 +24,8 @@ public class LogFolder {
     public static void setLogFolder(String testSetName){
         if(testRunLogFolder == null){
             baseLogFolder = TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER);
-            if(!baseLogFolder.endsWith("\\")){ baseLogFolder = baseLogFolder + "\\"; }
-            testRunLogFolder = baseLogFolder + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + testSetName + "\\";
+            if(!baseLogFolder.endsWith("\\") || !baseLogFolder.endsWith("/")){ baseLogFolder = baseLogFolder + "\\"; }
+            testRunLogFolder = baseLogFolder.replace("\\", File.separator).replace("/", File.separator) + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + testSetName + File.separator;
         }
     }
 }
