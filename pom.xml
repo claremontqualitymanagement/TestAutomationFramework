@@ -129,7 +129,7 @@
             <artifactId>json</artifactId>
             <version>20160810</version>
         </dependency>
-        <-- For mail sending of reports -->
+        <!-- For mail sending of reports -->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
