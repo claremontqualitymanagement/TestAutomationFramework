@@ -2,7 +2,7 @@ package se.claremont.autotest.common;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.support.SupportMethods;
+import se.claremont.autotest.support.StringManagement;
 
 /**
  * Tests for the Settings class
@@ -44,7 +44,7 @@ public class Settings_Tests {
         Settings settings = new Settings();
         settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "this value");
         Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("this value"));
-        settings.setCustomValue(SupportMethods.stringToCapitalInitialCharacterForEachWordAndNoSpaces(Settings.SettingParameters.PATH_TO_LOGO.toString().replace("_", " ")), "that value");
+        settings.setCustomValue(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(Settings.SettingParameters.PATH_TO_LOGO.toString().replace("_", " ")), "that value");
         Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("that value"));
     }
 

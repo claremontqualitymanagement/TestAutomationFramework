@@ -2,8 +2,8 @@ package se.claremont.autotest.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,7 +82,7 @@ class LogPost {
      * @return A friendly name variant of the testCaseLog level name
      */
     private String logLevelToString(String logLevelName){
-        StringBuilder sb = new StringBuilder(SupportMethods.enumCapitalNameToFriendlyString(logLevelName));
+        StringBuilder sb = new StringBuilder(StringManagement.enumCapitalNameToFriendlyString(logLevelName));
         for(int i = 0; i <  TestCaseLog.maxNumberOfCharactersInLogLevelNames - logLevelName.length(); i++){
             sb.append(" ");
         }
@@ -205,7 +205,7 @@ class LogPost {
                 "    \"teststepname\": \"" + this.testStepName + "\"," + SupportMethods.LF +
                 "    \"teststepclassname\": \"" + this.testStepClassName+ "\"," + SupportMethods.LF +
                 "    \"time\": \"" + new SimpleDateFormat("yyyMMdd HH:mm:ss").format(date) + "\"," + SupportMethods.LF +
-                "    \"loglevel\": \"" + SupportMethods.enumCapitalNameToFriendlyString(this.logLevel.toString()) + "\"," + SupportMethods.LF +
+                "    \"loglevel\": \"" + StringManagement.enumCapitalNameToFriendlyString(this.logLevel.toString()) + "\"," + SupportMethods.LF +
                 "    \"puretextmessage\": \"" + this.message + "\"," + SupportMethods.LF +
                 "    \"htmlmessage\": \"" + this.htmlMessage + "\"," +
                 "    \"identifiedtobepartofknownerror\": " + String.valueOf(this.identifiedToBePartOfKnownError).toLowerCase() + SupportMethods.LF +

@@ -3,7 +3,6 @@ package se.claremont.autotest.support;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.tools.Utils;
@@ -87,10 +86,6 @@ public class SupportMethods {
     }
 
 
-    public static String htmlContentToDisplayableHtmlCode(String htmlContent){
-        return "<pre>" + LF + LF + htmlContent.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + LF + LF + "</pre>" + LF;
-    }
-
     /**
      * Line-feed for current OS
      */
@@ -118,20 +113,6 @@ public class SupportMethods {
         return Thread.currentThread().getStackTrace()[stacktraceLevel].getClassName();
     }
 
-    public static String stringToCapitalInitialCharacterForEachWordAndNoSpaces(String instring){
-        StringBuilder stringBuilder = new StringBuilder();
-        String[] words = instring.split(" ");
-        for(String word : words){
-            if(word.length() > 0){
-                stringBuilder.append(word.trim().substring(0,1).toUpperCase());
-                if(word.length() > 1){
-                    stringBuilder.append(word.trim().substring(1).toLowerCase());
-                }
-            }
-        }
-        return stringBuilder.toString();
-    }
-
     /**
      * Matches a string with a regex pattern
      * @param instring the string to match
@@ -144,19 +125,6 @@ public class SupportMethods {
         Matcher m = p.matcher(instring);
         return m.matches();
         //return instring.contains(pattern);
-    }
-
-    /**
-     * Since java enum elements are written in capital letters (considered being
-     * constants) and enum values are parsed as string frequently this method
-     * re-formats the enum values to initial capital letter and the rest of the
-     * string in lower case - and underscore characters substituted with spaces.
-     * @param CAPITALIZED_STRING A string from an enum value
-     * @return The modified string, in friendlier text format
-     */
-    public static String enumCapitalNameToFriendlyString(String CAPITALIZED_STRING){
-        return CAPITALIZED_STRING.substring(0, 1).toUpperCase() +
-                CAPITALIZED_STRING.substring(1).replace('_', ' ').toLowerCase();
     }
 
     /**
@@ -206,81 +174,4 @@ public class SupportMethods {
         return fileContent;
     }
 
-    /**
-     * Method naming should only consist of method name safe characters, and be formatted according to method naming conventions in java, and according to coding guidelines.
-     *
-     * @param instring The string to convert
-     * @return Returns the converted string
-     */
-    public static String methodNameWithOnlySafeCharacters(String instring){
-        if(instring == null || instring.length() < 1){
-            return "";
-        }
-        instring = instring.trim();
-        String returnString = "";
-
-        for(String spaceDividedWord : instring.split(" ")){
-            for(String dashDividedWord : spaceDividedWord.split("-")){
-                for(String underscoreDividedWord : dashDividedWord.split("_")){
-                    returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
-                }
-
-            }
-        }
-
-        returnString = returnString.replaceAll("--", "-").
-                replace(" ", "").
-                replace(",", "").
-                replace("–", "_").
-                replace(".", "_").
-                replace("%", "").
-                replace("&", "Proc").
-                replace("$", "Dollar").
-                replace("£", "Pound").
-                replace("€", "Euro").
-                replace("\\", "_").
-                replace("\"", "").
-                replace("'", "").
-                replace("!", "").
-                replace("?", "").
-                replace("é", "e").
-                replace("è", "e").
-                replace("-", "_").
-                replace("*", "_").
-                replace("+", "Plus").
-                replace("©", "Copyright").
-                replace("å", "a").
-                replace("ä", "a").
-                replace("|", "_").
-                replace("ö", "o").
-                replace("Å", "A").
-                replace("Ä", "A").
-                replace("=", "").
-                replace("@", "At").
-                replace("/", "_").
-                replace("(", "_").
-                replace(")", "_").
-                replace(";", "").
-                replace("^", "_").
-                replace(":", "").
-                replace("__", "_").
-                replace("Ö", "O");
-
-
-        if(Character.isDigit(returnString.charAt(0))){
-            returnString = "_" + returnString;
-        } //Method names cannot start with digits
-        return returnString;
-    }
-
-    public static String firstUpperLetterTrailingLowerLetter(String instring){
-        if(instring == null || instring.length() < 1) return "";
-        String returnString;
-        returnString = instring.substring(0,1).toUpperCase();
-        if(instring.length() > 1){
-            returnString += instring.substring(1).toLowerCase();
-        }
-        return returnString;
-
-    }
 }

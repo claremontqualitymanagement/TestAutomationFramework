@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.util.ArrayList;
@@ -70,30 +71,30 @@ class WebPageCodeConstructor {
         List<WebElement> webElements = driver.findElements(By.xpath("//*"));
         for(WebElement webElement : webElements){
             if(webElement.getAttribute("id") != null && webElement.getAttribute("id").length() > 0){
-                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getAttribute("id")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(webElement.getAttribute("id")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("id") + "\", DomElement.IdentificationType.BY_ID";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getAttribute("name") != null && webElement.getAttribute("name").length() > 0){
-                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(webElement.getAttribute("name")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("name") + "\", DomElement.IdentificationType.BY_NAME";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getTagName().equals("a")){
                 if(webElement.getText() == null || webElement.getText().length() < 1) continue;
-                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + "Link";
+                String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + "Link";
                 String suggestedElementConstructor = "\"" + webElement.getText() + "\", DomElement.IdentificationType.BY_LINK_TEXT";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstructor));
             }
             //https://suitcss.github.io/
             else if( webElement.getAttribute("class") != null && webElement.getAttribute("class").length() > 0) {
-                String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(webElement.getAttribute("class")) + "_" + tagNameToElementSuffix(webElement.getTagName());
                 String suggestedElementConstrucorString = "\"" + webElement.getAttribute("class") + "\", DomElement.IdentificationType.BY_CLASS";
                 constructors.addConstructor(new Constructor(unusedMathodName(suggestedElementName), suggestedElementConstrucorString));
             }
             else if(webElement.getText() != null && webElement.getText().length() > 0){
                 if(driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size() == 1){
-                    String suggestedElementName = SupportMethods.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
+                    String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
                     String suggestedElementConstructorString = "";
                     int numberOfElementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size();
                     if(numberOfElementsFound != 1){
@@ -117,7 +118,7 @@ class WebPageCodeConstructor {
         if(tagName.toLowerCase().equals("h3")) return "SubHeading";
         if(tagName.toLowerCase().equals("p")) return "Paragraph";
         if(tagName.toLowerCase().equals("div")) return "Div";
-        return SupportMethods.firstUpperLetterTrailingLowerLetter(tagName);
+        return StringManagement.firstUpperLetterTrailingLowerLetter(tagName);
     }
 
     private class Constructors extends ArrayList<Constructor>{

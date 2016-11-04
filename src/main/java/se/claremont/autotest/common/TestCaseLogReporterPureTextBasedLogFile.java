@@ -1,5 +1,6 @@
 package se.claremont.autotest.common;
 
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
 
 /**
@@ -26,7 +27,7 @@ public class TestCaseLogReporterPureTextBasedLogFile implements TestCaseLogRepor
      */
     private String pureTextLogText(){
         StringBuilder logText = new StringBuilder(SupportMethods.LF + "Test case '" + testCase.testName + "'" + SupportMethods.LF + SupportMethods.LF);
-        logText.append("Test status: ").append(SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString())).append(SupportMethods.LF).append(SupportMethods.LF);
+        logText.append("Test status: ").append(StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString())).append(SupportMethods.LF).append(SupportMethods.LF);
         if(testCase.testCaseData.testCaseDataList.size() > 0){
             logText.append("Test case data:").append(SupportMethods.LF);
             for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){

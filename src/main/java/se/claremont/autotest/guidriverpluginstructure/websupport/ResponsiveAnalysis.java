@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -270,7 +270,7 @@ public class ResponsiveAnalysis {
         }
 
         public @Override String toString(){
-            return "[Visible immediate children count: " + assessmentChildElements.size() + ", hidden immediate children count: " + (immediateChildren.size() - assessmentChildElements.size()) + ", size: " + size.width + "x" + size.height + ", position: " + position.getX() + "x" + position.getY() + ", innerHTML: '" + SupportMethods.htmlContentToDisplayableHtmlCode(innerHtml) + "']";
+            return "[Visible immediate children count: " + assessmentChildElements.size() + ", hidden immediate children count: " + (immediateChildren.size() - assessmentChildElements.size()) + ", size: " + size.width + "x" + size.height + ", position: " + position.getX() + "x" + position.getY() + ", innerHTML: '" + StringManagement.htmlContentToDisplayableHtmlCode(innerHtml) + "']";
         }
 
         public boolean innerHtmlIsSame(AssessmentElement assessmentElement){

@@ -12,8 +12,8 @@ import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -1449,7 +1449,7 @@ public class WebInteractionMethods implements GuiDriver {
                 "      </style>" + LF +
                 "   </head>" + LF +
                 "   <body>" + LF +
-                "         " + SupportMethods.htmlContentToDisplayableHtmlCode(driver.getPageSource()) + LF + LF +
+                "         " + StringManagement.htmlContentToDisplayableHtmlCode(driver.getPageSource()) + LF + LF +
                 "   </body>" + LF +
                 "</html>" + LF;
         SupportMethods.saveToFile(html, filePath);

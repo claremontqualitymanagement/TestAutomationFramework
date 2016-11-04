@@ -1,5 +1,6 @@
 package se.claremont.autotest.common;
 
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ public class HtmlSummaryReport {
     }
 
     private void appendTestCaseResultToSummary(TestCase testCase){
-        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"file://" + testCase.pathToHtmlLog + "\" target=\"_blank\">Log</a></td></tr>" + LF;
+        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"file://" + testCase.pathToHtmlLog + "\" target=\"_blank\">Log</a></td></tr>" + LF;
         //testCaseSummary += solvedKnownErrorsFromTestCaseLocalKnownErrorsList(testCase);
         switch (testCase.resultStatus){
             case PASSED:

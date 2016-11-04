@@ -3,6 +3,7 @@ package se.claremont.autotest.common;
 import org.junit.Assert;
 import org.junit.Assume;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
 
 import java.text.SimpleDateFormat;
@@ -148,7 +149,7 @@ public class TestCase {
         testCaseLog.log(LogLevel.INFO, "Ending test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(stopTime) + ".");
         logKnownErrors();
         evaluateResultStatus();
-        testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + SupportMethods.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
+        testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
         CliTestRunner.testRun.reporters.evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
         reported = true;
@@ -344,7 +345,7 @@ public class TestCase {
         json.append("{\"testCaseRunInstance\": {").append(SupportMethods.LF);
         if(testSetName != null) json.append("   \"testSetName\": \"").append(testSetName).append("\",").append(SupportMethods.LF);
         if(testName != null) json.append("   \"testName\": \"").append(testName).append("\",").append(SupportMethods.LF);
-        if(resultStatus != null) json.append("   \"status\": \"").append(SupportMethods.enumCapitalNameToFriendlyString(resultStatus.toString())).append("\",").append(SupportMethods.LF);
+        if(resultStatus != null) json.append("   \"status\": \"").append(StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString())).append("\",").append(SupportMethods.LF);
         if(uid != null) json.append("   \"guid\": \"").append(uid.toString()).append("\",").append(SupportMethods.LF);
         if(pathToHtmlLog != null) json.append("   \"pathToHtmlLog\": \"").append(pathToHtmlLog.replace("\\", "\\\\")).append("\",").append(SupportMethods.LF);
         if(testCaseLog != null) json.append(testCaseLog.toJson()).append(",").append(SupportMethods.LF);

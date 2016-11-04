@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static se.claremont.autotest.support.SupportMethods.methodNameWithOnlySafeCharacters;
+import static se.claremont.autotest.support.StringManagement.methodNameWithOnlySafeCharacters;
 
 /**
  * Created by jordam on 2016-09-18.

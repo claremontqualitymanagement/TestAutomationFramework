@@ -2,8 +2,8 @@ package se.claremont.autotest.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -129,8 +129,8 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String footer(){
-        return "      <table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF;
-                //"<img src=\"http://46.101.193.212/TAF/images/Taf3.png\" alt=\"TAF Logo\">";
+        return "      <table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF +
+                "<img src=\"http://46.101.193.212/TAF/images/Taf3_transp.png\" alt=\"TAF Logo\">";
     }
 
     //#99CCFF - Claremont blue
@@ -217,7 +217,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
                 "      <p>" + LF +
-                "        Result status: " + SupportMethods.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
+                "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
                 "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
                 "      </p>" + LF +
