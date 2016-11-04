@@ -1,6 +1,6 @@
 package se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode;
 
-import com.sun.javaws.Main;
+//import com.sun.javaws.Main;
 import org.fest.swing.awt.AWT;
 import org.fest.swing.fixture.FrameFixture;
 import org.glassfish.jersey.jaxb.internal.XmlCollectionJaxbProvider;

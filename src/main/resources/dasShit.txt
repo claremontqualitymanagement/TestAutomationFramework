@@ -43,3 +43,10 @@ git remote show origin
 * skapa en ny tag för byggnation via webhooks till TravisCI
 git tag v1.0.1-beta88
 git push origin v1.0.1-beta88
+*glöm inte att pusha till development
+git push origin development
+
+*** check summor ***
+md5 TestAutomationFramework-v1.0-jar-with-dependencies.jar > TestAutomationFramework-v1.0-jar-with-dependencies.jar.md5
+shasum TestAutomationFramework-v1.0-jar-with-dependencies.jar > TestAutomationFramework-v1.0-jar-with-dependencies.jar.sha1
+*** glöm inte rensa filerna från skräp

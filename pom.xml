@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v1.0.1-beta97</version>
+    <version>v1.0.3</version>
     <packaging>jar</packaging>
 
     <name>Test Automation Framework - TAF</name>
@@ -129,7 +129,7 @@
             <artifactId>json</artifactId>
             <version>20160810</version>
         </dependency>
-        <-- For mail sending of reports -->
+        <!-- For mail sending of reports -->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
