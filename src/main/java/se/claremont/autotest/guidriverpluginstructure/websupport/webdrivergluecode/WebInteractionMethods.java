@@ -354,9 +354,9 @@ public class WebInteractionMethods implements GuiDriver {
             haltFurtherExecution();
         }
 
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
         logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
-        CliTestRunner.testRun.fileCounter++;
+        TestRun.fileCounter++;
         byte[] fileImage = null;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
@@ -1427,7 +1427,7 @@ public class WebInteractionMethods implements GuiDriver {
             haltFurtherExecution();
         }
 
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".html";
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".html";
         String LF = SupportMethods.LF;
         String htmlStyle =                 "          pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
@@ -1454,7 +1454,7 @@ public class WebInteractionMethods implements GuiDriver {
                 "</html>" + LF;
         SupportMethods.saveToFile(html, filePath);
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"file://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
-        CliTestRunner.testRun.fileCounter++;
+        TestRun.fileCounter++;
     }
 
 

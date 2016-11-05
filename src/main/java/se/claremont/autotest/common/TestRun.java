@@ -7,7 +7,7 @@ package se.claremont.autotest.common;
  * Created by jordam on 2016-08-17.
  */
 public class TestRun {
-    public int fileCounter = 0;
+    public static int fileCounter = 0;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -31,9 +31,9 @@ public class TestRun {
     }
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
 
-    public TestSet currentTestSet = null;
+    public static TestSet currentTestSet = null;
     public static final Settings settings = new Settings();
-    public TestRunReporterFactory reporters = new TestRunReporterFactory();
+    public static TestRunReporterFactory reporters = new TestRunReporterFactory();
 
     TestRun(){
         reporters.addTestRunReporter(new TestRunReporterHtmlSummaryReportFile());

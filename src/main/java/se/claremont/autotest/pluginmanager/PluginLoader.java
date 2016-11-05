@@ -40,7 +40,7 @@ public class PluginLoader {
         for(File pluginJarFile : jarFiles){
             ClassLoader loader = null;
             try {
-                loader = URLClassLoader.newInstance(new URL[] { pluginJarFile.toURL() });
+                loader = URLClassLoader.newInstance(new URL[] { new URL(pluginJarFile.getAbsolutePath())});
                 TafPlugin plugin = null;
                 plugin = (TafPlugin) loader.loadClass(pluginJarFile.getName()).newInstance();
                 plugin.run();

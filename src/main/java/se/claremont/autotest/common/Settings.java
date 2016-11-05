@@ -168,7 +168,7 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
-        setValue(SettingParameters.PLUGIN_FOLDER, getValue(SettingParameters.BASE_LOG_FOLDER) + File.separator + "Plugins");
+        setValue(SettingParameters.PLUGIN_FOLDER, getValue(SettingParameters.BASE_LOG_FOLDER) + "Plugins");
     }
 
     String toHtmlTable(){

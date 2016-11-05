@@ -4,10 +4,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.CliTestRunner;
-import se.claremont.autotest.common.LogFolder;
-import se.claremont.autotest.common.LogLevel;
-import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.common.*;
 import se.claremont.tools.Utils;
 
 import javax.imageio.ImageIO;
@@ -32,9 +29,9 @@ public class RobotSwingInteractionMethods {
     }
 
     public void captureScreenshot(){
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + CliTestRunner.testRun.fileCounter + ".png";
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
         logger.debug( "Saving screenshot of desktop to '" + filePath + "'." );
-        CliTestRunner.testRun.fileCounter++;
+        TestRun.fileCounter++;
         try{
             Path file = Paths.get(filePath);
             File fileFolder = new File(filePath);

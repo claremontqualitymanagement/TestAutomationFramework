@@ -17,7 +17,7 @@ public class CliTestRunner {
 
     private final static Logger logger = LoggerFactory.getLogger( CliTestRunner.class );
 
-    public static final TestRun testRun = new TestRun();
+//    public static final TestRun testRun = new TestRun();
     private static final String LF = SupportMethods.LF;
 
     private static String helpText(){

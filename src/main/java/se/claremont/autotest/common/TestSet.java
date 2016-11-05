@@ -16,7 +16,7 @@ public class TestSet {
      * Setting up a new test set instance
      */
     public TestSet(){
-        CliTestRunner.testRun.currentTestSet = this;
+        TestRun.currentTestSet = this;
         name = SupportMethods.classNameAtStacktraceLevel(3);
     }
 

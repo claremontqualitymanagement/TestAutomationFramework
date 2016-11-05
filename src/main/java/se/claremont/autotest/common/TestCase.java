@@ -150,7 +150,7 @@ public class TestCase {
         logKnownErrors();
         evaluateResultStatus();
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
-        CliTestRunner.testRun.reporters.evaluateTestCase(this);
+        TestRun.reporters.evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
         reported = true;
         assertExecutionResultsToTestRunner();

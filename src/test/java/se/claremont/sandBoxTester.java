@@ -9,6 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 //import qtpUsageAnalysis.GUI;
 import se.claremont.autotest.common.*;
+import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingApplication;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingWindow;
@@ -65,8 +66,8 @@ public class sandBoxTester extends TestSet{
 
     @AfterClass
     public static void ClassTearDown(){
-        CliTestRunner.testRun.reporters.evaluateTestSet(CliTestRunner.testRun.currentTestSet);
-        CliTestRunner.testRun.reporters.report();
+        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
+        TestRun.reporters.report();
     }
 
     @Before
@@ -280,5 +281,20 @@ public class sandBoxTester extends TestSet{
     }
 
 
+    @Ignore
+    @Test
+    public void fileCounterTest(){
+        TestCase testCase = new TestCase(null, "dummy");
+        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        web.navigate("http://www.claremont.se");
+        web.saveScreenshot();
+        web.saveDesktopScreenshot();
+        web.saveScreenshot();
+        web.saveDesktopScreenshot();
+        FileTester fileTester = new FileTester(testCase);
+        fileTester.verifyFileExists(LogFolder.testRunLogFolder + testCase.testName + "3.png");
+        web.makeSureDriverIsClosed();
+        testCase.evaluateResultStatus();
+    }
 
 }
