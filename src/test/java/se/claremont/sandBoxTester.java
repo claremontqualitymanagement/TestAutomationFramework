@@ -17,6 +17,7 @@ import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswingglue
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.SwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
 import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis;
+import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis2;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.restsupport.RestSupport;
@@ -176,7 +177,6 @@ public class sandBoxTester extends TestSet{
         driver.get("http://www.claremont.se");
         List<Dimension> resolutions = new ArrayList<>();
         resolutions.add(new Dimension(750, 480));
-        resolutions.add(new Dimension(1025, 650));
         resolutions.add(new Dimension(2028, 900));
         ResponsiveAnalysis responsiveAnalysis = new ResponsiveAnalysis(driver, resolutions, currentTestCase);
         responsiveAnalysis.performAnalysisAndReportResults();
@@ -295,6 +295,19 @@ public class sandBoxTester extends TestSet{
         fileTester.verifyFileExists(LogFolder.testRunLogFolder + testCase.testName + "3.png");
         web.makeSureDriverIsClosed();
         testCase.evaluateResultStatus();
+    }
+
+    @Ignore
+    @Test
+    public void newResolutionAssessment(){
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        web.navigate("http://www.claremont.se");
+        List<Dimension> resolutions = new ArrayList<>();
+        resolutions.add(new Dimension(1024, 768));
+        resolutions.add(new Dimension(2048, 1024));
+        ResponsiveAnalysis2 responsiveAnalysis2 = new ResponsiveAnalysis2(resolutions, web.driver, currentTestCase);
+        responsiveAnalysis2.performAnalysis();
+        web.makeSureDriverIsClosed();
     }
 
 }

@@ -85,7 +85,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
 
         try {
-            driver.manage().wait((long)milliseconds);
+            Thread.sleep(milliseconds);
             log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
         } catch (InterruptedException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not wait the expected " + milliseconds + " milliseconds.");
@@ -527,7 +527,7 @@ public class WebInteractionMethods implements GuiDriver {
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
         try {
             WebElement webelement = getRuntimeElementWithTimeout(element, standardTimeoutInSeconds);
-            if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it couldn't be identified.");
+            if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it could not be identified.");
             if(!webelement.isDisplayed()) errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
             if(!webelement.isEnabled()) errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
             webelement.click();
@@ -590,12 +590,51 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void verifyObjectIsNotDisplayed(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        long startTime = System.currentTimeMillis();
+        WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+        boolean disappeared = (webElement == null);
+        while (!disappeared && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
+            wait(100);
+            webElement = getRuntimeElementWithoutLogging(domElement);
+            disappeared = (webElement == null || !webElement.isDisplayed());
+        }
+
         if(webElement == null){
             log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could not be identified in the html.");
             log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not be present.");
         } else if(!webElement.isDisplayed()) {
-            log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could be identified in the html, but it's suppressed from being displayed in the GUI.");
+            log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could be identified in the html, but it is suppressed from being displayed in the GUI.");
+            log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not displayed.");
+        }else {
+            log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was identified as displayed although expected to not be displayed.");
+            saveScreenshot();
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
+    }
+
+    /**
+     * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyObjectIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
+        DomElement domElement = (DomElement) guiElement;
+        long startTime = System.currentTimeMillis();
+        WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+        boolean disappeared = (webElement == null);
+        while (!disappeared && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000){
+            wait(100);
+            webElement = getRuntimeElementWithoutLogging(domElement);
+            disappeared = (webElement == null || !webElement.isDisplayed());
+        }
+
+        if(webElement == null){
+            log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could not be identified in the html.");
+            log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not be present.");
+        } else if(!webElement.isDisplayed()) {
+            log(LogLevel.DEBUG, "Object " + domElement.LogIdentification() + " could be identified in the html, but it is suppressed from being displayed in the GUI.");
             log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not displayed.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was identified as displayed although expected to not be displayed.");
@@ -667,6 +706,26 @@ public class WebInteractionMethods implements GuiDriver {
     public void verifyObjectDoesNotExist(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement != null){
+            log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to not be present but was able to be identified.");
+            saveScreenshot();
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        } else {
+            log(LogLevel.VERIFICATION_PASSED, "Verified that the object " + domElement.LogIdentification() + " was not present.");
+        }
+    }
+
+    /**
+     * Checks if the given object exist in the GUI, within a timeout
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyObjectDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, timeoutInSeconds);
         if(webElement != null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to not be present but was able to be identified.");
             saveScreenshot();
@@ -954,7 +1013,7 @@ public class WebInteractionMethods implements GuiDriver {
                 log(LogLevel.EXECUTION_PROBLEM, "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
             }
         } else {
-            log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver doesn't seem to be compatible. Javascript that didn't run below:" + SupportMethods.LF + script);
+            log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + script);
         }
 
     }
@@ -1122,7 +1181,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null) return false;
         boolean interactionable = (webElement.isEnabled() && webElement.isDisplayed());
-        log(LogLevel.DEBUG, "Checking if " + ((DomElement)guiElement).LogIdentification() + " is interactionable and " + String.valueOf(interactionable).toLowerCase().replace("true", "it seemt to be both displayed and enabled.").replace("false", " it isn't."));
+        log(LogLevel.DEBUG, "Checking if " + ((DomElement)guiElement).LogIdentification() + " is interactionable and " + String.valueOf(interactionable).toLowerCase().replace("true", "it seemt to be both displayed and enabled.").replace("false", " it is not."));
         return interactionable;
     }
 
@@ -1273,7 +1332,7 @@ public class WebInteractionMethods implements GuiDriver {
                 log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
             } else {
                 webElement.click();
-                log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it wasn't.");
+                log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it was not.");
             }
         } catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
@@ -1421,7 +1480,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Saves the current HTML of the page interacted with to the testCaseLog folder for debugging purposes and write a testCaseLog post about it
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
-    private void saveHtmlContentOfCurrentPage(){
+    public void saveHtmlContentOfCurrentPage(){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -1461,7 +1520,7 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Halts further execution of the test case when further execution is considered non-valuable
      */
-    private void haltFurtherExecution(){
+    public void haltFurtherExecution(){
         log(LogLevel.INFO, "Halting further execution due to perceived problems.");
         makeSureDriverIsClosed();
         testCase.report();
@@ -1622,6 +1681,24 @@ public class WebInteractionMethods implements GuiDriver {
         saveHtmlContentOfCurrentPage();
         writeRunningProcessListDeviationsSinceTestCaseStart();
         haltFurtherExecution();
+    }
+
+    public boolean pageTitleExistWithTimeout(String expectedPageTitle, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000 && !driver.getTitle().equals(expectedPageTitle)){
+            wait(100);
+        }
+        boolean success = driver.getTitle().equals(expectedPageTitle);
+        long timeSpent = System.currentTimeMillis() - startTime;
+        if(timeSpent > timeoutInSeconds * 1000){
+            timeSpent = timeoutInSeconds * 1000;
+        }
+        if(success){
+            testCase.log(LogLevel.DEBUG, "Waited for page title to become '" + expectedPageTitle + "', and that was identified after " + timeSpent + " milliseconds. ");
+        } else {
+            testCase.log(LogLevel.DEBUG, "Waited for page title to become '" + expectedPageTitle + "', but that did not happen within the " + timeoutInSeconds + " second timeout. Page titel is '" + driver.getTitle() + "'.");
+        }
+        return success;
     }
 
 }
