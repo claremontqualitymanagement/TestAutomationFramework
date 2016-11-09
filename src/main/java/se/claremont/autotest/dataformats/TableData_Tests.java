@@ -1,10 +1,9 @@
-package se.claremont.autotest.dataformats.table;
+package se.claremont.autotest.dataformats;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
-import se.claremont.autotest.common.TestSet;
 import se.claremont.autotest.support.SupportMethods;
 
 /**

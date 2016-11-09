@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.*;
-import se.claremont.autotest.dataformats.table.TableData;
+import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
@@ -1440,7 +1440,92 @@ public class WebInteractionMethods implements GuiDriver {
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
      * @param regex True if match with regular expression pattern, false will check for cells containing the strings.
      */
-    public void verifyTableData(GuiElement guiElement, String[] headlineColonValueSemicolonSeparatedString, boolean regex){
+    public void verifyTableRows(GuiElement guiElement, String[] headlineColonValueSemicolonSeparatedString, boolean regex){
+        TableData tableData = tableDataFromGuiElement(guiElement);
+        if(tableData == null) return;
+        tableData.verifyRows(headlineColonValueSemicolonSeparatedString, regex);
+    }
+
+    /**
+     * Verifies existance of a row matching the stated values corresponding to the stated headlines.
+     *
+     * @param tableElement The table element.
+     * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
+     * @param regex Matched as a regular expression pattern, or a check if the cell contains the value.
+     */
+    public void verifyTableRow(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex){
+        TableData tableData = tableDataFromGuiElement(tableElement);
+        if(tableData == null)return;
+        tableData.verifyRow(headlineColonValueSemicolonSeparatedString, regex);
+
+    }
+
+    /**
+     * Verifies that the headline exists in the table.
+     *
+     * @param tableElement Table element
+     * @param expectedHeadline Headline name, as seen in the table
+     */
+    public void verifyTableHeadline(GuiElement tableElement, String expectedHeadline){
+        TableData tableData = tableDataFromGuiElement(tableElement);
+        if(tableData == null) return;
+        tableData.verifyHeadlineExist(expectedHeadline);
+    }
+
+
+
+    /**
+     * Checks if a certain row exist in table.
+     *
+     * @param tableElement The table element
+     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
+     * @param regex True if data value pattern is states as a regular expressions. Othervice a check for cells containing the data value is performed.
+     * @return Returns true if rows matching is found.
+     */
+    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex){
+        return tableRowExists(tableElement, headlineColonValueSemicolonSeparatedString, regex, null);
+    }
+
+    /**
+     * Checks if a certain row exist in table.
+     *
+     * @param tableElement The table element
+     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
+     * @param regex True if data value pattern is states as a regular expressions. Othervice a check for cells containing the data value is performed.
+     * @param expectedMatchCount The number of expected row matches. If set to null tests will be passed if at least one row is matched.
+     * @return Returns true if rows matching is found.
+     */
+    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex, Integer expectedMatchCount){
+        TableData tableData = tableDataFromGuiElement(tableElement);
+        if(tableData == null) return false;
+        return tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, expectedMatchCount);
+    }
+
+    /**
+     * Checks that the expected headlines exist in table
+     *
+     * @param tableElement The table element
+     * @param expectedHeadlines The list of expected headlines
+     */
+    public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
+        TableData tableData = tableDataFromGuiElement(tableElement);
+        if(tableData == null) return;
+        tableData.verifyHeadlinesExist(expectedHeadlines);
+    }
+
+    /**
+     * Checks if table data rows are empty/doesn't exist. Headlines does not count as data.
+     *
+     * @param tableElement The table element.
+     * @return Return true if table is empty.
+     */
+    public boolean tableIsEmpty(GuiElement tableElement){
+        TableData tableData = tableDataFromGuiElement(tableElement);
+        if(tableData == null) return false;
+        return tableData.tableIsEmpty();
+    }
+
+    private TableData tableDataFromGuiElement(GuiElement guiElement){
         DomElement domElement = (DomElement)guiElement;
         StringBuilder tableContent = new StringBuilder();
         WebElement tableElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
@@ -1452,14 +1537,14 @@ public class WebInteractionMethods implements GuiDriver {
         }
         if(tableElement == null) {
             testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
-            return;
+            return null;
         }
         List<WebElement> rows;
         try {
             rows = tableElement.findElements(By.xpath(".//tr"));
         }catch (Exception e){
             testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for " + domElement.LogIdentification() + ".");
-            return;
+            return null;
         }
         for(WebElement row : rows){
             List<WebElement> cells;
@@ -1467,7 +1552,7 @@ public class WebInteractionMethods implements GuiDriver {
                 cells = row.findElements(By.xpath(".//td|.//th"));
             } catch (Exception e){
                 testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " with row '" + row.getText() + "'.");
-                return;
+                return null;
             }
             for(WebElement cell : cells){
                 tableContent.append(cell.getText()).append(";");
@@ -1475,7 +1560,7 @@ public class WebInteractionMethods implements GuiDriver {
             tableContent.append(SupportMethods.LF);
         }
         TableData tableData = new TableData(tableContent.toString(), domElement.LogIdentification(), testCase, true);
-        tableData.verifyRows(headlineColonValueSemicolonSeparatedString, regex);
+        return tableData;
     }
 
     /**

@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
+ * @deprecated Don't use this class. Use the TableData class instead, for better logging and more robust scenarios.
  * Created by jordam on 2016-10-18.
  */
+@Deprecated
 public class TableVerifier {
     TestCase testCase;
     Table table;

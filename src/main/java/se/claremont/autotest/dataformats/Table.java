@@ -10,8 +10,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * @deprecated
+ * Use the TableData class instead. It has far better output since it color codes in the HTML report for ease of debugging.
+ *
  * Created by jordam on 2016-10-18.
  */
+@Deprecated
 public class Table {
     private final static Logger logger = LoggerFactory.getLogger( Table.class );
     Row headlineRow;

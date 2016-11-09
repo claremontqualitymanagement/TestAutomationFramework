@@ -1,4 +1,4 @@
-package se.claremont.autotest.dataformats.table;
+package se.claremont.autotest.dataformats;
 
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
@@ -42,6 +42,7 @@ public class TableData {
         for (int rowNumber = 1; rowNumber < rows.length; rowNumber++) {
             createDataRow(rows[rowNumber], rowNumber);
         }
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, toString(), toHtml(LogLevel.DEBUG));
     }
 
 
@@ -69,7 +70,7 @@ public class TableData {
         if (dataRows != null) {
             for (DataRow dataRow : dataRows) {
                 List<String> cells = new ArrayList<>();
-                for (String headline : dataRow.dataCells.keySet()) {
+                for (String headline : headLines){
                     cells.add(dataRow.value(headline));
                 }
                 returnRows.add(String.join(";", cells));
@@ -96,9 +97,9 @@ public class TableData {
         } else if ( assessedData.numberOfRowsWithRowStatus(AssessedTableData.AssessedDataRow.RowMatchStatus.ROW_HAS_ONLY_CORRECT_MATCHES) > 0) {
             rowFound = true;
         }
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Examined if the data below existed in the table in " + guiElementName +
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Examined if the data '" + headlineColonValueSemicolonSeparatedString + "' existed in the table in " + guiElementName +
             SupportMethods.LF + headlineColonValueSemicolonSeparatedStringToTableData(headlineColonValueSemicolonSeparatedString,
-            guiElementName, testCase).toHtml(LogLevel.DEBUG) + "<br>Results: '" +
+            guiElementName, testCase).toString() + SupportMethods.LF + "Results: '" +
             Boolean.toString(rowFound).toLowerCase().replace("true", "Yes, it exists.").replace("false", "No, it does not exist."),
             "Examined if the data below existed in the table in " + guiElementName + "<br>" +
             headlineColonValueSemicolonSeparatedStringToTableData(headlineColonValueSemicolonSeparatedString,
@@ -212,6 +213,66 @@ public class TableData {
     }
 
     /**
+     * Logs an error if stated headline does not exist.
+     *
+     * @param headline Headline name.
+     */
+    public void verifyHeadlineExist(String expectedHeadline){
+        if(headLines.contains(expectedHeadline)){
+            String tableHeadlines = "<table class=\"table padding\"><tr>";
+            for(String headLine : headLines){
+                if(headLine.contains(expectedHeadline)){
+                    tableHeadlines += "<td style=\"background-color: lightgreen; color: black; font-weight: bold;\">" + headLine + "</td>";
+                } else {
+                    tableHeadlines += "<td style=\"background-color: lightgrey; color: darkgrey; font-weight: bold;\">" + headLine + "</td>";
+                }
+            }
+            tableHeadlines += "</tr>";
+            tableHeadlines += "<tr><td style=\"background-color: cornsilk;\" colspan=\"" + headLines.size() + "\"><i>Table data</i></td></tr></table>";
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "The headline '" + expectedHeadline + "' exist in the table " + guiElementName + ". All headlines '" + String.join("', '", headLines) + "'.",
+                    "Verified that headline '" + expectedHeadline + "' existed amoing the table headlines.<br>" + tableHeadlines);
+        } else{
+            String tableHeadlines = "<table><tr>";
+            for(String headLine : headLines){
+                tableHeadlines += "<td style=\"background-color: lightgrey; color: darkgrey; font-weight: bold;\">" + headLine + "</td>";
+            }
+            tableHeadlines += "</tr>";
+            tableHeadlines += "<tr><td style=\"background-color: cornsilk;\" colspan=\"" + headLines.size() + "\"><i>Table data</i></td></tr></table>";
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "The headline '" + expectedHeadline + "' does not exist in the table " + guiElementName + ". Found headlines are '" + String.join("', '", headLines) +"'.",
+                    "Could not find the headline '" + expectedHeadline + "' among the headlines of " + guiElementName + "<br>" + tableHeadlines);
+        }
+    }
+
+    /**
+     * Checking table for multiple headlines.
+     *
+     * @param headLinesToFind List of headlines expected to be present.
+     */
+    public void verifyHeadlinesExist(List<String> headLinesToFind){
+        List<String> foundHeadlines = new ArrayList<>();
+        List<String> notFoundHeadlines = new ArrayList<>();
+        for(String headline : headLinesToFind){
+            if(headLines.contains(headline)){
+                foundHeadlines.add(headline);
+            } else {
+                notFoundHeadlines.add(headline);
+            }
+        }
+        String message = "The actual headlines in " + guiElementName + " were '" + String.join("', '", headLines) + "'.";
+        if(notFoundHeadlines.size() > 0){
+            message += "Cannot find headline(s) '" + String.join("', '", notFoundHeadlines) + "'. ";
+        }
+        if(foundHeadlines.size() > 0){
+            message += "The headline(s) '" + String.join("', ", foundHeadlines) + "' could be found. ";
+        }
+        if(notFoundHeadlines.size() > 0){
+            testCase.log(LogLevel.VERIFICATION_FAILED, message);
+        } else {
+            testCase.log(LogLevel.VERIFICATION_PASSED, message);
+        }
+    }
+
+    /**
      * Verify that the table data containst the sought after values.
      *
      * @param headlineColonValueSemicolonSeparatedStrings The values to find, in a format of 'Heading1:Value1;Heading3:Value3' if all strings are matched the test is passed.
@@ -246,15 +307,14 @@ public class TableData {
 
     private void reportInitially(boolean log){
         if (guiElementName != null && !guiElementName.trim().equals("") && log) {
-            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Reading TableData for " + guiElementName + SupportMethods.LF + tableData,
-                    "Reading TableData for " + guiElementName + ":<br>" +
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Creating TableData for " + guiElementName  + " from data: " + SupportMethods.LF + tableData,
+                    "Creating TableData for " + guiElementName + " from data:<br>" +
                             tableData.replace(SupportMethods.LF, "<br>").replace("\n", "<br>"));
         }
         if (tableData == null) {
-            testCase.log(LogLevel.INFO, "TableData for " + guiElementName + " is null. Making it ''.");
+            testCase.log(LogLevel.DEBUG, "TableData for " + guiElementName + " is null. Making it ''.");
             tableData = "";
         }
-
     }
 
     private void createHeadLineRow(String topRow) {

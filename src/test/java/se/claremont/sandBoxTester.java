@@ -1,19 +1,13 @@
 package se.claremont;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.TypeMatcher;
-import org.fest.swing.fixture.FrameFixture;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 //import qtpUsageAnalysis.GUI;
 import se.claremont.autotest.common.*;
-import se.claremont.autotest.dataformats.table.TableData;
+import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.filetestingsupport.FileTester;
-import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingApplication;
-import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;
-import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingWindow;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.SwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
@@ -21,19 +15,12 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnaly
 import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis2;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
-import se.claremont.autotest.restsupport.RestSupport;
 import se.claremont.autotest.support.PerformanceTimer;
 import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -327,7 +314,10 @@ public class sandBoxTester extends TestSet{
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("http://www.w3schools.com/html/html_tables.asp");
         DomElement table = new DomElement("customers", DomElement.IdentificationType.BY_ID);
-        web.verifyTableData(table, new String[] {"Contact:Maria Anders"}, false);
+        web.verifyTableRows(table, new String[] {"Contact:Maria Anders"}, false);
+        web.verifyTableHeadline(table, "Country");
+        currentTestCase.log(LogLevel.INFO, "Table empty: " + Boolean.toString(web.tableIsEmpty(table)));
+        currentTestCase.log(LogLevel.INFO, "Table row exists: " + Boolean.toString(web.tableRowExists(table, "Contact:Maria Anders", false)));
         web.makeSureDriverIsClosed();
     }
 
