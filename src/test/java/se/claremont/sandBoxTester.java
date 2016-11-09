@@ -321,4 +321,14 @@ public class sandBoxTester extends TestSet{
         tableData.verifyRow("Heading2:DataValue2;Heading3:DataValue1", false);
     }
 
+    @Test
+    @Ignore
+    public void htmlTableVerification(){
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        web.navigate("http://www.w3schools.com/html/html_tables.asp");
+        DomElement table = new DomElement("customers", DomElement.IdentificationType.BY_ID);
+        web.verifyTableData(table, new String[] {"Contact:Maria Anders"}, false);
+        web.makeSureDriverIsClosed();
+    }
+
 }

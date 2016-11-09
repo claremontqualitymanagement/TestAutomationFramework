@@ -27,10 +27,10 @@ public class TableData_Tests {
     public void tableCreationTestWithTrailingLinebreak(){
         TestCase testCase = new TestCase(null, "dummy");
         String tableName = "UnitTestTable";
-        String expectedHtml = "<table class=\"table padding\"><tr><td><table class=\"table data  INFO\"><tr class=\"table headline  INFO\"><td class=\"table headline soughtafter INFO\">Heading1</td><td class=\"table headline soughtafter INFO\">Heading2</td><td class=\"table headline soughtafter INFO\">Heading3</td></tr><tr class=\"table dataRow imperfectmatch  INFO\"><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue2</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue3</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue1</td></tr></table></td></tr></table>";
+        String expectedHtml = "<table class=\"table padding\"><tr><td><table class=\"table data  INFO\"><tr class=\"table headline  INFO\"><td class=\"table headline soughtafter INFO\">Heading1</td><td class=\"table headline soughtafter INFO\">Heading2</td><td class=\"table headline soughtafter INFO\">Heading3</td></tr><tr class=\"table dataRow imperfectmatch  INFO\"><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue1</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue2</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue3</td></tr></table></td></tr></table>";
         String tableContent = "Heading1;Heading2;Heading3" + SupportMethods.LF + "DataValue1;DataValue2;DataValue3" + SupportMethods.LF;
         String expectedString = "Heading1;Heading2;Heading3" + SupportMethods.LF +
-                "DataValue2;DataValue3;DataValue1";
+                "DataValue1;DataValue2;DataValue3";
         TableData tableData = new TableData(tableContent, tableName, testCase, true);
         Assert.assertTrue("Table: " + tableData.toHtml(LogLevel.INFO), tableData.toHtml(LogLevel.INFO).equals(expectedHtml));
         Assert.assertTrue("Table: " + tableData.toString(), tableData.toString().equals(expectedString));
@@ -40,9 +40,8 @@ public class TableData_Tests {
     public void tableCreationTestWithOutTrailingLinebreak(){
         TestCase testCase = new TestCase(null, "dummy");
         String tableName = "UnitTestTable";
-        String expectedHtml = "<table class=\"table padding\"><tr><td><table class=\"table data  INFO\"><tr class=\"table headline  INFO\"><td class=\"table headline soughtafter INFO\">Heading1</td><td class=\"table headline soughtafter INFO\">Heading2</td><td class=\"table headline soughtafter INFO\">Heading3</td></tr><tr class=\"table dataRow imperfectmatch  INFO\"><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue2</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue3</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue1</td></tr></table></td></tr></table>";
-        String expectedString = "Heading1;Heading2;Heading3" + SupportMethods.LF +
-                "DataValue2;DataValue3;DataValue1";
+        String expectedHtml = "<table class=\"table padding\"><tr><td><table class=\"table data  INFO\"><tr class=\"table headline  INFO\"><td class=\"table headline soughtafter INFO\">Heading1</td><td class=\"table headline soughtafter INFO\">Heading2</td><td class=\"table headline soughtafter INFO\">Heading3</td></tr><tr class=\"table dataRow imperfectmatch  INFO\"><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue1</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue2</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue3</td></tr></table></td></tr></table>";
+        String expectedString = "Heading1;Heading2;Heading3" + SupportMethods.LF + "DataValue1;DataValue2;DataValue3";
         String tableContent = "Heading1;Heading2;Heading3" + SupportMethods.LF + "DataValue1;DataValue2;DataValue3";
         TableData tableData = new TableData(tableContent, tableName, testCase, true);
         Assert.assertTrue("Table: " + tableData.toHtml(LogLevel.INFO), tableData.toHtml(LogLevel.INFO).equals(expectedHtml));
@@ -53,9 +52,9 @@ public class TableData_Tests {
     public void tableCreationTestCellDataTrim(){
         TestCase testCase = new TestCase(null, "dummy");
         String tableName = "UnitTestTable";
-        String expectedHtml = "<table class=\"table padding\"><tr><td><table class=\"table data  INFO\"><tr class=\"table headline  INFO\"><td class=\"table headline soughtafter INFO\">Heading1</td><td class=\"table headline soughtafter INFO\">Heading2</td><td class=\"table headline soughtafter INFO\">Heading3</td></tr><tr class=\"table dataRow imperfectmatch  INFO\"><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue2</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue3</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue1</td></tr></table></td></tr></table>";
+        String expectedHtml = "<table class=\"table padding\"><tr><td><table class=\"table data  INFO\"><tr class=\"table headline  INFO\"><td class=\"table headline soughtafter INFO\">Heading1</td><td class=\"table headline soughtafter INFO\">Heading2</td><td class=\"table headline soughtafter INFO\">Heading3</td></tr><tr class=\"table dataRow imperfectmatch  INFO\"><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue1</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue2</td><td class=\"table datacell matchedcellonrowbutnotthiscell  INFO\">DataValue3</td></tr></table></td></tr></table>";
         String expectedString = "Heading1;Heading2;Heading3" + SupportMethods.LF +
-                "DataValue2;DataValue3;DataValue1";
+                "DataValue1;DataValue2;DataValue3";
         String tableContent = "Heading1 ; Heading2;Heading3 " + SupportMethods.LF + "DataValue1 ; DataValue2;DataValue3 ";
         TableData tableData = new TableData(tableContent, tableName, testCase, true);
         Assert.assertTrue("Table: " + tableData.toHtml(LogLevel.INFO), tableData.toHtml(LogLevel.INFO).equals(expectedHtml));
@@ -190,11 +189,11 @@ public class TableData_Tests {
     }
 
     @Test
-    public void tableIsEmptyOnlyHeadlingesIsNotEmpty(){
+    public void tableWithOnlyHeadlingesIsNotEmpty(){
         TestCase testCase = new TestCase(null, "dummy");
         String tableName = "UnitTestTable";
         String tableContent = "Heading1;Heading2" + SupportMethods.LF;
         TableData tableData = new TableData(tableContent, tableName, testCase, true);
-        Assert.assertFalse(tableData.tableIsEmpty());
+        Assert.assertTrue(tableData.tableIsEmpty());
     }
 }

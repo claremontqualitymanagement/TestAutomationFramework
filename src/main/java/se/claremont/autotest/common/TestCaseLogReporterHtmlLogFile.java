@@ -2,7 +2,7 @@ package se.claremont.autotest.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.dataformats.table.TableVerifierLoggingHtmlStyles;
+import se.claremont.autotest.dataformats.table.TableData;
 import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
 
@@ -162,7 +162,7 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      img.screenshot          { border: 0px none; width:105px; background: #999; }" + LF +
 
                 //Table verifier
-                TableVerifierLoggingHtmlStyles.styles() +
+                TableData.TableVerifierLoggingHtmlStyles.styles() +
 
                 //W3C checker
                 "      font.w3cvalidationinfo    { color: darkgrey; font-weight: bold; }" + LF +

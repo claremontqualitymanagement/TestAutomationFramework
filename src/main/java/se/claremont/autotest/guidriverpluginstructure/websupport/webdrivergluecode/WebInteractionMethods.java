@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.*;
+import se.claremont.autotest.dataformats.table.TableData;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
@@ -1432,6 +1433,50 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    /**
+     * Verifies if html table data holds expected data. Top row expected to hold headlines.
+     *
+     * @param guiElement The table to search
+     * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
+     * @param regex True if match with regular expression pattern, false will check for cells containing the strings.
+     */
+    public void verifyTableData(GuiElement guiElement, String[] headlineColonValueSemicolonSeparatedString, boolean regex){
+        DomElement domElement = (DomElement)guiElement;
+        StringBuilder tableContent = new StringBuilder();
+        WebElement tableElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(!tableElement.getTagName().toLowerCase().equals("table")){
+            try {
+                tableElement = tableElement.findElement(By.xpath(".//table"));
+            }catch (Exception ignored){
+            }
+        }
+        if(tableElement == null) {
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
+            return;
+        }
+        List<WebElement> rows;
+        try {
+            rows = tableElement.findElements(By.xpath(".//tr"));
+        }catch (Exception e){
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for " + domElement.LogIdentification() + ".");
+            return;
+        }
+        for(WebElement row : rows){
+            List<WebElement> cells;
+            try{
+                cells = row.findElements(By.xpath(".//td|.//th"));
+            } catch (Exception e){
+                testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " with row '" + row.getText() + "'.");
+                return;
+            }
+            for(WebElement cell : cells){
+                tableContent.append(cell.getText()).append(";");
+            }
+            tableContent.append(SupportMethods.LF);
+        }
+        TableData tableData = new TableData(tableContent.toString(), domElement.LogIdentification(), testCase, true);
+        tableData.verifyRows(headlineColonValueSemicolonSeparatedString, regex);
+    }
 
     /**
      * Navigates to specified url
@@ -1636,7 +1681,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param timeoutInSeconds Number of seconds to wait for element before giving up on it
      * @return WebElement for WebDriver interaction
      */
-    private WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
+    WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
         double startTickCount = System.currentTimeMillis();
         WebElement returnElement = getRuntimeElementWithoutLogging(element);
         long sleepTime = 50;
