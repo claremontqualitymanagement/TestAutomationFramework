@@ -542,6 +542,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+
     /**
      * Closes the web browser.
      */

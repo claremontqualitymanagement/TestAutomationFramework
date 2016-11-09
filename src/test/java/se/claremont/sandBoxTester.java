@@ -9,6 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 //import qtpUsageAnalysis.GUI;
 import se.claremont.autotest.common.*;
+import se.claremont.autotest.dataformats.table.TableData;
 import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingApplication;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;
@@ -308,6 +309,16 @@ public class sandBoxTester extends TestSet{
         ResponsiveAnalysis2 responsiveAnalysis2 = new ResponsiveAnalysis2(resolutions, web.driver, currentTestCase);
         responsiveAnalysis2.performAnalysis();
         web.makeSureDriverIsClosed();
+    }
+
+    @Test
+    @Ignore
+    public void tableVerifierPlayground(){
+        String tableName = "UnitTestTable";
+        String tableContent = "Heading1 ; Heading2;Heading3 " + SupportMethods.LF + "DataValue1 ; DataValue2;DataValue3 " + SupportMethods.LF +
+                "DataValue4;DataValue5;DataValue6";
+        TableData tableData = new TableData(tableContent, tableName, currentTestCase, true);
+        tableData.verifyRow("Heading2:DataValue2;Heading3:DataValue1", false);
     }
 
 }
