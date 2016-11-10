@@ -142,6 +142,7 @@ public class SupportMethods {
      * Starts a program.
      *
      * @param programPathAndArgumentsString Program name, and path, and arguments.
+     * @param testCase The test case to log to.
      */
     public static void startProgram(String programPathAndArgumentsString, TestCase testCase){
         ApplicationManager am = new ApplicationManager(testCase);

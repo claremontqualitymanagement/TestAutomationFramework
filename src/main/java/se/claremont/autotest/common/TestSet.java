@@ -43,6 +43,7 @@ public class TestSet {
 
     /**
      * Procedures common for all test cases
+     * @param testName The name of the test, for reporting purposes.
      */
     public void startUpTestCase(String testName){
         currentTestCase = new TestCase(knownErrorsList, testName);

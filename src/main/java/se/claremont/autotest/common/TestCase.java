@@ -39,6 +39,9 @@ public class TestCase {
 
     /**
      * Setting up a new test case run and prepares it for execution
+     *
+     *  @param knownErrorsList An instance of KnownErrorsList. Could be null.
+     *  @param testName The name of the test. For reporting purposes.
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
         if(knownErrorsList == null){

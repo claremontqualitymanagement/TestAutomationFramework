@@ -120,9 +120,9 @@ public class TableData {
      * Getting the value for the headline among the row data.
      *
      * @param headlineName The name of the headline.
-     * @param headlineColonValueSemicolonSeparatedStringThatIdentifiesTheTableRow
-     * @param regex
-     * @return
+     * @param headlineColonValueSemicolonSeparatedStringThatIdentifiesTheTableRow The identifying pattern to identify the string.
+     * @param regex True if the matching pattern for data value is a regular expression, othervice it will be checked for cells containing this data.
+     * @return Returns the content of the cell matching the row identiyer and the headline.
      */
     public String getValue(String headlineName,
                            String headlineColonValueSemicolonSeparatedStringThatIdentifiesTheTableRow,
@@ -222,7 +222,7 @@ public class TableData {
     /**
      * Logs an error if stated headline does not exist.
      *
-     * @param headline Headline name.
+     * @param expectedHeadline Headline name.
      */
     public void verifyHeadlineExist(String expectedHeadline){
         if(headLines.contains(expectedHeadline)){

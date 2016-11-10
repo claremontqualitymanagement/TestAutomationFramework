@@ -620,6 +620,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
+     * @param timeoutInSeconds The time to wait for object disappearance.
      */
     public void verifyObjectIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         DomElement domElement = (DomElement) guiElement;
@@ -720,9 +721,10 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Checks if the given object exist in the GUI, within a timeout
+     * Checks if the given object exist in the GUI, within a timeout.
      *
-     * @param guiElement The GUI element to find
+     * @param guiElement The GUI element to find.
+     * @param timeoutInSeconds The timeout to wait for object disappearance.
      */
     public void verifyObjectDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
