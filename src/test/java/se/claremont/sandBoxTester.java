@@ -315,6 +315,7 @@ public class sandBoxTester extends TestSet{
         web.navigate("http://www.w3schools.com/html/html_tables.asp");
         DomElement table = new DomElement("customers", DomElement.IdentificationType.BY_ID);
         web.verifyTableRows(table, new String[] {"Contact:Maria Anders"}, false);
+        web.verifyTableRow(table, "Contact:o;Company:c", false);
         web.verifyTableHeadline(table, "Country");
         currentTestCase.log(LogLevel.INFO, "Table empty: " + Boolean.toString(web.tableIsEmpty(table)));
         currentTestCase.log(LogLevel.INFO, "Table row exists: " + Boolean.toString(web.tableRowExists(table, "Contact:Maria Anders", false)));

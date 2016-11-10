@@ -8,6 +8,13 @@ import se.claremont.autotest.support.SupportMethods;
 import java.util.*;
 
 /**
+ * This class is for verifying table structured data, in tables with a headline.
+ * Some limitations exist, but could probably be coded away:
+ * Since row delimiter is newline character, cell contents with linebreaks might ruin results.
+ * In the same manner: Since cell delimiter is semicolon, cell content with semicolon in it will break results.
+ * Creating a more generic structure, and escaping these characters in construction, would fix this. However,
+ * this has not yet proven needed.
+ *
  * Created by jordam on 2016-11-09.
  */
 public class TableData {
