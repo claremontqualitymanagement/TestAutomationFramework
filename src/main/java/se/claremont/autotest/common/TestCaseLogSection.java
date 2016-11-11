@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static se.claremont.autotest.support.SupportMethods.LF;
-import static se.claremont.autotest.support.SupportMethods.startProgram;
 
 /**
  * Created by jordam on 2016-11-01.
@@ -26,19 +25,19 @@ public class TestCaseLogSection {
 
     public static String htmlStyleInformation(){
         return  "      table.logsectionlogposts { width: 100%; }" + LF +
-                "      h3.logsectiontitle.passed  { color: green;  }" + LF +
-                "      h3.logsectiontitle.failed  { color: red; font-weight: bold;  }" + LF +
+                "      h3.logsectiontitle.passed  { color: " + TestCaseLogReporterHtmlLogFile.green + ";  }" + LF +
+                "      h3.logsectiontitle.failed  { color: " + TestCaseLogReporterHtmlLogFile.coralred + "; font-weight: bold;  }" + LF +
                 htmlStyleInformationTimeGraph();
     }
 
     private static String htmlStyleInformationTimeGraph(){
-        return "         table.timegraph.padding                  { background-color: white; width: 100%; }" + LF +
-                "         table.timegraph.datatabell               { font-weight: normal; border-color: white; width: auto; }" + LF +
-                "         tr.timegraph.rubrikrad                   { background-color:lightgrey; border: 1px solid grey;}" + LF +
-                "         td.timegraph                             { border: 1px solid grey; }" + LF +
-                "         td.before                      { background-color: grey; }" + LF +
-                "         td.during                      { background-color: blue; }" + LF +
-                "         td.after                       { background-color: grey; }" + LF;
+        return "         table.timegraph.padding                  { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; width: 100%; }" + LF +
+                "         table.timegraph.datatabell               { font-weight: normal; border-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; width: auto; }" + LF +
+                "         tr.timegraph.rubrikrad                   { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; border: 1px solid " + TestCaseLogReporterHtmlLogFile.verylightgrey + ";}" + LF +
+                "         td.timegraph                             { border: 1px solid " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; }" + LF +
+                "         td.before                      { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; }" + LF +
+                "         td.during                      { background-color: " + TestCaseLogReporterHtmlLogFile.darkblue + "; }" + LF +
+                "         td.after                       { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; }" + LF;
     }
 
     private boolean hasErrors(){

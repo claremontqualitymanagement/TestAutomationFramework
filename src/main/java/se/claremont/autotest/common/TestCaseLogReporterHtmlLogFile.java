@@ -15,7 +15,7 @@ import java.util.Date;
  *
  * Created by jordam on 2016-08-27.
  */
-class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
+public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
     private final TestCase testCase;
     private Date runStartTime;
@@ -134,28 +134,37 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "<img src=\"http://46.101.193.212/TAF/images/Taf3_transp.png\" alt=\"TAF Logo\">";
     }
 
-    //#99CCFF - Claremont blue
+
+	//Claremont color names:
+	public static String lightblue     = "rgb(150,192,230)";
+	public static String darkgrey      = "rgb(104,102,99)";
+	public static String midgrey       = "#DAD8D9";
+	public static String verylightgrey = "#F2F2F2";
+	public static String darkblue      = "rgb(119,150,178)";
+	public static String coralred      = "rgb(242,102,100)";
+    public static String green         = "#2db92d";
+    public static String lightyellow   = "cornsilk";
 
     /**
      * Used to append HTML style information to the HTML based testCaseLog
      * @return A HTML formatted string to incorporate in the style tag in the HTML testCaseLog
      */
     private static String styles(){
-        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: honeydew; }" + LF +
+        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: white; width:90%; margin-left: 2%; margin-top: 1%; color: " + darkgrey + "; }" + LF +
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
                 "      h1                      { font-size:24px; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
                 "      .ui-accordion .ui-accordion-content  { padding:0px; }" + LF +
-                "      table                   { border: 1px solid grey; }" + LF +
-                "      .pagetitle              { color: #99CCFF; font-size:24px; font-weight: bold; }" + LF +
+                "      table                   { border: 1px solid " + midgrey + "; }" + LF +
+                "      .pagetitle              { color: " + lightblue + "; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
                 LogPost.htmlStyleInformation() +
-                "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: red; font-weight: bold; } " + LF +
-                "      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "             { background-color: white; width: 80%; }" + LF +
-                "      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + " tr:hover     { background-color: lightgrey; }" + LF +
-                "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + " tr:nth-child(even)                 { background-color: #f2f2f2 }" + LF +
-                "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: floralwhite; }" + LF +
-                "     .logpost, .testdatapost                                { border-bottom: 1px solid lightgrey; }" + LF +
+                "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: " + coralred + "; font-weight: bold; } " + LF +
+                //"      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "             { background-color: white; width: 80%; }" + LF +
+                //"      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + " tr:hover     { background-color: lightgrey; }" + LF +
+                "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + " tr:nth-child(even)                 { background-color: " + verylightgrey + "; }" + LF +
+                "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: " + verylightgrey + "; }" + LF +
+                "     .logpost, .testdatapost                                { border-bottom: 1px solid " + midgrey + "; }" + LF +
                 "      td.logPostLogLevel       { width: 130px; }" + LF +
                 "      td.logMessage           { max-width: 99%; }" + LF +
                 "      img.screenshot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + SupportMethods.LF +
@@ -165,9 +174,9 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 TableData.TableVerifierLoggingHtmlStyles.styles() +
 
                 //W3C checker
-                "      font.w3cvalidationinfo    { color: darkgrey; font-weight: bold; }" + LF +
-                "      font.w3cvalidationerror   { color: red; font-weight: bold; }" + LF +
-                "      font.w3cvalidationother   { color: darkgrey; font-weight: bold; }" + LF +
+                "      font.w3cvalidationinfo    { color: " + darkgrey + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationerror   { color: " + coralred + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationother   { color: " + darkgrey + "; font-weight: bold; }" + LF +
                 "      pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
                 "                             overflow: auto;" + LF +
@@ -188,15 +197,15 @@ class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
              "                vertical-align: top;" + LF +
              "                float: right;" + LF +
              "                text-align: right;" + LF +
-             "                color: grey;" + LF +
+             "                color: " + lightblue + ";" + LF +
              "            }" + LF +
              "" + LF +
              "            #helpText {" + LF +
              "                visibility: hidden;" + LF +
              "                left: 50px;" + LF +
              "                width: auto;" + LF +
-             "                background-color: darkslateblue;" + LF +
-             "                color: #fff;" + LF +
+             "                background-color: " + darkblue + ";" + LF +
+             "                color: white;" + LF +
              "                text-align: left;" + LF +
              "                padding: 15px 0;" + LF +
              "                border-radius: 6px;" + LF +

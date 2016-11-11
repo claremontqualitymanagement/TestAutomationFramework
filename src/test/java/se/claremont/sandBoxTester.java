@@ -4,7 +4,6 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-//import qtpUsageAnalysis.GUI;
 import se.claremont.autotest.common.*;
 import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.filetestingsupport.FileTester;
@@ -23,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+//import qtpUsageAnalysis.GUI;
 
 /**
  * SandBox (UnitTest) containing various help tools for Test Automation Engineers.
@@ -312,13 +313,15 @@ public class sandBoxTester extends TestSet{
     @Ignore
     public void htmlTableVerification(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
-        web.navigate("http://www.w3schools.com/html/html_tables.asp");
-        DomElement table = new DomElement("customers", DomElement.IdentificationType.BY_ID);
-        web.verifyTableRows(table, new String[] {"Contact:Maria Anders"}, false);
-        web.verifyTableRow(table, "Contact:o;Company:c", false);
+        web.navigate("file://C:/temp/tabletest.html");
+        DomElement table = new DomElement("testTable", DomElement.IdentificationType.BY_ID);
+        web.verifyTableRows(table, new String[] {"Heading1:Data value 10", "Heading2:DataValue 5;Heading3:Data value 6"}, false);
+        web.verifyTableRow(table, "Heading2:DataValue 5;Heading3:Data value 6", false);
+        web.verifyTableRow(table, "Heading2:DataValue 5;Heading3:sfsg", false);
         web.verifyTableHeadline(table, "Country");
+        web.verifyTableHeadline(table, "Heading1");
         currentTestCase.log(LogLevel.INFO, "Table empty: " + Boolean.toString(web.tableIsEmpty(table)));
-        currentTestCase.log(LogLevel.INFO, "Table row exists: " + Boolean.toString(web.tableRowExists(table, "Contact:Maria Anders", false)));
+        currentTestCase.log(LogLevel.INFO, "Table row exists: " + Boolean.toString(web.tableRowExists(table, "Heading1:DataValue2", false)));
         web.makeSureDriverIsClosed();
     }
 

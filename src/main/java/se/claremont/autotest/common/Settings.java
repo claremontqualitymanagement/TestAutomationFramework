@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -102,11 +104,11 @@ public class Settings extends HashMap<String, String>{
                 setCustomValue(line.split("=")[0], line.split("=")[line.split("=").length-1]);
             }
         } catch (IOException e) { //No file exist yet
-            logger.error( "Could not read Settings from file '" + settingsFilePath + "'.", e );
+            logger.warn( "Could not read TAF settings from file '" + settingsFilePath + "'. Don't worry. Continuing with default values, and attempting saving of the settings to file '" + settingsFilePath + "' for next time.");
             try {
                 writeSettingsParametersToFile(settingsFilePath);
             }catch (Exception ex){
-                logger.error( "Could neither read Settings from file, nor write to file '" + settingsFilePath + "'. " + ex.toString(), ex );
+                logger.warn( "Could not save Settings to new settings file '" + settingsFilePath + "'. Error message: " + ex.getMessage(), ex );
             }
         }
     }
