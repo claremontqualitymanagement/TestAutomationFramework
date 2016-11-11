@@ -325,4 +325,33 @@ public class sandBoxTester extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
+    @Test
+    @Ignore
+    public void animatedMenu(){
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        web.navigate("https://www.typeandtell.com/sv/skrivbord/");
+        DomElement emailField = new DomElement("Email", DomElement.IdentificationType.BY_ID);
+        DomElement pwField = new DomElement("Password", DomElement.IdentificationType.BY_ID);
+        web.write(emailField, "email");
+        web.submitText(pwField, "password");
+        DomElement burger = new DomElement("Toggle menu", DomElement.IdentificationType.BY_VISIBLE_TEXT);
+        web.click(burger);
+        DomElement tjänsterLink = new DomElement("Tjänster", DomElement.IdentificationType.BY_LINK_TEXT);
+        web.click(tjänsterLink);
+
+        //web.makeSureDriverIsClosed();
+
+    }
+
+    @Test
+    @Ignore
+    public void animatedDropdown(){
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        web.navigate("https://www.typeandtell.com/sv/pris/");
+        DomElement drowDown = new DomElement("Insertion", DomElement.IdentificationType.BY_ID);
+        web.selectInDropdown(drowDown, "Naturtonat papper");
+        web.selectInDropdown(drowDown, "Vitt papper");
+        web.makeSureDriverIsClosed();
+    }
+
 }

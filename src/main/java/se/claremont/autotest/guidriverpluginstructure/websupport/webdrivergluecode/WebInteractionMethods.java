@@ -6,7 +6,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.*;
+import se.claremont.autotest.common.LogFolder;
+import se.claremont.autotest.common.LogLevel;
+import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.common.TestRun;
 import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
@@ -285,6 +288,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         try {
             enterText(webElement, textToWrite, false);
+            log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to " + domElement.LogIdentification() + ".");
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
             saveScreenshot();
@@ -327,7 +331,7 @@ public class WebInteractionMethods implements GuiDriver {
             enterText(webElement, text, false);
             try{
                 webElement.submit();
-                log(LogLevel.DEBUG, "Submitted text '" + text + "' to " + domElement.LogIdentification() + ".");
+                log(LogLevel.EXECUTED, "Submitted text '" + text + "' to " + domElement.LogIdentification() + ".");
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not submit the text entered to " + domElement.LogIdentification() + ".");
                 saveScreenshot();
@@ -336,7 +340,7 @@ public class WebInteractionMethods implements GuiDriver {
                 writeRunningProcessListDeviationsSinceTestCaseStart();
             }
         } catch (TextEnteringError textEnteringError) {
-            log(LogLevel.EXECUTION_PROBLEM, "Could not enter '" + text + "' in " + domElement.LogIdentification() + "-");
+            log(LogLevel.EXECUTION_PROBLEM, "Could not enter '" + text + "' in " + domElement.LogIdentification() + ".");
             saveScreenshot();
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -1361,7 +1365,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param dropdownElement The element to interact with
      * @param selections The value(s) to choose
      */
-    private void selectInDropdownManager(GuiElement dropdownElement, ArrayList<String> selections){
+    private void selectInDropdownManager(GuiElement dropdownElement, List<String> selections){
         DomElement domElement = (DomElement) dropdownElement;
         if(selections == null ||selections.size() == 0) {
             log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
@@ -1594,18 +1598,16 @@ public class WebInteractionMethods implements GuiDriver {
                     element.clear();
                     log(LogLevel.DEBUG, "Clearing existing text " +  element.getText().toString() );
                 }
-                    element.sendKeys(text);
+                element.sendKeys(text);
+                log(LogLevel.DEBUG, "Sending keys '" + text + "'.");
+                return;
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "'.");
                 throw new TextEnteringError();
             }
-            log(LogLevel.DEBUG, "Sending keys '" + text + "'.");
-        }else{
+        }else {
             log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "' since the webElement was null.");
-            saveScreenshot();
-            saveDesktopScreenshot();
-            saveHtmlContentOfCurrentPage();
-            writeRunningProcessListDeviationsSinceTestCaseStart();
+            throw new TextEnteringError();
         }
     }
 
