@@ -11,7 +11,7 @@ public class TestRun {
     public static int fileCounter = 0;
     public static int exitCode;
     public static TestSet currentTestSet;
-    public static TestRunReporterFactory reporters;
+    public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
 
     /**
      * TAF and TA test(s) standard codes.
@@ -35,7 +35,6 @@ public class TestRun {
     }
 
     public static void initialize() {
-        reporters = new TestRunReporterFactory();
         currentTestSet = null;
         exitCode = ExitCodeTable.INIT_OK.getValue();
     }

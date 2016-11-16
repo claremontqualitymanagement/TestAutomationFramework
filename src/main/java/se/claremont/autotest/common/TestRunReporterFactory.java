@@ -6,15 +6,15 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterFactory {
+    private ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public TestRunReporterFactory(){
-        TestRun.reporters.addTestRunReporter(new TestRunReporterHtmlSummaryReportFile());
+        reporters.add(new TestRunReporterHtmlSummaryReportFile());
         if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
-            TestRun.reporters.addTestRunReporter(new TestRunReporterEmailReport());
+            reporters.add(new TestRunReporterEmailReport());
         }
     }
 
-    private ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public void addTestRunReporter(TestRunReporter testRunReporter){
         reporters.add(testRunReporter);

@@ -555,12 +555,15 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement element = (DomElement) guiElement;
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
         try {
-            WebElement webelement = getRuntimeElementWithTimeout(element, standardTimeoutInSeconds);
-            if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it could not be identified.");
-            if(!elementBecomeDisplayedWithinTimeout (webelement))  errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
-            if(!elementBecomeEnabledWithinTimeout   (webelement))  errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
-            webelement.click();
-            log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
+            if(tryClick(element)){
+                log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
+            } else {
+                WebElement webelement = getRuntimeElementWithoutLogging(element);
+                if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it could not be identified.");
+                if(!elementBecomeDisplayedWithinTimeout (webelement))  errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
+                if(!elementBecomeEnabledWithinTimeout   (webelement))  errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
+                webelement.click();
+            }
         }catch (Exception e){
             if(e.toString().contains("Other element would receive the click")){
                 log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");
@@ -569,6 +572,25 @@ public class WebInteractionMethods implements GuiDriver {
             }
             errorManagementProcedures("Could not click element " + element.LogIdentification() + ".");
         }
+    }
+
+    private boolean tryClick(DomElement domElement){
+        boolean success = false;
+        long startTime = System.currentTimeMillis();
+        WebElement webElement = null;
+        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
+            webElement = getRuntimeElementWithoutLogging(domElement);
+            if(webElement == null) {
+                wait(50);
+            } else {
+                try {
+                    webElement.click();
+                    log(LogLevel.DEBUG, "Managed to identify and click on " + domElement.LogIdentification() + " after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+                    success = true;
+                }catch (Exception ignored){}
+            }
+        }
+        return success;
     }
 
     private boolean elementBecomeDisplayedWithinTimeout(WebElement webelement){
