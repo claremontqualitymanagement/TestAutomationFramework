@@ -83,11 +83,6 @@ public class WebInteractionMethods implements GuiDriver {
      * @param milliseconds The number of millseconds to wait.
      */
     public synchronized void wait(int milliseconds){
-        if(driver == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
-            haltFurtherExecution();
-        }
-
         try {
             Thread.sleep(milliseconds);
             log(LogLevel.DEBUG, "Waiting for " + milliseconds + " milliseconds.");
@@ -521,6 +516,35 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    private class Waiter{
+        private TestCase testCase;
+        private LogLevel logLevel;
+        private long startTime;
+        private int totalTimeInWaiting;
+
+        public Waiter(TestCase testCase, LogLevel logLevel){
+            this.logLevel = logLevel;
+            this.testCase = testCase;
+            this.startTime = System.currentTimeMillis();
+        }
+
+        public void wait(int milliseconds){
+            try {
+                Thread.sleep(milliseconds);
+                totalTimeInWaiting += milliseconds;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        public void report(){
+            testCase.log(logLevel, "Waited a total of " + (System.currentTimeMillis() - startTime) + " milliseconds, with " + totalTimeInWaiting + " of those in the waiting mechanism.");
+        }
+
+        public int totalTimeSpentSoFar(){
+            return (int) (System.currentTimeMillis() - startTime);
+        }
+    }
+
 
     /**
      * Performing a click event on an element
@@ -533,8 +557,8 @@ public class WebInteractionMethods implements GuiDriver {
         try {
             WebElement webelement = getRuntimeElementWithTimeout(element, standardTimeoutInSeconds);
             if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it could not be identified.");
-            if(!webelement.isDisplayed()) errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
-            if(!webelement.isEnabled()) errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
+            if(!elementBecomeDisplayedWithinTimeout (webelement))  errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
+            if(!elementBecomeEnabledWithinTimeout   (webelement))  errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
             webelement.click();
             log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
         }catch (Exception e){
@@ -547,6 +571,27 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    private boolean elementBecomeDisplayedWithinTimeout(WebElement webelement){
+        if(!webelement.isDisplayed()){
+            Waiter wait = new Waiter(testCase, LogLevel.DEBUG);
+            while (!webelement.isDisplayed() && wait.totalTimeSpentSoFar() < standardTimeoutInSeconds *1000){
+                wait.wait(50);
+            }
+            wait.report();
+        }
+        return webelement.isDisplayed();
+    }
+
+    private boolean elementBecomeEnabledWithinTimeout(WebElement webelement){
+        if(!webelement.isEnabled()){
+            Waiter wait = new Waiter(testCase, LogLevel.DEBUG);
+            while (!webelement.isEnabled() && wait.totalTimeSpentSoFar() < standardTimeoutInSeconds *1000){
+                wait.wait(50);
+            }
+            wait.report();
+        }
+        return webelement.isEnabled();
+    }
 
     /**
      * Closes the web browser.
@@ -1426,7 +1471,9 @@ public class WebInteractionMethods implements GuiDriver {
 
         //Log results
         if(allSelectionsOkSoFar){
-            log(LogLevel.EXECUTED, "Selected '" + String.join("', '", selections) + "' in element " + domElement.LogIdentification());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Found available options in " + domElement.LogIdentification() + ": '" + String.join("', '", optionStrings) + "'.",
+                    "Found available options in " + domElement.LogIdentification() + ": '" + String.join("', '", optionStrings) + "'.");
+            log(LogLevel.EXECUTED, "Selected '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification());
         } else {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                     "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",

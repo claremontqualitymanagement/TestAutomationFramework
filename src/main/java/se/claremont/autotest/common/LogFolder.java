@@ -25,6 +25,7 @@ public class LogFolder {
      */
     public static void setLogFolder(String testSetName){
         if(testRunLogFolder == null){
+            if(TestRun.settings == null) TestRun.initialize();
             baseLogFolder = TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER);
             if(!baseLogFolder.endsWith("\\") || !baseLogFolder.endsWith("/")){ baseLogFolder = baseLogFolder + "\\"; }
             testRunLogFolder = StringManagement.filePathToCurrentOsAdaptedFormat(baseLogFolder) + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + testSetName + File.separator;

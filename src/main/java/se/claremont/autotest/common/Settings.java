@@ -37,11 +37,11 @@ public class Settings extends HashMap<String, String>{
         EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES(),
         BASE_LOG_FOLDER              (),
         PATH_TO_LOGO                 (true),
-        CHROME_DRIVER_PATH_TO_EXE    (),
+        //CHROME_DRIVER_PATH_TO_EXE    (),
         PHANTOMJS_PATH_TO_EXE        (),
         FIREFOX_PATH_TO_BROWSER_EXE  (),
-        TEST_RUN_LOG_FOLDER          (),
-        PLUGIN_FOLDER                ();
+        TEST_RUN_LOG_FOLDER          ();
+        //PLUGIN_FOLDER                ();
 
         private boolean isSuppressedFromLogDisplay;
 
@@ -139,30 +139,26 @@ public class Settings extends HashMap<String, String>{
         if( Utils.getInstance().amIMacOS() ) {
             //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);
             setValue(SettingParameters.BASE_LOG_FOLDER, Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator);
-            setValue(SettingParameters.PATH_TO_LOGO, "http://www.claremont.se/wp-content/themes/claremont_rebooted/static/img/frontpage/intresting.png");
-            setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
-            setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver_mac64");
+            //setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver_mac64");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, File.separator + "Applications" + File.separator + "Firefox.app" + File.separator);
             setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "phantomjs-2.1-macosx" );
         }
         else if (Utils.getInstance().amILinuxOS() ) {
             //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);
             setValue(SettingParameters.BASE_LOG_FOLDER, Utils.getInstance().getUserWorkingDirectory() + File.separator + "TAF" + File.separator);
-            setValue(SettingParameters.PATH_TO_LOGO, "http://www.claremont.se/wp-content/themes/claremont_rebooted/static/img/frontpage/intresting.png");
-            setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
-            setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver_linux64");
+            //setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "chromedriver_linux64");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, File.separator + "usr" + File.separator + "bin" + File.separator + "firefox");
             setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, Utils.getInstance().getUserWorkingDirectory() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "drivers" + File.separator + "phantomjs-2.1.1-linux-x86_64" );
         }
         // lets assume jvm is running upon windows os.
         else {
             setValue(SettingParameters.BASE_LOG_FOLDER, System.getProperty("user.home") + File.separator + "TAF" + File.separator);
-            setValue(SettingParameters.PATH_TO_LOGO, "http://www.claremont.se/wp-content/themes/claremont_rebooted/static/img/frontpage/intresting.png");
-            setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
-            setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
+            //setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
             setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");
         }
+        setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
+        setValue(SettingParameters.PATH_TO_LOGO, "http://46.101.193.212/TAF/images/claremontlogo.jpg");
         setValue(SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "");
         setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_SERVER_ADDRESS, "");
@@ -170,7 +166,7 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
-        setValue(SettingParameters.PLUGIN_FOLDER, getValue(SettingParameters.BASE_LOG_FOLDER) + "Plugins");
+        //setValue(SettingParameters.PLUGIN_FOLDER, getValue(SettingParameters.BASE_LOG_FOLDER) + "Plugins");
     }
 
     String toHtmlTable(){

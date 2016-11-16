@@ -97,8 +97,8 @@ public class TestCaseLogSection {
         if (wholePeriod == 0) return "";
 
         StringBuilder sb = new StringBuilder();
-        sb.append("        <span title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
-                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\"></span>").append(LF);
+        sb.append("        <div class=\"timegraphtitle\" title=\"Test step start time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventStartTime))
+                .append(LF).append("Test step end time: ").append(new SimpleDateFormat("HH:mm:ss").format(partialEventEndTime)).append("\">").append(LF);
         sb.append("        <table class=\"timegraph\" width=\"100%\">").append(LF).append("           <tr>").append(LF);
 
         if(partialEventStartTime.getTime() - wholeTimePeriodStartTime.getTime() != 0){
@@ -115,7 +115,7 @@ public class TestCaseLogSection {
             long widthOfEndPartPercent = (100*(wholeTimePeriodEndTime.getTime() - partialEventEndTime.getTime()))/wholePeriod;
             sb.append("              <td width=\"").append(widthOfEndPartPercent).append("%\" class=\"after\"><span title=\"Part section end time: ").append(partialEventEndTime.getTime()).append(LF).append("Whole section end time: ").append(wholeTimePeriodEndTime.getTime()).append("\"></span></td>").append(LF);
         }
-        sb.append("           </tr>").append(LF).append("        </table>").append(LF);
+        sb.append("           </tr>").append(LF).append("        </table>").append(LF).append("</div>").append(LF);
         return sb.toString();
     }
 

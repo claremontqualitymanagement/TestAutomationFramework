@@ -1,7 +1,6 @@
 package se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode;
 
 import io.github.bonigarcia.wdm.*;
-import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -10,16 +9,17 @@ import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import se.claremont.autotest.common.*;
+import se.claremont.autotest.common.LogLevel;
+import se.claremont.autotest.common.Settings;
+import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.common.TestRun;
 import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.StringJoiner;
 
 /**
  * Settings and management of WebDriver browser interfaces.
@@ -167,7 +167,7 @@ public class WebDriverManager {
 
         public @Override WebDriver setup(){
             WebDriver driver = null;
-            System.setProperty("webdriver.firefox.bin", TestRun.settings.getValue(Settings.SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE));
+            //System.setProperty("webdriver.firefox.bin", TestRun.settings.getValue(Settings.SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE));
             testCase.log(LogLevel.INFO, "Initializing Firefox driver '" + System.getProperty("webdriver.firefox.bin") + "'.");
             try {
                 driver = new FirefoxDriver();
@@ -261,7 +261,7 @@ public class WebDriverManager {
             testCase.log(LogLevel.DEBUG, "Attempting to get hold of drivers for PhantomJS.");
             long startTime = System.currentTimeMillis();
             try {
-                //PhantomJsDriverManager.getInstance().setup();
+                PhantomJsDriverManager.getInstance().setup();
                 driver = new PhantomJSDriver();
             } catch (Exception e) {
                 testCase.log(LogLevel.INFO, "Could not start PhantomJS driver through WebDriverManager libraries. Error message: " + e.getMessage() + SupportMethods.LF + "Attempting harddisk scan for phantomjs.exe.");

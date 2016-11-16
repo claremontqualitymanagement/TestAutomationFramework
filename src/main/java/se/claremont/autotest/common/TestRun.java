@@ -7,7 +7,11 @@ package se.claremont.autotest.common;
  * Created by jordam on 2016-08-17.
  */
 public class TestRun {
+    public static final Settings settings = new Settings();
     public static int fileCounter = 0;
+    public static int exitCode;
+    public static TestSet currentTestSet;
+    public static TestRunReporterFactory reporters;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -29,17 +33,11 @@ public class TestRun {
             return value;
         }
     }
-    public static int exitCode = ExitCodeTable.INIT_OK.getValue();
 
-    public static TestSet currentTestSet = null;
-    public static final Settings settings = new Settings();
-    public static TestRunReporterFactory reporters = new TestRunReporterFactory();
-
-    TestRun(){
-        reporters.addTestRunReporter(new TestRunReporterHtmlSummaryReportFile());
-        reporters.addTestRunReporter(new TestRunReporterEmailReport());
-        //reporters.addTestRunReporter(new TestlinkReporter());
-        //RestServer.start();
+    public static void initialize() {
+        reporters = new TestRunReporterFactory();
+        currentTestSet = null;
+        exitCode = ExitCodeTable.INIT_OK.getValue();
     }
 
 }

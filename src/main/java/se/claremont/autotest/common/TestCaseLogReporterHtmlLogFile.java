@@ -207,7 +207,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
              "                background-color: " + darkblue + ";" + LF +
              "                color: white;" + LF +
              "                text-align: left;" + LF +
-             "                padding: 15px 0;" + LF +
+             "                padding: 15px;" + LF +
              "                border-radius: 6px;" + LF +
              "                position: absolute;" + LF +
              "                z-index: 1;" + LF +
