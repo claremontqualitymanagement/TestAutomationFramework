@@ -299,14 +299,14 @@ public class TestCase {
         if(resultStatus == ResultStatus.UNEVALUATED)
             evaluateResultStatus();
         if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
-            Assert.assertFalse(testCaseLog.toString(), true);
+            Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
             if( resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
                 TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
             else
                 TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         } else if(resultStatus == ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
             Assume.assumeTrue(false);
-            Assert.assertFalse(testCaseLog.toString(), true);
+            Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         }
     }
