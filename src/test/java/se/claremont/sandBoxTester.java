@@ -311,6 +311,7 @@ public class sandBoxTester extends TestSet{
     }
 
     @Test
+    @Ignore
     public void htmlTableVerification(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("file://C:/temp/tabletest.html");
@@ -326,6 +327,7 @@ public class sandBoxTester extends TestSet{
     }
 
     @Test
+    @Ignore
     public void animatedMenu(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("https://www.typeandtell.com/sv/skrivbord/");
