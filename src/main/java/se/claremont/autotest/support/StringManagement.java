@@ -90,6 +90,7 @@ public class StringManagement {
         if(Character.isDigit(returnString.charAt(0))){
             returnString = "_" + returnString;
         } //Method names cannot start with digits
+        returnString = returnString.substring(0,1).toLowerCase() + returnString.substring(1);
         return returnString;
     }
 

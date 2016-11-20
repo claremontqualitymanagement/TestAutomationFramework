@@ -333,6 +333,7 @@ public class sandBoxTester extends TestSet{
         web.navigate("https://www.typeandtell.com/sv/skrivbord/");
         DomElement emailField = new DomElement("Email", DomElement.IdentificationType.BY_ID);
         DomElement pwField = new DomElement("Password", DomElement.IdentificationType.BY_ID);
+        web.mapCurrentPage("C:\\temp\\ut.txt");
         web.write(emailField, "email");
         web.submitText(pwField, "password");
         DomElement burger = new DomElement("Toggle menu", DomElement.IdentificationType.BY_VISIBLE_TEXT);
