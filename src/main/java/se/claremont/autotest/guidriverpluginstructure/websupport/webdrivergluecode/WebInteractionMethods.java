@@ -402,15 +402,15 @@ public class WebInteractionMethods implements GuiDriver {
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
     @SuppressWarnings("WeakerAccess")
-    public void saveScreenshot(WebElement webElement){
+    public void saveScreenshot(WebElement relevantWebElementToMarkWithBorder){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        if(webElement != null){
-            js.executeScript("arguments[0].setAttribute('style', arguments[1]);", webElement, "color: yellow; border: 2px solid yellow;");
+        if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor){
+            js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "color: yellow; border: 5px solid yellow;");
         }
 
         String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
@@ -419,7 +419,7 @@ public class WebInteractionMethods implements GuiDriver {
         byte[] fileImage = null;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
-            if(webElement != null) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", webElement, "");
+            if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "");
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot. Is driver ok? " + e.toString());
         }
