@@ -179,7 +179,7 @@ public class sandBoxTester extends TestSet{
     public void testDesktopScreenshot() {
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("https://www.claremont.se");
-        web.saveScreenshot();
+        web.saveScreenshot(null);
     }
 
     @Ignore
@@ -277,9 +277,9 @@ public class sandBoxTester extends TestSet{
         TestCase testCase = new TestCase(null, "dummy");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
         web.navigate("http://www.claremont.se");
-        web.saveScreenshot();
+        web.saveScreenshot(null);
         web.saveDesktopScreenshot();
-        web.saveScreenshot();
+        web.saveScreenshot(null);
         web.saveDesktopScreenshot();
         FileTester fileTester = new FileTester(testCase);
         fileTester.verifyFileExists(LogFolder.testRunLogFolder + testCase.testName + "3.png");
@@ -333,7 +333,8 @@ public class sandBoxTester extends TestSet{
         web.navigate("https://www.typeandtell.com/sv/skrivbord/");
         DomElement emailField = new DomElement("Email", DomElement.IdentificationType.BY_ID);
         DomElement pwField = new DomElement("Password", DomElement.IdentificationType.BY_ID);
-        web.mapCurrentPage("C:\\temp\\ut.txt");
+        web.saveScreenshot(web.getRuntimeElementWithoutLogging(pwField));
+        //web.mapCurrentPage("C:\\temp\\ut.txt");
         web.write(emailField, "email");
         web.submitText(pwField, "password");
         DomElement burger = new DomElement("Toggle menu", DomElement.IdentificationType.BY_VISIBLE_TEXT);
@@ -341,7 +342,7 @@ public class sandBoxTester extends TestSet{
         DomElement tjänsterLink = new DomElement("Tjänster", DomElement.IdentificationType.BY_LINK_TEXT);
         //web.click(tjänsterLink);
 
-        web.makeSureDriverIsClosed();
+        //web.makeSureDriverIsClosed();
 
     }
 

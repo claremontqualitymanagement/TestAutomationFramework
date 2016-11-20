@@ -62,7 +62,7 @@ public class WebInteractionMethods implements GuiDriver {
             driver.manage().window().maximize();
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
         }
@@ -128,9 +128,9 @@ public class WebInteractionMethods implements GuiDriver {
     public void navigate(String url){
         try {
             goToUrl(url);
-            log(LogLevel.EXECUTED, "Navigation performed to url '" + url + "'.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Navigation performed to url '" + url + "'.", "Navigation performed to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'." );
         }catch (NavigationError e){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not navigate to url '" + url + "'.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not navigate to url '" + url + "'.", "Could not navigate to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'.");
         }
     }
 
@@ -157,17 +157,35 @@ public class WebInteractionMethods implements GuiDriver {
      * @return the current text in the element
      */
     public String getText(GuiElement guiElement){
+        long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         String text = null;
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        if(webElement != null){
-            text = webElement.getText();
-        } else{
+        WebElement element = null;
+        boolean elementIdentified = false;
+        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element != null){
+                elementIdentified = true;
+                try {
+                    text = element.getText();
+                }catch (Exception ignored){}
+            }
+            wait(50);
+        }
+        if(text == null && !elementIdentified){
             log(LogLevel.EXECUTION_PROBLEM, "Could not retrieve text from element " + domElement.LogIdentification() + " since it could not be identified at runtime.");
-            saveScreenshot();
+            saveScreenshot(element);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
+        } else if (text == null){
+            log(LogLevel.EXECUTION_PROBLEM, "The element " + domElement.LogIdentification() + " could be identified, but the text of the element could not be read.");
+            saveScreenshot(element);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        } else {
+            log(LogLevel.INFO, "Identified the text '" + text + "' from element " + domElement.LogIdentification() + ".");
         }
         return text;
     }
@@ -196,8 +214,13 @@ public class WebInteractionMethods implements GuiDriver {
             wait.until(ExpectedConditions.alertIsPresent());
             Alert alert = driver.switchTo().alert();
             alert.accept();
-        } catch (Exception e) {
-            //exception handling
+            log(LogLevel.EXECUTED, "Accepted alert dialogue.");
+        } catch (Exception ignored) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not accept alert dialogue.");
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -280,18 +303,48 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void write(GuiElement guiElement, String textToWrite){
         DomElement domElement = (DomElement) guiElement;
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        try {
-            enterText(webElement, textToWrite, false);
+        long startTime = System.currentTimeMillis();
+        WebElement element = null;
+        boolean success = false;
+        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element == null){
+                wait(50);
+                continue;
+            }
+            try {
+                enterText(element, textToWrite, false);
+                success = true;
+            }catch (Exception ignored){}
+        }
+        if(success){
             log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to " + domElement.LogIdentification() + ".");
-        }catch (Exception e){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
-            saveScreenshot();
+        } else {
+            String text = null;
+            String errorMessage = null;
+            boolean exist = false;
+            try {
+                element = getRuntimeElementWithoutLogging(domElement);
+                if(element != null) exist = true;
+                text = element.getText();
+            }catch (Exception e){
+                errorMessage = e.getMessage();
+            }
+            log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". Element " + Boolean.toString(exist).toLowerCase().replace("false", "could not be identified").replace("true", "was identified") + ".");
+            if(text != null) {
+                log(LogLevel.DEVIATION_EXTRA_INFO, "Current text of " + domElement.LogIdentification() + " = '" + text + "'.");
+            } else if(exist){
+                log(LogLevel.DEVIATION_EXTRA_INFO, "Could not retrieve the current text of the element " + domElement.LogIdentification() + ". Are you sure it is the correct element?");
+            }
+            if(errorMessage != null) log(LogLevel.DEVIATION_EXTRA_INFO, "Error message: " + errorMessage);
+            saveScreenshot(element);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
+            haltFurtherExecution();
         }
     }
+
 
     /**
      * Writes text to the given element after the element value has been cleared.
@@ -306,7 +359,7 @@ public class WebInteractionMethods implements GuiDriver {
             enterText(webElement, textToWrite, true);
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -321,22 +374,23 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void submitText(GuiElement guiElement, String text){
         DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = null;
         try {
-            WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+            webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
             enterText(webElement, text, false);
             try{
                 webElement.submit();
                 log(LogLevel.EXECUTED, "Submitted text '" + text + "' to " + domElement.LogIdentification() + ".");
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not submit the text entered to " + domElement.LogIdentification() + ".");
-                saveScreenshot();
+                saveScreenshot(webElement);
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
                 writeRunningProcessListDeviationsSinceTestCaseStart();
             }
         } catch (TextEnteringError textEnteringError) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter '" + text + "' in " + domElement.LogIdentification() + ".");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -348,10 +402,15 @@ public class WebInteractionMethods implements GuiDriver {
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
     @SuppressWarnings("WeakerAccess")
-    public void saveScreenshot(){
+    public void saveScreenshot(WebElement webElement){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
+        }
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        if(webElement != null){
+            js.executeScript("arguments[0].setAttribute('style', arguments[1]);", webElement, "color: yellow; border: 2px solid yellow;");
         }
 
         String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
@@ -360,6 +419,7 @@ public class WebInteractionMethods implements GuiDriver {
         byte[] fileImage = null;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
+            if(webElement != null) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", webElement, "");
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot. Is driver ok? " + e.toString());
         }
@@ -405,7 +465,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " when trying to capture an image of it.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -647,7 +707,7 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement domElement = (DomElement) guiElement;
         if(getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds) == null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be present but could not be identified.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -680,7 +740,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not displayed.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was identified as displayed although expected to not be displayed.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -712,7 +772,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "Object " + domElement.LogIdentification() + " verified to not displayed.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was identified as displayed although expected to not be displayed.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -757,13 +817,13 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be displayed but could not be identified at all.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
         } else if(!webElement.isDisplayed()) {
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " is present, but the display of the object is suppressed.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -782,7 +842,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement != null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to not be present but was able to be identified.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -803,7 +863,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, timeoutInSeconds);
         if(webElement != null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to not be present but was able to be identified.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -822,7 +882,7 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement domElement = (DomElement) guiElement;
         if(getRuntimeElementWithTimeout(domElement, timeoutInSeconds) == null){
             log(LogLevel.VERIFICATION_PROBLEM, "Object " + domElement.LogIdentification() + " was expected to be present but was not identified.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -844,7 +904,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The text '" + text + "' could be found on the current page.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The text '" + text + "' could not be found on the current page.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -866,7 +926,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The regular expression pattern '" + textAsRegexPattern + "' could be found on the current page.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The regular expression pattern '" + textAsRegexPattern + "' could not be found on the current page.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -889,7 +949,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + currentTitle + "', and that title matches the given regex pattern '" + expectedTitleAsRegexPattern + "'.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to match the regex pattern '" + expectedTitleAsRegexPattern+ "' but was '" + currentTitle + "'.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -913,7 +973,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + expectedTitle + "' as expected.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to be '" + expectedTitle + "' but was '" + currentTitle + "'.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -949,7 +1009,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + currentTitle + "' and that title is found to be a match for given regular expression pattern '" + expectedTitleAsRegexPattern + "' (found after " + (System.currentTimeMillis() - startTime) + " milliseconds).");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to match the regular expression pattern '" + expectedTitleAsRegexPattern + "' but was '" + currentTitle + "' even after " + timeoutInSeconds + " milliseconds.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -984,7 +1044,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The current page title was '" + expectedTitle + "' as expected (found after " + (System.currentTimeMillis() - startTime) + " milliseconds).");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The current page title was expected to be '" + expectedTitle + "' but was '" + currentTitle + "' even after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1003,7 +1063,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to have the text '" + expectedText + "' as expected.");
         } else {
             log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have the text '" + expectedText + "', but it actually was '" + currentText + "'.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1022,7 +1082,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to be '" + currentText + ". It is a match with the regular expression pattern '" + expectedTextAsRegexPattern + "'.");
         } else {
             log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have match the regular expression pattern '" + expectedTextAsRegexPattern+ "', but it actually was '" + currentText + "'. Not a match.");
-            saveScreenshot();
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1298,7 +1358,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify radio button element " + domElement.LogIdentification() + " where '" + text + "' was supposed to be selected. Continuing test case execution nevertheless.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1311,7 +1371,7 @@ public class WebInteractionMethods implements GuiDriver {
                 return;
             }
             log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + text + "' in radio button set " + domElement.LogIdentification() + ". However the tag of the element is not 'form', but '" + webElement.getTagName() + "'.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1325,7 +1385,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.DEBUG, "Found " + optionButtons.size() + " options for radiobutton.");
             if(optionButtons.size()==0){
                 log(LogLevel.FRAMEWORK_ERROR, "Could not identify any radiobuttons within " + domElement.LogIdentification() + ". Does it contain elements of type 'radio'?");
-                saveScreenshot();
+                saveScreenshot(webElement);
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
                 writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1364,7 +1424,7 @@ public class WebInteractionMethods implements GuiDriver {
             errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.");
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' crashed with error." + e.getMessage());
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1500,7 +1560,7 @@ public class WebInteractionMethods implements GuiDriver {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                     "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",
                     "Could not select:<ul><li>'" + String.join("'</li><li>'", nonSelectedStrings) + "'</li></ul> in element " + domElement.LogIdentification() + " when attempting to select: <ul><li>'" + String.join("'</li><li>'", selections) + "'</li></ul>. Available options are:<ul><li>'" + String.join("'</li><li>'", optionStrings) + "'</li></ul>.");
-            saveScreenshot();
+            saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1736,7 +1796,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param element Declared DomElement to interact with
      * @return WebElement for WebDriver interaction
      */
-    private WebElement getRuntimeElementWithoutLogging(DomElement element){
+    public WebElement getRuntimeElementWithoutLogging(DomElement element){
         List<WebElement> relevantWebElements = gatherRelevantElements(element);
         return mostRelevantElement(relevantWebElements, element);
     }
@@ -1892,7 +1952,7 @@ public class WebInteractionMethods implements GuiDriver {
      */
     private void errorManagementProcedures(String errorMessage){
         log(LogLevel.EXECUTION_PROBLEM, errorMessage);
-        saveScreenshot();
+        saveScreenshot(null);
         saveDesktopScreenshot();
         saveHtmlContentOfCurrentPage();
         writeRunningProcessListDeviationsSinceTestCaseStart();
