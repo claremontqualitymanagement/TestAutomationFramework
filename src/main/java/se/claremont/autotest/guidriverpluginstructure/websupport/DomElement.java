@@ -17,6 +17,7 @@ public class DomElement implements GuiElement {
     private final String page;
     public final List<String> recognitionStrings;
     public final IdentificationType identificationType;
+    public Integer ordinalNumber = null;
 
     /**
      * Identification mechanisms
@@ -57,6 +58,43 @@ public class DomElement implements GuiElement {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
         name = callingMethodUsingConstructor.getMethodName();
+        page = callingMethodUsingConstructor.getClassName();
+        for(String recognitionString : alternativeRecognitionStrings){
+            this.recognitionStrings.add(recognitionString);
+        }
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Declares a DOM element to be used in test execution
+     * @param recognitionString the recognition string that identifies the object
+     * @param identificationType what mechanism to use for identification
+     * @param ordinalNumber The ordinal number of the occurance on the web page, if multiple matches for search criteria.
+     */
+    public DomElement (String recognitionString, IdentificationType identificationType, Integer ordinalNumber){
+        this.recognitionStrings = new ArrayList<>();
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        name = callingMethodUsingConstructor.getMethodName();
+        page = callingMethodUsingConstructor.getClassName();
+        this.recognitionStrings.add(recognitionString);
+        this.ordinalNumber = ordinalNumber;
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Constructor for use for example with several languages
+     *
+     * @param alternativeRecognitionStrings An array of recognition strings for this element
+     * @param identificationType The method of identification
+     * @param ordinalNumber The ordinal number of the occurance on the web page, if multiple matches for search criteria.
+     */
+    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber){
+        this.recognitionStrings = new ArrayList<>();
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        name = callingMethodUsingConstructor.getMethodName();
+        this.ordinalNumber = ordinalNumber;
         page = callingMethodUsingConstructor.getClassName();
         for(String recognitionString : alternativeRecognitionStrings){
             this.recognitionStrings.add(recognitionString);

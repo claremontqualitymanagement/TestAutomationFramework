@@ -1791,10 +1791,22 @@ public class WebInteractionMethods implements GuiDriver {
      */
     private WebElement mostRelevantElement(List<WebElement> webElements, DomElement element){
         if (webElements.size() == 0) return null;
-        if (webElements.size() == 1) return webElements.get(0);
 
         //More than one match - trying to find best, most relevant match
         String debugString = "Found " + webElements.size() + " elements when trying to identify " + element.LogIdentification() + ". ";
+
+        if(element.ordinalNumber != null){
+            if(webElements.size() <= element.ordinalNumber){
+                log(LogLevel.DEBUG, debugString + "Using WebElement #" + element.ordinalNumber + ", given by the DomElement object. ");
+                return webElements.get(element.ordinalNumber + 1);
+            } else {
+                log(LogLevel.DEBUG, debugString + "The ordinal number given by the DomElement object was supposed to be " +
+                        element.ordinalNumber + ", so it could not be matched.");
+                return null;
+            }
+        }
+
+        if (webElements.size() == 1) return webElements.get(0);
 
         List<WebElement> visibleElementsList = new ArrayList<>();
         for(WebElement webElement : webElements){
