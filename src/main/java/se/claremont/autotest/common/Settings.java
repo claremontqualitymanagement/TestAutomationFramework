@@ -158,7 +158,7 @@ public class Settings extends HashMap<String, String>{
             setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");
         }
         setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
-        setValue(SettingParameters.PATH_TO_LOGO, "http://46.101.193.212/TAF/images/claremontlogo.jpg");
+        setValue(SettingParameters.PATH_TO_LOGO, "http://46.101.193.212/TAF/images/claremontlogo.gif");
         setValue(SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "");
         setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_SERVER_ADDRESS, "");
@@ -176,7 +176,7 @@ public class Settings extends HashMap<String, String>{
             if(valuePair.isSuppressedFromLogDisplay()) continue;
             stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(valuePair.friendlyName()).append("</td><td class=\"settingsParameterValue\">").append(getValue(valuePair)).append("</td></tr>").append(SupportMethods.LF);
         }
-        stringBuilder.append("</table>").append(SupportMethods.LF);
+        stringBuilder.append("</table>").append(SupportMethods.LF).append("<br>").append(SupportMethods.LF);
         return stringBuilder.toString();
     }
 

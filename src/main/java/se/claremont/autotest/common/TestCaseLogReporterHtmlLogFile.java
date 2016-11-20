@@ -135,36 +135,25 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
 
-	//Claremont color names:
-	public static String lightblue     = "rgb(150,192,230)";
-	public static String darkgrey      = "rgb(104,102,99)";
-	public static String midgrey       = "#DAD8D9";
-	public static String verylightgrey = "#F2F2F2";
-	public static String darkblue      = "rgb(119,150,178)";
-	public static String coralred      = "rgb(242,102,100)";
-    public static String green         = "#2db92d";
-    public static String lightyellow   = "cornsilk";
-
     /**
      * Used to append HTML style information to the HTML based testCaseLog
      * @return A HTML formatted string to incorporate in the style tag in the HTML testCaseLog
      */
     private static String styles(){
-        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: white; width:90%; margin-left: 2%; margin-top: 1%; color: " + darkgrey + "; }" + LF +
+        return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width:90%; margin-left: 2%; margin-top: 1%; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
                 "      h1                      { font-size:24px; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
                 "      .ui-accordion .ui-accordion-content  { padding:0px; }" + LF +
-                "      table                   { border: 1px solid " + midgrey + "; }" + LF +
-                "      .pagetitle              { color: " + lightblue + "; font-size:24px; font-weight: bold; }" + LF +
+                "      table                   { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
+                "      .pagetitle              { color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
                 LogPost.htmlStyleInformation() +
-                "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: " + coralred + "; font-weight: bold; } " + LF +
-                //"      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + "             { background-color: white; width: 80%; }" + LF +
-                //"      table#" + enumMemberNameToLower(HtmlLogStyleNames.LOG_POSTS_LIST.toString()) + " tr:hover     { background-color: lightgrey; }" + LF +
-                "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + " tr:nth-child(even)                 { background-color: " + verylightgrey + "; }" + LF +
-                "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: " + verylightgrey + "; }" + LF +
-                "     .logpost, .testdatapost                                { border-bottom: 1px solid " + midgrey + "; }" + LF +
+                "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; } " + LF +
+                "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + "  { background-color:" + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
+                "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + " tr:nth-child(even)                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
+                "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
+                "     .logpost, .testdatapost                                { border-bottom: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "      td.logPostLogLevel       { width: 130px; }" + LF +
                 "      td.logMessage           { max-width: 99%; }" + LF +
                 "      img.screenshot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + SupportMethods.LF +
@@ -174,9 +163,9 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 TableData.TableVerifierLoggingHtmlStyles.styles() +
 
                 //W3C checker
-                "      font.w3cvalidationinfo    { color: " + darkgrey + "; font-weight: bold; }" + LF +
-                "      font.w3cvalidationerror   { color: " + coralred + "; font-weight: bold; }" + LF +
-                "      font.w3cvalidationother   { color: " + darkgrey + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationinfo    { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationerror   { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationother   { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
                 "      pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
                 "                             overflow: auto;" + LF +
@@ -187,7 +176,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             padding-bottom: 20px!ie7;"  + LF +
                 "                             max - height: 600px;" + LF +
                 "      }" + LF +
-                "      .footer                  { border: 0px none; width: 100%; color: #99CCFF; text-align: center; align: center; }" + LF +
+                "      .footer                  { border: 0px none; width: 100%; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; align: center; }" + LF +
                 htmlStyleHelpOverlay();
 
     }
@@ -197,15 +186,15 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
              "                vertical-align: top;" + LF +
              "                float: right;" + LF +
              "                text-align: right;" + LF +
-             "                color: " + lightblue + ";" + LF +
+             "                color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + ";" + LF +
              "            }" + LF +
              "" + LF +
              "            #helpText {" + LF +
              "                visibility: hidden;" + LF +
              "                left: 50px;" + LF +
              "                width: auto;" + LF +
-             "                background-color: " + darkblue + ";" + LF +
-             "                color: white;" + LF +
+             "                background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + ";" + LF +
+             "                color: " + UxColors.WHITE.getHtmlColorCode() + ";" + LF +
              "                text-align: left;" + LF +
              "                padding: 15px;" + LF +
              "                border-radius: 6px;" + LF +

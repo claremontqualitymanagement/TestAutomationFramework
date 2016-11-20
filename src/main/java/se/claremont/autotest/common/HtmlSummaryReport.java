@@ -20,11 +20,13 @@ public class HtmlSummaryReport {
     int testCasesWithOnlyKnownErrors = 0;
     int testCasesWithBothNewAndKnownErrors = 0;
     int unevaluatedCount = 0;
+    private String resultBarHtml;
     final ArrayList<KnownError> encounteredKnownErrorInfos = new ArrayList<>();
     final ArrayList<NewErrorInfo> newErrorInfos = new ArrayList<>();
     final ArrayList<KnownError> solvedKnownErrorsList = new ArrayList<>();
     private String testCaseSummary = "";
     private final int barWidthInPixels = 400;
+    private String resultsBarStyleInfo = "";
 
 
     /**
@@ -149,24 +151,31 @@ public class HtmlSummaryReport {
     private String htmlElementStyles(){
         return LF +
                 "    <style>" + LF +
-                "      #" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "               { color: darkgrey; }" + LF +
-                "      body               { color: darkslategrey; background-color: darkgrey; }" + LF +
-                "      table              { background-color: white; }" + LF +
-                "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: honeydew;; padding: 30px; }" + LF +
-                "      tr." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: lightgrey; }" + LF +
-                "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: black; }" + LF +
-                "      li." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: lightgrey; }" + LF +
-                "      table#" + HtmlStyleNames.STATISTICS.toString() + "                           { background-color: white; border-collapse: collapse; border: 1p solid darkgrey; width: " + barWidthInPixels + "px; }" + LF +
-                "      ." + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "             { color: darkyellow; }" + LF +
-                "      ." + TestCase.ResultStatus.PASSED.toString() + "                                    { color: darkgreen; }" + LF +
-                "      ." + TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "     { color: orange; font-weight: bold; }" + LF +
-                "      ." + TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "               { color: red; font-weight: bold; }" + LF +
-                "      ." + TestCase.ResultStatus.UNEVALUATED.toString() + "                               { color: darkgrey; text-align: center; }" + LF +
-                "      ." + HtmlStyleNames.COPYRIGHT.toString() + "                                 { background-color: honeydew; color: grey; text-align: center; }" + LF +
-                "       tr#" + HtmlStyleNames.STATISTICS_COUNT.toString() + "          { background-color: lightgrey; }" + LF +
-                "       tr#" + HtmlStyleNames.STATISTICS_HEADER_ROW.toString() + "          { background-color: lightgrey; }" + LF +
-                "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + " tr:nth-child(even)                 { background-color: #f2f2f2 }" + LF +
+                "      #" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
+                "      body               { color: darkslategrey; background-color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      a                     { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + ";}" + LF +
+                "      th                    { text-align: left; }" + LF +
+                "      img.toplogo           { max-width: 30%; max-height: 10%; }" + LF +
+                "      img.bottomlogo        { width: 20%; }" + LF +
+                "      td.bottomlogo         { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
+                "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; }" + LF +
+                "      tr." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
+                "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
+                "      li." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
+                "      table#" + HtmlStyleNames.STATISTICS.toString() + "                           { background-color: " + UxColors.WHITE.getHtmlColorCode() +"; border-collapse: collapse; border: 1p solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; width: " + barWidthInPixels + "px; }" + LF +
+                "      ." + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "             { color: " + UxColors.DARK_YELLOW.getHtmlColorCode() + "; }" + LF +
+                "      ." + TestCase.ResultStatus.PASSED.toString() + "                                    { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
+                "      ." + TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "     { color: " + UxColors.ORANGE.getHtmlColorCode() +"; font-weight: bold; }" + LF +
+                "      ." + TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "               { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      ." + TestCase.ResultStatus.UNEVALUATED.toString() + "                               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: center; }" + LF +
+                "      ." + HtmlStyleNames.COPYRIGHT.toString() + "                                 { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; }" + LF +
+                "       tr#" + HtmlStyleNames.STATISTICS_COUNT.toString() + "          { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
+                "       tr#" + HtmlStyleNames.STATISTICS_HEADER_ROW.toString() + "          { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; text-aligned: left; }" + LF +
+                "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + "                                    { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; text-align: left; }" + LF +
+                "       tr.testcasesummaryheadline                                     { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
+                "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + " tr:nth-child(even)                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
                 "       .noerrorsexclamtaion    { color: black; font-weight: bold; }" + LF +
+                resultsBarStyleInfo +
                 "    </style>" + LF + LF;
     }
 
@@ -186,6 +195,7 @@ public class HtmlSummaryReport {
     String createReport(){
         StringBuilder html = new StringBuilder();
         if(reportShouldBeWritten()){
+            resultBarHtml = resultsGraphBar(); //Must be created before CSS Style info. Used in statistics section
             html.append("<!DOCTYPE html>").append(LF);
             html.append("<html>").append(LF).append(LF);
             html.append("  <HEAD>").append(LF).append(LF);
@@ -229,7 +239,7 @@ public class HtmlSummaryReport {
      * @return HTML section as string
      */
     private String htmlElementTitle(){
-        return "          <img src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
+        return "          <img class=\"toplogo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "          <h1>Test report " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
     }
 
@@ -240,7 +250,7 @@ public class HtmlSummaryReport {
     private String htmlElementStatistics(){
         StringBuilder html = new StringBuilder();
         html.append("          <h2>Statistics</h2>").append(LF);
-        html.append(resultsGraphBar()).append(LF);
+        html.append(resultBarHtml).append(LF);
         html.append("          <br>").append(LF).append(LF);
         html.append("          <table id=\"").append(HtmlStyleNames.STATISTICS.toString()).append("\">").append(LF);
         html.append("            <tr id=\"").append(HtmlStyleNames.STATISTICS_HEADER_ROW.toString()).append("\"><th>Result</th><th>Count</th></tr>").append(LF);
@@ -260,7 +270,7 @@ public class HtmlSummaryReport {
             html.append("            <tr class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\"><td>Unevaluated test cases</td><td>").append(unevaluatedCount).append("</td></tr>").append(LF);
         }
         html.append("            <tr id=\"").append(HtmlStyleNames.STATISTICS_COUNT.toString()).append("\"><td><i>Total test case count</i></td><td><i>").append(numberOfTestCases()).append("</i></td></tr>").append(LF);
-        html.append("          </table>").append(LF);
+        html.append("          </table>").append(LF).append("<br>").append(LF);
         return html.toString();
     }
 
@@ -274,7 +284,7 @@ public class HtmlSummaryReport {
             html.append("          <div id=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(HtmlStyleNames.NEW_ERRORS.toString())).append("\">").append(LF);
             html.append("          <h2>New deviations</h2>").append(LF);
             html.append(       newErrors());
-            html.append("          </div>").append(LF).append(LF);
+            html.append("          </div>").append(LF).append("<br>").append(LF);
         }
         return html.toString();
     }
@@ -310,7 +320,7 @@ public class HtmlSummaryReport {
                 html.append("            </p>").append(LF).append(LF);
             }
             html.append("            <br>").append(LF);
-            html.append("          </div>").append(LF).append(LF);
+            html.append("          </div>").append(LF).append("<br>").append(LF);
         }
         return html.toString();
     }
@@ -335,7 +345,7 @@ public class HtmlSummaryReport {
                 html.append("          </p>").append(LF).append(LF);
             }
             html.append("          <br>").append(LF);
-            html.append("        </div>").append(LF).append(LF);
+            html.append("        </div>").append(LF).append("<br>").append(LF);
         }
         return html.toString();
     }
@@ -350,9 +360,9 @@ public class HtmlSummaryReport {
     private String htmlElementExecutedTestCasesStatusList(){
         return "          <h2>Test case summary</h2>" + LF +
                 "          <table class=\"" + HtmlStyleNames.STRIPED_ROWS.toString() + " " + HtmlStyleNames.HOVERABLE.toString() + "\" id=\"" + HtmlStyleNames.EXECUTED_TEST_CASES.toString() + "\">" + LF +
-                "            <tr><th>Test set</th><th>Test case name</th><th>Test status</th><th>Log</th></tr>" + LF +
+                "            <tr class=\"testcasesummaryheadline\"><th>Test set</th><th>Test case name</th><th>Test status</th><th>Log</th></tr>" + LF +
                 "      " + testCaseSummary +
-                "          </table>" + LF;
+                "          </table>" + LF + "<br>" + LF;
     }
 
     /**
@@ -361,9 +371,12 @@ public class HtmlSummaryReport {
      */
     private String htmlElementCopyright(){
         //noinspection deprecation
-        return "          <table>" + LF +
+        return "<br><br>" +
+                "          <table width=\"100%\">" + LF +
                 "            <tr>" + LF +
-                "              <td class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>(c) Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "</td>" + LF +
+                "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
+                "            </tr><tr>" + LF +
+                "              <td width=\"100%\" class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>(c) Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "</td>" + LF +
                 "            </tr>" + LF +
                 "          </table>" + LF;
     }
@@ -379,28 +392,29 @@ public class HtmlSummaryReport {
      * @return HTML section for hte results bar
      */
     private String resultsGraphBar(){
-        int barHeightInPixels = 15;
         StringBuilder bar = new StringBuilder();
-        bar.append("          <table id=\"").append(HtmlStyleNames.RESULTS_BAR.toString()).append("\" width=\"").append(barWidthInPixels).append("\">").append(LF);
+        resultsBarStyleInfo += "      table#" + SummaryReport.HtmlStyleNames.RESULTS_BAR.toString() + "    { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width: " + barWidthInPixels + "px; }" + LF;
+        bar.append("          <table id=\"").append(SummaryReport.HtmlStyleNames.RESULTS_BAR.toString()).append("\">").append(LF);
         bar.append("            <tr>").append(LF);
-        if(testCasesWithBothNewAndKnownErrors + testCasesWithOnlyKnownErrors + failedTestCasesWithNewDeviations == 0){
-            bar.append("     <td bgcolor=\"green\" height=\"").append(barHeightInPixels).append("\" class=\"noerrorsexclamtaion\">Yippee!!!</td>").append(LF);
-        } else {
-            if(successfulTestCases > 0){
-                bar.append("              <td bgcolor=\"green\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.successfulTestCases * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
-            }
-            if(testCasesWithOnlyKnownErrors > 0){
-                bar.append("              <td bgcolor=\"yellow\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.testCasesWithOnlyKnownErrors * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
-            }
-            if(unevaluatedCount > 0){
-                bar.append("              <td bgcolor=\"gray\" height=\"").append(barHeightInPixels).append("\" width=\"").append(this.unevaluatedCount * 100 / numberOfTestCases()).append("%\"></td>").append(LF);
-            }
-            if(testCasesWithBothNewAndKnownErrors > 0){
-                bar.append("              <td bgcolor=\"orange\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.testCasesWithBothNewAndKnownErrors * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
-            }
-            if(failedTestCasesWithNewDeviations > 0){
-                bar.append("              <td bgcolor=\"red\" height=\"").append(barHeightInPixels).append("\" width=\"").append((this.failedTestCasesWithNewDeviations * 100) / numberOfTestCases()).append("%\"></td>").append(LF);
-            }
+        if(successfulTestCases > 0){
+            bar.append("              <td class=\"resultsgraphpassed\"></td>").append(LF);
+            resultsBarStyleInfo += "      td.resultsgraphpassed { background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
+        }
+        if(testCasesWithOnlyKnownErrors > 0){
+            bar.append("              <td class=\"resultsgraphwarning\"></td>").append(LF);
+            resultsBarStyleInfo += "      td.resultsgraphwarning { background-color: " + UxColors.YELLOW.getHtmlColorCode() + "; height: 15px; width: " + (this.testCasesWithOnlyKnownErrors * 100) / numberOfTestCases() + "%; }" + LF;
+        }
+        if(unevaluatedCount > 0){
+            bar.append("              <td class=\"resultsgraphunevaluated\"></td>").append(LF);
+            resultsBarStyleInfo += "      td.resultsgraphunevaluated { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; height: 15px; width: " + this.unevaluatedCount * 100 / numberOfTestCases() + "%; }" + LF;
+        }
+        if(testCasesWithBothNewAndKnownErrors > 0){
+            bar.append("              <td class=\"resultsgraphboth\"></td>").append(LF);
+            resultsBarStyleInfo += "      td.resultsgraphboth          { background-color: " + UxColors.ORANGE.getHtmlColorCode() + "; height: 15px; width: " + (this.testCasesWithBothNewAndKnownErrors * 100) / numberOfTestCases() + "%; }" + LF;
+        }
+        if(failedTestCasesWithNewDeviations > 0){
+            bar.append("              <td class=\"resultsgraphbad\"></td>").append(LF);
+            resultsBarStyleInfo += "      td.resultsgraphbad           { background-color: " + UxColors.RED.getHtmlColorCode() + "; height: 15px; width: " + (this.failedTestCasesWithNewDeviations * 100) / numberOfTestCases() + "%; }" + LF;
         }
         bar.append("            </tr>").append(LF);
         bar.append("          </table>").append(LF);

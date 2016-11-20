@@ -213,17 +213,17 @@ class LogPost {
     }
 
     public static String htmlStyleInformation(){
-        return  "      span." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()) + "               { color: " + TestCaseLogReporterHtmlLogFile.darkblue + "; }" + LF +
-                "      td." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString()) + "            { color: " + TestCaseLogReporterHtmlLogFile.darkgrey + "; width: 80px; }" + LF +
-                "      td.logpostloglevel.debug                 { color: " + TestCaseLogReporterHtmlLogFile.darkgrey + "; }" + LF +
-                "      td.logpostloglevel.verification-passed   { color: " + TestCaseLogReporterHtmlLogFile.green + "; }" + LF +
-                "      td.logpostloglevel.verification-failed   { color: " + TestCaseLogReporterHtmlLogFile.coralred + "; font-weight: bold; }" + LF +
-                "      td.logpostloglevel.verification-problem  { color: " + TestCaseLogReporterHtmlLogFile.coralred + "; font-weight: bold; }" + LF +
-                "      td.logpostloglevel.execution-problem     { color: " + TestCaseLogReporterHtmlLogFile.coralred + "; font-weight: bold; }" + LF +
-                "      td.logpostloglevel.executed              { color: " + TestCaseLogReporterHtmlLogFile.darkgrey + "; }" + LF +
-                "      td.logpostloglevel.deviation-extra-info  { color: " + TestCaseLogReporterHtmlLogFile.darkblue + "; }" + LF +
-                "      td.logpostloglevel.info                  { color: " + TestCaseLogReporterHtmlLogFile.darkblue + "; }" + LF +
-                "      td.logpostloglevel.framework-error       { color: " + TestCaseLogReporterHtmlLogFile.coralred + "; font-weight: bold; }" + LF;
+        return  "      span." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()) + "               { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      td." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString()) + "            { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; width: 80px; }" + LF +
+                "      td.logpostloglevel.debug                 { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
+                "      td.logpostloglevel.verification-passed   { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
+                "      td.logpostloglevel.verification-failed   { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.verification-problem  { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.execution-problem     { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      td.logpostloglevel.executed              { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
+                "      td.logpostloglevel.deviation-extra-info  { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      td.logpostloglevel.info                  { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      td.logpostloglevel.framework-error       { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF;
     }
 
     /**

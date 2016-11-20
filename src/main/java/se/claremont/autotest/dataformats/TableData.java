@@ -2,7 +2,7 @@ package se.claremont.autotest.dataformats;
 
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
-import se.claremont.autotest.common.TestCaseLogReporterHtmlLogFile;
+import se.claremont.autotest.common.UxColors;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
 import se.claremont.autotest.support.SupportMethods;
 
@@ -435,21 +435,21 @@ public class TableData {
     public static class TableVerifierLoggingHtmlStyles {
 
         public static String styles(){
-            String htmlStyles = "      table.table.padding                               { background-color: " + TestCaseLogReporterHtmlLogFile.midgrey+ "; border: 8px solid " + TestCaseLogReporterHtmlLogFile.midgrey + "; }" + SupportMethods.LF;
-            htmlStyles += "      table.table.data                                  { background-color: white; border: 1px solid " + TestCaseLogReporterHtmlLogFile.midgrey+ "; }" + SupportMethods.LF;
-            htmlStyles += "      tr.table.headline                                 { background-color: " + TestCaseLogReporterHtmlLogFile.midgrey + "; border: 1px solid " + TestCaseLogReporterHtmlLogFile.midgrey + "; }" + SupportMethods.LF;
-            htmlStyles += "      td.table                                          { border: 3px solid " + TestCaseLogReporterHtmlLogFile.midgrey + "; border-collapse: collapse; }" + SupportMethods.LF;
-            htmlStyles += "      th.table                                          { border: 3px solid " + TestCaseLogReporterHtmlLogFile.darkgrey + "; border-collapse: collapse; }" + SupportMethods.LF;
-            htmlStyles += "      table.table                                          { border: 3px solid " + TestCaseLogReporterHtmlLogFile.darkgrey + "; border-collapse: collapse; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.headline.soughtafter                     { font-weight: bold; color: black; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.headline.ignored                         { font-weight: bold; color: " + TestCaseLogReporterHtmlLogFile.darkgrey + "; }" + SupportMethods.LF;
-            htmlStyles += "      tr.table.dataRow.perfectmatch                     { background-color: lightgreen; }" + SupportMethods.LF;
-            htmlStyles += "      tr.table.dataRow.imperfectmatch                   { background-color: " + TestCaseLogReporterHtmlLogFile.lightyellow + "; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.datacell.matchedcellonrowbutnotthiscell  { background-color: " + TestCaseLogReporterHtmlLogFile.lightyellow + "; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.datacell.matchedcellsonrowbutnotthiscell { background-color: " + TestCaseLogReporterHtmlLogFile.lightyellow + "; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.datacell.mismatched                      { background-color: salmon; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.datacell.matchedcell                     { background-color: lightgreen; font-weight: bold; }" + SupportMethods.LF;
-            htmlStyles += "      td.table.datacell.matchedignored                  { background-color: white; color: " + TestCaseLogReporterHtmlLogFile.midgrey + "; }" + SupportMethods.LF;
+            String htmlStyles = "      table.table.padding                               { background-color: " + UxColors.MID_GREY.getHtmlColorCode()+ "; border: 8px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      table.table.data                                  { background-color: white; border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      tr.table.headline                                 { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      td.table                                          { border: 3px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; border-collapse: collapse; }" + SupportMethods.LF;
+            htmlStyles += "      th.table                                          { border: 3px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; border-collapse: collapse; }" + SupportMethods.LF;
+            htmlStyles += "      table.table                                          { border: 3px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; border-collapse: collapse; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.headline.soughtafter                     { font-weight: bold; color: " + UxColors.BLACK.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.headline.ignored                         { font-weight: bold; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      tr.table.dataRow.perfectmatch                     { background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      tr.table.dataRow.imperfectmatch                   { background-color: " + UxColors.YELLOW.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.datacell.matchedcellonrowbutnotthiscell  { background-color: " + UxColors.YELLOW.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.datacell.matchedcellsonrowbutnotthiscell { background-color: " + UxColors.YELLOW.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.datacell.mismatched                      { background-color: " + UxColors.RED.getHtmlColorCode() + "; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.datacell.matchedcell                     { background-color: " + UxColors.GREEN.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF;
+            htmlStyles += "      td.table.datacell.matchedignored                  { background-color: white; color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF;
             return htmlStyles;
         }
     }

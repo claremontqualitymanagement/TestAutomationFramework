@@ -25,19 +25,19 @@ public class TestCaseLogSection {
 
     public static String htmlStyleInformation(){
         return  "      table.logsectionlogposts { width: 100%; }" + LF +
-                "      h3.logsectiontitle.passed  { color: " + TestCaseLogReporterHtmlLogFile.green + ";  }" + LF +
-                "      h3.logsectiontitle.failed  { color: " + TestCaseLogReporterHtmlLogFile.coralred + "; font-weight: bold;  }" + LF +
+                "      h3.logsectiontitle.passed  { color: " + UxColors.GREEN.getHtmlColorCode() + ";  }" + LF +
+                "      h3.logsectiontitle.failed  { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold;  }" + LF +
                 htmlStyleInformationTimeGraph();
     }
 
     private static String htmlStyleInformationTimeGraph(){
-        return "         table.timegraph.padding                  { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; width: 100%; }" + LF +
-                "         table.timegraph.datatabell               { font-weight: normal; border-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; width: auto; }" + LF +
-                "         tr.timegraph.rubrikrad                   { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; border: 1px solid " + TestCaseLogReporterHtmlLogFile.verylightgrey + ";}" + LF +
-                "         td.timegraph                             { border: 1px solid " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; }" + LF +
-                "         td.before                      { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; }" + LF +
-                "         td.during                      { background-color: " + TestCaseLogReporterHtmlLogFile.darkblue + "; }" + LF +
-                "         td.after                       { background-color: " + TestCaseLogReporterHtmlLogFile.verylightgrey + "; }" + LF;
+        return "         table.timegraph.padding                  { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; width: 100%; }" + LF +
+                "         table.timegraph.datatabell               { font-weight: normal; border-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; width: auto; }" + LF +
+                "         tr.timegraph.rubrikrad                   { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; border: 1px solid " + UxColors.LIGHT_GREY.getHtmlColorCode() + ";}" + LF +
+                "         td.timegraph                             { border: 1px solid " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
+                "         td.before                      { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
+                "         td.during                      { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + LF +
+                "         td.after                       { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF;
     }
 
     private boolean hasErrors(){
