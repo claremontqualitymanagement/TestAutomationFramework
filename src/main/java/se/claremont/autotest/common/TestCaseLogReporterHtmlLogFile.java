@@ -129,9 +129,20 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "  </head>" + LF + LF;
     }
 
+    /**
+     * Produces a document footer for the summary report.
+     * @return HTML section for footer
+     */
     private String footer(){
-        return "      <table class=\"footer\"><tr class=\"footer\"><td class=\"footer\">TAF Test case report</td></tr></table>" + LF +
-                "<img src=\"http://46.101.193.212/TAF/images/Taf3_transp.png\" alt=\"TAF Logo\">";
+        //noinspection deprecation
+        return "<br><br>" +
+                "          <table class=\"footer\" width=\"100%\">" + LF +
+                "            <tr>" + LF +
+                "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
+                "            </tr><tr>" + LF +
+                "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>(c) Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "</td>" + LF +
+                "            </tr>" + LF +
+                "          </table>" + LF;
     }
 
 
@@ -143,29 +154,36 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width:90%; margin-left: 2%; margin-top: 1%; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
                 "      h1                      { font-size:24px; }" + LF +
+                "      img.toplogo             { max-width: 30%; max-height: 10%; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
                 "      .ui-accordion .ui-accordion-content  { padding:0px; }" + LF +
                 "      table                   { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
-                "      .pagetitle              { color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; font-size:24px; font-weight: bold; }" + LF +
+                "      table.footer            { border: 0px solid " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
+                "      .pagetitle              { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
                 LogPost.htmlStyleInformation() +
+                "      b.good                  { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
+                "      b.bad                   { color: " + UxColors.RED.getHtmlColorCode() + "; }" + LF +
+                "      ." + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "                                 { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; }" + LF +
                 "      td." + enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString()) + "           { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; } " + LF +
                 "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + "  { background-color:" + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "      table." + enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString()) + " tr:nth-child(even)                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
                 "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
                 "     .logpost, .testdatapost                                { border-bottom: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "      td.logPostLogLevel       { width: 130px; }" + LF +
-                "      td.logMessage           { max-width: 99%; }" + LF +
-                "      img.screenshot:hover    { margin: -1px -2px -2px -1px; width: 340px; }" + SupportMethods.LF +
-                "      img.screenshot          { border: 0px none; width:105px; background: #999; }" + LF +
+                "      td.logMessage            { max-width: 99%; }" + LF +
+                "      img.screenshot:hover     { margin: -1px -2px -2px -1px; width: 340px; }" + SupportMethods.LF +
+                "      img.screenshot           { border: 0px none; width:105px; background: #999; }" + LF +
+                "      img.bottomlogo           { width: 20%; }" + LF +
+                "      td.bottomlogo            { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
 
                 //Table verifier
                 TableData.TableVerifierLoggingHtmlStyles.styles() +
 
                 //W3C checker
-                "      font.w3cvalidationinfo    { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
-                "      font.w3cvalidationerror   { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
-                "      font.w3cvalidationother   { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationinfo   { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationerror  { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      font.w3cvalidationother  { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
                 "      pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
                 "                             overflow: auto;" + LF +
@@ -210,8 +228,9 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
-                "      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\"></a>" + LF +
-                "      <span class=\"pagetitle\">Claremont TAF test case results log</span>" + LF +
+                "      <img src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\" alt=\"logo\" class=\"toplogo\">" + LF + "<br>" + LF + "<br>" + LF +
+                //"      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\"></a>" + LF +
+                "      <br><span class=\"pagetitle\">TAF test case results log</span>" + LF +
                 "         <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() +
                 "         </span>" + LF +
                 "      </span>" + LF +
@@ -223,6 +242,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
                 "      </p>" + LF +
+                "      <br>" + LF +
                 "    </div>" + LF + LF;
     }
 
@@ -256,9 +276,9 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private String status(){
         if(testCase.testCaseLog.hasEncounteredErrors()){
-            return "      <p><font color=\"lightgrey\">Status: </font><b><font color=\"red\">&#x2717;</font></b></p>" + LF;
+            return "      <p class=\"statussymbol\">Status: <b class=\"bad\">&#x2717;</b></p>" + LF;
         } else {
-            return "      <p><font color=\"lightgrey\">Status: </font><b><font color=\"green\">&#x2713;</font></b></p>" + LF;
+            return "      <p class=\"statussymbol\">Status: <b class=\"good\">&#x2713;</b></p>" + LF;
         }
     }
 
@@ -313,7 +333,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         if(knownErrorsEncountered){
             html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
             html.append("      <h2>Encountered known errors</h2>").append(LF);
-            html.append("      <table>").append(LF);
+            html.append("      <table class=\"encounteredknownerrors\">").append(LF);
             for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
                 if(knownError.encountered()){
                     html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);

@@ -118,7 +118,7 @@ public class HtmlSummaryReport {
      * An enum that exist to cope with style changes by avoiding unlinked references.
      */
     @SuppressWarnings("unused")
-    private enum HtmlStyleNames {
+    enum HtmlStyleNames {
         STATISTICS,
         CONTENT,
         RESULTS_BAR,

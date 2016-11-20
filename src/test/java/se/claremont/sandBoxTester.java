@@ -41,6 +41,7 @@ public class sandBoxTester extends TestSet{
 
     @BeforeClass
     public static void classSetup(){
+        TestRun.settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
     }
 
     @Before
@@ -310,7 +311,6 @@ public class sandBoxTester extends TestSet{
     }
 
     @Test
-    @Ignore
     public void htmlTableVerification(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("file://C:/temp/tabletest.html");
@@ -326,7 +326,6 @@ public class sandBoxTester extends TestSet{
     }
 
     @Test
-    @Ignore
     public void animatedMenu(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("https://www.typeandtell.com/sv/skrivbord/");
@@ -335,11 +334,11 @@ public class sandBoxTester extends TestSet{
         web.write(emailField, "email");
         web.submitText(pwField, "password");
         DomElement burger = new DomElement("Toggle menu", DomElement.IdentificationType.BY_VISIBLE_TEXT);
-        web.click(burger);
+        //web.click(burger);
         DomElement tjänsterLink = new DomElement("Tjänster", DomElement.IdentificationType.BY_LINK_TEXT);
-        web.click(tjänsterLink);
+        //web.click(tjänsterLink);
 
-        //web.makeSureDriverIsClosed();
+        web.makeSureDriverIsClosed();
 
     }
 
