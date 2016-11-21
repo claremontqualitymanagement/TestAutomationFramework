@@ -345,7 +345,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 }
             }
             html.append("      </table>").append(LF);
-            html.append("    </div>").append(LF).append(LF);
+            html.append("    </div>").append(LF).append("<br><br>").append(LF);
         }
         return html.toString();
     }
