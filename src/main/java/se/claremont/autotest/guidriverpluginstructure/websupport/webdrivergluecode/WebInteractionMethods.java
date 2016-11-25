@@ -1,6 +1,8 @@
 package se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -59,6 +61,25 @@ public class WebInteractionMethods implements GuiDriver {
         try{
             WebDriverManager webDriverManager = new WebDriverManager(testCase);
             driver = webDriverManager.initializeWebDriver(webBrowser);
+            driver.manage().window().maximize();
+        }catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
+    }
+
+    /**
+     * Remote WebDriver enabled constructor. Example of usages: BrowserStack.
+     *
+     * @param testCase
+     * @param desiredCapabilites
+     */
+    public WebInteractionMethods(TestCase testCase, DesiredCapabilities desiredCapabilites){
+        this.testCase = testCase;
+        try{
+            driver = new RemoteWebDriver(desiredCapabilites);
             driver.manage().window().maximize();
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
