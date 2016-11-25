@@ -1,11 +1,9 @@
 package se.claremont.autotest.restsupport;
 
-import okhttp3.*;
+import okhttp3.OkHttpClient;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.dataformats.JsonParser;
-
-import java.io.IOException;
 
 /**
  * Rest support for the framework. Both information vice and communication vice
@@ -14,9 +12,8 @@ import java.io.IOException;
  */
 @SuppressWarnings("SameParameterValue")
 public class RestSupport {
-
-    private OkHttpClient restClient = null;
     private final TestCase testCase;
+    public static OkHttpClient client;
 
     /**
      * Enables support for interaction with a REST service.
@@ -24,14 +21,10 @@ public class RestSupport {
      * @param testCase The test case to log the interaction to.
      */
     public RestSupport(TestCase testCase){
+        this.client = new OkHttpClient();
         this.testCase = testCase;
-        try{
-            restClient = new OkHttpClient();
-            testCase.log(LogLevel.DEBUG, "Created new REST client.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not create REST client.");
-        }
     }
+
 
     /**
      * Get the response body from the response of a POST request to a REST service.
@@ -42,22 +35,16 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromPostRequest(String url, String mediaType, String data) {
-        String responseBodyString = null;
-        Request request = new Request.Builder().post(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
-        Response response;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST POST request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            try{
-                responseBodyString = response.body().string();
-            }catch (IOException e){
-                testCase.log(LogLevel.DEBUG, "Could not get response body content as string.");
-            }
-            testCase.log(LogLevel.EXECUTED, "Response for REST POST action = '" + response.message() + "'. Response content: '" + responseBodyString + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
+        RestResponse restResponse = restPostRequest.execute();
+        String bodyString = null;
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST POST request [" + restPostRequest.toString() + "'.");
+        } else {
+            bodyString = restResponse.body;
+            testCase.log(LogLevel.EXECUTED, "Response for REST POST request [" + restPostRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
-        return responseBodyString;
+        return bodyString;
     }
 
     /**
@@ -69,17 +56,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public RestResponse responseFromPostRequest(String url, String mediaType, String data) {
-        String responseBodyString = null;
-        Request request = new Request.Builder().post(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
-        Response response = null;
-        RestResponse restResponse = null;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST POST request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            restResponse = new RestResponse(response.body().string(), response.headers().toString(), Integer.toString(response.code()), response.message());
-            testCase.log(LogLevel.EXECUTED, "Response for REST POST action = '" + response.message() + "'. Response content: '" + restResponse.toString() + "'.");
-        } catch (IOException e) {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response to RestResponse. Error: " + e.getMessage());
+        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
+        RestResponse restResponse = restPostRequest.execute();
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST POST request [" + restPostRequest.toString() + "'.");
+        } else {
+            testCase.log(LogLevel.EXECUTED, "Response for REST POST request [" + restPostRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
         return restResponse;
     }
@@ -93,22 +75,16 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromPutRequest(String url, String mediaType, String data) {
-        String responseBodyString = null;
-        Request request = new Request.Builder().put(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
-        Response response;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST PUT request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            try{
-                responseBodyString = response.body().string();
-            }catch (IOException e){
-                testCase.log(LogLevel.DEBUG, "Could not get response body content as string.");
-            }
-            testCase.log(LogLevel.EXECUTED, "Response for REST PUT action = '" + response.message() + "'. Response content: '" + responseBodyString + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
+        RestResponse restResponse = restPutRequest.execute();
+        String responseBody = null;
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST PUT request [" + restPutRequest.toString() + "'.");
+        } else {
+            responseBody = restResponse.body;
+            testCase.log(LogLevel.EXECUTED, "Response for REST PUT request [" + restPutRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
-        return responseBodyString;
+        return responseBody;
     }
 
     /**
@@ -120,17 +96,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public RestResponse responseFromPutRequest(String url, String mediaType, String data) {
-        String responseBodyString = null;
-        Request request = new Request.Builder().put(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
-        Response response = null;
-        RestResponse restResponse = null;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST PUT request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            restResponse = new RestResponse(response.body().toString(), response.headers().toString(), Integer.toString(response.code()), response.message());
-            testCase.log(LogLevel.EXECUTED, "Executed REST PUT request to '" + url + "' with data:" + System.lineSeparator() + data + System.lineSeparator() + "Response: " + restResponse.toString());
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
+        RestResponse restResponse = restPutRequest.execute();
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST PUT request [" + restPutRequest.toString() + "'.");
+        } else {
+            testCase.log(LogLevel.EXECUTED, "Response for REST PUT request [" + restPutRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
         return restResponse;
     }
@@ -154,23 +125,15 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromDeleteRequest(String url) {
+        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
+        RestResponse restResponse = restDeleteRequest.execute();
         String responseBodyString = null;
-        Request request = new Request.Builder().delete().url(url).build();
-        Response response;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST DELETE request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            try{
-                responseBodyString = response.body().string();
 
-                testCase.log(LogLevel.DEBUG, "Response status code =  '" + response.code() + "'.");
-                if(response.code() != 200) testCase.log(LogLevel.EXECUTION_PROBLEM, "Delete didn't end with status 200 (OK). Status code was '" + response.code() + "'.");
-            }catch (IOException e){
-                testCase.log(LogLevel.DEBUG, "Could not get body content as string.");
-            }
-            testCase.log(LogLevel.EXECUTED, "Response for REST DELETE action = '" + response.message() + "'. Response content: '" + responseBodyString + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST DELETE request [" + restDeleteRequest.toString() + "'.");
+        } else {
+            responseBodyString = restResponse.body;
+            testCase.log(LogLevel.EXECUTED, "Response for REST DELETE request [" + restDeleteRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
         return responseBodyString;
     }
@@ -183,17 +146,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public RestResponse responseFromDeleteRequest(String url) {
-        String responseBodyString = null;
-        Request request = new Request.Builder().delete().url(url).build();
-        Response response = null;
-        RestResponse restResponse = null;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST DELETE request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            restResponse = new RestResponse(response.body().toString(), response.headers().toString(), Integer.toString(response.code()), response.message());
-            testCase.log(LogLevel.EXECUTED, "Response for REST DELETE action = '" + response.message() + "'. Response content: '" + restResponse.toString() + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
+        RestResponse restResponse = restDeleteRequest.execute();
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST DELETE request [" + restDeleteRequest.toString() + "'.");
+        } else {
+            testCase.log(LogLevel.EXECUTED, "Response for REST DELETE request [" + restDeleteRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
         return restResponse;
     }
@@ -207,20 +165,14 @@ public class RestSupport {
      */
 
     public String responseCodeFromGetRequest(String url){
+        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestResponse restResponse = restGetRequest.execute();
         String responseCode = null;
-        Request request = new Request.Builder().url(url).build();
-        Response response;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            try{
-                responseCode = Integer.toString(response.code());
-            }catch (Exception e){
-                testCase.log(LogLevel.DEBUG, "Could not get response code as string.");
-            }
-            testCase.log(LogLevel.EXECUTED, "REST response = '" + response.message() + "'. Response code: '" + responseCode + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.");
+        } else {
+            responseCode = restResponse.responseCode;
+            testCase.log(LogLevel.EXECUTED, "Response for REST GET request [" + restGetRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
         return responseCode;
     }
@@ -233,22 +185,16 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromGetRequest(String url) {
-        String bodyString = null;
-        Request request = new Request.Builder().url(url).build();
-        Response response;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            try{
-                bodyString = response.body().string();
-            }catch (IOException e){
-                testCase.log(LogLevel.DEBUG, "Could not get body content as string.");
-            }
-            testCase.log(LogLevel.EXECUTED, "REST response = '" + response.message() + "'. Response content: '" + bodyString + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestResponse restResponse = restGetRequest.execute();
+        String responseBody = null;
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.");
+        } else {
+            responseBody = restResponse.body;
+            testCase.log(LogLevel.EXECUTED, "Response for REST GET request [" + restGetRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
-        return bodyString;
+        return responseBody;
     }
 
     /**
@@ -258,17 +204,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public RestResponse responseFromGetRequest(String url) {
-        String bodyString = null;
-        Request request = new Request.Builder().url(url).build();
-        Response response = null;
-        RestResponse restResponse = null;
-        try{
-            testCase.log(LogLevel.DEBUG, "Executing REST request '" + request.toString() + "'.");
-            response = restClient.newCall(request).execute();
-            restResponse = new RestResponse(response.body().toString(), response.headers().toString(), Integer.toString(response.code()), response.message());
-            testCase.log(LogLevel.EXECUTED, "REST response = '" + response.message() + "'. Response content: '" + restResponse.toString() + "'.");
-        } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestResponse restResponse = restGetRequest.execute();
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.");
+        } else {
+            testCase.log(LogLevel.EXECUTED, "Response for REST GET request [" + restGetRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString());
         }
         return restResponse;
     }
@@ -299,21 +240,4 @@ public class RestSupport {
         return parameterValue;
     }
 
-    public class RestResponse{
-        public String body = null;
-        public String header = null;
-        public String responseCode = null;
-        public String message = null;
-
-        public RestResponse(String body, String header, String responseCode, String message){
-            this.body = body;
-            this.header = header;
-            this.responseCode = responseCode;
-            this.message = message;
-        }
-
-        public String toString(){
-            return "Header: '" + header + "'" + System.lineSeparator() + "Body: '" + body + "'" + System.lineSeparator() + "Response code: '" + responseCode + "'" + System.lineSeparator() + "Message: '" + message + "'";
-        }
-    }
 }

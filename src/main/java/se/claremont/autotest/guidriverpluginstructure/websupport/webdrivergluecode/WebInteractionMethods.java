@@ -794,7 +794,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Checks if the given element is displayed in the GUI.
+     * Checks if the given element is displayed in the GUI. Check performed only once, but wait for element to appear.
      *
      * @param guiElement The element to check for
      * @return Return true if the element is not displayed
@@ -805,6 +805,40 @@ public class WebInteractionMethods implements GuiDriver {
         boolean notDisplayed = (webElement == null || !webElement.isDisplayed());
         log(LogLevel.DEBUG, "Checking if "  + domElement.LogIdentification() + " is not displayed. Returning " + notDisplayed + ".");
         return notDisplayed;
+    }
+
+    /**
+     * Checks if the given element is displayed in the GUI. Checks only once, but right away. If element is not present directly it continues.
+     *
+     * @param guiElement The element to check for
+     * @return Return true if the element is not displayed
+     */
+    public boolean isNotDisplayedExactlyNow(GuiElement guiElement){
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+        boolean notDisplayed = (webElement == null || !webElement.isDisplayed());
+        log(LogLevel.DEBUG, "Checking if "  + domElement.LogIdentification() + " is not displayed. Returning " + notDisplayed + ".");
+        return notDisplayed;
+    }
+
+    /**
+     * Checks if the given element is displayed in the GUI. Checks repeatedly for element to disappear from the GUI of the system under test the whole length of the timeout.
+     *
+     * @param guiElement The element to check for
+     * @param timeoutInSeconds Seconds to wait for element being disappeared
+     * @return Return true if the element is not displayed
+     */
+    public boolean isNotDisplayedWithinTimeout(GuiElement guiElement, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+        if(webElement == null) return true;
+        while((webElement != null && webElement.isDisplayed()) && (System.currentTimeMillis() - startTime) < timeoutInSeconds * 1000){
+            webElement = getRuntimeElementWithoutLogging(domElement);
+        }
+        if(webElement == null) return true;
+        if(!webElement.isDisplayed()) return true;
+        return false;
     }
 
     /**
