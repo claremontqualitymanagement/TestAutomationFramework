@@ -117,7 +117,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     public String htmlSectionHtmlHead(){
         return "  <head>" + LF + LF +
-                "    <title>Test testCaseLog " + testCase.testName + "</title>" + LF +
+                "    <title>" + testCase.testName + " execution log</title>" + LF +
                 "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\"/>" + LF +
                 "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
                 "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF + LF +

@@ -1143,12 +1143,12 @@ public class WebInteractionMethods implements GuiDriver {
         if (driver instanceof JavascriptExecutor) {
             try {
                 ((JavascriptExecutor)driver).executeScript(script);
-                log(LogLevel.EXECUTED, "Executed the javascript '" + script + "'.");
+                log(LogLevel.EXECUTED, "Executed the javascript '" + StringManagement.htmlContentToDisplayableHtmlCode(script) + "'.");
             }catch (Exception e){
-                log(LogLevel.EXECUTION_PROBLEM, "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
+                log(LogLevel.EXECUTION_PROBLEM, "Errors while trying to run the javascript:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script) + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
             }
         } else {
-            log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + script);
+            log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script));
         }
 
     }
@@ -1180,14 +1180,21 @@ public class WebInteractionMethods implements GuiDriver {
         if(isEnabled(guiElement)){
             log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to be enabled as expected.");
         }else {
-            WebElement webElement = getRuntimeElementWithTimeout((DomElement)guiElement, standardTimeoutInSeconds);
+            long startTime = System.currentTimeMillis();
+            DomElement domElement = (DomElement) guiElement;
+            boolean enabled = false;
+            WebElement webElement = null;
+            while (!enabled && System.currentTimeMillis() - startTime < standardTimeoutInSeconds){
+                webElement = getRuntimeElementWithoutLogging(domElement);
+                if(webElement.isEnabled()) enabled = true;
+            }
             if(webElement == null) {
                 log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled, but could not be identified.");
                 return;
             }
-            if(!webElement.isDisplayed() && !webElement.isEnabled()){
+            if(!webElement.isDisplayed() && !enabled){
                 log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled, but it's neither displayed, nor enabled.");
-            }else if(webElement.isEnabled()){
+            }else if(!enabled){
                 log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled. It seem to be enabled, but not displayed.");
             }else{
                 log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled. It's enabled, but not displayed and cannot be used for interaction.");

@@ -61,6 +61,30 @@ public class RestSupport {
     }
 
     /**
+     * Get the response body from the response of a POST request to a REST service.
+     *
+     * @param url The url of the REST service
+     * @param mediaType The media type of the data
+     * @param data The data to post
+     * @return Return the response body of the request as a string.
+     */
+    public RestResponse responseFromPostRequest(String url, String mediaType, String data) {
+        String responseBodyString = null;
+        Request request = new Request.Builder().post(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
+        Response response = null;
+        RestResponse restResponse = null;
+        try{
+            testCase.log(LogLevel.DEBUG, "Executing REST POST request '" + request.toString() + "'.");
+            response = restClient.newCall(request).execute();
+            restResponse = new RestResponse(response.body().string(), response.headers().toString(), Integer.toString(response.code()), response.message());
+            testCase.log(LogLevel.EXECUTED, "Response for REST POST action = '" + response.message() + "'. Response content: '" + restResponse.toString() + "'.");
+        } catch (IOException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response to RestResponse. Error: " + e.getMessage());
+        }
+        return restResponse;
+    }
+
+    /**
      * Get the response body from the response of a PUT request to a REST service.
      *
      * @param url The url of the REST service
@@ -88,6 +112,31 @@ public class RestSupport {
     }
 
     /**
+     * Get the response body from the response of a PUT request to a REST service.
+     *
+     * @param url The url of the REST service
+     * @param mediaType The media type of the data
+     * @param data The data to put
+     * @return Return the response body of the request as a string.
+     */
+    public RestResponse responseFromPutRequest(String url, String mediaType, String data) {
+        String responseBodyString = null;
+        Request request = new Request.Builder().put(RequestBody.create(MediaType.parse(mediaType), data)).url(url).build();
+        Response response = null;
+        RestResponse restResponse = null;
+        try{
+            testCase.log(LogLevel.DEBUG, "Executing REST PUT request '" + request.toString() + "'.");
+            response = restClient.newCall(request).execute();
+            restResponse = new RestResponse(response.body().toString(), response.headers().toString(), Integer.toString(response.code()), response.message());
+            testCase.log(LogLevel.EXECUTED, "Executed REST PUT request to '" + url + "' with data:" + System.lineSeparator() + data + System.lineSeparator() + "Response: " + restResponse.toString());
+        } catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        }
+        return restResponse;
+    }
+
+
+    /**
      * Checks if a service is up and ready by checking that a GET request is responded to with the status code 200 (=ok).
      *
      * @param url The url for the service request
@@ -96,6 +145,7 @@ public class RestSupport {
     public boolean isRespondingToGetRequest(String url){
         return responseCodeFromGetRequest(url).equals( "200" );
     }
+
 
     /**
      * Get the response body from the response of a DELETE request to a REST service.
@@ -124,6 +174,30 @@ public class RestSupport {
         }
         return responseBodyString;
     }
+
+
+    /**
+     * Get the response body from the response of a DELETE request to a REST service.
+     *
+     * @param url The url of the REST service
+     * @return Return the response body of the request as a string.
+     */
+    public RestResponse responseFromDeleteRequest(String url) {
+        String responseBodyString = null;
+        Request request = new Request.Builder().delete().url(url).build();
+        Response response = null;
+        RestResponse restResponse = null;
+        try{
+            testCase.log(LogLevel.DEBUG, "Executing REST DELETE request '" + request.toString() + "'.");
+            response = restClient.newCall(request).execute();
+            restResponse = new RestResponse(response.body().toString(), response.headers().toString(), Integer.toString(response.code()), response.message());
+            testCase.log(LogLevel.EXECUTED, "Response for REST DELETE action = '" + response.message() + "'. Response content: '" + restResponse.toString() + "'.");
+        } catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        }
+        return restResponse;
+    }
+
 
     /**
      * Get the response code from the response of a GET request to a REST service.
@@ -178,6 +252,28 @@ public class RestSupport {
     }
 
     /**
+     * Get the response body from the response of a GET request to a REST service.
+     *
+     * @param url The url of the REST service
+     * @return Return the response body of the request as a string.
+     */
+    public RestResponse responseFromGetRequest(String url) {
+        String bodyString = null;
+        Request request = new Request.Builder().url(url).build();
+        Response response = null;
+        RestResponse restResponse = null;
+        try{
+            testCase.log(LogLevel.DEBUG, "Executing REST request '" + request.toString() + "'.");
+            response = restClient.newCall(request).execute();
+            restResponse = new RestResponse(response.body().toString(), response.headers().toString(), Integer.toString(response.code()), response.message());
+            testCase.log(LogLevel.EXECUTED, "REST response = '" + response.message() + "'. Response content: '" + restResponse.toString() + "'.");
+        } catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get REST response for request '" + request.toString() + "' to url '" + url + "'.");
+        }
+        return restResponse;
+    }
+
+    /**
      * Log to test case log if the service is up and running or not.
      *
      * @param url The url to check, and expect a status code 200 from.
@@ -201,5 +297,23 @@ public class RestSupport {
         String parameterValue = JsonParser.get(responseBodyFromGetRequest(url), parameterName);
         testCase.log(LogLevel.DEBUG, "Reading parameter value '" + parameterValue + "' for parameter '" + parameterName + "' from url '" + url + "'.");
         return parameterValue;
+    }
+
+    public class RestResponse{
+        public String body = null;
+        public String header = null;
+        public String responseCode = null;
+        public String message = null;
+
+        public RestResponse(String body, String header, String responseCode, String message){
+            this.body = body;
+            this.header = header;
+            this.responseCode = responseCode;
+            this.message = message;
+        }
+
+        public String toString(){
+            return "Header: '" + header + "'" + System.lineSeparator() + "Body: '" + body + "'" + System.lineSeparator() + "Response code: '" + responseCode + "'" + System.lineSeparator() + "Message: '" + message + "'";
+        }
     }
 }
