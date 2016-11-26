@@ -195,6 +195,7 @@ public class SummaryReport {
             html.append("<html lang=\"en\">").append(LF).append(LF);
             html.append("  <HEAD>").append(LF).append(LF);
             html.append("    <title>Test summary</title>").append(LF);
+            html.append("    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">").append(LF);
             html.append("    <meta charset=\"UTF-8\">").append(LF);
             html.append("    <meta name=\"description\" content=\"Summary result for test run\">").append(LF);
             html.append(     htmlElementStyles());
