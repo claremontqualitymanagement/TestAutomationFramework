@@ -18,7 +18,6 @@ import java.util.Date;
 public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
     private final TestCase testCase;
-    private Date runStartTime;
     private Date runEndTime;
 
     /**
@@ -28,10 +27,11 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      */
     public TestCaseLogReporterHtmlLogFile(TestCase testCase){
         this.testCase = testCase;
+        Date runStartTime;
         if(testCase.testCaseLog.logPosts.size() > 0){
-            this.runStartTime = testCase.testCaseLog.logPosts.get(0).date;
+            runStartTime = testCase.testCaseLog.logPosts.get(0).date;
         } else {
-            this.runStartTime = new Date();
+            runStartTime = new Date();
         }
     }
 

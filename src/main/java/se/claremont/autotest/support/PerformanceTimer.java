@@ -59,8 +59,7 @@ public class PerformanceTimer {
      * @return Returns true if the time used so far for this timer is longer than the given value, othervice returning false.
      */
     public boolean hasTakenLongerThan(int milliseconds){
-        if(System.currentTimeMillis() - startTime > milliseconds) return true;
-        return false;
+        return System.currentTimeMillis() - startTime > milliseconds;
     }
 
     /**

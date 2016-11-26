@@ -73,8 +73,8 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Remote WebDriver enabled constructor. Example of usages: BrowserStack.
      *
-     * @param testCase
-     * @param desiredCapabilites
+     * @param testCase The test case to log errors to.
+     * @param desiredCapabilites The desired capabilities of the browser driver to use.
      */
     public WebInteractionMethods(TestCase testCase, DesiredCapabilities desiredCapabilites){
         this.testCase = testCase;
@@ -513,7 +513,6 @@ public class WebInteractionMethods implements GuiDriver {
             ImageIO.write(dest, "png", new File(filePath));
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not write image of " + domElement.LogIdentification() + " to file '" + filePath + "'.");
-            return;
         }
     }
 
@@ -858,8 +857,7 @@ public class WebInteractionMethods implements GuiDriver {
             webElement = getRuntimeElementWithoutLogging(domElement);
         }
         if(webElement == null) return true;
-        if(!webElement.isDisplayed()) return true;
-        return false;
+        return !webElement.isDisplayed();
     }
 
     /**
@@ -1756,8 +1754,7 @@ public class WebInteractionMethods implements GuiDriver {
             }
             tableContent.append(SupportMethods.LF);
         }
-        TableData tableData = new TableData(tableContent.toString(), domElement.LogIdentification(), testCase, true);
-        return tableData;
+        return new TableData(tableContent.toString(), domElement.LogIdentification(), testCase, true);
     }
 
     /**
@@ -1791,7 +1788,6 @@ public class WebInteractionMethods implements GuiDriver {
                 }
                 element.sendKeys(text);
                 log(LogLevel.DEBUG, "Sending keys '" + text + "'.");
-                return;
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "'.");
                 throw new TextEnteringError();

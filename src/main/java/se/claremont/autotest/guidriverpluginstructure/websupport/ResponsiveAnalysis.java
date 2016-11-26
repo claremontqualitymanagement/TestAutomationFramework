@@ -47,8 +47,7 @@ public class ResponsiveAnalysis {
     }
 
     private boolean isRunnable(){
-        if(testCase == null || resolutions.size() < 2 || driver == null) return false;
-        return true;
+        return !(testCase == null || resolutions.size() < 2 || driver == null);
     }
 
     private void reportRunProblemsIfIdentified(){
@@ -167,7 +166,7 @@ public class ResponsiveAnalysis {
             ResolutionAssessment resolutionAssessment = new ResolutionAssessment();
             resolutionAssessment.resolution = resolution;
             testCase.log(LogLevel.DEBUG, "Creating element collection for resolution with width=" + resolution.width + " and height=" + resolution.height + ".");
-            if(setBrowserSizeAndReturnTrueIfSuccessful(resolution) == false) return;
+            if(!setBrowserSizeAndReturnTrueIfSuccessful(resolution)) return;
             resolutionAssessment.screenImage = getScreenshot();
             tryCollectVisibleElements(resolutionAssessment);
             testCase.log(LogLevel.DEBUG, "Identified " + resolutionAssessment.displayedElementsTreeRootNode.childrenInSubTreeCount() + " visible elements.");

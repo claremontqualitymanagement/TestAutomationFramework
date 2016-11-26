@@ -25,7 +25,7 @@ public enum LogLevel{
     DEVIATION_EXTRA_INFO(4);
 
     private final int value;
-    private LogLevel(int value) {
+    LogLevel(int value) {
         this.value = value;
     }
 

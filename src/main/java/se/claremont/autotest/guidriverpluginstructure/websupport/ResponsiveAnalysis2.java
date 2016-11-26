@@ -1,6 +1,5 @@
 package se.claremont.autotest.guidriverpluginstructure.websupport;
 
-import net.sourceforge.htmlunit.corejs.javascript.tools.debugger.Dim;
 import org.openqa.selenium.*;
 import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
@@ -13,7 +12,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -70,7 +68,6 @@ public class ResponsiveAnalysis2 {
                 if(compareResults != null) {
                     testCase.log(LogLevel.INFO, StringManagement.htmlContentToDisplayableHtmlCode(compareResults));
                     found = true;
-                    continue;
                 }
             }
             if(!found){
@@ -225,8 +222,7 @@ public class ResponsiveAnalysis2 {
         public boolean isSame(AssessableElement assessableElement){
             if(this.size != assessableElement.size) return false;
             if(this.position != assessableElement.position) return false;
-            if(!innerHtml.equals(assessableElement.innerHtml)) return false;
-            return true;
+            return innerHtml.equals(assessableElement.innerHtml);
         }
 
         public boolean canBeFoundInCollection(ElementTreeCollection elementTreeCollection){

@@ -244,6 +244,7 @@ public class WebDriverManager {
             try {
                 long startTime = System.currentTimeMillis();
                 MarionetteDriverManager.getInstance().setup();
+                //noinspection deprecation
                 driver = new MarionetteDriver();
                 testCase.log(LogLevel.EXECUTED, "Creating a Marionette session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {

@@ -13,7 +13,7 @@ import se.claremont.autotest.dataformats.JsonParser;
 @SuppressWarnings("SameParameterValue")
 public class RestSupport {
     private final TestCase testCase;
-    public static OkHttpClient client;
+    public OkHttpClient client;
 
     /**
      * Enables support for interaction with a REST service.
@@ -36,7 +36,7 @@ public class RestSupport {
      */
     public String responseBodyFromPostRequest(String url, String mediaType, String data) {
         RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
-        RestResponse restResponse = restPostRequest.execute();
+        RestResponse restResponse = restPostRequest.execute(client);
         String bodyString = null;
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST POST request [" + restPostRequest.toString() + "'.");
@@ -57,7 +57,7 @@ public class RestSupport {
      */
     public RestResponse responseFromPostRequest(String url, String mediaType, String data) {
         RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
-        RestResponse restResponse = restPostRequest.execute();
+        RestResponse restResponse = restPostRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST POST request [" + restPostRequest.toString() + "'.");
         } else {
@@ -76,7 +76,7 @@ public class RestSupport {
      */
     public String responseBodyFromPutRequest(String url, String mediaType, String data) {
         RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
-        RestResponse restResponse = restPutRequest.execute();
+        RestResponse restResponse = restPutRequest.execute(client);
         String responseBody = null;
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST PUT request [" + restPutRequest.toString() + "'.");
@@ -97,7 +97,7 @@ public class RestSupport {
      */
     public RestResponse responseFromPutRequest(String url, String mediaType, String data) {
         RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
-        RestResponse restResponse = restPutRequest.execute();
+        RestResponse restResponse = restPutRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST PUT request [" + restPutRequest.toString() + "'.");
         } else {
@@ -147,7 +147,7 @@ public class RestSupport {
      */
     public RestResponse responseFromDeleteRequest(String url) {
         RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
-        RestResponse restResponse = restDeleteRequest.execute();
+        RestResponse restResponse = restDeleteRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST DELETE request [" + restDeleteRequest.toString() + "'.");
         } else {
@@ -166,7 +166,7 @@ public class RestSupport {
 
     public String responseCodeFromGetRequest(String url){
         RestGetRequest restGetRequest = new RestGetRequest(url);
-        RestResponse restResponse = restGetRequest.execute();
+        RestResponse restResponse = restGetRequest.execute(client);
         String responseCode = null;
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.");
@@ -186,7 +186,7 @@ public class RestSupport {
      */
     public String responseBodyFromGetRequest(String url) {
         RestGetRequest restGetRequest = new RestGetRequest(url);
-        RestResponse restResponse = restGetRequest.execute();
+        RestResponse restResponse = restGetRequest.execute(client);
         String responseBody = null;
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.");
@@ -205,7 +205,7 @@ public class RestSupport {
      */
     public RestResponse responseFromGetRequest(String url) {
         RestGetRequest restGetRequest = new RestGetRequest(url);
-        RestResponse restResponse = restGetRequest.execute();
+        RestResponse restResponse = restGetRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.");
         } else {

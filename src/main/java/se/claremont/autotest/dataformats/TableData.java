@@ -295,10 +295,10 @@ public class TableData {
     /**
      * Formatting info
      *
-     * @param headlineColonValueSemicolonSeparatedString
-     * @param guiElementName
-     * @param testCase
-     * @param logLevel
+     * @param headlineColonValueSemicolonSeparatedString A string in the format of headline1:value1;headline2:value2
+     * @param guiElementName The name of the gui element
+     * @param testCase The test case to log to
+     * @param logLevel The log level of the log post
      * @return A string formatted for HTML
      */
     static String headlineColonValueSemicolonSeparatedStringToHtml(
@@ -843,7 +843,7 @@ public class TableData {
             /**
              * Created by jordam on 2016-11-09.
              */
-            static enum CellMatchStatus {
+            enum CellMatchStatus {
                 UNEVALUATED,
                 CORRECT,
                 WRONG
@@ -865,7 +865,7 @@ public class TableData {
             /**
              * Created by jordam on 2016-11-09.
              */
-            static enum RowMatchStatus {
+            enum RowMatchStatus {
                 ROW_IS_UNEVALUATED,
                 ROW_HAS_ONLY_MISMATCHED_DATA,
                 ROW_HAS_BOTH_CORRECT_AND_ERRONEUS_DATA,
