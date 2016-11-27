@@ -152,7 +152,7 @@ public class HtmlSummaryReport {
         return LF +
                 "    <style>" + LF +
                 "      #" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
-                "      body               { color: darkslategrey; background-color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      body                  { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
                 "      a                     { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + ";}" + LF +
                 "      th                    { text-align: left; }" + LF +
                 "      img.toplogo           { max-width: 30%; max-height: 10%; }" + LF +
@@ -175,6 +175,8 @@ public class HtmlSummaryReport {
                 "       tr.testcasesummaryheadline                                     { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + " tr:nth-child(even)                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
                 "       .noerrorsexclamtaion    { color: black; font-weight: bold; }" + LF +
+                "       h3#settingsheading      { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
+                "       table.settingsTable     { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; font-size: 80%; }" + LF +
                 resultsBarStyleInfo +
                 "    </style>" + LF + LF;
     }
@@ -200,6 +202,7 @@ public class HtmlSummaryReport {
             html.append("<html>").append(LF).append(LF);
             html.append("  <HEAD>").append(LF).append(LF);
             html.append("    <title>Test summary</title>").append(LF);
+            //html.append("    <link href=\"https://fonts.googleapis.com/css?family=Roboto:300\" rel=\"stylesheet\">").append(LF);
             html.append("    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">").append(LF);
             html.append("    <meta charset=\"UTF-8\">").append(LF);
             html.append("    <meta name=\"description\" content=\"Summary result for test run\">").append(LF);
@@ -231,7 +234,7 @@ public class HtmlSummaryReport {
     }
 
     private String htmlElementSettings(){
-        return "          <h2>Test run settings</h2>" + LF +
+        return "          <h3 id=\"settingsheading\">Test run settings</h2>" + LF +
                 TestRun.settings.toHtmlTable();
     }
 

@@ -173,7 +173,7 @@ public class Settings extends HashMap<String, String>{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table class=\"settingsTable\">").append(SupportMethods.LF);
         for(SettingParameters valuePair : SettingParameters.values()){
-            if(valuePair.isSuppressedFromLogDisplay()) continue;
+            if(valuePair.isSuppressedFromLogDisplay() || getValue(valuePair).equals("")) continue;
             stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(valuePair.friendlyName()).append("</td><td class=\"settingsParameterValue\">").append(getValue(valuePair)).append("</td></tr>").append(SupportMethods.LF);
         }
         stringBuilder.append("</table>").append(SupportMethods.LF).append("<br>").append(SupportMethods.LF);

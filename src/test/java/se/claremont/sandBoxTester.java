@@ -342,7 +342,7 @@ public class sandBoxTester extends TestSet{
         DomElement tjänsterLink = new DomElement("Tjänster", DomElement.IdentificationType.BY_LINK_TEXT);
         //web.click(tjänsterLink);
 
-        //web.makeSureDriverIsClosed();
+        web.makeSureDriverIsClosed();
 
     }
 
