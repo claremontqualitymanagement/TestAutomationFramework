@@ -506,7 +506,7 @@ public class TableData {
         public AssessedTableData(TableData tableData) {
             testCase = tableData.testCase;
             headLines = tableData.headLines;
-            dataRows = new ArrayList<AssessedDataRow>();
+            dataRows = new ArrayList<>();
             guiElementName = tableData.guiElementName;
             if (tableData != null && tableData.dataRows != null) {
                 for (DataRow datarad : tableData.dataRows) {

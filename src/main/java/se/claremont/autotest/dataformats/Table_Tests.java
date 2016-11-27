@@ -1,7 +1,6 @@
 package se.claremont.autotest.dataformats;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.support.SupportMethods;
 

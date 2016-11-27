@@ -2,17 +2,13 @@ package se.claremont.autotest.guidriverpluginstructure.swingsupport.festswingglu
 
 //import com.sun.javaws.Main;
 import org.fest.swing.awt.AWT;
-import org.fest.swing.fixture.FrameFixture;
-import org.glassfish.jersey.jaxb.internal.XmlCollectionJaxbProvider;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.SwingElement;
-import se.claremont.autotest.support.SupportMethods;
 
 import java.awt.*;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -69,23 +65,19 @@ public class SwingInteractionMethods implements GuiDriver{
         }
         Method method = null;
         try {
-            method = classToLoad.getDeclaredMethod (methodName);
+            method = classToLoad != null ? classToLoad.getDeclaredMethod(methodName) : null;
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
         Object instance = null;
         try {
             instance = classToLoad.newInstance ();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         try {
             returnObject = method.invoke (instance);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return returnObject;

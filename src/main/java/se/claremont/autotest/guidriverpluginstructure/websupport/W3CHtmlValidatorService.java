@@ -94,14 +94,14 @@ public class W3CHtmlValidatorService {
         for(String child : JsonParser.childObjects(responseJson, "messages")){
             String lineNumberString = getLineNumberString(child);
             if(verbose && JsonParser.get(child, "type").contains("info")){
-                textLogMessage.append(SupportMethods.LF + "W3C Validation " + JsonParser.get(child, "subType") + ": " + JsonParser.get(child, "message"));
-                htmlLogMessage.add("<p><font class=\"w3cvalidationinfo\">W3C Validation information info</font>" + lineNumberString + "<br>" + JsonParser.get(child, "subType").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
+                textLogMessage.append(SupportMethods.LF).append("W3C Validation ").append(JsonParser.get(child, "subType")).append(": ").append(JsonParser.get(child, "message"));
+                htmlLogMessage.add("<p><font class=\"w3cvalidationinfo\">W3C Validation information info</font>" + lineNumberString + "<br>" + JsonParser.get(child, "subType") + ":<br>" + JsonParser.get(child, "message") + "<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
             } else if(JsonParser.get(child, "type").contains("error")){
-                textLogMessage.append(SupportMethods.LF + "W3C Validation error: " +  JsonParser.get(child, "message").toString() + " Extract: '" + JsonParser.get(child, "extract").toString() + "'.");
-                htmlLogMessage.add("<p><font class=\"w3cvalidationerror\">W3C Validation information: Error</font>" + lineNumberString + "<br>'" + JsonParser.get(child, "message").toString() + "'<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
+                textLogMessage.append(SupportMethods.LF).append("W3C Validation error: ").append(JsonParser.get(child, "message")).append(" Extract: '").append(JsonParser.get(child, "extract")).append("'.");
+                htmlLogMessage.add("<p><font class=\"w3cvalidationerror\">W3C Validation information: Error</font>" + lineNumberString + "<br>'" + JsonParser.get(child, "message") + "'<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
             } else if(verbose){
-                textLogMessage.append(SupportMethods.LF + "W3C Validation " + JsonParser.get(child, "type").toString() + ": " + JsonParser.get(child, "message").toString());
-                htmlLogMessage.add("<p><font class=\"w3validationother\">W3C Validation information</font>" + lineNumberString + "<br>" + JsonParser.get(child, "type").toString() + ":<br>" + JsonParser.get(child, "message").toString() + "<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
+                textLogMessage.append(SupportMethods.LF).append("W3C Validation ").append(JsonParser.get(child, "type")).append(": ").append(JsonParser.get(child, "message"));
+                htmlLogMessage.add("<p><font class=\"w3validationother\">W3C Validation information</font>" + lineNumberString + "<br>" + JsonParser.get(child, "type") + ":<br>" + JsonParser.get(child, "message") + "<br>Extract:<pre>" + JsonParser.get(child, "extract").replace("<", "&lt;").replace(">", "&gt;") + "</pre></p>");
             }
             testCase.log(LogLevel.DEBUG, "W3C JSON response content: '" + child.replace("<", "&lt;").replace(">", "&gt;") + "'.");
         }

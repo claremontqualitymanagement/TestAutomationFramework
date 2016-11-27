@@ -1,11 +1,13 @@
 package se.claremont.autotest.dataformats;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

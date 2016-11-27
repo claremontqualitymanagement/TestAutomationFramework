@@ -49,19 +49,12 @@ class KnownErrorsList {
     }
 
     public void assessLogForKnownErrors(TestCase testCase){
-        for(KnownError knownError : knownErrors) {
-            knownError.thisErrorIsEncountered(testCase);
-        }
+        for(KnownError knownError : knownErrors) knownError.thisErrorIsEncountered(testCase);
     }
 
     public boolean testCaseHasAnyKnownError(TestCase testCase){
-        for (KnownError knownError: knownErrors){
-            for(TestCase test : knownError.testCasesWhereErrorWasEncountered){
-                if(test.isSameAs(testCase)){
-                    return true;
-                }
-            }
-        }
+        for (KnownError knownError: knownErrors)
+            for (TestCase test : knownError.testCasesWhereErrorWasEncountered) if (test.isSameAs(testCase)) return true;
         return false;
     }
 
@@ -79,9 +72,7 @@ class KnownErrorsList {
         StringBuilder json = new StringBuilder();
         json.append("   {\"knownerrors\": [").append(SupportMethods.LF);
         List<String> knownErrorStrings = new ArrayList<>();
-        for(KnownError knownError : knownErrors){
-            knownErrorStrings.add(knownError.toJson());
-        }
+        for(KnownError knownError : knownErrors) knownErrorStrings.add(knownError.toJson());
         json.append(String.join("," + SupportMethods.LF, knownErrorStrings));
         json.append("      ]").append(SupportMethods.LF).append("}").append(SupportMethods.LF);
         return json.toString();

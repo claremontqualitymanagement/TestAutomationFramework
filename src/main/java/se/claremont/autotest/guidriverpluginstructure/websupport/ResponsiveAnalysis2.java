@@ -219,10 +219,9 @@ public class ResponsiveAnalysis2 {
             }
         }
 
-        public boolean isSame(AssessableElement assessableElement){
-            if(this.size != assessableElement.size) return false;
-            if(this.position != assessableElement.position) return false;
-            return innerHtml.equals(assessableElement.innerHtml);
+        public boolean isSame(AssessableElement assessableElement) {
+            if (this.size != assessableElement.size) return false;
+            return this.position == assessableElement.position && innerHtml.equals(assessableElement.innerHtml);
         }
 
         public boolean canBeFoundInCollection(ElementTreeCollection elementTreeCollection){

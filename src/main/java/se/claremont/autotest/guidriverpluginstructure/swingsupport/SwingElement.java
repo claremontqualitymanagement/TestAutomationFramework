@@ -1,12 +1,10 @@
 package se.claremont.autotest.guidriverpluginstructure.swingsupport;
 
-import org.fest.swing.fixture.FrameFixture;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 /**
  * Created by jordam on 2016-09-18.

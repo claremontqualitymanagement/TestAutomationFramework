@@ -243,7 +243,7 @@ class LogPost {
         }
         sb.append("              <tr class=\"logpost ").append(logRowClass).append("\">").append(SupportMethods.LF);
         sb.append("                 <td class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
-        sb.append("                 <td class=\"logpostloglevel " + logRowClass + "\">").append(logLevelToString(logLevel.toString().trim())).append("</td>").append(SupportMethods.LF);
+        sb.append("                 <td class=\"logpostloglevel ").append(logRowClass).append("\">").append(logLevelToString(logLevel.toString().trim())).append("</td>").append(SupportMethods.LF);
         sb.append("                 <td class=\"logmessage\">").append(LF).append(LF).append(substituteDataElements(rowMessage)).append(LF).append(LF).append("                 </td>").append(SupportMethods.LF);
         sb.append("              </tr>").append(SupportMethods.LF);
         return sb.toString();

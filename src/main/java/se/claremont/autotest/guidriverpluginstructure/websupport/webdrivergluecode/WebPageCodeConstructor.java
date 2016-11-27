@@ -124,7 +124,7 @@ class WebPageCodeConstructor {
     private class Constructors extends ArrayList<Constructor>{
         int elementCounter = 1;
 
-        public boolean addConstructor(Constructor constructor){
+        public void addConstructor(Constructor constructor){
             if(hasUniqueName(constructor)){
                 this.add(constructor);
             } else {
@@ -132,7 +132,6 @@ class WebPageCodeConstructor {
                 elementCounter++;
                 this.add(constructor);
             }
-            return false;
         }
 
         public boolean hasUniqueName(Constructor constructor){

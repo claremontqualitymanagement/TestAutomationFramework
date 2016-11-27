@@ -6,7 +6,6 @@ import se.claremont.autotest.support.SupportMethods;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

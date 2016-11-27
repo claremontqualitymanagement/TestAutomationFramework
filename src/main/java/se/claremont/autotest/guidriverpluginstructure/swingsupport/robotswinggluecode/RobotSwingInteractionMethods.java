@@ -1,18 +1,16 @@
 package se.claremont.autotest.guidriverpluginstructure.swingsupport.robotswinggluecode;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.*;
-import se.claremont.tools.Utils;
+import se.claremont.autotest.common.LogFolder;
+import se.claremont.autotest.common.LogLevel;
+import se.claremont.autotest.common.TestCase;
+import se.claremont.autotest.common.TestRun;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

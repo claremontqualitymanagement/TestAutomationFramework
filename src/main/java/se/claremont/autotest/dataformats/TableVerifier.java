@@ -6,7 +6,6 @@ import se.claremont.autotest.support.SupportMethods;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * @deprecated Don't use this class. Use the TableData class instead, for better logging and more robust scenarios.

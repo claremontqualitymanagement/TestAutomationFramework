@@ -4,7 +4,7 @@ import se.claremont.autotest.support.SupportMethods;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static se.claremont.autotest.support.StringManagement.methodNameWithOnlySafeCharacters;
@@ -23,7 +23,7 @@ public class SwingWindow {
         this.swingApplication = application;
         this.name = stringToMethodName(windowTitle);
 
-        for(Frame frame : application.frame.getFrames()){
+        for(Frame frame : Frame.getFrames()){
             if(frame.getTitle().equals(windowTitle)){
                 window = new Window(frame);
                 this.rootContainer = frame;
@@ -105,7 +105,9 @@ public class SwingWindow {
                     break;
                 case "JList":
                     JList jList = (JList)component;
+                    if(jList == null) return null;
                     List selected = jList.getSelectedValuesList();
+                    if(selected == null)return null;
                     description.add("Selected values: '" + String.join("', '", selected) + "'");
                     break;
                 case "JTextField":

@@ -1,12 +1,7 @@
 package se.claremont.tools;
 
-import org.junit.*;
-import se.claremont.autotest.common.TestCase;
-import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
-import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
-import se.claremont.autotest.support.PerformanceTimer;
-
-import java.io.File;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Created by magnusolsson on 2016-09-23.

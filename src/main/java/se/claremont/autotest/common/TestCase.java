@@ -98,8 +98,8 @@ public class TestCase {
         //currentProcessesRunning.removeAll(copyOfProcessListAtStart);
         //copyOfProcessListAtStart.removeAll(applicationManager.listActiveRunningProcessesOnLocalMachine());
         StringBuilder sb = new StringBuilder();
-        sb.append("Process(es) added since test case start: '" + String.join("', '", copyOfCurrentProcesses) + "'." + SupportMethods.LF);
-        sb.append("Process(es) that has exited since test case start: '" + String.join("', '", copyOfProcessListAtStart) + "'." + SupportMethods.LF);
+        sb.append("Process(es) added since test case start: '").append(String.join("', '", copyOfCurrentProcesses)).append("'.").append(SupportMethods.LF);
+        sb.append("Process(es) that has exited since test case start: '").append(String.join("', '", copyOfProcessListAtStart)).append("'.").append(SupportMethods.LF);
         if(copyOfProcessListAtStart.size() > 0 || copyOfCurrentProcesses.size() > 0){
             log(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString());
         } else {

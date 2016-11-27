@@ -64,19 +64,19 @@ public class TestCaseLogSection {
         StringBuilder html = new StringBuilder();
         if(logPostList.size() > 0) {
             html.append(timeProgressGraph(startTime, stopTime, logPostList.get(0).date, logPostList.get(logPostList.size() -1).date, 600)).append(LF);
-            html.append("        <div class=\"expandable logsection level-" + highestLogLevel().toString().toLowerCase());
+            html.append("        <div class=\"expandable logsection level-").append(highestLogLevel().toString().toLowerCase());
             if(hasErrors()){
                 html.append(" initially-expanded");
             }
             html.append("\">").append(LF);
-            html.append("           <h3 title=\"Test step in class '" + logPostList.get(0).testStepClassName + "'\" class=\"logsectiontitle ");
+            html.append("           <h3 title=\"Test step in class '").append(logPostList.get(0).testStepClassName).append("'\" class=\"logsectiontitle ");
             if(hasErrors()){
                 html.append("failed\">");
             }else {
                 html.append("passed\">");
             }
             //html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'   - in class: '" + logPostList.get(0).testStepClassName + "'</h3>").append(LF);
-            html.append("Test step: '<b>" + logPostList.get(0).testStepName.replace("<", "_").replace(">", "_") + "</b>'</h3>").append(LF);
+            html.append("Test step: '<b>").append(logPostList.get(0).testStepName.replace("<", "_").replace(">", "_")).append("</b>'</h3>").append(LF);
             html.append("           <div class=\"expandable-content\">").append(LF);
             html.append("              <table class=\"logsectionlogposts\">").append(LF);
             for(LogPost logPost : logPostList){

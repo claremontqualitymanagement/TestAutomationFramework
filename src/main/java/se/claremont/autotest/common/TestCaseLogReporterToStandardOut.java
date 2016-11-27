@@ -2,7 +2,6 @@ package se.claremont.autotest.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.tools.Utils;
 
 /**
  * Non-file based log reporter for test case logs. Writes the log to standard out.

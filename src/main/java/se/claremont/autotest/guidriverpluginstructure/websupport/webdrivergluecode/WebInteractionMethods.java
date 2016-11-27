@@ -848,16 +848,15 @@ public class WebInteractionMethods implements GuiDriver {
      * @param timeoutInSeconds Seconds to wait for element being disappeared
      * @return Return true if the element is not displayed
      */
-    public boolean isNotDisplayedWithinTimeout(GuiElement guiElement, int timeoutInSeconds){
+    public boolean isNotDisplayedWithinTimeout(GuiElement guiElement, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithoutLogging(domElement);
-        if(webElement == null) return true;
-        while((webElement != null && webElement.isDisplayed()) && (System.currentTimeMillis() - startTime) < timeoutInSeconds * 1000){
+        if (webElement == null) return true;
+        while ((webElement != null && webElement.isDisplayed()) && (System.currentTimeMillis() - startTime) < timeoutInSeconds * 1000) {
             webElement = getRuntimeElementWithoutLogging(domElement);
         }
-        if(webElement == null) return true;
-        return !webElement.isDisplayed();
+        return webElement == null || !webElement.isDisplayed();
     }
 
     /**
@@ -1690,10 +1689,9 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedMatchCount The number of expected row matches. If set to null tests will be passed if at least one row is matched.
      * @return Returns true if rows matching is found.
      */
-    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex, Integer expectedMatchCount){
+    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex, Integer expectedMatchCount) {
         TableData tableData = tableDataFromGuiElement(tableElement);
-        if(tableData == null) return false;
-        return tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, expectedMatchCount);
+        return tableData != null && tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, expectedMatchCount);
     }
 
     /**
@@ -1714,10 +1712,9 @@ public class WebInteractionMethods implements GuiDriver {
      * @param tableElement The table element.
      * @return Return true if table is empty.
      */
-    public boolean tableIsEmpty(GuiElement tableElement){
+    public boolean tableIsEmpty(GuiElement tableElement) {
         TableData tableData = tableDataFromGuiElement(tableElement);
-        if(tableData == null) return false;
-        return tableData.tableIsEmpty();
+        return tableData != null && tableData.tableIsEmpty();
     }
 
     private TableData tableDataFromGuiElement(GuiElement guiElement){
@@ -1784,7 +1781,7 @@ public class WebInteractionMethods implements GuiDriver {
             try {
                 if( clearElement ) {
                     element.clear();
-                    log(LogLevel.DEBUG, "Clearing existing text " +  element.getText().toString() );
+                    log(LogLevel.DEBUG, "Clearing existing text " + element.getText());
                 }
                 element.sendKeys(text);
                 log(LogLevel.DEBUG, "Sending keys '" + text + "'.");

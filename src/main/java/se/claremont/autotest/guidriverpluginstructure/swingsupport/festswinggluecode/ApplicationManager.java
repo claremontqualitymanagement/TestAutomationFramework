@@ -4,17 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
-import se.claremont.autotest.common.TestCaseLogReporter;
 import se.claremont.autotest.support.SupportMethods;
 import se.claremont.tools.Utils;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

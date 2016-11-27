@@ -1,11 +1,11 @@
 package se.claremont.autotest.common;
-import com.sun.net.httpserver.HttpServer;
 
-import java.net.InetSocketAddress;
-import java.net.URI;
-import javax.ws.rs.core.UriBuilder;
+import com.sun.net.httpserver.HttpServer;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 
 /**
  * Created by jordam on 2016-10-10.

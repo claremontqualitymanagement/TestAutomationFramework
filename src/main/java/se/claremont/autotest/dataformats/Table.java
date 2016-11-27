@@ -3,10 +3,8 @@ package se.claremont.autotest.dataformats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
-import se.claremont.tools.Utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
