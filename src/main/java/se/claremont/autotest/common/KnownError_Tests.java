@@ -186,4 +186,11 @@ public class KnownError_Tests {
         }
     }
 
+    @Test
+    public void methodToJsonShouldReturnErrors(){
+        KnownError knownError = new KnownError("description", "pattern");
+        Assert.assertTrue(knownError.toJson().contains("description") && knownError.toJson().contains("pattern"));
+
+    }
+
 }

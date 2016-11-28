@@ -129,4 +129,93 @@ public class TestCaseLog_Tests {
         Assert.assertTrue("Wrong", testCaseLog.logPosts.get(0).toString().toLowerCase().contains("deviation extra info"));
     }
 
+    @Test
+    public void toJson(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        System.out.print(testCaseLog.toJson());
+        Assert.assertTrue(testCaseLog.toJson().contains("\"logpostlist\": "));
+    }
+
+    @Test
+    public void methodFirstErroneousLogPostShouldReturnFirstError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.DEBUG, "Debug");
+        testCaseLog.log(LogLevel.EXECUTED, "Executed");
+        testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "Execution problem");
+        testCaseLog.log(LogLevel.DEVIATION_EXTRA_INFO, "Deviation extra info");
+        testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Framework error");
+        testCaseLog.log(LogLevel.INFO, "Info");
+        Assert.assertTrue(testCaseLog.firstNonSuccessfulLogPost().message.equals("Execution problem"));
+    }
+
+    @Test
+    public void methodFirstErroneousLogPostShouldReturnNullOnEmpty(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        Assert.assertTrue(testCaseLog.firstNonSuccessfulLogPost() == null);
+    }
+
+    @Test
+    public void methodFirstErroneousLogPostShouldReturnNullOnNoErrors(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.DEBUG, "Debug");
+        Assert.assertTrue(testCaseLog.firstNonSuccessfulLogPost() == null);
+    }
+
+    @Test
+    public void methodHasEncounteredErrorShouldReturnFalseOnEmpty(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        Assert.assertTrue(testCaseLog.hasEncounteredErrors() == false);
+    }
+
+    @Test
+    public void methodHasEncounteredErrorShouldReturnFalseOnNoErrors(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.DEBUG, "Debug");
+        Assert.assertTrue(testCaseLog.hasEncounteredErrors() == false);
+    }
+
+    @Test
+    public void methodToJsonShouldReturnLogPostIfExist(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.DEBUG, "Dummy log post");
+        Assert.assertTrue(testCaseLog.toJson().contains("Dummy log post"));
+    }
+
+    @Test
+    public void methodToStringShouldNotReturnDebugRowsIfNoErrorExists(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.DEBUG, "Dummy log post");
+        Assert.assertTrue(!testCaseLog.toString().contains("Dummy log post"));
+    }
+
+    @Test
+    public void methodToStringShouldReturnDebugRowsIfErrorsExist(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.DEBUG, "Dummy log post");
+        testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Framework errora");
+        Assert.assertTrue(testCaseLog.toString().contains("Dummy log post"));
+    }
+
+    @Test
+    public void methodToStringShouldReturnNonDebugLogPostsIfTheyExist(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.EXECUTED, "Dummy log post");
+        Assert.assertTrue(testCaseLog.toString().contains("Dummy log post"));
+    }
+
+    @Test
+    public void methodToLogSectionsShouldProvideLogSectionsForLogPostsInDifferentSections(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTED, "Section1 message", "Html Section1 message", "Test case 1", "Test step 1", "Test step class name 1"));
+        testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTED, "Section2 message", "Html Section2 message", "Test case 1", "Test step 2", "Test step class name 2"));
+        Assert.assertTrue(testCaseLog.toLogSections().size() == 2);
+    }
+
+    @Test
+    public void methodToLogSectionsShouldReturnMessageIfNoLogPosts(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        Assert.assertTrue(testCaseLog.toLogSections().size() == 1);
+        Assert.assertTrue(testCaseLog.logPosts.get(0).message.contains("Nothing logged"));
+    }
+
 }

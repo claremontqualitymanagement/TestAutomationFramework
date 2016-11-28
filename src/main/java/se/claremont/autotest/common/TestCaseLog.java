@@ -169,6 +169,7 @@ public class TestCaseLog {
             logPostsInTestStep.add(logPost);
         }
         logSectionsList.add(new TestCaseLogSection(logPostsInTestStep, startTime, stopTime));
+        logSectionsList.remove(0);
         return logSectionsList;
     }
 
