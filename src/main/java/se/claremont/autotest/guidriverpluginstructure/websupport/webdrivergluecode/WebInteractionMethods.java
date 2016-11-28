@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,10 +77,10 @@ public class WebInteractionMethods implements GuiDriver {
      * @param testCase The test case to log errors to.
      * @param desiredCapabilites The desired capabilities of the browser driver to use.
      */
-    public WebInteractionMethods(TestCase testCase, DesiredCapabilities desiredCapabilites){
+    public WebInteractionMethods(TestCase testCase, URL url, DesiredCapabilities desiredCapabilites){
         this.testCase = testCase;
         try{
-            driver = new RemoteWebDriver(desiredCapabilites);
+            driver = new RemoteWebDriver(url, desiredCapabilites);
             driver.manage().window().maximize();
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
