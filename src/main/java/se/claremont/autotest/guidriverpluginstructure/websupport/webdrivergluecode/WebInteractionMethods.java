@@ -1111,11 +1111,24 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedText The expected text to find
      */
     public void verifyElementText(GuiElement guiElement, String expectedText){
-        String currentText = getText(guiElement);
-        if(currentText.equals(expectedText)){
+        boolean verifiedOk = false;
+        String currentText = "";
+        long startTime = System.currentTimeMillis();
+        while(!verifiedOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            currentText = getText(guiElement);
+            if(currentText != null && currentText.equals(expectedText)){
+                verifiedOk = true;
+            }
+        }
+        if(verifiedOk){
             log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to have the text '" + expectedText + "' as expected.");
         } else {
-            log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have the text '" + expectedText + "', but it actually was '" + currentText + "'.");
+            if(exists(guiElement)){
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have the text '" + expectedText + "', but it actually was '" + currentText + "'.");
+            } else {
+                DomElement domElement = (DomElement) guiElement;
+                log(LogLevel.VERIFICATION_PROBLEM, "Could not find element " + domElement.LogIdentification() + " when attempting to verify the text '" + expectedText + "'.");
+            }
             saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -1130,11 +1143,24 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedTextAsRegexPattern The expected text to find
      */
     public void verifyElementTextWithRegexPattern(GuiElement guiElement, String expectedTextAsRegexPattern){
-        String currentText = getText(guiElement);
+        String currentText = "";
+        long startTime = System.currentTimeMillis();
+        boolean verifiedOk = false;
+        while (!verifiedOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            currentText = getText(guiElement);
+            if(SupportMethods.isRegexMatch(currentText, expectedTextAsRegexPattern)){
+                verifiedOk = true;
+            }
+        }
         if(SupportMethods.isRegexMatch(currentText, expectedTextAsRegexPattern)){
             log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to be '" + currentText + ". It is a match with the regular expression pattern '" + expectedTextAsRegexPattern + "'.");
         } else {
-            log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have match the regular expression pattern '" + expectedTextAsRegexPattern+ "', but it actually was '" + currentText + "'. Not a match.");
+            if(exists(guiElement)){
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have match the regular expression pattern '" + expectedTextAsRegexPattern+ "', but it actually was '" + currentText + "'. Not a match.");
+            } else {
+                DomElement domElement = (DomElement) guiElement;
+                log(LogLevel.VERIFICATION_PROBLEM, "Could not find element " + domElement.LogIdentification() + " when attempting to verify the text from regular expression pattern '" + expectedTextAsRegexPattern + "'.");
+            }
             saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -1210,12 +1236,18 @@ public class WebInteractionMethods implements GuiDriver {
         if (driver instanceof JavascriptExecutor) {
             try {
                 ((JavascriptExecutor)driver).executeScript(script);
-                log(LogLevel.EXECUTED, "Executed the javascript '" + StringManagement.htmlContentToDisplayableHtmlCode(script) + "'.");
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED,
+                        "Executed the javascript '" + script + "'.",
+                        "Executed the javascript '" + StringManagement.htmlContentToDisplayableHtmlCode(script) + "'.");
             }catch (Exception e){
-                log(LogLevel.EXECUTION_PROBLEM, "Errors while trying to run the javascript:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script) + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
+                        "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString(),
+                        "Errors while trying to run the javascript:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script) + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
             }
         } else {
-            log(LogLevel.EXECUTION_PROBLEM, "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script));
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
+                    "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + script,
+                    "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script));
         }
 
     }
