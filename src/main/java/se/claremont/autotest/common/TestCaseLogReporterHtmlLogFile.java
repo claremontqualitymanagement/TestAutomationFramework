@@ -243,8 +243,33 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
                 "      </p>" + LF +
+                "      <p>" + LF +
+                "         Number of verifications performed: " + numberOfVerificationsPerformed() + LF +
+                "         <br>" + LF +
+                "         Number of non-verifying execution steps performed: " + numberOfExecitionStepsPerformed() + LF +
+                "      </p>" + LF +
                 "      <br>" + LF +
                 "    </div>" + LF + LF;
+    }
+
+    private int numberOfVerificationsPerformed() {
+        int count = 0;
+        for(LogPost logPost : testCase.testCaseLog.logPosts){
+            if(logPost.logLevel == LogLevel.VERIFICATION_PASSED || logPost.logLevel == LogLevel.VERIFICATION_FAILED){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private int numberOfExecitionStepsPerformed() {
+        int count = 0;
+        for(LogPost logPost : testCase.testCaseLog.logPosts){
+            if(logPost.logLevel == LogLevel.EXECUTED){
+                count++;
+            }
+        }
+        return count;
     }
 
     private String helpText(){

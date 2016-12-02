@@ -207,7 +207,32 @@ public class WebInteractionMethods implements GuiDriver {
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
         } else {
-            log(LogLevel.INFO, "Identified the text '" + text + "' from element " + domElement.LogIdentification() + ".");
+            log(LogLevel.DEBUG, "Identified the text '" + text + "' from element " + domElement.LogIdentification() + ".");
+        }
+        return text;
+    }
+
+    /**
+     * Reads the text from an element
+     *
+     * @param guiElement The element to read the current text from
+     * @return the current text in the element
+     */
+    public String getTextWithoutLogging(GuiElement guiElement){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        String text = null;
+        WebElement element = null;
+        boolean elementIdentified = false;
+        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element != null){
+                elementIdentified = true;
+                try {
+                    text = element.getText();
+                }catch (Exception ignored){}
+            }
+            wait(50);
         }
         return text;
     }
@@ -1115,8 +1140,40 @@ public class WebInteractionMethods implements GuiDriver {
         String currentText = "";
         long startTime = System.currentTimeMillis();
         while(!verifiedOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
-            currentText = getText(guiElement);
+            currentText = getTextWithoutLogging(guiElement);
             if(currentText != null && currentText.equals(expectedText)){
+                verifiedOk = true;
+            }
+        }
+        if(verifiedOk){
+            log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to have the text '" + expectedText + "' as expected.");
+        } else {
+            if(exists(guiElement)){
+                log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to have the text '" + expectedText + "', but it actually was '" + currentText + "'.");
+            } else {
+                DomElement domElement = (DomElement) guiElement;
+                log(LogLevel.VERIFICATION_PROBLEM, "Could not find element " + domElement.LogIdentification() + " when attempting to verify the text '" + expectedText + "'.");
+            }
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
+    }
+
+    /**
+     * Verifies that the current text of the given element correspont to the expected text.
+     *
+     * @param guiElement The element to check the text of
+     * @param expectedText The expected text to find
+     */
+    public void verifyElementTextContainsText(GuiElement guiElement, String expectedText){
+        boolean verifiedOk = false;
+        String currentText = "";
+        long startTime = System.currentTimeMillis();
+        while(!verifiedOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            currentText = getTextWithoutLogging(guiElement);
+            if(currentText != null && currentText.contains(expectedText)){
                 verifiedOk = true;
             }
         }
@@ -1147,7 +1204,7 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         boolean verifiedOk = false;
         while (!verifiedOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
-            currentText = getText(guiElement);
+            currentText = getTextWithoutLogging(guiElement);
             if(SupportMethods.isRegexMatch(currentText, expectedTextAsRegexPattern)){
                 verifiedOk = true;
             }
@@ -1175,56 +1232,62 @@ public class WebInteractionMethods implements GuiDriver {
      * @param textsToFindOnRow the text strings to find
      */
     public void pickTableRow(GuiElement guiTableElement, String[] textsToFindOnRow){
+        boolean doneOk = false;
+        long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement)guiTableElement;
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        List<String> partialMatches = new ArrayList<>();
-        boolean allValuesFoundInRow = false;
-        List<WebElement> rows = webElement.findElements(By.xpath(".//tr"));
-        for (WebElement row : rows)
-        {
-            ArrayList<String> rowStrings = new ArrayList<>();
-            boolean someValueFoundInRow = false;
-            boolean valueMissingOnRow = false;
-            List<WebElement> cells = row.findElements(By.xpath("(.//td | .//th)"));
-            for(String textToFindOnRow : textsToFindOnRow)
+        WebElement webElement = null;
+        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds *1000){
+            webElement = getRuntimeElementWithoutLogging(domElement);
+            List<String> partialMatches = new ArrayList<>();
+            boolean allValuesFoundInRow = false;
+            List<WebElement> rows = webElement.findElements(By.xpath(".//tr"));
+            for (WebElement row : rows)
             {
-                boolean thisValueFoundOnRow = false;
-                for(WebElement cell : cells)
+                ArrayList<String> rowStrings = new ArrayList<>();
+                boolean someValueFoundInRow = false;
+                boolean valueMissingOnRow = false;
+                List<WebElement> cells = row.findElements(By.xpath("(.//td | .//th)"));
+                for(String textToFindOnRow : textsToFindOnRow)
                 {
-                    rowStrings.add(cell.getText());
-                    if (cell.getText().contains(textToFindOnRow))
+                    boolean thisValueFoundOnRow = false;
+                    for(WebElement cell : cells)
                     {
-                        thisValueFoundOnRow = true;
-                        someValueFoundInRow = true;
+                        rowStrings.add(cell.getText());
+                        if (cell.getText().contains(textToFindOnRow))
+                        {
+                            thisValueFoundOnRow = true;
+                            someValueFoundInRow = true;
+                        }
                     }
-                }
-                if (!thisValueFoundOnRow)
-                {
-                    valueMissingOnRow = true;
-                    break;
-                }
+                    if (!thisValueFoundOnRow)
+                    {
+                        valueMissingOnRow = true;
+                        break;
+                    }
 
+                }
+                //log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
+                if (!valueMissingOnRow)
+                {
+                    allValuesFoundInRow = true;
+                    row.click();
+                    break;
+                } else if (someValueFoundInRow){
+                    partialMatches.add("'" + String.join("', '", rowStrings) + "'");
+                }
             }
-            //log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
-            if (!valueMissingOnRow)
-            {
-                allValuesFoundInRow = true;
-                row.click();
-                break;
-            } else if (someValueFoundInRow){
-                partialMatches.add("'" + String.join("', '", rowStrings) + "'");
+            if(!allValuesFoundInRow){
+                log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + String.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO,
+                        "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + String.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
+                        "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + String.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
+                saveScreenshot(webElement);
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+            } else {
+                doneOk = true;
+                log(LogLevel.EXECUTED, "Clicked the row with values '" + String.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
             }
-        }
-        if(!allValuesFoundInRow){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + String.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
-            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO,
-                    "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + String.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
-                    "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + String.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
-            saveScreenshot(webElement);
-            saveDesktopScreenshot();
-            saveHtmlContentOfCurrentPage();
-        } else {
-            log(LogLevel.EXECUTED, "Clicked the row with values '" + String.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
         }
     }
 
@@ -1238,7 +1301,7 @@ public class WebInteractionMethods implements GuiDriver {
                 ((JavascriptExecutor)driver).executeScript(script);
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED,
                         "Executed the javascript '" + script + "'.",
-                        "Executed the javascript '" + StringManagement.htmlContentToDisplayableHtmlCode(script) + "'.");
+                        "Executed the javascript:" + StringManagement.htmlContentToDisplayableHtmlCode(script));
             }catch (Exception e){
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                         "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString(),
@@ -1682,7 +1745,19 @@ public class WebInteractionMethods implements GuiDriver {
      * @param regex True if match with regular expression pattern, false will check for cells containing the strings.
      */
     public void verifyTableRows(GuiElement guiElement, String[] headlineColonValueSemicolonSeparatedString, boolean regex){
-        TableData tableData = tableDataFromGuiElement(guiElement);
+        boolean doneOk = false;
+        long startTime = System.currentTimeMillis();
+        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            TableData tableData = tableDataFromGuiElement(guiElement, false);
+            boolean nonErroneous = true;
+            for(String searchPattern : headlineColonValueSemicolonSeparatedString){
+                if(!tableData.rowExists(searchPattern, regex, null)){
+                    nonErroneous = false;
+                }
+            }
+            if(nonErroneous) doneOk = true;
+        }
+        TableData tableData = tableDataFromGuiElement(guiElement, true);
         if(tableData == null) return;
         tableData.verifyRows(headlineColonValueSemicolonSeparatedString, regex);
     }
@@ -1695,7 +1770,13 @@ public class WebInteractionMethods implements GuiDriver {
      * @param regex Matched as a regular expression pattern, or a check if the cell contains the value.
      */
     public void verifyTableRow(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex){
-        TableData tableData = tableDataFromGuiElement(tableElement);
+        boolean doneOk = false;
+        long startTime = System.currentTimeMillis();
+        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            TableData tableData = tableDataFromGuiElement(tableElement, false);
+            doneOk = tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, null);
+        }
+        TableData tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null)return;
         tableData.verifyRow(headlineColonValueSemicolonSeparatedString, regex);
 
@@ -1715,7 +1796,8 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedHeadline Headline name, as seen in the table
      */
     public void verifyTableHeadline(GuiElement tableElement, String expectedHeadline){
-        TableData tableData = tableDataFromGuiElement(tableElement);
+        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        TableData tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null) return;
         tableData.verifyHeadlineExist(expectedHeadline);
     }
@@ -1744,8 +1826,29 @@ public class WebInteractionMethods implements GuiDriver {
      * @return Returns true if rows matching is found.
      */
     public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex, Integer expectedMatchCount) {
-        TableData tableData = tableDataFromGuiElement(tableElement);
+        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        TableData tableData = tableDataFromGuiElement(tableElement, false);
         return tableData != null && tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, expectedMatchCount);
+    }
+
+
+    /**
+     * Checks if a certain row exist in table. Gives the GUI table time to load
+     *
+     * @param tableElement The table element
+     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
+     * @param regex True if data value pattern is states as a regular expressions. Othervice a check for cells containing the data value is performed.
+     * @param expectedMatchCount The number of expected row matches. If set to null tests will be passed if at least one row is matched.
+     * @return Returns true if rows matching is found.
+     */
+    public boolean tableRowExistsWithTimeout(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex, Integer expectedMatchCount) {
+        boolean doneOk = false;
+        long startTime = System.currentTimeMillis();
+        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            TableData tableData = tableDataFromGuiElement(tableElement, false);
+            doneOk = tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, expectedMatchCount);
+        }
+        return doneOk;
     }
 
     /**
@@ -1755,7 +1858,8 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedHeadlines The list of expected headlines
      */
     public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
-        TableData tableData = tableDataFromGuiElement(tableElement);
+        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        TableData tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null) return;
         tableData.verifyHeadlinesExist(expectedHeadlines);
     }
@@ -1767,14 +1871,15 @@ public class WebInteractionMethods implements GuiDriver {
      * @return Return true if table is empty.
      */
     public boolean tableIsEmpty(GuiElement tableElement) {
-        TableData tableData = tableDataFromGuiElement(tableElement);
+        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        TableData tableData = tableDataFromGuiElement(tableElement, true);
         return tableData != null && tableData.tableIsEmpty();
     }
 
-    private TableData tableDataFromGuiElement(GuiElement guiElement){
+    private TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
         DomElement domElement = (DomElement)guiElement;
         StringBuilder tableContent = new StringBuilder();
-        WebElement tableElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        WebElement tableElement = getRuntimeElementWithoutLogging(domElement);
         if(!tableElement.getTagName().toLowerCase().equals("table")){
             try {
                 tableElement = tableElement.findElement(By.xpath(".//table"));
@@ -1782,22 +1887,22 @@ public class WebInteractionMethods implements GuiDriver {
             }
         }
         if(tableElement == null) {
-            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
+            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
             return null;
         }
         List<WebElement> rows;
         try {
             rows = tableElement.findElements(By.xpath(".//tr"));
         }catch (Exception e){
-            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for " + domElement.LogIdentification() + ".");
+            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for " + domElement.LogIdentification() + ".");
             return null;
         }
         for(WebElement row : rows){
             List<WebElement> cells;
             try{
-                cells = row.findElements(By.xpath(".//td|.//th"));
+                cells = row.findElements(By.xpath("(.//td|.//th)"));
             } catch (Exception e){
-                testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " with row '" + row.getText() + "'.");
+                if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " for row '" + row.toString() + "'.");
                 return null;
             }
             for(WebElement cell : cells){
