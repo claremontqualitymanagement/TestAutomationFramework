@@ -116,6 +116,26 @@ public class SqlInteractionManager {
         tableData.verifyRow(headlineColonValueSemicolonSeparatedString, regex);
     }
 
+    public void verifyRowExistInResultsFromQuery(String tableName, String headlineColonValueSemicolonSeparatedString){
+        String[] pairs = headlineColonValueSemicolonSeparatedString.split(";");
+        List<String> searchString = new ArrayList<>();
+        for(String pair : pairs){
+            if(pair.contains("=")){
+                searchString.add(pair.split("=")[0] + " = '" + pair.split("=")[pair.split("=").length] + "'");
+            }
+        }
+        String sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" AND ", searchString) + ";";
+        TableData td = execute(sql);
+        if(td.dataRowCount() == 0){
+            sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" OR ", searchString) + ";";
+            td = execute(sql);
+            td.verifyRow(headlineColonValueSemicolonSeparatedString, false);
+        } else {
+            testCase.log(LogLevel.VERIFICATION_PASSED, "Found '" + headlineColonValueSemicolonSeparatedString + "' in " + tableName + ".");
+        }
+
+    }
+
     public void closeConnection() {
         if (connection == null) return;
         try {

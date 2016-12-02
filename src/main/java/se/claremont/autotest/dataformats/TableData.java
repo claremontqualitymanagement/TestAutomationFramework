@@ -71,6 +71,10 @@ public class TableData {
         return html;
     }
 
+    public int dataRowCount(){
+        return this.dataRows.size();
+    }
+
     public @Override String toString() {
         List<String> returnRows = new ArrayList<>();
         if (headLines == null || headLines.size() == 0) return "";

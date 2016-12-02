@@ -1151,14 +1151,15 @@ public class WebInteractionMethods implements GuiDriver {
     public void pickTableRow(GuiElement guiTableElement, String[] textsToFindOnRow){
         DomElement domElement = (DomElement)guiTableElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        List<WebElement> rows = webElement.findElements(By.xpath(".//*"));
+        List<String> partialMatches = new ArrayList<>();
+        boolean allValuesFoundInRow = false;
+        List<WebElement> rows = webElement.findElements(By.xpath(".//tr"));
         for (WebElement row : rows)
         {
             ArrayList<String> rowStrings = new ArrayList<>();
-            boolean allValuesFoundInRow = false;
             boolean someValueFoundInRow = false;
             boolean valueMissingOnRow = false;
-            List<WebElement> cells = row.findElements(By.xpath(".//*"));
+            List<WebElement> cells = row.findElements(By.xpath("(.//td | .//th)"));
             for(String textToFindOnRow : textsToFindOnRow)
             {
                 boolean thisValueFoundOnRow = false;
@@ -1178,13 +1179,26 @@ public class WebInteractionMethods implements GuiDriver {
                 }
 
             }
-            log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
+            //log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
             if (!valueMissingOnRow)
             {
                 allValuesFoundInRow = true;
                 row.click();
                 break;
+            } else if (someValueFoundInRow){
+                partialMatches.add("'" + String.join("', '", rowStrings) + "'");
             }
+        }
+        if(!allValuesFoundInRow){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + String.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO,
+                    "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + String.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
+                    "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + String.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
+            saveScreenshot(webElement);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+        } else {
+            log(LogLevel.EXECUTED, "Clicked the row with values '" + String.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
         }
     }
 
@@ -1656,6 +1670,13 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Reloads the page. Similar as pressing F5 in the browser to refresh the page.
+     */
+    public void reloadPage(){
+        driver.navigate().refresh();
+    }
+
+    /**
      * Verifies that the headline exists in the table.
      *
      * @param tableElement Table element
@@ -1748,7 +1769,12 @@ public class WebInteractionMethods implements GuiDriver {
                 return null;
             }
             for(WebElement cell : cells){
-                tableContent.append(cell.getText()).append(";");
+                try{
+                    tableContent.append(cell.getText()).append(";");
+                } catch (Exception e) {
+                    log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
+                    tableContent.append(";");
+                }
             }
             tableContent.append(SupportMethods.LF);
         }
