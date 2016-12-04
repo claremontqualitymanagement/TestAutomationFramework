@@ -261,6 +261,9 @@ public class TestCase {
         ArrayList<LogPost> erroneousPosts = testCaseLog.onlyErroneousLogPosts();
         if(erroneousPosts.size() == 0) {
             resultStatus = ResultStatus.PASSED;
+            String message = "   (•̀ᴗ•́)و    No deviations found for test case '" + testName + "'. Success! Passed.";
+            System.out.println(message);
+            testCaseLog.log(LogLevel.INFO, message);
             return;
         }
 
@@ -281,13 +284,22 @@ public class TestCase {
         }
 
         if(newErrorsEncountered && knownErrorsEncountered){
+            String message = "   (⊙_◎)   Both new and known errors found for test case '" + testName + "'.";
             resultStatus = ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS;
+            System.out.println(message);
+            testCaseLog.log(LogLevel.INFO, message);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         } else if (newErrorsEncountered){
             resultStatus = ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
+            String message = "  ٩(͡๏̯͡๏)۶  Deviations not marked as known was found for test case '" + testName + "'.";
+            System.out.println(message);
+            testCaseLog.log(LogLevel.INFO, message);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
         } else {
             resultStatus = ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS;
+            String message = " ¯\\_(ツ)_/¯ Deviations found, but all of them was marked as known for test case '" + testName + "'.";
+            testCaseLog.log(LogLevel.INFO, message);
+            System.out.println(message);
         }
     }
 

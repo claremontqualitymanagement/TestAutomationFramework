@@ -94,4 +94,26 @@ public class TestCase_Tests {
         Assert.assertFalse(testCase.isSameAs(testCase2));
     }
 
+    @Test
+    public void successPrintout(){
+        KnownErrorsList knownErrorsList = new KnownErrorsList();
+        knownErrorsList.add(new KnownError("TEST", ".*Text.*"));
+        TestCase testCase = new TestCase(knownErrorsList, "dummy");
+
+        //Passed
+        testCase.log(LogLevel.VERIFICATION_PASSED, "Text");
+        testCase.evaluateResultStatus();
+
+        //Only new error
+        testCase.log(LogLevel.FRAMEWORK_ERROR, "Other error");
+        testCase.evaluateResultStatus();
+
+        //Both new and known errors
+        testCase.log(LogLevel.VERIFICATION_FAILED, "Text");
+        testCase.evaluateResultStatus();
+
+        knownErrorsList.add(new KnownError("TEST2", ".*Other error.*"));
+        testCase.evaluateResultStatus();
+    }
+
 }

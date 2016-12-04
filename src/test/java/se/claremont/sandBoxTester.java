@@ -326,8 +326,8 @@ public class sandBoxTester extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
-    @Test
     @Ignore
+    @Test
     public void animatedMenu(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("https://www.typeandtell.com/sv/skrivbord/");
@@ -346,8 +346,8 @@ public class sandBoxTester extends TestSet{
 
     }
 
-    @Test
     @Ignore
+    @Test
     public void animatedDropdown(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("https://www.typeandtell.com/sv/pris/");
