@@ -192,6 +192,14 @@ public class WebInteractionMethods implements GuiDriver {
             }
     }
 
+    private String currentDomain(){
+        String domain = driver.getCurrentUrl();
+        int startPosition = domain.indexOf("://") + 3;
+        domain = domain.substring(startPosition);
+        if(domain.contains("/"))
+            domain = domain.substring(0, domain.indexOf("/"));
+        return domain;
+    }
 
     /**
      * Reads the text from an element

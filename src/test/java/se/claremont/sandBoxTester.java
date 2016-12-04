@@ -358,4 +358,11 @@ public class sandBoxTester extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
+    @Test
+    public void checkDomain(){
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        web.navigate("http://www.claremont.se");
+        System.out.println(web.currentDomain());
+    }
+
 }

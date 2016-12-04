@@ -1,0 +1,56 @@
+Release notes for TAF
+==========================
+
+Added to version v1.0.14
+-------------------------
+* Support for checking the links on the page you are at for broken links. Links that don't return HTTP status code 200 are treated as failed verifications.
+* Test case result evaluation now present test case status easily in stdOut to ease assessment in debugging with cheezy ASCII face emoticons (also being logged).
+* Added release notes to project files (this file).
+
+Added to version v1.0.13
+-------------------------
+* New web table verification for dynamically populated tables.
+* Re-made method of verifying web element text.
+
+Added to version v1.0.12
+-------------------------
+* New web text verification that gives time for the element to render. Previous version only gave time for element to appear.
+* Verification of stuff in databases, through JDBC calls.
+
+Added to version v1.0.9
+-------------------------
+* Added support for RemoteWebDriver and BrowserStack interface to run tests on BrowserStack infrastructure (www.browserstack.com).
+
+Added to versoin v1.0.8
+-------------------------
+* REST support refactored. REST response is more versatile, and HTTP headers are now customizable.
+* Customizable logo in HTML reports are back, and managed through TestRun.Settings.setValue() or the runSettings.properties file.
+* Reports prettified and clarified a bit.
+
+Added to version v1.0.7
+-------------------------
+* Screenshots of web pages now marks relevant element with a yellow frame, if possible.
+* Encountered known error now is formatted in a relevant way.
+
+Added to version v1.0.6
+-------------------------
+* Enchanced logging for web methods.
+* WebElements with multiple matches can now be chosen by ordinal number.
+
+Added to version v1.0.5
+-------------------------
+* Code cleaning.
+
+Added to version v1.0.4
+-------------------------
+* Web tables implemented with the feature rich TableData class for better logging and verification possibilities.
+
+Added to version v1.0.3
+-------------------------
+* Changed test run settings implementation for it to be easier understood and used without need to use un-intuitive CliTestRunner class reference.
+* Bug fixes for timing usage for methods assessing disappearing or non-existing web elements.
+
+Added to version v1.0.2
+-------------------------
+* Instructions added.
+

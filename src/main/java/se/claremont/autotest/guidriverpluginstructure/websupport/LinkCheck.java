@@ -14,6 +14,8 @@ import se.claremont.autotest.restsupport.RestResponse;
 public class LinkCheck implements Runnable{
     String link;
     TestCase testCase;
+    String originatingDomain = null;
+    boolean recursive = false;
 
     public LinkCheck(TestCase testCase, String link){
         this.link = link;
