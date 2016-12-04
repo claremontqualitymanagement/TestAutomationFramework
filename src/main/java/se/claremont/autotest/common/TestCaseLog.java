@@ -109,6 +109,22 @@ public class TestCaseLog {
     }
 
     /**
+     * Writes a testCaseLog post to the test case testCaseLog
+     *
+     * @param logLevel The {@link LogLevel} of this testCaseLog entry
+     * @param message The string message of the testCaseLog
+     * @param htmlMessage The html representation of the log message
+     * @param testCaseName The name of the test case
+     * @param testStepName The name of the test step
+     * @param testStepClassName The name of the test class
+     */
+    public void log(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
+        LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStepName, testStepClassName);
+        logger.debug( logPost.toString() );
+        logPosts.add(logPost);
+    }
+
+    /**
      * Used when logging benefits from being different between HTML formatted testCaseLog info and other testCaseLog info.
      *
      * @param logLevel The {@link LogLevel} of the entry

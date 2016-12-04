@@ -1,6 +1,7 @@
 package se.claremont.autotest.common;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -94,8 +95,10 @@ public class TestCase_Tests {
         Assert.assertFalse(testCase.isSameAs(testCase2));
     }
 
+    //Used for printing test
     @Test
-    public void successPrintout(){
+    @Ignore
+    public void testCaseEvaluationStatusPrintoutCheck(){
         KnownErrorsList knownErrorsList = new KnownErrorsList();
         knownErrorsList.add(new KnownError("TEST", ".*Text.*"));
         TestCase testCase = new TestCase(knownErrorsList, "dummy");

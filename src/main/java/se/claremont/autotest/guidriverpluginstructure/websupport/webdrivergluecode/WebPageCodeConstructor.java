@@ -44,10 +44,12 @@ class WebPageCodeConstructor {
     @SuppressWarnings("UnusedReturnValue")
     public static String ConstructWebPageCode(WebDriver driver, String pathToOutputFile){
         WebPageCodeConstructor webPageCodeConstructor = new WebPageCodeConstructor(driver);
-        String descriptors = webPageCodeConstructor.constructWebPageCode();
+        String descriptors = "//Auto-generated with mapCurrentPage() method of WebInteractionMethods." + System.lineSeparator() +
+                System.lineSeparator() + webPageCodeConstructor.constructWebPageCode();
         SupportMethods.saveToFile(descriptors, pathToOutputFile);
         return descriptors;
     }
+
 
     private String unusedMathodName(String suggestedMethodName){
         int elementCounter = 2;

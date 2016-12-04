@@ -351,6 +351,7 @@ public class sandBoxTester extends TestSet{
     public void animatedDropdown(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("https://www.typeandtell.com/sv/pris/");
+        web.reportBrokenLinks();
         DomElement drowDown = new DomElement("Insertion", DomElement.IdentificationType.BY_ID);
         web.selectInDropdown(drowDown, "Naturtonat papper");
         web.selectInDropdown(drowDown, "Vitt papper");
