@@ -9,46 +9,46 @@ Added to version v1.0.14
 
 Added to version v1.0.13
 -------------------------
-* New web table verification for dynamically populated tables.
-* Re-made method of verifying web element text.
+* New web table verification for dynamically populated tables, that retries verification continuously until timeout, for dynamically rendered table rows to appear.
+* Re-made method of verifying web element text to enable verification of dynamically rendered texts that appear after a while.
 
 Added to version v1.0.12
 -------------------------
-* New web text verification that gives time for the element to render. Previous version only gave time for element to appear.
-* Verification of stuff in databases, through JDBC calls.
+* New web text verification that give time for the element to render. Previous version only gave time for element to appear. If it appeared but was populated with text later the verification failed. Now this is fixed.
+* Verification possibilities for stuff in SQL databases, through JDBC calls, for low level tests and for test data manipulation.
 
 Added to version v1.0.9
 -------------------------
-* Added support for RemoteWebDriver and BrowserStack interface to run tests on BrowserStack infrastructure (www.browserstack.com).
+* Added support for RemoteWebDriver to enable remote execution of scripts, and enable a BrowserStack interface to be able to run tests on BrowserStack infrastructure (http://www.browserstack.com).
 
 Added to versoin v1.0.8
 -------------------------
-* REST support refactored. REST response is more versatile, and HTTP headers are now customizable.
-* Customizable logo in HTML reports are back, and managed through TestRun.Settings.setValue() or the runSettings.properties file.
-* Reports prettified and clarified a bit.
+* REST support refactored. REST response is more versatile, and HTTP headers are now customizable. This change was implemented for the REST support to be useful when security architectures need header manipulation.
+* Customizable logo in HTML reports (both test case reports and test run reports) are back, and managed through TestRun.settings.setValue() or the runSettings.properties file. This is done to make users feel at home with the reports.
+* Reports prettified and clarified a bit to be more appealing.
 
 Added to version v1.0.7
 -------------------------
-* Screenshots of web pages now marks relevant element with a yellow frame, if possible.
-* Encountered known error now is formatted in a relevant way.
+* Screenshots of web pages now marks relevant element with a yellow frame, if possible. This is meant to ease debugging when wrong elements for interaction aare identified by the scripts.
+* Encountered known error now is formatted in a relevant way to ease understanding of test results.
 
 Added to version v1.0.6
 -------------------------
-* Enchanced logging for web methods.
-* WebElements with multiple matches can now be chosen by ordinal number.
+* Enchanced logging for web methods to ease debugging.
+* Web elements (of the DomElement class) with multiple matches can now be identified by complimentary ordinal number to ease scripting of badly built sites.
 
 Added to version v1.0.5
 -------------------------
-* Code cleaning.
+* Code cleaning to ease understanding of code and to enable more people to participate in development of this framework.
 
 Added to version v1.0.4
 -------------------------
-* Web tables implemented with the feature rich TableData class for better logging and verification possibilities.
+* Web tables implemented with the feature rich TableData class for better logging and verification possibilities - and neater outputs from verifications.
 
 Added to version v1.0.3
 -------------------------
 * Changed test run settings implementation for it to be easier understood and used without need to use un-intuitive CliTestRunner class reference.
-* Bug fixes for timing usage for methods assessing disappearing or non-existing web elements.
+* Bug fixes for timing usage for methods assessing disappearing or non-existing web elements since this posed a problem to some clients with dynamically rendered web sites.
 
 Added to version v1.0.2
 -------------------------
