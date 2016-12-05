@@ -14,8 +14,6 @@ import se.claremont.autotest.restsupport.RestResponse;
 public class LinkCheck implements Runnable{
     String link;
     TestCase testCase;
-    String originatingDomain = null;
-    boolean recursive = false;
 
     public LinkCheck(TestCase testCase, String link){
         this.link = link;
@@ -53,6 +51,6 @@ public class LinkCheck implements Runnable{
             log(LogLevel.VERIFICATION_FAILED, "Link '" + link + "' was broken (response took " + (System.currentTimeMillis() - startTime) + " milliseconds). Response code '" + responseCode + "'.");
         }
 
-
     }
+
 }

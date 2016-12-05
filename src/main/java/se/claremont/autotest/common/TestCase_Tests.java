@@ -3,6 +3,7 @@ package se.claremont.autotest.common;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import se.claremont.autotest.support.SupportMethods;
 
 /**
  *
@@ -117,6 +118,45 @@ public class TestCase_Tests {
 
         knownErrorsList.add(new KnownError("TEST2", ".*Other error.*"));
         testCase.evaluateResultStatus();
+    }
+
+    @Test
+    public void writingProcessChangesSinceStartOfTestCaseIfNoChanges(){
+        TestCase testCase = new TestCase(null, "dummy");
+        testCase.writeProcessListDeviationsFromSystemStartToLog();
+
+        boolean logRowAboutNoChangesToRunningProcessesFound = false;
+                for(LogPost logPost : testCase.testCaseLog.logPosts){
+            if(logPost.message.contains("No changes to what processes are running, from test case start until now, could be detected.")){
+                logRowAboutNoChangesToRunningProcessesFound = true;
+                break;
+            }
+        }
+        Assert.assertTrue(logRowAboutNoChangesToRunningProcessesFound);
+    }
+
+    @Test
+    public void writingProcessChangesSinceStartOfTestCaseIfChanges(){
+        TestCase testCase = new TestCase(null, "dummy");
+        SupportMethods.startProgram("cmd.exe", testCase);
+
+        testCase.writeProcessListDeviationsFromSystemStartToLog();
+
+        boolean logRowAboutChangesToRunningProcessesFound = false;
+        for(LogPost logPost : testCase.testCaseLog.logPosts){
+            if(logPost.message.contains("Process(es) added since test case start: '")){
+                logRowAboutChangesToRunningProcessesFound = true;
+                break;
+            }
+        }
+        Assert.assertTrue(logRowAboutChangesToRunningProcessesFound);
+    }
+
+
+    @Test
+    public void testCaseCreatedWithKnownErrorListNullShouldCreateEmptyKnownErrorsList(){
+        TestCase testCase = new TestCase(null, "dummy");
+        Assert.assertNotNull(testCase.testCaseKnownErrorsList);
     }
 
 }

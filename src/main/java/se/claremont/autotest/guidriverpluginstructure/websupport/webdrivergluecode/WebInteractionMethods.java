@@ -192,6 +192,29 @@ public class WebInteractionMethods implements GuiDriver {
             }
     }
 
+
+    /**
+     * Checks current page for broken links and reports results to log as verifications.
+     */
+    public void reportBrokenLinksRecursive(){
+        String currentDomain = currentDomain();
+        List<WebElement> links = driver.findElements(By.xpath("//a"));
+        List<Thread> linkCheckingThreads = new ArrayList<>();
+        for(WebElement link : links){
+            Thread linkCheck = new Thread(new LinkCheck(testCase, link.getAttribute("href")));
+            linkCheckingThreads.add(linkCheck);
+            linkCheck.start();
+        }
+
+        //Code below for waiting for all threads to finish due to log timing issues
+        for(int i = 0; i < linkCheckingThreads.size(); i++)
+            try {
+                linkCheckingThreads.get(i).join();
+            } catch (InterruptedException e) {
+                log(LogLevel.FRAMEWORK_ERROR, e.getMessage());
+            }
+    }
+
     private String currentDomain(){
         String domain = driver.getCurrentUrl();
         int startPosition = domain.indexOf("://") + 3;

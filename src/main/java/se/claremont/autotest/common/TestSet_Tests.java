@@ -41,4 +41,44 @@ public class TestSet_Tests {
         testSet.currentTestCase.evaluateResultStatus();
         Assert.assertTrue(testSet.currentTestCase.resultStatus == TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
+
+    @Test
+    public void wrapUpCurrentTestSetShould(){
+        TestSet testSet = new TestSet();
+        testSet.startUpTestCase(currentTestName.getMethodName());
+        testSet.currentTestCase.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
+        //testSet.currentTestCase.evaluateResultStatus();
+        testSet.wrapUpTestCase();
+        Assert.assertNotNull(testSet.currentTestCase.stopTime);
+
+        boolean logRowAboutEndingExecutionFound = false;
+        for(LogPost logPost : testSet.currentTestCase.testCaseLog.logPosts){
+            if(logPost.message.contains("Ending test execution at ")){
+                logRowAboutEndingExecutionFound = true;
+                break;
+            }
+        }
+        Assert.assertTrue(logRowAboutEndingExecutionFound);
+
+        boolean logRowAboutEvaluatingTestResultStatusFound = false;
+        for(LogPost logPost : testSet.currentTestCase.testCaseLog.logPosts){
+            if(logPost.message.contains("Evaluated test result status to")){
+                logRowAboutEvaluatingTestResultStatusFound = true;
+                break;
+            }
+        }
+        Assert.assertTrue(logRowAboutEvaluatingTestResultStatusFound);
+
+    }
+
+    @Test
+    public void knownErrorsListWithStringArrayAssessed(){
+        TestSet testSet = new TestSet();
+        testSet.addKnownError("Description", new String[] {".*Pattern string.*"});
+        testSet.startUpTestCase(currentTestName.getMethodName());
+        testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
+        testSet.currentTestCase.evaluateResultStatus();
+        Assert.assertTrue("Expected result status of test case to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.resultStatus.toString() + ".", testSet.currentTestCase.resultStatus == TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+    }
+
 }

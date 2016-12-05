@@ -39,4 +39,16 @@ public class ValuePair_Tests {
         ValuePair valuePair = new ValuePair("Parameter name", 123);
         Assert.assertTrue(valuePair.value.equals("123"));
     }
+
+    @Test
+    public void toStringTestInt(){
+        ValuePair valuePair = new ValuePair("Parameter name", 123);
+        Assert.assertTrue(valuePair.toString().equals("['Parameter name' = '123']"));
+    }
+
+    @Test
+    public void toStringTestString(){
+        ValuePair valuePair = new ValuePair("Parameter name", "123");
+        Assert.assertTrue(valuePair.toString().equals("['Parameter name' = '123']"));
+    }
 }
