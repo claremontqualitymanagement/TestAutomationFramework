@@ -8,7 +8,7 @@ public interface Scp {
     void doSomeScpStuff();
 
     /**
-     *
+     * Most likly to only work from linux to linux system due to sftp service?
      * @param user
      * @param pass
      * @param host
@@ -16,5 +16,27 @@ public interface Scp {
      * @param destinationFilePath
      * @return
      */
-    boolean sftpFromLinuxToLinux(String user, String pass, String host, String sourceFilePath, String destinationFilePath);
+    boolean sftpUploadFromLinuxToLinux(String user, String pass, String host, String sourceFilePath, String destinationFilePath);
+
+    /**
+     * Most likly to only work from linux to linux system?
+     * @param user
+     * @param pass
+     * @param host
+     * @param sourceFilePath
+     * @param destinationFilePath
+     * @return
+     */
+    boolean sftpDownloadFromLinuxToLinux(String user, String pass, String host, String sourceFilePath, String destinationFilePath);
+
+    /**
+     * Method enables you to connect to sshd server and get the shell prompt
+     * @param user
+     * @param pass
+     * @param host
+     * @param command e.g. ls
+     */
+    void createShell(String user, String pass, String host, String command);
+
+
 }
