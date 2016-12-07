@@ -50,3 +50,42 @@ git push origin development
 md5 TestAutomationFramework-v1.0-jar-with-dependencies.jar > TestAutomationFramework-v1.0-jar-with-dependencies.jar.md5
 shasum TestAutomationFramework-v1.0-jar-with-dependencies.jar > TestAutomationFramework-v1.0-jar-with-dependencies.jar.sha1
 *** glöm inte rensa filerna från skräp
+
+*** https://help.github.com/articles/generating-an-ssh-key/ ***
+Magnuss-MBP:~ magnusolsson$ cat ~/.ssh/known_hosts
+46.101.193.212 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDrUSFRq8+qHR8Ofr6xP9h5Un3qvqKbvWuYxyglQ++x0w0FxRA8+hMmXXZ/CM1ieMvcQltEZTG2quUdDm7cLSg0=
+Magnuss-MBP:~ magnusolsson$ ssh-keygen -t rsa -b 4096 -C "magnus.olsson@claremont.se"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/magnusolsson/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/magnusolsson/.ssh/id_rsa.
+Your public key has been saved in /Users/magnusolsson/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:mbAGw5HicDJOT/80HxUbEoy4dev+XmtHHY0h8xJhqNI magnus.olsson@claremont.se
+The key's randomart image is:
++---[RSA 4096]----+
+|    ... oo.++.   |
+|+.oo.o o ooo* .  |
+|o*o.= +...o. = o.|
+| ... =.=E=  . o..|
+|      =.S .  .  o|
+|     . . o     ..|
+|        .    ..  |
+|         .  .... |
+|          oo...  |
++----[SHA256]-----+
+Magnuss-MBP:~ magnusolsson$ eval "$(ssh-agent -s)"
+Agent pid 45375
+Magnuss-MBP:~ magnusolsson$ ssh-add ~/.ssh/id_rsa
+Enter passphrase for /Users/magnusolsson/.ssh/id_rsa:
+Identity added: /Users/magnusolsson/.ssh/id_rsa (/Users/magnusolsson/.ssh/id_rsa)
+Magnuss-MBP:~ magnusolsson$ pbcopy < ~/.ssh/id_rsa.pub
+Magnuss-MBP:~ magnusolsson$ ssh -T git git@github.com
+ssh: Could not resolve hostname git: nodename nor servname provided, or not known
+Magnuss-MBP:~ magnusolsson$ ssh -T git@github.com
+The authenticity of host 'github.com (192.30.253.112)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,192.30.253.112' (RSA) to the list of known hosts.
+Hi claremontqualitymanagement! You've successfully authenticated, but GitHub does not provide shell access.
