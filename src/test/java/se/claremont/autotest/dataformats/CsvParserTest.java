@@ -10,7 +10,7 @@ import java.net.URL;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-public class CsvParser_Tests {
+public class CsvParserTest {
     private CsvParser csvParser;
 
     @Before
@@ -20,7 +20,7 @@ public class CsvParser_Tests {
 
     @Test
     public void test_FileReaderConstructor() throws FileNotFoundException {
-        URL resource = CsvParser_Tests.class.getClassLoader().getResource("dataformats/csv/data.csv");
+        URL resource = CsvParserTest.class.getClassLoader().getResource("dataformats/csv/data.csv");
         FileReader fileReader = new FileReader(resource.getFile());
         csvParser = new CsvParser(fileReader);
 
@@ -34,7 +34,7 @@ public class CsvParser_Tests {
 
     @Test
     public void test_ContentConstructor() throws FileNotFoundException {
-        URL resource = CsvParser_Tests.class.getClassLoader().getResource("dataformats/csv/data.csv");
+        URL resource = CsvParserTest.class.getClassLoader().getResource("dataformats/csv/data.csv");
         FileReader fileReader = new FileReader(resource.getFile());
 
         String fileContent = CsvParser.csvFileContent(fileReader);
@@ -51,7 +51,7 @@ public class CsvParser_Tests {
 
     @Test
     public void test_ContentWithDelimiterConstructor() throws FileNotFoundException {
-        URL resource = CsvParser_Tests.class.getClassLoader().getResource("dataformats/csv/data.csv");
+        URL resource = CsvParserTest.class.getClassLoader().getResource("dataformats/csv/data.csv");
         FileReader fileReader = new FileReader(resource.getFile());
 
         String fileContent = CsvParser.csvFileContent(fileReader);

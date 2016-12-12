@@ -7,7 +7,7 @@ import se.claremont.tools.Utils;
 /**
  * Created by jordam on 2016-11-04.
  */
-public class StringManegement_Tests {
+public class StringManagementTest {
 
     @Test
     public void filePathToHtmlCheck(){

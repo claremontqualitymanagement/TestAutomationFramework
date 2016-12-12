@@ -30,7 +30,7 @@ import java.util.List;
  *
  * Created by magnusolsson on 2016-10-06.
  */
-public class sandBoxTester extends TestSet{
+public class SandBoxTest extends TestSet{
 
     private static String OUTPUT_FILE_PATH = "";
     private static String ENDPOINT_TARGET_URL = "https://www.typeandtell.com/sv/";

@@ -5,12 +5,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.Settings;
 import se.claremont.autotest.common.TestRun;
-import se.claremont.autotest.common.email.EmailSender;
 
 /**
  * Created by jordam on 2016-09-19.
  */
-public class EmailSender_Tests {
+public class EmailSenderTest {
 
     @Ignore
     @Test

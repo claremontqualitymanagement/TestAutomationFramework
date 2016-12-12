@@ -6,7 +6,7 @@ import se.claremont.autotest.dataformats.JsonParser;
 /**
  * Created by jordam on 2016-10-28.
  */
-public class JsonParser_Tests {
+public class JsonParserTest {
 
     private String contentSample = "{\"menu\": {\n" +
             "  \"id\": \"file\",\n" +

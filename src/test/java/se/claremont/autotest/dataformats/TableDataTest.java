@@ -9,7 +9,7 @@ import se.claremont.autotest.support.SupportMethods;
 /**
  * Created by jordam on 2016-11-09.
  */
-public class TableData_Tests {
+public class TableDataTest {
 
     @Test
     public void emptyTableTest(){
