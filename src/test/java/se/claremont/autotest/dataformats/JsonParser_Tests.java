@@ -8,7 +8,7 @@ import se.claremont.autotest.dataformats.JsonParser;
  */
 public class JsonParser_Tests {
 
-    String contentSample = "{\"menu\": {\n" +
+    private String contentSample = "{\"menu\": {\n" +
             "  \"id\": \"file\",\n" +
             "  \"value\": \"File\",\n" +
             "  \"popup\": {\n" +
