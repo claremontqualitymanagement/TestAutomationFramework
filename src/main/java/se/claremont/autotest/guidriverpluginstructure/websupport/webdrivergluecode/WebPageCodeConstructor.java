@@ -27,7 +27,7 @@ class WebPageCodeConstructor {
 
     private WebDriver driver;
     private Constructors constructors = new Constructors();
-    List<String> methodNames = new ArrayList<>();
+    private List<String> methodNames = new ArrayList<>();
 
     private WebPageCodeConstructor(WebDriver driver){
         if(driver == null) return;
@@ -42,7 +42,7 @@ class WebPageCodeConstructor {
      * @return Returns a string with a draft page class
      */
     @SuppressWarnings("UnusedReturnValue")
-    public static String ConstructWebPageCode(WebDriver driver, String pathToOutputFile){
+    static String ConstructWebPageCode(WebDriver driver, String pathToOutputFile){
         WebPageCodeConstructor webPageCodeConstructor = new WebPageCodeConstructor(driver);
         String descriptors = "//Auto-generated with mapCurrentPage() method of WebInteractionMethods." + System.lineSeparator() +
                 System.lineSeparator() + webPageCodeConstructor.constructWebPageCode();
@@ -68,8 +68,6 @@ class WebPageCodeConstructor {
      * @return Returns a string with the relevant objects.
      */
     private String constructWebPageCode(){
-        List<String> domElementStrings = new ArrayList<>();
-        StringBuilder element = new StringBuilder();
         List<WebElement> webElements = driver.findElements(By.xpath("//*"));
         for(WebElement webElement : webElements){
             if(webElement.getAttribute("id") != null && webElement.getAttribute("id").length() > 0){
@@ -126,7 +124,7 @@ class WebPageCodeConstructor {
     private class Constructors extends ArrayList<Constructor>{
         int elementCounter = 1;
 
-        public void addConstructor(Constructor constructor){
+        void addConstructor(Constructor constructor){
             if(hasUniqueName(constructor)){
                 this.add(constructor);
             } else {
@@ -136,7 +134,7 @@ class WebPageCodeConstructor {
             }
         }
 
-        public boolean hasUniqueName(Constructor constructor){
+        boolean hasUniqueName(Constructor constructor){
             for(Constructor constr : this){
                 if(constr.elementName.equals(constructor.elementName)) return false;
             }
@@ -163,7 +161,7 @@ class WebPageCodeConstructor {
         String elementName;
         String constructorString;
 
-        public Constructor(String elementName, String constructorString){
+        Constructor(String elementName, String constructorString){
             this.elementName = elementName;
             this.constructorString = constructorString;
             logger.debug( "Creating: " + SupportMethods.LF + this.toString() );

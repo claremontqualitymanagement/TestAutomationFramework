@@ -18,11 +18,11 @@ import java.util.List;
  * Created by jordam on 2016-11-06.
  */
 public class ResponsiveAnalysis2 {
-    WebDriver driver;
-    List<CompareElement> compareElements = new ArrayList<>();
-    List<Dimension> resolutions = new ArrayList<>();
-    List<ElementTreeCollection> elementTreeCollectionList = new ArrayList<>();
-    TestCase testCase;
+    private WebDriver driver;
+    private List<CompareElement> compareElements = new ArrayList<>();
+    private List<Dimension> resolutions = new ArrayList<>();
+    private List<ElementTreeCollection> elementTreeCollectionList = new ArrayList<>();
+    private TestCase testCase;
 
     public ResponsiveAnalysis2(List<Dimension> resolutions, WebDriver driver, TestCase testCase){
         SupportMethods.saveToFile("Just making sure log folder exist.", LogFolder.testRunLogFolder + testCase.testName + "dummy.txt");
@@ -107,14 +107,14 @@ public class ResponsiveAnalysis2 {
         BufferedImage screenImage;
         Dimension resolution;
         TestCase testCase;
-        public List<AssessableElement> assessableElements = new ArrayList<>();
+        List<AssessableElement> assessableElements = new ArrayList<>();
 
-        public ElementTreeCollection(Dimension resolution, TestCase testCase){
+        ElementTreeCollection(Dimension resolution, TestCase testCase){
             this.testCase = testCase;
             this.resolution = resolution;
         }
 
-        public void collectVisibleElementsOnCurrentPage(WebDriver driver) {
+        void collectVisibleElementsOnCurrentPage(WebDriver driver) {
             screenImage = getScreenshot();
             List<WebElement> childElements = recursiveWebElementGathering(driver.findElement(By.xpath("//body")));
             for(WebElement child : childElements){
@@ -148,12 +148,11 @@ public class ResponsiveAnalysis2 {
     private class AssessableElement {
         Dimension size = new Dimension(0,0);
         Point position = new Point(0,0);
-        WebElement element = null;
         TestCase testCase;
         BufferedImage elementImage = null;
         String innerHtml = "";
 
-        public AssessableElement(WebElement webElement, BufferedImage screenImage, TestCase testCase){
+        AssessableElement(WebElement webElement, BufferedImage screenImage, TestCase testCase){
             this.testCase = testCase;
             try {
                 this.size = webElement.getSize();
@@ -188,7 +187,7 @@ public class ResponsiveAnalysis2 {
             return sb.toString();
         }
 
-        public String toHtml(){
+        String toHtml(){
             String html = StringManagement.htmlContentToDisplayableHtmlCode(toString());
 
             if(elementImage != null){
@@ -200,7 +199,7 @@ public class ResponsiveAnalysis2 {
             return html;
         }
 
-        public BufferedImage image(BufferedImage screenImage){
+        BufferedImage image(BufferedImage screenImage){
             try {
                 return screenImage.getSubimage(this.position.getX(), this.position.getY(), this.size.width, this.size.height);
             }catch (Exception e){
@@ -210,7 +209,7 @@ public class ResponsiveAnalysis2 {
         }
 
 
-        public void writeImageToFile(String filePath){
+        void writeImageToFile(String filePath){
             if(elementImage == null) return;
             try {
                 ImageIO.write(elementImage, "png", new File(filePath));
@@ -219,7 +218,7 @@ public class ResponsiveAnalysis2 {
             }
         }
 
-        public boolean isSame(AssessableElement assessableElement) {
+        boolean isSame(AssessableElement assessableElement) {
             if (this.size != assessableElement.size) return false;
             return this.position == assessableElement.position && innerHtml.equals(assessableElement.innerHtml);
         }
@@ -243,14 +242,14 @@ public class ResponsiveAnalysis2 {
     class CompareElement{
         Dimension resolution;
         AssessableElement assessableElement;
-        public DisplayStatus displayStatus = DisplayStatus.UNEVALUATED;
+        DisplayStatus displayStatus = DisplayStatus.UNEVALUATED;
 
-        public CompareElement(Dimension resolution, AssessableElement assessableElement){
+        CompareElement(Dimension resolution, AssessableElement assessableElement){
             this.resolution = resolution;
             this.assessableElement = assessableElement;
         }
 
-        public String evaluateAgainst(CompareElement compareElement) {
+        String evaluateAgainst(CompareElement compareElement) {
             if(this.assessableElement.isSame(compareElement.assessableElement)){
                 displayStatus = DisplayStatus.EXACT_MATCH_IN_ALL_RESOLUTIONS;
                 return "";

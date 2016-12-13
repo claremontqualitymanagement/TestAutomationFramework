@@ -1,45 +1,114 @@
 package se.claremont.autotest.common.email;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.subethamail.wiser.Wiser;
 import se.claremont.autotest.common.Settings;
 import se.claremont.autotest.common.TestRun;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by jordam on 2016-09-19.
  */
 public class EmailSenderTest {
+    private Wiser wiser;
 
-    @Ignore
-    @Test
-    public void sendGmail(){
-        String[] recipients = new String[] {"jorgen.damberg@claremont.se"};
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "Claremont!16");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "autotestcqm@gmail.com");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "gmail");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "587");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "smtp.gmail.com");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "jorgen.damberg@gmail.com");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "jorgen.damberg@claremont.se");
-        EmailSender emailSender = new EmailSender("smtp.google.com", "jorgen.damberg@gmail.com", recipients, "Test email", "<html><body><h1>content string headline</h1></body></html>", "587", "gmail");
-        String returnMessage = emailSender.send();
-        System.out.println(returnMessage);
-        Assert.assertFalse("No user name set: '" + returnMessage, returnMessage.contains("Cannot send mail"));
-        Assert.assertFalse("Could not send gmail. " + returnMessage, returnMessage.toLowerCase().contains("exception"));
-        Assert.assertFalse("Impossible state", returnMessage.contains("This is not supposed to be possible"));
+    @Before
+    public void setup() {
+        wiser = new Wiser(2500);
+        wiser.start();
     }
 
-    @Ignore
+    @After
+    public void tearDown() {
+        wiser.stop();
+    }
+
     @Test
-    public void SendSmtp(){
-        Settings settings = new Settings();
-        String[] recipients = new String[] {"jorgen.damberg@claremont.se"};
-        EmailSender emailSender = new EmailSender("mailrelay.prv.se", "jorgen.damberg@gmail.com", recipients, "Test email", "<html><body><h1>content string headline</h1></body></html>", "25", "smtp");
-        String returnMessage = emailSender.send();
-        System.out.println(returnMessage);
-        Assert.assertFalse("Could not send smtp email. " + returnMessage, returnMessage.toLowerCase().contains("exception"));
-        Assert.assertFalse("Impossible state", returnMessage.contains("This is not supposed to be possible"));
-        Assert.assertFalse("Bad sending of email", returnMessage.contains("Something went terribly wrong sending the email"));
+    public void testGmail2() {
+        //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
+        //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "gmail");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "2500");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "localhost");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "sender@gmail.com");
+        //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "recipient@mail.se");
+
+        String[] recipients = new String[] {"recipient@mail.com"};
+        EmailSender emailSender = new EmailSender(
+                null,
+                null,
+                recipients,
+                "Test email",
+                "<html><body><h1>content string headline</h1></body></html>",
+                null,
+                "gmail");
+        String result = emailSender.send();
+
+        assertTrue(result, result.contains("Email sent with subject 'Test email' using account 'account@yahoo.rocks' to mail host 'localhost"));
+
+        assertFalse(wiser.getMessages().isEmpty());
+
+        try {
+            MimeMessage msg = wiser.getMessages().get(0).getMimeMessage();
+
+            assertEquals("sender@gmail.com", msg.getFrom()[0].toString());
+            assertEquals("recipient@mail.com", msg.getAllRecipients()[0].toString());
+            assertEquals("Test email", msg.getSubject());
+            assertTrue(msg.getContent().toString(),
+                    msg.getContent().toString().contains("<html><body><h1>content string headline</h1></body></html>"));
+        } catch (MessagingException | IOException e) {
+            fail("Should not throw exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testSmtp() {
+        //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
+        //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "gmail");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "2500");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "localhost");
+        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "sender@gmail.com");
+        //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "recipient@mail.se");
+
+        String[] recipients = new String[] {"recipient@mail.com"};
+        EmailSender emailSender = new EmailSender(
+                "localhost",
+                "sender@gmail.com",
+                recipients,
+                "Test email",
+                "<html><body><h1>content string headline</h1></body></html>",
+                "2500",
+                "smtp");
+        String result = emailSender.send();
+
+        assertTrue(result, result.contains("Sent email message successfully"));
+
+        assertFalse(wiser.getMessages().isEmpty());
+
+        try {
+            MimeMessage msg = wiser.getMessages().get(0).getMimeMessage();
+
+            assertEquals("sender@gmail.com", msg.getFrom()[0].toString());
+            assertEquals("recipient@mail.com", msg.getAllRecipients()[0].toString());
+            assertEquals("Test email", msg.getSubject());
+            assertTrue(msg.getContent().toString(),
+                    msg.getContent().toString().contains("<html><body><h1>content string headline</h1></body></html>"));
+        } catch (MessagingException | IOException e) {
+            fail("Should not throw exception: " + e.getMessage());
+        }
     }
 }
