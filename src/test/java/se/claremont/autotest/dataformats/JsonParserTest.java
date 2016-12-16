@@ -6,9 +6,9 @@ import se.claremont.autotest.dataformats.JsonParser;
 /**
  * Created by jordam on 2016-10-28.
  */
-public class JsonParser_Tests {
+public class JsonParserTest {
 
-    String contentSample = "{\"menu\": {\n" +
+    private String contentSample = "{\"menu\": {\n" +
             "  \"id\": \"file\",\n" +
             "  \"value\": \"File\",\n" +
             "  \"popup\": {\n" +

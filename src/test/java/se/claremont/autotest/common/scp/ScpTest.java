@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * Created by magnusolsson on 2016-12-05.
  */
-public class Scp_Tests {
+public class ScpTest {
 
     @Test
     public void SftpUploadFileTest(){

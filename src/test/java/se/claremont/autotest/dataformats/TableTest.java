@@ -7,7 +7,7 @@ import se.claremont.autotest.support.SupportMethods;
 /**
  * Created by jordam on 2016-10-18.
  */
-public class Table_Tests {
+public class TableTest {
 
     @Test
     public void csvConstructor(){

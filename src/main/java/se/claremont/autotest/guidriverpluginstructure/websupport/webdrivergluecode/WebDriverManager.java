@@ -27,7 +27,7 @@ import java.util.List;
  * Created by jordam on 2016-09-13.
  */
 public class WebDriverManager {
-    TestCase testCase;
+    private TestCase testCase;
 
     public WebDriverManager(TestCase testCase){
         this.testCase = testCase;
@@ -119,7 +119,7 @@ public class WebDriverManager {
                 "Identified local browsers on execution machine:<br>" + SupportMethods.LF + "'" + String.join("'<br>" + SupportMethods.LF + "'", browserPaths) + "'<br>");
     }
 
-    public static List<File> scanComputerForBrowsersAndRegisterTheirLocations(List<String> fileNames){
+    private static List<File> scanComputerForBrowsersAndRegisterTheirLocations(List<String> fileNames){
         List<File> matchingFiles = null;
         if( Utils.getInstance().amIWindowsOS() )
             matchingFiles = FileTester.searchForSpecificFiles(new File("C:\\"), fileNames);
@@ -130,7 +130,7 @@ public class WebDriverManager {
 
     abstract class Browser{
         TestCase testCase;
-        public Browser(TestCase testCase){
+        Browser(TestCase testCase){
             this.testCase = testCase;
         }
 
@@ -141,7 +141,7 @@ public class WebDriverManager {
     }
 
     class ChromeBrowser extends Browser{
-        public ChromeBrowser(TestCase testCase){
+        ChromeBrowser(TestCase testCase){
             super(testCase);
         }
         public @Override WebDriver setup(){
@@ -161,7 +161,7 @@ public class WebDriverManager {
     }
 
     class FirefoxBrowser extends Browser{
-        public FirefoxBrowser(TestCase testCase){
+        FirefoxBrowser(TestCase testCase){
             super(testCase);
         }
 
@@ -181,7 +181,7 @@ public class WebDriverManager {
     }
 
     class InternetExplorerBrowser extends Browser{
-        public InternetExplorerBrowser(TestCase testCase){ super(testCase);}
+        InternetExplorerBrowser(TestCase testCase){ super(testCase);}
 
         public @Override WebDriver setup(){
             WebDriver driver = null;
@@ -199,7 +199,7 @@ public class WebDriverManager {
     }
 
     class EdgeBrowser extends Browser{
-        public EdgeBrowser(TestCase testCase) {super(testCase);}
+        EdgeBrowser(TestCase testCase) {super(testCase);}
 
         public WebDriver setup(){
             WebDriver driver = null;
@@ -217,7 +217,7 @@ public class WebDriverManager {
     }
 
     class OperaBrowser extends Browser{
-        public OperaBrowser(TestCase testCase) { super(testCase);}
+        OperaBrowser(TestCase testCase) { super(testCase);}
 
         public WebDriver setup(){
             WebDriver driver = null;
@@ -236,7 +236,7 @@ public class WebDriverManager {
     }
 
     class MarionetteBrowser extends Browser{
-        public MarionetteBrowser (TestCase testCase) { super(testCase);}
+        MarionetteBrowser (TestCase testCase) { super(testCase);}
 
         public WebDriver setup(){
             WebDriver driver = null;
@@ -255,7 +255,7 @@ public class WebDriverManager {
     }
 
     class PhantomJsBrowser  extends Browser{
-        public PhantomJsBrowser(TestCase testCase) { super(testCase);}
+        PhantomJsBrowser(TestCase testCase) { super(testCase);}
 
         public WebDriver setup(){
             WebDriver driver = null;

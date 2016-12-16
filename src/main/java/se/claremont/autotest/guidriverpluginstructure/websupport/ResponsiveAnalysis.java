@@ -22,13 +22,11 @@ public class ResponsiveAnalysis {
 
     private final static Logger logger = LoggerFactory.getLogger( ResponsiveAnalysis.class );
 
-    List<ResolutionAssessment> elementCollections = new ArrayList<>();
+    private List<ResolutionAssessment> elementCollections = new ArrayList<>();
     //List<CompareElement> oddElements = new ArrayList<>();
-    TestCase testCase;
-    WebDriver driver;
-    List<Dimension> resolutions;
-    int imagecounter = 0;
-    List<ReportableElement> reportableElements = new ArrayList<>();
+    private TestCase testCase;
+    private WebDriver driver;
+    private List<Dimension> resolutions;
 
     public ResponsiveAnalysis(WebDriver driver, List<Dimension> resolutions, TestCase testCase){
         this.testCase = testCase;
@@ -79,47 +77,6 @@ public class ResponsiveAnalysis {
         for(ReportableElement deviatingElement : deviatingElementsList){
             testCase.log(LogLevel.INFO, "Found deviating element with innerHTML '" + deviatingElement.assessmentElement.innerHtml + "'.");
         }
-    }
-
-    private void report(){
-        /*
-        StringBuilder text = new StringBuilder();
-        StringBuilder html = new StringBuilder();
-        html.append("Differenting elements found in responsive web analysis:<br>").append(SupportMethods.LF);
-        html.append("<table>").append(SupportMethods.LF);
-        html.append("<tr>").append(SupportMethods.LF);
-        html.append("<td>Text</td><td>Size</td>");
-        for(Dimension resolution : resolutions){
-            html.append("<td>").append(resolution.width).append("x").append(resolution.height).append("</td>");
-        }
-        html.append("<td>Image</td>").append(SupportMethods.LF);
-        html.append("</tr>").append(SupportMethods.LF);
-
-        text.append("Differenting elements found in responsive web analysis:" + SupportMethods.LF);
-        for(ReportableElement reportableElement : reportableElements){
-            //saveImage(reportableElement.compareElement, "C:\\Temp\\ResolitionFile" + imagecounter + ".png", );
-            html.append("<tr>").append(SupportMethods.LF);
-            String elementText = "<td>" + reportableElement.compareElement.text + "</td>";
-            if(reportableElement.compareElement.text.length() > 50){
-                elementText = "<td title='" + reportableElement.compareElement.text.replace("'", "\"") + "'>" + reportableElement.compareElement.text.substring(0,46) + "...</td>";
-            }
-            html.append(elementText).append("<td>").append(reportableElement.compareElement.size.width).append("x").append(reportableElement.compareElement.size.height).append("</td>");
-            for(Dimension resolution : resolutions){
-                if(reportableElement.resolutions.contains(resolution)){
-                    html.append("<td>Yes</td>");
-                } else {
-                    html.append("<td>No</td>");
-                }
-            }
-            html.append("<td><img src=\"file://c/Temp/ResolutionFile").append(imagecounter).append(".png\" alt=\"elementimage\"></td>");
-            html.append(SupportMethods.LF);
-            html.append("</tr>").append(SupportMethods.LF);
-            imagecounter++;
-            text.append(reportableElement.compareElement.toString()).append(" - image found at 'C:\\Temp\\ResolutionFile").append(imagecounter).append(".png'.").append(SupportMethods.LF);
-        }
-        html.append("</table>").append(SupportMethods.LF);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, text.toString(), html.toString());
-        */
     }
 
     private boolean setBrowserSizeAndReturnTrueIfSuccessful(Dimension browserSize){
@@ -200,44 +157,6 @@ public class ResponsiveAnalysis {
         elementCollections.add(resolutionAssessment);
     }
 
-    /*
-    class CompareElement{
-        Dimension resolution = null;
-        Dimension size = new Dimension(0,0);
-        Point position = new Point(0,0);
-        String text = "";
-        String innerHtml = "";
-        WebElement webElement = null;
-
-        public CompareElement(WebElement webElement, Dimension resolution){
-            try {
-                this.size = webElement.getSize();
-            }catch (Exception ignored1){}
-            try {
-                this.text = webElement.getText();
-            }catch (Exception ignored2){}
-            try {
-                this.webElement = webElement;
-            }catch (Exception ignored2){}
-            try {
-                this.position = webElement.getLocation();
-            }catch (Exception ignored3){}
-            try {
-                this.innerHtml = webElement.getAttribute("innerHTML");
-            }catch (Exception ignored4){}
-            this.resolution = resolution;
-        }
-
-        public @Override String toString(){
-            return "[Text='" + text + "', size='" + size.width + "x" + size.height + "', resolution='" + resolution.width + "x" + resolution.height +"']";
-        }
-
-        public boolean isSameAs(CompareElement compareElement){
-            return (size.equals(compareElement.size) && text.equals(compareElement.text));
-        }
-
-    }
-*/
     class AssessmentElement{
         Dimension size = new Dimension(0,0);
         Point position = new Point(0,0);
@@ -246,7 +165,7 @@ public class ResponsiveAnalysis {
         List<WebElement> immediateChildren = new ArrayList<>();
         List<AssessmentElement> assessmentChildElements = new ArrayList<>();
 
-        public AssessmentElement(WebElement webElement){
+        AssessmentElement(WebElement webElement){
             element = webElement;
             immediateChildren.addAll(webElement.findElements(By.xpath("*")));
             innerHtml = element.getAttribute("innerHTML");
@@ -272,7 +191,7 @@ public class ResponsiveAnalysis {
             return "[Visible immediate children count: " + assessmentChildElements.size() + ", hidden immediate children count: " + (immediateChildren.size() - assessmentChildElements.size()) + ", size: " + size.width + "x" + size.height + ", position: " + position.getX() + "x" + position.getY() + ", innerHTML: '" + StringManagement.htmlContentToDisplayableHtmlCode(innerHtml) + "']";
         }
 
-        public boolean innerHtmlIsSame(AssessmentElement assessmentElement){
+        boolean innerHtmlIsSame(AssessmentElement assessmentElement){
             return innerHtml.equals(assessmentElement.innerHtml);
         }
 
@@ -300,7 +219,7 @@ public class ResponsiveAnalysis {
         }
 
 
-        public List<AssessmentElement> getChildrenWithDeviatingInnerHtmlFromChildElementsOfRootElement(AssessmentElement assessmentElement){
+        List<AssessmentElement> getChildrenWithDeviatingInnerHtmlFromChildElementsOfRootElement(AssessmentElement assessmentElement){
             List<AssessmentElement> returnObjectList = new ArrayList<>();
             List<AssessmentElement> oddElements = new ArrayList<>();
             List<AssessmentElement> foreignOddElements = new ArrayList<>();
@@ -319,11 +238,11 @@ public class ResponsiveAnalysis {
             return returnObjectList;
         }
 
-        public int immediateChildrenCount(){
+        int immediateChildrenCount(){
             return assessmentChildElements.size();
         }
 
-        public int childrenInSubTreeCount(){
+        int childrenInSubTreeCount(){
             int count = immediateChildrenCount();
             for(AssessmentElement e : assessmentChildElements){
                 count += e.childrenInSubTreeCount();
@@ -331,7 +250,7 @@ public class ResponsiveAnalysis {
             return count;
         }
 
-        public String allChildrenInSubTreeToString(){
+        String allChildrenInSubTreeToString(){
             String text = this.toString() + SupportMethods.LF;
             for(AssessmentElement e : assessmentChildElements){
                 text += e.allChildrenInSubTreeToString();
@@ -339,7 +258,7 @@ public class ResponsiveAnalysis {
             return text;
         }
 
-        public boolean hasSameElementInSubtreeOf(AssessmentElement assessmentElement){
+        boolean hasSameElementInSubtreeOf(AssessmentElement assessmentElement){
             boolean found = false;
             if(this.isEqualTo(assessmentElement)) return true;
             for(AssessmentElement e : assessmentChildElements){
@@ -348,7 +267,7 @@ public class ResponsiveAnalysis {
             return found;
         }
 
-        public List<AssessmentElement> toListOfAssessmentElementsIncludingSubtree(){
+        List<AssessmentElement> toListOfAssessmentElementsIncludingSubtree(){
             List<AssessmentElement> returnList = new ArrayList<>();
             returnList.add(this);
             for(AssessmentElement e : assessmentChildElements){
@@ -366,7 +285,7 @@ public class ResponsiveAnalysis {
             return found;
         }
 
-        public boolean isEqualToButRescaledComparedTo(AssessmentElement assessmentElement){
+        boolean isEqualToButRescaledComparedTo(AssessmentElement assessmentElement){
             return (size != assessmentElement.size && innerHtml.equals(assessmentElement.innerHtml));
         }
 
@@ -384,7 +303,7 @@ public class ResponsiveAnalysis {
             return false;
         }
 
-        public boolean isEqualTo(AssessmentElement assessmentElement){
+        boolean isEqualTo(AssessmentElement assessmentElement){
             return (innerHtml.equals(assessmentElement.innerHtml) && size.equals(assessmentElement.size));
         }
     }
@@ -393,7 +312,7 @@ public class ResponsiveAnalysis {
         ResolutionAssessment resolutionAssessments;
         AssessmentElement assessmentElement;
 
-        public ReportableElement(AssessmentElement assessmentElement, ResolutionAssessment resolutionAssessment){
+        ReportableElement(AssessmentElement assessmentElement, ResolutionAssessment resolutionAssessment){
             this.assessmentElement = assessmentElement;
             this.resolutionAssessments = resolutionAssessment;
         }
@@ -424,7 +343,7 @@ public class ResponsiveAnalysis {
             return sb.toString();
         }
 
-        public boolean containElement(AssessmentElement assessmentElement){
+        boolean containElement(AssessmentElement assessmentElement){
             for(AssessmentElement assessmentElement2 : this.displayedElementsTreeRootNode.toListOfAssessmentElementsIncludingSubtree()){
                 if(assessmentElement.isEqualTo(assessmentElement2)) {
                     return true;

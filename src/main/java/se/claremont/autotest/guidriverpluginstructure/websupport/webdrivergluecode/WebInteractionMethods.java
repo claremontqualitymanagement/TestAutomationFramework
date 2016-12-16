@@ -76,6 +76,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Remote WebDriver enabled constructor. Example of usages: BrowserStack.
      *
      * @param testCase The test case to log errors to.
+     * @param url url to remote web driver
      * @param desiredCapabilites The desired capabilities of the browser driver to use.
      */
     public WebInteractionMethods(TestCase testCase, URL url, DesiredCapabilities desiredCapabilites){
@@ -499,6 +500,7 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Saves a screenshot of the web browser content to the testCaseLog folder and writes a testCaseLog post about it.
      * Used for provide debugging information when execution or verification problems (or errors) occur.
+     * @param relevantWebElementToMarkWithBorder relevantWebElementToMarkWithBorder
      */
     @SuppressWarnings("WeakerAccess")
     public void saveScreenshot(WebElement relevantWebElementToMarkWithBorder){

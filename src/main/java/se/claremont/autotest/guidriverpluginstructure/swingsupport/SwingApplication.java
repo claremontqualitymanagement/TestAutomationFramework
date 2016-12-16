@@ -8,9 +8,9 @@ import java.awt.*;
  * Created by jordam on 2016-11-01.
  */
 public class SwingApplication {
-    Frame frame;
-    FrameFixture frameFixture;
-    double timeoutInMiliseconds = 10000;
+    private Frame frame;
+    private FrameFixture frameFixture;
+    private double timeoutInMiliseconds = 10000;
 
     public SwingApplication(Frame frame){
         this.frame = frame;
