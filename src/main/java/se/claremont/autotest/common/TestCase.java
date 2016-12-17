@@ -75,10 +75,8 @@ public class TestCase {
         ApplicationManager applicationManager = new ApplicationManager(this);
         List<String> currentProcessesRunning = applicationManager.listActiveRunningProcessesOnLocalMachine();
 
-        List<String> copyOfCurrentProcesses = new ArrayList<>();
-        copyOfCurrentProcesses.addAll(currentProcessesRunning);
-        List<String> copyOfProcessListAtStart = new ArrayList<>();
-        copyOfProcessListAtStart.addAll(processesRunningAtTestCaseStart);
+        List<String> copyOfCurrentProcesses = new ArrayList<>(currentProcessesRunning);
+        List<String> copyOfProcessListAtStart = new ArrayList<>(processesRunningAtTestCaseStart);
 
         for(int i = 0; i < copyOfCurrentProcesses.size(); i++){
             for(int j = 0; j < copyOfProcessListAtStart.size(); j++){
@@ -100,7 +98,7 @@ public class TestCase {
         StringBuilder sb = new StringBuilder();
         sb.append("Process(es) added since test case start: '").append(String.join("', '", copyOfCurrentProcesses)).append("'.").append(SupportMethods.LF);
         sb.append("Process(es) that has exited since test case start: '").append(String.join("', '", copyOfProcessListAtStart)).append("'.").append(SupportMethods.LF);
-        if(copyOfProcessListAtStart.size() > 0 || copyOfCurrentProcesses.size() > 0){
+        if(!copyOfProcessListAtStart.isEmpty() || !copyOfCurrentProcesses.isEmpty()){
             log(LogLevel.INFO, "Running process list deviation since test case start:" + SupportMethods.LF + sb.toString());
         } else {
             log(LogLevel.DEBUG, "No changes to what processes are running, from test case start until now, could be detected.");

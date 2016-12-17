@@ -127,13 +127,17 @@ public class TestCase_Tests {
         testCase.writeProcessListDeviationsFromSystemStartToLog();
 
         boolean logRowAboutNoChangesToRunningProcessesFound = false;
-                for(LogPost logPost : testCase.testCaseLog.logPosts){
+
+        for(LogPost logPost : testCase.testCaseLog.logPosts){
             if(logPost.message.contains("No changes to what processes are running, from test case start until now, could be detected.")){
                 logRowAboutNoChangesToRunningProcessesFound = true;
                 break;
             }
         }
-        Assert.assertTrue(logRowAboutNoChangesToRunningProcessesFound);
+
+        Assert.assertTrue(
+                testCase.testCaseLog.logPosts.toString(),
+                logRowAboutNoChangesToRunningProcessesFound);
     }
 
     @Test
