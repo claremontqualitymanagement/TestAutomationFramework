@@ -23,14 +23,14 @@ public class SummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(summaryReport.successfulTestCases == 1);
-        Assert.assertTrue(summaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(summaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(1, summaryReport.successfulTestCases);
+        Assert.assertEquals(0, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -42,14 +42,14 @@ public class SummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(summaryReport.successfulTestCases == 0);
-        Assert.assertTrue(summaryReport.failedTestCasesWithNewDeviations == 1);
-        Assert.assertTrue(summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(summaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 1);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(0, summaryReport.successfulTestCases);
+        Assert.assertEquals(1, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -62,14 +62,14 @@ public class SummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(summaryReport.successfulTestCases == 0);
-        Assert.assertTrue(summaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(summaryReport.testCasesWithOnlyKnownErrors == 1);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 1);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(0, summaryReport.successfulTestCases);
+        Assert.assertEquals(0, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(1, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(1, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -82,14 +82,14 @@ public class SummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(summaryReport.successfulTestCases == 1);
-        Assert.assertTrue(summaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(summaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(1, summaryReport.successfulTestCases);
+        Assert.assertEquals(0, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -102,14 +102,14 @@ public class SummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(summaryReport.successfulTestCases == 0);
-        Assert.assertTrue("New deviations count was expected to be 1 but was " + summaryReport.failedTestCasesWithNewDeviations + ".", summaryReport.failedTestCasesWithNewDeviations == 1);
-        Assert.assertTrue("Unevaluated count was expected to be 0 but was " + summaryReport.unevaluatedCount + ".", summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue("Test cases with both new and known bugs count was expected to be 0 but was " + summaryReport.testCasesWithBothNewAndKnownErrors + ".", summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue("Test cases count for test cases with only known errors was expected to be 0 but was " + summaryReport.testCasesWithOnlyKnownErrors + ".", summaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 1);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(0, summaryReport.successfulTestCases);
+        Assert.assertEquals(1, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -124,14 +124,14 @@ public class SummaryReport_Tests {
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
         summaryReport.evaluateTestSet(testSet);
-        Assert.assertTrue(summaryReport.successfulTestCases == 0);
-        Assert.assertTrue(summaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(summaryReport.testCasesWithOnlyKnownErrors == 1);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 1);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(0, summaryReport.successfulTestCases);
+        Assert.assertEquals(0, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(1, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(1, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -146,14 +146,14 @@ public class SummaryReport_Tests {
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
         summaryReport.evaluateTestSet(testSet);
-        Assert.assertTrue(summaryReport.successfulTestCases == 1);
-        Assert.assertTrue(summaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(summaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(1, summaryReport.successfulTestCases);
+        Assert.assertEquals(0, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -168,14 +168,14 @@ public class SummaryReport_Tests {
         testCase.evaluateResultStatus();
         summaryReport.evaluateTestCase(testCase);
         summaryReport.evaluateTestSet(testSet);
-        Assert.assertTrue(summaryReport.successfulTestCases == 0);
-        Assert.assertTrue("New deviations count was expected to be 1 but was " + summaryReport.failedTestCasesWithNewDeviations + ".", summaryReport.failedTestCasesWithNewDeviations == 1);
-        Assert.assertTrue("Unevaluated count was expected to be 0 but was " + summaryReport.unevaluatedCount + ".", summaryReport.unevaluatedCount == 0);
-        Assert.assertTrue("Test cases with both new and known bugs count was expected to be 0 but was " + summaryReport.testCasesWithBothNewAndKnownErrors + ".", summaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue("Test cases count for test cases with only known errors was expected to be 0 but was " + summaryReport.testCasesWithOnlyKnownErrors + ".", summaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(summaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(summaryReport.newErrorInfos.size() == 1);
-        Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(0, summaryReport.successfulTestCases);
+        Assert.assertEquals(1, summaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, summaryReport.unevaluatedCount);
+        Assert.assertEquals(0, summaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, summaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, summaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, summaryReport.solvedKnownErrorsList.size());
     }
 
 }
