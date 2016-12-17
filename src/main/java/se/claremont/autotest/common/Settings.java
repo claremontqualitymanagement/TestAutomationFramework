@@ -89,8 +89,12 @@ public class Settings extends HashMap<String, String>{
      */
     public void writeSettingsParametersToFile(String outputFilePath){
         StringBuilder stringBuilder = new StringBuilder();
-        for(String key : this.keySet()){
-            stringBuilder.append(key).append("=").append(this.get(key)).append(SupportMethods.LF);
+        for(Entry<String, String> entry : this.entrySet()){
+            stringBuilder.
+                    append(entry.getKey()).
+                    append("=").
+                    append(entry.getValue()).
+                    append(SupportMethods.LF);
         }
         SupportMethods.saveToFile(stringBuilder.toString(), outputFilePath);
     }

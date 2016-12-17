@@ -14,19 +14,20 @@ public class TestCaseLog_Tests {
     public void logInstantiationNotNull(){
         TestCaseLog testCaseLog = new TestCaseLog("logInstantiationNotNull");
         Assert.assertNotNull("New TestCaseLog() was null", testCaseLog.logPosts);
+        Assert.assertTrue("New TestCaseLog() was not empty", testCaseLog.logPosts.isEmpty());
     }
 
     @Test
     public void logInstantiationLogEmpty(){
         TestCaseLog testCaseLog = new TestCaseLog("logInstantiationLogEmpty");
-        Assert.assertTrue("New TestCaseLog() has no attached testCaseLog list.", testCaseLog.logPosts.size() == 0);
+        Assert.assertTrue("New TestCaseLog() has no attached testCaseLog list.", testCaseLog.logPosts.isEmpty());
     }
 
     @Test
     public void logging(){
         TestCaseLog testCaseLog = new TestCaseLog("logging");
         testCaseLog.log(LogLevel.DEBUG, "Testing");
-        Assert.assertTrue("New TestCaseLog() didn't have logged item.", testCaseLog.logPosts.size() == 1);
+        Assert.assertEquals("New TestCaseLog() didn't have logged item.", 1, testCaseLog.logPosts.size());
         for(LogPost logPost : testCaseLog.logPosts){
             Assert.assertTrue("Correct testCaseLog post couldn't be matched.", logPost.toString().contains("Testing"));
         }
@@ -47,9 +48,9 @@ public class TestCaseLog_Tests {
             testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Testing DEBUG");
 
         } catch (Exception e){
-            Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
+            Assert.fail("Couldn't register some LogLevel testCaseLog post: " + e.getMessage());
         }
-        Assert.assertTrue("New TestCaseLog() didn't have all logged items.", testCaseLog.logPosts.size() == 9);
+        Assert.assertEquals("New TestCaseLog() didn't have all logged items.",  9,testCaseLog.logPosts.size());
     }
     @Test
     public void logHasEncounteredErrorTest(){
@@ -66,7 +67,7 @@ public class TestCaseLog_Tests {
             testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Testing DEBUG");
 
         } catch (Exception e){
-            Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
+            Assert.fail("Couldn't register some LogLevel testCaseLog post: " + e.getMessage());
         }
         Assert.assertTrue("New TestCaseLog() didn't report that it had encountered errors when it actually had errors.", testCaseLog.hasEncounteredErrors());
     }
@@ -86,16 +87,16 @@ public class TestCaseLog_Tests {
             testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Testing DEBUG");
 
         } catch (Exception e){
-            Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
+            Assert.fail("Couldn't register some LogLevel testCaseLog post: " + e.getMessage());
         }
-        Assert.assertTrue("New TestCaseLog() didn't have all logged items.", testCaseLog.onlyErroneousLogPosts().size() == 4);
+        Assert.assertEquals("New TestCaseLog() didn't have all logged items.", 4, testCaseLog.onlyErroneousLogPosts().size());
     }
 
     @Test
     public void logDifferentlyToTextAndHtmlTestLogging(){
         TestCaseLog testCaseLog = new TestCaseLog("logDifferentlyToTextAndHtmlTestLogging");
         testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Testing", "<p><b>TestingHtml</b></p>");
-        Assert.assertTrue("Logging html and text at the same time resulted in more than one testCaseLog post.", testCaseLog.logPosts.size() == 1);
+        Assert.assertEquals("Logging html and text at the same time resulted in more than one testCaseLog post.", 1, testCaseLog.logPosts.size());
     }
 
     @Test
@@ -158,20 +159,20 @@ public class TestCaseLog_Tests {
     public void methodFirstErroneousLogPostShouldReturnNullOnNoErrors(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         testCaseLog.log(LogLevel.DEBUG, "Debug");
-        Assert.assertTrue(testCaseLog.firstNonSuccessfulLogPost() == null);
+        Assert.assertNull(testCaseLog.firstNonSuccessfulLogPost());
     }
 
     @Test
     public void methodHasEncounteredErrorShouldReturnFalseOnEmpty(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
-        Assert.assertTrue(testCaseLog.hasEncounteredErrors() == false);
+        Assert.assertFalse(testCaseLog.hasEncounteredErrors());
     }
 
     @Test
     public void methodHasEncounteredErrorShouldReturnFalseOnNoErrors(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         testCaseLog.log(LogLevel.DEBUG, "Debug");
-        Assert.assertTrue(testCaseLog.hasEncounteredErrors() == false);
+        Assert.assertFalse(testCaseLog.hasEncounteredErrors());
     }
 
     @Test
@@ -208,7 +209,7 @@ public class TestCaseLog_Tests {
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTED, "Section1 message", "Html Section1 message", "Test case 1", "Test step 1", "Test step class name 1"));
         testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTED, "Section2 message", "Html Section2 message", "Test case 1", "Test step 2", "Test step class name 2"));
-        Assert.assertTrue(testCaseLog.toLogSections().size() == 2);
+        Assert.assertEquals(2, testCaseLog.toLogSections().size());
     }
 
     @Test
