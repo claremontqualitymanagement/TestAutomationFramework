@@ -23,14 +23,14 @@ public class HtmlSummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 1);
-        Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(1, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals(0, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -42,14 +42,14 @@ public class HtmlSummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
-        Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 1);
-        Assert.assertTrue(htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 1);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(0, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals(1, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -62,14 +62,14 @@ public class HtmlSummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
-        Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithOnlyKnownErrors == 1);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 1);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(0, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals(0, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(1, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(1, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -82,14 +82,14 @@ public class HtmlSummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 1);
-        Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(1, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals(0, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -102,14 +102,14 @@ public class HtmlSummaryReport_Tests {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
-        Assert.assertTrue("New deviations count was expected to be 1 but was " + htmlSummaryReport.failedTestCasesWithNewDeviations + ".", htmlSummaryReport.failedTestCasesWithNewDeviations == 1);
-        Assert.assertTrue("Unevaluated count was expected to be 0 but was " + htmlSummaryReport.unevaluatedCount + ".", htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue("Test cases with both new and known bugs count was expected to be 0 but was " + htmlSummaryReport.testCasesWithBothNewAndKnownErrors + ".", htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue("Test cases count for test cases with only known errors was expected to be 0 but was " + htmlSummaryReport.testCasesWithOnlyKnownErrors + ".", htmlSummaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 1);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(0, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals("New deviations count was expected to be 1 but was " + htmlSummaryReport.failedTestCasesWithNewDeviations + ".", 1, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals("Unevaluated count was expected to be 0 but was " + htmlSummaryReport.unevaluatedCount + ".",0,  htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals("Test cases with both new and known bugs count was expected to be 0 but was " + htmlSummaryReport.testCasesWithBothNewAndKnownErrors + ".",0,  htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals("Test cases count for test cases with only known errors was expected to be 0 but was " + htmlSummaryReport.testCasesWithOnlyKnownErrors + ".",0, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -124,14 +124,14 @@ public class HtmlSummaryReport_Tests {
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         htmlSummaryReport.evaluateTestSet(testSet);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
-        Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithOnlyKnownErrors == 1);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 1);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 0);
+        Assert.assertEquals(0, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals(0, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(1, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(1, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -146,14 +146,14 @@ public class HtmlSummaryReport_Tests {
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         htmlSummaryReport.evaluateTestSet(testSet);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 1);
-        Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
-        Assert.assertTrue(htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(1, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals(0, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals(0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(0, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
     @Test
@@ -168,14 +168,14 @@ public class HtmlSummaryReport_Tests {
         testCase.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         htmlSummaryReport.evaluateTestSet(testSet);
-        Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
-        Assert.assertTrue("New deviations count was expected to be 1 but was " + htmlSummaryReport.failedTestCasesWithNewDeviations + ".", htmlSummaryReport.failedTestCasesWithNewDeviations == 1);
-        Assert.assertTrue("Unevaluated count was expected to be 0 but was " + htmlSummaryReport.unevaluatedCount + ".", htmlSummaryReport.unevaluatedCount == 0);
-        Assert.assertTrue("Test cases with both new and known bugs count was expected to be 0 but was " + htmlSummaryReport.testCasesWithBothNewAndKnownErrors + ".", htmlSummaryReport.testCasesWithBothNewAndKnownErrors == 0);
-        Assert.assertTrue("Test cases count for test cases with only known errors was expected to be 0 but was " + htmlSummaryReport.testCasesWithOnlyKnownErrors + ".", htmlSummaryReport.testCasesWithOnlyKnownErrors == 0);
-        Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
-        Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 1);
-        Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 1);
+        Assert.assertEquals(0, htmlSummaryReport.successfulTestCases);
+        Assert.assertEquals("New deviations count was expected to be 1 but was " + htmlSummaryReport.failedTestCasesWithNewDeviations + ".", 1, htmlSummaryReport.failedTestCasesWithNewDeviations);
+        Assert.assertEquals("Unevaluated count was expected to be 0 but was " + htmlSummaryReport.unevaluatedCount + ".", 0, htmlSummaryReport.unevaluatedCount);
+        Assert.assertEquals("Test cases with both new and known bugs count was expected to be 0 but was " + htmlSummaryReport.testCasesWithBothNewAndKnownErrors + ".", 0, htmlSummaryReport.testCasesWithBothNewAndKnownErrors);
+        Assert.assertEquals("Test cases count for test cases with only known errors was expected to be 0 but was " + htmlSummaryReport.testCasesWithOnlyKnownErrors + ".", 0, htmlSummaryReport.testCasesWithOnlyKnownErrors);
+        Assert.assertEquals(0, htmlSummaryReport.encounteredKnownErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.newErrorInfos.size());
+        Assert.assertEquals(1, htmlSummaryReport.solvedKnownErrorsList.size());
     }
 
 }
