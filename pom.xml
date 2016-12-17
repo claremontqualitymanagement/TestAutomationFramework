@@ -18,6 +18,8 @@
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
+        <jsch.version>0.1.53</jsch.version>
+        <ant-jsch.version>1.6.5</ant-jsch.version>
     </properties>
 
     <licenses>
@@ -45,13 +47,6 @@
             <name>Apache-SVN</name>
             <url>https://svn.apache.org/viewvc/maven</url>
         </repository>
-        <!--
-        <repository>
-            <id>repo</id>
-            <name>repo</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-        -->
         <repository>
             <id>mvnrepository.com</id>
             <name>MVNRepository</name>
@@ -71,53 +66,16 @@
             </snapshots>
             <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
         </repository>
-        <!--
-        <repository>
-            <id>github</id>
-            <name>github</name>
-            <url>https://github.com/</url>
-        </repository>
-        -->
-        <!--
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        -->
     </repositories>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>http://repo1.maven.org/maven2</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>mvnrepo</id>
-            <name>MVNrepository</name>
-            <url>http://mvnrepository.com</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>github</id>
-            <name>github</name>
-            <url>https://github.com/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-
     <dependencies>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <!--<version>2.53.1</version>-->
-            <version>LATEST</version>
-        </dependency>
-        <!-- For REST interactions -->
+        <!-- REST CLIENT -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.4.1</version>
         </dependency>
+        
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -125,20 +83,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>mockwebserver</artifactId>
-            <version>3.4.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160810</version>
-        </dependency>
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
         </dependency>
         <!-- For mail sending of reports -->
         <dependency>
@@ -146,34 +93,26 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.23.2</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>2.23.2</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-jdk-http -->
+
+        <!-- REST SERVER  -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-jdk-http</artifactId>
             <version>2.23.2</version>
         </dependency>
+        <!-- SWING SUPPORT -->
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
             <version>1.2.1</version>
         </dependency>
+        <!-- WEB DRIVER SUPPORT -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>1.4.10</version>
         </dependency>
+        <!-- UNIT TESTING -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -185,27 +124,44 @@
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support -->
+        <!-- SELENIUM -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-support</artifactId>
-            <version>2.53.1</version>
+            <version>3.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+
+        <!-- DOESNT SEEM TO BE USED -->
         <!--
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>LATEST</version>
-            <scope>test</scope>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.23.2</version>
         </dependency>
-        -->
-        <!--
         <dependency>
-            <groupId>com.github.claremontqualitymanagement</groupId>
-            <artifactId>TestAutomationFramework</artifactId>
-            <version>v1.0.1-beta28</version>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>2.23.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
         </dependency>
         -->
+
+        <!-- LOGGING -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -216,26 +172,31 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.21</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.6.2</version>
-        </dependency>
+
+        <!-- SSH -->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>0.1.53</version>
+            <version>${jsch.version}</version>
         </dependency>
         <dependency>
             <groupId>ant</groupId>
             <artifactId>ant-jsch</artifactId>
-            <version>1.6.5</version>
+            <version>${ant-jsch.version}</version>
         </dependency>
 
+        <!-- TEST -->
+        <!-- EMBEDDED MAIL SERVER -->
         <dependency>
             <groupId>org.subethamail</groupId>
             <artifactId>subethasmtp</artifactId>
             <version>3.1.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>3.4.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -295,7 +256,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -388,14 +349,14 @@
                         </configuration>
                         <dependencies>
                             <dependency>
-                                <groupId>ant</groupId>
-                                <artifactId>ant-jsch</artifactId>
-                                <version>1.6.5</version>
-                            </dependency>
-                            <dependency>
                                 <groupId>com.jcraft</groupId>
                                 <artifactId>jsch</artifactId>
-                                <version>0.1.53</version>
+                                <version>${jsch.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>ant</groupId>
+                                <artifactId>ant-jsch</artifactId>
+                                <version>${ant-jsch.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
