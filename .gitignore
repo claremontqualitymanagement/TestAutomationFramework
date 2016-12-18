@@ -6,7 +6,7 @@ doc
 **/out
 **/*.iml
 TestAutomationFramework/src/main/resources/drivers
-**/TAF/
+TestAutomationFramework/TAF/
 *.log*
 .gradle
 build
