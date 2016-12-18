@@ -75,4 +75,13 @@
     <modules>
         <module>TestAutomationFramework</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <modules>
+                <module>TestExamples</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

@@ -5,7 +5,7 @@ doc
 .idea
 TestAutomationFramework.iml
 out
-.iml
+**/*.iml
 TestAutomationFramework/src/main/resources/drivers
 TAF
 *.log*
