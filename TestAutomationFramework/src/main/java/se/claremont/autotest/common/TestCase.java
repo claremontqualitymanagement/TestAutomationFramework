@@ -1,7 +1,6 @@
 package se.claremont.autotest.common;
 
 import org.junit.Assert;
-import org.junit.Assume;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;

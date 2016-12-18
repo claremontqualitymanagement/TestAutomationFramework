@@ -6,7 +6,7 @@ doc
 TestAutomationFramework.iml
 out
 .iml
-src/main/resources/drivers
+TestAutomationFramework/src/main/resources/drivers
 TAF
 *.log*
 .gradle
