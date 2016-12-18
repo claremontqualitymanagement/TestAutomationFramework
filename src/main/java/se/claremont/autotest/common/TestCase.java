@@ -289,7 +289,7 @@ public class TestCase {
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         } else if (newErrorsEncountered){
             resultStatus = ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
-            String message = "  ٩(͡๏̯͡๏)۶\tDeviations not marked as known was found for test case '" + testName + "'.";
+            String message = "   ٩(͡๏̯͡๏)۶\tDeviations not marked as known was found for test case '" + testName + "'.";
             System.out.println(message);
             testCaseLog.log(LogLevel.INFO, message);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
@@ -306,17 +306,17 @@ public class TestCase {
      * Also halts further test case execution.
      */
     private void assertExecutionResultsToTestRunner(){
-        if(resultStatus == ResultStatus.UNEVALUATED)
+        if(ResultStatus.UNEVALUATED.equals(resultStatus))
             evaluateResultStatus();
-        if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
-            Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
-            if( resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
+        if(ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.equals(resultStatus) || ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.equals(resultStatus)){
+            Assert.fail(SupportMethods.LF + testCaseLog.toString());
+            if( ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.equals(resultStatus) )
                 TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
             else
                 TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
-        } else if(resultStatus == ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
-            Assume.assumeTrue(false);
-            Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
+        } else if(ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.equals(resultStatus)){
+            //Assume.assumeTrue(false);
+            Assert.fail(SupportMethods.LF + testCaseLog.toString());
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         }
     }

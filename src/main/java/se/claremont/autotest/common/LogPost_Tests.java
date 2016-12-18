@@ -3,6 +3,9 @@ package se.claremont.autotest.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests for the LogPost class
  *
@@ -107,5 +110,37 @@ public class LogPost_Tests {
     @Test
     public void isSimilarStringComparisonSuccessiveDataElement(){
         Assert.assertTrue(LogPost.isSimilar("text1 'data1' text2", "text1 'data2' text2"));
+    }
+
+    @Test
+    public void test_toJson() {
+        LogPost logPost = new LogPost(
+                LogLevel.INFO,
+                "MESSAGE",
+                "HTMLMESSAGE",
+                "TESTCASENAME",
+                "TESTSTEPNAME",
+                "TESTSTEPCLASSNAME");
+
+        String json = logPost.toJson();
+
+        assertNotNull(json);
+        assertFalse(json.isEmpty());
+    }
+
+    @Test
+    public void test_toHtmlTableRow() {
+        LogPost logPost = new LogPost(
+                LogLevel.INFO,
+                "MESSAGE",
+                "HTMLMESSAGE",
+                "TESTCASENAME",
+                "TESTSTEPNAME",
+                "TESTSTEPCLASSNAME");
+
+        String htmlTableRow = logPost.toHtmlTableRow();
+
+        assertNotNull(htmlTableRow);
+        assertFalse(htmlTableRow.isEmpty());
     }
 }
