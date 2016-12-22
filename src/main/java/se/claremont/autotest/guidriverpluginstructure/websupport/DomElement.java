@@ -3,6 +3,8 @@ package se.claremont.autotest.guidriverpluginstructure.websupport;
 import se.claremont.autotest.guidriverpluginstructure.GuiElement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,12 +40,11 @@ public class DomElement implements GuiElement {
      * @param identificationType what mechanism to use for identification
      */
     public DomElement (String recognitionString, IdentificationType identificationType){
-        this.recognitionStrings = new ArrayList<>();
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        name = callingMethodUsingConstructor.getMethodName();
-        page = callingMethodUsingConstructor.getClassName();
-        this.recognitionStrings.add(recognitionString);
+        this.name = callingMethodUsingConstructor.getMethodName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
         this.identificationType = identificationType;
     }
 
@@ -54,15 +55,12 @@ public class DomElement implements GuiElement {
      * @param identificationType The method of identification
      */
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType){
-        this.recognitionStrings = new ArrayList<>();
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        name = callingMethodUsingConstructor.getMethodName();
-        page = callingMethodUsingConstructor.getClassName();
-        for(String recognitionString : alternativeRecognitionStrings){
-            this.recognitionStrings.add(recognitionString);
-        }
+        this.name = callingMethodUsingConstructor.getMethodName();
+        this.page = callingMethodUsingConstructor.getClassName();
         this.identificationType = identificationType;
+        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
     }
 
     /**
@@ -72,12 +70,11 @@ public class DomElement implements GuiElement {
      * @param ordinalNumber The ordinal number of the occurance on the web page, if multiple matches for search criteria.
      */
     public DomElement (String recognitionString, IdentificationType identificationType, Integer ordinalNumber){
-        this.recognitionStrings = new ArrayList<>();
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        name = callingMethodUsingConstructor.getMethodName();
-        page = callingMethodUsingConstructor.getClassName();
-        this.recognitionStrings.add(recognitionString);
+        this.name = callingMethodUsingConstructor.getMethodName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
         this.ordinalNumber = ordinalNumber;
         this.identificationType = identificationType;
     }
@@ -90,15 +87,12 @@ public class DomElement implements GuiElement {
      * @param ordinalNumber The ordinal number of the occurance on the web page, if multiple matches for search criteria.
      */
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber){
-        this.recognitionStrings = new ArrayList<>();
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        name = callingMethodUsingConstructor.getMethodName();
+        this.name = callingMethodUsingConstructor.getMethodName();
         this.ordinalNumber = ordinalNumber;
-        page = callingMethodUsingConstructor.getClassName();
-        for(String recognitionString : alternativeRecognitionStrings){
-            this.recognitionStrings.add(recognitionString);
-        }
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
         this.identificationType = identificationType;
     }
 

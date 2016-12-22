@@ -1,11 +1,13 @@
 package se.claremont.autotest.restsupport;
 
+import okhttp3.Request;
+
 /**
  * Created by jordam on 2016-11-25.
  */
-public class RestGetRequest extends RestRequest {
+class RestGetRequest extends RestRequest {
 
-    public RestGetRequest(String url){
+    RestGetRequest(String url){
         super(url);
     }
 

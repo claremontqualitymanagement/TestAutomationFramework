@@ -7,9 +7,9 @@ import okhttp3.RequestBody;
 /**
  * Created by jordam on 2016-11-25.
  */
-public class RestPutRequest extends RestRequest {
+class RestPutRequest extends RestRequest {
 
-    public RestPutRequest(String url, String mediaType, String data){
+    RestPutRequest(String url, String mediaType, String data){
         super(url, mediaType, data);
         builder = new Request.Builder().put(RequestBody.create(MediaType.parse(mediaType), data)).url(url);
     }

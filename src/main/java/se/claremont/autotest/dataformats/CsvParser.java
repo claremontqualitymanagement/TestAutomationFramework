@@ -45,7 +45,7 @@ public class CsvParser {
         csvContent = new Table(headlines, dataRows);
     }
 
-    private static String csvFileContent(FileReader fileReader){
+    static String csvFileContent(FileReader fileReader){
         String fileContent = null;
         try(BufferedReader br = new BufferedReader(fileReader)) {
             StringBuilder sb = new StringBuilder();

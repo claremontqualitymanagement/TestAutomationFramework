@@ -39,9 +39,9 @@ public class EmailSender {
         this.subjectLine = subjectLine;
         this.htmlContent = htmlContent;
         this.hostServerPort = hostServerPort;
-        if(smtpOrGmail.toLowerCase().equals("smtp")){
+        if("smtp".equalsIgnoreCase(smtpOrGmail)){
             this.emailSendType = EmailSendType.SMTP;
-        } else if(smtpOrGmail.toLowerCase().equals("gmail")){
+        } else if("gmail".equalsIgnoreCase(smtpOrGmail)){
             this.emailSendType = EmailSendType.GMAIL;
         } else {
             this.emailSendType = EmailSendType.UNMANAGED;
@@ -64,6 +64,7 @@ public class EmailSender {
     private String sendThroughSmtp() {
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", hostName);
+        properties.setProperty("mail.smtp.port", hostServerPort);
         Session session = Session.getDefaultInstance(properties);
 
         try {

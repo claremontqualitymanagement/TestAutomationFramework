@@ -28,9 +28,7 @@ public class SqlInteractionManager {
             testCase.log(LogLevel.DEBUG, "Connecting to DB '" + dbUrl + dbName + "'.");
             connection = DriverManager.getConnection(dbUrl + dbName, username, password);
             testCase.log(LogLevel.DEBUG, "Connected successfully to DB '" + dbUrl + dbName + "' as '" + username + "'.");
-        }catch(SQLException se){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not connect to DB '" + dbUrl + dbName + "' as '" + username + "'. Error: " + se.getMessage() );
-        }catch(Exception e){
+        } catch(Exception e){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not connect to DB '" + dbUrl + dbName + "' as '" + username + "'. Error: " + e.getMessage() );
         }
     }
@@ -54,7 +52,6 @@ public class SqlInteractionManager {
                 continueToNextColumn = false;
             }
         }
-        columnCount = columnCount;
         return  columnCount;
     }
 
@@ -87,7 +84,7 @@ public class SqlInteractionManager {
         return returnString;
     }
 
-    public TableData execute(String sql) {
+    private TableData execute(String sql) {
         Statement stmt = null;
         ResultSet resultSet = null;
         try{
@@ -137,7 +134,9 @@ public class SqlInteractionManager {
     }
 
     public void closeConnection() {
-        if (connection == null) return;
+        if (connection == null) {
+            return;
+        }
         try {
             connection.close();
             testCase.log(LogLevel.DEBUG, "Closed connection to DB '" + dbName + "' at server '" + dbUrl + "'.");

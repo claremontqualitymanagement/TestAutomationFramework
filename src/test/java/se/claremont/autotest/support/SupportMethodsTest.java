@@ -3,7 +3,6 @@ package se.claremont.autotest.support;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.LogFolder;
-import se.claremont.autotest.common.TestSet;
 
 import java.io.File;
 
@@ -12,7 +11,7 @@ import java.io.File;
  *
  * Created by jordam on 2016-08-31.
  */
-public class SupportMethods_Tests {
+public class SupportMethodsTest {
 
     @Test
     public void isRegexMatchTest(){
@@ -21,7 +20,6 @@ public class SupportMethods_Tests {
 
     @Test
     public void testFileWriteToReportFolder(){
-        @SuppressWarnings("UnusedAssignment") TestSet testSet = new TestSet();
         LogFolder.setLogFolder(this.getClass().getName());
         try{
             int i = 0;
@@ -40,7 +38,7 @@ public class SupportMethods_Tests {
             //noinspection ResultOfMethodCallIgnored
             f.delete();
         }catch (Exception e){
-            Assert.assertTrue("Could not save to disk at '" + LogFolder.testRunLogFolder + "'", false);
+            Assert.fail("Could not save to disk at '" + LogFolder.testRunLogFolder + "'");
         }
 
     }
