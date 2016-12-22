@@ -58,12 +58,16 @@ public class TestCase {
         String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
         long maxMemory = Runtime.getRuntime().maxMemory();
         memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
-        testCaseLog.log(LogLevel.INFO, "Running tests on machine with OS " + System.getProperty("OS.name") + " and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
+        testCaseLog.log(LogLevel.INFO, "Running tests as user '" + getCurrentUser() + "' on machine with " + System.getProperty("os.name") + " as operating system (version reported as '" + System.getProperty("os.version") + "', and architecture '" + System.getProperty("os.arch") +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
         reporters.add(new TestCaseLogReporterHtmlLogFile(this));
         setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
+    }
+
+    private String getCurrentUser(){
+        return System.getProperty("user.name");
     }
 
     /**
