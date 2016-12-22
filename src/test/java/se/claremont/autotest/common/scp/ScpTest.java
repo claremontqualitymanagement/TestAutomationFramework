@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.scp;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.taf.api.Taf;
 
@@ -12,6 +13,7 @@ import java.io.File;
 public class ScpTest {
 
     @Test
+    @Ignore
     public void SftpUploadFileTest(){
         String user = "taf";
         String pass = "Claremont16!";
@@ -23,6 +25,7 @@ public class ScpTest {
     }
 
     @Test
+    @Ignore
     public void SftpDownloadFileTest(){
         String user = "taf";
         String pass = "Claremont16!";
@@ -39,6 +42,7 @@ public class ScpTest {
     }
 
     @Test
+    @Ignore
     public void ShellTest(){
         String user = "taf";
         String pass = "Claremont16!";
