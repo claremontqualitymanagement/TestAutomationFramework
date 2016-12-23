@@ -13,6 +13,9 @@ public class TestRun {
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
 
+    public TestRun(){
+    }
+
     /**
      * TAF and TA test(s) standard codes.
      */
@@ -37,6 +40,10 @@ public class TestRun {
     public static void initialize() {
         currentTestSet = null;
         exitCode = ExitCodeTable.INIT_OK.getValue();
+    }
+
+    public void report(){
+        reporters.report();
     }
 
 }
