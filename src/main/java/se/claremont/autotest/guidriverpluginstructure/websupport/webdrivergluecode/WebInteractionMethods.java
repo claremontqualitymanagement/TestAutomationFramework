@@ -206,6 +206,50 @@ public class WebInteractionMethods implements GuiDriver {
             }
     }
 
+    /**
+     * Pauses execution until given element is displayed.
+     *
+     * @param guiElement The element to wait for
+     */
+    public void waitForElementToAppear(GuiElement guiElement){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement element = null;
+        boolean elementIdentified = false;
+        while (!elementIdentified && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element != null && element.isDisplayed()){
+                elementIdentified = true;
+            }else{
+                wait(50);
+            }
+        }
+        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to appear. " +
+                "It " + Boolean.toString(elementIdentified).toLowerCase().replace("true", "did.").replace("false", "never did."));
+    }
+
+    /**
+     * Pausing execution until the given element has disappeared.
+     *
+     * @param guiElement The element to wait for.
+     */
+    public void waitForElementToDisappear(GuiElement guiElement){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement element = null;
+        boolean elementIsDisplayed = true;
+        while (elementIsDisplayed && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element == null || !element.isDisplayed()){
+                elementIsDisplayed = false;
+            }else{
+                wait(50);
+            }
+        }
+        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to disappear. " +
+                "It " + Boolean.toString(elementIsDisplayed).toLowerCase().replace("true", "never did.").replace("false", "did."));
+    }
+
 
     /**
      * Checks current page for broken links and reports results to log as verifications.
@@ -250,7 +294,7 @@ public class WebInteractionMethods implements GuiDriver {
         String text = null;
         WebElement element = null;
         boolean elementIdentified = false;
-        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds){
+        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null){
                 elementIdentified = true;
@@ -290,7 +334,7 @@ public class WebInteractionMethods implements GuiDriver {
         String text = null;
         WebElement element = null;
         boolean elementIdentified = false;
-        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds){
+        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null){
                 elementIdentified = true;
@@ -419,7 +463,7 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         WebElement element = null;
         boolean success = false;
-        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds){
+        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element == null){
                 wait(50);
@@ -1413,7 +1457,7 @@ public class WebInteractionMethods implements GuiDriver {
             DomElement domElement = (DomElement) guiElement;
             boolean enabled = false;
             WebElement webElement = null;
-            while (!enabled && System.currentTimeMillis() - startTime < standardTimeoutInSeconds){
+            while (!enabled && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
                 webElement = getRuntimeElementWithoutLogging(domElement);
                 if(webElement.isEnabled()) enabled = true;
             }
