@@ -207,38 +207,61 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Waits for the given element to appear. If it hasn't appeared within the standard timeout execution continues.
+     *
+     * @param guiElement The element to wait for.
+     * @return Returns true if element successfully appears within the timeout.
+     */
+    public boolean waitForElementToAppear(GuiElement guiElement){
+        return waitForElementToAppear(guiElement, standardTimeoutInSeconds);
+    }
+
+    /**
      * Pauses execution until given element is displayed.
      *
      * @param guiElement The element to wait for
+     * @return Returns true if element appears within timeout.
      */
-    public void waitForElementToAppear(GuiElement guiElement){
+    public boolean waitForElementToAppear(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         WebElement element = null;
-        boolean elementIdentified = false;
-        while (!elementIdentified && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
+        boolean elementHasAppeared = false;
+        while (!elementHasAppeared && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null && element.isDisplayed()){
-                elementIdentified = true;
+                elementHasAppeared = true;
             }else{
                 wait(50);
             }
         }
         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to appear. " +
-                "It " + Boolean.toString(elementIdentified).toLowerCase().replace("true", "did.").replace("false", "never did."));
+                "It " + Boolean.toString(elementHasAppeared).toLowerCase().replace("true", "did.").replace("false", "never did."));
+        return elementHasAppeared;
+    }
+
+    /**
+     * Waiting for element to disappear. If element is still there after standard timeout execution continues.
+     * @param guiElement The element to wait for disappearance of.
+     * @return Return true if element successfully has disappeared within the timeout.
+     */
+    public boolean waitForElementToDisappear(GuiElement guiElement){
+        return waitForElementToDisappear(guiElement, standardTimeoutInSeconds);
     }
 
     /**
      * Pausing execution until the given element has disappeared.
      *
      * @param guiElement The element to wait for.
+     * @param timeoutInSeconds Timeout period to wait for element to disappear.
+     * @return Returns true if element disappears within timeout.
      */
-    public void waitForElementToDisappear(GuiElement guiElement){
+    public boolean waitForElementToDisappear(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         WebElement element = null;
         boolean elementIsDisplayed = true;
-        while (elementIsDisplayed && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
+        while (elementIsDisplayed && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element == null || !element.isDisplayed()){
                 elementIsDisplayed = false;
@@ -248,6 +271,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to disappear. " +
                 "It " + Boolean.toString(elementIsDisplayed).toLowerCase().replace("true", "never did.").replace("false", "did."));
+        return !elementIsDisplayed;
     }
 
 
