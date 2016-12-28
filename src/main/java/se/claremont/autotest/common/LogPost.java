@@ -249,5 +249,4 @@ class LogPost {
         return sb.toString();
     }
 
-
 }

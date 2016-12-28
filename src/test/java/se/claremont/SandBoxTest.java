@@ -2,7 +2,6 @@ package se.claremont;
 
 import org.junit.*;
 import org.junit.rules.TestName;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import se.claremont.autotest.common.*;
 import se.claremont.autotest.dataformats.TableData;
@@ -10,8 +9,6 @@ import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.SwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
-import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis;
-import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis2;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.support.PerformanceTimer;
@@ -159,20 +156,6 @@ public class SandBoxTest extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
-    @Ignore
-    @Test
-    public void testResponsive(){
-        WebDriverManager webDriverManager = new WebDriverManager(currentTestCase);
-        WebDriver driver = webDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME);
-        driver.get("http://www.claremont.se");
-        List<Dimension> resolutions = new ArrayList<>();
-        resolutions.add(new Dimension(750, 480));
-        resolutions.add(new Dimension(2028, 900));
-        ResponsiveAnalysis responsiveAnalysis = new ResponsiveAnalysis(driver, resolutions, currentTestCase);
-        responsiveAnalysis.performAnalysisAndReportResults();
-        driver.close();
-    }
-
 
     @Ignore
     @Test
@@ -285,19 +268,6 @@ public class SandBoxTest extends TestSet{
         fileTester.verifyFileExists(LogFolder.testRunLogFolder + testCase.testName + "3.png");
         web.makeSureDriverIsClosed();
         testCase.evaluateResultStatus();
-    }
-
-    @Ignore
-    @Test
-    public void newResolutionAssessment(){
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
-        web.navigate("http://www.claremont.se");
-        List<Dimension> resolutions = new ArrayList<>();
-        resolutions.add(new Dimension(1024, 768));
-        resolutions.add(new Dimension(2048, 1024));
-        ResponsiveAnalysis2 responsiveAnalysis2 = new ResponsiveAnalysis2(resolutions, web.driver, currentTestCase);
-        responsiveAnalysis2.performAnalysis();
-        web.makeSureDriverIsClosed();
     }
 
     @Test
