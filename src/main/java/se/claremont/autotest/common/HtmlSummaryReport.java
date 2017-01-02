@@ -336,18 +336,18 @@ public class HtmlSummaryReport {
     private String htmlElementSolvedKnownErrors(){
         StringBuilder html = new StringBuilder();
         if(solvedKnownErrorsList.size() > 0){
+            ArrayList<String> displayableKnownErrors = new ArrayList<>();
+            for(KnownError knownError : solvedKnownErrorsList){
+                if(displayableKnownErrors.contains(knownError.description)) continue;
+                displayableKnownErrors.add(knownError.description);
+            }
             html.append("          <div id=\"").append(HtmlStyleNames.SOLVED_TEST_SET_ERRORS.toString()).append("\">").append(LF);
             html.append("            <h2>Registered known errors not encountered</h2>").append(LF);
-            for(KnownError knownError : solvedKnownErrorsList){
-                html.append("            <p>").append(LF);
-                html.append("              ['").append(knownError.description).append("']").append(LF);
-                html.append("              <ul>").append(LF);
-                for(TestCase testCase : knownError.testCasesWhereErrorWasEncountered){
-                    html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
-                }
-                html.append("            </ul>").append(LF);
-                html.append("          </p>").append(LF).append(LF);
+            html.append("            <p>").append(LF);
+            for(String knownError : displayableKnownErrors){
+                html.append("              ['").append(knownError).append("']<br>").append(LF);
             }
+            html.append("            </p>").append(LF).append(LF);
             html.append("          <br>").append(LF);
             html.append("        </div>").append(LF).append("<br>").append(LF);
         }

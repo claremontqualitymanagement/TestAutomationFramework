@@ -10,7 +10,7 @@ import org.junit.rules.TestName;
  *
  * Created by jordam on 2016-08-31.
  */
-public class HtmlSummaryReport_Tests {
+public class HtmlSummaryReport_Test {
     @SuppressWarnings("CanBeFinal")
     @Rule public TestName currentTestName = new TestName();
 

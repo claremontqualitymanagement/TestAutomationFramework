@@ -283,9 +283,12 @@ public class WebInteractionMethods implements GuiDriver {
         List<WebElement> links = driver.findElements(By.xpath("//a"));
         List<Thread> linkCheckingThreads = new ArrayList<>();
         for(WebElement link : links){
-            Thread linkCheck = new Thread(new LinkCheck(testCase, link.getAttribute("href")));
-            linkCheckingThreads.add(linkCheck);
-            linkCheck.start();
+            String href = link.getAttribute("href");
+            if(SupportMethods.isRegexMatch(href, "http.*" + currentDomain + ".*") || SupportMethods.isRegexMatch(href, "./.*")){
+                Thread linkCheck = new Thread(new LinkCheck(testCase, link.getAttribute("href")));
+                linkCheckingThreads.add(linkCheck);
+                linkCheck.start();
+            }
         }
 
         //Code below for waiting for all threads to finish due to log timing issues

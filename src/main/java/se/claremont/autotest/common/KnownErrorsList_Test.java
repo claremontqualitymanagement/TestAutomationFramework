@@ -8,13 +8,13 @@ import org.junit.Test;
  *
  * Created by jordam on 2016-08-30.
  */
-public class KnownErrorsList_Tests {
+public class KnownErrorsList_Test {
     private final TestSet testTestSet = new TestSet();
 
     @Test
     public void testCaseKnownErrorOnlyOneLogPostThatIsKnownError(){
         KnownErrorsList knownErrorsList = new KnownErrorsList();
-        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Tests");
+        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
         testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
         testCase1.evaluateResultStatus();
@@ -24,7 +24,7 @@ public class KnownErrorsList_Tests {
     @Test
     public void testCaseKnownErrorBothKnownErrorAndNewError(){
         KnownErrorsList knownErrorsList = new KnownErrorsList();
-        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Tests");
+        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
         testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
         testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 2.");
@@ -35,7 +35,7 @@ public class KnownErrorsList_Tests {
     @Test
     public void testCaseKnownErrorNewError(){
         KnownErrorsList knownErrorsList = new KnownErrorsList();
-        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Tests");
+        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
         testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 2.");
         testCase1.evaluateResultStatus();
@@ -45,7 +45,7 @@ public class KnownErrorsList_Tests {
     @Test
     public void testCaseKnownErrorNoErrors(){
         KnownErrorsList knownErrorsList = new KnownErrorsList();
-        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Tests");
+        TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
         testCase1.testCaseLog.log(LogLevel.INFO, "TestCaseLog row 1.");
         testCase1.testCaseLog.log(LogLevel.DEBUG, "TestCaseLog row 2.");
@@ -60,7 +60,7 @@ public class KnownErrorsList_Tests {
     @Test
     public void testSetKnownErrorOnlyOneLogPostThatIsKnownError(){
         testTestSet.addKnownError("Description1", "TestCaseLog row 1.");
-        TestCase testCase1 = new TestCase(testTestSet.knownErrorsList, "KnownErrorsList_Tests");
+        TestCase testCase1 = new TestCase(testTestSet.knownErrorsList, "KnownErrorsList_Test");
         testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
         testCase1.evaluateResultStatus();
         Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));

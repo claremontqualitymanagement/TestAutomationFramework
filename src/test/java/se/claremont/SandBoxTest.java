@@ -3,6 +3,9 @@ package se.claremont;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import se.claremont.autotest.common.*;
 import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.filetestingsupport.FileTester;
@@ -17,6 +20,7 @@ import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -319,12 +323,27 @@ public class SandBoxTest extends TestSet{
     @Ignore
     @Test
     public void animatedDropdown(){
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        WebDriver webDriver = new FirefoxDriver();
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, webDriver);
         web.navigate("https://www.typeandtell.com/sv/pris/");
         web.reportBrokenLinks();
         DomElement drowDown = new DomElement("Insertion", DomElement.IdentificationType.BY_ID);
         web.selectInDropdown(drowDown, "Naturtonat papper");
         web.selectInDropdown(drowDown, "Vitt papper");
+        web.makeSureDriverIsClosed();
+    }
+
+    @Ignore
+    @Test
+    public void recursiveLinkCheckerTest() throws MalformedURLException {
+        System.setProperty("webdriver.gecko.driver", "C:\\Temp\\geckodriver.exe");
+        System.setProperty("webdriver.edge.driver", "C:\\Temp\\MicrosoftWebDriver.exe");
+        //WebDriver webDriver = new FirefoxDriver();
+        DesiredCapabilities dc = DesiredCapabilities.edge();
+        WebDriver driver = new RemoteWebDriver(dc);
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, driver);
+        web.navigate("http://www.claremont.se");
+        web.reportBrokenLinks();
         web.makeSureDriverIsClosed();
     }
 

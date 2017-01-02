@@ -29,14 +29,14 @@ public class DiagnosticsRun implements Runnable {
         System.setOut(dummyStream);
 
         Result result = junit.runClasses(
-                KnownError_Tests.class,
-                KnownErrorsList_Tests.class,
+                KnownError_Test.class,
+                KnownErrorsList_Test.class,
                 LogPost_Tests.class,
                 TestCaseLog_Tests.class,
                 TestCase_Tests.class,
                 TestSet_Tests.class,
                 ValuePair_Tests.class,
-                HtmlSummaryReport_Tests.class,
+                HtmlSummaryReport_Test.class,
                 Settings_Tests.class,
                 SummaryReport_Tests.class
         );

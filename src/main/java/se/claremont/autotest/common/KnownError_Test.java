@@ -9,7 +9,7 @@ import org.junit.Test;
  *
  * Created by jordam on 2016-08-30.
  */
-public class KnownError_Tests {
+public class KnownError_Test {
 
     @Test
     public void equalTest(){
@@ -26,7 +26,7 @@ public class KnownError_Tests {
     @Test
     public void matchOfSeveralStringsEmptyLog(){
         String[] patterns = {"Pattern1", "Pattern2"};
-        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Tests");
+        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
         KnownError knownError = new KnownError("Description", patterns);
         Assert.assertFalse("The known error was reported found, but wasn't present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
@@ -35,7 +35,7 @@ public class KnownError_Tests {
     public void matchOfSeveralStringsNoError(){
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
-        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Tests");
+        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         Assert.assertFalse("The known error was reported found, but wasn't present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
@@ -44,7 +44,7 @@ public class KnownError_Tests {
     public void matchOfSeveralStringsMatch(){
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
-        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Tests");
+        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
         testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
@@ -56,7 +56,7 @@ public class KnownError_Tests {
     public void matchOfSeveralStringsBothMatchAndOtherErrors(){
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
-        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Tests");
+        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
         testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
@@ -69,7 +69,7 @@ public class KnownError_Tests {
     public void matchOfSeveralStringsPartialMatch(){
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
-        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Tests");
+        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
@@ -81,7 +81,7 @@ public class KnownError_Tests {
     public void matchOfSeveralStringsOnlyNewErrors(){
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
-        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Tests");
+        TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern4");
         testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
