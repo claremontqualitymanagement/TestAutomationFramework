@@ -146,6 +146,12 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
+        <!-- For UNC path writing on Linux -->
+        <dependency>
+            <groupId>jcifs</groupId>
+            <artifactId>jcifs</artifactId>
+            <version>1.3.17</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>

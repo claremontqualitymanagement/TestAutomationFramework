@@ -1,6 +1,7 @@
 package se.claremont.autotest.support;
 
-import org.junit.Assert;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.TestCase;
@@ -31,8 +32,6 @@ public class SupportMethods {
      * @param filePath file path as a string
      */
     public static void saveToFile(String content, String filePath){
-        Writer writer;
-
         if(filePath == null ){
             System.out.println("Could not write file to null file path.");
             logger.debug( "Could not write file to null file path." );
@@ -43,6 +42,15 @@ public class SupportMethods {
             logger.debug( "Warning! Attempting to write a null string to file '." + filePath + "' Replacing null with empty string." );
             content = "";
         }
+        if(filePath.startsWith("\\\\") || filePath.startsWith("smb:\\\\") || filePath.startsWith("//") || filePath.startsWith("smb://")){
+            writeToUncPath(content, filePath);
+        } else {
+            writeToFileOnMappedDrive(content, filePath);
+        }
+    }
+
+    private static void writeToFileOnMappedDrive(String content, String filePath){
+        Writer writer;
         try {
             File file = new File(filePath);
             //noinspection ResultOfMethodCallIgnored
@@ -54,10 +62,22 @@ public class SupportMethods {
             writer.write(content);
             writer.close();
         } catch (Exception ex) {
-            Assert.fail("Could not write content to file '" + filePath + "'.");
+            System.out.println("Error: Could not write content to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content);
         }
     }
 
+    private static void writeToUncPath(String content, String path){
+        if(!path.startsWith("smb:")){
+            path = "smb:" + path;
+        }
+        try {
+        SmbFile smbFile = new SmbFile(path);
+        SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
+            smbfos.write(content.getBytes());
+        } catch (IOException e) {
+            System.out.println("Error: Could not write to file '" + path + "'. Should have written:" + System.lineSeparator() + content);
+        }
+    }
 
     /**
      * Parses a string to a date
