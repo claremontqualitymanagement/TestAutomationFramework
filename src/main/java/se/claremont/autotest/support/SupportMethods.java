@@ -66,16 +66,29 @@ public class SupportMethods {
         }
     }
 
-    private static void writeToUncPath(String content, String path){
-        if(!path.startsWith("smb:")){
-            path = "smb:" + path;
+    private static void writeToUncPath(String content, String filePath){
+        if(!filePath.startsWith("smb:")){
+            filePath = "smb:" + filePath;
         }
         try {
-        SmbFile smbFile = new SmbFile(path);
-        SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
+            if(filePath.contains("/")){
+                String path = filePath.substring(0, filePath.lastIndexOf("/"));
+                SmbFile directory = new SmbFile(path);
+                if(!directory.exists()){
+                    directory.mkdir();
+                }
+            } else if (filePath.contains("\\")){
+                String path = filePath.substring(0, filePath.lastIndexOf("\\"));
+                SmbFile directory = new SmbFile(path);
+                if(!directory.exists()){
+                    directory.mkdir();
+                }
+            }
+            SmbFile smbFile = new SmbFile(filePath);
+            SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
             smbfos.write(content.getBytes());
         } catch (IOException e) {
-            System.out.println("Error: Could not write to file '" + path + "'. Should have written:" + System.lineSeparator() + content);
+            System.out.println("Error: Could not write to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content);
         }
     }
 
