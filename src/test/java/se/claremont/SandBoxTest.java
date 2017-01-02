@@ -322,19 +322,8 @@ public class SandBoxTest extends TestSet{
 
 
     @Test
+    @Ignore
     public void animatedDropdown(){
-        WebDriver webDriver = new FirefoxDriver();
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, webDriver);
-        web.navigate("https://www.typeandtell.com/sv/pris/");
-        web.reportBrokenLinks();
-        DomElement drowDown = new DomElement("Insertion", DomElement.IdentificationType.BY_ID);
-        web.selectInDropdown(drowDown, "Naturtonat papper");
-        web.selectInDropdown(drowDown, "Vitt papper");
-        web.makeSureDriverIsClosed();
-    }
-
-    @Test
-    public void animatedDropdown2(){
         WebDriver webDriver = new FirefoxDriver();
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase, webDriver);
         web.navigate("https://www.typeandtell.com/sv/pris/");
