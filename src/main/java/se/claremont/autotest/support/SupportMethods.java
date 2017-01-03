@@ -9,6 +9,9 @@ import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswingglue
 import se.claremont.tools.Utils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +52,25 @@ public class SupportMethods {
         }
     }
 
+    public static void saveToFile(byte[] content, String filePath){
+        if(filePath == null ){
+            System.out.println("Could not write file to null file path.");
+            logger.debug( "Could not write file to null file path." );
+            return;
+        }
+        logger.debug( "Writing file content to '" + filePath + "'." );
+        if(content == null){
+            logger.debug( "Warning! Attempting to write a null string to file '." + filePath + "' Replacing null with empty string." );
+            saveToFile("", filePath);
+            return;
+        }
+        if(filePath.startsWith("\\\\") || filePath.startsWith("smb:\\\\") || filePath.startsWith("//") || filePath.startsWith("smb://")){
+            writeToUncPath(content, filePath);
+        } else {
+            writeToFileOnMappedDrive(content, filePath);
+        }
+    }
+
     private static void writeToFileOnMappedDrive(String content, String filePath){
         Writer writer;
         try {
@@ -66,7 +88,37 @@ public class SupportMethods {
         }
     }
 
+    private static void writeToFileOnMappedDrive(byte[] content, String filePath){
+        Writer writer;
+        try {
+            File file = new File(filePath);
+            //noinspection ResultOfMethodCallIgnored
+            file.getParentFile().mkdirs();
+            if( !Utils.getInstance().doesFileExists( filePath ) )
+                file.createNewFile();
+
+            try {
+                Path path = Paths.get(filePath);
+                File fileFolder = new File(filePath);
+                //noinspection ResultOfMethodCallIgnored
+                fileFolder.getParentFile().mkdirs();
+                if(content != null){
+                    Files.write(path, content);
+                }
+            } catch (IOException e) {
+                System.out.println("Error: Could not write content to file '" + filePath + "'. Error: " + e.getMessage());
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: Could not write content to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content);
+        }
+    }
+
     private static void writeToUncPath(String content, String filePath){
+        writeToUncPath(content.getBytes(), filePath);
+    }
+
+    private static void writeToUncPath(byte[] content, String filePath){
         if(!filePath.startsWith("smb:")){
             filePath = "smb:" + filePath;
         }
@@ -83,10 +135,10 @@ public class SupportMethods {
             SmbFile smbFile = new SmbFile(filePath);
             smbFile.connect();
             SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
-            smbfos.write(content.getBytes());
+            smbfos.write(content);
             smbfos.close();
         } catch (IOException e) {
-            System.out.println("Error: Could not write to file '" + filePath + "'. Error: " + e.getMessage() + System.lineSeparator() + "Should have written:" + System.lineSeparator() + content);
+            System.out.println("Error: Could not write to file '" + filePath + "'. Error: " + e.getMessage());
         }
     }
 

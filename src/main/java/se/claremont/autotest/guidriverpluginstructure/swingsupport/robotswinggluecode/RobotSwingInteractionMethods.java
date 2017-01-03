@@ -6,10 +6,12 @@ import se.claremont.autotest.common.LogFolder;
 import se.claremont.autotest.common.LogLevel;
 import se.claremont.autotest.common.TestCase;
 import se.claremont.autotest.common.TestRun;
+import se.claremont.autotest.support.SupportMethods;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,11 +38,17 @@ public class RobotSwingInteractionMethods {
             fileFolder.getParentFile().mkdirs();
             BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
             if(image != null){
-                ImageIO.write(image, "png", new File(filePath));
-                testCase.log(LogLevel.DEVIATION_EXTRA_INFO, "Saved screenshot as '" + filePath + "'.");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write( image, "png", baos );
+                baos.flush();
+                byte[] imageInByte = baos.toByteArray();
+                baos.close();
+                SupportMethods.saveToFile(imageInByte, filePath);
+                //ImageIO.write(image, "png", new File(filePath));
+                testCase.log(LogLevel.INFO, "Saved screenshot as '" + filePath + "'.");
             }
         }catch (Exception e){
-            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot of desktop. Is Robot driver ok? " + e.toString());
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot of desktop. Is Robot driver ok? Is file save to '" + filePath + "' ok? Error: " + e.toString());
         }
     }
 }
