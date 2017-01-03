@@ -36,7 +36,6 @@ public class TestCase {
     final UUID uid = UUID.randomUUID();
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
 
-
     /**
      * Setting up a new test case run and prepares it for execution
      *

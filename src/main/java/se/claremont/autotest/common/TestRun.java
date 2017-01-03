@@ -9,12 +9,10 @@ package se.claremont.autotest.common;
 public class TestRun {
     public static final Settings settings = new Settings();
     public static int fileCounter = 0;
+    public static String testRunName = "";
     public static int exitCode;
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
-
-    public TestRun(){
-    }
 
     /**
      * TAF and TA test(s) standard codes.

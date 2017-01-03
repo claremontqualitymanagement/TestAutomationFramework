@@ -36,9 +36,8 @@ public class SandBoxTest extends TestSet{
     private static String OUTPUT_FILE_PATH = "";
     private static String ENDPOINT_TARGET_URL = "https://www.typeandtell.com/sv/";
     private static String LOCAL_MOCH_HTML_FILE = "";
-    @SuppressWarnings("CanBeFinal")
-    @Rule
-    public TestName currentTestName = new TestName();
+    @Rule public TestName currentTestName = new TestName();
+
 
     @BeforeClass
     public static void classSetup(){
@@ -73,6 +72,10 @@ public class SandBoxTest extends TestSet{
         }
     }
 
+    @Test
+    public void testCaseNameTest(){
+        currentTestCase.log(LogLevel.INFO, currentTestCase.testName);
+    }
 
     @Ignore
     @Test
@@ -84,6 +87,7 @@ public class SandBoxTest extends TestSet{
         web.makeSureDriverIsClosed();
         testCase.report();
     }
+
 
     @Ignore
     @Test

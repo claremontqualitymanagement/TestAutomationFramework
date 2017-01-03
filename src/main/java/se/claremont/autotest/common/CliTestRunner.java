@@ -29,6 +29,10 @@ public class CliTestRunner {
                 "listed test classes to be run, or the keyword 'diagnostics' to run the unit tests and " +
                 "the diagnostics tests to ensure the local installation is ok. A diagnostic run output results from failed tests as debug information." +
                 LF + LF +
+                "A test run name can be set using the argument runName" + LF +
+                "Example: RunName=MyTestRun1stOfApril" + LF +
+                "This test run name will be used for log folder name creation." + LF +
+                LF + LF +
                 "If test classes are listed as arguments the output of those tests are displayed. This output can be quite extensive, and sometimes it is beneficial to make sure you can read it all." +
                 LF +
                 "Test output from test classes extending the TestSet class is saved to the output log folder." + LF + LF +
@@ -86,8 +90,14 @@ public class CliTestRunner {
                 System.out.print(helpText());
                 return;
             } else if (arg.contains("=")) {
-                TestRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.split("=")[1].trim());
-                System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");
+                String[] parts = arg.split("=");
+                if(parts[0].toLowerCase().equals("runname")){
+                    TestRun.testRunName = parts[1].trim();
+                    System.out.println("Setting test run name to '" + TestRun.testRunName + "'.");
+                } else {
+                    TestRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.split("=")[1].trim());
+                    System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");
+                }
             } else {
                 try {
                     Result result = junit.runClasses(Class.forName(arg));
