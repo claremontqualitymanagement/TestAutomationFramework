@@ -70,7 +70,7 @@ public class SupportMethods {
         if(!filePath.startsWith("smb:")){
             filePath = "smb:" + filePath;
         }
-        filePath.replace("\\", "/");
+        filePath = filePath.replace("\\", "/");
         try {
             if(filePath.contains("/")){
                 String path = filePath.substring(0, filePath.lastIndexOf("/"));
