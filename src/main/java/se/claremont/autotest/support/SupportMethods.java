@@ -75,20 +75,24 @@ public class SupportMethods {
                 String path = filePath.substring(0, filePath.lastIndexOf("/"));
                 SmbFile directory = new SmbFile(path);
                 if(!directory.exists()){
+                    System.out.println("Creating directory '" + path + "'.");
                     directory.mkdir();
                 }
             } else if (filePath.contains("\\")){
                 String path = filePath.substring(0, filePath.lastIndexOf("\\"));
                 SmbFile directory = new SmbFile(path);
                 if(!directory.exists()){
+                    System.out.println("Creating directory '" + path + "'.");
                     directory.mkdir();
                 }
             }
             SmbFile smbFile = new SmbFile(filePath);
+            smbFile.connect();
             SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
             smbfos.write(content.getBytes());
+            smbfos.close();
         } catch (IOException e) {
-            System.out.println("Error: Could not write to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content);
+            System.out.println("Error: Could not write to file '" + filePath + "'. Error: " + e.getMessage() + System.lineSeparator() + "Should have written:" + System.lineSeparator() + content);
         }
     }
 
