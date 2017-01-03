@@ -70,16 +70,10 @@ public class SupportMethods {
         if(!filePath.startsWith("smb:")){
             filePath = "smb:" + filePath;
         }
+        filePath.replace("\\", "/");
         try {
             if(filePath.contains("/")){
                 String path = filePath.substring(0, filePath.lastIndexOf("/"));
-                SmbFile directory = new SmbFile(path);
-                if(!directory.exists()){
-                    System.out.println("Creating directory '" + path + "'.");
-                    directory.mkdir();
-                }
-            } else if (filePath.contains("\\")){
-                String path = filePath.substring(0, filePath.lastIndexOf("\\"));
                 SmbFile directory = new SmbFile(path);
                 if(!directory.exists()){
                     System.out.println("Creating directory '" + path + "'.");

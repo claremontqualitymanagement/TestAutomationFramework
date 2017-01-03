@@ -134,7 +134,7 @@ public class TestCase {
      * Sets the log folder if no log folder is already set
      */
     private void setLogFolderIfNotAlreadySet(){
-        LogFolder.setLogFolder(this.getClass().getName());
+        LogFolder.setLogFolder(testSetName.replace(".", "_"));
         pathToHtmlLog = LogFolder.testRunLogFolder + testName + ".html";
     }
 
