@@ -6,13 +6,22 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterFactory {
-    private ArrayList<TestRunReporter> reporters = new ArrayList<>();
+    protected ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public TestRunReporterFactory(){
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
         if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
             reporters.add(new TestRunReporterEmailReport());
         }
+    }
+
+    public void addTestRunReporterIfNotAlreadyRegistered(TestRunReporter testRunReporter){
+        for(TestRunReporter reporter : reporters){
+            if(reporter.getClass().equals(testRunReporter.getClass())){
+                return;
+            }
+        }
+        reporters.add(testRunReporter);
     }
 
 
