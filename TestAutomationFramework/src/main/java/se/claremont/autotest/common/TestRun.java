@@ -7,8 +7,9 @@ package se.claremont.autotest.common;
  * Created by jordam on 2016-08-17.
  */
 public class TestRun {
-    public static final Settings settings = new Settings();
+    public static Settings settings = new Settings();
     public static int fileCounter = 0;
+    public static String testRunName = "";
     public static int exitCode;
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
@@ -37,6 +38,20 @@ public class TestRun {
     public static void initialize() {
         currentTestSet = null;
         exitCode = ExitCodeTable.INIT_OK.getValue();
+    }
+
+    public void report(){
+        reporters.report();
+    }
+
+    public static String reportLinkPrefix(){
+        if(TestRun.settings.getCustomValue("HtmlReportsLinkPrefix") == null) return "file";
+        if(TestRun.settings.getCustomValue("HtmlReportsLinkPrefix").toLowerCase().equals("http")){
+            return "http";
+        } else if (TestRun.settings.getCustomValue("HtmlReportsLinkPrefix").toLowerCase().equals("https")){
+            return "https";
+        }
+        return "file";
     }
 
 }

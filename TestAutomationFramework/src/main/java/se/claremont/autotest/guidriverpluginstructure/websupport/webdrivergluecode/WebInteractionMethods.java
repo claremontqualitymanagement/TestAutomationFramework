@@ -27,9 +27,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +62,20 @@ public class WebInteractionMethods implements GuiDriver {
             driver = webDriverManager.initializeWebDriver(webBrowser);
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
+    }
+
+    public WebInteractionMethods(TestCase testCase, WebDriver driver){
+        this.testCase = testCase;
+        try{
+            this.driver = driver;
+            driver.manage().window().maximize();
+        }catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -85,7 +95,7 @@ public class WebInteractionMethods implements GuiDriver {
             driver = new RemoteWebDriver(url, desiredCapabilites);
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver.");
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -193,6 +203,74 @@ public class WebInteractionMethods implements GuiDriver {
             }
     }
 
+    /**
+     * Waits for the given element to appear. If it hasn't appeared within the standard timeout execution continues.
+     *
+     * @param guiElement The element to wait for.
+     * @return Returns true if element successfully appears within the timeout.
+     */
+    public boolean waitForElementToAppear(GuiElement guiElement){
+        return waitForElementToAppear(guiElement, standardTimeoutInSeconds);
+    }
+
+    /**
+     * Pauses execution until given element is displayed.
+     *
+     * @param guiElement The element to wait for
+     * @return Returns true if element appears within timeout.
+     */
+    public boolean waitForElementToAppear(GuiElement guiElement, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement element = null;
+        boolean elementHasAppeared = false;
+        while (!elementHasAppeared && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element != null && element.isDisplayed()){
+                elementHasAppeared = true;
+            }else{
+                wait(50);
+            }
+        }
+        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to appear. " +
+                "It " + Boolean.toString(elementHasAppeared).toLowerCase().replace("true", "did.").replace("false", "never did."));
+        return elementHasAppeared;
+    }
+
+    /**
+     * Waiting for element to disappear. If element is still there after standard timeout execution continues.
+     * @param guiElement The element to wait for disappearance of.
+     * @return Return true if element successfully has disappeared within the timeout.
+     */
+    public boolean waitForElementToDisappear(GuiElement guiElement){
+        return waitForElementToDisappear(guiElement, standardTimeoutInSeconds);
+    }
+
+    /**
+     * Pausing execution until the given element has disappeared.
+     *
+     * @param guiElement The element to wait for.
+     * @param timeoutInSeconds Timeout period to wait for element to disappear.
+     * @return Returns true if element disappears within timeout.
+     */
+    public boolean waitForElementToDisappear(GuiElement guiElement, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement element = null;
+        boolean elementIsDisplayed = true;
+        while (elementIsDisplayed && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element == null || !element.isDisplayed()){
+                elementIsDisplayed = false;
+            }else{
+                wait(50);
+            }
+        }
+        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to disappear. " +
+                "It " + Boolean.toString(elementIsDisplayed).toLowerCase().replace("true", "never did.").replace("false", "did."));
+        return !elementIsDisplayed;
+    }
+
 
     /**
      * Checks current page for broken links and reports results to log as verifications.
@@ -202,9 +280,12 @@ public class WebInteractionMethods implements GuiDriver {
         List<WebElement> links = driver.findElements(By.xpath("//a"));
         List<Thread> linkCheckingThreads = new ArrayList<>();
         for(WebElement link : links){
-            Thread linkCheck = new Thread(new LinkCheck(testCase, link.getAttribute("href")));
-            linkCheckingThreads.add(linkCheck);
-            linkCheck.start();
+            String href = link.getAttribute("href");
+            if(SupportMethods.isRegexMatch(href, "http.*" + currentDomain + ".*") || SupportMethods.isRegexMatch(href, "./.*")){
+                Thread linkCheck = new Thread(new LinkCheck(testCase, link.getAttribute("href")));
+                linkCheckingThreads.add(linkCheck);
+                linkCheck.start();
+            }
         }
 
         //Code below for waiting for all threads to finish due to log timing issues
@@ -237,7 +318,7 @@ public class WebInteractionMethods implements GuiDriver {
         String text = null;
         WebElement element = null;
         boolean elementIdentified = false;
-        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds){
+        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null){
                 elementIdentified = true;
@@ -277,7 +358,7 @@ public class WebInteractionMethods implements GuiDriver {
         String text = null;
         WebElement element = null;
         boolean elementIdentified = false;
-        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds){
+        while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null){
                 elementIdentified = true;
@@ -406,7 +487,7 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         WebElement element = null;
         boolean success = false;
-        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds){
+        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element == null){
                 wait(50);
@@ -524,6 +605,7 @@ public class WebInteractionMethods implements GuiDriver {
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot. Is driver ok? " + e.toString());
         }
+        /*
         try {
             Path file = Paths.get(filePath);
             File fileFolder = new File(filePath);
@@ -537,6 +619,8 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTION_PROBLEM, "Could not save screenshot to '" + filePath + "'. " + e.toString());
             //e.printStackTrace();
         }
+        */
+        SupportMethods.saveToFile(fileImage, filePath);
     }
 
     /**
@@ -1400,7 +1484,7 @@ public class WebInteractionMethods implements GuiDriver {
             DomElement domElement = (DomElement) guiElement;
             boolean enabled = false;
             WebElement webElement = null;
-            while (!enabled && System.currentTimeMillis() - startTime < standardTimeoutInSeconds){
+            while (!enabled && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
                 webElement = getRuntimeElementWithoutLogging(domElement);
                 if(webElement.isEnabled()) enabled = true;
             }
@@ -2049,7 +2133,7 @@ public class WebInteractionMethods implements GuiDriver {
                 "   </body>" + LF +
                 "</html>" + LF;
         SupportMethods.saveToFile(html, filePath);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"file://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"" + TestRun.reportLinkPrefix() + "://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
         TestRun.fileCounter++;
     }
 

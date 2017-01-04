@@ -97,4 +97,18 @@ public class JsonParser {
         JSONObject jsonObject = new JSONObject(content);
 
     }
+
+    public static String jsonToHtml(String json){
+        String html = "";
+        json = json.replace(System.lineSeparator(), "");
+        String[] parts = json.split("}");
+        for(String part : parts){
+            String[] values = part.split(",");
+            for(String value : values){
+                html += value + ",<br>" + System.lineSeparator();
+            }
+            html += "}<br>" + System.lineSeparator();
+        }
+        return html;
+    }
 }

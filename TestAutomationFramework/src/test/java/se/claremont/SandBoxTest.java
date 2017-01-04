@@ -2,16 +2,16 @@ package se.claremont;
 
 import org.junit.*;
 import org.junit.rules.TestName;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import se.claremont.autotest.common.*;
 import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.SwingInteractionMethods;
 import se.claremont.autotest.guidriverpluginstructure.websupport.DomElement;
-import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis;
-import se.claremont.autotest.guidriverpluginstructure.websupport.ResponsiveAnalysis2;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebDriverManager;
 import se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.support.PerformanceTimer;
@@ -20,6 +20,7 @@ import se.claremont.tools.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +36,12 @@ public class SandBoxTest extends TestSet{
     private static String OUTPUT_FILE_PATH = "";
     private static String ENDPOINT_TARGET_URL = "https://www.typeandtell.com/sv/";
     private static String LOCAL_MOCH_HTML_FILE = "";
-    @SuppressWarnings("CanBeFinal")
-    @Rule
-    public TestName currentTestName = new TestName();
+    @Rule public TestName currentTestName = new TestName();
+
 
     @BeforeClass
     public static void classSetup(){
+        TestRun.settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
         TestRun.settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
     }
 
@@ -72,7 +73,6 @@ public class SandBoxTest extends TestSet{
         }
     }
 
-
     @Ignore
     @Test
     public void w3cValidationTest(){
@@ -83,6 +83,7 @@ public class SandBoxTest extends TestSet{
         web.makeSureDriverIsClosed();
         testCase.report();
     }
+
 
     @Ignore
     @Test
@@ -157,20 +158,6 @@ public class SandBoxTest extends TestSet{
         web.navigate( ENDPOINT_TARGET_URL );
         web.mapCurrentPage( OUTPUT_FILE_PATH );
         web.makeSureDriverIsClosed();
-    }
-
-    @Ignore
-    @Test
-    public void testResponsive(){
-        WebDriverManager webDriverManager = new WebDriverManager(currentTestCase);
-        WebDriver driver = webDriverManager.initializeWebDriver(WebDriverManager.WebBrowserType.CHROME);
-        driver.get("http://www.claremont.se");
-        List<Dimension> resolutions = new ArrayList<>();
-        resolutions.add(new Dimension(750, 480));
-        resolutions.add(new Dimension(2028, 900));
-        ResponsiveAnalysis responsiveAnalysis = new ResponsiveAnalysis(driver, resolutions, currentTestCase);
-        responsiveAnalysis.performAnalysisAndReportResults();
-        driver.close();
     }
 
 
@@ -287,19 +274,6 @@ public class SandBoxTest extends TestSet{
         testCase.evaluateResultStatus();
     }
 
-    @Ignore
-    @Test
-    public void newResolutionAssessment(){
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
-        web.navigate("http://www.claremont.se");
-        List<Dimension> resolutions = new ArrayList<>();
-        resolutions.add(new Dimension(1024, 768));
-        resolutions.add(new Dimension(2048, 1024));
-        ResponsiveAnalysis2 responsiveAnalysis2 = new ResponsiveAnalysis2(resolutions, web.driver, currentTestCase);
-        responsiveAnalysis2.performAnalysis();
-        web.makeSureDriverIsClosed();
-    }
-
     @Test
     @Ignore
     public void tableVerifierPlayground(){
@@ -346,15 +320,31 @@ public class SandBoxTest extends TestSet{
 
     }
 
-    @Ignore
+
     @Test
+    @Ignore
     public void animatedDropdown(){
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        WebDriver webDriver = new FirefoxDriver();
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, webDriver);
         web.navigate("https://www.typeandtell.com/sv/pris/");
         web.reportBrokenLinks();
         DomElement drowDown = new DomElement("Insertion", DomElement.IdentificationType.BY_ID);
         web.selectInDropdown(drowDown, "Naturtonat papper");
         web.selectInDropdown(drowDown, "Vitt papper");
+        web.makeSureDriverIsClosed();
+    }
+
+    @Ignore
+    @Test
+    public void recursiveLinkCheckerTest() throws MalformedURLException {
+        System.setProperty("webdriver.gecko.driver", "C:\\Temp\\geckodriver.exe");
+        System.setProperty("webdriver.edge.driver", "C:\\Temp\\MicrosoftWebDriver.exe");
+        //WebDriver webDriver = new FirefoxDriver();
+        DesiredCapabilities dc = DesiredCapabilities.edge();
+        WebDriver driver = new RemoteWebDriver(dc);
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, driver);
+        web.navigate("http://www.claremont.se");
+        web.reportBrokenLinks();
         web.makeSureDriverIsClosed();
     }
 

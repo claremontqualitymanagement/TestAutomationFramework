@@ -13,6 +13,7 @@ import java.io.File;
 public class ScpTest {
 
     @Test
+    @Ignore
     public void SftpUploadFileTest(){
         String user = "taf";
         String pass = "Claremont16!";
@@ -24,6 +25,7 @@ public class ScpTest {
     }
 
     @Test
+    @Ignore
     public void SftpDownloadFileTest(){
         String user = "taf";
         String pass = "Claremont16!";

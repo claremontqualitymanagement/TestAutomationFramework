@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
  * A summary of the test results for a number of test cases, like a test set or a test run.
  * Formatted in HTML for emailing, links and so forth.
  *
+ * If TestRun.settings has a customValue called 'HtmlReportsLinkPrefix' with the value
+ * of 'http' the link prefix in the summary report will be http:// instead of file://.
+ *
  * Created by jordam on 2016-08-25.
  */
 public class HtmlSummaryReport {
@@ -40,7 +43,10 @@ public class HtmlSummaryReport {
     }
 
     private void appendTestCaseResultToSummary(TestCase testCase){
-        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"file://" + testCase.pathToHtmlLog + "\" target=\"_blank\">Log</a></td></tr>" + LF;
+        String link = testCase.pathToHtmlLog;
+        if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
+            link = link.replace("\\", "/").substring(6);
+        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"" + TestRun.reportLinkPrefix() + "://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
         //testCaseSummary += solvedKnownErrorsFromTestCaseLocalKnownErrorsList(testCase);
         switch (testCase.resultStatus){
             case PASSED:
@@ -158,7 +164,7 @@ public class HtmlSummaryReport {
                 "      img.toplogo           { max-width: 30%; max-height: 10%; }" + LF +
                 "      img.bottomlogo        { width: 20%; }" + LF +
                 "      td.bottomlogo         { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
-                "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; }" + LF +
+                "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; margin: 30px; }" + LF +
                 "      tr." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      li." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
@@ -316,8 +322,11 @@ public class HtmlSummaryReport {
                         }
                     }
                     if(!alreadyReported){
+                        String link = testCase.pathToHtmlLog;
+                        if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
+                            link = link.replace("\\", "/").substring(6);
                         idsOfTestCases.add(testCase.uid.toString());
-                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
+                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"" + TestRun.reportLinkPrefix() + "://").append(link).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
                     }
                 }
                 html.append("              </ul>").append(LF);
@@ -336,18 +345,18 @@ public class HtmlSummaryReport {
     private String htmlElementSolvedKnownErrors(){
         StringBuilder html = new StringBuilder();
         if(solvedKnownErrorsList.size() > 0){
+            ArrayList<String> displayableKnownErrors = new ArrayList<>();
+            for(KnownError knownError : solvedKnownErrorsList){
+                if(displayableKnownErrors.contains(knownError.description)) continue;
+                displayableKnownErrors.add(knownError.description);
+            }
             html.append("          <div id=\"").append(HtmlStyleNames.SOLVED_TEST_SET_ERRORS.toString()).append("\">").append(LF);
             html.append("            <h2>Registered known errors not encountered</h2>").append(LF);
-            for(KnownError knownError : solvedKnownErrorsList){
-                html.append("            <p>").append(LF);
-                html.append("              ['").append(knownError.description).append("']").append(LF);
-                html.append("              <ul>").append(LF);
-                for(TestCase testCase : knownError.testCasesWhereErrorWasEncountered){
-                    html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
-                }
-                html.append("            </ul>").append(LF);
-                html.append("          </p>").append(LF).append(LF);
+            html.append("            <p>").append(LF);
+            for(String knownError : displayableKnownErrors){
+                html.append("              ['").append(knownError).append("']<br>").append(LF);
             }
+            html.append("            </p>").append(LF).append(LF);
             html.append("          <br>").append(LF);
             html.append("        </div>").append(LF).append("<br>").append(LF);
         }
@@ -435,7 +444,10 @@ public class HtmlSummaryReport {
         StringBuilder html = new StringBuilder();
         for(NewErrorInfo newErrorInfo : newErrorInfos){
             html.append("          <p>").append(LF);
-            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"file://").append(newErrorInfo.testCase.pathToHtmlLog).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
+            String link = newErrorInfo.testCase.pathToHtmlLog;
+            if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
+                link = link.replace("\\", "/").substring(6);
+            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"" + TestRun.reportLinkPrefix() + "://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             for(LogPost logRow : newErrorInfo.logEntries){
                 html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
             }
@@ -535,6 +547,5 @@ public class HtmlSummaryReport {
             this.testCasesWhereSimilarLogRowsAreEncountered.add(testCase);
         }
     }
-
 
 }

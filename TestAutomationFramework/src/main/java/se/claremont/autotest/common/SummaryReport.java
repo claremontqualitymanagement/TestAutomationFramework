@@ -8,6 +8,7 @@ import se.claremont.autotest.support.SupportMethods;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -321,10 +322,13 @@ public class SummaryReport {
      */
     private String htmlElementSolvedKnownErrors(){
         StringBuilder html = new StringBuilder();
+        List<String> solvedKnownErrors = new ArrayList<>();
         if(solvedKnownErrorsList.size() > 0){
             html.append("          <div id=\"").append(HtmlStyleNames.SOLVED_TEST_SET_ERRORS.toString()).append("\">").append(LF);
             html.append("            <h2>Registered known errors not encountered</h2>").append(LF);
             for(KnownError knownError : solvedKnownErrorsList){
+                if(solvedKnownErrors.contains(knownError.description)) continue;
+                solvedKnownErrors.add(knownError.description);
                 html.append("            <p>").append(LF);
                 html.append("              ['").append(knownError.description).append("']").append(LF);
                 html.append("              <ul>").append(LF);
