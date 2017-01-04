@@ -45,6 +45,7 @@ public class TestRun {
     }
 
     public static String reportLinkPrefix(){
+        if(TestRun.settings.getCustomValue("HtmlReportsLinkPrefix") == null) return "file";
         if(TestRun.settings.getCustomValue("HtmlReportsLinkPrefix").toLowerCase().contains("http")){
             return "http";
         } else if (TestRun.settings.getCustomValue("HtmlReportsLinkPrefix").toLowerCase().contains("https")){

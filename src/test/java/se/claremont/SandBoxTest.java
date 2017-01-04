@@ -4,7 +4,6 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import se.claremont.autotest.common.*;
@@ -72,14 +71,6 @@ public class SandBoxTest extends TestSet{
             OUTPUT_FILE_PATH = "C:\\Temp\\Output.txt";
             LOCAL_MOCH_HTML_FILE = "file://c:/temp/taf.html";
         }
-    }
-
-    @Test
-    public void testCaseNameTest(){
-        System.setProperty("phantomjs.binary.path", "C:\\Temp\\phantomjs.exe");
-        WebDriver driver = new PhantomJSDriver();
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, driver);
-        web.saveDesktopScreenshot();
     }
 
     @Ignore
