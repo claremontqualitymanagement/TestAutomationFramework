@@ -2133,7 +2133,7 @@ public class WebInteractionMethods implements GuiDriver {
                 "   </body>" + LF +
                 "</html>" + LF;
         SupportMethods.saveToFile(html, filePath);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"file://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"" + TestRun.reportLinkPrefix() + "://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
         TestRun.fileCounter++;
     }
 

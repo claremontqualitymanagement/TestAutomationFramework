@@ -44,4 +44,13 @@ public class TestRun {
         reporters.report();
     }
 
+    public static String reportLinkPrefix(){
+        if(TestRun.settings.getCustomValue("HtmlSummaryReportLinkPrefix").toLowerCase().contains("http")){
+            return "http";
+        } else if (TestRun.settings.getCustomValue("HtmlSummaryReportLinkPrefix").toLowerCase().contains("https")){
+            return "https";
+        }
+        return "file";
+    }
+
 }

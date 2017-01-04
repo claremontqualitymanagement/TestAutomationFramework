@@ -132,7 +132,7 @@ class LogPost {
         StringBuilder sb = new StringBuilder();
         if(instring.startsWith("Saved screenshot as '")){
             String[] parts = instring.split("'");
-            sb.append("Saved screenshot as '<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[1]).append("</span>'<br><a href=\"file://").append(parts[1].replace("\\", "/")).append("\" target=\"_blank\"><img class=\"screenshot\" alt=\"screenshot\" src=\"file://").append(parts[1].replace("\\", "/")).append("\"></a>");
+            sb.append("Saved screenshot as '<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[1]).append("</span>'<br><a href=\"" + TestRun.reportLinkPrefix() + "://").append(parts[1].replace("\\", "/")).append("\" target=\"_blank\"><img class=\"screenshot\" alt=\"screenshot\" src=\"" + TestRun.reportLinkPrefix() + "://").append(parts[1].replace("\\", "/")).append("\"></a>");
         }else {
             String[] parts = instring.split("'");
             if(instring.startsWith("'")){
