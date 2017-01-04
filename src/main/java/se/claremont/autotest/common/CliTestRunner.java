@@ -2,8 +2,6 @@ package se.claremont.autotest.common;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
@@ -41,31 +39,21 @@ public class CliTestRunner {
     }
 
 
-    public static class OneTimeReporterAtEndOfRun extends RunListener{
-        public void testFailure(Failure failure){
-            System.out.println("Failure: " + failure.getDescription());
-        }
-
-        public void testRunFinished(Result result) throws Exception {
-            TestRun.reporters.report();
-        }
-
-    }
-
     /**
      * Actual runner method
      * @param args arguments
      */
     public static void main(String [] args) {
+        System.out.println();
+        List<Class<?>> classes = new ArrayList<Class<?>>();
 
         if (args.length == 0) {
             System.out.print(helpText());
             return;
         }
-
         JUnitCore junit = new JUnitCore();
-        TestRun.reporters.addTestRunReporter(new TestRunReporterHtmlSummaryReportFile());
-        junit.addListener(new OneTimeReporterAtEndOfRun());
+        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+        junit.addListener(new TafRunListener());
 
         for (String arg : args) {
             if (arg.toLowerCase().contains("diagnostic")) {
@@ -100,39 +88,21 @@ public class CliTestRunner {
                 }
             } else {
                 try {
-                    Result result = junit.runClasses(Class.forName(arg));
-
-                    for (Failure failure : result.getFailures()) {
-                        System.out.println(failure.toString());
-                    }
-
-                    System.out.println(result.wasSuccessful());
+                    classes.add(Class.forName(arg));
                 } catch (ClassNotFoundException e) {
-                    System.out.println("Class with name '" + arg + "' not found.");
-                    e.printStackTrace();
-                    logger.error("Class with name '" + arg + "' not found.", e);
+                    System.out.println("Warning: Class '" + arg + "' not found.");
                 }
             }
         }
 
-        if (TestRun.exitCode == 0)
-            logger.debug("TAF RUNNING SUCCESSFULLY WITH exitCode= " + TestRun.exitCode);
-        else
-            logger.debug("TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
+        Result result = junit.run(classes.toArray(new Class[0]));
 
-        System.out.println("TAF exits with exitCode= " + TestRun.exitCode);
+        if (TestRun.exitCode == 0)
+            logger.debug(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode= " + TestRun.exitCode);
+        else
+            logger.debug(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
+
         System.exit(TestRun.exitCode);
 
-
-        class OneTimeReporterAtEndOfRun extends RunListener{
-            public void testFailure(Failure failure){
-                System.out.println("Failure: " + failure.getDescription());
-            }
-
-            public void testRunFinished(Result result) throws Exception {
-                TestRun.reporters.report();
-            }
-
-        }
     }
 }

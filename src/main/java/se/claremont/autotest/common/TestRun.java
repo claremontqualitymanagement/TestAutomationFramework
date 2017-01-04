@@ -2,6 +2,8 @@ package se.claremont.autotest.common;
 
 //import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
 
+import org.junit.runner.notification.RunListener;
+
 /**
  * A test run is the entity of every time some set(s) of test cases are run.
  * Created by jordam on 2016-08-17.
@@ -13,6 +15,8 @@ public class TestRun {
     public static int exitCode;
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
+    RunListener runListener = new RunListener();
+
 
     /**
      * TAF and TA test(s) standard codes.
