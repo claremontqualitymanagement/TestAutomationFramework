@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * A summary of the test results for a number of test cases, like a test set or a test run.
  * Formatted in HTML for emailing, links and so forth.
  *
- * If TestRun.settings has a customValue called 'HtmlSummaryReportLinkPrefix' with the value
+ * If TestRun.settings has a customValue called 'HtmlReportsLinkPrefix' with the value
  * of 'http' the link prefix in the summary report will be http:// instead of file://.
  *
  * Created by jordam on 2016-08-25.
