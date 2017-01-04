@@ -8,12 +8,10 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.webdriverglueco
  * Created by jordam on 2016-12-04.
  */
 public class NavigationMechanisms {
-    TestCase testCase;
-    WebInteractionMethods web;
+    private WebInteractionMethods web;
 
     public NavigationMechanisms(TestCase testCase){
-        this.testCase = testCase;
-        web = new WebInteractionMethods(this.testCase);
+        web = new WebInteractionMethods(testCase);
     }
 
     public void ensureLandingPageDisplayed(){
