@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
  * A summary of the test results for a number of test cases, like a test set or a test run.
  * Formatted in HTML for emailing, links and so forth.
  *
+ * If TestRun.settings has a customValue called 'HtmlSummaryReportLinkPrefix' with the value
+ * of 'http' the link prefix in the summary report will be http:// instead of file://.
+ *
  * Created by jordam on 2016-08-25.
  */
 public class HtmlSummaryReport {
@@ -43,7 +46,7 @@ public class HtmlSummaryReport {
         String link = testCase.pathToHtmlLog;
         if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
             link = link.replace("\\", "/").substring(6);
-        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"file://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
+        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"" + linkPrefix() + "://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
         //testCaseSummary += solvedKnownErrorsFromTestCaseLocalKnownErrorsList(testCase);
         switch (testCase.resultStatus){
             case PASSED:
@@ -323,7 +326,7 @@ public class HtmlSummaryReport {
                         if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                             link = link.replace("\\", "/").substring(6);
                         idsOfTestCases.add(testCase.uid.toString());
-                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"file://").append(link).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
+                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"" + linkPrefix() + "://").append(link).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
                     }
                 }
                 html.append("              </ul>").append(LF);
@@ -444,7 +447,7 @@ public class HtmlSummaryReport {
             String link = newErrorInfo.testCase.pathToHtmlLog;
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
-            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"file://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
+            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"" + linkPrefix() + "://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             for(LogPost logRow : newErrorInfo.logEntries){
                 html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
             }
@@ -545,5 +548,11 @@ public class HtmlSummaryReport {
         }
     }
 
+    private String linkPrefix(){
+        if(TestRun.settings.getCustomValue("HtmlSummaryReportLinkPrefix").toLowerCase().equals("http")){
+            return "http";
+        }
+        return "file";
+    }
 
 }

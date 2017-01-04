@@ -4,6 +4,7 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import se.claremont.autotest.common.*;
@@ -41,6 +42,7 @@ public class SandBoxTest extends TestSet{
 
     @BeforeClass
     public static void classSetup(){
+        TestRun.settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
         TestRun.settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
     }
 
@@ -74,7 +76,10 @@ public class SandBoxTest extends TestSet{
 
     @Test
     public void testCaseNameTest(){
-        currentTestCase.log(LogLevel.INFO, currentTestCase.testName);
+        System.setProperty("phantomjs.binary.path", "C:\\Temp\\phantomjs.exe");
+        WebDriver driver = new PhantomJSDriver();
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase, driver);
+        web.saveDesktopScreenshot();
     }
 
     @Ignore
