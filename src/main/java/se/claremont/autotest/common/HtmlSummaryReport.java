@@ -181,8 +181,8 @@ public class HtmlSummaryReport {
                 "       tr.testcasesummaryheadline                                     { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + " tr:nth-child(even)                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
                 "       .noerrorsexclamtaion    { color: black; font-weight: bold; }" + LF +
-                "       h3#settingsheading      { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
-                "       table.settingsTable     { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; font-size: 80%; }" + LF +
+                "       h3#settingsheading      { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
+                "       table.settingsTable     { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-size: 80%; }" + LF +
                 resultsBarStyleInfo +
                 "    </style>" + LF + LF;
     }

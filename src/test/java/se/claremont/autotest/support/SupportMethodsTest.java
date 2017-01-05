@@ -7,7 +7,7 @@ import se.claremont.autotest.common.LogFolder;
 import java.io.File;
 
 /**
- * Tests for methods in the SupportMethods class
+ * SecondSet_Test for methods in the SupportMethods class
  *
  * Created by jordam on 2016-08-31.
  */

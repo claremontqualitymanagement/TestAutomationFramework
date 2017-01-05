@@ -58,4 +58,12 @@ public class TestRun {
         return "file";
     }
 
+    public static void evaluateCurrentTestSet(){
+        if(currentTestSet != null)
+            reporters.evaluateTestSet(currentTestSet);
+    }
+
+    public static void reportTestRun(){
+        reporters.report();
+    }
 }
