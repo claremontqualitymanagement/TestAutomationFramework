@@ -46,6 +46,7 @@ public class TestRun {
 
     public void report(){
         reporters.report();
+        BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 
     public static String reportLinkPrefix(){
@@ -65,5 +66,6 @@ public class TestRun {
 
     public static void reportTestRun(){
         reporters.report();
+        BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 }
