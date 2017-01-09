@@ -4,11 +4,18 @@ import se.claremont.autotest.support.SupportMethods;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by jordam on 2017-01-05.
  */
 public class BaseFolderHtmlIndexFile {
+    SimpleDateFormat directoryPartTimeFormat = new SimpleDateFormat("yyyyMMdd HHmmss");
+    SimpleDateFormat outputTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public BaseFolderHtmlIndexFile(){
         SupportMethods.saveToFile(htmlContent(), TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER) + "index.html" );
@@ -23,12 +30,18 @@ public class BaseFolderHtmlIndexFile {
                 return new File(current, name).isDirectory();
             }
         });
+        if(directories == null) return null;
+        Arrays.sort(directories, Collections.reverseOrder());
         String baseFolder = TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).replace("\\", "/");
         for(String directory : directories) {
             String[] directoryNameParts = directory.split("_");
-            String timestamp = "";
+            Date timestamp = null;
             if(directoryNameParts.length > 2){
-                timestamp = directoryNameParts[0] + " " + directoryNameParts[1];
+                try {
+                    timestamp = directoryPartTimeFormat.parse(directoryNameParts[0] + " " + directoryNameParts[1]);
+                } catch (ParseException e) {
+                    System.out.println(e.getMessage());
+                }
             }
             String runName = "";
             for(int i = 2; i < directoryNameParts.length; i++){
@@ -37,12 +50,10 @@ public class BaseFolderHtmlIndexFile {
             htmlTableRows
                     .append("         <tr class=\"resultdirectory\" onclick=\"openInNewTab('" + TestRun.reportLinkPrefix() + ":///" + baseFolder + directory + "/_summary.html');\">").append(System.lineSeparator())
                     .append("            <td class=\"timestamp\">").append(System.lineSeparator())
-                    .append("               ").append(timestamp).append(System.lineSeparator())
+                    .append("               ").append(outputTimeFormat.format(timestamp)).append(System.lineSeparator())
                     .append("            </td>").append(System.lineSeparator())
                     .append("            <td class=\"runname\">").append(System.lineSeparator())
                     .append("               ").append(runName).append(System.lineSeparator())
-                    .append("            </td>").append(System.lineSeparator())
-                    .append("            <td>").append(System.lineSeparator())
                     .append("            </td>").append(System.lineSeparator())
                     .append("         </tr>").append(System.lineSeparator());
         }
@@ -53,12 +64,15 @@ public class BaseFolderHtmlIndexFile {
     private String htmlContent(){
         return "<!DOCTYPE html>" + System.lineSeparator() +
                 "<html lang=\"en\">" + System.lineSeparator() +
+                "" + System.lineSeparator() +
                 "   <head>" + System.lineSeparator() +
+                "" + System.lineSeparator() +
                 "      <meta charset='utf-8'>" + System.lineSeparator() +
                 "       <meta http-equiv=\"Content-Language\" content=\"en\">" + System.lineSeparator() +
                 "      <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">" + System.lineSeparator() +
                 "      <meta name=\"description\" content=\"Test run results for TAF\"/>" + System.lineSeparator() +
                 "      <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + System.lineSeparator() +
+                "      <meta http-equiv=\"refresh\" content=\"15\" />" + System.lineSeparator() +
                 "      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + System.lineSeparator() +
                 "" + System.lineSeparator() +
                 "      <title>TAF Result Viewer</title>" + System.lineSeparator() +
@@ -120,7 +134,7 @@ public class BaseFolderHtmlIndexFile {
                 "         " + System.lineSeparator() +
                 "         td.timestamp {" + System.lineSeparator() +
                 "            color: rgb(104,102,99); " + System.lineSeparator() +
-                "            width: 80px; " + System.lineSeparator() +
+                //"            width: 80px; " + System.lineSeparator() +
                 "         }" + System.lineSeparator() +
                 "         " + System.lineSeparator() +
                 "         td.runname {" + System.lineSeparator() +
@@ -206,37 +220,42 @@ public class BaseFolderHtmlIndexFile {
                 "   </head>" + System.lineSeparator() +
                 "   " + System.lineSeparator() +
                 "   <body>" + System.lineSeparator() +
-                "      <div id=\"head\">" + System.lineSeparator() +
-                "      <img src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\" alt=\"logo\" class=\"toplogo\">" + System.lineSeparator() +
-                "      <br>" + System.lineSeparator() +
-                "      <br>" + System.lineSeparator() +
                 "" + System.lineSeparator() +
-                "      <h1 class=\"pagetitle\">TAF Result Viewer</h1>" + System.lineSeparator() +
+                "      <div id=\"head\">" + System.lineSeparator() +
+                "         <img class=\"toplogo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + System.lineSeparator() +
+                "         <br>" + System.lineSeparator() +
+                "         <br>" + System.lineSeparator() +
+                "         <h1 class=\"pagetitle\">TAF Result Viewer</h1>" + System.lineSeparator() +
+                "         <p class=\"updatetime\">Last updated " + outputTimeFormat.format(new Date()) + "</p>" + System.lineSeparator() +
+                "      </div>" + System.lineSeparator() +
+                "" + System.lineSeparator() +
                 "      <table class=\"testruns striped\">" + System.lineSeparator() +
-                "       <tr data-href=\"C:/Users/jordam/TAF/20170104_164907_sun_reflect_NativeMethodAccessorImpl/wrapUpCurrentTestSetShould.html\">" + System.lineSeparator() +
+                "         <tr data-href=\"C:/Users/jordam/TAF/20170104_164907_sun_reflect_NativeMethodAccessorImpl/wrapUpCurrentTestSetShould.html\">" + System.lineSeparator() +
                 "            <th>Time</th>" + System.lineSeparator() +
                 "            <th>Run name</th>" + System.lineSeparator() +
-                "            <th>Run status</th>" + System.lineSeparator() +
                 "         </tr>" + System.lineSeparator() +
                 "" + folderNamesAsHtmlTable() +
                 "      </table>" + System.lineSeparator() +
                 "      " + System.lineSeparator() +
                 "      <br>" + System.lineSeparator() +
                 "      <br>" + System.lineSeparator() +
+                "" + System.lineSeparator() +
                 "      <table class=\"footer\" width=\"100%\">" + System.lineSeparator() +
-                "            <tr>" + System.lineSeparator() +
+                "         <tr>" + System.lineSeparator() +
                 "            <td class=\"bottomlogo\" width=\"100%\">" + System.lineSeparator() +
                 "               <a href=\"http://www.claremont.se\" target=\"_blank\">" + System.lineSeparator() +
                 "                  <img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\">" + System.lineSeparator() +
                 "               </a>" + System.lineSeparator() +
                 "            </td>" + System.lineSeparator() +
-                "            </tr>" + System.lineSeparator() +
+                "         </tr>" + System.lineSeparator() +
                 "         <tr>" + System.lineSeparator() +
                 "            <td width=\"100%\" class=\"copyright\"><br>(c) Claremont 2017</td>" + System.lineSeparator() +
-                "            </tr>" + System.lineSeparator() +
-                "     </table>" + System.lineSeparator() +
+                "         </tr>" + System.lineSeparator() +
+                "      </table>" + System.lineSeparator() +
                 "" + System.lineSeparator() +
                 "   </body>" + System.lineSeparator() +
-                "</html>";
+                "" + System.lineSeparator() +
+                "</html>" +
+                "" + System.lineSeparator();
     }
 }
