@@ -1,6 +1,7 @@
 package se.claremont.autotest.common;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -8,7 +9,7 @@ import org.junit.Test;
  */
 public class BaseFolderHtmlIndexFileTest {
 
-
+    @Ignore
     @Test
     public void fileCreationTest(){
         BaseFolderHtmlIndexFile b = new BaseFolderHtmlIndexFile();
