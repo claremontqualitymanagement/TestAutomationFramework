@@ -2000,8 +2000,11 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
         getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
-        TableData tableData = tableDataFromGuiElement(tableElement, true);
-        if(tableData == null) return;
+        TableData tableData = tableDataFromGuiElement(tableElement, false);
+        if(tableData == null) {
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + ".");
+            return;
+        }
         tableData.verifyHeadlinesExist(expectedHeadlines);
     }
 
@@ -2035,7 +2038,7 @@ public class WebInteractionMethods implements GuiDriver {
         try {
             rows = tableElement.findElements(By.xpath(".//tr"));
         }catch (Exception e){
-            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for " + domElement.LogIdentification() + ".");
+            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for HTML table " + domElement.LogIdentification() + ".");
             return null;
         }
         for(WebElement row : rows){
