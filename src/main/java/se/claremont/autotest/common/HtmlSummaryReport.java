@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Formatted in HTML for emailing, links and so forth.
  *
  * If TestRun.settings has a customValue called 'HtmlReportsLinkPrefix' with the value
- * of 'http' the link prefix in the summary report will be http:// instead of file://.
+ * of 'http' the link prefix in the summary reportTestRun will be http:// instead of file://.
  *
  * Created by jordam on 2016-08-25.
  */
@@ -151,7 +151,7 @@ public class HtmlSummaryReport {
     }
 
     /**
-     * Produces the style section for the HTML HEAD section, to visually format the report
+     * Produces the style section for the HTML HEAD section, to visually format the reportTestRun
      * @return HTML document style section as string
      */
     private String htmlElementStyles(){
@@ -188,7 +188,7 @@ public class HtmlSummaryReport {
     }
 
     /**
-     * Check to see if the report should be written at all
+     * Check to see if the reportTestRun should be written at all
      * @return Return true if the number of test cases exceeds one
      */
     private boolean reportShouldBeWritten(){
@@ -197,7 +197,7 @@ public class HtmlSummaryReport {
 
 
     /**
-     * Compiles a HTML formatted summary report from analyzed test case information.
+     * Compiles a HTML formatted summary reportTestRun from analyzed test case information.
      * @return HTML document as string
      */
     String createReport(){
@@ -245,16 +245,16 @@ public class HtmlSummaryReport {
     }
 
     /**
-     * Produces the title section of the HTML page the summary report consists of.
+     * Produces the title section of the HTML page the summary reportTestRun consists of.
      * @return HTML section as string
      */
     private String htmlElementTitle(){
         return "          <img class=\"toplogo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
-                "          <h1>Test report " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
+                "          <h1>Test reportTestRun " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
     }
 
     /**
-     * Produces the statistics section of the summary report
+     * Produces the statistics section of the summary reportTestRun
      * @return HTML section as string
      */
     private String htmlElementStatistics(){
@@ -379,7 +379,7 @@ public class HtmlSummaryReport {
     }
 
     /**
-     * Produces a document footer for the summary report.
+     * Produces a document footer for the summary reportTestRun.
      * @return HTML section for footer
      */
     private String htmlElementCopyright(){

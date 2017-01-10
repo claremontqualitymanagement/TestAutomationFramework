@@ -31,7 +31,7 @@ public class LogEventHandler {
     @GET
     @Produces("text/plain")
     public String getLogEvent(@Context Request request) {
-        return "nothing to report from getMovieEvent";
+        return "nothing to reportTestRun from getMovieEvent";
     }
 
 }

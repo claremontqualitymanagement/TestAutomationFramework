@@ -98,8 +98,8 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * Saves the output of the test case to an HTML formatted text file
      */
     public void report(){
-        testCase.log(LogLevel.DEBUG, "Saving html report to '" + testCase.pathToHtmlLog + "'.");
-        logger.debug( "Saving html report to '" + testCase.pathToHtmlLog + "'." );
+        testCase.log(LogLevel.DEBUG, "Saving html reportTestRun to '" + testCase.pathToHtmlLog + "'.");
+        logger.debug( "Saving html reportTestRun to '" + testCase.pathToHtmlLog + "'." );
         if(testCase.testCaseLog.logPosts.size() > 0){
             this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
         } else {
@@ -131,7 +131,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     /**
-     * Produces a document footer for the summary report.
+     * Produces a document footer for the summary reportTestRun.
      * @return HTML section for footer
      */
     private String footer(){

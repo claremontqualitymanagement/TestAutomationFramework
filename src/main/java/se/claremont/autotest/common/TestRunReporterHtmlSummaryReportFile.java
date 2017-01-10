@@ -25,7 +25,7 @@ public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
 
 
     /**
-     * Check to see if the report should be written at all
+     * Check to see if the reportTestRun should be written at all
      * @return Return true if the number of test cases exceeds one
      */
     private boolean reportShouldBeWritten(){
@@ -33,12 +33,12 @@ public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
     }
 
     /**
-     * Writes the compiled summary report to a file in the test run catalogue.
+     * Writes the compiled summary reportTestRun to a file in the test run catalogue.
      */
     private void writeReport(){
         if(reportShouldBeWritten()){
             SupportMethods.saveToFile(htmlSummaryReport.createReport(), LogFolder.testRunLogFolder + "_summary.html");
-            LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary report saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
+            LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary reportTestRun saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
             System.out.println(SupportMethods.LF + logPost.toString());
         }
     }

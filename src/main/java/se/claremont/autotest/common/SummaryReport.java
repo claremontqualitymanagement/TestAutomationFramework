@@ -150,7 +150,7 @@ public class SummaryReport {
     }
 
     /**
-     * Check to see if the report should be written at all
+     * Check to see if the reportTestRun should be written at all
      * @return Return true if the number of test cases exceeds one
      */
     private boolean reportShouldBeWritten(){
@@ -158,7 +158,7 @@ public class SummaryReport {
     }
 
     /**
-     * Produces the style section for the HTML HEAD section, to visually format the report
+     * Produces the style section for the HTML HEAD section, to visually format the reportTestRun
      * @return HTML document style section as string
      */
     private String htmlElementStyles(){
@@ -185,7 +185,7 @@ public class SummaryReport {
     }
 
     /**
-     * Compiles a HTML formatted summary report from analyzed test case information.
+     * Compiles a HTML formatted summary reportTestRun from analyzed test case information.
      * @return HTML document as string
      */
     private String createReport(){
@@ -226,16 +226,16 @@ public class SummaryReport {
     }
 
     /**
-     * Produces the title section of the HTML page the summary report consists of.
+     * Produces the title section of the HTML page the summary reportTestRun consists of.
      * @return HTML section as string
      */
     private String htmlElementTitle(){
         return "          <img alt=\"toplogo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
-                "          <h1>Test report " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
+                "          <h1>Test reportTestRun " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
     }
 
     /**
-     * Produces the statistics section of the summary report
+     * Produces the statistics section of the summary reportTestRun
      * @return HTML section as string
      */
     private String htmlElementStatistics(){
@@ -359,7 +359,7 @@ public class SummaryReport {
     }
 
     /**
-     * Produces a document footer for the summary report.
+     * Produces a document footer for the summary reportTestRun.
      * @return HTML section for footer
      */
     private String htmlElementCopyright(){
@@ -372,12 +372,12 @@ public class SummaryReport {
     }
 
     /**
-     * Writes the compiled summary report to a file in the test run catalogue.
+     * Writes the compiled summary reportTestRun to a file in the test run catalogue.
      */
     public void writeReport(){
         if(reportShouldBeWritten()){
             SupportMethods.saveToFile(createReport(), LogFolder.testRunLogFolder + "_summary.html");
-            LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary report saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
+            LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary reportTestRun saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
             logger.debug( LF + logPost.toString() );
         }
     }

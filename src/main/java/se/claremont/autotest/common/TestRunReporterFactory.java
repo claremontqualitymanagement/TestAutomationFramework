@@ -11,7 +11,7 @@ public class TestRunReporterFactory {
     public TestRunReporterFactory(){
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
         if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
-            reporters.add(new TestRunReporterEmailReport());
+            addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());
         }
     }
 
@@ -41,7 +41,7 @@ public class TestRunReporterFactory {
         }
     }
 
-    public void report(){
+    public void reportTestRun(){
         reporters.forEach(TestRunReporter::report);
     }
 }

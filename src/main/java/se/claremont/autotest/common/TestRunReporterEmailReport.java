@@ -13,7 +13,7 @@ public class TestRunReporterEmailReport implements TestRunReporter{
     @Override
     public void report() {
         String recipientsString = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES);
-        if(recipientsString == null || recipientsString.length() == 0) System.out.println("No recipients found for sending summary report email. Add them to the runSettings.properties file in the base log folder.");
+        if(recipientsString == null || recipientsString.length() == 0) System.out.println("No recipients found for sending summary reportTestRun email. Add them to the runSettings.properties file in the base log folder.");
         if(htmlSummaryReport.numberOfTestCases() > 1 && recipientsString != null && recipientsString.length() > 0){
             ArrayList<String> recipients = new ArrayList<>();
             for(String recipient : recipientsString.split(",")){

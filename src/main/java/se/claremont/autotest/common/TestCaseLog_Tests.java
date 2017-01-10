@@ -68,7 +68,7 @@ public class TestCaseLog_Tests {
         } catch (Exception e){
             Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
         }
-        Assert.assertTrue("New TestCaseLog() didn't report that it had encountered errors when it actually had errors.", testCaseLog.hasEncounteredErrors());
+        Assert.assertTrue("New TestCaseLog() didn't reportTestRun that it had encountered errors when it actually had errors.", testCaseLog.hasEncounteredErrors());
     }
 
     @Test

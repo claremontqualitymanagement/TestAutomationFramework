@@ -59,7 +59,7 @@ public class SandBoxTest extends TestSet{
     @AfterClass
     public static void ClassTearDown(){
         TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
-        TestRun.reporters.report();
+        TestRun.reporters.reportTestRun();
     }
 
     @Before

@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 /**
  * Relevant test execution parameters. Usually used in a TestRun context.
- * Secret items are not displayed in html report
+ * Secret items are not displayed in html reportTestRun
  *
  * Created by jordam on 2016-08-17.
  */
@@ -26,7 +26,7 @@ public class Settings extends HashMap<String, String>{
 
     private final static Logger logger = LoggerFactory.getLogger( Settings.class );
 
-    //Some of these setting parameters are suppressed from log display in the summary report, where these settings othervice is displayed.
+    //Some of these setting parameters are suppressed from log display in the summary reportTestRun, where these settings othervice is displayed.
     public enum SettingParameters{
         EMAIL_SENDER_ADDRESS         (),
         EMAIL_ACCOUNT_USER_NAME      (),

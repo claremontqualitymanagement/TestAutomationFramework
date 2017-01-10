@@ -30,7 +30,7 @@ public class KioskModeReportTest {
         Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.UNEVALUATED));
         kioskDisplay.evaluateTestCase(testCase);
         Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.PASSED));
-        kioskDisplay.create("C:\\temp\\report.html", "Dummy tests", 4);
+        kioskDisplay.create("C:\\temp\\reportTestRun.html", "Dummy tests", 4);
         kioskDisplay.openInDefaultBrowser();
     }
 }
