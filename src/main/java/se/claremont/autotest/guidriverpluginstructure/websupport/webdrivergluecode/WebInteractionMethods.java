@@ -66,6 +66,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
+            haltFurtherExecution();
         }
     }
 
@@ -79,6 +80,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
+            haltFurtherExecution();
         }
     }
 
@@ -99,6 +101,7 @@ public class WebInteractionMethods implements GuiDriver {
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
+            haltFurtherExecution();
         }
     }
 
