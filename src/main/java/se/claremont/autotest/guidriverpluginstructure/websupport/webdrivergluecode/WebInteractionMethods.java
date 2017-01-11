@@ -74,7 +74,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Attempts to create a WebDriver instance to use for the specified browser type
      *
      * @param testCase The test case to log to
-     * @param browserType The browser type to use
+     * @param browserType The type of browser to try to create driver instance for
      */
     public WebInteractionMethods(TestCase testCase, WebDriverManager.WebBrowserType browserType){
         this.testCase = testCase;
