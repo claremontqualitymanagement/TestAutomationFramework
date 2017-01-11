@@ -23,4 +23,4 @@ Read more about the documentation [here](http://46.101.193.212/TAF/documentation
 [![Github Releases](https://img.shields.io/github/downloads/atom/atom/latest/total.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
 
-© 2016 Claremont AB
+© 2017 Claremont AB
