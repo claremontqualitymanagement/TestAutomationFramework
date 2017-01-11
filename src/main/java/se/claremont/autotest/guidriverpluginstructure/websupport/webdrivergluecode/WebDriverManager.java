@@ -3,6 +3,7 @@ package se.claremont.autotest.guidriverpluginstructure.websupport.webdrivergluec
 import io.github.bonigarcia.wdm.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.MarionetteDriver;
@@ -141,16 +142,20 @@ public class WebDriverManager {
     }
 
     class ChromeBrowser extends Browser{
+
         ChromeBrowser(TestCase testCase){
             super(testCase);
         }
+
         public @Override WebDriver setup(){
             WebDriver driver = null;
             testCase.log(LogLevel.DEBUG, "Attempting to initialize Chrome driver.");
             try {
                 long startTime = System.currentTimeMillis();
                 ChromeDriverManager.getInstance().setup();
-                driver = new ChromeDriver();
+                ChromeDriverService service =
+                        new ChromeDriverService.Builder().withWhitelistedIps("127.0.0.1").withVerbose(false).build();
+                driver = new ChromeDriver(service);
                 testCase.log(LogLevel.EXECUTED, "Creating a Chrome session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize Chrome driver. Error message: " + e.getMessage());

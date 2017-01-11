@@ -70,6 +70,27 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    /**
+     * Attempts to create a WebDriver instance to use for the specified browser type
+     *
+     * @param testCase The test case to log to
+     * @param browserType The browser type to use
+     */
+    public WebInteractionMethods(TestCase testCase, WebDriverManager.WebBrowserType browserType){
+        this.testCase = testCase;
+        try{
+            WebDriverManager webDriverManager = new WebDriverManager(testCase);
+            driver = webDriverManager.initializeWebDriver(browserType);
+            driver.manage().window().maximize();
+        }catch (Exception e){
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+            haltFurtherExecution();
+        }
+    }
+
     public WebInteractionMethods(TestCase testCase, WebDriver driver){
         this.testCase = testCase;
         try{
@@ -2344,5 +2365,6 @@ public class WebInteractionMethods implements GuiDriver {
         }
         return success;
     }
+
 
 }
