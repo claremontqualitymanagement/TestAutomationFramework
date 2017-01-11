@@ -2160,6 +2160,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @return WebElement for WebDriver interaction
      */
     public WebElement getRuntimeElementWithoutLogging(DomElement element){
+        if(element == null) return null;
         List<WebElement> relevantWebElements = gatherRelevantElements(element);
         return mostRelevantElement(relevantWebElements, element);
     }
@@ -2177,6 +2178,10 @@ public class WebInteractionMethods implements GuiDriver {
         }
 
         List<WebElement> webElements = new ArrayList<>();
+        if(element == null) {
+            log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
+            return webElements;
+        }
         try {
             for(String recognitionString : element.recognitionStrings){
                 if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {

@@ -104,6 +104,7 @@ public class TestCaseLog {
             }
         }
         LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStep, testStepClassName);
+        System.out.println(logPost.toString());
         logger.debug( logPost.toString() );
         logPosts.add(logPost);
     }
@@ -121,6 +122,7 @@ public class TestCaseLog {
     public void log(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
         LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStepName, testStepClassName);
         logger.debug( logPost.toString() );
+        System.out.println(logPost.toString());
         logPosts.add(logPost);
     }
 
@@ -141,7 +143,9 @@ public class TestCaseLog {
                 testStepClassName = stackTraceElements[i-1].getClassName();
             }
         }
-        this.logPosts.add(new LogPost(logLevel, pureTextMessage, htmlFormattedMessage, testCaseName, testStep, testStepClassName));
+        LogPost logPost = new LogPost(logLevel, pureTextMessage, htmlFormattedMessage, testCaseName, testStep, testStepClassName);
+        System.out.println(logPost.toString());
+        this.logPosts.add(logPost);
     }
 
     /**
