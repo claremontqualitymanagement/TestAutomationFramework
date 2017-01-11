@@ -29,7 +29,7 @@ public class TestRunTest {
     public void customSettingsValueForHtmlReportsLinkPrefixSetToHttpShouldReturnHttpLink(){
         Settings original = TestRun.settings;
         Settings s = new Settings();
-        s.setCustomValue("HtmlReportsLinkPrefix", "http");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
         TestRun.settings = s;
         assertTrue("Expected 'http' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("http"));
         TestRun.settings = original;
@@ -39,7 +39,7 @@ public class TestRunTest {
     public void customSettingsValueForHtmlReportsLinkPrefixSetToHttpsShouldReturnHttpsLink(){
         Settings original = TestRun.settings;
         Settings s = new Settings();
-        s.setCustomValue("HtmlReportsLinkPrefix", "https");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "https");
         TestRun.settings = s;
         assertTrue("Expected 'https' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("https"));
         TestRun.settings = original;
@@ -49,7 +49,7 @@ public class TestRunTest {
     public void customSettingsValueForHtmlReportsLinkPrefixSetToFileShouldReturnFileLink(){
         Settings original = TestRun.settings;
         Settings s = new Settings();
-        s.setCustomValue("HtmlReportsLinkPrefix", "file");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
         TestRun.settings = s;
         assertTrue("Expected 'file' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("file"));
         TestRun.settings = original;
@@ -59,9 +59,10 @@ public class TestRunTest {
     public void customSettingsValueForHtmlReportsLinkPrefixSetToNonManagedValueShouldReturnFileLink(){
         Settings original = TestRun.settings;
         Settings s = new Settings();
-        s.setCustomValue("HtmlReportsLinkPrefix", "unmanagedLinkType");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "customLinkType");
         TestRun.settings = s;
-        assertTrue("Expected 'file' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("file"));
+
+        assertTrue("Expected 'customLinkType' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("customLinkType"));
         TestRun.settings = original;
     }
 

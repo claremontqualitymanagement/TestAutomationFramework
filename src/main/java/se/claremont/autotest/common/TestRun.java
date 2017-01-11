@@ -41,13 +41,14 @@ public class TestRun {
     }
 
     public static String reportLinkPrefix(){
-        if(TestRun.settings.getCustomValue("HtmlReportsLinkPrefix") == null) return "file";
-        if(TestRun.settings.getCustomValue("HtmlReportsLinkPrefix").toLowerCase().equals("http")){
+        if(TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
+                TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
+        if(TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
             return "http";
-        } else if (TestRun.settings.getCustomValue("HtmlReportsLinkPrefix").toLowerCase().equals("https")){
+        } else if (TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
             return "https";
         }
-        return "file";
+        return TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
     }
 
     public static void evaluateCurrentTestSet(){
