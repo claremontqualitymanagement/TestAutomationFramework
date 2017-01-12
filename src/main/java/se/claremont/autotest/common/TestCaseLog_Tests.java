@@ -49,8 +49,9 @@ public class TestCaseLog_Tests {
         } catch (Exception e){
             Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
         }
-        Assert.assertTrue("New TestCaseLog() didn't have all logged items.", testCaseLog.logPosts.size() == 9);
+        Assert.assertTrue("New TestCaseLog() didn't have all logged items. Found " + testCaseLog.logPosts.size(), testCaseLog.logPosts.size() == 13);
     }
+
     @Test
     public void logHasEncounteredErrorTest(){
         TestCaseLog testCaseLog = new TestCaseLog("logHasEncounteredErrorTest");
@@ -216,6 +217,60 @@ public class TestCaseLog_Tests {
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         Assert.assertTrue(testCaseLog.toLogSections().size() == 1);
         Assert.assertTrue(testCaseLog.logPosts.get(0).message.contains("Nothing logged"));
+    }
+
+    @Test
+    public void registeringANonErrorShouldNotProduceALogRowWithSuggestionForRegisteringAKnownError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.INFO, "Info posts should not create extra log posts");
+        Assert.assertTrue(testCaseLog.logPosts.size() == 1);
+    }
+
+    @Test
+    public void registeringANonErrorInDifferentiatedLoggingShouldNotProduceALogRowWithSuggestionForRegisteringAKnownError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Info posts should not create extra log posts", "HTML log post message");
+        Assert.assertTrue(testCaseLog.logPosts.size() == 1);
+    }
+
+    @Test
+    public void registeringANonErrorInComplexLoggingShouldNotProduceALogRowWithSuggestionForRegisteringAKnownError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.INFO, "Info posts should not create extra log posts", "HTML Log post message", "testName", "stepName", "className");
+        Assert.assertTrue(testCaseLog.logPosts.size() == 1);
+    }
+
+    @Test
+    public void registeringAnErrorShouldProduceALogRowWithSuggestionForRegisteringAKnownError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "Problem posts should not create extra log posts");
+        Assert.assertTrue(testCaseLog.logPosts.size() == 2);
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).toString().contains("Info"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("If you want to add this error as a known error you should enter the line below to your test case:"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+    }
+
+    @Test
+    public void registeringAnErrorInDifferentLoggingShouldProduceALogRowWithSuggestionForRegisteringAKnownError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Problem posts should not create extra log posts", "Problem HTML posts should not create extra log posts");
+        Assert.assertTrue(testCaseLog.logPosts.size() == 2);
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).toString().contains("Info"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("If you want to add this error as a known error you should enter the line below to your test case:"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+    }
+
+    @Test
+    public void registeringAnErrorInStepLoggingShouldProduceALogRowWithSuggestionForRegisteringAKnownError(){
+        TestCaseLog testCaseLog = new TestCaseLog("dummy");
+        testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "Problem posts should not create extra log posts", "Problem HTML posts should not create extra log posts", "testCase", "testStep", "className");
+        Assert.assertTrue(testCaseLog.logPosts.size() == 2);
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).toString().contains("Info"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("If you want to add this error as a known error you should enter the line below to your test case:"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
     }
 
 }
