@@ -77,7 +77,10 @@ public class Settings extends HashMap<String, String>{
     }
 
     public String getValue(SettingParameters settingParameters){
-        return get(settingParameters.friendlyName());
+        String value = get(settingParameters.toString());
+        if(value == null)
+            value = get(settingParameters.friendlyName());
+        return value;
     }
 
     public void setValue(SettingParameters settingParameters, String value){
