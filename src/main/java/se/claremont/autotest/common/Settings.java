@@ -37,6 +37,7 @@ public class Settings extends HashMap<String, String>{
         HTML_REPORTS_LINK_PREFIX     ("HTML reports link prefix"),
         EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES("Report email recipients"),
         BASE_LOG_FOLDER              ("Report log folder"),
+        CONSOLE_LOG_LEVEL            ("Console log level"),
         PATH_TO_LOGO                 ("Path to custom report top logotype image", true),
         //CHROME_DRIVER_PATH_TO_EXE    (),
         PHANTOMJS_PATH_TO_EXE        ("Path to PhantomJS binary"),

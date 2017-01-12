@@ -104,7 +104,7 @@ public class TestCaseLog {
             }
         }
         LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStep, testStepClassName);
-        System.out.println(logPost.toString());
+        outputLogPost(logPost);
         logger.debug( logPost.toString() );
         logPosts.add(logPost);
         addKnownErrorSuggestionIfApplicable(logLevel, message);
@@ -123,7 +123,7 @@ public class TestCaseLog {
     public void log(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
         LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStepName, testStepClassName);
         logger.debug( logPost.toString() );
-        System.out.println(logPost.toString());
+        outputLogPost(logPost);
         logPosts.add(logPost);
         addKnownErrorSuggestionIfApplicable(logLevel, message);
     }
@@ -146,9 +146,22 @@ public class TestCaseLog {
             }
         }
         LogPost logPost = new LogPost(logLevel, pureTextMessage, htmlFormattedMessage, testCaseName, testStep, testStepClassName);
-        System.out.println(logPost.toString());
+        outputLogPost(logPost);
         this.logPosts.add(logPost);
         addKnownErrorSuggestionIfApplicable(logLevel, pureTextMessage);
+    }
+
+    private void outputLogPost(LogPost logPost){
+        if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
+            System.out.println(logPost.toString());
+        } else if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.MODERATE) &&
+                (logPost.logLevel.equals(LogLevel.DEBUG) ||
+                 logPost.logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO) ||
+                 logPost.logLevel.equals(LogLevel.INFO))
+                ){
+            return;
+        }
+        System.out.println(logPost.toString());
     }
 
     private void addKnownErrorSuggestionIfApplicable(LogLevel logLevel, String pureTextMessage){

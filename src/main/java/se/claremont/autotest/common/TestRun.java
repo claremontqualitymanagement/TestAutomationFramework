@@ -14,6 +14,7 @@ public class TestRun {
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
+    public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
 
     /**
      * TAF and TA test(s) standard codes.
