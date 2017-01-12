@@ -62,7 +62,7 @@ public class WebInteractionMethods implements GuiDriver {
             driver = webDriverManager.initializeWebDriver(webBrowser);
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -83,7 +83,7 @@ public class WebInteractionMethods implements GuiDriver {
             driver = webDriverManager.initializeWebDriver(browserType);
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -97,7 +97,7 @@ public class WebInteractionMethods implements GuiDriver {
             this.driver = driver;
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -118,7 +118,7 @@ public class WebInteractionMethods implements GuiDriver {
             driver = new RemoteWebDriver(url, desiredCapabilites);
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize driver. Error: " + e.getMessage());
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();

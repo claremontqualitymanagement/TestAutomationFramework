@@ -48,11 +48,14 @@ public class TestSet_Tests {
         testSet.startUpTestCase(currentTestName.getMethodName());
         testSet.currentTestCase.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
         //testSet.currentTestCase.evaluateResultStatus();
+        TestCase theTestCase = testSet.currentTestCase;
         testSet.wrapUpTestCase();
-        Assert.assertNotNull(testSet.currentTestCase.stopTime);
+        Assert.assertNotNull(testSet);
+        Assert.assertNotNull(theTestCase);
+        Assert.assertNotNull(theTestCase.stopTime);
 
         boolean logRowAboutEndingExecutionFound = false;
-        for(LogPost logPost : testSet.currentTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : theTestCase.testCaseLog.logPosts){
             if(logPost.message.contains("Ending test execution at ")){
                 logRowAboutEndingExecutionFound = true;
                 break;
@@ -61,7 +64,7 @@ public class TestSet_Tests {
         Assert.assertTrue(logRowAboutEndingExecutionFound);
 
         boolean logRowAboutEvaluatingTestResultStatusFound = false;
-        for(LogPost logPost : testSet.currentTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : theTestCase.testCaseLog.logPosts){
             if(logPost.message.contains("Evaluated test result status to")){
                 logRowAboutEvaluatingTestResultStatusFound = true;
                 break;

@@ -28,30 +28,43 @@ public class Settings extends HashMap<String, String>{
 
     //Some of these setting parameters are suppressed from log display in the summary reportTestRun, where these settings othervice is displayed.
     public enum SettingParameters{
-        EMAIL_SENDER_ADDRESS         (),
-        EMAIL_ACCOUNT_USER_NAME      (),
-        EMAIL_ACCOUNT_USER_PASSWORD  (true),
-        EMAIL_SERVER_ADDRESS         (true),
-        EMAIL_SERVER_PORT            (true),
-        EMAIL_SMTP_OR_GMAIL          (true),
-        HTML_REPORTS_LINK_PREFIX     (true),
-        EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES(),
-        BASE_LOG_FOLDER              (),
-        PATH_TO_LOGO                 (true),
+        EMAIL_SENDER_ADDRESS         ("Email sender address"),
+        EMAIL_ACCOUNT_USER_NAME      ("Email accound user name", true),
+        EMAIL_ACCOUNT_USER_PASSWORD  ("Email account user password", true),
+        EMAIL_SERVER_ADDRESS         ("Email server address", true),
+        EMAIL_SERVER_PORT            ("Email server port", true),
+        EMAIL_SMTP_OR_GMAIL          ("Email send method (SMTP or GMAIL)", true),
+        HTML_REPORTS_LINK_PREFIX     ("HTML reports link prefix"),
+        EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES("Report email recipients"),
+        BASE_LOG_FOLDER              ("Report log folder"),
+        PATH_TO_LOGO                 ("Path to report top logotype image", true),
         //CHROME_DRIVER_PATH_TO_EXE    (),
-        PHANTOMJS_PATH_TO_EXE        (),
-        FIREFOX_PATH_TO_BROWSER_EXE  (),
-        TEST_RUN_LOG_FOLDER          ();
+        PHANTOMJS_PATH_TO_EXE        ("Path to PhantomJS binary"),
+        FIREFOX_PATH_TO_BROWSER_EXE  ("Path to Firefox browser binary"),
+        TEST_RUN_LOG_FOLDER          ("Log folder for test run");
         //PLUGIN_FOLDER                ();
 
         private boolean isSuppressedFromLogDisplay;
+        private String friendlyName;
 
         SettingParameters(){
+            this.friendlyName = StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(this.toString().replace("_", " "));
             this.isSuppressedFromLogDisplay = false;
         }
 
         SettingParameters(boolean isSuppressedFromLogDisplay){
             this.isSuppressedFromLogDisplay = isSuppressedFromLogDisplay;
+            this.friendlyName = StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(this.toString().replace("_", " "));
+        }
+
+        SettingParameters(String friendlyName, boolean isSuppressedFromLogDisplay){
+            this.isSuppressedFromLogDisplay = isSuppressedFromLogDisplay;
+            this.friendlyName = friendlyName;
+        }
+
+        SettingParameters(String friendlyName){
+            this.isSuppressedFromLogDisplay = false;
+            this.friendlyName = friendlyName;
         }
 
         public boolean isSuppressedFromLogDisplay(){
@@ -59,7 +72,7 @@ public class Settings extends HashMap<String, String>{
         }
 
         public String friendlyName(){
-            return StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(this.toString().replace("_", " "));
+            return this.friendlyName;
         }
     }
 
@@ -78,11 +91,7 @@ public class Settings extends HashMap<String, String>{
     public String getCustomValue(String parameter){
         return get(parameter);
     }
-    // Man ska inte behöva ange värde för alla parametrar.
-    // Man ska kunna lägga till custom-värden när det behövs
-    // Det ska gå att hantera lösenord och liknande icke-utskriftgrejer separat
-    // Det ska gå att uppdatera värden i runtime
-    //
+
 
     /**
      * Writes current Settings values into runSettings.properties file.

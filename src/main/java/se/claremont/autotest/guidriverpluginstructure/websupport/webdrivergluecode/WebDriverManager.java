@@ -59,7 +59,7 @@ public class WebDriverManager {
      * @return Appropriate implementation of WebDriver interface
      */
     public WebDriver initializeWebDriver(WebBrowserType webBrowserType){
-        testCase.log(LogLevel.DEBUG, "Attempting to initialize WebDriver for web browser type '" +  webBrowserType.toString() + "'.");
+        testCase.log(LogLevel.DEBUG, "Attempting to initializeIfNotInitialized WebDriver for web browser type '" +  webBrowserType.toString() + "'.");
         WebDriver driver = null;
         if(testCase == null) { testCase = new TestCase(null, "dummy");}
         switch (webBrowserType) {
@@ -95,7 +95,7 @@ public class WebDriverManager {
 
         }
         if(driver == null){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize driver for browser '" + webBrowserType.toString() + "'.");
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized driver for browser '" + webBrowserType.toString() + "'.");
             logIdentifiedLocalBrowsersFromFileScan();
         }else{
             testCase.log(LogLevel.INFO, "Driver for browser '" + webBrowserType.toString() + "' achieved.");
@@ -149,7 +149,7 @@ public class WebDriverManager {
 
         public @Override WebDriver setup(){
             WebDriver driver = null;
-            testCase.log(LogLevel.DEBUG, "Attempting to initialize Chrome driver.");
+            testCase.log(LogLevel.DEBUG, "Attempting to initializeIfNotInitialized Chrome driver.");
             try {
                 long startTime = System.currentTimeMillis();
                 ChromeDriverManager.getInstance().setup();
@@ -158,7 +158,7 @@ public class WebDriverManager {
                 driver = new ChromeDriver(service);
                 testCase.log(LogLevel.EXECUTED, "Creating a Chrome session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {
-                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize Chrome driver. Error message: " + e.getMessage());
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized Chrome driver. Error message: " + e.getMessage());
             }
             return driver;
         }
@@ -177,7 +177,7 @@ public class WebDriverManager {
             try {
                 driver = new FirefoxDriver();
             } catch (Exception e) {
-                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initialize Firefox driver. " +
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized Firefox driver. " +
                         "Expected to find Firefox driver at '" + TestRun.settings.getValue(Settings.SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE) + "' as stated by the 'firefoxPathToBrowserExe' parameter in settings.");
                 logIdentifiedLocalBrowsersFromFileScan();
             }

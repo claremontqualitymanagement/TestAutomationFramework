@@ -1,7 +1,6 @@
 package se.claremont.autotest.common.email;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,13 +10,9 @@ import se.claremont.autotest.common.TestRun;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by jordam on 2016-09-19.
@@ -37,6 +32,7 @@ public class EmailSenderTest {
     }
 
     @Test
+    @Ignore
     public void testGmail2() {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
         TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");

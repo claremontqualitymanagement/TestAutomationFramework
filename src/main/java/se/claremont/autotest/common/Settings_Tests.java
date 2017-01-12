@@ -2,7 +2,6 @@ package se.claremont.autotest.common;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.support.StringManagement;
 
 /**
  * Tests for the Settings class
@@ -40,12 +39,13 @@ public class Settings_Tests {
     }
 
     @Test
-    public void customParameterOnEnumParameter(){
+    public void customParameterWithSameNameAsEnumParameterShouldOverwriteTheEnumValue(){
         Settings settings = new Settings();
         settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "this value");
         Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("this value"));
-        settings.setCustomValue(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(Settings.SettingParameters.PATH_TO_LOGO.toString().replace("_", " ")), "that value");
-        Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("that value"));
+        settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName(), "that value");
+        System.out.println(Settings.SettingParameters.PATH_TO_LOGO.friendlyName());
+        Assert.assertTrue("Expected value to be 'that value', but it was '" + settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "'.", settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("that value"));
     }
 
 }
