@@ -58,28 +58,18 @@ public class CliTestRunner {
         junit.addListener(new TafRunListener());
 
         for (String arg : args) {
-            if (arg.toLowerCase().contains("diagnostic")) {
-                System.out.println("Running diagnostic tests. This might take a few minutes while strange things might occur on the screen. Don't be alarmed. Be patient.");
-                List<Thread> threads = new ArrayList<>();
-
-                //Running tests in separate thread to enable running a dot-printer to the command line to show progress.
-                DiagnosticsRun diag = new DiagnosticsRun(junit);
-                Thread diagnosticsRunThread = new Thread(diag);
-                threads.add(diagnosticsRunThread);
-                diagnosticsRunThread.start();
-
-                //Waiting for threads to finish
-                for(int i = 0; i < threads.size(); i++)
-                    try {
-                        threads.get(i).join();
-                    } catch (InterruptedException e) {
-                    }
-
-                return;
-            } else if (arg.contains("help") || arg.contains("man") || arg.contains("-h")) {
+            if (
+                    arg.equals("help") ||
+                    arg.equals("man") ||
+                    arg.equals("-h") ||
+                    arg.equals("-man") ||
+                    arg.equals("--man") ||
+                    arg.equals("-help") ||
+                    arg.equals("--help")
+                    ){
                 System.out.print(helpText());
                 return;
-            } else if (arg.contains("=")) {
+            } else if (arg.contains("=")) { //Setting (overriding) run time settings
                 String[] parts = arg.split("=");
                 if(parts[0].toLowerCase().equals("runname")){
                     TestRun.testRunName = parts[1].trim();
@@ -88,6 +78,24 @@ public class CliTestRunner {
                     TestRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.split("=")[1].trim());
                     System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");
                 }
+            } else if (arg.toLowerCase().equals("diagnostic") || arg.toLowerCase().equals("diagnostics")) {
+                System.out.println("Running diagnostic tests. This might take a few minutes while strange things might occur on the screen. Don't be alarmed. Be patient.");
+                List<Thread> threads = new ArrayList<>();
+
+                //Running tests in separate thread to enable running a dot-printer to the command line to show progress. Not yet implemented.
+                DiagnosticsRun diag = new DiagnosticsRun(junit);
+                Thread diagnosticsRunThread = new Thread(diag);
+                threads.add(diagnosticsRunThread);
+                diagnosticsRunThread.start();
+
+                //Waiting for threads to finish
+                for (int i = 0; i < threads.size(); i++)
+                    try {
+                        threads.get(i).join();
+                    } catch (InterruptedException e) {
+                    }
+
+                return;
             } else {
                 try {
                     classes.add(Class.forName(arg));

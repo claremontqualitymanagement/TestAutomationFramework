@@ -1,6 +1,7 @@
 package se.claremont.autotest.common;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -47,5 +48,26 @@ public class Settings_Tests {
         System.out.println(Settings.SettingParameters.PATH_TO_LOGO.friendlyName());
         Assert.assertTrue("Expected value to be 'that value', but it was '" + settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "'.", settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("that value"));
     }
+
+    @Test
+    public void enumParameterValuesShouldBeSetAndRetrievableWithBothEnumNameAndFriendlyName(){
+        Settings settings = new Settings();
+        settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName(), "MyPath");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("MyPath"));
+        Assert.assertTrue(settings.getCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName()).equals("MyPath"));
+        Assert.assertTrue(settings.getCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName()).equals(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO)));
+
+        settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.toString(), "MyNewPath");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("MyNewPath"));
+    }
+
+    @Test
+    @Ignore
+    public void settingRuntimeValuesForSettingsWithCLIShouldOverrideOtherSettings(){
+        String[] args = {"testRun=testRun", "se.claremont.autotest.common.Settings_Tests"};
+        CliTestRunner.main(args);
+        Assert.assertTrue(TestRun.settings.getCustomValue("testRun").equals("testRun"));
+    }
+
 
 }
