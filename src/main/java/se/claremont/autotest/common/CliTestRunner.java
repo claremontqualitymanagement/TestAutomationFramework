@@ -47,6 +47,8 @@ public class CliTestRunner {
         System.out.println();
         List<Class<?>> classes = new ArrayList<Class<?>>();
 
+        TestRun.initializeIfNotInitialized();
+
         if (args.length == 0) {
             System.out.print(helpText());
             return;

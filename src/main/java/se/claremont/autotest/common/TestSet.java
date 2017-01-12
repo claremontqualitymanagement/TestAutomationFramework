@@ -16,6 +16,7 @@ public class TestSet {
      * Setting up a new test set instance
      */
     public TestSet(){
+        TestRun.initializeIfNotInitialized();
         TestRun.currentTestSet = this;
         name = SupportMethods.classNameAtStacktraceLevel(3);
     }

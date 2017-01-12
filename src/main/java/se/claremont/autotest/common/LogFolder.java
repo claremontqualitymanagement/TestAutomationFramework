@@ -26,12 +26,12 @@ public class LogFolder {
     public static void setLogFolder(String testSetName){
         if(testRunLogFolder == null){
             if(TestRun.testRunName != null && TestRun.testRunName.length() > 0){
-                if(TestRun.settings == null) TestRun.initialize();
+                if(TestRun.settings == null) TestRun.initializeIfNotInitialized();
                 baseLogFolder = TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER);
                 if(!baseLogFolder.endsWith("\\") || !baseLogFolder.endsWith("/")){ baseLogFolder = baseLogFolder + "\\"; }
                 testRunLogFolder = StringManagement.filePathToCurrentOsAdaptedFormat(baseLogFolder) + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + TestRun.testRunName + File.separator;
             } else {
-                if(TestRun.settings == null) TestRun.initialize();
+                if(TestRun.settings == null) TestRun.initializeIfNotInitialized();
                 baseLogFolder = TestRun.settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER);
                 if(!baseLogFolder.endsWith("\\") || !baseLogFolder.endsWith("/")){ baseLogFolder = baseLogFolder + "\\"; }
                 testRunLogFolder = StringManagement.filePathToCurrentOsAdaptedFormat(baseLogFolder) + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + testSetName + File.separator;

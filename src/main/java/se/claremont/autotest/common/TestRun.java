@@ -13,6 +13,7 @@ public class TestRun {
     public static int exitCode;
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
+    public static boolean isInitialized = false;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -35,9 +36,13 @@ public class TestRun {
         }
     }
 
-    public static void initialize() {
-        currentTestSet = null;
-        exitCode = ExitCodeTable.INIT_OK.getValue();
+    public static void initializeIfNotInitialized() {
+        if(!isInitialized){
+            currentTestSet = null;
+            settings = new Settings();
+            exitCode = ExitCodeTable.INIT_OK.getValue();
+            isInitialized = true;
+        }
     }
 
     public static String reportLinkPrefix(){
