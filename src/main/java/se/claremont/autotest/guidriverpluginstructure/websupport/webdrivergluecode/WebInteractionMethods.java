@@ -654,9 +654,14 @@ public class WebInteractionMethods implements GuiDriver {
         byte[] fileImage = null;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
-            if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor && js != null) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "");
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot. Is driver ok? " + e.toString());
+            try{
+                if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor && js != null) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "");
+            }catch (Exception jsProblem){
+                log(LogLevel.DEBUG, "Could not reset element highlight frame. Error: " + jsProblem.getMessage());
+            }
+            return;
         }
         /*
         try {
@@ -673,7 +678,12 @@ public class WebInteractionMethods implements GuiDriver {
             //e.printStackTrace();
         }
         */
-        SupportMethods.saveToFile(fileImage, filePath);
+        if(fileImage != null){
+            SupportMethods.saveToFile(fileImage, filePath);
+            log(LogLevel.INFO, "Saved screenshot as '" + filePath + "'.");
+        } else {
+            log(LogLevel.DEBUG, "Could not save screenshot to '" + filePath + "' since the image data was empty.");
+        }
     }
 
     /**
