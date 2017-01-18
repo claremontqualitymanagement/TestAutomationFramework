@@ -5,6 +5,8 @@ import org.junit.Assume;
 import se.claremont.autotest.guidriverpluginstructure.swingsupport.festswinggluecode.ApplicationManager;
 import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.taf.api.Taf;
+import se.claremont.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,16 +59,12 @@ public class TestCase {
         String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
         long maxMemory = Runtime.getRuntime().maxMemory();
         memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
-        testCaseLog.log(LogLevel.INFO, "Running tests as user '" + getCurrentUser() + "' on machine with " + System.getProperty("os.name") + " as operating system (version reported as '" + System.getProperty("os.version") + "', and architecture '" + System.getProperty("os.arch") +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
+        testCaseLog.log(LogLevel.INFO, "Running tests as user '" + Taf.tafUserInfon().getUserAccountName() + "' on machine with " + Taf.tafUserInfon().getOperatingSystemName() + " as operating system (version reported as '" + Taf.tafUserInfon().getOperatingSystemVersion() + "', and architecture '" + Taf.tafUserInfon().getOperatingSystemArchitecture() +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
         reporters.add(new TestCaseLogReporterHtmlLogFile(this));
         setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
-    }
-
-    private String getCurrentUser(){
-        return System.getProperty("user.name");
     }
 
     /**

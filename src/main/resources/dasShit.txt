@@ -89,3 +89,8 @@ RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
 Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added 'github.com,192.30.253.112' (RSA) to the list of known hosts.
 Hi claremontqualitymanagement! You've successfully authenticated, but GitHub does not provide shell access.
+
+*** AppDynamics stuff ***
+https://814.saas.appdynamics.com
+Access Key:	amqdc6ugfw1w
+Account: 814

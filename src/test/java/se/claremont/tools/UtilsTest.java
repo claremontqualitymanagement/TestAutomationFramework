@@ -21,4 +21,10 @@ public class UtilsTest{
                 Utils.getInstance().amIWindowsOS() );
     }
 
+    @Test
+    public void checkSupportedJavaVersionForTAF()
+    {
+        Assert.assertTrue( Utils.getInstance().checkSupportedJavaVersionForTAF() );
+    }
+
 }

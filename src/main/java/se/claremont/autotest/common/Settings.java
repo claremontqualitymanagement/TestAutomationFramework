@@ -182,7 +182,7 @@ public class Settings extends HashMap<String, String>{
         }
         // lets assume jvm is running upon windows os.
         else {
-            setValue(SettingParameters.BASE_LOG_FOLDER, System.getProperty("user.home") + File.separator + "TAF" + File.separator);
+            setValue(SettingParameters.BASE_LOG_FOLDER, Utils.getInstance().getUserHomeDirectory() + File.separator + "TAF" + File.separator);
             //setValue(SettingParameters.CHROME_DRIVER_PATH_TO_EXE, System.getProperty("user.home") + File.separator + "TAF" + File.separator + "chromedriver.exe");
             setValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE, "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
             setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");

@@ -3,6 +3,7 @@ package se.claremont.tools;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.taf.api.Taf;
 
 /**
  * Created by magnusolsson on 2016-09-21.
@@ -13,8 +14,8 @@ import org.slf4j.LoggerFactory;
 public class Utils {
 
     private final static Logger logger = LoggerFactory.getLogger( Utils.class );
-
     private static Utils instance = null;
+    public final int SUPPORTED_TAF_JVM_VERSION = 8;
 
     private Utils() {
 
@@ -112,10 +113,41 @@ public class Utils {
         return false;
     }
 
+    /**
+     * Checks if running jvm supports TAF supported java version 8.
+     * @return true if java version is 8 otherwise false
+     */
+    public boolean checkSupportedJavaVersionForTAF()
+    {
+        try {
+            int presentJVMVersion = Integer.parseInt( Taf.tafUserInfon().getJavaVersion().substring( Taf.tafUserInfon().getJavaVersion().indexOf(".") + 1, Taf.tafUserInfon().getJavaVersion().indexOf(".") + 2 ) );
+            if( presentJVMVersion >= SUPPORTED_TAF_JVM_VERSION )
+                return true;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         logger.debug( Utils.getInstance().getRootDirectory() );
         logger.debug( Utils.getInstance().getOS() );
         logger.debug( Utils.getInstance().getUserWorkingDirectory() );
+
+        logger.debug( Taf.tafUserInfon().getCanonicalHostName() );
+        logger.debug( Taf.tafUserInfon().getHostAdress() );
+        logger.debug( Taf.tafUserInfon().getHostName() );
+        logger.debug( Taf.tafUserInfon().getOperatingSystemArchitecture() );
+        logger.debug( Taf.tafUserInfon().getOperatingSystemName() );
+        logger.debug( Taf.tafUserInfon().getOperatingSystemVersion() );
+        logger.debug( Taf.tafUserInfon().getJavaHome() );
+        logger.debug( Taf.tafUserInfon().getJavaVersion() );
+        logger.debug( Taf.tafUserInfon().getJavaVersion().substring( Taf.tafUserInfon().getJavaVersion().indexOf(".") + 1, Taf.tafUserInfon().getJavaVersion().indexOf(".") + 2 ) );
+        logger.debug( Taf.tafUserInfon().getUserAccountName() );
+        logger.debug( Taf.tafUserInfon().getUserHomeDirectory() );
+        logger.debug( Taf.tafUserInfon().getUserWorkingDirectory() );
+        logger.debug( Runtime.class.getPackage().getImplementationVersion() );
     }
 
 }

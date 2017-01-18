@@ -5,6 +5,8 @@ import org.junit.runner.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.support.SupportMethods;
+import se.claremont.taf.api.Taf;
+import se.claremont.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +44,22 @@ public class CliTestRunner {
                 "emailRecipients=firstName.lastName@organization.com" + LF + LF;
     }
 
-
     /**
      * Actual runner method
      * @param args arguments
      */
     public static void main(String [] args) {
-        System.out.println();
         List<Class<?>> classes = new ArrayList<Class<?>>();
 
         TestRun.initializeIfNotInitialized();
 
         if (args.length == 0) {
             System.out.print(helpText());
+            return;
+        }
+        if( !Utils.getInstance().checkSupportedJavaVersionForTAF() )
+        {
+            System.out.println( "Running java version (" + Taf.tafUserInfon().getJavaVersion() + ") is not supported for TAF. Please use Java " + Utils.getInstance().SUPPORTED_TAF_JVM_VERSION + " or newer version!" );
             return;
         }
         JUnitCore junit = new JUnitCore();
