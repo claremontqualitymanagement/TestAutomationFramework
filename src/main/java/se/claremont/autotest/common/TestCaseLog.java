@@ -152,6 +152,7 @@ public class TestCaseLog {
     }
 
     private void outputLogPost(LogPost logPost){
+        if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.NONE))return;
         if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
             System.out.println(logPost.toString());
             return;
