@@ -31,8 +31,12 @@ public class CliTestRunner {
                 "Example: RunName=MyTestRun1stOfApril" + LF +
                 "This test run name will be used for log folder name creation." + LF +
                 LF + LF +
+                "If you want to initiate a test run it sometimes can be convenient to just point to a prepared runSettings file with properties. This could for example be very useful when running your tests in a CI/CD environment. You can do this by providing the argument 'settingsfile' or 'runsettingsfile'. E.g.:" + LF +
+                LF + LF +
+                " java -jar MyTestProject.jar runSettingsFile=C:\\temp\\runSettings.properties com.organization.testproject.MyTestClass1 com.organization.testproject.MyTestClass2" + LF + LF +
+                "The line above will use the settings parameters in the C:\\Temp\\runSettings.properties file to execute the tests in the classes MyTestClass1 and MyTestClass2 found in the package 'com.organization.testproject'." +
                 "If test classes are listed as arguments the output of those tests are displayed. This output can be quite extensive, and sometimes it is beneficial to make sure you can read it all." +
-                LF +
+                LF + LF +
                 "Test output from test classes extending the TestSet class is saved to the output log folder." + LF + LF +
                 "Settings from file can be overwritten by stating them as arguments using equal sign in between parameter name and parameter value:" + LF +
                 "emailRecipients=firstName.lastName@organization.com" + LF + LF;
@@ -74,6 +78,9 @@ public class CliTestRunner {
                 if(parts[0].toLowerCase().equals("runname")){
                     TestRun.testRunName = parts[1].trim();
                     System.out.println("Setting test run name to '" + TestRun.testRunName + "'.");
+                } else if((parts[0].toLowerCase().equals("settingsfile") || parts[0].toLowerCase().equals("runsettingsfile")) && parts.length > 1) {
+                    TestRun.settings = new Settings(parts[1].trim());
+                    System.out.println("Run settings properties file = '" + parts[1] + "'.");
                 } else {
                     TestRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.split("=")[1].trim());
                     System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");

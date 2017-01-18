@@ -32,6 +32,7 @@ public class Settings extends HashMap<String, String>{
         EMAIL_ACCOUNT_USER_NAME      ("Email accound user name", true),
         EMAIL_ACCOUNT_USER_PASSWORD  ("Email account user password", true),
         EMAIL_SERVER_ADDRESS         ("Email server address", true),
+        RUN_SETTINGS_FILE            ("Run settings file"),
         EMAIL_SERVER_PORT            ("Email server port", true),
         EMAIL_SMTP_OR_GMAIL          ("Email send method (SMTP or GMAIL)", true),
         HTML_REPORTS_LINK_PREFIX     ("HTML reports link prefix"),
@@ -107,10 +108,18 @@ public class Settings extends HashMap<String, String>{
             stringBuilder.append(key).append("=").append(this.get(key)).append(SupportMethods.LF);
         }
         SupportMethods.saveToFile(stringBuilder.toString(), outputFilePath);
+        File settingsFile = new File(outputFilePath);
+        if(settingsFile.exists()){
+            setValue(SettingParameters.RUN_SETTINGS_FILE, outputFilePath);
+        }
     }
 
     private void readFromFileIfItExistElseTryToCreateFile(String settingsFilePath){
         List<String> lines = new ArrayList<>();
+        File settingFile = new File(settingsFilePath);
+        if(settingFile.exists()){
+            setValue(SettingParameters.RUN_SETTINGS_FILE, settingsFilePath);
+        }
         try (Stream<String> stream = Files.lines(Paths.get(settingsFilePath))) {
             stream.forEach(lines::add);
             for(String line : lines){
@@ -121,6 +130,7 @@ public class Settings extends HashMap<String, String>{
             logger.warn( "Could not read TAF settings from file '" + settingsFilePath + "'. Don't worry. Continuing with default values, and attempting saving of the settings to file '" + settingsFilePath + "' for next time.");
             try {
                 writeSettingsParametersToFile(settingsFilePath);
+                setValue(SettingParameters.RUN_SETTINGS_FILE, settingsFilePath);
             }catch (Exception ex){
                 logger.warn( "Could not save Settings to new settings file '" + settingsFilePath + "'. Error message: " + ex.getMessage(), ex );
             }
@@ -141,6 +151,12 @@ public class Settings extends HashMap<String, String>{
     public Settings(){
         loadDefaults();
         readFromFileIfItExistElseTryToCreateFile(getValue(SettingParameters.BASE_LOG_FOLDER) + "runSettings.properties");
+    }
+
+    public Settings(String pathToSettingsPropertiesFile){
+        loadDefaults();
+        setValue(SettingParameters.RUN_SETTINGS_FILE, pathToSettingsPropertiesFile);
+        readFromFileIfItExistElseTryToCreateFile(pathToSettingsPropertiesFile);
     }
 
     /**
