@@ -21,6 +21,7 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.LinkCheck;
 import se.claremont.autotest.guidriverpluginstructure.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.support.StringManagement;
 import se.claremont.autotest.support.SupportMethods;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -259,6 +260,30 @@ public class WebInteractionMethods implements GuiDriver {
         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to appear. " +
                 "It " + Boolean.toString(elementHasAppeared).toLowerCase().replace("true", "did.").replace("false", "never did."));
         return elementHasAppeared;
+    }
+
+    /**
+     * Pauses execution until given element is displayed.
+     *
+     * @param guiElement The element to wait for
+     * @return Returns true if element appears within timeout.
+     */
+    public WebElement waitForElementToBeEnabled(GuiElement guiElement, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement element = null;
+        boolean elementIsEnabled = false;
+        while (!elementIsEnabled && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
+            element = getRuntimeElementWithoutLogging(domElement);
+            if(element != null && element.isDisplayed() && element.isEnabled()){
+                elementIsEnabled = true;
+            }else{
+                wait(50);
+            }
+        }
+        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to become enabled. " +
+                "It " + Boolean.toString(elementIsEnabled).toLowerCase().replace("true", "did.").replace("false", "never did."));
+        return element;
     }
 
     /**
@@ -613,10 +638,14 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
-
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor){
-            js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "color: yellow; border: 5px solid yellow;");
+        JavascriptExecutor js = null;
+        try {
+            js = (JavascriptExecutor) driver;
+            if (relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor) {
+                js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "color: yellow; border: 5px solid yellow;");
+            }
+        } catch (Exception e){
+            log(LogLevel.DEBUG, "Could not highlight any element before screenshot. Error: " + e.getMessage());
         }
 
         String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
@@ -625,7 +654,7 @@ public class WebInteractionMethods implements GuiDriver {
         byte[] fileImage = null;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
-            if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "");
+            if(relevantWebElementToMarkWithBorder != null && driver instanceof JavascriptExecutor && js != null) js.executeScript("arguments[0].setAttribute('style', arguments[1]);", relevantWebElementToMarkWithBorder, "");
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not take screenshot. Is driver ok? " + e.toString());
         }
@@ -814,6 +843,11 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
 
+    public void clickEvenIfDisabled(){
+        throw new NotImplementedException();
+    }
+
+
     /**
      * Performing a click event on an element
      *
@@ -821,45 +855,41 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void click(GuiElement guiElement){
         DomElement element = (DomElement) guiElement;
+        long startTime = System.currentTimeMillis();
+        boolean clicked = false;
+        String errorMessage = null;
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
-        try {
-            if(tryClick(element)){
-                log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification()+ " element.");
-            } else {
-                WebElement webelement = getRuntimeElementWithoutLogging(element);
-                if(webelement == null) errorManagementProcedures("Could not click on element " + element.LogIdentification() + " since it could not be identified.");
-                if(!elementBecomeDisplayedWithinTimeout (webelement))  errorManagementProcedures("Element " + element.LogIdentification() + " can be found in page source, but it is not displayed in the GUI. It seem unnatural to click it. Halting execution.");
-                if(!elementBecomeEnabledWithinTimeout   (webelement))  errorManagementProcedures("Found element " + element.LogIdentification() + " but it is not enabled.");
-                webelement.click();
+        WebElement webElement = waitForElementToBeEnabled(guiElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            errorManagementProcedures("Could not identify element " + element.LogIdentification() + " in the GUI.");
+        } else if(!webElement.isEnabled()){
+            errorManagementProcedures("Element " + element.LogIdentification() + " is not enabled. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.");
+        } else if(!webElement.isDisplayed()){
+            errorManagementProcedures("Element " + element.LogIdentification() + " is not displayed. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.");
+        }
+        while (!clicked && (System.currentTimeMillis() - startTime) < standardTimeoutInSeconds *1000){
+            try{
+                webElement.click();
+                clicked = true;
+            } catch (Exception e){
+                errorMessage = e.getMessage();
+                wait(50);
             }
-        }catch (Exception e){
-            if(e.toString().contains("Other element would receive the click")){
+        }
+        if(clicked){
+            log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification() + " element.");
+        } else if(errorMessage != null){
+            if(errorMessage.contains("Other element would receive the click")){
                 log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");
             } else {
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR, "Could not click on element " + element.LogIdentification() + ". " + e.toString(), "Could not click och element " + element.LogIdentification() + ".<br>Error:<br><br>" + e.toString());
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR, "Could not click on element " + element.LogIdentification() + ". " + errorMessage, "Could not click och element " + element.LogIdentification() + ".<br>Error:<br><br>" + errorMessage);
             }
             errorManagementProcedures("Could not click element " + element.LogIdentification() + ".");
+        } else {
+            errorManagementProcedures("Could not successfully click on the " + element.LogIdentification() + " element.");
         }
     }
 
-    private boolean tryClick(DomElement domElement){
-        boolean success = false;
-        long startTime = System.currentTimeMillis();
-        WebElement webElement = null;
-        while (!success && System.currentTimeMillis() - startTime < standardTimeoutInSeconds * 1000){
-            webElement = getRuntimeElementWithoutLogging(domElement);
-            if(webElement == null) {
-                wait(50);
-            } else {
-                try {
-                    webElement.click();
-                    log(LogLevel.DEBUG, "Managed to identify and click on " + domElement.LogIdentification() + " after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
-                    success = true;
-                }catch (Exception ignored){}
-            }
-        }
-        return success;
-    }
 
     private boolean elementBecomeDisplayedWithinTimeout(WebElement webelement){
         if(!webelement.isDisplayed()){
