@@ -842,24 +842,39 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
-
-    public void clickEvenIfDisabled(){
+    /**
+     * Performing a click event on an element. Method keeps trying the given number of seconds.
+     *
+     * @param guiElement the GUI element to click
+     * @param timeoutInSeconds The number of seconds to wait and try to click
+     */
+    public void clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
+        log(LogLevel.FRAMEWORK_ERROR, "The method clickEvenIfDisabled() is not yet implemented in class WebInteractionMethods. Please do.");
         throw new NotImplementedException();
     }
 
-
     /**
-     * Performing a click event on an element
+     * Performing a click event on an element. Method keeps trying the set standard timeout number of seconds.
      *
      * @param guiElement the GUI element to click
      */
     public void click(GuiElement guiElement){
+        click(guiElement, standardTimeoutInSeconds);
+    }
+
+    /**
+     * Performing a click event on an element. Method keeps trying the given number of seconds.
+     *
+     * @param guiElement the GUI element to click
+     * @param timeoutInSeconds The number of seconds to wait and try to click
+     */
+    public void click(GuiElement guiElement, int timeoutInSeconds){
         DomElement element = (DomElement) guiElement;
         long startTime = System.currentTimeMillis();
         boolean clicked = false;
         String errorMessage = null;
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
-        WebElement webElement = waitForElementToBeEnabled(guiElement, standardTimeoutInSeconds);
+        WebElement webElement = waitForElementToBeEnabled(guiElement, timeoutInSeconds);
         if(webElement == null){
             errorManagementProcedures("Could not identify element " + element.LogIdentification() + " in the GUI.");
         } else if(!webElement.isEnabled()){
@@ -867,17 +882,17 @@ public class WebInteractionMethods implements GuiDriver {
         } else if(!webElement.isDisplayed()){
             errorManagementProcedures("Element " + element.LogIdentification() + " is not displayed. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.");
         }
-        while (!clicked && (System.currentTimeMillis() - startTime) < standardTimeoutInSeconds *1000){
+        while (!clicked && (System.currentTimeMillis() - startTime) < timeoutInSeconds *1000){
             try{
+                Thread.sleep(50);
                 webElement.click();
                 clicked = true;
             } catch (Exception e){
                 errorMessage = e.getMessage();
-                wait(50);
             }
         }
         if(clicked){
-            log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification() + " element.");
+            log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification() + " element after " + String.valueOf(System.currentTimeMillis() - startTime) + " milliseconds.");
         } else if(errorMessage != null){
             if(errorMessage.contains("Other element would receive the click")){
                 log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");

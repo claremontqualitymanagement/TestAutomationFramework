@@ -17,7 +17,7 @@ import static se.claremont.autotest.support.SupportMethods.LF;
  * Created by jordam on 2016-08-25.
  */
 @SuppressWarnings("WeakerAccess")
-class LogPost {
+public class LogPost {
 
     private final static Logger logger = LoggerFactory.getLogger( LogPost.class );
 
