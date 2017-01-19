@@ -4,6 +4,9 @@ sudo: false
 install: true
 addons:
   sonarqube:
+    branches:
+      - development
+      - master
     token:
       secure: c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
 jdk:
