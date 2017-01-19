@@ -94,3 +94,27 @@ Hi claremontqualitymanagement! You've successfully authenticated, but GitHub doe
 https://814.saas.appdynamics.com
 Access Key:	amqdc6ugfw1w
 Account: 814
+*** sonarqube ***
+https://sonarqube.com/projects/favorite
+taf_sonarqube
+c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+https://sonarqube.com/dashboard/index/se.claremont:TestAutomationFramework
+
+
+.travis.yml
+language: java
+sudo: false
+install: true
+addons:
+  sonarqube:
+    token:
+      secure: "your_token_encrypted_with_travis_encrypt_tool"
+jdk:
+  - oraclejdk8
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
