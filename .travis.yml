@@ -1,6 +1,5 @@
 # Always validate your .travis.yml file at http://lint.travis-ci.org
 language: java
-
 sudo: false
 install: true
 addons:
@@ -12,7 +11,7 @@ jdk:
 #  - oraclejdk7
 #  - openjdk6
 script:
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 #- mvn install antrun:run
 cache:
   directories:
