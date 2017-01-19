@@ -1523,11 +1523,13 @@ public class WebInteractionMethods implements GuiDriver {
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                         "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString(),
                         "Errors while trying to run the javascript:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script) + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString());
+                saveHtmlContentOfCurrentPage();
             }
         } else {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                     "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + script,
                     "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script));
+            saveHtmlContentOfCurrentPage();
         }
 
     }
@@ -1569,6 +1571,10 @@ public class WebInteractionMethods implements GuiDriver {
             }
             if(webElement == null) {
                 log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled, but could not be identified.");
+                saveScreenshot(null);
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
                 return;
             }
             if(!webElement.isDisplayed() && !enabled){
@@ -1578,6 +1584,10 @@ public class WebInteractionMethods implements GuiDriver {
             }else{
                 log(LogLevel.VERIFICATION_FAILED, "Element " + ((DomElement)guiElement).LogIdentification() + " was expected to be enabled. It's enabled, but not displayed and cannot be used for interaction.");
             }
+            saveScreenshot(webElement);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
     }
 
@@ -1602,6 +1612,10 @@ public class WebInteractionMethods implements GuiDriver {
         catch (Exception e)
         {
             log(LogLevel.EXECUTION_PROBLEM, "Could not switch browser tab. Browser seem to be closed.");
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
 
@@ -1642,6 +1656,10 @@ public class WebInteractionMethods implements GuiDriver {
         catch (Exception e)
         {
             log(LogLevel.EXECUTION_PROBLEM, "Could not switch browser tab. Browser seem to be closed.");
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
 
@@ -1687,6 +1705,11 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTED, "Hover over " + ((DomElement)guiElement).LogIdentification() + ".");
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not hover over " + ((DomElement)guiElement).LogIdentification() + ".");
+            saveScreenshot(getRuntimeElementWithoutLogging((DomElement)guiElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+
         }
     }
 
@@ -1846,7 +1869,10 @@ public class WebInteractionMethods implements GuiDriver {
                 }
             }
             log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
+            saveScreenshot(webElement);
+            saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
         try {
             if(webElement.isSelected() == expectedToBeTicked){
@@ -1870,6 +1896,11 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void verifyImage(GuiElement guiElement, String pathToOracleImage){
         log(LogLevel.FRAMEWORK_ERROR, "Method 'verifyImage()' is not yet implemented.");
+        saveScreenshot(getRuntimeElementWithoutLogging((DomElement)guiElement));
+        saveDesktopScreenshot();
+        saveHtmlContentOfCurrentPage();
+        writeRunningProcessListDeviationsSinceTestCaseStart();
+
     }
 
     /**
@@ -2079,6 +2110,10 @@ public class WebInteractionMethods implements GuiDriver {
         TableData tableData = tableDataFromGuiElement(tableElement, false);
         if(tableData == null) {
             testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + ".");
+            saveScreenshot(getRuntimeElementWithoutLogging((DomElement)tableElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
         tableData.verifyHeadlinesExist(expectedHeadlines);
@@ -2108,6 +2143,10 @@ public class WebInteractionMethods implements GuiDriver {
         }
         if(tableElement == null) {
             if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
+            saveScreenshot(tableElement);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return null;
         }
         List<WebElement> rows;
@@ -2115,6 +2154,10 @@ public class WebInteractionMethods implements GuiDriver {
             rows = tableElement.findElements(By.xpath(".//tr"));
         }catch (Exception e){
             if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for HTML table " + domElement.LogIdentification() + ".");
+            saveScreenshot(tableElement);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             return null;
         }
         for(WebElement row : rows){
@@ -2122,7 +2165,13 @@ public class WebInteractionMethods implements GuiDriver {
             try{
                 cells = row.findElements(By.xpath("(.//td|.//th)"));
             } catch (Exception e){
-                if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " for row '" + row.toString() + "'.");
+                if(logErrors) {
+                    testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " for row '" + row.toString() + "'.");
+                    saveScreenshot(tableElement);
+                    saveDesktopScreenshot();
+                    saveHtmlContentOfCurrentPage();
+                    writeRunningProcessListDeviationsSinceTestCaseStart();
+                }
                 return null;
             }
             for(WebElement cell : cells){
@@ -2171,10 +2220,18 @@ public class WebInteractionMethods implements GuiDriver {
                 log(LogLevel.DEBUG, "Sending keys '" + text + "'.");
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "'.");
+                saveScreenshot(element);
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
                 throw new TextEnteringError();
             }
         }else {
             log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "' since the webElement was null.");
+            saveScreenshot(element);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
             throw new TextEnteringError();
         }
     }
@@ -2215,7 +2272,7 @@ public class WebInteractionMethods implements GuiDriver {
                 "   </body>" + LF +
                 "</html>" + LF;
         SupportMethods.saveToFile(html, filePath);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"" + TestRun.reportLinkPrefix() + "://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"" + TestRun.reportLinkPrefix() + "://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
         TestRun.fileCounter++;
     }
 
@@ -2279,6 +2336,8 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                 }else {
                     log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
+                    saveDesktopScreenshot();
+                    saveHtmlContentOfCurrentPage();
                 }
             }
         }catch (Exception e){
