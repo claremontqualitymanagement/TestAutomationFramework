@@ -16,10 +16,10 @@ import java.util.Date;
  *  added addTableRows method
  */
 public class KioskModeReport {
-    String html = null;
-    String filePath = null;
-    ArrayList<String> tableRows = new ArrayList<>();
-
+    private String html = null;
+    private StringBuilder htmlBuilder = new StringBuilder();
+    private String filePath = null;
+    private ArrayList<String> tableRows = new ArrayList<>();
     public void evaluateTestCase(TestCase testCase){
         if (testCase.resultStatus.equals(TestCase.ResultStatus.UNEVALUATED)){
             testCase.evaluateResultStatus();
@@ -47,25 +47,25 @@ public class KioskModeReport {
     }
     public void create(String filePath, String title, int reloadIntervalInSeconds){
         this.filePath = filePath;
-        html = "<!DOCTYPE html>" + System.lineSeparator();
-        html += "<hmtl>" + System.lineSeparator();
-        html += "  <head>" + System.lineSeparator();
-        html += "    <meta http-equiv=\"refresh\" content=\"" + reloadIntervalInSeconds + "\" >" + System.lineSeparator();
-        html += "    <style>" + System.lineSeparator();
-        html += styleInfo();
-        html += "    </style>" + System.lineSeparator();
-        html += "  </head>" + System.lineSeparator();
-        html += "  <body>" + System.lineSeparator();
-        html += "    <h1>" + title + "</h2>" + System.lineSeparator();
-        html += "    <table>" + System.lineSeparator();
-
-        for(String resultRow : tableRows){
-            html += resultRow;
+        htmlBuilder.append("<!DOCTYPE html>").append(System.lineSeparator());
+        htmlBuilder.append("<hmtl>").append(System.lineSeparator());
+        htmlBuilder.append("  <head>").append(System.lineSeparator());
+        htmlBuilder.append("    <meta http-equiv=\"refresh\" content=\"").append(reloadIntervalInSeconds).append("\" >").append(System.lineSeparator());
+        htmlBuilder.append("    <style>").append(System.lineSeparator());
+        htmlBuilder.append(styleInfo());
+        htmlBuilder.append("    </style>").append(System.lineSeparator());
+        htmlBuilder.append("  </head>").append(System.lineSeparator());
+        htmlBuilder.append("  <body>").append(System.lineSeparator());
+        htmlBuilder.append("    <h1>").append(title).append("</h2>").append(System.lineSeparator());
+        htmlBuilder.append("    <table>").append(System.lineSeparator());
+        for(String resultRow : tableRows) {
+            htmlBuilder.append(resultRow);
         }
-        html += "    </table>" + System.lineSeparator();
-        html += "    <div class=\"lastruntimestamp\">Last updated " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</div>" + System.lineSeparator();
-        html += "  </body>" + System.lineSeparator();
-        html += "</hmtl>" + System.lineSeparator();
+        htmlBuilder.append("    </table>").append(System.lineSeparator());
+        htmlBuilder.append("    <div class=\"lastruntimestamp\">Last updated ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())).append("</div>").append(System.lineSeparator());
+        htmlBuilder.append("  </body>").append(System.lineSeparator());
+        htmlBuilder.append("</hmtl>").append(System.lineSeparator());
+        html = htmlBuilder.toString();
         save();
     }
 
@@ -84,13 +84,13 @@ public class KioskModeReport {
     private String styleInfo(){
         return
                 "      body            { background-color: black; }" + System.lineSeparator() +
-                "      h1              { color: lightgrey; }" + System.lineSeparator() +
-                "      tr.passed       { background-color: lightgreen; }" + System.lineSeparator() +
-                "      tr.newerrors    { background-color: red; color: white; }" + System.lineSeparator() +
-                "      tr.newandknownerrors { background-color: orange; color: black; }" + System.lineSeparator() +
-                "      tr.onlyknownerrors   { background-color: yellow; color: darkslategrey; }" + System.lineSeparator() +
-                "      tr.unevaluated       { background-color: grey; color: black; }" + System.lineSeparator() +
-                "      div.lastruntimestamp { color: lightgrey; }" + System.lineSeparator();
+                        "      h1              { color: lightgrey; }" + System.lineSeparator() +
+                        "      tr.passed       { background-color: lightgreen; }" + System.lineSeparator() +
+                        "      tr.newerrors    { background-color: red; color: white; }" + System.lineSeparator() +
+                        "      tr.newandknownerrors { background-color: orange; color: black; }" + System.lineSeparator() +
+                        "      tr.onlyknownerrors   { background-color: yellow; color: darkslategrey; }" + System.lineSeparator() +
+                        "      tr.unevaluated       { background-color: grey; color: black; }" + System.lineSeparator() +
+                        "      div.lastruntimestamp { color: lightgrey; }" + System.lineSeparator();
     }
 
 }
