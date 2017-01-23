@@ -12,6 +12,8 @@ import java.util.Date;
 
 /**
  * Created by jordam on 2016-12-22.
+ * Modified by percar on 2017-01-23
+ *  added addTableRows method
  */
 public class KioskModeReport {
     String html = null;
@@ -24,23 +26,25 @@ public class KioskModeReport {
         }
         switch (testCase.resultStatus){
             case UNEVALUATED:
-                tableRows.add("      <tr class=\"unevaluated\"><td>Unevaluated</td><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td></tr>" + System.lineSeparator());
+                addTableRows(testCase.testSetName, testCase.testName, "unevaluated", "Unevaluated");
                 break;
             case PASSED:
-                tableRows.add("      <tr class=\"passed\"><td>Passed</td><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td></tr>" + System.lineSeparator());
+                addTableRows(testCase.testSetName, testCase.testName, "unevaluated", "Passed");
                 break;
             case FAILED_WITH_ONLY_KNOWN_ERRORS:
-                tableRows.add("      <tr class=\"onlyknownerrors\"><td>Known errors</td><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td></tr>" + System.lineSeparator());
+                addTableRows(testCase.testSetName, testCase.testName, "unevaluated", "Known errors");
                 break;
             case FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS:
-                tableRows.add("      <tr class=\"newandknownerrors\"><td>New and known errors</td><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td></tr>" + System.lineSeparator());
+                addTableRows(testCase.testSetName, testCase.testName, "unevaluated", "New and known errors");
                 break;
             case FAILED_WITH_ONLY_NEW_ERRORS:
-                tableRows.add("      <tr class=\"newerrors\"><td>New errors</td><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td></tr>" + System.lineSeparator());
+                addTableRows(testCase.testSetName, testCase.testName,"newerrors", "New errors");
                 break;
         }
     }
-
+    private void addTableRows(String testCaseTestSetName, String testCaseName, String styleClass, String userFriendlyStatus) {
+        tableRows.add("      <tr class=\"" + styleClass + "\"><td>" + userFriendlyStatus + "</td><td>" + testCaseTestSetName + "</td><td>" + testCaseName + "</td></tr>" + System.lineSeparator());
+    }
     public void create(String filePath, String title, int reloadIntervalInSeconds){
         this.filePath = filePath;
         html = "<!DOCTYPE html>" + System.lineSeparator();
@@ -54,6 +58,7 @@ public class KioskModeReport {
         html += "  <body>" + System.lineSeparator();
         html += "    <h1>" + title + "</h2>" + System.lineSeparator();
         html += "    <table>" + System.lineSeparator();
+
         for(String resultRow : tableRows){
             html += resultRow;
         }
