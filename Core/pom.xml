@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
-    <artifactId>TestAutomationFramework</artifactId>
+    <artifactId>TestAutomationFrameworkCore</artifactId>
     <version>v1.0.29</version>
     <packaging>jar</packaging>
 
@@ -243,11 +243,6 @@
             <version>3.1.7</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkCore</artifactId>
-            <version>v1.0.29</version>
-        </dependency>
     </dependencies>
 
     <distributionManagement>
@@ -267,7 +262,7 @@
     <build>
         <resources>
             <resource>
-                <directory>TechnologiesSupport/src/main/resources</directory>
+                <directory>src/main/resources</directory>
                     <excludes>
                         <exclude>drivers</exclude>
                         <exclude>images</exclude>

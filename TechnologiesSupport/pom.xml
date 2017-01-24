@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
-    <artifactId>TestAutomationFramework</artifactId>
+    <artifactId>TestAutomationFrameworkWebTesting</artifactId>
     <version>v1.0.29</version>
     <packaging>jar</packaging>
 
@@ -248,6 +248,31 @@
             <artifactId>TestAutomationFrameworkCore</artifactId>
             <version>v1.0.29</version>
         </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestAutomationFramework</artifactId>
+            <version>1.0.1-beta24</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestAutomationFramework</artifactId>
+            <version>1.0.1-beta24</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestAutomationFramework</artifactId>
+            <version>1.0.1-beta24</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestAutomationFramework</artifactId>
+            <version>1.0.1-beta24</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestAutomationFramework</artifactId>
+            <version>1.0.1-beta24</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
@@ -267,7 +292,7 @@
     <build>
         <resources>
             <resource>
-                <directory>TechnologiesSupport/src/main/resources</directory>
+                <directory>src/main/resources</directory>
                     <excludes>
                         <exclude>drivers</exclude>
                         <exclude>images</exclude>
