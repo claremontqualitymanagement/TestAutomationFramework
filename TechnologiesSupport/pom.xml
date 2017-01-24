@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
-    <artifactId>TestAutomationFrameworkWebTesting</artifactId>
+    <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
     <version>v1.0.29</version>
     <packaging>jar</packaging>
 
     <name>Test Automation Framework - TAF</name>
-    <description>This is the CORE project from Claremont - TAF</description>
+    <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
 
     <properties>
