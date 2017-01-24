@@ -22,5 +22,6 @@ Read more about the documentation [here](http://46.101.193.212/TAF/documentation
 [![codecov coverage](https://img.shields.io/codecov/c/github/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
 [![Github Releases](https://img.shields.io/github/downloads/atom/atom/latest/total.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
+[![SonarQube TechDebt](https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=se.claremont%3ATestAutomationFramework)
 
 © 2017 Claremont AB

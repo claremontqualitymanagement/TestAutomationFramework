@@ -1,10 +1,25 @@
+# Always validate your .travis.yml file at http://lint.travis-ci.org
 language: java
+sudo: false
+install: true
+addons:
+  sonarqube:
+    branches:
+      - master
+    token:
+      secure: c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
 jdk:
   - oraclejdk8
 #  - oraclejdk7
 #  - openjdk6
 script:
-- mvn install antrun:run
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run
+#- mvn install antrun:run
+#- mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
 before_deploy:
 #- export TAF_VERSION=$(ls target/TestAutomationFramework-*.jar)
 #- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
