@@ -1,10 +1,12 @@
-package java.se.claremont.autotest.common;
+package se.claremont.autotest.common;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.support.Utils;
 
 /**
+ * Tests to assess Utils class in TAF Core
+ *
  * Created by magnusolsson on 2016-09-23.
  */
 public class UtilsTest{

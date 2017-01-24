@@ -1,4 +1,4 @@
-package java.se.claremont.autotest.common;
+package se.claremont.autotest.common;
 
 import org.junit.Test;
 import se.claremont.autotest.common.testrun.Settings;
@@ -8,6 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Tests for TestRun class
+ *
  * Created by magnusolsson on 2016-11-01.
  */
 public class TestRunTest {
@@ -21,8 +23,7 @@ public class TestRunTest {
     @Test
     public void unsetCustomSettingsValueForHtmlReportsLinkPrefixShouldReturnFileLink(){
         Settings original = TestRun.settings;
-        Settings s = new Settings();
-        TestRun.settings = s;
+        TestRun.settings = new Settings();
         assertTrue("Expected 'file' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("file"));
         TestRun.settings = original;
     }

@@ -1,4 +1,4 @@
-package java.se.claremont.autotest.common.email;
+package se.claremont.autotest.common.email;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +16,8 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 
 /**
+ * Email sending tests
+ *
  * Created by jordam on 2016-09-19.
  */
 public class EmailSenderTest {

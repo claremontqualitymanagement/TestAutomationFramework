@@ -1,10 +1,12 @@
-package java.se.claremont.autotest.common;
+package se.claremont.autotest.common;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.support.api.Taf;
 
 /**
+ * Tests for UserInfo class
+ *
  * Created by magnusolsson on 2016-12-20.
  */
 public class TafUserInfoTest {
