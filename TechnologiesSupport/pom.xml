@@ -20,6 +20,7 @@
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
     </properties>
 
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -146,6 +147,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
         <!-- needed for unit 4.12 bug -->
         <dependency>

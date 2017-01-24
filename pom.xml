@@ -6,7 +6,7 @@
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
     <version>v2.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>Test Automation Framework - TAF</name>
     <description>This is the CORE project from Claremont - TAF</description>
@@ -28,11 +28,11 @@
         </license>
     </licenses>
 
-    <!--
-    <scm>
-        <url>https://svn.apache.org/viewvc/maven</url>
-    </scm>
-    -->
+    <modules>
+        <module>Core</module>
+        <module>TechnologiesSupport</module>
+    </modules>
+
 
     <repositories>
         <repository>
@@ -45,13 +45,6 @@
             <name>Apache-SVN</name>
             <url>https://svn.apache.org/viewvc/maven</url>
         </repository>
-        <!--
-        <repository>
-            <id>repo</id>
-            <name>repo</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-        -->
         <repository>
             <id>mvnrepository.com</id>
             <name>MVNRepository</name>
@@ -91,84 +84,16 @@
         </pluginRepository>
     </pluginRepositories>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkCore</artifactId>
-            <version>v2.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
-            <version>v1.0.0</version>
-        </dependency>
-    </dependencies>
-
     <distributionManagement>
         <repository>
             <id>se.claremont</id>
             <name>TestAutomationFramework</name>
             <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
         </repository>
-        <!--
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        -->
     </distributionManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>TechnologiesSupport/src/main/resources</directory>
-                    <excludes>
-                        <exclude>drivers</exclude>
-                        <exclude>images</exclude>
-                    </excludes>
-            </resource>
-        </resources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>main.java.se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -180,62 +105,17 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>main.java.se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
                     <properties>
                         <property>
                             <name>listener</name>
-                            <value>main.java.se.claremont.autotest.common.testrun.TafRunListener</value>
+                            <value>se.claremont.autotest.common.testrun.TafRunListener</value>
                         </property>
                     </properties>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
-            <!--
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-            -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <configuration>
