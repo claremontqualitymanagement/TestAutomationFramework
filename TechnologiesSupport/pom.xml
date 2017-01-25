@@ -2,13 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>TestAutomationFramework</artifactId>
+        <groupId>se.claremont</groupId>
+        <version>v2.1.0</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
     <version>v1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Test Automation Framework - TAF</name>
+    <name>TAF - TechnologiesSupport</name>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
 
@@ -19,7 +24,6 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
     </properties>
-
 
     <licenses>
         <license>
