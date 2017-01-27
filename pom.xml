@@ -31,6 +31,7 @@
     <modules>
         <module>Core</module>
         <module>TechnologiesSupport</module>
+        <module>EyeAutomateSupport</module>
     </modules>
 
 
