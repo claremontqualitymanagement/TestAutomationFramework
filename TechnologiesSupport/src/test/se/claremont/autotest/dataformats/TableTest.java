@@ -1,9 +1,8 @@
-package claremont.autotest.dataformats;
+package se.claremont.autotest.dataformats;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.dataformats.Table;
 
 /**
  * Created by jordam on 2016-10-18.

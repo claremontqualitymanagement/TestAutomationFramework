@@ -1,4 +1,4 @@
-package claremont.autotest.websupport.webdrivergluecode;
+package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -7,7 +7,6 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
-import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 /**
  * Created by jordam on 2017-01-18.

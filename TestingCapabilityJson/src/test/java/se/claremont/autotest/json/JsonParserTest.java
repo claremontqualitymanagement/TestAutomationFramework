@@ -1,8 +1,7 @@
-package claremont.autotest.dataformats;
+package se.claremont.autotest.json;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.json.JsonParser;
 
 /**
  * Created by jordam on 2016-10-28.

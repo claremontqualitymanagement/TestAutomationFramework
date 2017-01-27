@@ -1,11 +1,9 @@
-package claremont.autotest.dataformats;
+package se.claremont.autotest.dataformats;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import se.claremont.autotest.dataformats.CsvParser;
-import se.claremont.autotest.dataformats.Table;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
