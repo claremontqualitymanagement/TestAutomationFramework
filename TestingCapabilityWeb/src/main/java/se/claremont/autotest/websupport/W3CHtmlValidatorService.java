@@ -3,7 +3,7 @@ package se.claremont.autotest.websupport;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.dataformats.JsonParser;
+import se.claremont.autotest.json.JsonParser;
 import se.claremont.autotest.restsupport.RestSupport;
 
 import java.util.ArrayList;

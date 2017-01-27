@@ -3,7 +3,7 @@ package se.claremont.autotest.restsupport;
 import okhttp3.OkHttpClient;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.dataformats.JsonParser;
+import se.claremont.autotest.json.JsonParser;
 
 /**
  * Rest support for the framework. Both information vice and communication vice

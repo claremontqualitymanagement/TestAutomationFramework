@@ -83,5 +83,10 @@
             <artifactId>TestingCapabilityWeb</artifactId>
             <version>LATEST</version>
         </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilityJson</artifactId>
+            <version>v2.0.0</version>
+        </dependency>
     </dependencies>
 </project>

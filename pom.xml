@@ -35,6 +35,8 @@
         <module>TestingCapabilityWeb</module>
         <module>TestingCapabilityJavaGui</module>
         <module>SandboxTests</module>
+        <module>TestingCapabilityRestApi</module>
+        <module>TestingCapabilityJson</module>
     </modules>
 
 

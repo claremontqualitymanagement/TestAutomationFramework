@@ -1,4 +1,4 @@
-package se.claremont.autotest.dataformats;
+package se.claremont.autotest.json;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
