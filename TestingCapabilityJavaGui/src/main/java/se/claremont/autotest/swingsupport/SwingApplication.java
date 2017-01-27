@@ -1,5 +1,6 @@
 package se.claremont.autotest.swingsupport;
 
+
 import org.fest.swing.fixture.FrameFixture;
 
 import java.awt.*;

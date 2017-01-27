@@ -1,4 +1,4 @@
-package se.claremont;
+package claremont;
 
 import org.junit.*;
 import org.junit.rules.TestName;

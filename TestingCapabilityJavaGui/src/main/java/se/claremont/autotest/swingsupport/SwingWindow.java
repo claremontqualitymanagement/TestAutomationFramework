@@ -1,13 +1,12 @@
 package se.claremont.autotest.swingsupport;
 
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static se.claremont.autotest.common.support.StringManagement.methodNameWithOnlySafeCharacters;
 
 /**
  * Created by jordam on 2016-09-18.
@@ -70,7 +69,7 @@ public class SwingWindow {
     }
 
     private static String stringToMethodName(String string){
-        return methodNameWithOnlySafeCharacters(string);
+        return StringManagement.methodNameWithOnlySafeCharacters(string);
     }
 
     public String map(){

@@ -16,7 +16,7 @@ import java.util.List;
 @Deprecated
 public class Table {
     private final static Logger logger = LoggerFactory.getLogger( Table.class );
-    Row headlineRow;
+    public Row headlineRow;
     List<Row> rows = new ArrayList<>();
 
     public Table(List<String[]> values){
@@ -214,7 +214,7 @@ public class Table {
         return SupportMethods.isRegexMatch(instring, "^[0-9|\\.|,|\\x020]*$");
     }
 
-    class Row{
+    public class Row{
         List<String> dataValueList = new ArrayList<>();
 
         public Row(String line, String delimiter){
@@ -230,6 +230,7 @@ public class Table {
             }
         }
 
+        @Override
         public String toString(){
             return String.join(",", dataValueList);
         }

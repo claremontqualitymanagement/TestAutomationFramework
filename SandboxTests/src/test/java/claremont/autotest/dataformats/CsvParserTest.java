@@ -1,15 +1,15 @@
-package se.claremont.autotest.dataformats;
+package claremont.autotest.dataformats;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import se.claremont.autotest.dataformats.CsvParser;
+import se.claremont.autotest.dataformats.Table;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URL;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 
 public class CsvParserTest {
     private CsvParser csvParser;
@@ -28,11 +28,11 @@ public class CsvParserTest {
         csvParser = new CsvParser(fileReader);
 
         Table table = csvParser.csvContent;
-        assertNotNull(table);
+        Assert.assertNotNull(table);
         String htmlTable = table.toHtmlTable();
 
-        assertNotNull(htmlTable);
-        assertFalse(htmlTable.isEmpty());
+        Assert.assertNotNull(htmlTable);
+        Assert.assertFalse(htmlTable.isEmpty());
     }
 
     @Test
@@ -46,11 +46,11 @@ public class CsvParserTest {
         csvParser = new CsvParser(fileContent);
 
         Table table = csvParser.csvContent;
-        assertNotNull(table);
+        Assert.assertNotNull(table);
         String htmlTable = table.toHtmlTable();
 
-        assertNotNull(htmlTable);
-        assertFalse(htmlTable.isEmpty());
+        Assert.assertNotNull(htmlTable);
+        Assert.assertFalse(htmlTable.isEmpty());
     }
 
     @Test
@@ -64,11 +64,11 @@ public class CsvParserTest {
         csvParser = new CsvParser(fileContent, ",");
 
         Table table = csvParser.csvContent;
-        assertNotNull(table);
+        Assert.assertNotNull(table);
         String htmlTable = table.toHtmlTable();
 
-        assertNotNull(htmlTable);
-        assertFalse(htmlTable.isEmpty());
+        Assert.assertNotNull(htmlTable);
+        Assert.assertFalse(htmlTable.isEmpty());
     }
 
 }

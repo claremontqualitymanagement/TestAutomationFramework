@@ -4,9 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
-    <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
+    <parent>
+        <artifactId>TestAutomationFramework</artifactId>
+        <groupId>se.claremont</groupId>
+        <version>LATEST</version>
+    </parent>
     <version>v1.0.0</version>
     <packaging>jar</packaging>
+
+    <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
 
     <name>Test Automation Framework - TAF</name>
     <description>This is the technologies enabling project from Claremont TAF</description>
@@ -14,10 +20,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <TEST_SERVER>46.101.193.212</TEST_SERVER>
-        <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
-        <TEST_USER>taf</TEST_USER>
-        <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
     </properties>
 
 
@@ -81,12 +83,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <!--<version>2.53.1</version>-->
-            <version>LATEST</version>
-        </dependency>
         <!-- For REST interactions -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -133,34 +129,7 @@
             <artifactId>jersey-container-jdk-http</artifactId>
             <version>2.23.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-swing</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>1.4.10</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- needed for unit 4.12 bug -->
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-support</artifactId>
-            <version>2.53.1</version>
-        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -192,6 +161,11 @@
             <artifactId>TestAutomationFrameworkCore</artifactId>
             <version>LATEST</version>
         </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilityJavaGui</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
@@ -211,7 +185,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>../resources</directory>
                     <excludes>
                         <exclude>drivers</exclude>
                         <exclude>images</exclude>

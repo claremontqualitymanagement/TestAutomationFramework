@@ -1,6 +1,10 @@
 package se.claremont.autotest.swingsupport;
 
-import com.sun.jna.*;
+import com.sun.jna.Library;
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import org.fest.swing.util.Platform;
 
 /**
  * Created by jordam on 2016-11-14.

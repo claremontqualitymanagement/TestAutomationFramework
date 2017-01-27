@@ -31,7 +31,10 @@
     <modules>
         <module>Core</module>
         <module>TechnologiesSupport</module>
-        <module>EyeAutomateSupport</module>
+        <module>TestingCapabilitySmartImageGui</module>
+        <module>TestingCapabilityWeb</module>
+        <module>TestingCapabilityJavaGui</module>
+        <module>SandboxTests</module>
     </modules>
 
 
