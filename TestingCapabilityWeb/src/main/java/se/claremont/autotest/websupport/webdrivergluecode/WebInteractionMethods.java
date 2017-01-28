@@ -277,14 +277,19 @@ public class WebInteractionMethods implements GuiDriver {
         while (!elementIsEnabled && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null && element.isDisplayed() && element.isEnabled()){
-                elementIsEnabled = true;
+                log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled.");
+                return element;
             }else{
                 wait(50);
             }
         }
-        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to become enabled. " +
-                "It " + Boolean.toString(elementIsEnabled).toLowerCase().replace("true", "did.").replace("false", "never did."));
-        return element;
+        if(element == null){
+            log(LogLevel.DEBUG, "Could not identify element " + domElement.LogIdentification() + ". Tried for " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+        } else {
+            log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled. " +
+                    "It " + Boolean.toString(elementIsEnabled).toLowerCase().replace("true", "did").replace("false", "never did") + " become enabled.");
+        }
+        return null;
     }
 
     /**
