@@ -12,16 +12,13 @@
     <version>v1.0.0</version>
     <packaging>jar</packaging>
 
-    <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
-
-    <name>Test Automation Framework - TAF</name>
+    <name>TAF - TechnologiesSupport</name>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 
     <licenses>
         <license>

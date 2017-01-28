@@ -12,9 +12,7 @@
     <version>v2.0.0</version>
     <packaging>jar</packaging>
 
-    <artifactId>TestAutomationFrameworkCore</artifactId>
-
-    <name>Test Automation Framework - TAF</name>
+    <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>
     <url>http://www.claremont.se</url>
 
