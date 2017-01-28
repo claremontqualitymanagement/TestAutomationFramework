@@ -1912,6 +1912,32 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    public String getSelectedValueFromDropdown(GuiElement guiElement){
+        List<String> selectedStrings = new ArrayList<>();
+        DomElement domElement = (DomElement) guiElement;
+        WebElement webElement = waitForElementToBeEnabled(guiElement, standardTimeoutInSeconds);
+        if(webElement == null) {
+            log(LogLevel.DEBUG, "Could not identify the element " + domElement.LogIdentification() + " to get current selection from.");
+            return null;
+        }
+        Select dropdown;
+        try{
+            dropdown = new Select(webElement);
+        }catch (Exception e){
+            log(LogLevel.DEBUG, "Could not cast WebElement to type Select (=DropDown). " + e.getMessage());
+            return null;
+        }
+        List<WebElement> selections = dropdown.getAllSelectedOptions();
+        for(WebElement selection : selections){
+            try{
+                selectedStrings.add(selection.getText());
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not get text value for selected element when attempting to get selections for " + domElement.LogIdentification() + ". " + e.getMessage());
+            }
+        }
+        return "['" + String.join("','", selectedStrings) + "']";
+    }
+
 
     /**
      * Verifies that an image looks as expected
@@ -1940,7 +1966,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
             return;
         }
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        WebElement webElement = waitForElementToBeEnabled(domElement, standardTimeoutInSeconds);
         if(webElement == null) {
             errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
             return;
@@ -2056,6 +2082,7 @@ public class WebInteractionMethods implements GuiDriver {
         boolean doneOk = false;
         long startTime = System.currentTimeMillis();
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            if(!waitForElementToAppear(tableElement))continue;
             TableData tableData = tableDataFromGuiElement(tableElement, false);
             if(tableData == null ){
                 DomElement table = (DomElement) tableElement;
@@ -2088,7 +2115,6 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedHeadline Headline name, as seen in the table
      */
     public void verifyTableHeadline(GuiElement tableElement, String expectedHeadline){
-        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
         TableData tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null) return;
         tableData.verifyHeadlineExist(expectedHeadline);
@@ -2151,10 +2177,15 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedHeadlines The list of expected headlines
      */
     public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
-        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        DomElement table = (DomElement) tableElement;
+        boolean found = waitForElementToAppear(tableElement);
+        if(!found){
+            log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + table.LogIdentification() + " to verify headlines '" + String.join("', '", expectedHeadlines) + "' in." );
+            return;
+        }
         TableData tableData = tableDataFromGuiElement(tableElement, false);
         if(tableData == null) {
-            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + ".");
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + " when trying to verify headlines '" + String.join("', '", expectedHeadlines) + "'.");
             saveScreenshot(getRuntimeElementWithoutLogging((DomElement)tableElement));
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -2178,16 +2209,22 @@ public class WebInteractionMethods implements GuiDriver {
 
     private TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
         DomElement domElement = (DomElement)guiElement;
+        boolean found = waitForElementToAppear(guiElement);
+        if(!found) {
+            log(LogLevel.DEBUG, "Could not find " + domElement.LogIdentification() + " within timeout.");
+            return null;
+        }
         StringBuilder tableContent = new StringBuilder();
         WebElement tableElement = getRuntimeElementWithoutLogging(domElement);
         if(!tableElement.getTagName().toLowerCase().equals("table")){
             try {
                 tableElement = tableElement.findElement(By.xpath(".//table"));
             }catch (Exception ignored){
+                log(LogLevel.DEBUG, "The " + domElement.LogIdentification() + " is not of 'table' tag, and it does not seem to have any child element of type 'table' either.");
             }
         }
         if(tableElement == null) {
-            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
+            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not create TableData from " + domElement.LogIdentification() + ". Check debug for more info.");
             saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();

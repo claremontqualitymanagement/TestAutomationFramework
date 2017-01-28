@@ -17,7 +17,7 @@ import java.net.URL;
  *
  * Created by jordam on 2017-01-18.
  */
-public class WebInteractionMethods_Test extends TestSet {
+public class ButtonInteractionTest extends TestSet {
 
     private String getTestFileFromTestResourcesFolder(String fileName){
         URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
