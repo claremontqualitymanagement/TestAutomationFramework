@@ -36,7 +36,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-08-17.
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused"})
 public class WebInteractionMethods implements GuiDriver {
 
     private final static Logger logger = LoggerFactory.getLogger( WebInteractionMethods.class );
@@ -220,6 +220,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
 
         //Code below for waiting for all threads to finish due to log timing issues
+        //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < linkCheckingThreads.size(); i++)
             try {
                 linkCheckingThreads.get(i).join();
@@ -247,7 +248,7 @@ public class WebInteractionMethods implements GuiDriver {
     public boolean waitForElementToAppear(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
-        WebElement element = null;
+        WebElement element;
         boolean elementHasAppeared = false;
         while (!elementHasAppeared && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
@@ -305,7 +306,7 @@ public class WebInteractionMethods implements GuiDriver {
     public boolean waitForElementToDisappear(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
-        WebElement element = null;
+        WebElement element;
         boolean elementIsDisplayed = true;
         while (elementIsDisplayed && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
@@ -338,6 +339,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
 
         //Code below for waiting for all threads to finish due to log timing issues
+        //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < linkCheckingThreads.size(); i++)
             try {
                 linkCheckingThreads.get(i).join();
@@ -379,6 +381,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
         if(text == null && !elementIdentified){
             log(LogLevel.EXECUTION_PROBLEM, "Could not retrieve text from element " + domElement.LogIdentification() + " since it could not be identified at runtime.");
+            //noinspection ConstantConditions
             saveScreenshot(element);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -405,17 +408,16 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         String text = null;
-        WebElement element = null;
-        boolean elementIdentified = false;
+        WebElement element;
         while (text == null && (System.currentTimeMillis() - startTime) <= standardTimeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
             if(element != null){
-                elementIdentified = true;
                 try {
                     text = element.getText();
                 }catch (Exception ignored){}
+            } else {
+                wait(50);
             }
-            wait(50);
         }
         return text;
     }
@@ -555,8 +557,10 @@ public class WebInteractionMethods implements GuiDriver {
             boolean exist = false;
             try {
                 element = getRuntimeElementWithoutLogging(domElement);
-                if(element != null) exist = true;
-                text = element.getText();
+                if(element != null) {
+                    exist = true;
+                    text = element.getText();
+                }
             }catch (Exception e){
                 errorMessage = e.getMessage();
             }
@@ -651,7 +655,7 @@ public class WebInteractionMethods implements GuiDriver {
         String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
         logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
         TestRun.fileCounter++;
-        byte[] fileImage = null;
+        byte[] fileImage;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
         }catch (Exception e){
@@ -713,7 +717,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " when trying to capture an image of it.");
-            saveScreenshot(webElement);
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -726,7 +730,7 @@ public class WebInteractionMethods implements GuiDriver {
         int xcord = point.getX();
         int ycord = point.getY();
 
-        BufferedImage img = null;
+        BufferedImage img;
         try {
             img = ImageIO.read(screen);
         } catch (IOException e) {
@@ -824,9 +828,9 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     private class Waiter{
-        private TestCase testCase;
-        private LogLevel logLevel;
-        private long startTime;
+        private final TestCase testCase;
+        private final LogLevel logLevel;
+        private final long startTime;
         private int totalTimeInWaiting;
 
         public Waiter(TestCase testCase, LogLevel logLevel){
@@ -895,6 +899,7 @@ public class WebInteractionMethods implements GuiDriver {
         while (!clicked && (System.currentTimeMillis() - startTime) < timeoutInSeconds *1000){
             try{
                 Thread.sleep(50);
+                //noinspection ConstantConditions
                 webElement.click();
                 clicked = true;
             } catch (Exception e){
@@ -1112,7 +1117,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be displayed but could not be identified at all.");
-            saveScreenshot(webElement);
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1199,7 +1204,7 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.VERIFICATION_PASSED, "The text '" + text + "' could be found on the current page.");
         }else {
             log(LogLevel.VERIFICATION_FAILED, "The text '" + text + "' could not be found on the current page.");
-            saveScreenshot(webElement);
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1452,7 +1457,7 @@ public class WebInteractionMethods implements GuiDriver {
         boolean doneOk = false;
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement)guiTableElement;
-        WebElement webElement = null;
+        WebElement webElement;
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds *1000){
             webElement = getRuntimeElementWithoutLogging(domElement);
             List<String> partialMatches = new ArrayList<>();
@@ -1767,7 +1772,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
             log(LogLevel.EXECUTION_PROBLEM, "Could not identify radio button element " + domElement.LogIdentification() + " where '" + text + "' was supposed to be selected. Continuing test case execution nevertheless.");
-            saveScreenshot(webElement);
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1848,42 +1853,63 @@ public class WebInteractionMethods implements GuiDriver {
      * @param expectedToBeTicked True if expected to be ticked after procedure, false if expected to be un-ticked after procedure. If null is provided, execution will proceed without interaction.
      */
     public void manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
+        long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement)checkboxElement;
         if (expectedToBeTicked == null){
             log(LogLevel.DEBUG, "Leaving checkbox " + domElement.LogIdentification() + " without interaction since input was null.");
             return;
         }
-        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        if(webElement == null)
-            errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
-        if(!webElement.getTagName().toLowerCase().equals("input") || !webElement.getAttribute("type").toLowerCase().equals("checkbox")){
-            List<WebElement> subElements = webElement.findElements(By.xpath("//input"));
-            if(subElements.size() == 1){
-                if(!subElements.get(0).isSelected() == expectedToBeTicked){
-                    subElements.get(0).click();
-                    log(LogLevel.EXECUTED, "Clicked the " + domElement.LogIdentification() + " to make it " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ".");
-                    return;
-                } else {
-                    log(LogLevel.EXECUTED, "Made sure that " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "un-ticked") + ". And it already was.");
-                    return;
+        WebElement webElement = null;
+        boolean success = false;
+        while (!success && (System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000)){
+            webElement = getRuntimeElementWithoutLogging(domElement);
+            if(webElement == null){
+                wait(50);
+                continue;
+            }
+            if(!webElement.getTagName().toLowerCase().equals("input") || !webElement.getAttribute("type").toLowerCase().equals("checkbox")){
+                List<WebElement> subElements = webElement.findElements(By.xpath("//input"));
+                if(subElements.size() == 1){
+                    if(!subElements.get(0).isSelected() == expectedToBeTicked){
+                        subElements.get(0).click();
+                        log(LogLevel.EXECUTED, "Clicked the " + domElement.LogIdentification() + " to make it " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ".");
+                        success = true;
+                        continue;
+                    } else {
+                        log(LogLevel.EXECUTED, "Made sure that " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "un-ticked") + ". And it already was.");
+                        success = true;
+                        continue;
+                    }
+                }
+                log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
+                webElement = null;
+                saveScreenshot(webElement);
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
+                haltFurtherExecution();
+            } else {
+                try {
+                    if(webElement.isSelected() == expectedToBeTicked){
+                        log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
+                        success = true;
+                        continue;
+                    } else {
+                        webElement.click();
+                        log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it was not.");
+                        success = true;
+                        continue;
+                    }
+                } catch (Exception e){
+                    log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
+                    webElement = null;
+                    errorManagementProcedures("This should not happen.");
                 }
             }
-            log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
-            saveScreenshot(webElement);
-            saveDesktopScreenshot();
-            saveHtmlContentOfCurrentPage();
-            writeRunningProcessListDeviationsSinceTestCaseStart();
         }
-        try {
-            if(webElement.isSelected() == expectedToBeTicked){
-                log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
-            } else {
-                webElement.click();
-                log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it was not.");
-            }
-        } catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
-            errorManagementProcedures("This should not happen.");
+        if(webElement == null){
+            errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
+            return;
         }
     }
 
@@ -1997,6 +2023,15 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
             TableData tableData = tableDataFromGuiElement(guiElement, false);
+            if(tableData == null ){
+                DomElement table = (DomElement) guiElement;
+                testCase.log(LogLevel.VERIFICATION_PROBLEM, "Table data for " + table.LogIdentification() + " is null.");
+                saveScreenshot(getRuntimeElementWithoutLogging(table));
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
+                return;
+            }
             boolean nonErroneous = true;
             for(String searchPattern : headlineColonValueSemicolonSeparatedString){
                 if(!tableData.rowExists(searchPattern, regex, null)){
@@ -2022,6 +2057,15 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
             TableData tableData = tableDataFromGuiElement(tableElement, false);
+            if(tableData == null ){
+                DomElement table = (DomElement) tableElement;
+                testCase.log(LogLevel.VERIFICATION_PROBLEM, "Table data for " + table.LogIdentification() + " is null.");
+                saveScreenshot(getRuntimeElementWithoutLogging(table));
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
+                return;
+            }
             doneOk = tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, null);
         }
         TableData tableData = tableDataFromGuiElement(tableElement, true);
@@ -2094,6 +2138,7 @@ public class WebInteractionMethods implements GuiDriver {
         long startTime = System.currentTimeMillis();
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
             TableData tableData = tableDataFromGuiElement(tableElement, false);
+            if(tableData == null ) continue;
             doneOk = tableData.rowExists(headlineColonValueSemicolonSeparatedString, regex, expectedMatchCount);
         }
         return doneOk;
@@ -2143,7 +2188,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
         if(tableElement == null) {
             if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could nog find table " + domElement.LogIdentification() + " to verify data in.");
-            saveScreenshot(tableElement);
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -2228,7 +2273,7 @@ public class WebInteractionMethods implements GuiDriver {
             }
         }else {
             log(LogLevel.EXECUTION_PROBLEM, "Could not send keys '" + text + "' since the webElement was null.");
-            saveScreenshot(element);
+            saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();

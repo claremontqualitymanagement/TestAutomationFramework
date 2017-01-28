@@ -9,6 +9,8 @@ import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
 
 /**
+ * Tests for the WebInteractionMethods class
+ *
  * Created by jordam on 2017-01-18.
  */
 public class WebInteractionMethods_Test extends TestSet {
@@ -16,11 +18,11 @@ public class WebInteractionMethods_Test extends TestSet {
 
     @Test
     @Ignore
-    /**
-     * This test case tries clicking a button that at first is not displayed, and then is not enabled.
-     * When enabled the click is performed.
-     *
-     * This method could be improved by opening the html file from the project.
+    /*
+      This test case tries clicking a button that at first is not displayed, and then is not enabled.
+      When enabled the click is performed.
+
+      This method could be improved by opening the html file from the project.
      */
     public void delayedDisplayOfElementShouldStillBeClickable(){
         System.setProperty("webdriver.chrome.driver", "C:\\temp\\chromedriver.exe");
@@ -33,11 +35,11 @@ public class WebInteractionMethods_Test extends TestSet {
 
     @Test
     @Ignore
-    /**
-     * This test case tries clicking a button that at first is not displayed, and then is not enabled.
-     * When enabled the click is performed.
-     *
-     * This method could be improved by opening the html file from the project.
+    /*
+      This test case tries clicking a button that at first is not displayed, and then is not enabled.
+      When enabled the click is performed.
+
+      This method could be improved by opening the html file from the project.
      */
     public void delayedDisplayOfElementWithToShortTimeoudShouldGiveErrorMessage(){
         TestCase testCase = new TestCase(null, "dummy");
@@ -54,11 +56,11 @@ public class WebInteractionMethods_Test extends TestSet {
 
     @Test
     @Ignore
-    /**
-     * This test case tries clicking a button that at first is not displayed, and then is not enabled.
-     * When enabled the click is performed.
-     *
-     * This method could be improved by opening the html file from the project.
+    /*
+      This test case tries clicking a button that at first is not displayed, and then is not enabled.
+      When enabled the click is performed.
+
+      This method could be improved by opening the html file from the project.
      */
     public void clickingDisabledButton(){
         TestCase testCase = new TestCase(null, "dummy");

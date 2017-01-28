@@ -4,21 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Tests to assure JsonParser works as expected
+ *
  * Created by jordam on 2016-10-28.
  */
 public class JsonParserTest {
-
-    private String contentSample = "{\"menu\": {\n" +
-            "  \"id\": \"file\",\n" +
-            "  \"value\": \"File\",\n" +
-            "  \"popup\": {\n" +
-            "    \"menuitem\": [\n" +
-            "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n" +
-            "      {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},\n" +
-            "      {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}\n" +
-            "    ]\n" +
-            "  }\n" +
-            "}}";
 
     @Test
     public void nullJsonGet(){
@@ -42,6 +32,18 @@ public class JsonParserTest {
 
     @Test
     public void positiveIsJsonCheck(){
+
+        String contentSample = "{\"menu\": {\n" +
+                "  \"id\": \"file\",\n" +
+                "  \"value\": \"File\",\n" +
+                "  \"popup\": {\n" +
+                "    \"menuitem\": [\n" +
+                "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n" +
+                "      {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},\n" +
+                "      {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}\n" +
+                "    ]\n" +
+                "  }\n" +
+                "}}";
         Assert.assertTrue(JsonParser.isJson(contentSample));
     }
 

@@ -13,11 +13,11 @@ import java.util.List;
  *
  * Created by jordam on 2016-09-09.
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class JsonParser {
 
     public static String get(String content, String parameterName){
-        JSONObject object = null;
+        JSONObject object;
         if(!isJson(content)) return null;
         String returnValue = null;
         try {
@@ -31,8 +31,10 @@ public class JsonParser {
         return returnValue;
     }
 
+    @SuppressWarnings("unused")
     public static boolean isJson(String content){
         try {
+            @SuppressWarnings("unused")
             JSONObject object = new JSONObject(content);
             return true;
         }catch (Exception e){
@@ -44,7 +46,7 @@ public class JsonParser {
         if(!isJson(content)) return null;
 
         if(content == null || parameterName == null) return null;
-        JSONObject object = null;
+        JSONObject object;
         try {
             object = new JSONObject(content);
         }catch (Exception ignored){
@@ -57,6 +59,7 @@ public class JsonParser {
         return returnValue;
     }
 
+    @SuppressWarnings("unused")
     public static void verifyMandatoryFieldIsNotEmpty(String content, String mandatoryParameterName, TestCase testCase){
         JSONObject object;
         boolean parameterNameExist = true;
@@ -83,6 +86,7 @@ public class JsonParser {
         }
     }
 
+    @SuppressWarnings("unused")
     public static List<String> childObjects(String content, String parentParameter){
         ArrayList<String> returnString = new ArrayList<>();
         JSONObject object = new JSONObject(content);
@@ -93,11 +97,7 @@ public class JsonParser {
         return returnString;
     }
 
-    public static void nodesToString(String content){
-        JSONObject jsonObject = new JSONObject(content);
-
-    }
-
+    @SuppressWarnings("unused")
     public static String jsonToHtml(String json){
         String html = "";
         json = json.replace(System.lineSeparator(), "");

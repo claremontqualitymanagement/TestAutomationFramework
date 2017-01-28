@@ -12,6 +12,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-08-17.
  */
+@SuppressWarnings("unused")
 public class DomElement implements GuiElement {
 
     @SuppressWarnings("WeakerAccess")

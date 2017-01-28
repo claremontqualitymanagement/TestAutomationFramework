@@ -3,14 +3,17 @@ package se.claremont.autotest.eyeautomatesupport;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
 
 /**
+ * A screen captured image of the element to interact with
+ *
  * Created by jordam on 2017-01-27.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class GuiImageElement implements GuiElement {
     public String getImageFilePath() {
         return imageFilePath;
     }
 
-    private String imageFilePath;
+    private final String imageFilePath;
 
     public String getName() {
         return name;

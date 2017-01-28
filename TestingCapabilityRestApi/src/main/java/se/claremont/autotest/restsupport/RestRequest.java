@@ -9,10 +9,11 @@ import okhttp3.Response;
  *
  * Created by jordam on 2016-11-25.
  */
+@SuppressWarnings("WeakerAccess")
 public class RestRequest {
     Request request;
     Request.Builder builder;
-    String url;
+    final String url;
     String data;
     String mediaType;
 
@@ -27,7 +28,7 @@ public class RestRequest {
     }
 
     /**
-     * Constructor for REST requests transfering data.
+     * Constructor for REST requests transferring data.
      *
      * @param url The url to send the request to.
      * @param mediaType The media type of the data sent.
@@ -45,6 +46,7 @@ public class RestRequest {
      *
      * @param name The name of the header parameter to remove.
      */
+    @SuppressWarnings("unused")
     public void removeHeaderValue(String name){
         builder.removeHeader(name);
     }
@@ -55,6 +57,7 @@ public class RestRequest {
      * @param name The name of the header parameter.
      * @param value The value of the header parameter.
      */
+    @SuppressWarnings("unused")
     public void addHeaderValue(String name, String value){
         builder.addHeader(name, value);
     }

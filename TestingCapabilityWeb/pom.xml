@@ -10,69 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>TestingCapabilityWeb</artifactId>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>http://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>apachew.org</id>
-            <name>Apache-SVN</name>
-            <url>https://svn.apache.org/viewvc/maven</url>
-        </repository>
-        <repository>
-            <id>mvnrepository.com</id>
-            <name>MVNRepository</name>
-            <url>https://mvnrepository.com</url>
-        </repository>
-        <repository>
-            <id>claremontqualitymanagement</id>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-            <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>http://repo1.maven.org/maven2</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>mvnrepo</id>
-            <name>MVNrepository</name>
-            <url>http://mvnrepository.com</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>github</id>
-            <name>github</name>
-            <url>https://github.com/</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <version>v1.0.0</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

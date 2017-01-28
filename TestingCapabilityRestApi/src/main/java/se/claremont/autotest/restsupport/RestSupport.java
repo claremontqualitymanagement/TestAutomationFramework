@@ -10,10 +10,10 @@ import se.claremont.autotest.json.JsonParser;
  *
  * Created by jordam on 2016-09-09.
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class RestSupport {
     private final TestCase testCase;
-    public OkHttpClient client;
+    public final OkHttpClient client;
 
     /**
      * Enables support for interaction with a REST service.
@@ -55,6 +55,7 @@ public class RestSupport {
      * @param data The data to post
      * @return Return the response body of the request as a string.
      */
+    @SuppressWarnings("unused")
     public RestResponse responseFromPostRequest(String url, String mediaType, String data) {
         RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
         RestResponse restResponse = restPostRequest.execute(client);
@@ -74,6 +75,7 @@ public class RestSupport {
      * @param data The data to put
      * @return Return the response body of the request as a string.
      */
+    @SuppressWarnings("unused")
     public String responseBodyFromPutRequest(String url, String mediaType, String data) {
         RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
         RestResponse restResponse = restPutRequest.execute(client);
@@ -95,6 +97,7 @@ public class RestSupport {
      * @param data The data to put
      * @return Return the response body of the request as a string.
      */
+    @SuppressWarnings("unused")
     public RestResponse responseFromPutRequest(String url, String mediaType, String data) {
         RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
         RestResponse restResponse = restPutRequest.execute(client);
@@ -111,7 +114,7 @@ public class RestSupport {
      * Checks if a service is up and ready by checking that a GET request is responded to with the status code 200 (=ok).
      *
      * @param url The url for the service request
-     * @return Return true if the response status is 200, othervice false;
+     * @return Return true if the response status is 200, otherwise false;
      */
     public boolean isRespondingToGetRequest(String url){
         return responseCodeFromGetRequest(url).equals( "200" );
@@ -124,6 +127,7 @@ public class RestSupport {
      * @param url The url of the REST service
      * @return Return the response body of the request as a string.
      */
+    @SuppressWarnings("unused")
     public String responseBodyFromDeleteRequest(String url) {
         RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
         RestResponse restResponse = restDeleteRequest.execute();
@@ -145,6 +149,7 @@ public class RestSupport {
      * @param url The url of the REST service
      * @return Return the response body of the request as a string.
      */
+    @SuppressWarnings("unused")
     public RestResponse responseFromDeleteRequest(String url) {
         RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
         RestResponse restResponse = restDeleteRequest.execute(client);
@@ -219,6 +224,7 @@ public class RestSupport {
      *
      * @param url The url to check, and expect a status code 200 from.
      */
+    @SuppressWarnings("unused")
     public void verifyServiceIsResponding(String url){
         if(isRespondingToGetRequest(url)){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Service up and running. Request to '" + url + "' returned status code 200 (=ok).");
@@ -234,6 +240,7 @@ public class RestSupport {
      * @param parameterName Name of JSON parameter
      * @return Return the value of the given parameter, if the parameter exist.
      */
+    @SuppressWarnings("unused")
     public String getParameterValueFromResponseFromGetRequest(String url, String parameterName){
         String parameterValue = JsonParser.get(responseBodyFromGetRequest(url), parameterName);
         testCase.log(LogLevel.DEBUG, "Reading parameter value '" + parameterValue + "' for parameter '" + parameterName + "' from url '" + url + "'.");

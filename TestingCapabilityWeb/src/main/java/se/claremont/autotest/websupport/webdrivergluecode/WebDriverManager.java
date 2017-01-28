@@ -130,11 +130,12 @@ public class WebDriverManager {
     }
 
     abstract class Browser{
-        TestCase testCase;
+        final TestCase testCase;
         Browser(TestCase testCase){
             this.testCase = testCase;
         }
 
+        @SuppressWarnings("unused")
         public WebDriver setup(){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Browser is an abstract class and the setup of this is not intended.");
             return null;

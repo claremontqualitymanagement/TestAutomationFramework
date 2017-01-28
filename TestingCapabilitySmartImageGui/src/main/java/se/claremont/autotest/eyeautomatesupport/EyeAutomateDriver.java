@@ -16,11 +16,15 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 /**
+ * Driver for image based GUI automation with smart image recognition. This enables any OS to be automated.
+ * Uses library from the EyeAutomate tool from Auqtus. Cred and kudos to those guys for enabling this.
+ *
  * Created by jordam on 2017-01-27.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class EyeAutomateDriver {
-    public ScriptRunner scriptRunner = new ScriptRunner(null);
-    TestCase testCase;
+    public final ScriptRunner scriptRunner = new ScriptRunner(null);
+    private final TestCase testCase;
 
     public EyeAutomateDriver(TestCase testCase){
         if(testCase == null){
@@ -69,14 +73,38 @@ public class EyeAutomateDriver {
     }
 
     private void executeCommand(ArrayList<String> scriptRowParts){
-        String commandString = String.join(" ",scriptRowParts);
+        String commandString = "";
         String command = null;
-        testCase.log(LogLevel.DEBUG, "Executing command '" + String.join(" ", scriptRowParts) + "'.");
+        String imageFile;
+        String arguments = null;
+        if(scriptRowParts.size() == 0) {
+            testCase.log(LogLevel.DEBUG, "Command string was null.");
+            return;
+        }
+        if(scriptRowParts.size() > 0) {
+            command = scriptRowParts.get(0);
+            commandString += command + " ";
+        }
+        if(scriptRowParts.size() > 1) {
+            imageFile = scriptRowParts.get(1);
+            commandString += imageFile + " ";
+        }
+        if(scriptRowParts.size() > 2){
+            for(int i = 3; i < scriptRowParts.size(); i++){
+                arguments += scriptRowParts.get(i) + " ";
+            }
+            if(arguments != null) {
+                arguments = arguments.trim();
+                commandString += arguments + " ";
+            }
+        }
+        commandString = commandString.trim();
+
         boolean success = scriptRunner.runScript(command, commandString);
         if(success){
-            testCase.log(LogLevel.EXECUTED, command + ": " + commandString);
+            testCase.log(LogLevel.EXECUTED, "EyeAutomate executed '" + commandString + "' command.");
         } else {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Couldn't execute '" + commandString + "'.");
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "EyeAutomate could not execute '" + commandString + "'.");
             GuiImageElement element = null;
             if(scriptRowParts.size() > 1){
                 element = new GuiImageElement(scriptRowParts.get(1), scriptRowParts.get(1));
@@ -98,7 +126,12 @@ public class EyeAutomateDriver {
             for(int i = 3; i < scriptRowParts.size(); i++){
                 arguments += scriptRowParts.get(i) + " ";
             }
-            arguments = arguments.trim();
+            if(arguments != null)
+               arguments = arguments.trim();
+        }
+        if(command == null) {
+            testCase.log(LogLevel.DEBUG, "Command was null.");
+            return;
         }
         switch (command.toLowerCase()){
             case "click":
@@ -238,11 +271,6 @@ public class EyeAutomateDriver {
         } catch (Exception e) {
             this.testCase.log(LogLevel.DEBUG, "Could not take desktop screenshot: " + e.toString());
         }
-
-    }
-
-
-    private void copyFile(String sourcePath, String targetPath){
 
     }
 

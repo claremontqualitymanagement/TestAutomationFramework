@@ -15,9 +15,9 @@ import java.util.ArrayList;
  */
 public class W3CHtmlValidatorService {
     private boolean failed = false;
-    private TestCase testCase;
-    private String pageSource;
-    private boolean verbose;
+    private final TestCase testCase;
+    private final String pageSource;
+    private final boolean verbose;
     private String responseJson;
 
     /**
@@ -27,6 +27,7 @@ public class W3CHtmlValidatorService {
      * @param pageSource The page HTML source code to validate
      * @param verbose If set to false only errors will be logged. If set to true also warnings and W3C information messages will be logged.
      */
+    @SuppressWarnings("unused")
     public W3CHtmlValidatorService(TestCase testCase, String pageSource, boolean verbose){
         this.testCase = testCase;
         this.pageSource = pageSource;

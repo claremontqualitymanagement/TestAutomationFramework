@@ -10,9 +10,10 @@ import se.claremont.autotest.restsupport.RestSupport;
  *
  * Created by jordam on 2016-12-04.
  */
+@SuppressWarnings("unused")
 public class LinkCheck implements Runnable{
-    private String link;
-    private TestCase testCase;
+    private final String link;
+    private final TestCase testCase;
 
     public LinkCheck(TestCase testCase, String link){
         this.link = link;

@@ -26,8 +26,8 @@ class WebPageCodeConstructor {
     private final static Logger logger = LoggerFactory.getLogger( WebPageCodeConstructor.class );
 
     private WebDriver driver;
-    private Constructors constructors = new Constructors();
-    private List<String> methodNames = new ArrayList<>();
+    private final Constructors constructors = new Constructors();
+    private final List<String> methodNames = new ArrayList<>();
 
     private WebPageCodeConstructor(WebDriver driver){
         if(driver == null) return;
@@ -141,6 +141,7 @@ class WebPageCodeConstructor {
             return true;
         }
 
+        @SuppressWarnings("unused")
         public boolean hasUniqueDescriptor(Constructor constructor){
             for(Constructor constr : this){
                 if(constr.constructorString.equals(constructor.constructorString)) return false;
@@ -159,7 +160,7 @@ class WebPageCodeConstructor {
 
     private class Constructor{
         String elementName;
-        String constructorString;
+        final String constructorString;
 
         Constructor(String elementName, String constructorString){
             this.elementName = elementName;
