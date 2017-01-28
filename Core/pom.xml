@@ -11,7 +11,7 @@
 
     <artifactId>TestAutomationFrameworkCore</artifactId>
     <version>v2.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>
     <url>http://www.claremont.se</url>

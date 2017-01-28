@@ -68,7 +68,7 @@ public class DomElement implements GuiElement {
      * Declares a DOM element to be used in test execution
      * @param recognitionString the recognition string that identifies the object
      * @param identificationType what mechanism to use for identification
-     * @param ordinalNumber The ordinal number of the occurance on the web page, if multiple matches for search criteria.
+     * @param ordinalNumber The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
      */
     public DomElement (String recognitionString, IdentificationType identificationType, Integer ordinalNumber){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -85,7 +85,7 @@ public class DomElement implements GuiElement {
      *
      * @param alternativeRecognitionStrings An array of recognition strings for this element
      * @param identificationType The method of identification
-     * @param ordinalNumber The ordinal number of the occurance on the web page, if multiple matches for search criteria.
+     * @param ordinalNumber The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
      */
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

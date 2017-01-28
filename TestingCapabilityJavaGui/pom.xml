@@ -11,7 +11,7 @@
 
     <artifactId>TestingCapabilityJavaGui</artifactId>
     <version>v1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>
@@ -30,4 +30,5 @@
             <version>4.1.0</version>
         </dependency>
     </dependencies>
+
 </project>

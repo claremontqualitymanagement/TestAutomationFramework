@@ -12,7 +12,7 @@
     <name>TAF - TechnologiesSupport</name>
     <artifactId>TechnologiesSupport</artifactId>
     <version>v1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
 

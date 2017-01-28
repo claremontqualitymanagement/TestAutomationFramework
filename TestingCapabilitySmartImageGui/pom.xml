@@ -11,7 +11,7 @@
 
     <artifactId>TestingCapabilitySmartImageGui</artifactId>
     <version>v1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>Test Automation Framework - EyeAutomateSupport</name>
     <description>This is the module enabling interacting with GUI components through image recognition for Claremont TAF</description>

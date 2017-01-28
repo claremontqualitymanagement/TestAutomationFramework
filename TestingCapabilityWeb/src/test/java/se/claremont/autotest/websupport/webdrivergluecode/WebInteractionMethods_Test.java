@@ -29,7 +29,7 @@ public class WebInteractionMethods_Test extends TestSet {
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummy"));
         web.navigate("file://C:\\temp\\delayTest.html");
         web.click(new DomElement("button", DomElement.IdentificationType.BY_ID));
-        web.verifyElementText(new DomElement("verifyingtext", DomElement.IdentificationType.BY_ID), "Clicked");
+        web.verifyElementText(new DomElement("verifyingText", DomElement.IdentificationType.BY_ID), "Clicked");
         web.makeSureDriverIsClosed();
     }
 
@@ -41,7 +41,7 @@ public class WebInteractionMethods_Test extends TestSet {
 
       This method could be improved by opening the html file from the project.
      */
-    public void delayedDisplayOfElementWithToShortTimeoudShouldGiveErrorMessage(){
+    public void delayedDisplayOfElementWithToShortTimeoutShouldGiveErrorMessage(){
         TestCase testCase = new TestCase(null, "dummy");
         System.setProperty("webdriver.chrome.driver", "C:\\temp\\chromedriver.exe");
         WebInteractionMethods web = new WebInteractionMethods(testCase);

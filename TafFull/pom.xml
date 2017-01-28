@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>TestAutomationFramework</artifactId>
+        <groupId>se.claremont</groupId>
+        <version>LATEST</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>TafFull</artifactId>
+    <version>v2.1.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestAutomationFrameworkCore</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilitySmartImageGui</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilityJavaGui</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilityWeb</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TechnologiesSupport</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilityJson</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TestingCapabilityRestApi</artifactId>
+            <version>LATEST</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>go-framework-assemby</id>
+                        <phase>package</phase><!-- create assembly in package phase (invoke 'single' goal on assemby plugin)-->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assemble/taf_bin.xml</descriptor>
+                            </descriptors>
+                            <finalName>TafFull</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>TestAutomationFramework</artifactId>
+    <groupId>se.claremont</groupId>
+    <version>LATEST</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>TestAutomationFrameworkCore</artifactId>
+  <name>TAF - Core</name>
+  <version>v2.0.0</version>
+  <description>This is the CORE project from Claremont - TAF</description>
+  <url>http://www.claremont.se</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <dependencies>
+    <dependency>
+      <groupId>org.subethamail</groupId>
+      <artifactId>subethasmtp</artifactId>
+      <version>3.1.7</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>jsr305</artifactId>
+          <groupId>com.google.code.findbugs</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+  <properties>
+    <TEST_SERVER>46.101.193.212</TEST_SERVER>
+    <TEST_USER>taf</TEST_USER>
+    <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
+  </properties>
+</project>
+

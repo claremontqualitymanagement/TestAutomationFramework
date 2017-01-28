@@ -271,13 +271,13 @@ public class WebDriverManager {
                 PhantomJsDriverManager.getInstance().setup();
                 driver = new PhantomJSDriver();
             } catch (Exception e) {
-                testCase.log(LogLevel.INFO, "Could not start PhantomJS driver through WebDriverManager libraries. Error message: " + e.getMessage() + SupportMethods.LF + "Attempting harddisk scan for phantomjs.exe.");
+                testCase.log(LogLevel.INFO, "Could not start PhantomJS driver through WebDriverManager libraries. Error message: " + e.getMessage() + SupportMethods.LF + "Attempting disk scan for phantomjs.exe.");
                 try{
                     System.setProperty("phantomjs.binary.path", TestRun.settings.getValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE));
                     driver = new PhantomJSDriver();
                     testCase.log(LogLevel.EXECUTED, "Creating a PhantomJS session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
                 }catch (Exception ex){
-                    testCase.log(LogLevel.INFO, "Could not load PhantomJS driver from Settings variable '" + Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE.toString() + "', stating path '" + TestRun.settings.getValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE) + "'. Initiating a harddisk scan for file.");
+                    testCase.log(LogLevel.INFO, "Could not load PhantomJS driver from Settings variable '" + Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE.toString() + "', stating path '" + TestRun.settings.getValue(Settings.SettingParameters.PHANTOMJS_PATH_TO_EXE) + "'. Initiating a disk scan for file.");
                 }
             }
             if(driver != null){

@@ -11,7 +11,7 @@
 
     <artifactId>TestingCapabilityWeb</artifactId>
     <version>v1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>

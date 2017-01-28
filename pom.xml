@@ -37,6 +37,7 @@
         <module>SandboxTests</module>
         <module>TestingCapabilityRestApi</module>
         <module>TestingCapabilityJson</module>
+        <module>TafFull</module>
     </modules>
 
     <repositories>
@@ -98,6 +99,8 @@
     </distributionManagement>
 
     <build>
+
+        <!-- Compiler plugin makes class files from java files -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -108,7 +111,9 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!-- TODO: custom build fat jar with all modules
+
+            <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -137,6 +142,8 @@
                 </executions>
             </plugin>
             -->
+
+            <!-- Surefire is used to execute tests within modules -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -150,6 +157,32 @@
                     </properties>
                 </configuration>
             </plugin>
+
+            <!-- Shade plugin is used to create single jar from multiple modules. -->
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+
+            <!-- AntRun plugin is used to push artifact to build server. -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <configuration>

@@ -111,12 +111,12 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param testCase The test case to log errors to.
      * @param url url to remote web driver
-     * @param desiredCapabilites The desired capabilities of the browser driver to use.
+     * @param desiredCapabilities The desired capabilities of the browser driver to use.
      */
-    public WebInteractionMethods(TestCase testCase, URL url, DesiredCapabilities desiredCapabilites){
+    public WebInteractionMethods(TestCase testCase, URL url, DesiredCapabilities desiredCapabilities){
         this.testCase = testCase;
         try{
-            driver = new RemoteWebDriver(url, desiredCapabilites);
+            driver = new RemoteWebDriver(url, desiredCapabilities);
             driver.manage().window().maximize();
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
@@ -139,7 +139,7 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Pauses execution for a number of milliseconds.
      *
-     * @param milliseconds The number of millseconds to wait.
+     * @param milliseconds The number of milliseconds to wait.
      */
     public synchronized void wait(int milliseconds){
         try {
@@ -482,19 +482,19 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param linkElement The element to check attribute of
      * @param attributeName The name of the attribute to check the value of
-     * @param expectedAttributevalue The expected attribute of the element
+     * @param expectedAttributeValue The expected attribute of the element
      */
-    public void verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributevalue){
+    public void verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributeValue){
         DomElement domElement = (DomElement) linkElement;
         try{
             WebElement element = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-            if(element.getAttribute("href").equals(expectedAttributevalue)){
-                log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " was found to have the expected attribute value of '" + expectedAttributevalue + "' for attribute '" + attributeName + "'.");
+            if(element.getAttribute("href").equals(expectedAttributeValue)){
+                log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " was found to have the expected attribute value of '" + expectedAttributeValue + "' for attribute '" + attributeName + "'.");
             } else {
-                log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " was expected to have the value '" + expectedAttributevalue + "' for attribute '" + attributeName + "' but actually had the value of '" + element.getAttribute(attributeName) + "'.");
+                log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " was expected to have the value '" + expectedAttributeValue + "' for attribute '" + attributeName + "' but actually had the value of '" + element.getAttribute(attributeName) + "'.");
             }
         } catch (Exception e){
-            log(LogLevel.VERIFICATION_PROBLEM, "Could not check the attribute '" + attributeName + "' of element " + domElement.LogIdentification() + " (was expected to have the value '" + expectedAttributevalue + "'." + SupportMethods.LF + e.toString() );
+            log(LogLevel.VERIFICATION_PROBLEM, "Could not check the attribute '" + attributeName + "' of element " + domElement.LogIdentification() + " (was expected to have the value '" + expectedAttributeValue + "'." + SupportMethods.LF + e.toString() );
         }
     }
 
@@ -727,8 +727,8 @@ public class WebInteractionMethods implements GuiDriver {
         int ImageWidth = webElement.getSize().getWidth();
         int ImageHeight = webElement.getSize().getHeight();
         Point point = webElement.getLocation();
-        int xcord = point.getX();
-        int ycord = point.getY();
+        int xCoordinate = point.getX();
+        int yCoordinate = point.getY();
 
         BufferedImage img;
         try {
@@ -739,9 +739,9 @@ public class WebInteractionMethods implements GuiDriver {
         }
 
         //cut Image using height, width and x y coordinates parameters.
-        BufferedImage dest = img.getSubimage(xcord, ycord, ImageWidth, ImageHeight);
+        BufferedImage destination = img.getSubimage(xCoordinate, yCoordinate, ImageWidth, ImageHeight);
         try {
-            ImageIO.write(dest, "png", new File(filePath));
+            ImageIO.write(destination, "png", new File(filePath));
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not write image of " + domElement.LogIdentification() + " to file '" + filePath + "'.");
         }
@@ -822,7 +822,7 @@ public class WebInteractionMethods implements GuiDriver {
                     errorManagementProcedures("Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage());
                 }
             }else{
-                errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but severeal elements was found with that text.");
+                errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but several elements was found with that text.");
             }
         }
     }
@@ -1352,7 +1352,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Verifies that the current text of the given element correspont to the expected text.
+     * Verifies that the current text of the given element correspond to the expected text.
      *
      * @param guiElement The element to check the text of
      * @param expectedText The expected text to find
@@ -1384,7 +1384,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Verifies that the current text of the given element correspont to the expected text.
+     * Verifies that the current text of the given element correspond to the expected text.
      *
      * @param guiElement The element to check the text of
      * @param expectedText The expected text to find
@@ -1416,7 +1416,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Verifies that the current text of the given element correspont to the expected text.
+     * Verifies that the current text of the given element correspond to the expected text.
      *
      * @param guiElement The element to check the text of
      * @param expectedTextAsRegexPattern The expected text to find
@@ -1606,8 +1606,8 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
-        String currentTabId = "";
-        String initialTitle = "";
+        String currentTabId;
+        String initialTitle;
         try
         {
             initialTitle = driver.getTitle();
@@ -1650,8 +1650,8 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
-        String currentTabId = "";
-        String initialTitle = "";
+        String currentTabId;
+        String initialTitle;
         try
         {
             initialTitle = driver.getTitle();
@@ -1730,7 +1730,7 @@ public class WebInteractionMethods implements GuiDriver {
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null) return false;
         boolean interactionable = (webElement.isEnabled() && webElement.isDisplayed());
-        log(LogLevel.DEBUG, "Checking if " + ((DomElement)guiElement).LogIdentification() + " is interactionable and " + String.valueOf(interactionable).toLowerCase().replace("true", "it seemt to be both displayed and enabled.").replace("false", " it is not."));
+        log(LogLevel.DEBUG, "Checking if " + ((DomElement)guiElement).LogIdentification() + " is interactionable and " + String.valueOf(interactionable).toLowerCase().replace("true", "it seems to be both displayed and enabled.").replace("false", " it is not."));
         return interactionable;
     }
 
@@ -1793,7 +1793,6 @@ public class WebInteractionMethods implements GuiDriver {
         }
 
         List<String> optionStrings = new ArrayList<>();
-        boolean clicked = false;
         try {
             List<WebElement> optionButtons = webElement.findElements(By.xpath("//*[@type='radio']"));
             log(LogLevel.DEBUG, "Found " + optionButtons.size() + " options for radiobutton.");
@@ -1823,7 +1822,6 @@ public class WebInteractionMethods implements GuiDriver {
                 if(optionButton.getText().equals(text)){
                     optionButton.click();
                     log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
-                    clicked = true;
                     return;
                 }
             }
@@ -1831,7 +1829,6 @@ public class WebInteractionMethods implements GuiDriver {
                 if(optionButton.getAttribute("value").equals(text)){
                     optionButton.click();
                     log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
-                    clicked = true;
                     return;
                 }
             }
@@ -1883,7 +1880,7 @@ public class WebInteractionMethods implements GuiDriver {
                 }
                 log(LogLevel.EXECUTION_PROBLEM, "Element " + domElement.LogIdentification() + " was expected to be a 'input' tag with the type 'checkbox', but it seem to be a '" + webElement.getTagName() + "' tag with type '" + webElement.getAttribute("type") + "'.");
                 webElement = null;
-                saveScreenshot(webElement);
+                saveScreenshot(null);
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
                 writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -1893,12 +1890,10 @@ public class WebInteractionMethods implements GuiDriver {
                     if(webElement.isSelected() == expectedToBeTicked){
                         log(LogLevel.EXECUTED, "Made sure the " + domElement.LogIdentification() + " was " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + ", and it already was.");
                         success = true;
-                        continue;
                     } else {
                         webElement.click();
                         log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it was not.");
                         success = true;
-                        continue;
                     }
                 } catch (Exception e){
                     log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
@@ -1909,7 +1904,6 @@ public class WebInteractionMethods implements GuiDriver {
         }
         if(webElement == null){
             errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
-            return;
         }
     }
 
@@ -1942,9 +1936,10 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
-        if(webElement == null)
+        if(webElement == null) {
             errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
-
+            return;
+        }
         if(!webElement.getTagName().toLowerCase().equals("select"))
             errorManagementProcedures("Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
 
@@ -2046,7 +2041,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Verifies existance of a row matching the stated values corresponding to the stated headlines.
+     * Verifies existence of a row matching the stated values corresponding to the stated headlines.
      *
      * @param tableElement The table element.
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
@@ -2101,7 +2096,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param tableElement The table element
      * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
-     * @param regex True if data value pattern is states as a regular expressions. Othervice a check for cells containing the data value is performed.
+     * @param regex True if data value pattern is states as a regular expressions. Otherwise a check for cells containing the data value is performed.
      * @return Returns true if rows matching is found.
      */
     public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex){
@@ -2113,7 +2108,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param tableElement The table element
      * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
-     * @param regex True if data value pattern is states as a regular expressions. Othervice a check for cells containing the data value is performed.
+     * @param regex True if data value pattern is states as a regular expressions. Otherwise a check for cells containing the data value is performed.
      * @param expectedMatchCount The number of expected row matches. If set to null tests will be passed if at least one row is matched.
      * @return Returns true if rows matching is found.
      */
@@ -2129,7 +2124,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param tableElement The table element
      * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
-     * @param regex True if data value pattern is states as a regular expressions. Othervice a check for cells containing the data value is performed.
+     * @param regex True if data value pattern is states as a regular expressions. Otherwise a check for cells containing the data value is performed.
      * @param expectedMatchCount The number of expected row matches. If set to null tests will be passed if at least one row is matched.
      * @return Returns true if rows matching is found.
      */
@@ -2520,7 +2515,7 @@ public class WebInteractionMethods implements GuiDriver {
         if(success){
             testCase.log(LogLevel.DEBUG, "Waited for page title to become '" + expectedPageTitle + "', and that was identified after " + timeSpent + " milliseconds. ");
         } else {
-            testCase.log(LogLevel.DEBUG, "Waited for page title to become '" + expectedPageTitle + "', but that did not happen within the " + timeoutInSeconds + " second timeout. Page titel is '" + driver.getTitle() + "'.");
+            testCase.log(LogLevel.DEBUG, "Waited for page title to become '" + expectedPageTitle + "', but that did not happen within the " + timeoutInSeconds + " second timeout. Page title is '" + driver.getTitle() + "'.");
         }
         return success;
     }
