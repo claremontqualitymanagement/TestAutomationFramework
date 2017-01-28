@@ -5,13 +5,14 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>v2.0.0</version>
+        <version>v2.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>TestingCapabilityJson</artifactId>
     <version>v1.0.0</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
+    <name>TAF - TestingCapabilityJson</name>
 
     <dependencies>
         <dependency>
@@ -22,7 +23,7 @@
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestAutomationFrameworkCore</artifactId>
-            <version>v2.0.0</version>
+            <version>${core.version}</version>
         </dependency>
     </dependencies>
 </project>

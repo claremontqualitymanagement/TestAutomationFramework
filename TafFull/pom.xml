@@ -5,48 +5,49 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>LATEST</version>
+        <version>v2.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>TafFull</artifactId>
     <version>v2.1.0</version>
+    <name>TAF - FULL</name>
 
     <dependencies>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestAutomationFrameworkCore</artifactId>
-            <version>LATEST</version>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilitySmartImageGui</artifactId>
-            <version>LATEST</version>
+            <version>${capability.smart.image.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityJavaGui</artifactId>
-            <version>LATEST</version>
+            <version>${capability.java.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityWeb</artifactId>
-            <version>LATEST</version>
+            <version>${capability.web.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TechnologiesSupport</artifactId>
-            <version>LATEST</version>
+            <version>${capability.support.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
-            <version>LATEST</version>
+            <version>${capability.json.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityRestApi</artifactId>
-            <version>LATEST</version>
+            <version>${capability.rest.version}</version>
         </dependency>
     </dependencies>
 

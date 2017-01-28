@@ -5,13 +5,14 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>LATEST</version>
+        <version>v2.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>SandboxTests</artifactId>
     <version>v1.0.0</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
+    <name>TAF - SandboxTests</name>
 
     <dependencies>
         <dependency>
@@ -29,17 +30,17 @@
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
-            <version>LATEST</version>
+            <version>${capability.support.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityWeb</artifactId>
-            <version>LATEST</version>
+            <version>${capability.web.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
-            <version>v2.0.0</version>
+            <version>${capability.json.version}</version>
         </dependency>
     </dependencies>
 

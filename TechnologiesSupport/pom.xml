@@ -6,13 +6,13 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>LATEST</version>
+        <version>v2.1.0</version>
     </parent>
 
     <name>TAF - TechnologiesSupport</name>
     <artifactId>TechnologiesSupport</artifactId>
     <version>v1.0.0</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
 
@@ -76,12 +76,12 @@
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestAutomationFrameworkCore</artifactId>
-            <version>LATEST</version>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityJavaGui</artifactId>
-            <version>LATEST</version>
+            <version>${capability.java.version}</version>
         </dependency>
     </dependencies>
 
