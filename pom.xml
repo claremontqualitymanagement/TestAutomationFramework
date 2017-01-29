@@ -25,7 +25,7 @@
         <capability.json.version>v1.0.0</capability.json.version>
         <capability.java.version>v1.0.0</capability.java.version>
         <capability.support.version>v1.1.0</capability.support.version>
-        <core.version>v2.1.0</core.version>
+        <core.version>v2.1.1</core.version>
     </properties>
 
     <licenses>

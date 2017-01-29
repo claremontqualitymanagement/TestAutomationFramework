@@ -22,22 +22,24 @@ public class HtmlStyles {
     }
 
     public static String tableVerificationStyles(){
-        String returnString = "    table.tableverificationresulttable   { border: 5px solid darkgrey; border-collapse: collapse; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable td { border: 1px solid darkgrey; }" + System.lineSeparator();;
-        returnString += "    table.tableverificationresulttable th { border: 1px solid darkslategrey; }" + System.lineSeparator();;
-        returnString += "    table.tableverificationresulttable tr.headlines { border: 1px solid grey; background-color: lightgrey; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.headlines th { color: darkslategrey; text-align: left; font-weight: bold; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.unevaluated { color: grey; background-color: white; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.no_match { color: grey; background-color: white; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches { color: darkgrey; background-color: cornsilk; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches td.exact_match { color: black; font-weight: bold; background-color: lightgreen; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches td.contains_match { color: black; background-color: lightgreen; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches td.regex_match { color: darkslategrey; background-color: lightgreen; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.exact_match { color: black; font-weight: bold; background-color: lightgreen; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.regex_match { color: darkgrey; background-color: lightgreen; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.contains_match { color: black; background-color: lightgreen; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.no_match { color: black; background-color: salmon; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.unevaluated { color: grey; background-color: white; }" + System.lineSeparator();
+        String returnString = "    table.tableverificationresulttable   { border: 5px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; border-collapse: collapse; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable td { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();;
+        returnString += "    table.tableverificationresulttable th { border: 1px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();;
+        returnString += "    table.tableverificationresulttable tr.headlines { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.headlines th { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: left; font-weight: bold; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.headlines th.found_heading { color: " + UxColors.BLACK.getHtmlColorCode() + "; text-align: left; font-weight: bold; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.headlines th.not_found_heading { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: left; font-weight: bold; background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.unevaluated { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.no_match { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: cornsilk; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches td.exact_match { color: " + UxColors.BLACK.getHtmlColorCode() +"; font-weight: bold; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches td.contains_match { color: " + UxColors.BLACK.getHtmlColorCode() +"; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.only_matches td.regex_match { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.exact_match { color: " + UxColors.BLACK.getHtmlColorCode() +"; font-weight: bold; background-color: " + UxColors.GREEN.getHtmlColorCode() +"; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.regex_match { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.contains_match { color: " + UxColors.BLACK.getHtmlColorCode() + "; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.no_match { color: " + UxColors.BLACK.getHtmlColorCode() + "; background-color: " + UxColors.RED.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable tr.tableevaluationrow.both_matches_and_non_matches td.unevaluated { color: " + UxColors.MID_GREY.getHtmlColorCode() + "; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + System.lineSeparator();
         return returnString;
     }
 

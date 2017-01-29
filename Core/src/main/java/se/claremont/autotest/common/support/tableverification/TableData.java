@@ -160,10 +160,22 @@ public class TableData {
     }
 
     public void verifyHeadingExist(String heading){
+        String htmlHeadingsRepresentation = "<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator();
+        for(String headline : headlines){
+            if(headline.equals(heading)){
+                htmlHeadingsRepresentation += "      <th class=\"found_heading\">" + headline + "</th>" + System.lineSeparator();
+            } else {
+                htmlHeadingsRepresentation += "      <th class=\"not_found_heading\">" + headline + "</th>" + System.lineSeparator();
+            }
+        }
+        htmlHeadingsRepresentation += "   </tr>" + System.lineSeparator() + "</table>" + System.lineSeparator();
+
         if(headlines.contains(heading.trim())){
-            log(LogLevel.VERIFICATION_PASSED, "Heading '" + heading + "' exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".");
+            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Heading '" + heading + "' exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
+                    "Heading '" + heading + "' found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
         } else {
-            log(LogLevel.VERIFICATION_FAILED, "Heading '" + heading + "' does not exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".");
+            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Heading '" + heading + "' does not exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
+                    "Heading '" + heading + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
         }
     }
 
