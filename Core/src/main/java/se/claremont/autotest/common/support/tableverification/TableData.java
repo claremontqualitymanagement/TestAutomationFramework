@@ -8,6 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TableData class for verification and analysis of table data.
+ * TableData could be constructed in multiple ways and should be
+ * useful for many types of two dimensional data, for example
+ * HTML tables, CSV files, and result sets from SQL queries.
+ *
+ * Methods exist for script flow control and for verifications.
+ * Verification methods return boolean to enhance possibilities
+ * to log technology dependent debugging info if verifications
+ * fail.
+ *
  * Created by jordam on 2017-01-28.
  */
 public class TableData {
@@ -116,20 +126,22 @@ public class TableData {
      *              headline "Headline1" and "Content2" as cell data for "Headline2" to be a match.
      * @param cellMatchingType The type of matching to perform. Either an exact match is required, or the
      *              searched for value could be a partial match, or matching through regular expression.
+     * @return Returns true only if a row matching the given pattern and matching type is found.
      */
-    public void verifyRowExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
+    public boolean verifyRowExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
         evaluate(headlineColonValueSemicolonSeparatedStringForRowMatch, cellMatchingType);
         for(TableRow tableRow : rows){
             if(tableRow.tableRowEvaluationStatus.equals(TableRowEvaluationStatus.ONLY_MATCHES)) {
                 logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Match found for '" + headlineColonValueSemicolonSeparatedStringForRowMatch + "' in " + tableElementName + ".",
                         "Match found for<br>" +searchCriteriaAsHtmlTable(headlineColonValueSemicolonSeparatedStringForRowMatch) + "<br>Found in " + tableElementName + ".<br>" + toHtml());
-                return;
+                return true;
             }
         }
         logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Could not find any match for '" +
                         headlineColonValueSemicolonSeparatedStringForRowMatch + "' in " + tableElementName + ".",
                 "Could not find any match for<br>" + searchCriteriaAsHtmlTable(headlineColonValueSemicolonSeparatedStringForRowMatch) +
                         "<br>The data of " + tableElementName + ":<br>" + toHtml());
+        return false;
     }
 
     /**
@@ -141,8 +153,9 @@ public class TableData {
      *              headline "Headline1" and "Content2" as cell data for "Headline2" to be a match.
      * @param cellMatchingType The type of matching to perform. Either an exact match is required, or the
      *              searched for value could be a partial match, or matching through regular expression.
+     * @return Returns true only if no rows matching the row pattern and matching type is found.
      */
-    public void verifyRowDoesNotExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
+    public boolean verifyRowDoesNotExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
         evaluate(headlineColonValueSemicolonSeparatedStringForRowMatch, cellMatchingType);
         boolean matchFound = false;
         for(TableRow tableRow : rows){
@@ -157,9 +170,17 @@ public class TableData {
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Did not find any match for '" + headlineColonValueSemicolonSeparatedStringForRowMatch + "' in " + tableElementName + " as expected." + System.lineSeparator() + toString(),
                     "Did not find any match for '" + headlineColonValueSemicolonSeparatedStringForRowMatch + "' in " + tableElementName + " as expected.<br>" + toHtml());
         }
+        return !matchFound;
     }
 
-    public void verifyHeadingExist(String heading){
+    /**
+     * Verifies that the given heading exist as a heading in the table.
+     *
+     * @param heading The heading to verify existence of.
+     * @return Returns true if the heading is found.
+     */
+    public boolean verifyHeadingExist(String heading){
+        boolean verificationPassed = false;
         String htmlHeadingsRepresentation = "<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator();
         for(String headline : headlines){
             if(headline.equals(heading)){
@@ -173,13 +194,22 @@ public class TableData {
         if(headlines.contains(heading.trim())){
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Heading '" + heading + "' exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Heading '" + heading + "' found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
+            verificationPassed = true;
         } else {
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Heading '" + heading + "' does not exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Heading '" + heading + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
         }
+        return verificationPassed;
     }
 
-    public void verifyHeadingsExist(List<String> headings){
+    /**
+     * Verifies that the given headings exists in the set of headings for the table.
+     *
+     * @param headings Headings to find.
+     * @return Returns true if all headings are found, otherwise false.
+     */
+    public boolean verifyHeadingsExist(List<String> headings){
+        boolean verificationPassed = false;
         List<String> foundHeadings = new ArrayList<>();
         List<String> notFoundHeadings = new ArrayList<>();
         String htmlHeadingsRepresentation = "<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator();
@@ -196,6 +226,7 @@ public class TableData {
         if(foundHeadings.size() == headings.size()){
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Headings '" + String.join("', '", headings) + "' were found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Headings '" + String.join("', '", headings) + "' were found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
+            verificationPassed = true;
         } else {
             List<String> missingHeadlines = new ArrayList<>();
             for(String heading : headings){
@@ -205,8 +236,18 @@ public class TableData {
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Verified existence of headings '" + String.join("', '", headings) + "', but the heading(s) '" + String.join("', '", missingHeadlines) + "' could not be found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Verified existence of headings '" + String.join("', '", headings) + "', but the heading(s) '" + String.join("', '", missingHeadlines) + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
         }
+        return verificationPassed;
     }
 
+    /**
+     * Method intended for logging and script flow control. Identifies the first row to fit the given pattern,
+     * and returns the value of that row for the headline given.
+     *
+     * @param headline The headline to return the row value for.
+     * @param headlineColonValueSemicolonSeparatedStringThatIdentifiesTheTableRow The pattern to identify the row to search for.
+     * @param cellMatchingType The type of matching to perform.
+     * @return Returns the content of the data cell. If the cell is not found null is returned.
+     */
     public String getValueForHeadlineForRow(String headline, String headlineColonValueSemicolonSeparatedStringThatIdentifiesTheTableRow, CellMatchingType cellMatchingType){
         evaluate(headlineColonValueSemicolonSeparatedStringThatIdentifiesTheTableRow, cellMatchingType);
         for(TableRow tableRow : rows){
@@ -222,14 +263,31 @@ public class TableData {
         return null;
     }
 
+    /**
+     * Returns the number of data rows in the table data (exluding headings).
+     *
+     * @return Number of data rows.
+     */
     public int dataRowCount(){
         return rows.size();
     }
 
+    /**
+     * Flow control method that respont to table data status.
+     *
+     * @return Returns true if table is empty, otherwise false.
+     */
     public boolean tableIsEmpty(){
         return dataRowCount() == 0;
     }
 
+    /**
+     * Flow control method to steer test flow depending on the existance of a specified row in the table data.
+     *
+     * @param headlineColonValueSemicolonSeparatedStringForRowMatch The pattern for the row to search for.
+     * @param cellMatchingType The type of matching to perform.
+     * @return Returns false if the row is missing, and true is the row is present.
+     */
     public boolean rowExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
         evaluate(headlineColonValueSemicolonSeparatedStringForRowMatch, cellMatchingType);
         for(TableRow tableRow : rows){
@@ -242,6 +300,13 @@ public class TableData {
         return false;
     }
 
+    /**
+     * Flow control method to steer test flow depending on the non-existance of a specified row in the table data.
+     *
+     * @param headlineColonValueSemicolonSeparatedStringForRowMatch The pattern for the row to search for.
+     * @param cellMatchingType The type of matching to perform.
+     * @return Returns true if the row is missing, and false is the row is present.
+     */
     public boolean rowDoesNotExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
         evaluate(headlineColonValueSemicolonSeparatedStringForRowMatch, cellMatchingType);
         for(TableRow tableRow : rows){
@@ -252,6 +317,21 @@ public class TableData {
         }
         log(LogLevel.DEBUG, "No match for '" + headlineColonValueSemicolonSeparatedStringForRowMatch + "' found in " + tableElementName + "'.");
         return true;
+    }
+
+    /**
+     * Verifies the existence of several rows in the same verification step.
+     *
+     * @param headlineColonValueSemicolonSeparatedStrings The strings identifying the rows to find matches for.
+     * @param cellMatchingType The type of matching to perform.
+     * @return Returns true if all verifications passes.
+     */
+    public boolean verifyRows(String[] headlineColonValueSemicolonSeparatedStrings, CellMatchingType cellMatchingType) {
+        boolean someVerificationFailed = false;
+        for(String searchCriteria : headlineColonValueSemicolonSeparatedStrings){
+            if(!verifyRowExist(searchCriteria, cellMatchingType)) someVerificationFailed = true;
+        }
+        return !someVerificationFailed;
     }
 
     @Override
@@ -371,9 +451,4 @@ public class TableData {
         return oracleTable.toHtml();
     }
 
-    public void verifyRows(String[] headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType) {
-        for(String searchCriteria : headlineColonValueSemicolonSeparatedString){
-            verifyRowExist(searchCriteria, cellMatchingType);
-        }
-    }
 }

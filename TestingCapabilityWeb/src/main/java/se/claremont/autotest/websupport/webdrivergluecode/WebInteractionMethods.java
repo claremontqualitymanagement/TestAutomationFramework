@@ -2093,8 +2093,20 @@ public class WebInteractionMethods implements GuiDriver {
             doneOk = tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
         }
         TableData tableData = tableDataFromGuiElement(tableElement, true);
-        if(tableData == null)return;
-        tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
+        if(tableData == null){
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not retrieve data from " + domElement.LogIdentification() + ".");
+            saveScreenshot(getRuntimeElementWithoutLogging(domElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+            return;
+        }
+        if(!tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType)){
+            saveScreenshot(getRuntimeElementWithoutLogging(domElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
     }
 
     /**
@@ -2113,7 +2125,12 @@ public class WebInteractionMethods implements GuiDriver {
     public void verifyTableHeadline(GuiElement tableElement, String expectedHeadline){
         TableData tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null) return;
-        tableData.verifyHeadingExist(expectedHeadline);
+        if(!tableData.verifyHeadingExist(expectedHeadline)){
+            saveScreenshot(getRuntimeElementWithoutLogging((DomElement)tableElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
     }
 
 
@@ -2190,7 +2207,12 @@ public class WebInteractionMethods implements GuiDriver {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
-        tableData.verifyHeadingsExist(expectedHeadlines);
+        if(!tableData.verifyHeadingsExist(expectedHeadlines)){
+            saveScreenshot(getRuntimeElementWithoutLogging(table));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
     }
 
     /**
