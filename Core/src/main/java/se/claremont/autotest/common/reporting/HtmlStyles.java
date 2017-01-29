@@ -22,7 +22,9 @@ public class HtmlStyles {
     }
 
     public static String tableVerificationStyles(){
-        String returnString = "    table.tableverificationresulttable   { border: 5px solid darkgrey; }" + System.lineSeparator();
+        String returnString = "    table.tableverificationresulttable   { border: 5px solid darkgrey; border-collapse: collapse; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable td { border: 1px solid darkgrey; }" + System.lineSeparator();;
+        returnString += "    table.tableverificationresulttable th { border: 1px solid darkslategrey; }" + System.lineSeparator();;
         returnString += "    table.tableverificationresulttable tr.headlines { border: 1px solid grey; background-color: lightgrey; }" + System.lineSeparator();
         returnString += "    table.tableverificationresulttable tr.headlines th { color: darkslategrey; text-align: left; font-weight: bold; }" + System.lineSeparator();
         returnString += "    table.tableverificationresulttable tr.tableevaluationrow.unevaluated { color: grey; background-color: white; }" + System.lineSeparator();

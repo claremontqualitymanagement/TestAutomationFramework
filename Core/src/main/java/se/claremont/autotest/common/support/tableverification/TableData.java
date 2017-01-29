@@ -121,7 +121,8 @@ public class TableData {
         evaluate(headlineColonValueSemicolonSeparatedStringForRowMatch, cellMatchingType);
         for(TableRow tableRow : rows){
             if(tableRow.tableRowEvaluationStatus.equals(TableRowEvaluationStatus.ONLY_MATCHES)) {
-                logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Match found for '" + headlineColonValueSemicolonSeparatedStringForRowMatch + "' in " + tableElementName + ".", "Match found for<br>" +searchCriteriaAsHtmlTable(headlineColonValueSemicolonSeparatedStringForRowMatch) + "<br>Found in " + tableElementName + "'.<br>" + toHtml());
+                logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Match found for '" + headlineColonValueSemicolonSeparatedStringForRowMatch + "' in " + tableElementName + ".",
+                        "Match found for<br>" +searchCriteriaAsHtmlTable(headlineColonValueSemicolonSeparatedStringForRowMatch) + "<br>Found in " + tableElementName + ".<br>" + toHtml());
                 return;
             }
         }
@@ -234,7 +235,7 @@ public class TableData {
 
     public String toHtml(){
         StringBuilder sb = new StringBuilder();
-        if(tableElementName != null) sb.append(tableElementName).append("<br>").append(System.lineSeparator());
+        //if(tableElementName != null) sb.append(tableElementName).append("<br>").append(System.lineSeparator());
         sb.append("<table class=\"tableverificationresulttable\">").append(System.lineSeparator());
         sb.append("   <tr class=\"headlines\">").append(System.lineSeparator());
         for(String headline : headlines){
