@@ -1,8 +1,9 @@
 package se.claremont.autotest.dbinteraction;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.tableverification.CellMatchingType;
+import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.dataformats.TableData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -103,14 +104,23 @@ public class SqlInteractionManager {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not execute SQL '" + sql + "' to DB '" + dbName + "' at server '" + dbUrl + "'. Error: " + e.getMessage());
         }
         String returnString = resultSetToString(resultSet);
-        TableData tableData = new TableData(returnString, "SQL query result set", testCase, false);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Results from query:" + System.lineSeparator() + tableData.toString(), "Results from query:<br>" + tableData.toHtml(LogLevel.DEBUG));
+        TableData tableData = new TableData(testCase, "SQL query result set", returnString);
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Results from query:" + System.lineSeparator() + tableData.toString(), "Results from query:<br>" + tableData.toHtml());
         return tableData;
     }
 
     public void verifyRowExistInResultsFromQuery(String sqlQuery, String headlineColonValueSemicolonSeparatedString, boolean regex){
         TableData tableData = execute(sqlQuery);
-        tableData.verifyRow(headlineColonValueSemicolonSeparatedString, regex);
+        if(regex){
+            tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.REGEX_MATCH);
+        }else {
+            tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
+        }
+    }
+
+    public void verifyRowExistInResultsFromQuery(String sqlQuery, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
+        TableData tableData = execute(sqlQuery);
+        tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
     }
 
     public void verifyRowExistInResultsFromQuery(String tableName, String headlineColonValueSemicolonSeparatedString){
@@ -126,7 +136,7 @@ public class SqlInteractionManager {
         if(td.dataRowCount() == 0){
             sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" OR ", searchString) + ";";
             td = execute(sql);
-            td.verifyRow(headlineColonValueSemicolonSeparatedString, false);
+            td.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
         } else {
             testCase.log(LogLevel.VERIFICATION_PASSED, "Found '" + headlineColonValueSemicolonSeparatedString + "' in " + tableName + ".");
         }

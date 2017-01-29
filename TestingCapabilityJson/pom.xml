@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkCore</artifactId>
+            <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>
     </dependencies>

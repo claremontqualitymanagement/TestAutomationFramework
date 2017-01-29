@@ -10,13 +10,12 @@ import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.ApplicationManager;
 import se.claremont.autotest.common.support.PerformanceTimer;
-import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
+import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
-import se.claremont.autotest.dataformats.TableData;
 import se.claremont.autotest.filetestingsupport.FileTester;
 import se.claremont.autotest.swingsupport.festswinggluecode.SwingInteractionMethods;
 import se.claremont.autotest.websupport.DomElement;
@@ -28,6 +27,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 //import qtpUsageAnalysis.GUI;
 
@@ -279,15 +279,6 @@ public class SandBoxTest extends TestSet {
         testCase.evaluateResultStatus();
     }
 
-    @Test
-    @Ignore
-    public void tableVerifierPlayground(){
-        String tableName = "UnitTestTable";
-        String tableContent = "Heading1 ; Heading2;Heading3 " + SupportMethods.LF + "DataValue1 ; DataValue2;DataValue3 " + SupportMethods.LF +
-                "DataValue4;DataValue5;DataValue6";
-        TableData tableData = new TableData(tableContent, tableName, currentTestCase, true);
-        tableData.verifyRow("Heading2:DataValue2;Heading3:DataValue1", false);
-    }
 
     @Test
     @Ignore
@@ -295,9 +286,9 @@ public class SandBoxTest extends TestSet {
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
         web.navigate("file://C:/temp/tabletest.html");
         DomElement table = new DomElement("testTable", DomElement.IdentificationType.BY_ID);
-        web.verifyTableRows(table, new String[] {"Heading1:Data value 10", "Heading2:DataValue 5;Heading3:Data value 6"}, false);
-        web.verifyTableRow(table, "Heading2:DataValue 5;Heading3:Data value 6", false);
-        web.verifyTableRow(table, "Heading2:DataValue 5;Heading3:sfsg", false);
+        web.verifyTableRows(table, new String[] {"Heading1:Data value 10", "Heading2:DataValue 5;Heading3:Data value 6"}, CellMatchingType.CONTAINS_MATCH);
+        web.verifyTableRow(table, "Heading2:DataValue 5;Heading3:Data value 6", CellMatchingType.CONTAINS_MATCH);
+        web.verifyTableRow(table, "Heading2:DataValue 5;Heading3:sfsg", CellMatchingType.CONTAINS_MATCH);
         web.verifyTableHeadline(table, "Country");
         web.verifyTableHeadline(table, "Heading1");
         currentTestCase.log(LogLevel.INFO, "Table empty: " + Boolean.toString(web.tableIsEmpty(table)));

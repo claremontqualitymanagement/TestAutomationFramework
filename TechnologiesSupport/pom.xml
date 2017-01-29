@@ -11,7 +11,7 @@
 
     <name>TAF - TechnologiesSupport</name>
     <artifactId>TechnologiesSupport</artifactId>
-    <version>v1.0.0</version>
+    <version>v1.1.0</version>
     <packaging>jar</packaging>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
@@ -75,7 +75,7 @@
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkCore</artifactId>
+            <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>

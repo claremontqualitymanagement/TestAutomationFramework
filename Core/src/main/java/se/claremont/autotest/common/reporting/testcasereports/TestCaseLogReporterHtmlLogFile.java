@@ -173,6 +173,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      table.footer            { border: 0px solid " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "      .pagetitle              { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
+                HtmlStyles.tableVerificationStyles() +
                 LogPost.htmlStyleInformation() +
                 "      b.good                  { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
                 "      b.bad                   { color: " + UxColors.RED.getHtmlColorCode() + "; }" + LF +

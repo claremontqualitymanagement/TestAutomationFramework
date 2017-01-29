@@ -3,6 +3,7 @@ package se.claremont.autotest.dataformats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.autotest.common.support.tableverification.TableData;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,22 +20,22 @@ import java.util.List;
  */
 public class CsvParser {
     private final static Logger logger = LoggerFactory.getLogger( CsvParser.class );
-    public Table csvContent;
+    public TableData csvContent;
 
     public CsvParser(FileReader fileReader){
         this(csvFileContent(fileReader));
     }
 
     public CsvParser(String csvString){
-        csvContent = new Table(csvString, SupportMethods.LF, ",");
+        csvContent = new TableData(null, "csv data", csvString, SupportMethods.LF, ",");
     }
 
     public CsvParser(String csvString, String dataValueDelimiter){
-        csvContent = new Table(csvString, SupportMethods.LF, dataValueDelimiter);
+        csvContent = new TableData(null, "csv data", csvString, SupportMethods.LF, dataValueDelimiter);
     }
 
     public CsvParser(String csvString, String lineBreak, String dataValueDelimiter){
-        csvContent = new Table(csvString, lineBreak, dataValueDelimiter);
+        csvContent = new TableData(null, "csv content", csvString, lineBreak, dataValueDelimiter);
     }
 
     public CsvParser(String csvString, String[] headlines, String lineBreak, String dataValueDelimiter){
@@ -42,7 +43,7 @@ public class CsvParser {
         for(String row : csvString.split(lineBreak)){
             dataRows.add(row.split(dataValueDelimiter));
         }
-        csvContent = new Table(headlines, dataRows);
+        csvContent = new TableData(null, "csv data", csvString, headlines, lineBreak, dataValueDelimiter);
     }
 
     public static String csvFileContent(FileReader fileReader){

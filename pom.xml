@@ -24,8 +24,8 @@
         <capability.rest.version>v1.0.0</capability.rest.version>
         <capability.json.version>v1.0.0</capability.json.version>
         <capability.java.version>v1.0.0</capability.java.version>
-        <capability.support.version>v1.0.0</capability.support.version>
-        <core.version>v2.0.0</core.version>
+        <capability.support.version>v1.1.0</capability.support.version>
+        <core.version>v2.1.0</core.version>
     </properties>
 
     <licenses>
@@ -39,12 +39,12 @@
     <modules>
         <module>Core</module>
         <module>TechnologiesSupport</module>
-        <module>TestingCapabilitySmartImageGui</module>
-        <module>TestingCapabilityWeb</module>
         <module>TestingCapabilityJavaGui</module>
-        <module>SandboxTests</module>
-        <module>TestingCapabilityRestApi</module>
         <module>TestingCapabilityJson</module>
+        <module>TestingCapabilityRestApi</module>
+        <module>TestingCapabilityWeb</module>
+        <module>TestingCapabilitySmartImageGui</module>
+        <module>SandboxTests</module>
         <module>TafFull</module>
     </modules>
 

@@ -29,7 +29,12 @@
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkTechnologiesSupport</artifactId>
+            <artifactId>Core</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>se.claremont</groupId>
+            <artifactId>TechnologiesSupport</artifactId>
             <version>${capability.support.version}</version>
         </dependency>
         <dependency>

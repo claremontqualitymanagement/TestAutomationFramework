@@ -8,6 +8,7 @@
         <version>v2.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
 
     <artifactId>TafFull</artifactId>
     <version>v2.1.0</version>
@@ -16,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>se.claremont</groupId>
-            <artifactId>TestAutomationFrameworkCore</artifactId>
+            <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
