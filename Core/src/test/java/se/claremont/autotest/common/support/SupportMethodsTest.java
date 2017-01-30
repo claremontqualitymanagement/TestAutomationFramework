@@ -48,19 +48,4 @@ public class SupportMethodsTest {
 
     }
 
-    @Test
-    public void test_stringToDate_8Chars() {
-        Date date = SupportMethods.stringToDate("20160101");
-
-        assertNotNull(date);
-        assertEquals(1451602800000L, date.getTime());
-    }
-    @Test
-    public void test_stringToDate_6Chars() {
-        Date date = SupportMethods.stringToDate("160101");
-
-        assertNotNull(date);
-        assertEquals(1451602800000L, date.getTime());
-    }
-
 }
