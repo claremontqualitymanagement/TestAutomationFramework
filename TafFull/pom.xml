@@ -68,9 +68,6 @@
                             <descriptors>
                                 <descriptor>src/main/assemble/taf_bin.xml</descriptor>
                             </descriptors>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
                             <finalName>TafFull</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <archive>
