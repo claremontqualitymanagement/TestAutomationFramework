@@ -177,8 +177,8 @@ public class TestCaseLog {
                 logLevel.equals(LogLevel.INFO) ||
                 logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO)) return;
         logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
-                "If you want to add this error as a known error you should enter the line below to your test case:" + System.lineSeparator() + System.lineSeparator() + "      currentTestCase.addKnownError(\"<description of known error>\", \".*" + pureTextMessage + ".*\");" + System.lineSeparator(),
-                "If you want to add this error as a known error you should enter the line below to your test case:<br><pre>     currentTestCase.addKnownError(\"<description of known error>\", \".*" + pureTextMessage + ".*\");</pre>");
+                "If you want to add this error as a known error you should enter the line below to your test case:" + System.lineSeparator() + System.lineSeparator() + "      currentTestCase.addKnownError(\"<Your description of this error>\", \".*" + pureTextMessage + ".*\");" + System.lineSeparator(),
+                "If you want to add this error as a known error you should enter the line below to your test case:<br><pre>     currentTestCase.addKnownError(\"-- Your description of this error --\", \".*" + pureTextMessage + ".*\");</pre>");
     }
     /**
      * Method to get the testCaseLog posts considered as non-successful from the testCaseLog

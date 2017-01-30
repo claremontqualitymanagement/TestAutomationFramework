@@ -82,13 +82,13 @@ public class CliTestRunner {
             } else if (arg.contains("=")) { //Setting (overriding) run time settings
                 String[] parts = arg.split("=");
                 if(parts[0].toLowerCase().equals("runname")){
-                    TestRun.testRunName = parts[1].trim();
+                    TestRun.testRunName = arg.substring(arg.indexOf("=") + 1).trim();
                     System.out.println("Setting test run name to '" + TestRun.testRunName + "'.");
                 } else if((parts[0].toLowerCase().equals("settingsfile") || parts[0].toLowerCase().equals("runsettingsfile")) && parts.length > 1) {
-                    TestRun.settings = new Settings(parts[1].trim());
+                    TestRun.settings = new Settings(arg.substring(arg.indexOf("=") + 1).trim());
                     System.out.println("Run settings properties file = '" + parts[1] + "'.");
                 } else {
-                    TestRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.split("=")[1].trim());
+                    TestRun.settings.setCustomValue(arg.split("=")[0].trim(), arg.substring(arg.indexOf("=") + 1));
                     System.out.println("Setting value '" + arg.split("=")[1].trim() + "' for parameter name '" + arg.split("=")[0].trim() + "'.");
                 }
             } else if (arg.toLowerCase().equals("diagnostic") || arg.toLowerCase().equals("diagnostics")) {

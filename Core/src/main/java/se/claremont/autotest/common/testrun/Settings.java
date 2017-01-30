@@ -33,6 +33,7 @@ public class Settings extends HashMap<String, String>{
         EMAIL_ACCOUNT_USER_PASSWORD  ("Email account user password", true),
         EMAIL_SERVER_ADDRESS         ("Email server address", true),
         RUN_SETTINGS_FILE            ("Run settings file"),
+        HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER("Access path to files"),
         EMAIL_SERVER_PORT            ("Email server port", true),
         EMAIL_SMTP_OR_GMAIL          ("Email send method (SMTP or GMAIL)", true),
         HTML_REPORTS_LINK_PREFIX     ("HTML reports link prefix"),
@@ -194,6 +195,7 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_SERVER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_NAME, "");
         setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
+        setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER, getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + getValue(SettingParameters.BASE_LOG_FOLDER));
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
