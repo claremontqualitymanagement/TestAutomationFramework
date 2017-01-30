@@ -87,7 +87,6 @@ public class SupportMethods {
     }
 
     private static void writeToFileOnMappedDrive(byte[] content, String filePath){
-        Writer writer;
         try {
             File file = new File(filePath);
             //noinspection ResultOfMethodCallIgnored
