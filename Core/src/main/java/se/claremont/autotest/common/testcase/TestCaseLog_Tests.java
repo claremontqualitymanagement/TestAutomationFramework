@@ -249,8 +249,8 @@ public class TestCaseLog_Tests {
         Assert.assertTrue(testCaseLog.logPosts.size() == 2);
         Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).toString().contains("Info"));
         Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("If you want to add this error as a known error you should enter the line below to your test case:"));
-        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
-        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<Your description of this error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"-- Your description of this error --\", \".*Problem posts should not create extra log posts.*\");"));
     }
 
     @Test
@@ -260,9 +260,11 @@ public class TestCaseLog_Tests {
         Assert.assertTrue(testCaseLog.logPosts.size() == 2);
         Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).toString().contains("Info"));
         Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("If you want to add this error as a known error you should enter the line below to your test case:"));
-        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
-        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<Your description of this error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"-- Your description of this error --\", \".*Problem posts should not create extra log posts.*\");"));
     }
+//                "If you want to add this error as a known error you should enter the line below to your test case:" + System.lineSeparator() + System.lineSeparator() + "      currentTestCase.addKnownError(\"<Your description of this error>\", \".*" + pureTextMessage + ".*\");" + System.lineSeparator(),
+//                "If you want to add this error as a known error you should enter the line below to your test case:<br><pre>     currentTestCase.addKnownError(\"-- Your description of this error --\", \".*" + pureTextMessage + ".*\");</pre>");
 
     @Test
     public void registeringAnErrorInStepLoggingShouldProduceALogRowWithSuggestionForRegisteringAKnownError(){
@@ -271,8 +273,8 @@ public class TestCaseLog_Tests {
         Assert.assertTrue(testCaseLog.logPosts.size() == 2);
         Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).toString().contains("Info"));
         Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("If you want to add this error as a known error you should enter the line below to your test case:"));
-        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
-        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"<description of known error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).message, testCaseLog.logPosts.get(1).message.contains("currentTestCase.addKnownError(\"<Your description of this error>\", \".*Problem posts should not create extra log posts.*\");"));
+        Assert.assertTrue(testCaseLog.logPosts.get(1).toHtmlTableRow(), testCaseLog.logPosts.get(1).toHtmlTableRow().contains("currentTestCase.addKnownError(\"-- Your description of this error --\", \".*Problem posts should not create extra log posts.*\");"));
     }
 
 }
