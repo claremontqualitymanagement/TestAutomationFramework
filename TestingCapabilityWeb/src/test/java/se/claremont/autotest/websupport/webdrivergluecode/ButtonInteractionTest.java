@@ -18,14 +18,6 @@ import java.net.URL;
  * Created by jordam on 2017-01-18.
  */
 public class ButtonInteractionTest extends TestSet {
-
-    private String getTestFileFromTestResourcesFolder(String fileName){
-        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
-        File file = new File(url.getPath());
-        Assume.assumeNotNull(file);
-        return file.getAbsolutePath();
-    }
-
     @Test
     @Ignore
     /*
@@ -34,7 +26,7 @@ public class ButtonInteractionTest extends TestSet {
      */
     public void delayedDisplayOfElementShouldStillBeClickable(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummy"));
-        web.navigate("file://" + getTestFileFromTestResourcesFolder("delayTest.html"));
+        web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         web.click(new DomElement("button", DomElement.IdentificationType.BY_ID));
         web.verifyElementText(new DomElement("verifyingText", DomElement.IdentificationType.BY_ID), "Clicked");
         web.makeSureDriverIsClosed();
@@ -50,7 +42,7 @@ public class ButtonInteractionTest extends TestSet {
     public void delayedDisplayOfElementWithToShortTimeoutShouldGiveErrorMessage(){
         TestCase testCase = new TestCase(null, "dummy");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
-        web.navigate("file://" + getTestFileFromTestResourcesFolder("delayTest.html"));
+        web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         try{
             web.click(new DomElement("button", DomElement.IdentificationType.BY_ID), 1);
         }catch (Exception ignored){}
@@ -70,7 +62,7 @@ public class ButtonInteractionTest extends TestSet {
     public void clickingDisabledButton(){
         TestCase testCase = new TestCase(null, "dummy");
         WebInteractionMethods web = new WebInteractionMethods(testCase);
-        web.navigate("file://" + getTestFileFromTestResourcesFolder("delayTest.html"));
+        web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         web.clickEvenIfDisabled(new DomElement("button", DomElement.IdentificationType.BY_ID), 1);
         web.makeSureDriverIsClosed();
     }

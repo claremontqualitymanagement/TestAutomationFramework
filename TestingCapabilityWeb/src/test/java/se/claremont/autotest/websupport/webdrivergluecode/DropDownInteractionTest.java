@@ -14,13 +14,6 @@ import java.net.URL;
  * Created by jordam on 2017-01-28.
  */
 public class DropDownInteractionTest {
-    private String getTestFileFromTestResourcesFolder(String fileName){
-        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
-        File file = new File(url.getPath());
-        Assume.assumeNotNull(file);
-        return file.getAbsolutePath();
-    }
-
     @Test
     @Ignore
     /*
@@ -29,7 +22,7 @@ public class DropDownInteractionTest {
      */
     public void delayedDisplayOfElementShouldStillBeClickable(){
         WebInteractionMethods web = new WebInteractionMethods(new TestCase(null, "dummy"));
-        web.navigate("file://" + getTestFileFromTestResourcesFolder("delayTest.html"));
+        web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         DomElement dropDown = new DomElement("dropdown", DomElement.IdentificationType.BY_ID);
         web.selectInDropdown(dropDown, "Saab");
         System.out.println(web.getSelectedValueFromDropdown(dropDown));
