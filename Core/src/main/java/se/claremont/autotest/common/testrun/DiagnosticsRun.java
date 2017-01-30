@@ -15,12 +15,15 @@ import se.claremont.autotest.common.testset.TestSet_Tests;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by jordam on 2016-12-23.
  */
 public class DiagnosticsRun implements Runnable {
-    JUnitCore junit;
+    private JUnitCore junit;
+    private Result result;
 
     public DiagnosticsRun(JUnitCore jUnitCore){
         junit = jUnitCore;
@@ -37,8 +40,7 @@ public class DiagnosticsRun implements Runnable {
 
         System.setOut(dummyStream);
 
-        Result result = junit.runClasses(
-                KnownError_Test.class,
+        result = junit.runClasses(KnownError_Test.class,
                 KnownErrorsList_Test.class,
                 LogPost_Tests.class,
                 TestCaseLog_Tests.class,
@@ -47,8 +49,7 @@ public class DiagnosticsRun implements Runnable {
                 ValuePair_Tests.class,
                 HtmlSummaryReport_Test.class,
                 Settings_Tests.class,
-                SummaryReport_Tests.class
-        );
+                SummaryReport_Tests.class);
 
         System.setOut(originalStream);
 
@@ -62,5 +63,9 @@ public class DiagnosticsRun implements Runnable {
         System.out.println("#Failed tests: " + result.getFailureCount());
         System.out.println(System.lineSeparator() + "Over all diagnostics result. Successful: " + result.wasSuccessful());
         System.out.println();
+    }
+
+    public Result getResult() {
+        return result;
     }
 }

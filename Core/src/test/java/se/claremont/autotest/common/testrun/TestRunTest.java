@@ -1,4 +1,4 @@
-package se.claremont.autotest.common;
+package se.claremont.autotest.common.testrun;
 
 import org.junit.Test;
 import se.claremont.autotest.common.testrun.Settings;

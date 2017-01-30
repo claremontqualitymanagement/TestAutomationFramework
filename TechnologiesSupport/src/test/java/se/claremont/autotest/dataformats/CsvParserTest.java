@@ -2,71 +2,65 @@ package se.claremont.autotest.dataformats;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.support.tableverification.TableData;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URL;
 
+import static org.junit.Assert.assertNotNull;
+
 public class CsvParserTest {
-    private se.claremont.autotest.dataformats.CsvParser csvParser;
+    private CsvParser csvParser;
+    private FileReader fileReader;
 
     @Before
-    public void setup() {
-        csvParser = null;
-
-    }
-
-    @Test
-    @Ignore
-    public void test_FileReaderConstructor() throws FileNotFoundException {
-        URL resource = CsvParserTest.class.getClassLoader().getResource("src/resources/data.csv");
-        FileReader fileReader = new FileReader(resource.getFile());
+    public void setup() throws FileNotFoundException {
+        URL resource = CsvParserTest.class.getClassLoader().getResource("data.csv");
+        assertNotNull(resource);
+        fileReader = new FileReader(resource.getPath());
         csvParser = new CsvParser(fileReader);
+    }
 
+    @Test
+    public void test_FileReaderConstructor() throws FileNotFoundException {
         TableData table = csvParser.csvContent;
-        Assert.assertNotNull(table);
+        assertNotNull(table);
         String htmlTable = table.toHtml();
 
-        Assert.assertNotNull(htmlTable);
+        assertNotNull(htmlTable);
         Assert.assertFalse(htmlTable.isEmpty());
     }
 
     @Test
-    @Ignore
     public void test_ContentConstructor() throws FileNotFoundException {
-        URL resource = CsvParserTest.class.getClassLoader().getResource("src/resources/data.csv");
-        FileReader fileReader = new FileReader(resource.getFile());
-
-        String fileContent = CsvParser.csvFileContent(fileReader);
-
-        csvParser = new CsvParser(fileContent);
-
         TableData table = csvParser.csvContent;
-        Assert.assertNotNull(table);
+        assertNotNull(table);
         String htmlTable = table.toHtml();
 
-        Assert.assertNotNull(htmlTable);
+        assertNotNull(htmlTable);
         Assert.assertFalse(htmlTable.isEmpty());
     }
 
     @Test
-    @Ignore
     public void test_ContentWithDelimiterConstructor() throws FileNotFoundException {
-        URL resource = CsvParserTest.class.getClassLoader().getResource("src/resources/data.csv");
-        FileReader fileReader = new FileReader(resource.getFile());
+        URL resource = CsvParserTest.class.getClassLoader().getResource("data.csv");
+        assertNotNull(resource);
+        fileReader = new FileReader(resource.getPath());
 
         String fileContent = CsvParser.csvFileContent(fileReader);
+
+        assertNotNull("File content should not be null", fileContent);
 
         csvParser = new CsvParser(fileContent, ",");
 
         TableData table = csvParser.csvContent;
-        Assert.assertNotNull(table);
+        assertNotNull(table);
         String htmlTable = table.toHtml();
 
-        Assert.assertNotNull(htmlTable);
+        assertNotNull(htmlTable);
         Assert.assertFalse(htmlTable.isEmpty());
     }
 

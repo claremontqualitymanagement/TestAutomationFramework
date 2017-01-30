@@ -87,7 +87,6 @@ public class SupportMethods {
     }
 
     private static void writeToFileOnMappedDrive(byte[] content, String filePath){
-        Writer writer;
         try {
             File file = new File(filePath);
             //noinspection ResultOfMethodCallIgnored
@@ -202,10 +201,9 @@ public class SupportMethods {
      */
     public static boolean isRegexMatch(String instring, String pattern){
         if(pattern == null || instring == null) return false;
-        Pattern p = Pattern.compile(pattern);
+        Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
         Matcher m = p.matcher(instring);
         return m.matches();
-        //return instring.contains(pattern);
     }
 
     /**

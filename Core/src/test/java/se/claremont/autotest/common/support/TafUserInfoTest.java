@@ -1,4 +1,4 @@
-package se.claremont.autotest.common;
+package se.claremont.autotest.common.support;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -44,14 +44,6 @@ public class TableInteractionTest extends TestSet {
         TestRun.reporters.reportTestRun();
     }
 
-
-    private String getTestFileFromTestResourcesFolder(String fileName){
-        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
-        File file = new File(url.getPath());
-        Assume.assumeNotNull(file);
-        return file.getAbsolutePath();
-    }
-
     @Test
     @Ignore
     /*
@@ -59,7 +51,7 @@ public class TableInteractionTest extends TestSet {
      */
     public void delayedTableShouldBeWaitedFor(){
         WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
-        web.navigate("file://" + getTestFileFromTestResourcesFolder("delayTest.html"));
+        web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         DomElement table = new DomElement("table", DomElement.IdentificationType.BY_ID);
         List<String> headlines = new ArrayList<>();
         headlines.add("Headline2");

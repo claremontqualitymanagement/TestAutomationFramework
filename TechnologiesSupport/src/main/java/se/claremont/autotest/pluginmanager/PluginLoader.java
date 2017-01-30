@@ -37,8 +37,7 @@ public class PluginLoader {
             ClassLoader loader = null;
             try {
                 loader = URLClassLoader.newInstance(new URL[] { new URL(pluginJarFile.getAbsolutePath())});
-                TafPlugin plugin = null;
-                plugin = (TafPlugin) loader.loadClass(pluginJarFile.getName()).newInstance();
+                TafPlugin plugin = (TafPlugin) loader.loadClass(pluginJarFile.getName()).newInstance();
                 plugin.run();
             } catch (Exception e) {
                 e.printStackTrace();
