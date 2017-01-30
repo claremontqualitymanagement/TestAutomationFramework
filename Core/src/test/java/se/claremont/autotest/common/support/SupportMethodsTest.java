@@ -53,14 +53,14 @@ public class SupportMethodsTest {
         Date date = SupportMethods.stringToDate("20160101");
 
         assertNotNull(date);
-        assertEquals("Fri Jan 01 00:00:00 CET 2016", date.toString());
+        assertEquals(1451602800000L, date.getTime());
     }
     @Test
     public void test_stringToDate_6Chars() {
         Date date = SupportMethods.stringToDate("160101");
 
         assertNotNull(date);
-        assertEquals("Fri Jan 01 00:00:00 CET 2016", date.toString());
+        assertEquals(1451602800000L, date.getTime());
     }
 
 }
