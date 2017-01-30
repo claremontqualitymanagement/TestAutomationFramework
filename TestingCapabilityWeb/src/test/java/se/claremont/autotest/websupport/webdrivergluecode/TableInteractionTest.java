@@ -45,6 +45,7 @@ public class TableInteractionTest extends TestSet {
     }
 
     @Test
+    @Ignore
     /*
       This test case tries reading from a table that at first is not displayed.
      */
