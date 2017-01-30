@@ -50,7 +50,7 @@ public class CliTestRunner {
      * @param args arguments
      */
     public static void main(String [] args) {
-        List<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classes = new ArrayList<>();
 
         TestRun.initializeIfNotInitialized();
 
@@ -102,11 +102,19 @@ public class CliTestRunner {
                 diagnosticsRunThread.start();
 
                 //Waiting for threads to finish
-                for (int i = 0; i < threads.size(); i++)
+                for (Thread thread : threads) {
                     try {
-                        threads.get(i).join();
+                        thread.join();
                     } catch (InterruptedException e) {
+
                     }
+                }
+
+                if(!diag.getResult().getFailures().isEmpty()) {
+                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                }
+
+                System.exit(TestRun.exitCode);
 
                 return;
             } else {
@@ -126,10 +134,10 @@ public class CliTestRunner {
             e.printStackTrace();
         }
 
-        if (TestRun.exitCode == 0)
-            logger.debug(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode= " + TestRun.exitCode);
+        if (TestRun.exitCode == TestRun.ExitCodeTable.INIT_OK.getValue())
+            System.out.println(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode= " + TestRun.exitCode);
         else
-            logger.debug(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
+            System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
 
         System.exit(TestRun.exitCode);
 
