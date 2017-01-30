@@ -201,10 +201,9 @@ public class SupportMethods {
      */
     public static boolean isRegexMatch(String instring, String pattern){
         if(pattern == null || instring == null) return false;
-        Pattern p = Pattern.compile(pattern);
+        Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
         Matcher m = p.matcher(instring);
         return m.matches();
-        //return instring.contains(pattern);
     }
 
     /**
