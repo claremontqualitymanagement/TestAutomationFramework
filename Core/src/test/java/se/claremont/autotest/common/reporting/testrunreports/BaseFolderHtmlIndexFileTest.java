@@ -1,4 +1,4 @@
-package se.claremont.autotest.common;
+package se.claremont.autotest.common.reporting.testrunreports;
 
 import org.junit.Assert;
 import org.junit.Ignore;

@@ -1,4 +1,4 @@
-package se.claremont.autotest.common.email;
+package se.claremont.autotest.common.reporting.testrunreports.email;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +35,6 @@ public class EmailSenderTest {
     }
 
     @Test
-    @Ignore
     public void testGmail2() {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
         TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
