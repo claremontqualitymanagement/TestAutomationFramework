@@ -123,6 +123,17 @@ public class CliTestRunner {
         System.exit(TestRun.exitCode);
     }
 
+    private static String celebration(){
+        return System.lineSeparator() + " __     ___             _      _ " + System.lineSeparator() +
+                " \\ \\   / (_)           (_)    | |" + System.lineSeparator() +
+                "  \\ \\_/ / _ _ __  _ __  _  ___| |" + System.lineSeparator() +
+                "   \\   / | | '_ \\| '_ \\| |/ _ \\ |" + System.lineSeparator() +
+                "    | |  | | |_) | |_) | |  __/_|" + System.lineSeparator() +
+                "    |_|  |_| .__/| .__/|_|\\___(_)" + System.lineSeparator() +
+                "           | |   | |             " + System.lineSeparator() +
+                "           |_|   |_|             " + System.lineSeparator();
+    }
+
     private static void runDiagnosticTestsIfWanted(){
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
@@ -154,6 +165,7 @@ public class CliTestRunner {
                     TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
                 }
                 remainingArguments.remove(arg);
+                if(diag.getResult().getFailureCount() == 0) System.out.println(celebration());
                 System.exit(TestRun.exitCode);
                 return;
             }
@@ -185,6 +197,7 @@ public class CliTestRunner {
             return null;
         }
         Result result = junit.run(classes.toArray(new Class[0]));
+        if(result.getFailureCount() == 0) System.out.println(celebration());
         return result;
     }
 
