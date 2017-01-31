@@ -6,7 +6,7 @@ import se.claremont.autotest.common.testrun.DiagnosticsRun;
 import static org.junit.Assert.assertTrue;
 
 public class DiagnosticsRunTest {
-    DiagnosticsRun diagnosticsRun;
+    private DiagnosticsRun diagnosticsRun;
 
     @Before
     public void setup() {
@@ -16,6 +16,7 @@ public class DiagnosticsRunTest {
     @Test
     public void test() {
         diagnosticsRun.run();
+
         assertTrue("There should not be any errors in the diagnostics",
                 diagnosticsRun.getResult().getFailures().isEmpty());
     }

@@ -13,7 +13,7 @@ http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 ">
     <dependencySets>
         <dependencySet>
             <unpack>true</unpack> <!-- unpack , then repack the jars -->
-            <useTransitiveDependencies>true
+            <useTransitiveDependencies>false
             </useTransitiveDependencies> <!-- do not pull in any transitive dependencies -->
         </dependencySet>
     </dependencySets>
