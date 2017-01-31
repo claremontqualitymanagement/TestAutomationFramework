@@ -6,7 +6,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>v2.1.0</version>
+        <version>${global.version}</version>
     </parent>
 
     <name>TAF - TechnologiesSupport</name>
@@ -77,6 +77,13 @@
             <groupId>se.claremont</groupId>
             <artifactId>Core</artifactId>
             <version>${core.version}</version>
+        </dependency>
+            <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>

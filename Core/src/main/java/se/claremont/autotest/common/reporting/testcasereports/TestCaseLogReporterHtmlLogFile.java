@@ -243,7 +243,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private String htmlSectionBodyHeader(){
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
-                "      <img src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\" alt=\"logo\" class=\"toplogo\">" + LF + "<br>" + LF + "<br>" + LF +
+                "      <img src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\" alt=\"logo\" class=\"toplogo\">" + LF + "<br>" + LF + "<br>" + LF +
                 //"      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\"></a>" + LF +
                 "      <br><span class=\"pagetitle\">TAF test case results log</span>" + LF +
                 "         <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() +

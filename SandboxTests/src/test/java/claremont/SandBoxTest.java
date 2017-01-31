@@ -46,8 +46,8 @@ public class SandBoxTest extends TestSet {
 
     @BeforeClass
     public static void classSetup(){
-        TestRun.settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
-        TestRun.settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
+        TestRun.setSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
+        TestRun.setSettingsValue(Settings.SettingParameters.PATH_TO_LOGO, "https://www.prv.se/globalassets/in-swedish/prv_logox2.png");
     }
 
     @Before

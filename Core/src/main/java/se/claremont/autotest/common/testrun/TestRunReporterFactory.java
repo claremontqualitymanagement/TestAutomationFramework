@@ -14,6 +14,7 @@ public class TestRunReporterFactory {
     public ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public TestRunReporterFactory(){
+        TestRun.initializeIfNotInitialized();
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
         if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
             addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());

@@ -8,8 +8,6 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class TableInteractionTest extends TestSet {
 
     @BeforeClass
     public static void classSetup(){
-        TestRun.settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
+        TestRun.setSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
     }
 
     @Before

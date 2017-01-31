@@ -13,11 +13,10 @@ import java.util.Properties;
 public class ScpImpl implements Scp {
 
     //create localThread of the current thread
-    private static ThreadLocal<ScpImpl> myScp = new ThreadLocal<ScpImpl>() {
-        @Override protected ScpImpl initialValue() {
-            return new ScpImpl();
-        }
-    };
+    private static ThreadLocal<ScpImpl> myScp = ThreadLocal.withInitial(ScpImpl::new);
+    private int port = 22;
+
+    private ScpImpl() {}
 
     //get instace of the object and access all the methods of it
     public static ScpImpl getInstance(){
@@ -37,7 +36,7 @@ public class ScpImpl implements Scp {
         ChannelSftp channel = null;
 
         try{
-            session = jsch.getSession( user, host, 22 );
+            session = jsch.getSession( user, host, port );
             session.setPassword( pass );
 
             Properties config = new Properties();
@@ -54,30 +53,12 @@ public class ScpImpl implements Scp {
             channel.cd( remoteFile.getParent() );
             channel.put( new FileInputStream(localFile),localFile.getName() );
 
-            channel.disconnect();
-            session.disconnect();
-
-        }
-        catch (JSchException jschex){
+        } catch (JSchException | SftpException | FileNotFoundException jschex){
             jschex.printStackTrace();
             return false;
-        }
-        catch (SftpException sftpe){
-            sftpe.printStackTrace();
-            return false;
-        }
-        catch (FileNotFoundException fnfe){
-            fnfe.printStackTrace();
-            return false;
-        }
-
-        finally {
-            if (channel != null) {
-                channel.disconnect();
-            }
-            if (session != null) {
-                session.disconnect();
-            }
+        } finally {
+            closeRunnable(channel);
+            closeRunnable(session);
         }
         return true;
     }
@@ -90,7 +71,7 @@ public class ScpImpl implements Scp {
         ChannelSftp channel = null;
 
         try{
-            session = jsch.getSession( user, host, 22 );
+            session = jsch.getSession( user, host, port );
             session.setPassword( pass );
 
             Properties config = new Properties();
@@ -101,37 +82,19 @@ public class ScpImpl implements Scp {
             channel = (ChannelSftp)session.openChannel("sftp");
             channel.connect();
 
-            ChannelSftp sftp = (ChannelSftp) channel;
-            sftp.get( sourceFilePath, destinationFilePath);
-
-            sftp.disconnect();
-            channel.disconnect();
-            session.disconnect();
-
-        }
-        catch (JSchException jschex){
+            channel.get( sourceFilePath, destinationFilePath);
+        } catch (JSchException | SftpException jschex){
             jschex.printStackTrace();
             return false;
-        }
-        catch (SftpException sftpe){
-            sftpe.printStackTrace();
-            return false;
-        }
-
-        finally {
-            if (channel != null) {
-                channel.disconnect();
-            }
-            if (session != null) {
-                session.disconnect();
-            }
+        } finally {
+            closeRunnable(channel);
+            closeRunnable(session);
         }
         return true;
     }
 
     @Override
-    public void createShell(String user, String pass, String host, String command)
-    {
+    public void createShell(String user, String pass, String host, String command) {
         JSch jsch=new JSch();
 
         Session session = null;
@@ -155,22 +118,27 @@ public class ScpImpl implements Scp {
             // or something!!!
             channel.connect( 3*timeout );
 
-            channel.disconnect();
-            session.disconnect();
-
-        }
-        catch (JSchException jschex){
+        } catch (JSchException jschex){
             jschex.printStackTrace();
+        } finally {
+            closeRunnable(channel);
+            closeRunnable(session);
         }
+    }
 
-        finally {
-            if (channel != null) {
-                channel.disconnect();
+    private void closeRunnable(Runnable runnable) {
+        if(runnable != null) {
+            if (runnable instanceof ChannelSftp) {
+                ((ChannelSftp) runnable).disconnect();
             }
-            if (session != null) {
-                session.disconnect();
+            if (runnable instanceof Session) {
+                ((Session) runnable).disconnect();
             }
         }
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
 }

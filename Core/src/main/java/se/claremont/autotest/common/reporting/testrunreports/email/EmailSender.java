@@ -87,10 +87,10 @@ public class EmailSender {
 
     private String sendThroughGmail(){
         String returnMessage = "";
-        String username = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
-        String password = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
-        this.hostName = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);
-        this.hostServerPort = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_PORT);
+        String username = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
+        String password = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
+        this.hostName = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);
+        this.hostServerPort = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_PORT);
 
         if(username == null || username.length() < 1) {
             return "Cannot send mail. No email account user name set in settings.";
@@ -114,7 +114,7 @@ public class EmailSender {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
+            message.setFrom(new InternetAddress(TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(String.join(",", recipientAddresses)));
             message.setSubject(subjectLine);

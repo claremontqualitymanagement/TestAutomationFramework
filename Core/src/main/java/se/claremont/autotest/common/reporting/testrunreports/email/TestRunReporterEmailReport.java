@@ -17,7 +17,7 @@ public class TestRunReporterEmailReport implements TestRunReporter {
 
     @Override
     public void report() {
-        String recipientsString = TestRun.settings.getValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES);
+        String recipientsString = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES);
         if(recipientsString == null || recipientsString.length() == 0) System.out.println("No recipients found for sending summary reportTestRun email. Add them to the runSettings.properties file in the base log folder.");
         if(htmlSummaryReport.numberOfTestCases() > 1 && recipientsString != null && recipientsString.length() > 0){
             ArrayList<String> recipients = new ArrayList<>();
@@ -25,13 +25,13 @@ public class TestRunReporterEmailReport implements TestRunReporter {
                 recipients.add(recipient.trim());
             }
             EmailSender emailSender = new EmailSender(
-                    TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS),
-                    TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS),
+                    TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS),
+                    TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS),
                     recipients.toArray(new String[0]),
                     "AutoTest results",
                     htmlSummaryReport.createReport(),
-                    TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_PORT),
-                    TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL));
+                    TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_PORT),
+                    TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL));
             System.out.println(emailSender.send());
         }
     }

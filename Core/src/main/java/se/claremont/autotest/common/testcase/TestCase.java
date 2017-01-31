@@ -13,12 +13,7 @@ import se.claremont.autotest.common.support.api.Taf;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +46,7 @@ public class TestCase {
      *  @param testName The name of the test. For reporting purposes.
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
+        TestRun.initializeIfNotInitialized();
         TestRun.manageRunListener();
         if(knownErrorsList == null){
             knownErrorsList = new KnownErrorsList();

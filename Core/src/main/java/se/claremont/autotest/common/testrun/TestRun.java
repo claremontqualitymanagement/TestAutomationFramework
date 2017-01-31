@@ -11,10 +11,10 @@ import se.claremont.autotest.common.testset.TestSet;
  * Created by jordam on 2016-08-17.
  */
 public class TestRun {
-    public static Settings settings = new Settings();
+    public static Settings settings;
     public static int fileCounter = 0;
     public static String testRunName = "";
-    public static int exitCode;
+    public static int exitCode = ExitCodeTable.INIT_OK.getValue();
     public static TestSet currentTestSet;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
@@ -42,6 +42,26 @@ public class TestRun {
         }
     }
 
+    public static String getSettingsValue(Settings.SettingParameters parameter){
+        initializeIfNotInitialized();
+        return settings.getValue(parameter);
+    }
+
+    public static String getCustomSettingsValue(String parameter, String value){
+        initializeIfNotInitialized();
+        return settings.getCustomValue(parameter);
+    }
+
+    public static void setSettingsValue(Settings.SettingParameters parameter, String value){
+        initializeIfNotInitialized();
+        settings.setValue(parameter, value);
+    }
+
+    public static void setCustomSettingsValue(String parameter, String value){
+        initializeIfNotInitialized();
+        settings.setCustomValue(parameter, value);
+    }
+
     public static void initializeIfNotInitialized() {
         if(!isInitialized){
             currentTestSet = null;
@@ -52,6 +72,7 @@ public class TestRun {
     }
 
     public static String reportLinkPrefix(){
+        initializeIfNotInitialized();
         if(TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
                 TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
         if(TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
@@ -63,11 +84,13 @@ public class TestRun {
     }
 
     public static void evaluateCurrentTestSet(){
+        initializeIfNotInitialized();
         if(currentTestSet != null)
             reporters.evaluateTestSet(currentTestSet);
     }
 
     public static void reportTestRun(){
+        initializeIfNotInitialized();
         reporters.reportTestRun();
         BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }

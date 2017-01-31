@@ -2,10 +2,8 @@ package se.claremont.autotest.common.reporting.testrunreports.email;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.subethamail.wiser.Wiser;
-import se.claremont.autotest.common.reporting.testrunreports.email.EmailSender;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 
@@ -37,11 +35,11 @@ public class EmailSenderTest {
     @Test
     public void testGmail2() {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "gmail");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "2500");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "localhost");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "sender@gmail.com");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "2500");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "localhost");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "sender@gmail.com");
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "recipient@mail.se");
 
         String[] recipients = new String[] {"recipient@mail.com"};
@@ -75,11 +73,11 @@ public class EmailSenderTest {
     @Test
     public void testSmtp() {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "gmail");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "2500");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "localhost");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "sender@gmail.com");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "2500");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "localhost");
+        TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "sender@gmail.com");
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "recipient@mail.se");
 
         String[] recipients = new String[] {"recipient@mail.com"};
