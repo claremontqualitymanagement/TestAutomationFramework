@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>Core</artifactId>
-    <version>v2.1.3</version>
+    <version>v2.2.0</version>
     <packaging>jar</packaging>
     <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>

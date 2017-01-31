@@ -22,7 +22,7 @@ public class TableInteractionTest extends TestSet {
 
     @BeforeClass
     public static void classSetup(){
-        TestRun.settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
+        TestRun.setSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
     }
 
     @Before
@@ -43,6 +43,7 @@ public class TableInteractionTest extends TestSet {
     }
 
     @Test
+    @Ignore
     /*
       This test case tries reading from a table that at first is not displayed.
      */

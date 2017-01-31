@@ -42,6 +42,26 @@ public class TestRun {
         }
     }
 
+    public static String getSettingsValue(Settings.SettingParameters parameter){
+        initializeIfNotInitialized();
+        return settings.getValue(parameter);
+    }
+
+    public static String getCustomSettingsValue(String parameter, String value){
+        initializeIfNotInitialized();
+        return settings.getCustomValue(parameter);
+    }
+
+    public static void setSettingsValue(Settings.SettingParameters parameter, String value){
+        initializeIfNotInitialized();
+        settings.setValue(parameter, value);
+    }
+
+    public static void setCustomSettingsValue(String parameter, String value){
+        initializeIfNotInitialized();
+        settings.setCustomValue(parameter, value);
+    }
+
     public static void initializeIfNotInitialized() {
         if(!isInitialized){
             currentTestSet = null;

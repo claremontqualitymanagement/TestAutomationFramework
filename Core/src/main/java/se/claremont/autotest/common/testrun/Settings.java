@@ -79,22 +79,22 @@ public class Settings extends HashMap<String, String>{
         }
     }
 
-    public String getValue(SettingParameters settingParameters){
+    String getValue(SettingParameters settingParameters){
         String value = get(settingParameters.toString());
         if(value == null)
             value = get(settingParameters.friendlyName());
         return value;
     }
 
-    public void setValue(SettingParameters settingParameters, String value){
+    void setValue(SettingParameters settingParameters, String value){
         put(settingParameters.friendlyName(), value);
     }
 
-    public void setCustomValue(String parameter, String value){
+    void setCustomValue(String parameter, String value){
         put(parameter, value);
     }
 
-    public String getCustomValue(String parameter){
+    String getCustomValue(String parameter){
         return get(parameter);
     }
 
