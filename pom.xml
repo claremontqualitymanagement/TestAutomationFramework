@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.2.1</version>
+    <version>v2.2.2</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
