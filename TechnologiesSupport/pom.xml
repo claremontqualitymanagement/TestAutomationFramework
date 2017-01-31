@@ -6,7 +6,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>v2.2.2</version>
+        <version>${global.version}</version>
     </parent>
 
     <name>TAF - TechnologiesSupport</name>
