@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class CliTestRunner {
 
+    private static List<String> remainingArguments ;
     private final static Logger logger = LoggerFactory.getLogger( CliTestRunner.class );
 
 //    public static final TestRun testRun = new TestRun();
@@ -45,68 +46,54 @@ public class CliTestRunner {
                 "emailRecipients=firstName.lastName@organization.com" + LF + LF;
     }
 
-    private static String[] setRunSettingsFileIfGivenAsArgument(String[] args){
-        List<String> interpretedArguments = new ArrayList<>();
+    private static void setRunSettingsFileIfGivenAsArgument(){
+        String[] args = stringListToArray(remainingArguments);
         for(String arg : args){
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
                 if((parts[0].trim().toLowerCase().equals("settingsfile") || parts[0].trim().toLowerCase().equals("runsettingsfile")) && parts.length > 1) {
-                    interpretedArguments.add(arg);
                     TestRun.settings = new Settings(arg.trim().substring(arg.indexOf("=") + 1).trim());
                     System.out.println("Run settings properties file = '" + parts[1].trim() + "'.");
+                    remainingArguments.remove(arg);
                 }
             }
         }
-        List<String> arguments = stringArrayToList(args);
-        for(String interpretedArgument : interpretedArguments){
-            arguments.remove(interpretedArgument);
-        }
-        return stringListToArray(arguments);
     }
 
-    private static String[] setRunNameIfGivenAsArgument(String[] args){
-        List<String> interpretedArguments = new ArrayList<>();
+    private static void setRunNameIfGivenAsArgument(){
+        String[] args = stringListToArray(remainingArguments);
         for(String arg : args){
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
                 if(parts[0].trim().toLowerCase().equals("runname") && parts.length > 1) {
-                    interpretedArguments.add(arg);
                     TestRun.testRunName = arg.trim().substring(arg.indexOf("=") + 1).trim();
                     System.out.println("Run name is set to '" + parts[1].trim() + "'.");
+                    remainingArguments.remove(arg);
                 }
             }
         }
-        List<String> arguments = stringArrayToList(args);
-        for(String interpretedArgument : interpretedArguments){
-            arguments.remove(interpretedArgument);
-        }
-        return stringListToArray(arguments);
     }
 
 
-    private static String[] setRunSettingsParametersGivenAsArguments(String[] args){
-        List<String> interpretedArguments = new ArrayList<>();
+    private static void setRunSettingsParametersGivenAsArguments(){
+        String[] args = stringListToArray(remainingArguments);
         for(String arg : args){
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
                 if(parts[0].trim().length() > 0 && parts.length > 1) {
-                    interpretedArguments.add(arg);
-                    TestRun.settings.setCustomValue(arg.trim().split("=")[0].trim(), arg.trim().substring(arg.indexOf("=") + 1).trim());
-                    System.out.println("Setting value '" + arg.trim().split("=")[1].trim() + "' for parameter name '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
+                    TestRun.settings.setCustomValue(arg.trim().split("=")[0].trim(), arg.trim().substring(arg.trim().indexOf("=") + 1).trim());
+                    System.out.println("Setting parameter '" + arg.trim().split("=")[0].trim() + "' to value '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
+                    remainingArguments.remove(arg);
                 }
             }
         }
-        List<String> arguments = stringArrayToList(args);
-        for(String interpretedArgument : interpretedArguments){
-            arguments.remove(interpretedArgument);
-        }
-        return stringListToArray(arguments);
-
     }
 
-    private static void printHelpTextIfApplicable(String[] args){
+    private static void printHelpTextIfApplicable(){
+        String[] args = stringListToArray(remainingArguments);
         if (args.length == 0) {
             System.out.print(helpText());
+            System.exit(TestRun.ExitCodeTable.INIT_OK.getValue());
             return;
         }
         for (String arg : args) {
@@ -120,10 +107,11 @@ public class CliTestRunner {
                             arg.trim().toLowerCase().equals("--help")
                     ){
                 System.out.print(helpText());
+                remainingArguments.remove(arg);
+                System.exit(TestRun.ExitCodeTable.INIT_OK.getValue());
                 return;
             }
         }
-        System.exit(TestRun.exitCode);
     }
 
     private static void exitWithExitCode(){
@@ -135,8 +123,8 @@ public class CliTestRunner {
         System.exit(TestRun.exitCode);
     }
 
-    private static String[] runDiagnosticTestsIfWanted(String[] args){
-        List<String> interpretedArguments = new ArrayList<>();
+    private static void runDiagnosticTestsIfWanted(){
+        String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
@@ -144,7 +132,6 @@ public class CliTestRunner {
 
         for (String arg : args) {
             if (arg.toLowerCase().equals("diagnostic") || arg.toLowerCase().equals("diagnostics")) {
-                interpretedArguments.add(arg);
                 System.out.println("Running diagnostic tests. This might take a few minutes while strange things might occur on the screen. Don't be alarmed. Be patient.");
                 List<Thread> threads = new ArrayList<>();
 
@@ -166,33 +153,37 @@ public class CliTestRunner {
                 if (!diag.getResult().getFailures().isEmpty()) {
                     TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
                 }
-
+                remainingArguments.remove(arg);
                 System.exit(TestRun.exitCode);
-                return null;
+                return;
             }
         }
-        List<String> arguments = stringArrayToList(args);
-        for(String interpretedArgument : interpretedArguments){
-            arguments.remove(interpretedArgument);
-        }
-        Result result = junit.run(classes.toArray(new Class[0]));
-        return stringListToArray(arguments);
     }
 
-    private static Result runTestClasses(String[] remainingArgs){
+    private static Result runTestClasses(){
+        String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         junit.addListener(new TafRunListener());
 
-        for (String arg : remainingArgs) {
+        for (String arg : args) {
             try {
                 classes.add(Class.forName(arg));
+                System.out.println("Found test class '" + arg + "'.");
+                remainingArguments.remove(arg);
             } catch (ClassNotFoundException e) {
-                System.out.println("Warning: Class '" + arg + "' not found.");
+                System.out.println(System.lineSeparator() + "WARNING: Expecting argument '" + arg +
+                        "' to be a class containing tests, but no such class could be found. " +
+                        "Are you sure you used a correct package path to the test class?");
+                remainingArguments.remove(arg);
             }
         }
 
+        if(classes.size() == 0) {
+            System.out.println(System.lineSeparator() + "No test classes given for execution." + System.lineSeparator()+ System.lineSeparator() + "If in doubt of how to use this command line interface, please try the help switch or the Wiki.");
+            return null;
+        }
         Result result = junit.run(classes.toArray(new Class[0]));
         return result;
     }
@@ -206,11 +197,10 @@ public class CliTestRunner {
     }
 
     private static void printErrorMessageUponWrongJavaVersion(){
-        if( !Utils.getInstance().checkSupportedJavaVersionForTAF() )
-        {
-            System.out.println( "Running java version (" + Taf.tafUserInfon().getJavaVersion() + ") is not supported for TAF. Please use Java " + Utils.getInstance().SUPPORTED_TAF_JVM_VERSION + " or newer version!" );
-        }
-        printHelpTextIfApplicable(new String[] {"help"});
+        if( Utils.getInstance().checkSupportedJavaVersionForTAF() ) return;
+        System.out.println( "Running java version (" + Taf.tafUserInfon().getJavaVersion() + ") is not supported for TAF. Please use Java " + Utils.getInstance().SUPPORTED_TAF_JVM_VERSION + " or newer version!" );
+        System.out.println(System.lineSeparator() + helpText());
+        System.exit(TestRun.ExitCodeTable.RUN_TAF_ERROR_FATAL.getValue());
     }
 
     private static String[] stringListToArray(List<String> strings){
@@ -234,15 +224,19 @@ public class CliTestRunner {
      * @param args arguments
      */
     public static void main(String [] args) {
-        String[] remainingArguments = args;
-        TestRun.initializeIfNotInitialized(); // No need to remove arguments from argument array for not being test classes
+        System.out.println(System.lineSeparator() + "Executing TAF (TestAutomationFramework) from CLI." + System.lineSeparator());
+        remainingArguments = stringArrayToList(args);
         printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
-        printHelpTextIfApplicable(args);// Exits at the end. No need to remove arguments from argument array for not being test classes
-        remainingArguments = setRunSettingsFileIfGivenAsArgument(remainingArguments);
-        remainingArguments = setRunNameIfGivenAsArgument(remainingArguments);
-        remainingArguments = setRunSettingsParametersGivenAsArguments(remainingArguments);
-        remainingArguments = runDiagnosticTestsIfWanted(remainingArguments);
-        runTestClasses(remainingArguments);
+        printHelpTextIfApplicable();
+        System.out.println("Argument(s) given:" + System.lineSeparator()  +
+                " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
+                "Interpreting arguments.");
+        TestRun.initializeIfNotInitialized(); // No need to remove arguments from argument array for not being test classes
+        setRunSettingsFileIfGivenAsArgument();
+        setRunNameIfGivenAsArgument();
+        setRunSettingsParametersGivenAsArguments();
+        runDiagnosticTestsIfWanted();
+        runTestClasses();
         pause(1000);
         exitWithExitCode();
     }
