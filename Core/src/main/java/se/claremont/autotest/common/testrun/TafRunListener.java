@@ -33,14 +33,15 @@ public class TafRunListener extends RunListener {
     }
 
     private static String celebration(){
-        return System.lineSeparator() + " __     ___             _      _ " + System.lineSeparator() +
-                " \\ \\   / (_)           (_)    | |" + System.lineSeparator() +
-                "  \\ \\_/ / _ _ __  _ __  _  ___| |" + System.lineSeparator() +
-                "   \\   / | | '_ \\| '_ \\| |/ _ \\ |" + System.lineSeparator() +
-                "    | |  | | |_) | |_) | |  __/_|" + System.lineSeparator() +
-                "    |_|  |_| .__/| .__/|_|\\___(_)" + System.lineSeparator() +
-                "           | |   | |             " + System.lineSeparator() +
-                "           |_|   |_|             " + System.lineSeparator();
+        return System.lineSeparator() +
+                "    __     ___             _      _ " + System.lineSeparator() +
+                "    \\ \\   / (_)           (_)    | |" + System.lineSeparator() +
+                "     \\ \\_/ / _ _ __  _ __  _  ___| |" + System.lineSeparator() +
+                "      \\   / | | '_ \\| '_ \\| |/ _ \\ |" + System.lineSeparator() +
+                "       | |  | | |_) | |_) | |  __/_|" + System.lineSeparator() +
+                "       |_|  |_| .__/| .__/|_|\\___(_)" + System.lineSeparator() +
+                "              | |   | |             " + System.lineSeparator() +
+                "              |_|   |_|             " + System.lineSeparator();
     }
 
 
