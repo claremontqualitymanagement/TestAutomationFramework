@@ -14,7 +14,7 @@
 
     <properties>
 
-        <global.version>v2.2.3</global.version>
+        <global.version>v2.2.4</global.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
@@ -28,7 +28,7 @@
         <capability.json.version>v1.0.0</capability.json.version>
         <capability.java.version>v1.0.0</capability.java.version>
         <capability.support.version>v1.1.0</capability.support.version>
-        <core.version>v2.2.0</core.version>
+        <core.version>v2.2.1</core.version>
     </properties>
 
     <licenses>
