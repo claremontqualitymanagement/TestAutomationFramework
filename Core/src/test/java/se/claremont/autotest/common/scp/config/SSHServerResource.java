@@ -1,6 +1,17 @@
 package se.claremont.autotest.common.scp.config;
 
 
+import com.sshtools.common.configuration.XmlConfigurationContext;
+import com.sshtools.daemon.SshServer;
+import com.sshtools.daemon.configuration.XmlServerConfigurationContext;
+import com.sshtools.daemon.forwarding.ForwardingServer;
+import com.sshtools.daemon.session.SessionChannelFactory;
+import com.sshtools.j2ssh.configuration.ConfigurationException;
+import com.sshtools.j2ssh.configuration.ConfigurationLoader;
+import com.sshtools.j2ssh.connection.ConnectionProtocol;
+import org.junit.rules.ExternalResource;
+
+import javax.xml.bind.JAXB;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -10,19 +21,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
-
-import javax.xml.bind.JAXB;
-
-import com.sshtools.common.configuration.XmlConfigurationContext;
-import org.junit.rules.ExternalResource;
-
-import com.sshtools.daemon.SshServer;
-import com.sshtools.daemon.configuration.XmlServerConfigurationContext;
-import com.sshtools.daemon.forwarding.ForwardingServer;
-import com.sshtools.daemon.session.SessionChannelFactory;
-import com.sshtools.j2ssh.configuration.ConfigurationException;
-import com.sshtools.j2ssh.configuration.ConfigurationLoader;
-import com.sshtools.j2ssh.connection.ConnectionProtocol;
 
 public class SSHServerResource extends ExternalResource {
 

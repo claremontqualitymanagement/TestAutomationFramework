@@ -22,6 +22,7 @@ public class ScpImplTest {
     public SSHServerResource sshServer = new SSHServerResource(USERNAME, PORT, ADDRESS);
 
     @Test
+    @Ignore
     public void SftpUploadFileTest() throws InterruptedException {
         String sourceFilePath = ScpImplTest.class.getClassLoader().getResource("copyfile.txt").getPath();
         String destinationFilePath = "/copyfile.txt";
@@ -33,6 +34,7 @@ public class ScpImplTest {
     }
 
     @Test
+    @Ignore
     public void SftpDownloadFileTest() throws InterruptedException {
         //Fails for some reason unless there's a timeout.. Guessing it's threadrelated
         Thread.sleep(10L);
