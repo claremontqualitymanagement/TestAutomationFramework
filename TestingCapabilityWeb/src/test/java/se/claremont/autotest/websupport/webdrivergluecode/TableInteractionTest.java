@@ -8,8 +8,6 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +43,6 @@ public class TableInteractionTest extends TestSet {
     }
 
     @Test
-    @Ignore
     /*
       This test case tries reading from a table that at first is not displayed.
      */
