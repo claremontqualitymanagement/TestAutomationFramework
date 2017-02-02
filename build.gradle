@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'se.claremont'
-version = 'v2.2.5'
+version = 'v2.2.6'
 
 description = """Test Automation Framework - TAF"""
 
