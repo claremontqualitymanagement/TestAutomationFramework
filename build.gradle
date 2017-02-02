@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'se.claremont'
-version = 'v1.0.1-beta90'
+version = 'v2.2.5'
 
 description = """Test Automation Framework - TAF"""
 
@@ -20,6 +20,7 @@ repositories {
      maven { url "https://svn.apache.org/viewvc/maven" }
      maven { url "http://mvnrepository.com" }
      maven { url "https://github.com/claremontqualitymanagement/TestAutomationFramework" }
+     maven { url "https://jitpack.io" }
 }
 dependencies {
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version:'LATEST'
