@@ -1,0 +1,7 @@
+
+description = 'TAF - EyeAutomateSupport'
+dependencies {
+  compile project(':Core')
+  compile project(':TechnologiesSupport')
+    system group: 'EyeAutomate', name: 'eyeautomate', version:'LATEST'
+}

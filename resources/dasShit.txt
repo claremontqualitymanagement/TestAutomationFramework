@@ -1,39 +1,22 @@
 *** skapa en droplet (from Alex)
 
 <------------Start-------------->
-
 1. Skapa droplet pÂ digitalocean
-
 2. Connecta till droplet via ssh
-
 <------------Connecta-------------->
-
 2.1. IP-adress / Root pass (Mail)
-
 <------------Skapa demokonto-------------->
-
 3. adduser demo
-
 4. gpasswd -a demo sudo
-
 5. ssh 'demo@[IP-adress]'
-
 <------------Nyckel-------------->
-
 6. ssh-keygen
-
 7. ssh-copy-id demo@[IP-adress]
-
 <------------Nginx-------------->
-
 8. sudo apt-get update
-
 9. sudo apt-get install nginx
-
 <------------Webserver-------------->
-
 10. sudo service nginx restart
-
 <------------Startkod-------------->
 
 URL: tinyurl.com/cadroplet

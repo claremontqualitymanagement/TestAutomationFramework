@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
-    <artifactId>TestAutomationFrameworkFather</artifactId>
+    <artifactId>TestAutomationFramework</artifactId>
     <version>${global.version}</version>
     <packaging>pom</packaging>
 
@@ -14,7 +14,7 @@
 
     <properties>
 
-        <global.version>v2.2.6</global.version>
+        <global.version>v2.2.7-beta1</global.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
@@ -101,14 +101,6 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
-        <repository>
-            <id>se.claremont</id>
-            <name>TestAutomationFramework</name>
-            <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <!-- Compiler plugin makes class files from java files -->
         <plugins>
@@ -121,7 +113,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
             <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
             <!--
             <plugin>

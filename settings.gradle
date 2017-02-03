@@ -1,1 +1,20 @@
 rootProject.name = 'TestAutomationFramework'
+include ':Core'
+include ':TechnologiesSupport'
+include ':TestingCapabilityJavaGui'
+include ':TestingCapabilityJson'
+include ':TestingCapabilityRestApi'
+include ':TestingCapabilityWeb'
+include ':TestingCapabilitySmartImageGui'
+include ':SandboxTests'
+include ':TafFull'
+
+project(':Core').projectDir = "$rootDir/Core" as File
+project(':TechnologiesSupport').projectDir = "$rootDir/TechnologiesSupport" as File
+project(':TestingCapabilityJavaGui').projectDir = "$rootDir/TestingCapabilityJavaGui" as File
+project(':TestingCapabilityJson').projectDir = "$rootDir/TestingCapabilityJson" as File
+project(':TestingCapabilityRestApi').projectDir = "$rootDir/TestingCapabilityRestApi" as File
+project(':TestingCapabilityWeb').projectDir = "$rootDir/TestingCapabilityWeb" as File
+project(':TestingCapabilitySmartImageGui').projectDir = "$rootDir/TestingCapabilitySmartImageGui" as File
+project(':SandboxTests').projectDir = "$rootDir/SandboxTests" as File
+project(':TafFull').projectDir = "$rootDir/TafFull" as File

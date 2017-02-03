@@ -5,16 +5,9 @@ An Test Automated Framework brought to you from the [Claremont team](http://www.
 
 ![alt this is the cool Claremont TAF logo...](http://46.101.193.212/TAF/images/Taf3_transp.png)
 
-Building instructions:
-Using Maven command:mvn clean install
 
 
-Running instructions:
-- With jar file: java -jar -DparameterName=parameterValue
-- CI server integration e.g. Jenkins, Team City etc.
-
-
-Read more about the documentation [here](http://46.101.193.212/TAF/documentation/TAF%20introduction.html).
+Check out our documentation [here](https://github.com/claremontqualitymanagement/TestAutomationFramework/wiki).
 
 
 
@@ -23,5 +16,6 @@ Read more about the documentation [here](http://46.101.193.212/TAF/documentation
 [![Github Releases](https://img.shields.io/github/downloads/atom/atom/latest/total.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
 [![SonarQube TechDebt](https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=se.claremont%3ATestAutomationFramework)
+[![Release](https://jitpack.io/v/com.example/Repo.svg)](https://jitpack.io/com/github/claremontqualitymanagement/TestAutomationFramework)
 
 © 2017 Claremont AB

@@ -13,9 +13,12 @@ jdk:
 #  - oraclejdk7
 #  - openjdk6
 script:
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run
-#- mvn install antrun:run
+- mvn clean install
+- mvn javadoc:aggregate-jar
+- mvn source:aggregate
+#- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run -DskipTests
 #- mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+#- mvn install antrun:run
 cache:
   directories:
     - '$HOME/.m2/repository'
@@ -26,7 +29,9 @@ before_deploy:
 #- gem install mime-types -v 2.6.2
 #- rvm 1.9.3 do gem install octokit -v 4.3.0
 #- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
-- export TAF_VERSION=$(find ./TafFull/target/ -name *TestAutomationFramework-*.jar -maxdepth 1 | grep -v "doc" | grep -v "sources")
+- export TAF_JAR_FILE=$(./TafFull/target/ -name *TafFull-*.jar -maxdepth 1)
+- export TAF_DOC_FILE=$(find . -name *-javadoc.jar)
+- export TAF_SRC_FILE=$(find . -name *-sources.jar)
 deploy:
   provider: releases
   edge:
@@ -34,7 +39,10 @@ deploy:
   api_key:
     secure: BnKQnxJ308fLM2WRDwQqIaZeKj0xxngspNmLFZawFGnh/aAA8uoN0jJQfipYU0BNipeld3NivKvEijzArC9Jx1w5jcfegstYLC+Zc0qourgClRLgn/Nc4IaSOLJsMzyrs9WhNpGLd70EQhPDAsbbQl8PKoWJBot1Z2TxhZn8mcIs+tXCCK8Agso508PsrGe4kAQO3HWfnYx3fey6833GGKWfDCQcWeAIDZCJKpmi7O9NVZC8gHSnVNy1yDSakN4PQVkmyDNoBUdsiQMkQKS66JAMu1taIAZ0LhcdFtF2DbSG+oYmSvFHu/EnoMkbJKP+kbxSJVOvTW91+b1v4CplXkipYhld/nUK9aIFaaFCe67NAO7fegO19BK5N4i4NaRkvNCLDgdV18ePy9JURcofDsapWl74ntRcKVYn8ZqHThNe2rttlj+H10h5INO77JsyJ8iZqG6C31r4XrIRj7Kgzf3xzDJnPve/kdcdT0w0E5e2Mdf4+YPF9cilVgfBmiM4oj9ga5tMWrzQQ+T7z3y5OwKLiAsQHLLQfU1877roYNIdwKYKBPDWfL7Lh6XYBExMGVEbzBIAo5DjhszJgT00VNDQMZDGtXziyMfvOZ7d2ySYTfZT/mjx1BQEB5hHu+KPpfYKC6OqeJPps2QmwEuO61ERYTkq2lELUoU3p79hR4M=
   skip_cleanup: true
-  file: "${TAF_VERSION}"
+  file:
+    - "${TAF_JAR_FILE}"
+    - "${TAF_DOC_FILE}"
+    - "${TAF_SRC_FILE}"
   overwrite: true
   on:
     tags: true
