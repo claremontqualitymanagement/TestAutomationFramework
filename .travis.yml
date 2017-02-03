@@ -15,7 +15,7 @@ jdk:
 script:
 - mvn clean install
 - mvn javadoc:aggregate-jar
-- mvn source:aggregate
+- mvn source:jar
 #- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run -DskipTests
 #- mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
 #- mvn install antrun:run
