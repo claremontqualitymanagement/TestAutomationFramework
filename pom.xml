@@ -14,7 +14,7 @@
 
     <properties>
 
-        <global.version>v2.2.7-beta4</global.version>
+        <global.version>v2.2.7-beta5</global.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
@@ -164,7 +164,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>2.4.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -172,9 +172,20 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>SOME_NAME_FOR_SHADED_SUFFIX</shadedClassifierName>
+                            <artifactSet>
+                                <includes>
+                                    <include>se.claremont:TafFul:${global.version}</include>
+                                </includes>
+                            </artifactSet>
+                            <minimizeJar>true</minimizeJar>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
+                                    <manifestEntries>
+                                        <Main-Class>se.claremont.autotest.common.testrun.CliTestRunner</Main-Class>
+                                    </manifestEntries>
                                 </transformer>
                             </transformers>
                         </configuration>
