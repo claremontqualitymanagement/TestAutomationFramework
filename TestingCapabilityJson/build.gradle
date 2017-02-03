@@ -1,6 +1,0 @@
-
-description = 'TAF - TestingCapabilityJson'
-dependencies {
-    compile group: 'org.json', name: 'json', version:'20160810'
-  compile project(':Core')
-}
