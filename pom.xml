@@ -13,7 +13,6 @@
     <url>http://www.claremont.se</url>
 
     <properties>
-
         <global.version>v2.2.7-beta7</global.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
