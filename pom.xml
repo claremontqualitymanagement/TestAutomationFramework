@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.2.7-beta20</version>
+    <version>v2.2.7-beta21</version>
     <packaging>jar</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -183,7 +183,25 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <distributionManagement>
+        <repository>
+            <id>se.claremont</id>
+            <name>TestAutomationFramework</name>
+            <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
+        </repository>
+    </distributionManagement>
+
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>drivers</exclude>
+                    <exclude>images</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
 
             <!-- Compiler plugin makes class files from java files -->
@@ -194,6 +212,22 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
 
