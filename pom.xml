@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.2.7-beta17</version>
-    <packaging>pom</packaging>
+    <version>v2.2.7-beta18</version>
+    <packaging>jar</packaging>
 
     <name>TAF - Test Automation Framework</name>
     <description>TAF - Test Automation Framework</description>
@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <TEST_SERVER>46.101.193.212</TEST_SERVER>
+        <TEST_SERVER>46.101.193.21te2</TEST_SERVER>
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
@@ -184,34 +184,9 @@
     </pluginRepositories>
 
     <build>
-        <!-- Compiler plugin makes class files from java files -->
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
+            <!-- Compiler plugin makes class files from java files -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -221,6 +196,52 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <!-- Surefire is used to execute tests within modules -->
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>TafRunListener</value>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
+            -->
+
+            <!-- Create Javadoc for project -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Making source available -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -248,21 +269,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <!-- Surefire is used to execute tests within modules -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <properties>
-                        <property>
-                            <name>listener</name>
-                            <value>TafRunListener</value>
-                        </property>
-                    </properties>
-                </configuration>
             </plugin>
 
             <!-- AntRun plugin is used to push artifact to build server. -->
