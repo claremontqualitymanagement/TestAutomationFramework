@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.2.7-beta21</version>
+    <version>v2.2.7-beta22</version>
     <packaging>jar</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <TEST_SERVER>46.101.193.21te2</TEST_SERVER>
+        <TEST_SERVER>46.101.193.212</TEST_SERVER>
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
