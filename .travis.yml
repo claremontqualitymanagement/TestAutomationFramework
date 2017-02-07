@@ -14,8 +14,8 @@ jdk:
 #  - openjdk6
 script:
 - mvn clean install
-- mvn javadoc:aggregate-jar
-- mvn source:aggregate
+#- mvn javadoc:aggregate-jar
+#- mvn source:aggregate
 #- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run -DskipTests
 #- mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
 #- mvn install antrun:run
@@ -28,10 +28,10 @@ before_deploy:
 #- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
 #- gem install mime-types -v 2.6.2
 #- rvm 1.9.3 do gem install octokit -v 4.3.0
-#- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
-- export TAF_JAR_FILE=$(find ./TafFull/target/ -maxdepth 1 -name *TafFull-*jar-with-dependencies.jar)
-- export TAF_DOC_FILE=$(find . -name *-javadoc.jar)
-- export TAF_SRC_FILE=$(find . -name *-sources.jar)
+- export TAF_JAR_FILE=$(find . -name *TestAutomationFramework-*-jar-with-dependencies.jar | grep -v "doc" | grep -v "sources")
+#- export TAF_JAR_FILE=$(find ./target/ -maxdepth 1 -name *TestAutomationFramework-*jar-with-dependencies.jar)
+- export TAF_DOC_FILE=$(find . -name *TestAutomationFramework-*-javadoc.jar | grep -v "doc" | grep -v "sources")
+- export TAF_SRC_FILE=$(find . -name *TestAutomationFramework-*-sources.jar | grep -v "doc" | grep -v "sources")
 deploy:
   provider: releases
   edge:
