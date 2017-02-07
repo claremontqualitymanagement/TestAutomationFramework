@@ -5,12 +5,12 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont</groupId>
-        <version>${global.version}</version>
+        <version>v2.2.7-beta12</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>TestingCapabilityWeb</artifactId>
-    <version>v1.0.0</version>
+    <version>v1.0.1</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityWeb</name>
 
@@ -34,22 +34,22 @@
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TechnologiesSupport</artifactId>
-            <version>${capability.support.version}</version>
+            <version>v1.1.1</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityJavaGui</artifactId>
-            <version>${capability.java.version}</version>
+            <version>v1.0.1</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>Core</artifactId>
-            <version>${core.version}</version>
+            <version>v2.2.2</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>TestingCapabilityRestApi</artifactId>
-            <version>${capability.rest.version}</version>
+            <version>v1.0.1</version>
         </dependency>
     </dependencies>
 

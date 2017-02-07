@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>${global.version}</version>
+    <version>v2.2.7-beta12</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -13,7 +13,7 @@
     <url>http://www.claremont.se</url>
 
     <properties>
-        <global.version>v2.2.7-beta7</global.version>
+        <global.version>v2.2.7-beta12</global.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
@@ -46,7 +46,6 @@
         <module>TestingCapabilityRestApi</module>
         <module>TestingCapabilityWeb</module>
         <module>TestingCapabilitySmartImageGui</module>
-        <module>SandboxTests</module>
         <module>TafFull</module>
     </modules>
 
@@ -113,7 +112,6 @@
                 </configuration>
             </plugin>
             <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
-            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -141,9 +139,9 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
 
             <!-- Surefire is used to execute tests within modules -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -157,7 +155,7 @@
                     </properties>
                 </configuration>
             </plugin>
-
+            -->
             <!-- Shade plugin is used to create single jar from multiple modules. -->
             <!--
             <plugin>
