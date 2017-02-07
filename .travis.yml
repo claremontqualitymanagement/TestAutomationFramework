@@ -29,7 +29,7 @@ before_deploy:
 #- gem install mime-types -v 2.6.2
 #- rvm 1.9.3 do gem install octokit -v 4.3.0
 #- export TAF_VERSION=$(find . -name *TestAutomationFramework-*.jar | grep -v "doc" | grep -v "sources")
-- export TAF_JAR_FILE=$(find ./TafFull/target/ -maxdepth 1 -name *TafFull-*jar-with-dependencies.jar)
+- export TAF_JAR_FILE=$(find ./target/ -maxdepth 1 -name *TestAutomationFramework-*jar-with-dependencies.jar)
 - export TAF_DOC_FILE=$(find . -name *-javadoc.jar)
 - export TAF_SRC_FILE=$(find . -name *-sources.jar)
 deploy:
