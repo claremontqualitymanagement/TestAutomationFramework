@@ -12,6 +12,8 @@
     <description>TAF - Test Automation Framework</description>
     <url>http://www.claremont.se</url>
 
+    <!--Now you -->
+
     <properties>
 
         <global.version>v2.2.7-beta12</global.version>
