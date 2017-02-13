@@ -6,7 +6,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont.parent</groupId>
-        <version>v2.2.7-beta7</version>
+        <version>v2.4.4</version>
     </parent>
 
     <groupId>se.claremont</groupId>

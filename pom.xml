@@ -8,7 +8,7 @@
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
-        <global.version>v2.4.2</global.version>
+        <global.version>v2.4.4</global.version>
         <capability.web.version>v1.0.0</capability.web.version>
         <capability.smart.image.version>v1.0.0</capability.smart.image.version>
         <capability.rest.version>v1.0.0</capability.rest.version>
@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont.parent</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>${global.version}}</version>
+    <version>v2.4.4</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -242,6 +242,7 @@
                 </configuration>
             </plugin>
 
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -257,6 +258,7 @@
                     </archive>
                 </configuration>
             </plugin>
+            -->
 
             <!-- Surefire is used to execute tests within modules -->
             <!--
@@ -304,6 +306,7 @@
             </plugin>
 
             <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -331,6 +334,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
 
             <!-- AntRun plugin is used to push artifact to build server. -->
             <plugin>
