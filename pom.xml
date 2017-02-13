@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.2.7-beta12</version>
+    <version>v2.3.0</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -14,7 +14,7 @@
 
     <properties>
 
-        <global.version>v2.2.7-beta12</global.version>
+        <global.version>v2.3.0</global.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>

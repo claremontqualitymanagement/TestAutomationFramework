@@ -1,20 +1,33 @@
 package se.claremont.autotest.common.testset;
 
+import org.junit.*;
+import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.TafTestRunner;
 import se.claremont.autotest.common.testrun.TestRun;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * A test set is a set of test cases
  *
  * Created by jordam on 2016-08-17.
  */
+@RunWith(TafTestRunner.class)
 public class TestSet {
     public TestCase currentTestCase;
     public String name;
     public final KnownErrorsList knownErrorsList = new KnownErrorsList();
+    @Rule public TestName currentTestName = new TestName();
+    @Before public void testSetup(){ startUpTestCase(currentTestName.getMethodName()); }
+    @After public void teardown(){ wrapUpTestCase(); }
+    @AfterClass public static void classTeardown(){ TestRun.reporters.evaluateTestSet(TestRun.currentTestSet); }
 
     /**
      * Setting up a new test set instance
