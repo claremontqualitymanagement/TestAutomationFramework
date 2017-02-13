@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.claremont.parent</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.4.0</version>
+    <version>v2.2.7-beta7</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -13,7 +13,7 @@
     <url>http://www.claremont.se</url>
 
     <properties>
-        <global.version>v2.4.0</global.version>
+        <global.version>v2.2.7-beta7</global.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
@@ -35,6 +35,20 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <modules>
+        <module>Core</module>
+        <!--
+        <module>TechnologiesSupport</module>
+        <module>TestingCapabilityJavaGui</module>
+        <module>TestingCapabilityJson</module>
+        <module>TestingCapabilityRestApi</module>
+        <module>TestingCapabilityWeb</module>
+        <module>TestingCapabilitySmartImageGui</module>
+        <module>SandboxTests</module>
+        -->
+        <module>TafFull</module>
+    </modules>
 
     <dependencies>
 
