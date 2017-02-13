@@ -6,12 +6,13 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont.parent</groupId>
-        <version>v2.4.4</version>
+        <version>v2.4.5</version>
     </parent>
 
     <groupId>se.claremont</groupId>
     <artifactId>Core</artifactId>
-    <version>${core.version}}</version>
+    <!--<version>${core.version}</version>-->
+    <version>v2.2.2</version>
     <packaging>jar</packaging>
     <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>
