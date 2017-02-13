@@ -5,7 +5,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>se.claremont.parent</groupId>
-        <version>v2.4.6</version>
+        <version>v2.4.7</version>
     </parent>
 
     <groupId>se.claremont</groupId>
@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <artifactId>TafFull</artifactId>
     <!--<version>${global.version}</version>-->
-    <version>v2.4.6</version>
+    <version>v2.4.7</version>
     <name>TAF - FULL</name>
 
     <pluginRepositories>
