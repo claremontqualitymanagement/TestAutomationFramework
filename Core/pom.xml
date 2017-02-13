@@ -11,7 +11,7 @@
 
     <groupId>se.claremont</groupId>
     <artifactId>Core</artifactId>
-    <version>v2.2.2</version>
+    <version>${core.version}}</version>
     <packaging>jar</packaging>
     <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>
