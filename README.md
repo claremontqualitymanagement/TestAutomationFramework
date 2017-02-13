@@ -16,6 +16,6 @@ Check out our documentation [here](https://github.com/claremontqualitymanagement
 [![Github Releases](https://img.shields.io/github/downloads/atom/atom/latest/total.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)](https://github.com/claremontqualitymanagement/TestAutomationFramework)
 [![SonarQube TechDebt](https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=se.claremont%3ATestAutomationFramework)
-[![Release](https://jitpack.io/v/codebulb/crudlet.svg)](https://jitpack.io/com/github/claremontqualitymanagement/TestAutomationFramework)
+[![Release](https://jitpack.io/v/codebulb/crudlet.svg)](https://jitpack.io/#claremontqualitymanagement/TestAutomationFramework)
 
 © 2017 Claremont AB
