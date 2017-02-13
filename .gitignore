@@ -16,6 +16,5 @@ gradlew
 gradlew.bat
 EyeAutomateSupport/EyeAutomateSupport.iml
 *.iml
-src
 *.bak
 dependency-reduced-pom.xml
