@@ -33,8 +33,8 @@ before_deploy:
 #- export TAF_DOC_FILE=$(find . -name *TestAutomationFramework-*-javadoc.jar | grep -v "doc" | grep -v "sources")
 #- export TAF_SRC_FILE=$(find . -name *TestAutomationFramework-*-sources.jar | grep -v "doc" | grep -v "sources")
 - export TAF_JAR_FILE=$(find ./TafFull/target/ -maxdepth 1 -name *TafFull-*-jar-with-dependencies.jar)
-- export TAF_DOC_FILE=$(find . -name *-javadoc.jar)
-- export TAF_SRC_FILE=$(find . -name *-sources.jar)
+- export TAF_DOC_FILE=$(find . -name TestAutomationFramework*-javadoc.jar)
+- export TAF_SRC_FILE=$(find . -name TestAutomationFramework*-sources.jar)
 deploy:
   provider: releases
   edge:
