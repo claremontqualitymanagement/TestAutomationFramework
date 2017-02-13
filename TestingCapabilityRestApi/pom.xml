@@ -10,21 +10,29 @@
 
     <groupId>se.claremont</groupId>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>TestingCapabilitySmartImageGui</artifactId>
+    <artifactId>TestingCapabilityRestApi</artifactId>
     <version>v1.0.1</version>
     <packaging>jar</packaging>
-
-    <name>TAF - EyeAutomateSupport</name>
-    <description>This is the module enabling interacting with GUI components through image recognition for Claremont TAF</description>
-    <url>http://www.claremont.se</url>
+    <name>TAF - TestingCapabilityRestApi</name>
 
     <dependencies>
         <dependency>
-            <groupId>EyeAutomate</groupId>
-            <artifactId>eyeautomate</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/libs/EyeAutomate.jar</systemPath>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>3.4.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- For REST interactions -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
@@ -33,8 +41,8 @@
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
-            <artifactId>TechnologiesSupport</artifactId>
-            <version>v1.1.1</version>
+            <artifactId>TestingCapabilityJson</artifactId>
+            <version>v1.0.1</version>
         </dependency>
     </dependencies>
 

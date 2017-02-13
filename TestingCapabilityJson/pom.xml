@@ -10,32 +10,21 @@
 
     <groupId>se.claremont</groupId>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>TestingCapabilitySmartImageGui</artifactId>
+    <artifactId>TestingCapabilityJson</artifactId>
     <version>v1.0.1</version>
     <packaging>jar</packaging>
-
-    <name>TAF - EyeAutomateSupport</name>
-    <description>This is the module enabling interacting with GUI components through image recognition for Claremont TAF</description>
-    <url>http://www.claremont.se</url>
+    <name>TAF - TestingCapabilityJson</name>
 
     <dependencies>
         <dependency>
-            <groupId>EyeAutomate</groupId>
-            <artifactId>eyeautomate</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/libs/EyeAutomate.jar</systemPath>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
             <artifactId>Core</artifactId>
             <version>v2.2.2</version>
         </dependency>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TechnologiesSupport</artifactId>
-            <version>v1.1.1</version>
-        </dependency>
     </dependencies>
-
 </project>

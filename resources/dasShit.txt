@@ -1,0 +1,153 @@
+*** skapa en droplet (from Alex)
+
+<------------Start-------------->
+1. Skapa droplet pÂ digitalocean
+2. Connecta till droplet via ssh
+<------------Connecta-------------->
+2.1. IP-adress / Root pass (Mail)
+<------------Skapa demokonto-------------->
+3. adduser demo
+4. gpasswd -a demo sudo
+5. ssh 'demo@[IP-adress]'
+<------------Nyckel-------------->
+6. ssh-keygen
+7. ssh-copy-id demo@[IP-adress]
+<------------Nginx-------------->
+8. sudo apt-get update
+9. sudo apt-get install nginx
+<------------Webserver-------------->
+10. sudo service nginx restart
+<------------Startkod-------------->
+
+URL: tinyurl.com/cadroplet
+
+*** ubuntu grejer ***
+sudo apt-cache search java8
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install xvfb
+sudo apt-get install firefox
+sudo apt-get upgrade firefox
+dpkg -L xvfb
+
+sudo apt-get install google-chrome-stable
+sudo apt-get install -f
+sudo apt-get install google-chrome-stable
+
+sudo apt-get update
+
+sudo reboot
+
+*** Xvfb ***
+
+xvfb-run firefox http://google.com
+xvfb-run --server-args "-screen 0 1024x768x16" firefox
+xvfb-run --server-args "-screen 0 1024x768x16" firefox http://google.com
+xvfb-run --server-args "-screen 0 1024x768x16" google-chrome-stable http://google.com
+
+scp target/TypeAndTell-1.0.1-beta17-jar-with-dependencies.jar taf@46.101.193.212:/home/taf/
+scp google-chrome-stable_current_amd64.deb taf@46.101.193.212:/home/taf/
+
+
+*** git grejer ***
+
+git fetch origin
+git branch development origin/development
+git checkout development
+
+kan behövas:
+git branch --set-upstream development origin/development
+
+git remote -v
+git push --set-upstream origin
+
+Kolla att allt ser ok ut med:
+git remote show origin
+
+* skapa en ny tag för byggnation via webhooks till TravisCI
+git tag v1.0.1-beta88
+git push origin v1.0.1-beta88
+*glöm inte att pusha till development
+git push origin development
+
+git checkout tags/<tag_name>
+git checkout tags/<tag_name> -b <branch_name>
+
+git checkout -b feature/test development
+git checkout tags/v2.2.7-beta7 -b feature/fixModuleStructureFromTagv2.2.7-beta7
+git push origin feature/fixModuleStructureFromTagv2.2.7-beta7
+
+git branch -D feature/test
+
+
+*** check summor ***
+md5 TestAutomationFramework-v1.0-jar-with-dependencies.jar > TestAutomationFramework-v1.0-jar-with-dependencies.jar.md5
+shasum TestAutomationFramework-v1.0-jar-with-dependencies.jar > TestAutomationFramework-v1.0-jar-with-dependencies.jar.sha1
+*** glöm inte rensa filerna från skräp
+
+*** https://help.github.com/articles/generating-an-ssh-key/ ***
+Magnuss-MBP:~ magnusolsson$ cat ~/.ssh/known_hosts
+46.101.193.212 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDrUSFRq8+qHR8Ofr6xP9h5Un3qvqKbvWuYxyglQ++x0w0FxRA8+hMmXXZ/CM1ieMvcQltEZTG2quUdDm7cLSg0=
+Magnuss-MBP:~ magnusolsson$ ssh-keygen -t rsa -b 4096 -C "magnus.olsson@claremont.se"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/magnusolsson/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/magnusolsson/.ssh/id_rsa.
+Your public key has been saved in /Users/magnusolsson/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:mbAGw5HicDJOT/80HxUbEoy4dev+XmtHHY0h8xJhqNI magnus.olsson@claremont.se
+The key's randomart image is:
++---[RSA 4096]----+
+|    ... oo.++.   |
+|+.oo.o o ooo* .  |
+|o*o.= +...o. = o.|
+| ... =.=E=  . o..|
+|      =.S .  .  o|
+|     . . o     ..|
+|        .    ..  |
+|         .  .... |
+|          oo...  |
++----[SHA256]-----+
+Magnuss-MBP:~ magnusolsson$ eval "$(ssh-agent -s)"
+Agent pid 45375
+Magnuss-MBP:~ magnusolsson$ ssh-add ~/.ssh/id_rsa
+Enter passphrase for /Users/magnusolsson/.ssh/id_rsa:
+Identity added: /Users/magnusolsson/.ssh/id_rsa (/Users/magnusolsson/.ssh/id_rsa)
+Magnuss-MBP:~ magnusolsson$ pbcopy < ~/.ssh/id_rsa.pub
+Magnuss-MBP:~ magnusolsson$ ssh -T git git@github.com
+ssh: Could not resolve hostname git: nodename nor servname provided, or not known
+Magnuss-MBP:~ magnusolsson$ ssh -T git@github.com
+The authenticity of host 'github.com (192.30.253.112)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,192.30.253.112' (RSA) to the list of known hosts.
+Hi claremontqualitymanagement! You've successfully authenticated, but GitHub does not provide shell access.
+
+*** AppDynamics stuff ***
+https://814.saas.appdynamics.com
+Access Key:	amqdc6ugfw1w
+Account: 814
+*** sonarqube ***
+https://sonarqube.com/projects/favorite
+taf_sonarqube
+c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+https://sonarqube.com/dashboard/index/se.claremont:TestAutomationFramework
+
+
+.travis.yml
+language: java
+sudo: false
+install: true
+addons:
+  sonarqube:
+    token:
+      secure: "your_token_encrypted_with_travis_encrypt_tool"
+jdk:
+  - oraclejdk8
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
