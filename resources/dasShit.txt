@@ -75,8 +75,8 @@ git checkout tags/<tag_name> -b <branch_name>
 git checkout -b feature/test development
 git checkout tags/v2.2.7-beta7 -b feature/fixModuleStructureFromTagv2.2.7-beta7
 git push origin feature/fixModuleStructureFromTagv2.2.7-beta7
-
 git branch -D feature/test
+
 
 
 *** check summor ***
