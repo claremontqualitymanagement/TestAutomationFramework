@@ -5,10 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
-        <groupId>se.claremont</groupId>
-        <version>v2.2.7-beta12</version>
+        <groupId>se.claremont.parent</groupId>
+        <version>v2.4.0</version>
     </parent>
 
+    <groupId>se.claremont</groupId>
     <artifactId>Core</artifactId>
     <version>v2.2.2</version>
     <packaging>jar</packaging>

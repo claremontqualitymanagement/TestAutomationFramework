@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>se.claremont</groupId>
+    <groupId>se.claremont.parent</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.2.7-beta12</version>
+    <version>v2.4.0</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -13,22 +13,19 @@
     <url>http://www.claremont.se</url>
 
     <properties>
-
-        <global.version>v2.2.7-beta12</global.version>
-
+        <global.version>v2.4.0</global.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
-
         <capability.web.version>v1.0.0</capability.web.version>
         <capability.smart.image.version>v1.0.0</capability.smart.image.version>
         <capability.rest.version>v1.0.0</capability.rest.version>
         <capability.json.version>v1.0.0</capability.json.version>
         <capability.java.version>v1.0.0</capability.java.version>
         <capability.support.version>v1.1.0</capability.support.version>
-        <core.version>v2.2.1</core.version>
+        <core.version>v2.2.2</core.version>
     </properties>
 
     <licenses>
