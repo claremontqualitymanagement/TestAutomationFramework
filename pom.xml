@@ -19,9 +19,9 @@
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>se.claremont.parent</groupId>
+    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.4.7</version>
+    <version>v2.4.8</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
