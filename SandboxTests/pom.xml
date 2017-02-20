@@ -19,14 +19,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <!-- needed for unit 4.12 bug -->
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>

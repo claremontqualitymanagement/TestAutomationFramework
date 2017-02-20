@@ -2,13 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+    <artifactId>TestAutomationFramework</artifactId>
+    <version>${global.version}</version>
+    <packaging>pom</packaging>
+
+    <name>TAF - Test Automation Framework</name>
+    <description>TAF - Test Automation Framework</description>
+    <url>http://www.claremont.se</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <TEST_SERVER>46.101.193.212</TEST_SERVER>
         <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
-        <global.version>v2.4.7</global.version>
+        <!-- global version properties -->
+        <global.version>v2.4.9</global.version>
         <capability.web.version>v1.0.0</capability.web.version>
         <capability.smart.image.version>v1.0.0</capability.smart.image.version>
         <capability.rest.version>v1.0.0</capability.rest.version>
@@ -17,24 +28,6 @@
         <capability.support.version>v1.1.0</capability.support.version>
         <core.version>v2.2.2</core.version>
     </properties>
-
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-    <artifactId>TestAutomationFramework</artifactId>
-    <version>v2.4.8</version>
-    <packaging>pom</packaging>
-
-    <name>TAF - Test Automation Framework</name>
-    <description>TAF - Test Automation Framework</description>
-    <url>http://www.claremont.se</url>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
 
     <modules>
         <module>Core</module>
@@ -50,110 +43,13 @@
         <module>TafFull</module>
     </modules>
 
-    <dependencies>
-
-        <!-- Log4j is used for more primitive, but easily applied logging in the framework. -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
-        </dependency>
-
-        <!-- JUnit is used as a test runner for both unit tests and for test execution from command line from built artifact. -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-        </dependency>
-
-        <!-- SSH support is included for scripting purposes. -->
-        <dependency>
-            <groupId>sshtools</groupId>
-            <artifactId>j2ssh-daemon</artifactId>
-            <version>0.2.9</version>
-        </dependency>
-        <dependency>
-            <groupId>sshtools</groupId>
-            <artifactId>j2ssh-core</artifactId>
-            <version>0.2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>sshtools</groupId>
-            <artifactId>j2ssh-common</artifactId>
-            <version>0.2.9</version>
-        </dependency>
-
-
-        <!-- OkHTTP3 is used for REST calls. -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>mockwebserver</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-
-        <!-- JNA is used for ClassLoading purposes for Java based execution. -->
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>4.2.2</version>
-        </dependency>
-
-        <!-- Fest is used to get Java based testing going, as a compliment to the AWT Robot libraries. -->
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-swing</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-
-        <!-- Selenium is used as a driver for web based testing. -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>3.0.0-beta4</version>
-        </dependency>
-
-        <!-- JSON is used to interprete JSON strings - mainly in REST testing. -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160810</version>
-        </dependency>
-
-        <!-- JCIFS libraries are included for support for Linux-based file systems as well as Windows based ones. -->
-        <dependency>
-            <groupId>jcifs</groupId>
-            <artifactId>jcifs</artifactId>
-            <version>1.3.17</version>
-        </dependency>
-        <dependency>
-            <groupId>org.subethamail</groupId>
-            <artifactId>subethasmtp</artifactId>
-            <version>3.1.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <version>1.4.2.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts-core</artifactId>
-            <version>1.3.8</version>
-        </dependency>
-
-    </dependencies>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <repositories>
         <repository>
@@ -216,6 +112,174 @@
             <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
         </repository>
     </distributionManagement>
+
+    <dependencyManagement>
+        <!-- JCIFS libraries are included for support for Linux-based file systems as well as Windows based ones. -->
+        <dependencies>
+            <dependency>
+                <groupId>jcifs</groupId>
+                <artifactId>jcifs</artifactId>
+                <version>1.3.17</version>
+                <!--<scope>import</scope>-->
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-jdk-http -->
+            <dependency>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-jdk-http</artifactId>
+                <version>2.23.2</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>2.23.2</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>2.23.2</version>
+            </dependency>
+            <!-- Log4j is used for more primitive, but easily applied logging in the framework. -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.21</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+            <!-- needed for unit 4.12 bug -->
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.6.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>0.1.53</version>
+            </dependency>
+            <dependency>
+                <groupId>ant</groupId>
+                <artifactId>ant-jsch</artifactId>
+                <version>1.6.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.subethamail</groupId>
+                <artifactId>subethasmtp</artifactId>
+                <version>3.1.7</version>
+            </dependency>
+            <!-- SSH support is included for scripting purposes. -->
+            <dependency>
+                <groupId>sshtools</groupId>
+                <artifactId>j2ssh-daemon</artifactId>
+                <version>0.2.9</version>
+            </dependency>
+            <dependency>
+                <groupId>sshtools</groupId>
+                <artifactId>j2ssh-core</artifactId>
+                <version>0.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>sshtools</groupId>
+                <artifactId>j2ssh-common</artifactId>
+                <version>0.2.9</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- JUnit is used as a test runner for both unit tests and for test execution from command line from built artifact. -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <!-- SSH support is included for scripting purposes. -->
+        <dependency>
+            <groupId>sshtools</groupId>
+            <artifactId>j2ssh-daemon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sshtools</groupId>
+            <artifactId>j2ssh-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sshtools</groupId>
+            <artifactId>j2ssh-common</artifactId>
+        </dependency>
+
+        <!-- OkHTTP3 is used for REST calls. -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
+        <!-- JNA is used for ClassLoading purposes for Java based execution. -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+
+        <!-- Fest is used to get Java based testing going, as a compliment to the AWT Robot libraries. -->
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-swing</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+        <!-- Selenium is used as a driver for web based testing. -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>3.0.0-beta4</version>
+        </dependency>
+        <!-- JSON is used to interprete JSON strings - mainly in REST testing. -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+        </dependency>
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <version>1.4.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts-core</artifactId>
+            <version>1.3.8</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <!--

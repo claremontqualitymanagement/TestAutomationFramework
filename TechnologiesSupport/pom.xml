@@ -33,45 +33,37 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>2.23.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>2.23.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-jdk-http -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-jdk-http</artifactId>
-            <version>2.23.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.6.2</version>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>0.1.53</version>
         </dependency>
         <dependency>
             <groupId>ant</groupId>
             <artifactId>ant-jsch</artifactId>
-            <version>1.6.5</version>
         </dependency>
         <dependency>
             <groupId>org.subethamail</groupId>
             <artifactId>subethasmtp</artifactId>
-            <version>3.1.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -83,7 +75,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
