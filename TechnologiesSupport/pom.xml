@@ -6,13 +6,13 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>v2.2.7-beta7</version>
+        <version>${global.version}</version>
     </parent>
 
-    <groupId>se.claremont</groupId>
+    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <name>TAF - TechnologiesSupport</name>
     <artifactId>TechnologiesSupport</artifactId>
-    <version>v1.1.1</version>
+    <version>${capability.support.version}</version>
     <packaging>jar</packaging>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>
@@ -66,28 +66,27 @@
             <artifactId>subethasmtp</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>Core</artifactId>
-            <version>v2.2.2</version>
-        </dependency>
-            <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TestingCapabilityJavaGui</artifactId>
-            <version>v1.0.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>2.6.9</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>Core</artifactId>
+            <version>${global.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityJavaGui</artifactId>
+            <version>${capability.java.version}</version>
         </dependency>
     </dependencies>
 

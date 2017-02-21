@@ -5,13 +5,13 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>v2.2.7-beta7</version>
+        <version>${global.version}</version>
     </parent>
 
-    <groupId>se.claremont</groupId>
+    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>TestingCapabilityRestApi</artifactId>
-    <version>v1.0.1</version>
+    <version>${capability.rest.version}</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityRestApi</name>
 
@@ -34,14 +34,14 @@
             <version>3.4.1</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>v2.2.2</version>
+            <version>${global.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
-            <version>v1.0.1</version>
+            <version>${capability.json.version}</version>
         </dependency>
     </dependencies>
 

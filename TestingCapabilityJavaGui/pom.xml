@@ -4,23 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
-        <groupId>scom.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>v2.2.7-beta7</version>
+        <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+        <version>${global.version}</version>
     </parent>
 
-    <groupId>se.claremont</groupId>
+    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>TestingCapabilityJavaGui</artifactId>
-    <version>v1.0.1</version>
+    <version>${capability.java.version}</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityJavaGui</name>
 
     <dependencies>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>Core</artifactId>
-            <version>v2.2.2</version>
-        </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
@@ -30,6 +25,11 @@
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
             <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>Core</artifactId>
+            <version>${global.version}</version>
         </dependency>
     </dependencies>
 

@@ -5,13 +5,13 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>v2.2.7-beta7</version>
+        <version>${global.version}</version>
     </parent>
 
     <groupId>se.claremont</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>TestingCapabilitySmartImageGui</artifactId>
-    <version>v1.0.1</version>
+    <version>${capability.smart.image.version}</version>
     <packaging>jar</packaging>
 
     <name>TAF - EyeAutomateSupport</name>
@@ -27,14 +27,14 @@
             <systemPath>${project.basedir}/src/main/resources/libs/EyeAutomate.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>v2.2.2</version>
+            <version>${global.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TechnologiesSupport</artifactId>
-            <version>v1.1.1</version>
+            <version>${capability.support.version}</version>
         </dependency>
     </dependencies>
 

@@ -36,13 +36,21 @@
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
             <version>${global.version}</version>
-            <!--<version>v2.2.2</version>-->
         </dependency>
-        <!--
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityRestApi</artifactId>
             <version>${capability.rest.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityWeb</artifactId>
+            <version>${capability.web.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityJson</artifactId>
+            <version>${capability.json.version}</version>
         </dependency>
         <dependency>
             <groupId>se.claremont</groupId>
@@ -50,26 +58,15 @@
             <version>${capability.smart.image.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJavaGui</artifactId>
             <version>${capability.java.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TestingCapabilityWeb</artifactId>
-            <version>${capability.web.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TechnologiesSupport</artifactId>
             <version>${capability.support.version}</version>
         </dependency>
-        <dependency>
-            <groupId>se.claremont</groupId>
-            <artifactId>TestingCapabilityJson</artifactId>
-            <version>${capability.json.version}</version>
-        </dependency>
-        -->
     </dependencies>
 
     <distributionManagement>

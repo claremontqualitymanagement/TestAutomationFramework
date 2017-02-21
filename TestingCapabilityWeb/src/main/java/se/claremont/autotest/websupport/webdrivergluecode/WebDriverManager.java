@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.MarionetteDriver;
+//import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -75,9 +75,11 @@ public class WebDriverManager {
             case EDGE:
                 driver = new EdgeBrowser(testCase).setup();
                 break;
+            /*
             case MARIONETTE:
                 driver = new MarionetteBrowser(testCase).setup();
                 break;
+            */
             case FIREFOX:
                 driver = new FirefoxBrowser(testCase).setup();
                 break;
@@ -241,6 +243,7 @@ public class WebDriverManager {
         }
     }
 
+    /*
     class MarionetteBrowser extends Browser{
         MarionetteBrowser (TestCase testCase) { super(testCase);}
 
@@ -259,6 +262,7 @@ public class WebDriverManager {
             return driver;
         }
     }
+    */
 
     class PhantomJsBrowser  extends Browser{
         PhantomJsBrowser(TestCase testCase) { super(testCase);}
