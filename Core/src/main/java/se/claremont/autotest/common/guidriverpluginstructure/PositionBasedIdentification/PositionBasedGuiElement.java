@@ -4,10 +4,9 @@ package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdent
  * Created by jordam on 2016-10-02.
  */
 public interface PositionBasedGuiElement {
-    int left = 0;
-    int right = 0;
-    int top = 0;
-    int bottom = 0;
-    String typeName = "";
-    Object returnElement = null;
+    int getLeftPosition();
+    int getRightPosition();
+    int getTopPosition();
+    int getBottomPosition();
+    String getTypeName(); // Something like: return this.getClass().toString();
 }
