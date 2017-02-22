@@ -53,7 +53,7 @@
             <version>${capability.json.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilitySmartImageGui</artifactId>
             <version>${capability.smart.image.version}</version>
         </dependency>
