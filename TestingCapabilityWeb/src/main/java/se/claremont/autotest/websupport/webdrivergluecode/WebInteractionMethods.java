@@ -1,8 +1,6 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,6 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Methods for interaction with web elements in a web page DOM. Utilizes Selenium WebDriver components.
@@ -85,7 +84,7 @@ public class WebInteractionMethods implements GuiDriver {
             driver = webDriverManager.initializeWebDriver(browserType);
             driver.manage().window().maximize();
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
+            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize if not driver is initialized. Error: " + e.toString());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -107,6 +106,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+
     /**
      * Remote WebDriver enabled constructor. Example of usages: BrowserStack.
      *
@@ -114,6 +114,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param url url to remote web driver
      * @param desiredCapabilities The desired capabilities of the browser driver to use.
      */
+    /*
     public WebInteractionMethods(TestCase testCase, URL url, DesiredCapabilities desiredCapabilities){
         this.testCase = testCase;
         try{
@@ -127,6 +128,7 @@ public class WebInteractionMethods implements GuiDriver {
             haltFurtherExecution();
         }
     }
+    */
 
     /**
      * Returns the test case.
@@ -448,8 +450,6 @@ public class WebInteractionMethods implements GuiDriver {
             haltFurtherExecution();
         }
         try {
-            WebDriverWait wait = new WebDriverWait(driver, 5);
-            wait.until(ExpectedConditions.alertIsPresent());
             Alert alert = driver.switchTo().alert();
             alert.accept();
             log(LogLevel.EXECUTED, "Accepted alert dialogue.");

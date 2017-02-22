@@ -227,17 +227,6 @@
             <artifactId>j2ssh-common</artifactId>
         </dependency>
 
-        <!-- OkHTTP3 is used for REST calls. -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>mockwebserver</artifactId>
-            <version>3.4.1</version>
-        </dependency>
 
         <!-- JNA is used for ClassLoading purposes for Java based execution. -->
         <dependency>
@@ -246,19 +235,6 @@
             <version>4.2.2</version>
         </dependency>
 
-        <!-- Fest is used to get Java based testing going, as a compliment to the AWT Robot libraries. -->
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-swing</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-
-        <!-- Selenium is used as a driver for web based testing. -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>3.0.0-beta4</version>
-        </dependency>
         <!-- JSON is used to interprete JSON strings - mainly in REST testing. -->
         <dependency>
             <groupId>org.json</groupId>

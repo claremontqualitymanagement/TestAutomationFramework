@@ -1,9 +1,10 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
@@ -61,7 +62,8 @@ public class ButtonInteractionTest extends TestSet {
      */
     public void clickingDisabledButton(){
         TestCase testCase = new TestCase(null, "dummy");
-        WebInteractionMethods web = new WebInteractionMethods(testCase);
+        WebDriver driver = new ChromeDriver();
+        WebInteractionMethods web = new WebInteractionMethods(testCase, driver);
         web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         web.clickEvenIfDisabled(new DomElement("button", DomElement.IdentificationType.BY_ID), 1);
         web.makeSureDriverIsClosed();
