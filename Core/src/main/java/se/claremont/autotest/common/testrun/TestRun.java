@@ -47,7 +47,7 @@ public class TestRun {
         return settings.getValue(parameter);
     }
 
-    public static String getCustomSettingsValue(String parameter, String value){
+    public static String getCustomSettingsValue(String parameter){
         initializeIfNotInitialized();
         return settings.getCustomValue(parameter);
     }
