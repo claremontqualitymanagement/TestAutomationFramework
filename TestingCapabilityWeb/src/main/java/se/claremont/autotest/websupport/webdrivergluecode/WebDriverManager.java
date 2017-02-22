@@ -266,10 +266,11 @@ public class WebDriverManager {
 
     class PhantomJsBrowser  extends Browser{
         PhantomJsBrowser(TestCase testCase) { super(testCase);}
+/*
 
         public WebDriver setup(){
             WebDriver driver = null;
-            testCase.log(LogLevel.DEBUG, "Attempting to get hold of drivers for PhantomJS.");
+            testCase.log(LogLevel.DEBUG, "Attempting to get hold of drivers for PhantomJS, assuming PhantomJS binaries are in OS path.");
             long startTime = System.currentTimeMillis();
             try {
                 PhantomJsDriverManager.getInstance().setup();
@@ -291,5 +292,6 @@ public class WebDriverManager {
             }
             return driver;
         }
+        */
     }
 }
