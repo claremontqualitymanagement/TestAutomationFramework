@@ -17,11 +17,11 @@ import se.claremont.autotest.common.testrun.TestRun;
 @RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 public abstract class TestSet {
     @Rule
-    public TestName currentTestName = new TestName();
+    public TestName currentTestNameInternal = new TestName();
 
     @Before
     public void testSetClassInternalSetup(){
-        startUpTestCase(currentTestName.getMethodName());
+        startUpTestCase(currentTestNameInternal.getMethodName());
     }
 
     @After
