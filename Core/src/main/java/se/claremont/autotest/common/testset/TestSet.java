@@ -1,5 +1,11 @@
 package se.claremont.autotest.common.testset;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.support.SupportMethods;
@@ -11,7 +17,27 @@ import se.claremont.autotest.common.testrun.TestRun;
  *
  * Created by jordam on 2016-08-17.
  */
+@RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 public class TestSet {
+    @Rule
+    public TestName currentTestName = new TestName();
+
+    @Before
+    public void setup(){
+        startUpTestCase(currentTestName.getMethodName());
+    }
+
+    @After
+    public void tearDown(){
+        wrapUpTestCase();
+    }
+
+    @AfterClass
+    public static void classTeardown(){
+        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
+    }
+
+
     public TestCase currentTestCase;
     public String name;
     public final KnownErrorsList knownErrorsList = new KnownErrorsList();
