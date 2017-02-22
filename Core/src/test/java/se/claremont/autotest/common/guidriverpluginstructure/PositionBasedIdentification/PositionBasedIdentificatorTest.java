@@ -2,10 +2,6 @@ package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdent
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jordam on 2017-02-22.
