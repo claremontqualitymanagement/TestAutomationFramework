@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>${global.version}</version>
+    <version>v2.4.18</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -19,7 +19,7 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>v2.4.17</global.version>
+        <global.version>v2.4.18</global.version>
         <capability.core.version>v2.2.5</capability.core.version>
         <capability.web.version>v1.0.1</capability.web.version>
         <capability.smart.image.version>v1.0.1</capability.smart.image.version>

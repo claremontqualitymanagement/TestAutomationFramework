@@ -21,6 +21,7 @@ public class CliTestRunner {
 
     private static List<String> remainingArguments ;
     private final static Logger logger = LoggerFactory.getLogger( CliTestRunner.class );
+    private static boolean testMode = false;
 
 //    public static final TestRun testRun = new TestRun();
     private static final String LF = SupportMethods.LF;
@@ -81,7 +82,13 @@ public class CliTestRunner {
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
                 if(parts[0].trim().length() > 0 && parts.length > 1) {
-                    TestRun.settings.setCustomValue(arg.trim().split("=")[0].trim(), arg.trim().substring(arg.trim().indexOf("=") + 1).trim());
+                    String parameterName = parts[0].trim();
+                    for(Settings.SettingParameters parameter : Settings.SettingParameters.values()){
+                        if(parameterName.toUpperCase().equals(parameter.toString())){
+                            parameterName = parameterName.toUpperCase();
+                        }
+                    }
+                    TestRun.settings.setCustomValue(parameterName, arg.trim().substring(arg.trim().indexOf("=") + 1).trim());
                     System.out.println("Setting parameter '" + arg.trim().split("=")[0].trim() + "' to value '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
                     remainingArguments.remove(arg);
                 }
@@ -93,7 +100,8 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         if (args.length == 0) {
             System.out.print(helpText());
-            System.exit(TestRun.ExitCodeTable.INIT_OK.getValue());
+            TestRun.exitCode = TestRun.ExitCodeTable.INIT_OK.getValue();
+            exitWithExitCode();
             return;
         }
         for (String arg : args) {
@@ -108,7 +116,8 @@ public class CliTestRunner {
                     ){
                 System.out.print(helpText());
                 remainingArguments.remove(arg);
-                System.exit(TestRun.ExitCodeTable.INIT_OK.getValue());
+                TestRun.exitCode = TestRun.ExitCodeTable.INIT_OK.getValue();
+                exitWithExitCode();
                 return;
             }
         }
@@ -120,7 +129,7 @@ public class CliTestRunner {
         else
             System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
 
-        System.exit(TestRun.exitCode);
+        if(!testMode) System.exit(TestRun.exitCode);
     }
 
     private static void runDiagnosticTestsIfWanted(){
@@ -154,7 +163,7 @@ public class CliTestRunner {
                     TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
                 }
                 remainingArguments.remove(arg);
-                System.exit(TestRun.exitCode);
+                exitWithExitCode();
                 return;
             }
         }
@@ -200,7 +209,8 @@ public class CliTestRunner {
         if( Utils.getInstance().checkSupportedJavaVersionForTAF() ) return;
         System.out.println( "Running java version (" + Taf.tafUserInfon().getJavaVersion() + ") is not supported for TAF. Please use Java " + Utils.getInstance().SUPPORTED_TAF_JVM_VERSION + " or newer version!" );
         System.out.println(System.lineSeparator() + helpText());
-        System.exit(TestRun.ExitCodeTable.RUN_TAF_ERROR_FATAL.getValue());
+        TestRun.exitCode = TestRun.ExitCodeTable.RUN_TAF_ERROR_FATAL.getValue();
+        exitWithExitCode();
     }
 
     private static String[] stringListToArray(List<String> strings){
@@ -219,11 +229,12 @@ public class CliTestRunner {
         return returnList;
     }
 
-    /**
-     * Actual runner method
-     * @param args arguments
-     */
-    public static void main(String [] args) {
+    static void runInTestMode(String[] args){
+        testMode = true;
+        executeRunSequence(args);
+    }
+
+    private static void executeRunSequence(String[] args){
         System.out.println(System.lineSeparator() + "Executing TAF (TestAutomationFramework) from CLI." + System.lineSeparator());
         remainingArguments = stringArrayToList(args);
         printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
@@ -239,5 +250,13 @@ public class CliTestRunner {
         runTestClasses();
         pause(1000);
         exitWithExitCode();
+    }
+
+    /**
+     * Actual runner method
+     * @param args arguments
+     */
+    public static void main(String [] args) {
+        executeRunSequence(args);
     }
 }
