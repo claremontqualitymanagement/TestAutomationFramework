@@ -19,13 +19,13 @@ public class TestSet_Tests {
 
     @Test
     public void instantiation(){
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         Assert.assertTrue("Expected the TestSet name to be 'TestSet_Tests' but it was '" + testSet.name + "'.", testSet.name.contains("TestSet_Tests"));
     }
 
     @Test
     public void knownErrorsListAssessed(){
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Description", ".*Pattern string.*");
         testSet.startUpTestCase(currentTestName.getMethodName());
         testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
@@ -35,7 +35,7 @@ public class TestSet_Tests {
 
     @Test
     public void knownErrorsListMultiPatternAssessed(){
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Description", "PatternString1");
         testSet.addKnownError("Description", "PatternString2");
         testSet.startUpTestCase(currentTestName.getMethodName());
@@ -47,7 +47,7 @@ public class TestSet_Tests {
 
     @Test
     public void wrapUpCurrentTestSetShould(){
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.startUpTestCase(currentTestName.getMethodName());
         testSet.currentTestCase.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
         //testSet.currentTestCase.evaluateResultStatus();
@@ -79,12 +79,14 @@ public class TestSet_Tests {
 
     @Test
     public void knownErrorsListWithStringArrayAssessed(){
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Description", new String[] {".*Pattern string.*"});
         testSet.startUpTestCase(currentTestName.getMethodName());
         testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
         testSet.currentTestCase.evaluateResultStatus();
         Assert.assertTrue("Expected result status of test case to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.resultStatus.toString() + ".", testSet.currentTestCase.resultStatus == TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
+
+    class TestClass extends TestSet{}
 
 }

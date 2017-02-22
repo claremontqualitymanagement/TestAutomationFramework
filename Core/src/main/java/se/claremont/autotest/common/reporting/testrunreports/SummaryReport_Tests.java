@@ -119,7 +119,7 @@ public class SummaryReport_Tests {
     @Test
     public void knownTestSetErrorTest(){
         SummaryReport summaryReport = new SummaryReport();
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Failed verification is being tested", ".*Failed verification.*");
         TestCase testCase = new TestCase(testSet.knownErrorsList, currentTestName.getMethodName());
         testCase.log(LogLevel.DEBUG, "Test");
@@ -141,7 +141,7 @@ public class SummaryReport_Tests {
     @Test
     public void solvedTestSetRegisteredKnownErrorsTest(){
         SummaryReport summaryReport = new SummaryReport();
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Fixed error", "String that is not encountered.");
         TestCase testCase = new TestCase(testSet.knownErrorsList, currentTestName.getMethodName());
         testCase.log(LogLevel.DEBUG, "Test");
@@ -163,7 +163,7 @@ public class SummaryReport_Tests {
     @Test
     public void bothNewErrorAndSolvedTestSetKnownErrorTest(){
         SummaryReport summaryReport = new SummaryReport();
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Fixed error", "String that is not encountered.");
         TestCase testCase = new TestCase(testSet.knownErrorsList, currentTestName.getMethodName());
         testCase.log(LogLevel.DEBUG, "Test");
@@ -182,4 +182,5 @@ public class SummaryReport_Tests {
         Assert.assertTrue(summaryReport.solvedKnownErrorsList.size() == 1);
     }
 
+    class TestClass extends TestSet{}
 }

@@ -119,7 +119,7 @@ public class HtmlSummaryReport_Test {
     @Test
     public void knownTestSetErrorTest(){
         HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Failed verification is being tested", ".*Failed verification.*");
         TestCase testCase = new TestCase(testSet.knownErrorsList, currentTestName.getMethodName());
         testCase.log(LogLevel.DEBUG, "Test");
@@ -141,7 +141,7 @@ public class HtmlSummaryReport_Test {
     @Test
     public void solvedTestSetRegisteredKnownErrorsTest(){
         HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Fixed error", "String that is not encountered.");
         TestCase testCase = new TestCase(testSet.knownErrorsList, currentTestName.getMethodName());
         testCase.log(LogLevel.DEBUG, "Test");
@@ -163,7 +163,7 @@ public class HtmlSummaryReport_Test {
     @Test
     public void bothNewErrorAndSolvedTestSetKnownErrorTest(){
         HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
-        TestSet testSet = new TestSet();
+        TestClass testSet = new TestClass();
         testSet.addKnownError("Fixed error", "String that is not encountered.");
         TestCase testCase = new TestCase(testSet.knownErrorsList, currentTestName.getMethodName());
         testCase.log(LogLevel.DEBUG, "Test");
@@ -180,6 +180,10 @@ public class HtmlSummaryReport_Test {
         Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
         Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 1);
         Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 1);
+    }
+
+    class TestClass extends TestSet{
+
     }
 
 }

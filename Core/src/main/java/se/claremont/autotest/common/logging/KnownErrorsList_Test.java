@@ -11,7 +11,7 @@ import se.claremont.autotest.common.testset.TestSet;
  * Created by jordam on 2016-08-30.
  */
 public class KnownErrorsList_Test {
-    private final TestSet testTestSet = new TestSet();
+    private final TestClass testTestSet = new TestClass();
 
     @Test
     public void testCaseKnownErrorOnlyOneLogPostThatIsKnownError(){
@@ -67,4 +67,6 @@ public class KnownErrorsList_Test {
         testCase1.evaluateResultStatus();
         Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
     }
+
+    class TestClass extends TestSet{}
 }
