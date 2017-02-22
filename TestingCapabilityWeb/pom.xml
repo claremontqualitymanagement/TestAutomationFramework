@@ -43,13 +43,11 @@
             <artifactId>selenium-server</artifactId>
             <version>3.0.1</version>
         </dependency>
-        <!-- TODO: adding this to fix failed imports -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-remote-driver</artifactId>
             <version>3.0.1</version>
         </dependency>
-        <!-- TODO: adding this to fix failed imports -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-firefox-driver</artifactId>
@@ -68,22 +66,12 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>${global.version}</version>
+            <version>${capability.core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityRestApi</artifactId>
             <version>${capability.rest.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>se.claremont.taf</groupId>
-            <artifactId>JavaGuiTest</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>se.prv</groupId>
-            <artifactId>mypagestest</artifactId>
-            <version>v1.0.10</version>
         </dependency>
     </dependencies>
 

@@ -19,7 +19,8 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>v2.4.14</global.version>
+        <global.version>v2.4.15</global.version>
+        <capability.core.version>v2.2.3</capability.core.version>
         <capability.web.version>v1.0.0</capability.web.version>
         <capability.smart.image.version>v1.0.0</capability.smart.image.version>
         <capability.rest.version>v1.0.0</capability.rest.version>

@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>${global.version}</version>
+            <version>${capability.core.version}</version>
         </dependency>
     </dependencies>
 
