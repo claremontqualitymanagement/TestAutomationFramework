@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>se.claremont</groupId>
+    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>SandboxTests</artifactId>
     <version>v1.0.0</version>
     <packaging>jar</packaging>
@@ -27,22 +27,22 @@
             <artifactId>hamcrest-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TechnologiesSupport</artifactId>
             <version>${capability.support.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityWeb</artifactId>
             <version>${capability.web.version}</version>
         </dependency>
         <dependency>
-            <groupId>se.claremont</groupId>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
             <version>${capability.json.version}</version>
         </dependency>
