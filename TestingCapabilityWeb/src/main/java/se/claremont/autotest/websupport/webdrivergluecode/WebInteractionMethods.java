@@ -16,7 +16,7 @@ import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
+import se.claremont.autotest.javamethods.GenericInteractionMethods;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.LinkCheck;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
@@ -107,7 +107,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
 
-    /**
+    /*
      * Remote WebDriver enabled constructor. Example of usages: BrowserStack.
      *
      * @param testCase The test case to log errors to.
@@ -277,11 +277,14 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement domElement = (DomElement) guiElement;
         WebElement element = null;
         boolean elementIsEnabled = false;
-        while (!elementIsEnabled && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
+        while ((System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
-            if(element != null && element.isDisplayed() && element.isEnabled()){
-                log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled.");
-                return element;
+            if(element != null && element.isEnabled()){
+                elementIsEnabled = true;
+                if(element.isDisplayed()){
+                    log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled.");
+                    return element;
+                }
             }else{
                 wait(50);
             }
@@ -701,8 +704,8 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void saveDesktopScreenshot(){
         try {
-            RobotSwingInteractionMethods robotSwingInteractionMethods = new RobotSwingInteractionMethods(testCase);
-            robotSwingInteractionMethods.captureScreenshot();
+            GenericInteractionMethods robotSwingInteractionMethods = new GenericInteractionMethods(testCase);
+            robotSwingInteractionMethods.takeScreenshot();
         } catch (Exception e){
             testCase.log(LogLevel.DEBUG, "Could not take desktop screenshot: " + e.toString());
         }
@@ -2090,6 +2093,10 @@ public class WebInteractionMethods implements GuiDriver {
         boolean doneOk = false;
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
             TableData tableData = tableDataFromGuiElement(tableElement, false);
+            if(tableData == null) {
+                wait(50);
+                continue;
+            }
             doneOk = tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
         }
         TableData tableData = tableDataFromGuiElement(tableElement, true);

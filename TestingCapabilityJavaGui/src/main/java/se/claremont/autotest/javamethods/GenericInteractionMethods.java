@@ -122,6 +122,10 @@ public class GenericInteractionMethods {
         return (String) methodInvoker.invokeTheFirstEncounteredMethod(component, componentNameGetterMethodsInAttemptOrder);
     }
 
+    public static void takeScreenshot(TestCase testCase){
+        GenericInteractionMethods g = new GenericInteractionMethods(testCase);
+        g.takeScreenshot();
+    }
 
     /**
      * Saves a screenshot of all screens and writes its save path to the test case log.

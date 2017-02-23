@@ -6,7 +6,7 @@ import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.swingsupport.robotswinggluecode.RobotSwingInteractionMethods;
+import se.claremont.autotest.javamethods.GenericInteractionMethods;
 
 import java.io.IOException;
 import java.nio.file.CopyOption;
@@ -266,8 +266,8 @@ public class EyeAutomateDriver {
 
     public void saveDesktopScreenshot() {
         try {
-            RobotSwingInteractionMethods e = new RobotSwingInteractionMethods(this.testCase);
-            e.captureScreenshot();
+            GenericInteractionMethods e = new GenericInteractionMethods(this.testCase);
+            e.takeScreenshot();
         } catch (Exception e) {
             this.testCase.log(LogLevel.DEBUG, "Could not take desktop screenshot: " + e.toString());
         }
