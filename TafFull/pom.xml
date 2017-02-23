@@ -5,7 +5,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>2.5.1</version>
+        <version>2.5.3</version>
     </parent>
 
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
@@ -71,7 +71,7 @@
 
     <distributionManagement>
         <repository>
-            <id>se.claremont</id>
+            <id>com.github.claremontqualitymanagement.TestAutomationFramework</id>
             <name>TestAutomationFramework</name>
             <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
         </repository>
