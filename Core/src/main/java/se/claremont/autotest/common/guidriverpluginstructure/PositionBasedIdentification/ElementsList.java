@@ -177,11 +177,20 @@ public class ElementsList {
         return null;
     }
 
+    @Override
     public String toString(){
         String returnString = "";
         for(PositionBasedGuiElement element :elements){
             returnString += element.toString() + System.lineSeparator();
         }
         return returnString;
+    }
+
+    public PositionBasedGuiElement elementImmediatelyToTheRightOf(PositionBasedGuiElement element){
+        return atTheSameHeightAs(element).keepElementsToTheRightOf(element).theObjectMostToTheLeft();
+    }
+
+    public PositionBasedGuiElement elementImmediatelyToTheLeftOf(PositionBasedGuiElement element){
+        return atTheSameHeightAs(element).keepElementsToTheLeftOf(element).theObjectMostToTheRight();
     }
 }

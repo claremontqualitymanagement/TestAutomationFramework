@@ -1,5 +1,6 @@
 package se.claremont.autotest.javamethods;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -9,6 +10,7 @@ public class JavaAppWindow {
 
 
     @Test
+    @Ignore
     public void test(){
         JavaWindow window = new JavaWindow("Java test application");
         JavaAwtAppWithSomeSwingComponents javaApp = new JavaAwtAppWithSomeSwingComponents();

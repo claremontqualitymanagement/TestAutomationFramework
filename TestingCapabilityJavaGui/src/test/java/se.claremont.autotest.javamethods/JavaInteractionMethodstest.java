@@ -127,7 +127,13 @@ public class JavaInteractionMethodstest extends TestSet {
     @Test
     @Ignore //This test is supposed to fail and take screenshot
     public void takeScreenshotOnFailedClick(){
-        javaApp.show();
+        Assume.assumeTrue(Desktop.isDesktopSupported());
+        try{
+            javaApp.show();
+        }catch (Exception e){
+            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
+        }
+        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement button = new JavaGuiElement("CancelButton", "Canc", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.click(button);
@@ -249,7 +255,14 @@ public class JavaInteractionMethodstest extends TestSet {
 
     @Test
     public void verifyIsDisplayedPositive(){
-        javaApp.show();
+        Assume.assumeTrue(Desktop.isDesktopSupported());
+        try{
+            javaApp.show();
+        }catch (Exception e){
+            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
+        }
+        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
+
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         Assert.assertTrue(javaApp.okButton.isShowing());

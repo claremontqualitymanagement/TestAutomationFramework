@@ -24,9 +24,16 @@ public class PositionBasedTests extends TestSet{
     }
     @Before
     public void testSetup() {
-        if (javaApp == null) javaApp = new JavaAwtAppWithSomeSwingComponents();
-        javaApp.show();
+        Assume.assumeTrue(Desktop.isDesktopSupported());
+        try{
+            if (javaApp == null) javaApp = new JavaAwtAppWithSomeSwingComponents();
+            javaApp.show();
+        }catch (Exception e){
+            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
+        }
+        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
     }
+
     @AfterClass
     public static void classTeardown(){
         if(javaApp != null){

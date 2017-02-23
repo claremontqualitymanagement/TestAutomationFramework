@@ -25,6 +25,12 @@ import java.nio.file.Paths;
 public class ApplicationStarterTest extends TestSet {
     @BeforeClass
     public static void classSetup(){ tempFolder = System.getProperty("java.io.tmpdir"); }
+
+    @Before
+    public void setup(){
+        Assume.assumeTrue(Desktop.isDesktopSupported());
+    }
+
     @After
     public void teardown(){
         if(javaApp != null) javaApp.dispose();;
@@ -91,38 +97,46 @@ public class ApplicationStarterTest extends TestSet {
             java.verifyElementTextContains(button, "k");
             java.verifyElementTextIsRegexMatch(button, ".*k.*");
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
         }
         ApplicationStarter.closeAllWindows();
     }
 
     @Test
     public void appStartFromString(){
-        makeSureJavaAppIsInTempFolder();
-        ApplicationStarter as = new ApplicationStarter(currentTestCase);
-        as.startJar(tempFolder + "JavaApp.jar");
-        GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
-        Object c = button.getRuntimeComponent();
-        Assert.assertNotNull(c);
-        Assert.assertTrue(c.toString().contains("Ok"));
-        ApplicationStarter.closeAllWindows();
+        try {
+            makeSureJavaAppIsInTempFolder();
+            ApplicationStarter as = new ApplicationStarter(currentTestCase);
+            as.startJar(tempFolder + "JavaApp.jar");
+            GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
+            JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+            Object c = button.getRuntimeComponent();
+            Assert.assertNotNull(c);
+            Assert.assertTrue(c.toString().contains("Ok"));
+            ApplicationStarter.closeAllWindows();
+        }catch (Exception e){
+            Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
+        }
     }
 
     @Test
     public void listWindows() throws MalformedURLException {
-        makeSureJavaAppIsInTempFolder();
-        TestCase tempTestCase = new TestCase(null, "dummy");
-        ApplicationStarter as = new ApplicationStarter(tempTestCase);
-        as.startJar(new URL("file:///" + tempFolder.replace("\\", "/") + "JavaApp.jar"));
-        ApplicationStarter.logCurrentWindows(tempTestCase);
-        boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
-            if(logPost.message.contains("Window title: 'Java test application'. Shown:true")){
-                found = true;
+        try{
+            makeSureJavaAppIsInTempFolder();
+            TestCase tempTestCase = new TestCase(null, "dummy");
+            ApplicationStarter as = new ApplicationStarter(tempTestCase);
+            as.startJar(new URL("file:///" + tempFolder.replace("\\", "/") + "JavaApp.jar"));
+            ApplicationStarter.logCurrentWindows(tempTestCase);
+            boolean found = false;
+            for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+                if(logPost.message.contains("Window title: 'Java test application'. Shown:true")){
+                    found = true;
+                }
             }
+            Assert.assertTrue(tempTestCase.testCaseLog.toString(), found);
+        }catch (Exception e){
+            Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
         }
-        Assert.assertTrue(tempTestCase.testCaseLog.toString(), found);
         ApplicationStarter.closeAllWindows();
     }
 
