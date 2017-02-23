@@ -1,14 +1,15 @@
 package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jordam on 2017-02-22.
  */
 public class ElementsList {
-    ArrayList<PositionBasedGuiElement> elements;
+    public ArrayList<? extends PositionBasedGuiElement> elements;
 
-    public ElementsList(ArrayList<PositionBasedGuiElement> elements){
+    public ElementsList(ArrayList<? extends PositionBasedGuiElement> elements){
         this.elements = elements;
     }
 
@@ -16,110 +17,114 @@ public class ElementsList {
         this.elements = new ArrayList<>();
     }
 
-    void add(PositionBasedGuiElement positionBasedGuiElement){
-        if(this.elements == null){
-            this.elements = new ArrayList<>();
-        }
-        this.elements.add(positionBasedGuiElement);
-    }
-
-    public ElementsList(PositionBasedGuiElement positionBasedGuiElement){
-        if(this.elements == null){
-            this.elements = new ArrayList<>();
-        }
-        this.elements.add(positionBasedGuiElement);
-    }
-
-    public ElementsList(PositionBasedGuiElement[] positionBasedGuiElements){
-        if(this.elements == null){
-            this.elements = new ArrayList<>();
-        }
-        for(PositionBasedGuiElement positionBasedGuiElement : positionBasedGuiElements){
-            this.elements.add(positionBasedGuiElement);
-        }
-    }
-
     public ElementsList keepElementsOfType(String typeName){
-        ElementsList returnElements = new ElementsList();
+        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
+
         for(PositionBasedGuiElement possibleElement : this.elements){
-            if(possibleElement.getTypeName().equals(typeName)){
+            String possibleElementTypeName = possibleElement.getTypeName();
+            if(possibleElementTypeName == null) continue;
+            if(possibleElementTypeName.equals(typeName)){
                 returnElements.add(possibleElement);
             }
         }
-        if(returnElements.elements.size() == 0){ //User might have misunderstood object type naming convention
+        if(returnElements.size() == 0){ //User might have misunderstood object type naming convention
             for(PositionBasedGuiElement possibleElement : this.elements){
-                if(possibleElement.getTypeName().contains(typeName)){
+                String possibleElementTypeName = possibleElement.getTypeName();
+                if(possibleElementTypeName == null) continue;
+                if(possibleElementTypeName.contains(typeName)){
                     returnElements.add(possibleElement);
                 }
             }
         }
-        return returnElements;
+        return new ElementsList(returnElements);
     }
 
     public ElementsList keepElementsToTheRightOf(PositionBasedGuiElement relativeElement){
-        ElementsList returnElements = new ElementsList();
+        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for (PositionBasedGuiElement possibleElement : this.elements){
-            if(possibleElement.getLeftPosition() > relativeElement.getRightPosition()) {
+            Integer possibleElementPosition = possibleElement.getLeftPosition();
+            Integer relativeElementPosition = relativeElement.getRightPosition();
+            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition > relativeElementPosition) {
                 returnElements.add(possibleElement);
             }
         }
-        return returnElements;
+        return new ElementsList(returnElements);
     }
 
     public ElementsList keepElementsToTheLeftOf(PositionBasedGuiElement relativeElement){
-        ElementsList returnElements = new ElementsList();
+        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for (PositionBasedGuiElement possibleElement : this.elements){
-            if(possibleElement.getRightPosition() < relativeElement.getLeftPosition()) {
+            Integer possibleElementPosition = possibleElement.getRightPosition();
+            Integer relativeElementPosition = relativeElement.getLeftPosition();
+            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition < relativeElementPosition) {
                 returnElements.add(possibleElement);
             }
         }
-        return returnElements;
+        return new ElementsList(returnElements);
     }
 
     public ElementsList keepElementsAbove(PositionBasedGuiElement relativeElement){
-        ElementsList returnElements = new ElementsList();
+        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for (PositionBasedGuiElement possibleElement : this.elements){
-            if(possibleElement.getBottomPosition() < relativeElement.getTopPosition()) {
+            Integer possibleElementPosition = possibleElement.getBottomPosition();
+            Integer relativeElementPosition = relativeElement.getTopPosition();
+            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition < relativeElementPosition) {
                 returnElements.add(possibleElement);
             }
         }
-        return returnElements;
+        return new ElementsList(returnElements);
     }
 
     public ElementsList keepElementsBelow(PositionBasedGuiElement relativeElement){
-        ElementsList returnElements = new ElementsList();
+        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for (PositionBasedGuiElement possibleElement : this.elements){
-            if(possibleElement.getTopPosition() > relativeElement.getBottomPosition()) {
+            Integer possibleElementPosition = possibleElement.getTopPosition();
+            Integer relativeElementPosition = relativeElement.getBottomPosition();
+            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition > relativeElementPosition) {
                 returnElements.add(possibleElement);
             }
         }
-        return returnElements;
+        return new ElementsList(returnElements);
+    }
+
+    public ElementsList atTheSameHeightAs(PositionBasedGuiElement relativeElement){
+        return atTheSameHeightAs(relativeElement, 10, 10);
     }
 
     public ElementsList atTheSameHeightAs(PositionBasedGuiElement relativeElement, int marginPixelsAbove, int marginPixelsBelow){
-        ElementsList returnElements = new ElementsList();
+        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for(PositionBasedGuiElement possibleElement : this.elements){
-            if(possibleElement.getTopPosition() > relativeElement.getTopPosition() - marginPixelsAbove &&
-                    possibleElement.getBottomPosition() < relativeElement.getBottomPosition() + marginPixelsBelow &&
-                    possibleElement.getBottomPosition() > relativeElement.getTopPosition() &&
-                    possibleElement.getTopPosition() < relativeElement.getBottomPosition()){
+            Integer possibleElementBottomPosition = possibleElement.getBottomPosition();
+            Integer possibleElementTopPosition = possibleElement.getTopPosition();
+            Integer relativeElementTopPosition = relativeElement.getTopPosition();
+            Integer relativeElementBottomPosition = relativeElement.getBottomPosition();
+            if(possibleElementTopPosition == null ||
+                    possibleElementBottomPosition == null ||
+                    relativeElementTopPosition == null ||
+                    relativeElementBottomPosition == null) continue;
+            if(possibleElement.getTopPosition() > relativeElementTopPosition - marginPixelsAbove &&
+                    possibleElementBottomPosition < relativeElementBottomPosition + marginPixelsBelow &&
+                    possibleElementBottomPosition > relativeElementTopPosition &&
+                    possibleElementTopPosition < relativeElementBottomPosition){
                 returnElements.add(possibleElement);
             }
         }
-        return returnElements;
+        return new ElementsList(returnElements);
     }
 
     public PositionBasedGuiElement theObjectMostToTheRight(){
         PositionBasedGuiElement returnElement = null;
+        int mostRight = Integer.MIN_VALUE;
         for(PositionBasedGuiElement element : this.elements){
-            int mostRight;
-            if(returnElement == null){
-                mostRight = 0;
-            } else {
-                mostRight = returnElement.getRightPosition();
-            }
-            if(element.getRightPosition() > mostRight){
+            Integer position = element.getRightPosition();
+            if(position == null) continue;;
+            if(position > mostRight){
                 returnElement = element;
+                mostRight = position;
             }
         }
         return returnElement;
@@ -127,15 +132,13 @@ public class ElementsList {
 
     public PositionBasedGuiElement theObjectMostToTheBottom(){
         PositionBasedGuiElement returnElement = null;
+        int mostExtreme = Integer.MIN_VALUE;
         for(PositionBasedGuiElement element : this.elements){
-            int mostBottom;
-            if(returnElement == null){
-                mostBottom = 0;
-            } else {
-                mostBottom = returnElement.getBottomPosition();
-            }
-            if(element.getBottomPosition() > mostBottom){
+            Integer position = element.getBottomPosition();
+            if(position == null) continue;;
+            if(position > mostExtreme){
                 returnElement = element;
+                mostExtreme = position;
             }
         }
         return returnElement;
@@ -143,15 +146,13 @@ public class ElementsList {
 
     public PositionBasedGuiElement theObjectMostToTheTop(){
         PositionBasedGuiElement returnElement = null;
+        int mostExtreme = Integer.MAX_VALUE;
         for(PositionBasedGuiElement element : this.elements){
-            int mostOnTop;
-            if(returnElement == null){
-                mostOnTop = Integer.MAX_VALUE;
-            } else {
-                mostOnTop = returnElement.getTopPosition();
-            }
-            if(element.getTopPosition() < mostOnTop){
+            Integer position = element.getTopPosition();
+            if(position == null) continue;;
+            if(position < mostExtreme){
                 returnElement = element;
+                mostExtreme = position;
             }
         }
         return returnElement;
@@ -159,15 +160,13 @@ public class ElementsList {
 
     public PositionBasedGuiElement theObjectMostToTheLeft(){
         PositionBasedGuiElement returnElement = null;
+        int mostExtreme = Integer.MAX_VALUE;
         for(PositionBasedGuiElement element : this.elements){
-            int mostToTheLeft;
-            if(returnElement == null){
-                mostToTheLeft = Integer.MAX_VALUE;
-            } else {
-                mostToTheLeft = returnElement.getLeftPosition();
-            }
-            if(element.getLeftPosition() < mostToTheLeft){
+            Integer position = element.getBottomPosition();
+            if(position == null) continue;;
+            if(position < mostExtreme){
                 returnElement = element;
+                mostExtreme = position;
             }
         }
         return returnElement;
@@ -176,5 +175,13 @@ public class ElementsList {
     public PositionBasedGuiElement theOnlyElementThatShouldBeLeft(){
         if(elements.size() > 0) return elements.get(0);
         return null;
+    }
+
+    public String toString(){
+        String returnString = "";
+        for(PositionBasedGuiElement element :elements){
+            returnString += element.toString() + System.lineSeparator();
+        }
+        return returnString;
     }
 }

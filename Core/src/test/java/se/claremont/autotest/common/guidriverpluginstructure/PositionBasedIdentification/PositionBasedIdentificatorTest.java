@@ -1,7 +1,10 @@
 package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 /**
  * Created by jordam on 2017-02-22.
@@ -13,17 +16,19 @@ public class PositionBasedIdentificatorTest {
     TestPositionBasedIdentificationObject bottomRightButton = new TestPositionBasedIdentificationObject("Cancel button", 160, 250, 200, 250, "myTool.Button");
 
     public ElementsList gui(){
-        ElementsList elementsList = new ElementsList();
+        ArrayList<PositionBasedGuiElement> elementsList = new ArrayList<>();
         elementsList.add(bottomLeftButton);
         elementsList.add(leftLabel);
         elementsList.add(bottomRightButton);
         elementsList.add(rightEditField);
-        return elementsList;
+        return new ElementsList(elementsList);
     }
 
     @Test
     public void referencingToTheRightOfAndBelow(){
-        PositionBasedGuiElement element = PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsToTheRightOf(bottomLeftButton).theObjectMostToTheBottom();
+        PositionBasedGuiElement element = PositionBasedIdentificator.fromAllTheElements(gui()).
+                keepElementsToTheRightOf(bottomLeftButton).
+                theObjectMostToTheBottom();
         Assert.assertNotNull("Ended up with no element", element);
         TestPositionBasedIdentificationObject testObject = (TestPositionBasedIdentificationObject) element;
         Assert.assertTrue(testObject.getName(), testObject.getName().equals("Cancel button"));
@@ -71,19 +76,19 @@ public class PositionBasedIdentificatorTest {
             this.name = name;
         }
 
-        public int getLeftPosition() {
+        public Integer getLeftPosition() {
             return left;
         }
 
-        public int getRightPosition() {
+        public Integer getRightPosition() {
             return right;
         }
 
-        public int getTopPosition() {
+        public Integer getTopPosition() {
             return top;
         }
 
-        public int getBottomPosition() {
+        public Integer getBottomPosition() {
             return bottom;
         }
 

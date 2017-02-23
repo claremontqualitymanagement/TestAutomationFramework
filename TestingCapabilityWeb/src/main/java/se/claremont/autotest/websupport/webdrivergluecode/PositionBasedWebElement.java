@@ -26,22 +26,22 @@ public class PositionBasedWebElement implements se.claremont.autotest.common.gui
     }
 
     @Override
-    public int getLeftPosition() {
+    public Integer getLeftPosition() {
         return left;
     }
 
     @Override
-    public int getRightPosition() {
+    public Integer getRightPosition() {
         return right;
     }
 
     @Override
-    public int getTopPosition() {
+    public Integer getTopPosition() {
         return top;
     }
 
     @Override
-    public int getBottomPosition() {
+    public Integer getBottomPosition() {
         return bottom;
     }
 

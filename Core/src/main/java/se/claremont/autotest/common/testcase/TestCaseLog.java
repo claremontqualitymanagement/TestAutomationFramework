@@ -98,6 +98,7 @@ public class TestCaseLog {
      * @param message The string message of the testCaseLog
      */
     public void log(LogLevel logLevel, String message){
+        if(message == null) message = "[null]";
         String testStep = "Framework actions";
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
