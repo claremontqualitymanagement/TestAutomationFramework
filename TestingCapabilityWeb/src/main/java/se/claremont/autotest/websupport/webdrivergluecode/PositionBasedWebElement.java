@@ -24,4 +24,29 @@ public class PositionBasedWebElement implements se.claremont.autotest.common.gui
         this.typeName = webElement.getTagName();
         this.returnElement = webElement;
     }
+
+    @Override
+    public int getLeftPosition() {
+        return left;
+    }
+
+    @Override
+    public int getRightPosition() {
+        return right;
+    }
+
+    @Override
+    public int getTopPosition() {
+        return top;
+    }
+
+    @Override
+    public int getBottomPosition() {
+        return bottom;
+    }
+
+    @Override
+    public String getTypeName() {
+        return typeName;
+    }
 }

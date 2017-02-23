@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.util.Properties;
 
 /**
+ * This class implements support for SCP, Secure Copy. This is a mechanism to copy files on Linux file systems.
+ *
  * Created by magnusolsson on 2016-12-05.
  */
 public class ScpImpl implements Scp {
