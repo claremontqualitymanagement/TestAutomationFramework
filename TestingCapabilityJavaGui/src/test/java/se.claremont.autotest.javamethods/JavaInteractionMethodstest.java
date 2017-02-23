@@ -301,4 +301,23 @@ public class JavaInteractionMethodstest extends TestSet {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Does not exist", JavaGuiElement.IdType.ELEMENT_TEXT);
         Assert.assertFalse(java.exists(button));
     }
+
+    @Test
+    public void clickMethodShouldMoveMouseAndClick(){
+        Assume.assumeTrue(Desktop.isDesktopSupported());
+        try{
+            javaApp.show();
+        }catch (Exception e){
+            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
+        }
+        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
+
+        GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
+        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        Assert.assertTrue(javaApp.okButton.isShowing());
+        java.click(button);
+        java.wait(2000);
+        Assert.assertTrue(java.isDisplayedWithinTimeout(button, java.standardTimeout));
+
+    }
 }

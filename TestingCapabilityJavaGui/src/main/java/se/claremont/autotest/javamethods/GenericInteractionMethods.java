@@ -8,8 +8,10 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class GenericInteractionMethods {
     MethodInvoker methodInvoker;
     String[] textGettingMethodsInAttemptOrder =             { "getLabel()", "getText()" };
     String[] componentNameGetterMethodsInAttemptOrder =     { "getName()" };
-    String[] componentLocationGetterMethodsInAttemptOrder = { "getLocation()" };
+    String[] componentLocationGetterMethodsInAttemptOrder = { "getLocationOnScreen()", "getLocation()" };
     String[] componentHightGetterMethodsInAttemptOrder =    { "getHeight()" };
     String[] componentWidthGetterMethodsInAttemptOrder =    { "getWidth()" };
     String[] componentWriteMethodsInAttemptOrder =          { "setText(java.lang.String)", "write(java.lang.String)", "type(java.lang.String)" };
@@ -202,6 +204,7 @@ public class GenericInteractionMethods {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Pauses execution the stated time.
