@@ -19,6 +19,7 @@ import java.util.jar.Attributes;
 /**
  * Created by jordam on 2017-02-10.
  */
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class ApplicationStarter {
 
     JarClassLoader classLoader;
@@ -108,7 +109,7 @@ public class ApplicationStarter {
             uc = (JarURLConnection)u.openConnection();
             attr = uc.getMainAttributes();
         } catch (IOException e) {
-            e.printStackTrace();
+            log(LogLevel.EXECUTION_PROBLEM, "Problem opening jar file:" + e.toString());
         }
         String returnString = attr != null
                 ? attr.getValue(Attributes.Name.MAIN_CLASS)

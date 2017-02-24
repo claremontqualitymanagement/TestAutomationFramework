@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-02-23.
  */
+@SuppressWarnings("WeakerAccess")
 public class PositionBasedTests extends TestSet{
 
     @BeforeClass
@@ -78,10 +79,11 @@ public class PositionBasedTests extends TestSet{
     @Test
     public void getText2(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
-        Object textField = PositionBasedIdentificator.
+        JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
                 fromAllTheElements(JavaTestApplication.panel0().getSubElements()).
-                atTheSameHeightAs(JavaTestApplication.textField(), 20, 20).
+                atTheSameHeightAs(JavaTestApplication.textField(), 10, 10).
                 theObjectMostToTheRight();
-        Assert.assertTrue(java.getText(((JavaGuiElement)textField).getRuntimeComponent()).equals("Checkbox Swing"));
+        java.takeScreenshot();
+        Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox Swing"));
     }
 }

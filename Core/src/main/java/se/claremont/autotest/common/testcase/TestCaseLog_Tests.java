@@ -167,14 +167,14 @@ public class TestCaseLog_Tests {
     @Test
     public void methodHasEncounteredErrorShouldReturnFalseOnEmpty(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
-        Assert.assertTrue(testCaseLog.hasEncounteredErrors() == false);
+        Assert.assertTrue(!testCaseLog.hasEncounteredErrors());
     }
 
     @Test
     public void methodHasEncounteredErrorShouldReturnFalseOnNoErrors(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         testCaseLog.log(LogLevel.DEBUG, "Debug");
-        Assert.assertTrue(testCaseLog.hasEncounteredErrors() == false);
+        Assert.assertTrue(!testCaseLog.hasEncounteredErrors());
     }
 
     @Test

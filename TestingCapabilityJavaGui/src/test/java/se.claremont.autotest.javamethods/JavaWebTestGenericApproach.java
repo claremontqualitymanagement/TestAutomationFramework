@@ -1,6 +1,5 @@
 package se.claremont.autotest.javamethods;
 
-import se.claremont.autotest.common.testset.TestSet;
 /*
 import org.junit.*;
 import org.openqa.selenium.WebElement;
@@ -11,6 +10,7 @@ import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 /**
  * Created by jordam on 2017-02-22.
  */
+@SuppressWarnings("WeakerAccess")
 public class JavaWebTestGenericApproach  {
 /*
     WebInteractionMethods web;

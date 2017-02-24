@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 @XmlRootElement (name = "ServerConfiguration")
 @XmlAccessorType (XmlAccessType.FIELD)
 public class ServerConfiguration {
@@ -91,10 +92,12 @@ public class ServerConfiguration {
         this.subsystem.add(subsystemI);
     }
 
+    @SuppressWarnings("WeakerAccess")
     @XmlAccessorType (XmlAccessType.FIELD)
     @XmlType (name = "")
     public static class ServerHostKey {
 
+        @SuppressWarnings("WeakerAccess")
         @XmlAttribute (name = "PrivateKeyFile", required = true)
         protected String privateKeyFile;
 
@@ -107,14 +110,18 @@ public class ServerConfiguration {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     @XmlAccessorType (XmlAccessType.FIELD)
     @XmlType (name = "")
     public static class Subsystem {
 
+        @SuppressWarnings("WeakerAccess")
         @XmlAttribute (name = "Name", required = true)
         protected String name;
+        @SuppressWarnings("WeakerAccess")
         @XmlAttribute (name = "Type", required = true)
         protected String type;
+        @SuppressWarnings("WeakerAccess")
         @XmlAttribute (name = "Provider", required = true)
         protected String provider;
 

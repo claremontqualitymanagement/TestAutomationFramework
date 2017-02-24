@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 
+@SuppressWarnings({"SameParameterValue", "RedundantThrows"})
 public class SSHServerResource extends ExternalResource {
 
     private static XmlServerConfigurationContext serverPlatformConfiguration;
@@ -149,7 +150,7 @@ public class SSHServerResource extends ExternalResource {
         ConfigurationLoader.initialize(false, context2);
     }
 
-    private void setupHomeDir () throws IOException {
+    private void setupHomeDir () {
         File homeBase = new File(BASE_DIR, "home");
         homeBase.mkdirs();
         File userHome = new File(homeBase, userId);
@@ -203,7 +204,7 @@ public class SSHServerResource extends ExternalResource {
         marshall(serverConfig, "server.xml");
     }
 
-    private void marshall (Object source, String fileName) throws IOException {
+    private void marshall (Object source, String fileName) {
         File outputFile = new File(CONFIG_DIR, fileName);
         JAXB.marshal(source, outputFile);
     }

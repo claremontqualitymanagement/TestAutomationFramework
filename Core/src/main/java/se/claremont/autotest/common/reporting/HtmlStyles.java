@@ -7,6 +7,7 @@ import java.util.ArrayList;
  *
  * Created by jordam on 2017-01-21.
  */
+@SuppressWarnings("WeakerAccess")
 public class HtmlStyles {
     public static ArrayList<String> styleSections = new ArrayList<>();
 

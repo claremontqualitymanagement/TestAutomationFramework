@@ -18,6 +18,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-10-18.
  */
+@SuppressWarnings("WeakerAccess")
 public class CsvParser {
     private final static Logger logger = LoggerFactory.getLogger( CsvParser.class );
     public TableData csvContent;
@@ -30,6 +31,7 @@ public class CsvParser {
         csvContent = new TableData(null, "csv data", csvString, SupportMethods.LF, ",");
     }
 
+    @SuppressWarnings("SameParameterValue")
     public CsvParser(String csvString, String dataValueDelimiter){
         csvContent = new TableData(null, "csv data", csvString, SupportMethods.LF, dataValueDelimiter);
     }

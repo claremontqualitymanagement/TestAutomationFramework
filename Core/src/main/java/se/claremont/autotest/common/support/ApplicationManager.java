@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Created by jordam on 2016-09-18.
  */
+@SuppressWarnings("WeakerAccess")
 public class ApplicationManager {
 
     private final static Logger logger = LoggerFactory.getLogger( ApplicationManager.class );

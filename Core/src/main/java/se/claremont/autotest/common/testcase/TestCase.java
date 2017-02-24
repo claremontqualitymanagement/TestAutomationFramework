@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  *
  * Created by jordam on 2016-08-17.
  */
+@SuppressWarnings("WeakerAccess")
 public class TestCase {
     public TestCaseLog testCaseLog;
     public String testName;

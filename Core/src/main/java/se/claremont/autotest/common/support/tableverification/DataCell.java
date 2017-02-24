@@ -5,6 +5,7 @@ import se.claremont.autotest.common.support.SupportMethods;
 /**
  * Created by jordam on 2017-01-28.
  */
+@SuppressWarnings("WeakerAccess")
 class DataCell {
     String correspontingHeadline;
     String dataContent;

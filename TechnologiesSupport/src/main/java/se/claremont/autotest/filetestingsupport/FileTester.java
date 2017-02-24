@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by jordam on 2016-10-04.
  */
+@SuppressWarnings("WeakerAccess")
 public class FileTester {
     TestCase testCase;
 

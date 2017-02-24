@@ -20,6 +20,7 @@ import java.util.List;
  *
  * Created by jordam on 2017-01-28.
  */
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class TableData {
     final String tableElementName;
     final String originalContent;

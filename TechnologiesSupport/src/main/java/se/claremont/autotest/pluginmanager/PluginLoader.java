@@ -12,6 +12,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-10-28.
  */
+@SuppressWarnings("WeakerAccess")
 public class PluginLoader {
     List<File> jarFiles = new ArrayList<>();
 

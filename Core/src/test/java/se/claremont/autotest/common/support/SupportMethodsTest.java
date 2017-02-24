@@ -6,10 +6,6 @@ import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.support.SupportMethods;
 
 import java.io.File;
-import java.util.Date;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * SecondSet_Test for methods in the SupportMethods class

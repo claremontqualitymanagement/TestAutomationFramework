@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Created by jordam on 2016-10-02.
  */
+@SuppressWarnings("WeakerAccess")
 public class PositionBasedIdentificator {
 
     public static ElementsList fromAllTheElements(ArrayList<? extends PositionBasedGuiElement> elements){

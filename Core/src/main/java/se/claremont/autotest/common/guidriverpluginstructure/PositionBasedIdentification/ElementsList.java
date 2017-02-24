@@ -1,11 +1,11 @@
 package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jordam on 2017-02-22.
  */
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class ElementsList {
     public ArrayList<? extends PositionBasedGuiElement> elements;
 
@@ -97,19 +97,22 @@ public class ElementsList {
 
     public ElementsList atTheSameHeightAs(PositionBasedGuiElement relativeElement, int marginPixelsAbove, int marginPixelsBelow){
         ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
+        Integer relativeElementTopPosition = relativeElement.getTopPosition();
+        if(relativeElementTopPosition == null)return new ElementsList(returnElements);
+        Integer relativeElementBottomPosition = relativeElement.getBottomPosition();
+        if(relativeElementBottomPosition == null) return new ElementsList(returnElements);
+        System.out.println("Relative element '" + relativeElement.getTypeName() + "': top=" + relativeElementTopPosition+ ", bottom=" + relativeElementBottomPosition);
         for(PositionBasedGuiElement possibleElement : this.elements){
             Integer possibleElementBottomPosition = possibleElement.getBottomPosition();
+            if(possibleElementBottomPosition == null)continue;
             Integer possibleElementTopPosition = possibleElement.getTopPosition();
-            Integer relativeElementTopPosition = relativeElement.getTopPosition();
-            Integer relativeElementBottomPosition = relativeElement.getBottomPosition();
-            if(possibleElementTopPosition == null ||
-                    possibleElementBottomPosition == null ||
-                    relativeElementTopPosition == null ||
-                    relativeElementBottomPosition == null) continue;
-            if(possibleElement.getTopPosition() > relativeElementTopPosition - marginPixelsAbove &&
-                    possibleElementBottomPosition < relativeElementBottomPosition + marginPixelsBelow &&
-                    possibleElementBottomPosition > relativeElementTopPosition &&
-                    possibleElementTopPosition < relativeElementBottomPosition){
+            if(possibleElementTopPosition == null)continue;
+            System.out.println("Possible element '" + possibleElement.getTypeName() + "': top=" + possibleElementTopPosition + ", bottom=" + possibleElementBottomPosition);
+            if(possibleElementTopPosition >= relativeElementTopPosition - marginPixelsAbove && //Nedanför överkantens marginal
+                    possibleElementBottomPosition <= relativeElementBottomPosition + marginPixelsBelow //&& //Ovanför nederkantens marginal
+                    //possibleElementBottomPosition >= relativeElementBottomPosition - marginPixelsBelow //&&
+                    //possibleElementTopPosition <= relativeElementTopPosition + marginPixelsAbove){
+                            ){
                 returnElements.add(possibleElement);
             }
         }

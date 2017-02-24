@@ -26,6 +26,7 @@ import java.util.Date;
  *
  * Created by jordam on 2016-08-27.
  */
+@SuppressWarnings("WeakerAccess")
 public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
     private final TestCase testCase;

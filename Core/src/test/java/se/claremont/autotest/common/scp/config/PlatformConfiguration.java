@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("SameParameterValue")
 @XmlRootElement ( name = "PlatformConfiguration" )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PlatformConfiguration {

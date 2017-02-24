@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.support.tableverification.TableData;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URL;

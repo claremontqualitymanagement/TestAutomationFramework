@@ -10,6 +10,7 @@ import java.net.URI;
 /**
  * Created by jordam on 2016-10-10.
  */
+@SuppressWarnings("WeakerAccess")
 public class RestServer {
 
     private final static int port = 9998;

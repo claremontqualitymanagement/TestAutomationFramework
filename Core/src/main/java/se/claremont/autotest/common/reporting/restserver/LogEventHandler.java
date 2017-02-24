@@ -10,6 +10,7 @@ import javax.ws.rs.core.Request;
 /**
  * Created by jordam on 2016-10-10.
  */
+@SuppressWarnings("SameReturnValue")
 @Path("logevent")
 public class LogEventHandler {
 

@@ -14,6 +14,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-11-29.
  */
+@SuppressWarnings("WeakerAccess")
 public class SqlInteractionManager {
     Connection connection = null;
     TestCase testCase;
@@ -47,7 +48,7 @@ public class SqlInteractionManager {
             try {
                 content = resultSet.getString(columnCount);
                 columnCount++;
-            } catch (SQLException e) {
+            } catch (SQLException ignored) {
             }
             if(content == null){
                 continueToNextColumn = false;

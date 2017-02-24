@@ -9,7 +9,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 //import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;

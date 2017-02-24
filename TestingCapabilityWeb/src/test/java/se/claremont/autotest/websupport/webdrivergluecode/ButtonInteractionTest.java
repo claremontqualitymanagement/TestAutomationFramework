@@ -10,9 +10,6 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
 
-import java.io.File;
-import java.net.URL;
-
 /**
  * Tests for the WebInteractionMethods class
  *

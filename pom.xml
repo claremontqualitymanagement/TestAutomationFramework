@@ -232,12 +232,6 @@
             <version>4.2.2</version>
         </dependency>
 
-        <!-- JSON is used to interprete JSON strings - mainly in REST testing. -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160810</version>
-        </dependency>
         <dependency>
             <groupId>org.subethamail</groupId>
             <artifactId>subethasmtp</artifactId>

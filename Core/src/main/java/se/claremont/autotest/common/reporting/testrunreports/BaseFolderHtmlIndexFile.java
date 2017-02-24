@@ -15,6 +15,7 @@ import java.util.Date;
 /**
  * Created by jordam on 2017-01-05.
  */
+@SuppressWarnings("WeakerAccess")
 public class BaseFolderHtmlIndexFile {
     SimpleDateFormat directoryPartTimeFormat = new SimpleDateFormat("yyyyMMdd HHmmss");
     SimpleDateFormat outputTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

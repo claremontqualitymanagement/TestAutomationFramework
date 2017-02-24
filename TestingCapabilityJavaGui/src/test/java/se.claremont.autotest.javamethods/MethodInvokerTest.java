@@ -6,6 +6,7 @@ import se.claremont.autotest.common.testset.TestSet;
 /**
  * Created by jordam on 2017-02-11.
  */
+@SuppressWarnings("WeakerAccess")
 public class MethodInvokerTest extends TestSet {
     String[] args = new String[]{};
     JavaAwtAppWithSomeSwingComponents javaApp;

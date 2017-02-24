@@ -9,7 +9,6 @@
         <version>2.5.3</version>
     </parent>
 
-    <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <name>TAF - TechnologiesSupport</name>
     <artifactId>TechnologiesSupport</artifactId>
     <version>${capability.support.version}</version>

@@ -99,6 +99,7 @@ public class Utils {
      * @param pathToFile The path to the file to check existance of.
      * @return true if file path exists and is file
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean doesFileExists(String pathToFile) {
 
         try {

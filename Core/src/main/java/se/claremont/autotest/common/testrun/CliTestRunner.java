@@ -17,6 +17,7 @@ import java.util.List;
  *
  * Created by jordam on 2016-08-27.
  */
+@SuppressWarnings("WeakerAccess")
 public class CliTestRunner {
 
     private static List<String> remainingArguments ;
@@ -155,7 +156,7 @@ public class CliTestRunner {
                     try {
                         thread.join();
                     } catch (InterruptedException e) {
-
+                        System.out.println(e.toString());
                     }
                 }
 
@@ -193,10 +194,10 @@ public class CliTestRunner {
             System.out.println(System.lineSeparator() + "No test classes given for execution." + System.lineSeparator()+ System.lineSeparator() + "If in doubt of how to use this command line interface, please try the help switch or the Wiki.");
             return null;
         }
-        Result result = junit.run(classes.toArray(new Class[0]));
-        return result;
+        return junit.run(classes.toArray(new Class[0]));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void pause(int milliseconds) {
         try {
             Thread.sleep(milliseconds);

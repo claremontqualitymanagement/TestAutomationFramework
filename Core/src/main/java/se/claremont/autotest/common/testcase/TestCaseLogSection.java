@@ -12,6 +12,7 @@ import java.util.Date;
 /**
  * Created by jordam on 2016-11-01.
  */
+@SuppressWarnings("WeakerAccess")
 public class TestCaseLogSection {
      ArrayList<LogPost> logPostList = new ArrayList<>();
     Date startTime;

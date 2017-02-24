@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-01-28.
  */
+@SuppressWarnings("WeakerAccess")
 public class TableRow {
     List<DataCell> dataCells = new ArrayList<>();
     TableRowEvaluationStatus tableRowEvaluationStatus = TableRowEvaluationStatus.UNEVALUATED;

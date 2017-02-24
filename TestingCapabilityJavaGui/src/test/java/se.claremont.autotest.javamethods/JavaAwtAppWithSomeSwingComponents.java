@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 /**
  * Created by jordam on 2017-02-08.
  */
+@SuppressWarnings("WeakerAccess")
 public class JavaAwtAppWithSomeSwingComponents extends Frame{
 
     JButton okButton = new JButton("Ok");

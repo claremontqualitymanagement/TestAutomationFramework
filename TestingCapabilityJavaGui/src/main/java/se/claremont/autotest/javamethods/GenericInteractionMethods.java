@@ -8,36 +8,26 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 /**
  * Class enabling interaction with rich Java application GUIs
  *
  * Created by jordam on 2017-02-08.
  */
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class GenericInteractionMethods {
     TestCase testCase;
     public int standardTimeout = 5;
     MethodInvoker methodInvoker;
-    String[] textGettingMethodsInAttemptOrder =             { "getLabel()", "getText()" };
-    String[] componentNameGetterMethodsInAttemptOrder =     { "getName()" };
-    String[] componentLocationGetterMethodsInAttemptOrder = { "getLocationOnScreen()", "getLocation()" };
-    String[] componentHightGetterMethodsInAttemptOrder =    { "getHeight()" };
-    String[] componentWidthGetterMethodsInAttemptOrder =    { "getWidth()" };
-    String[] componentWriteMethodsInAttemptOrder =          { "setText(java.lang.String)", "write(java.lang.String)", "type(java.lang.String)" };
-    String[] componentIsVisibleMethodsInAttemptOrder =      { "isShowing()", "isDisplayedWithinTimeout()", "isVisible()" };
-    String[] componentParentGetterMethodsInAttemptOrder =   { "getParent()" };
-    String[] subComponentCountMethodsInAttemptOrder =       { "getComponentCount()" };
-    String[] subComponentGetterMethodsInAttemptOrder =      { "getComponent(int)" };
 
 
     public GenericInteractionMethods(TestCase testCase){
@@ -52,7 +42,7 @@ public class GenericInteractionMethods {
      * @return Returns the parent
      */
     public Object getParentComponent(Object component){
-        Object parent = methodInvoker.invokeTheFirstEncounteredMethod(component, componentParentGetterMethodsInAttemptOrder);
+        Object parent = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentParentGetterMethodsInAttemptOrder);
         if(parent == null){
             log(LogLevel.DEBUG, "Could not find any parent for element " + component.toString() + ".");
         }else {
@@ -73,7 +63,7 @@ public class GenericInteractionMethods {
             log(LogLevel.DEBUG, "Could not get any contaner component since no parent element could be identified.");
             return null;
         }
-        if(methodInvoker.invokeTheFirstEncounteredMethod(parent, subComponentGetterMethodsInAttemptOrder) != null){
+        if(methodInvoker.invokeTheFirstEncounteredMethod(parent, MethodDeclarations.subComponentGetterMethodsInAttemptOrder) != null){
             log(LogLevel.DEBUG, "Found container component.");
             return parent;
         } else {
@@ -83,23 +73,59 @@ public class GenericInteractionMethods {
 
     public ArrayList<Object> allSubElementsOf(Object component){
         if(component.getClass().equals(JavaGuiElement.class)) component = ((JavaGuiElement) component).getRuntimeComponent();
-        Integer subComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, subComponentCountMethodsInAttemptOrder);
+
+        ArrayList<Object> componentList = new ArrayList<>();
+        Object[] returnList = (Object[]) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+        if(returnList != null && returnList.length > 0){
+            for(Object object : returnList){
+                componentList.add(object);
+                componentList.addAll(addSubComponents(object));
+            }
+            return componentList;
+        }
+        Integer componentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        if(componentCount == null)return componentList;
+        for(int i = 0; i < componentCount; i++){
+            Object subElement = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            if(subElement == null) continue;
+            componentList.add(subElement);
+            componentList.addAll(addSubComponents(subElement));
+        }
+        return componentList;
+
+
+/*
+
+        Integer subComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
         if(subComponentCount == null){
             log(LogLevel.DEBUG, "Component to get sub-component from is not a container object. Reaching for its parent object.");
             component = getContainerComponent(component);
         }
-        subComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, subComponentCountMethodsInAttemptOrder);
+        subComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
         if(subComponentCount == null){
             log(LogLevel.DEBUG, "Could not identify any container object for the given object.");
             return null;
         }
         ArrayList<java.lang.Object> objectList = new ArrayList<>();
         for(int i = 0; i < subComponentCount; i++){
-            java.lang.Object subElement = methodInvoker.invokeTheFirstEncounteredMethod(component, subComponentGetterMethodsInAttemptOrder, i);
+            java.lang.Object subElement = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
             if(subElement != null) objectList.add(subElement);
         }
         return objectList;
-     }
+  */
+    }
+
+    private List<Object> addSubComponents(Object component){
+        List<Object> componentList = new ArrayList<>();
+        if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
+        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        for(int i = 0; i<numberOfSubItems; i++){
+            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            componentList.add(o);
+            componentList.addAll(addSubComponents(o));
+        }
+        return componentList;
+    }
 
 
     /**
@@ -119,7 +145,7 @@ public class GenericInteractionMethods {
      * @return Returns the given name the application programmer gave it when creating the GUI.
      */
     public String getName(Object component){
-        return (String) methodInvoker.invokeTheFirstEncounteredMethod(component, componentNameGetterMethodsInAttemptOrder);
+        return (String) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentNameGetterMethodsInAttemptOrder);
     }
 
     public static void takeScreenshot(TestCase testCase){
@@ -176,8 +202,7 @@ public class GenericInteractionMethods {
             log(LogLevel.DEBUG, "Could not retrieve any text from a null object.");
             return null;
         }
-        String returnString = (String) methodInvoker.invokeTheFirstEncounteredMethod(component, textGettingMethodsInAttemptOrder);
-        return returnString;
+        return (String) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.textGettingMethodsInAttemptOrder);
     }
 
     /**
@@ -246,7 +271,7 @@ public class GenericInteractionMethods {
             return;
         }
         if(performCheckAfterwards){
-            for(String methodName : componentWriteMethodsInAttemptOrder){
+            for(String methodName : MethodDeclarations.componentWriteMethodsInAttemptOrder){
                 methodInvoker.invokeMethod(component, methodName, textToWrite);
                 String actualText = getText(guiElement);
                 if(actualText.equals(textToWrite)){
@@ -261,7 +286,7 @@ public class GenericInteractionMethods {
                 }
             }
         } else {
-            methodInvoker.invokeTheFirstEncounteredMethod(component, componentWriteMethodsInAttemptOrder, textToWrite);
+            methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentWriteMethodsInAttemptOrder, textToWrite);
             log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ", without making sure text was correct.");
         }
         log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to " + guiElement.getName() + ". Text in element after operation is '" + getText(guiElement) + "'.");
@@ -418,7 +443,7 @@ public class GenericInteractionMethods {
             log(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " is displayed, but it does not exist.");
             return false;
         }
-        Boolean shown = (Boolean) methodInvoker.invokeTheFirstEncounteredMethod(guiElement.getRuntimeComponent(), componentIsVisibleMethodsInAttemptOrder);
+        Boolean shown = (Boolean) methodInvoker.invokeTheFirstEncounteredMethod(guiElement.getRuntimeComponent(), MethodDeclarations.componentIsVisibleMethodsInAttemptOrder);
         if(shown == null){
             log(LogLevel.DEBUG, "Check if element " + guiElement.getName() + " is displayed, and applicable method does not exist.");
             return false;
@@ -427,7 +452,7 @@ public class GenericInteractionMethods {
             return true;
         }
         while (System.currentTimeMillis() - startTime < timeoutInSeconds*1000){
-            shown = (Boolean) methodInvoker.invokeTheFirstEncounteredMethod(guiElement.getRuntimeComponent(), componentIsVisibleMethodsInAttemptOrder);
+            shown = (Boolean) methodInvoker.invokeTheFirstEncounteredMethod(guiElement.getRuntimeComponent(), MethodDeclarations.componentIsVisibleMethodsInAttemptOrder);
             if(shown){
                 log(LogLevel.DEBUG, "Check if element " + guiElement.getName() + " is displayed, and it is.");
                 return true;
@@ -439,7 +464,7 @@ public class GenericInteractionMethods {
     }
 
     public boolean isDisplayed(GuiComponent guiElement){
-        Boolean displayed = (Boolean)methodInvoker.invokeTheFirstEncounteredMethod(guiElement, componentIsVisibleMethodsInAttemptOrder);
+        Boolean displayed = (Boolean)methodInvoker.invokeTheFirstEncounteredMethod(guiElement, MethodDeclarations.componentIsVisibleMethodsInAttemptOrder);
         if(displayed == null){
             log(LogLevel.FRAMEWORK_ERROR, "No applicable method seemed to be found for checking if " + guiElement.getName() + " was displayed.");
             return false;
@@ -515,9 +540,9 @@ public class GenericInteractionMethods {
         }
         Point clickPoint = null;
         try{
-            Point upperLeftCorner = (Point) methodInvoker.invokeTheFirstEncounteredMethod(component, componentLocationGetterMethodsInAttemptOrder);
-            int width = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, componentWidthGetterMethodsInAttemptOrder);
-            int height = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, componentHightGetterMethodsInAttemptOrder);
+            Point upperLeftCorner = (Point) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentLocationGetterMethodsInAttemptOrder);
+            int width = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentWidthGetterMethodsInAttemptOrder);
+            int height = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentHightGetterMethodsInAttemptOrder);
             clickPoint = new Point(upperLeftCorner.x + width/2, upperLeftCorner.y + height/2);
             log(LogLevel.DEBUG, "Found clickable point for component " + guiElement.getName() + ": " + clickPoint.x + "x" + clickPoint.y + ".");
         }catch (Exception e){

@@ -107,7 +107,7 @@ public class SupportMethods {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: Could not write content to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content);
+            System.out.println("Error: Could not write content to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content.toString());
         }
     }
 
@@ -223,6 +223,7 @@ public class SupportMethods {
      * @param programPathAndArgumentsString Program name, and path, and arguments.
      * @param testCase The test case to log to.
      */
+    @SuppressWarnings("SameParameterValue")
     public static void startProgram(String programPathAndArgumentsString, TestCase testCase){
         ApplicationManager am = new ApplicationManager(testCase);
         am.startProgram(programPathAndArgumentsString);

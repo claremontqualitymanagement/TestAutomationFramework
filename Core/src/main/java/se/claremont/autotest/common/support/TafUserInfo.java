@@ -18,7 +18,7 @@ public interface TafUserInfo {
     String getCanonicalHostName();
     String getHostAdress();
 
-    /**
+    /*
      * Key	Description of Associated Value
      java.version	Java Runtime Environment version
      java.vendor	Java Runtime Environment vendor

@@ -6,7 +6,6 @@ import org.junit.Test;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
-import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.SupportMethods;
 
 /**

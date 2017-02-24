@@ -12,6 +12,7 @@ import java.util.Properties;
  *
  * Created by magnusolsson on 2016-12-05.
  */
+@SuppressWarnings("SameParameterValue")
 public class ScpImpl implements Scp {
 
     //create localThread of the current thread

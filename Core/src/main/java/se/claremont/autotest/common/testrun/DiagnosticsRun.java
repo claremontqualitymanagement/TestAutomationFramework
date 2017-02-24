@@ -15,8 +15,6 @@ import se.claremont.autotest.common.testset.TestSet_Tests;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by jordam on 2016-12-23.

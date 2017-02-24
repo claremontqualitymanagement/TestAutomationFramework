@@ -1,14 +1,10 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.websupport.DomElement;
-
-import java.io.File;
-import java.net.URL;
 
 /**
  * Created by jordam on 2017-01-28.

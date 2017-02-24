@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  *
  * Created by jordam on 2016-08-17.
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class Settings extends HashMap<String, String>{
 
     private final static Logger logger = LoggerFactory.getLogger( Settings.class );

@@ -7,6 +7,7 @@ import com.sshtools.j2ssh.configuration.ConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 
+@SuppressWarnings("WeakerAccess")
 public class JunitDummyAuthenticationProvider extends NativeAuthenticationProvider {
 
     public JunitDummyAuthenticationProvider() {

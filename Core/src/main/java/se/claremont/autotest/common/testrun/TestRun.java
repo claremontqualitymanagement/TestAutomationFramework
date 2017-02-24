@@ -10,6 +10,7 @@ import se.claremont.autotest.common.testset.TestSet;
  * A test run is the entity of every time some set(s) of test cases are run.
  * Created by jordam on 2016-08-17.
  */
+@SuppressWarnings("WeakerAccess")
 public class TestRun {
     public static Settings settings;
     public static int fileCounter = 0;
@@ -47,6 +48,7 @@ public class TestRun {
         return settings.getValue(parameter);
     }
 
+    @SuppressWarnings("SameParameterValue")
     public static String getCustomSettingsValue(String parameter){
         initializeIfNotInitialized();
         return settings.getCustomValue(parameter);

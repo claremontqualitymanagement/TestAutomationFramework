@@ -3,6 +3,7 @@ package se.claremont.autotest.common.scp;
 /**
  * Created by magnusolsson on 2016-12-05.
  */
+@SuppressWarnings("SameParameterValue")
 public interface Scp {
 
     void doSomeScpStuff();

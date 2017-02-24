@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-02-10.
  */
+@SuppressWarnings("WeakerAccess")
 public class MethodInvoker {
 
     TestCase testCase = null;
@@ -24,7 +25,7 @@ public class MethodInvoker {
     }
 
     public Object invokeTheFirstEncounteredMethod(Object component, List<String> methodNames){
-        return invokeTheFirstEncounteredMethod(component, methodNames, null);
+        return invokeTheFirstEncounteredMethod(component, methodNames, (Object[]) null);
     }
 
     public static Object invokeTheFirstEncounteredMethod(TestCase testCase, Object component, String[] methodNames){
@@ -47,7 +48,7 @@ public class MethodInvoker {
         for(String method : methodNames){
             methods.add(method);
         }
-        return invokeTheFirstEncounteredMethod(component, methods, null);
+        return invokeTheFirstEncounteredMethod(component, methods, (Object[]) null);
     }
 
     public Object invokeTheFirstEncounteredMethod(Object component, String[] methodNames, Object... args){

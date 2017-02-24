@@ -7,6 +7,7 @@ import java.io.*;
 /**
  * Created by jordam on 2017-02-22.
  */
+@SuppressWarnings("WeakerAccess")
 public class CliTestRunnerTest {
 
     String cliIsInvokedWelcomeString = "Executing TAF (TestAutomationFramework) from CLI";

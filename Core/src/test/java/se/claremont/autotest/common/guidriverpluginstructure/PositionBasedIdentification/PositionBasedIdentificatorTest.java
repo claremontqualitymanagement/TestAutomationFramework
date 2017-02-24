@@ -1,7 +1,6 @@
 package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by jordam on 2017-02-22.
  */
+@SuppressWarnings("WeakerAccess")
 public class PositionBasedIdentificatorTest {
     TestPositionBasedIdentificationObject leftLabel = new TestPositionBasedIdentificationObject("Label for editfield", 10, 100, 50, 150, "myTool.Label");
     TestPositionBasedIdentificationObject rightEditField = new TestPositionBasedIdentificationObject("Edit field", 150, 250, 50, 150, "myTool.EditField");

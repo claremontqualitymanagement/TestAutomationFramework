@@ -7,6 +7,7 @@ import java.net.URL;
 
 import static org.junit.Assert.assertNotNull;
 
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public final class TestHelper {
 
     public static String getTestFileFromTestResourcesFolder(String fileName){

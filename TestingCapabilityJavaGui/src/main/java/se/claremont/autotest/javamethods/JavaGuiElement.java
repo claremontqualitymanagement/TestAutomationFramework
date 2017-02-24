@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-02-08.
  */
+@SuppressWarnings("WeakerAccess")
 public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     String name;
     String recognitionString;
@@ -19,13 +20,6 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     String className;
     JavaWindow window = null;
     List<String> recognitionDescription = new ArrayList<>();
-    String[] methodsToGetLocationInOrder = {"getLocationOnScreen()", "getLocation(java.awt.Point)"};
-    String[] methodsToGetLeftPositionInOrder = {"getX()"};
-    //String[] methodsToGetRightPositionInOrder = {"gsdfg"};
-    String[] methodsToGetTopPositionInOrder = {"getY()"};
-    //String[] methodsToGetBottomPositionInOrder = {"fdsgsdfg"};
-    String[] methodsToGetElementHeightInOrder = {"getHeight()"};
-    String[] methodsToGetElementWidthInOrder = {"getWidth()"};
     TestCase testCase;
 
 
@@ -177,16 +171,15 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     @Override
     public Integer getLeftPosition() {
         Object element = getRuntimeComponent();
-        Integer position = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, methodsToGetLeftPositionInOrder);
-        return position;
+        return (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetLeftPositionInOrder);
     }
 
     @Override
     public Integer getRightPosition() {
         Object element = getRuntimeComponent();
         if(element == null) return null;
-        Integer location = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, methodsToGetLeftPositionInOrder);
-        Integer width = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, methodsToGetElementWidthInOrder);
+        Integer location = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetLeftPositionInOrder);
+        Integer width = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.componentWidthGetterMethodsInAttemptOrder);
         return location + width;
     }
 
@@ -194,16 +187,15 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     public Integer getTopPosition() {
         Object element = getRuntimeComponent();
         if(element == null) return null;
-        Integer position = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, methodsToGetTopPositionInOrder);
-        return position;
+        return (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetTopPositionInOrder);
     }
 
     @Override
     public Integer getBottomPosition() {
         Object element = getRuntimeComponent();
         if(element == null) return null;
-        Integer location = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, methodsToGetTopPositionInOrder);
-        Integer height = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, methodsToGetElementHeightInOrder);
+        Integer location = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetTopPositionInOrder);
+        Integer height = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.componentHightGetterMethodsInAttemptOrder);
         return location + height;
     }
 

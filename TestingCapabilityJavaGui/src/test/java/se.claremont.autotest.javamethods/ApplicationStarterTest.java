@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 /**
  * Created by jordam on 2017-02-11.
  */
+@SuppressWarnings({"WeakerAccess", "ConstantConditions"})
 @RunWith(TafTestRunner.class)
 public class ApplicationStarterTest extends TestSet {
     @BeforeClass
@@ -56,6 +57,7 @@ public class ApplicationStarterTest extends TestSet {
         try {
             saveFile(url, tempFolder + "JavaApp.jar");
         } catch (IOException e) {
+            //noinspection ConstantConditions
             Assume.assumeTrue(e.toString(), false);
         }
     }

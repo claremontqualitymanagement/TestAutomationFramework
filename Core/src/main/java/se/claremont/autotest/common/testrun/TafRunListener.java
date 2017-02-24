@@ -8,6 +8,7 @@ import org.junit.runner.notification.RunListener;
 /**
  * Created by jordam on 2017-01-04.
  */
+@SuppressWarnings("WeakerAccess")
 public class TafRunListener extends RunListener {
 
     public void testRunStarted(Description description){

@@ -10,10 +10,8 @@ import java.util.List;
 /**
  * Created by jordam on 2017-02-14.
  */
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class JavaWindow {
-    String[] subComponentCountMethodsInAttemptOrder =       { "getComponentCount()" };
-    String[] subComponentGetterMethodsInAttemptOrder =      { "getComponent(int)" };
-    String[] titleGetterMethodsInAttemptOrder =             { "getTitle()" };
     MethodInvoker methodInvoker = new MethodInvoker();
 
     String titleAsRegularExpression;
@@ -24,19 +22,19 @@ public class JavaWindow {
 
     public JavaWindow(Window window){
         if(window != null){
-            titleAsRegularExpression = (String) methodInvoker.invokeTheFirstEncounteredMethod(window, titleGetterMethodsInAttemptOrder);
+            titleAsRegularExpression = (String) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.titleGetterMethodsInAttemptOrder);
         }
     }
 
     public String getTitle(){
-        return (String) methodInvoker.invokeTheFirstEncounteredMethod(getWindow(), titleGetterMethodsInAttemptOrder);
+        return (String) methodInvoker.invokeTheFirstEncounteredMethod(getWindow(), MethodDeclarations.titleGetterMethodsInAttemptOrder);
     }
 
     public Object getWindow(){
         ArrayList<Window> windows = ApplicationStarter.getWindows();
         ArrayList<Window> nonShownWindows = new ArrayList<>();
         for(Window w : windows){
-            String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(w, titleGetterMethodsInAttemptOrder);
+            String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(w, MethodDeclarations.titleGetterMethodsInAttemptOrder);
             if(SupportMethods.isRegexMatch(title, this.titleAsRegularExpression)){
                 if(w.isShowing())
                     return w;
@@ -50,13 +48,23 @@ public class JavaWindow {
     public List<Object> getComponents(){
         Object window = getWindow();
         List<Object> componentList = new ArrayList<>();
-        if(!methodInvoker.objectHasAnyOfTheMethods(window, subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(window, subComponentGetterMethodsInAttemptOrder)){
+        if(!methodInvoker.objectHasAnyOfTheMethods(window, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(window, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)){
             return componentList;
         }
 
-        int windowComponentCount = (int) methodInvoker.invokeTheFirstEncounteredMethod(window, subComponentCountMethodsInAttemptOrder);
+        Integer windowComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        if(windowComponentCount == null)return componentList;
+        Object[] returnList = (Object[]) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+        if(returnList != null && returnList.length > 0){
+            for(Object object : returnList){
+                componentList.add(object);
+                componentList.addAll(addSubComponents(object));
+            }
+            return componentList;
+        }
         for(int i = 0; i < windowComponentCount; i++){
-            Object component = methodInvoker.invokeTheFirstEncounteredMethod(window, subComponentGetterMethodsInAttemptOrder, i);
+            Object component = methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            if(component == null) continue;
             componentList.add(component);
             componentList.addAll(addSubComponents(component));
         }
@@ -87,8 +95,6 @@ public class JavaWindow {
 
     public void createWindowDescriptionClass(String outputFile){
         createElementDefinitions(getWindow(), outputFile);
-        return;
-
     }
 
     private void createElementDefinitions(Object window, String path){
@@ -127,10 +133,10 @@ public class JavaWindow {
 
     private List<Object> addSubComponents(Object component){
         List<Object> componentList = new ArrayList<>();
-        if(!methodInvoker.objectHasAnyOfTheMethods(component, subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, subComponentGetterMethodsInAttemptOrder)) return componentList;
-        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, subComponentCountMethodsInAttemptOrder);
+        if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
+        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
         for(int i = 0; i<numberOfSubItems; i++){
-            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, subComponentGetterMethodsInAttemptOrder, i);
+            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
             componentList.add(o);
             componentList.addAll(addSubComponents(o));
         }

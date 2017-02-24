@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-02-08.
  */
+@SuppressWarnings("WeakerAccess")
 public class JavaInteractionMethodstest extends TestSet {
     @BeforeClass
     public static void classSetup(){

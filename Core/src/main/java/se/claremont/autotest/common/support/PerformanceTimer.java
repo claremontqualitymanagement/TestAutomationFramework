@@ -8,6 +8,7 @@ import se.claremont.autotest.common.testcase.TestCase;
  *
  * Created by jordam on 2016-10-04.
  */
+@SuppressWarnings("WeakerAccess")
 public class PerformanceTimer {
     String name;
     long startTime;

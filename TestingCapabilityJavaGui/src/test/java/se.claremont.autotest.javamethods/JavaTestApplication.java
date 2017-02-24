@@ -3,6 +3,7 @@ package se.claremont.autotest.javamethods;
 /**
  * Created by jordam on 2017-02-19.
  */
+@SuppressWarnings("WeakerAccess")
 public class JavaTestApplication {
     public static JavaGuiElement panel0() {
         return new JavaGuiElement("panel0_panel", "panel0", JavaGuiElement.IdType.ELEMENT_NAME);
