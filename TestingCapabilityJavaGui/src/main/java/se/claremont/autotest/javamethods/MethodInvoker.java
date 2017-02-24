@@ -91,7 +91,7 @@ public class MethodInvoker {
                 }
             }
         }
-        log(LogLevel.FRAMEWORK_ERROR, "None of the suggested methods ('" + String.join("', '", methodNames) + "') were found to be suitable for element of class '" + component.getClass().toString() + "'. The methods available for this object are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)));
+        log(LogLevel.FRAMEWORK_ERROR, "None of the suggested methods ('" + String.join("', '", methodNames) + "') were found to be suitable for element of class '" + getClassName(component) + "'. The methods available for this object are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)));
         return null;
     }
 
@@ -115,19 +115,19 @@ public class MethodInvoker {
                     if(returnObject != null){
                         returnString =  " and retrieved the object '" + returnObject.toString() + "'.";
                     }
-                    log(LogLevel.EXECUTED, "Invoked method '" + methodName + "' on component of class '" + component.getClass().toString() + "'" + returnString);
+                    log(LogLevel.EXECUTED, "Invoked method '" + methodName + "' on component of class '" + getClassName(component) + "'" + returnString);
                     return returnObject;
                 } catch (IllegalAccessException e) {
-                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + component.getClass().toString() + "'. Error: " + e.getMessage());
+                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
                     return null;
                 } catch (InvocationTargetException e) {
-                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + component.getClass().toString() + "'. Error: " + e.getMessage());
+                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
                     return null;
                 }
             }
         }
         log(LogLevel.EXECUTION_PROBLEM, "Tried invoking method '" + methodName + "' on component, but that method could not be found for this component." + System.lineSeparator() +
-                "Class is '" + component.getClass().toString() + "' and available methods are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)) +
+                "Class is '" + getClassName(component) + "' and available methods are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)) +
                 System.lineSeparator() + "Remember to cast any return object upon usage.");
         return null;
     }
@@ -146,19 +146,19 @@ public class MethodInvoker {
                     if(returnObject != null){
                         returnString =  " and retrieved the object '" + returnObject.toString() + "'.";
                     }
-                    log(LogLevel.EXECUTED, "Invoked method '" + methodName + "' on component of class '" + component.getClass().toString() + "'" + returnString);
+                    log(LogLevel.EXECUTED, "Invoked method '" + methodName + "' on component of class '" + getClassName(component) + "'" + returnString);
                     return returnObject;
                 } catch (IllegalAccessException e) {
-                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + component.getClass().toString() + "'. Error: " + e.getMessage());
+                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
                     return null;
                 } catch (InvocationTargetException e) {
-                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + component.getClass().toString() + "'. Error: " + e.getMessage());
+                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
                     return null;
                 }
             }
         }
         log(LogLevel.EXECUTION_PROBLEM, "Tried invoking method '" + methodName + "' on component, but that method could not be found for this component." + System.lineSeparator() +
-                "Class is '" + component.getClass().toString() + "' and available methods are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)) +
+                "Class is '" + getClassName(component) + "' and available methods are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)) +
                 System.lineSeparator() + "Remember to cast any return object upon usage.");
         return null;
     }
@@ -173,16 +173,16 @@ public class MethodInvoker {
         for(Method method : c.getMethods()){
             if(method.toString().endsWith("." + methodName)) {
                 try {
-                    String logString = "Invoking method '" + method.toString() + "' on object of class '" + component.getClass().toString() + "'";
+                    String logString = "Invoking method '" + method.toString() + "' on object of class '" + getClassName(component) + "'";
                     Object returnObject = method.invoke(component);
                     if (returnObject != null)
                         logString += " and received '" + returnObject.toString() + "' in response";
                     log(LogLevel.DEBUG, logString + ".");
                     return returnObject;
                 } catch (IllegalAccessException e) {
-                    log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + component.getClass().toString() + "'. Error: " + e.toString());
+                    log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(component) + "'. Error: " + e.toString());
                 } catch (InvocationTargetException e) {
-                    log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + component.getClass().toString() + "'. Error: " + e.toString());
+                    log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(component) + "'. Error: " + e.toString());
                 }
             }
         }
@@ -223,15 +223,15 @@ public class MethodInvoker {
             return null;
         }
         try {
-            String logString = "Invoking method '" + method.toString() + "' on object of class '" + object.getClass().toString() + "'";
+            String logString = "Invoking method '" + method.toString() + "' on object of class '" + getClassName(object) + "'";
             Object returnObject = method.invoke(object);
             if(returnObject != null) logString += " and received '" + returnObject.toString() + "' in response";
             log(LogLevel.DEBUG, logString + ".");
             return returnObject;
         } catch (IllegalAccessException e) {
-            log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + object.getClass().toString() + "'. Error: " + e.toString());
+            log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(object) + "'. Error: " + e.toString());
         } catch (InvocationTargetException e) {
-            log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + object.getClass().toString() + "'. Error: " + e.toString());
+            log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(object) + "'. Error: " + e.toString());
         }
         return null;
     }
@@ -239,6 +239,16 @@ public class MethodInvoker {
     private void log(LogLevel logLevel, String message){
         if(testCase == null)return;
         testCase.log(logLevel, message);
+    }
+
+    private String getClassName(Object object){
+        if(object == null) return "[null]";
+        String className = object.getClass().toString();
+        String[] nameParts = className.split(" ");
+        if(nameParts.length > 1){
+            className = nameParts[nameParts.length-1];
+        }
+        return className;
     }
 
 }
