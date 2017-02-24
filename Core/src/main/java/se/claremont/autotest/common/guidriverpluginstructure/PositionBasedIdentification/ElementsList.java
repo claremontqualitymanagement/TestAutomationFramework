@@ -101,13 +101,14 @@ public class ElementsList {
         if(relativeElementTopPosition == null)return new ElementsList(returnElements);
         Integer relativeElementBottomPosition = relativeElement.getBottomPosition();
         if(relativeElementBottomPosition == null) return new ElementsList(returnElements);
-        System.out.println("Relative element '" + relativeElement.getTypeName() + "': top=" + relativeElementTopPosition+ ", bottom=" + relativeElementBottomPosition);
+        //System.out.println("Relative element '" + relativeElement.getTypeName() + "': top=" + relativeElementTopPosition+ ", bottom=" + relativeElementBottomPosition);
         for(PositionBasedGuiElement possibleElement : this.elements){
+            if(possibleElement.equals(relativeElement))continue;
             Integer possibleElementBottomPosition = possibleElement.getBottomPosition();
             if(possibleElementBottomPosition == null)continue;
             Integer possibleElementTopPosition = possibleElement.getTopPosition();
             if(possibleElementTopPosition == null)continue;
-            System.out.println("Possible element '" + possibleElement.getTypeName() + "': top=" + possibleElementTopPosition + ", bottom=" + possibleElementBottomPosition);
+           // System.out.println("Possible element '" + possibleElement.getTypeName() + "': top=" + possibleElementTopPosition + ", bottom=" + possibleElementBottomPosition);
             if(possibleElementTopPosition >= relativeElementTopPosition - marginPixelsAbove && //Nedanför överkantens marginal
                     possibleElementBottomPosition <= relativeElementBottomPosition + marginPixelsBelow //&& //Ovanför nederkantens marginal
                     //possibleElementBottomPosition >= relativeElementBottomPosition - marginPixelsBelow //&&

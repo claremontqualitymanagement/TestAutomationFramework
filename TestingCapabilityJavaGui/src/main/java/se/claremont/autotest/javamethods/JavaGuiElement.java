@@ -21,7 +21,13 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     JavaWindow window = null;
     List<String> recognitionDescription = new ArrayList<>();
     TestCase testCase;
+    Object cachedElement = null;
 
+
+    public enum IdType{
+        ELEMENT_NAME,
+        ELEMENT_TEXT
+    }
 
     public JavaGuiElement(Object object) {
         if(object == null)return;
@@ -51,12 +57,6 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             idType = IdType.ELEMENT_TEXT;
         }
         className = object.getClass().toString();
-    }
-
-
-    public enum IdType{
-        ELEMENT_NAME,
-        ELEMENT_TEXT
     }
 
     public JavaGuiElement(String name, String recognitionString){
@@ -131,6 +131,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             return null;
         } else if (matchingComponents.size() == 1){
             recognitionDescription.add("Identified exactly one matching runtime object for " + getName() + ". Returning this object. Time for identification: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+            cachedElement = matchingComponents.get(0);
             return matchingComponents.get(0);
         } else {
             recognitionDescription.add("Identified " + matchingComponents.size() + " matching runtime object for " + getName() + ".  Time for identification: " + (System.currentTimeMillis() - startTime) + " milliseconds. The objects were: ");
@@ -138,8 +139,14 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                 recognitionDescription.add(component.toString());
             }
             recognitionDescription.add("Returning the first object.");
+            cachedElement = matchingComponents.get(0);
             return matchingComponents.get(0);
         }
+    }
+
+    public Object getRuntimeElementCacheable(){
+        if(cachedElement != null) return cachedElement;
+        return getRuntimeComponent();
     }
 
     public String getRecognitionDescription(){
@@ -170,13 +177,13 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     @Override
     public Integer getLeftPosition() {
-        Object element = getRuntimeComponent();
+        Object element = getRuntimeElementCacheable();
         return (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetLeftPositionInOrder);
     }
 
     @Override
     public Integer getRightPosition() {
-        Object element = getRuntimeComponent();
+        Object element = getRuntimeElementCacheable();
         if(element == null) return null;
         Integer location = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetLeftPositionInOrder);
         Integer width = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.componentWidthGetterMethodsInAttemptOrder);
@@ -185,14 +192,14 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     @Override
     public Integer getTopPosition() {
-        Object element = getRuntimeComponent();
+        Object element = getRuntimeElementCacheable();
         if(element == null) return null;
         return (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetTopPositionInOrder);
     }
 
     @Override
     public Integer getBottomPosition() {
-        Object element = getRuntimeComponent();
+        Object element = getRuntimeElementCacheable();
         if(element == null) return null;
         Integer location = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetTopPositionInOrder);
         Integer height = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.componentHightGetterMethodsInAttemptOrder);
@@ -201,7 +208,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     @Override
     public String getTypeName() {
-        Object element = getRuntimeComponent();
+        Object element = getRuntimeElementCacheable();
         if(element == null) return null;
         if(element != null) return element.getClass().toString();
         return null;

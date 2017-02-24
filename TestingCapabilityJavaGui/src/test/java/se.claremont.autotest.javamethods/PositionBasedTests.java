@@ -83,7 +83,16 @@ public class PositionBasedTests extends TestSet{
                 fromAllTheElements(JavaTestApplication.panel0().getSubElements()).
                 atTheSameHeightAs(JavaTestApplication.textField(), 10, 10).
                 theObjectMostToTheRight();
-        java.takeScreenshot();
+        //java.takeScreenshot();
         Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox Swing"));
+    }
+
+    @Test
+    public void toTheRightOf(){
+        GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
+        JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
+                fromAllTheElements(JavaTestApplication.panel0().getSubElements()).elementImmediatelyToTheRightOf(JavaTestApplication.textField());
+        //java.takeScreenshot();
+        Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("The text"));
     }
 }
