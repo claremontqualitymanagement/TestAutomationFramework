@@ -56,7 +56,7 @@ public class PositionBasedTests extends TestSet{
     }
 
     @Test
-    //@Ignore //Not yet working as expected
+    @Ignore
     public void getText(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         List<Object> objects = java.allSubElementsOf(JavaTestApplication.panel0());
@@ -77,6 +77,7 @@ public class PositionBasedTests extends TestSet{
     }
 
     @Test
+    @Ignore
     public void getText2(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
@@ -88,6 +89,7 @@ public class PositionBasedTests extends TestSet{
     }
 
     @Test
+    @Ignore
     public void toTheRightOf(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.

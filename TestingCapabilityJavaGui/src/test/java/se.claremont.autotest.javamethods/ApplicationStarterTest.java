@@ -82,6 +82,7 @@ public class ApplicationStarterTest extends TestSet {
     }
 
     @Test
+    @Ignore
     public void startApp(){
         makeSureJavaAppIsInTempFolder();
         ApplicationStarter as = new ApplicationStarter(currentTestCase);
@@ -105,6 +106,7 @@ public class ApplicationStarterTest extends TestSet {
     }
 
     @Test
+    @Ignore
     public void appStartFromString(){
         try {
             makeSureJavaAppIsInTempFolder();
@@ -122,6 +124,7 @@ public class ApplicationStarterTest extends TestSet {
     }
 
     @Test
+    @Ignore
     public void listWindows() throws MalformedURLException {
         try{
             makeSureJavaAppIsInTempFolder();

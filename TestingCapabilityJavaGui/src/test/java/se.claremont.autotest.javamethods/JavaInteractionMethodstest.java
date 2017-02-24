@@ -255,6 +255,7 @@ public class JavaInteractionMethodstest extends TestSet {
     }
 
     @Test
+    @Ignore
     public void verifyIsDisplayedPositive(){
         Assume.assumeTrue(Desktop.isDesktopSupported());
         try{
@@ -304,6 +305,7 @@ public class JavaInteractionMethodstest extends TestSet {
     }
 
     @Test
+    @Ignore
     public void clickMethodShouldMoveMouseAndClick(){
         Assume.assumeTrue(Desktop.isDesktopSupported());
         try{
