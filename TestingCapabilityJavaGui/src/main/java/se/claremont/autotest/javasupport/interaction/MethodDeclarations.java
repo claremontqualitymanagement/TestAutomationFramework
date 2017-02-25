@@ -1,4 +1,4 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.interaction;
 
 import se.claremont.autotest.common.testcase.TestCase;
 

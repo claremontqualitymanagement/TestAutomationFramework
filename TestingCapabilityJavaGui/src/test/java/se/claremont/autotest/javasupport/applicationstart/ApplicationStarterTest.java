@@ -1,4 +1,4 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.applicationstart;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -7,6 +7,9 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TafTestRunner;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.javasupport.interaction.JavaAwtAppWithSomeSwingComponents;
+import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 import java.awt.*;
 import java.io.File;

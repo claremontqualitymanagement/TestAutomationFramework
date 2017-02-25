@@ -1,4 +1,4 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.objectstructure;
 
 /**
  * This should be merged with GuiElement interface

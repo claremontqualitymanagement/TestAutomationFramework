@@ -1,4 +1,6 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.interaction;
+
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 /**
  * Created by jordam on 2017-02-19.

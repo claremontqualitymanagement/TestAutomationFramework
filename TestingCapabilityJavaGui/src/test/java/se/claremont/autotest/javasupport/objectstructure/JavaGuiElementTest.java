@@ -1,6 +1,8 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.objectstructure;
 
 import org.junit.*;
+import se.claremont.autotest.javasupport.interaction.JavaTestApplication;
+import se.claremont.autotest.javasupport.interaction.JavaTestApplicationRunner;
 
 /**
  * Created by jordam on 2017-02-25.

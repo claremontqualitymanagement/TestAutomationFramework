@@ -1,4 +1,4 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.interaction;
 
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -6,6 +6,9 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
+import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
+import se.claremont.autotest.javasupport.objectstructure.GuiComponent;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

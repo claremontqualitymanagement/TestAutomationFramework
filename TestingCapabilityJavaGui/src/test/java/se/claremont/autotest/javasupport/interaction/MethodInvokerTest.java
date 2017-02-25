@@ -1,7 +1,8 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.interaction;
 
 import org.junit.*;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 /**
  * Created by jordam on 2017-02-11.

@@ -1,15 +1,13 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.interaction;
 
 import org.junit.*;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.logging.LogLevel;
-import se.claremont.autotest.common.logging.LogPost;
-import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

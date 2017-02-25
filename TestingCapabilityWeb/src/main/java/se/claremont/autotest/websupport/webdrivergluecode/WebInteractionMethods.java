@@ -14,7 +14,7 @@ import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.javamethods.GenericInteractionMethods;
+import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.LinkCheck;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;

@@ -1,10 +1,13 @@
-package se.claremont.autotest.javamethods;
+package se.claremont.autotest.javasupport.interaction;
 
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import org.junit.*;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
+import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import java.awt.*;
 import java.util.*;

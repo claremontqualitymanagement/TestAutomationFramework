@@ -1,4 +1,4 @@
-package se.claremont.autotest.javamethods.javawebstart;
+package se.claremont.autotest.javasupport.applicationstart;
 
 import java.io.File;
 import java.io.IOException;

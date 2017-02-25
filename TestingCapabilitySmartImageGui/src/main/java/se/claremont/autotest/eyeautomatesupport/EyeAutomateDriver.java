@@ -6,7 +6,7 @@ import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.javamethods.GenericInteractionMethods;
+import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 
 import java.io.IOException;
 import java.nio.file.CopyOption;
