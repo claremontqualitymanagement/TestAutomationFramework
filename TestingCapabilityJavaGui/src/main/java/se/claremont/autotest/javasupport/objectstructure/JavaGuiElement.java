@@ -22,12 +22,20 @@ import java.util.List;
 public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     String name;
     String recognitionString;
-    IdType idType;
+    IdType idType = IdType.UNKNOWN;
     String className;
     JavaWindow window = null;
     List<String> recognitionDescription = new ArrayList<>();
     TestCase testCase;
     Object cachedElement = null;
+
+    public IdType getIdType() {
+        return idType;
+    }
+
+    public void setIdType(IdType idType) {
+        this.idType = idType;
+    }
 
 
     /**
@@ -35,7 +43,9 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
      */
     public enum IdType{
         ELEMENT_NAME,
-        ELEMENT_TEXT
+        ELEMENT_TEXT,
+        POSITION_BASED,
+        UNKNOWN
     }
 
     public JavaGuiElement(Object object) {
@@ -53,6 +63,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                 recognitionString = text;
                 idType = IdType.ELEMENT_TEXT;
             } else {
+                idType = IdType.UNKNOWN;
                 log(LogLevel.DEBUG, "Warning: Could not find any recognition characteristics for element [" + object.toString() + "].");
             }
             cachedElement = object;
@@ -269,6 +280,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
      */
     public JavaGuiElement getParent(){
         Object object = MethodInvoker.invokeTheFirstEncounteredMethod(null, this.getRuntimeComponent(), MethodDeclarations.componentParentGetterMethodsInAttemptOrder);
+        if(object == null) return null;
         return new JavaGuiElement(object);
     }
 

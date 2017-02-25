@@ -4,15 +4,18 @@ import org.junit.*;
 import se.claremont.autotest.javasupport.interaction.JavaTestApplication;
 import se.claremont.autotest.javasupport.interaction.JavaTestApplicationRunner;
 
+import java.util.List;
+
 /**
  * Created by jordam on 2017-02-25.
  */
 public class JavaGuiElementTest {
 
-    @Before
-    public void setup(){
+    @Before     public void testSetup() {
         JavaTestApplicationRunner.tryStart();
     }
+
+    @After     public void tearDown() { JavaTestApplicationRunner.hideWindow(); }
 
     @Test
     public void getParent(){
@@ -21,13 +24,28 @@ public class JavaGuiElementTest {
 
     @Test
     public void getSubElements(){
-        System.out.println(JavaTestApplication.panel0().getSubElements().size());
-        Assert.assertTrue(JavaTestApplication.panel0().getSubElements().size() == 6);
+        List<JavaGuiElement> elementList = JavaTestApplication.panel0().getSubElements();
+        Assert.assertTrue(JavaTestApplication.panel0().getSubElements().size() > 5);
+        boolean foundCancelButton = false;
+        for(JavaGuiElement element: elementList){
+            if(element.toString().contains("Button_Cancel")){
+                System.out.println(element.toString());
+                foundCancelButton = true;
+            }
+        }
+        Assert.assertTrue(foundCancelButton);
     }
 
     @Test
     public void getElementsInTheSameComponent(){
-        System.out.println(JavaTestApplication.okbutton().getAllElementsInSameContainer().size());
-        Assert.assertTrue(JavaTestApplication.okbutton().getAllElementsInSameContainer().size() == 6);
+        List<JavaGuiElement> elementList = JavaTestApplication.okbutton().getAllElementsInSameContainer();
+        boolean foundCancelButton = false;
+        for(JavaGuiElement element: elementList){
+            if(element.toString().contains("Button_Cancel")){
+                System.out.println(element.toString());
+                foundCancelButton = true;
+            }
+        }
+        Assert.assertTrue(foundCancelButton);
     }
 }

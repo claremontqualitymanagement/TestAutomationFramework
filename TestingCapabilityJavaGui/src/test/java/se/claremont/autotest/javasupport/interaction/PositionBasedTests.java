@@ -35,7 +35,11 @@ public class PositionBasedTests extends TestSet{
         Assert.assertNotNull(objects);
         ArrayList<PositionBasedGuiElement> elementsList = new ArrayList<>();
         for(Object object : objects){
-            elementsList.add(new JavaGuiElement(object, currentTestCase));
+            JavaGuiElement j = new JavaGuiElement(object);
+            if(j.getIdType() == JavaGuiElement.IdType.UNKNOWN){
+                j.setIdType(JavaGuiElement.IdType.POSITION_BASED);
+            }
+            elementsList.add(new JavaGuiElement(object));
         }
         ElementsList allElementsInPanel = PositionBasedIdentificator.fromAllTheElements(elementsList);
         MethodInvoker m = new MethodInvoker(currentTestCase);

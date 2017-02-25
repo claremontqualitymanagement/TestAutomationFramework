@@ -39,9 +39,10 @@ public class JavaTestApplicationRunner {
         javaApp.hide();
     }
 
-    public void exitApplication(){
+    public static void exitApplication(){
         if(javaApp == null)return;
         javaApp.removeAll();
         javaApp.dispose();
     }
+
 }

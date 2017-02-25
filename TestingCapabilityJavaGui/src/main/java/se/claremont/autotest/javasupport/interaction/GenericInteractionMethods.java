@@ -78,7 +78,7 @@ public class GenericInteractionMethods {
         if(component.getClass().equals(JavaGuiElement.class)) component = ((JavaGuiElement) component).getRuntimeComponent();
 
         ArrayList<Object> componentList = new ArrayList<>();
-        Object[] returnList = (Object[]) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+        Object[] returnList = (Object[]) MethodInvoker.invokeTheFirstEncounteredMethodFromListOfMethodNames(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
         if(returnList != null && returnList.length > 0){
             for(Object object : returnList){
                 componentList.add(object);
@@ -86,10 +86,10 @@ public class GenericInteractionMethods {
             }
             return componentList;
         }
-        Integer componentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        Integer componentCount = (Integer) MethodInvoker.invokeTheFirstEncounteredMethodFromListOfMethodNames(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
         if(componentCount == null)return componentList;
         for(int i = 0; i < componentCount; i++){
-            Object subElement = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            Object subElement = MethodInvoker.invokeTheFirstEncounteredMethodFromListOfMethodNames(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
             if(subElement == null) continue;
             componentList.add(subElement);
             componentList.addAll(addSubComponents(subElement));
@@ -188,12 +188,27 @@ public class GenericInteractionMethods {
      * @return The current text at runtime for the GUI component.
      */
     public String getText(Object component){
+        String returnText = null;
         if(component == null) {
             log(LogLevel.DEBUG, "Could not retrieve any text from a null object.");
             return null;
         }
-        return (String) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.textGettingMethodsInAttemptOrder);
+        returnText = (String) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.textGettingMethodsInAttemptOrder);
+        //Section below might prove useful, but in separate method, since some types of components introduce complex container structires and subcomponents around them.
+        /*
+        if(returnText == null || returnText.length() < 0){
+            List<String> texts = new ArrayList<>();
+            JavaGuiElement thisElement = new JavaGuiElement(component);
+            for(JavaGuiElement subComponent : thisElement.getSubElements()){
+                String subComponentText = getText(subComponent.getRuntimeElementCacheable());
+                if(subComponentText != null) texts.add(subComponentText);
+            }
+            returnText = String.join(System.lineSeparator(), texts);
+        }
+        */
+        return returnText;
     }
+
 
     /**
      * Performs a left mouse button click upon the given element.
