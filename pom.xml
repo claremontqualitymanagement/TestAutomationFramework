@@ -37,10 +37,10 @@
         <module>TestingCapabilityRestApi</module>
         <module>TestingCapabilityWeb</module>
         <module>TestingCapabilitySmartImageGui</module>
+        <module>TafFull</module>
         <!--
         <module>SandboxTests</module>
         -->
-        <module>TafFull</module>
     </modules>
 
     <licenses>
@@ -119,6 +119,29 @@
                 <version>1.3.17</version>
                 <!--<scope>import</scope>-->
             </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>mockwebserver</artifactId>
+                <version>3.4.1</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- For REST interactions -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>3.4.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.21</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-jdk-http -->
             <dependency>
                 <groupId>org.glassfish.jersey.containers</groupId>
@@ -190,7 +213,6 @@
                 <artifactId>j2ssh-common</artifactId>
                 <version>0.2.9</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

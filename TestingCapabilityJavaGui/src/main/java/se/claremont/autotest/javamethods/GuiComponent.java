@@ -1,6 +1,8 @@
 package se.claremont.autotest.javamethods;
 
 /**
+ * This should be merged with GuiElement interface
+ *
  * Created by jordam on 2017-02-19.
  */
 @SuppressWarnings("WeakerAccess")

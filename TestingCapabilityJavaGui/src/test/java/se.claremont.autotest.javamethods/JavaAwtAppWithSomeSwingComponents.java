@@ -42,6 +42,7 @@ public class JavaAwtAppWithSomeSwingComponents extends Frame{
                                    public void windowClosing(WindowEvent we) {
                                        removeAll();
                                        dispose();
+                                       System.exit(0);
                                    }
                                }
         );

@@ -19,44 +19,16 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class PositionBasedTests extends TestSet{
 
-    @BeforeClass
-    public static void classSetup(){
-        javaApp  = new JavaAwtAppWithSomeSwingComponents();
-    }
     @Before
     public void testSetup() {
-        Assume.assumeTrue(Desktop.isDesktopSupported());
-        try{
-            if (javaApp == null) javaApp = new JavaAwtAppWithSomeSwingComponents();
-            javaApp.show();
-        }catch (Exception e){
-            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
-        }
-        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
+        JavaTestApplicationRunner.showWindow();
     }
-
-    @AfterClass
-    public static void classTeardown(){
-        if(javaApp != null){
-            javaApp.removeAll();
-            javaApp.dispose();
-        };
-    }
-
-    String[] args = new String[]{};
-    static JavaAwtAppWithSomeSwingComponents javaApp;
-
-    private boolean logPostIsFoundInLog(LogLevel logLevel, String partOfMessage, TestCase testCase){
-        for(LogPost lp : testCase.testCaseLog.logPosts){
-            if(logLevel == null) if(lp.message.contains(partOfMessage)) return true;
-            if(partOfMessage == null) if(lp.logLevel.equals(logLevel)) return true;
-            if(lp.logLevel == logLevel && lp.message.contains(partOfMessage))return true;
-        }
-        return false;
+    @After
+    public void testTeardown(){
+        JavaTestApplicationRunner.hideWindow();
     }
 
     @Test
-    @Ignore
     public void getText(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         List<Object> objects = java.allSubElementsOf(JavaTestApplication.panel0());
@@ -77,7 +49,6 @@ public class PositionBasedTests extends TestSet{
     }
 
     @Test
-    @Ignore
     public void getText2(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
@@ -89,12 +60,11 @@ public class PositionBasedTests extends TestSet{
     }
 
     @Test
-    @Ignore
     public void toTheRightOf(){
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
-                fromAllTheElements(JavaTestApplication.panel0().getSubElements()).elementImmediatelyToTheRightOf(JavaTestApplication.textField());
-        //java.takeScreenshot();
-        Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("The text"));
+                fromAllTheElements(JavaTestApplication.panel0().getSubElements()).elementImmediatelyToTheRightOf(JavaTestApplication.okbutton());
+        java.takeScreenshot();
+        Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox awt"));
     }
 }

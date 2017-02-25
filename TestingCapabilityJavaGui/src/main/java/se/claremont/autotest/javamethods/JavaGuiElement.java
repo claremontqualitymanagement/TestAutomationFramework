@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A GUI component in any Java client application.
+ *
  * Created by jordam on 2017-02-08.
  */
 @SuppressWarnings("WeakerAccess")
@@ -24,6 +26,9 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     Object cachedElement = null;
 
 
+    /**
+     * Element identification mechanism used to identify the element
+     */
     public enum IdType{
         ELEMENT_NAME,
         ELEMENT_TEXT
@@ -31,17 +36,27 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     public JavaGuiElement(Object object) {
         if(object == null)return;
-        String elementName = (String) MethodInvoker.invokeMethod(testCase, object, "getName");
-        name = object.getClass().toString().replace(".", "_").replace(" ", "") + "_" + elementName.replace(" ", "");
-        if(elementName != null){
-            recognitionString = elementName;
-            idType = IdType.ELEMENT_NAME;
-        } else {
-            recognitionString = (String) MethodInvoker.invokeMethod(null, object, "getText");
-            idType = IdType.ELEMENT_TEXT;
+        try {
+            String elementName = (String) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, object, MethodDeclarations.componentNameGetterMethodsInAttemptOrder);
+            String objectName = elementName;
+            if (objectName == null || objectName.length() == 0) objectName = "NoNamedObject";
+            name = object.getClass().toString().replace(".", "_").replace(" ", "") + "_" + objectName.replace(" ", "");
+            String text = (String) MethodInvoker.invokeTheFirstEncounteredMethod(null, object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+            if (elementName != null) {
+                recognitionString = elementName;
+                idType = IdType.ELEMENT_NAME;
+            } else if (text != null && text.length() > 0){
+                recognitionString = text;
+                idType = IdType.ELEMENT_TEXT;
+            } else {
+                log(LogLevel.DEBUG, "Warning: Could not find any recognition characteristics for element [" + object.toString() + "].");
+            }
+            cachedElement = object;
+            className = object.getClass().toString();
+        }catch (Exception e){
+            log(LogLevel.DEBUG, "Could not create JavaGuiElement from Object. Error: "+ e.toString());
+            log(LogLevel.DEBUG, "Possible methods of object are:" + System.lineSeparator() + String.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(object)));
         }
-        className = object.getClass().toString();
-
     }
 
     public JavaGuiElement(Object object, TestCase testCase) {
@@ -104,12 +119,17 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         this.window = window;
     }
 
+    /**
+     * Element name.
+     *
+     * @return Return the element name.
+     */
     public String getName(){
         return name;
     }
 
     /**
-     * Identifies the run-time element that is identified by a GuiElement of JavaGuiElement class.
+     * Identifies the runtime element that is identified by a GuiElement of JavaGuiElement class.
      *
      * @return Returns the actual runtime element to interact with.
      */
@@ -159,6 +179,58 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return recognitionString;
     }
 
+    /**
+     * Return the JavaWindow this element resides in.
+     *
+     * @return Returns the JavaWindow
+     */
+    public JavaWindow getJavaWindow(){
+        if(window != null) return window;
+        return new JavaWindow((Window)getWindow());
+    }
+
+    /**
+     * Return the Window element this element resides in.
+     *
+     * @return
+     */
+    public Object getWindow(){
+        Object thisElement = getRuntimeElementCacheable();
+        if(window != null){
+            return window.getWindow();
+        } else {
+            List<Object> objects = new ArrayList<>();
+            List<Window> windows = ApplicationStarter.getWindows();
+            List<Window> nonDisplayedWindows = new ArrayList<>();
+            for(Window w : windows){
+                if(!w.isShowing()) {
+                    nonDisplayedWindows.add(w);
+                } else {
+                    JavaWindow javaWindow = new JavaWindow(w);
+                    List<Object> objectList = javaWindow.getComponents();
+                    for(Object o : objectList){
+                        if(o.equals(thisElement)) return w;
+                    }
+                }
+            }
+            if(objects.size() == 0 && nonDisplayedWindows.size() > 0){
+                for(Window w : nonDisplayedWindows){
+                    JavaWindow javaWindow = new JavaWindow(nonDisplayedWindows.get(0));
+                    List<Object> objectList = javaWindow.getComponents();
+                    for(Object o : objectList){
+                        if(o.equals(thisElement)) return w;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the subelements of this element. Many element types don't have sub elements.
+     *
+     * @return Returns sub elements of this element.
+     */
     public ArrayList<JavaGuiElement> getSubElements(){
         ArrayList<JavaGuiElement> javaGuiElements = new ArrayList<>();
         GenericInteractionMethods genericInteractionMethods = new GenericInteractionMethods(null);
@@ -175,12 +247,42 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return javaGuiElements;
     }
 
+    /**
+     * Returns the parent element of this element.
+     *
+     * @return Returns the parent element of this element.
+     */
+    public JavaGuiElement getParent(){
+        Object object = MethodInvoker.invokeTheFirstEncounteredMethod(null, this.getRuntimeComponent(), MethodDeclarations.componentParentGetterMethodsInAttemptOrder);
+        return new JavaGuiElement(object);
+    }
+
+    /**
+     * Returns a list of all the other elements in the same container.
+     *
+     * @return Returns a list of all the other elements in the same container.
+     */
+    public List<JavaGuiElement> getAllElementsInSameContainer(){
+        List<JavaGuiElement> elements = new ArrayList<>();
+        List<JavaGuiElement> subElements = getSubElements();
+        if(subElements.size() > 0) return subElements;
+        JavaGuiElement parent = getParent();
+        if(parent == null) return elements;
+        return parent.getSubElements();
+    }
+
+    /**
+     * @return Returns the left most position of this element.
+     */
     @Override
     public Integer getLeftPosition() {
         Object element = getRuntimeElementCacheable();
         return (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetLeftPositionInOrder);
     }
 
+    /**
+     * @return Returns the right most position of this element.
+     */
     @Override
     public Integer getRightPosition() {
         Object element = getRuntimeElementCacheable();
@@ -190,6 +292,9 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return location + width;
     }
 
+    /**
+     * @return Returns the top most position of this element.
+     */
     @Override
     public Integer getTopPosition() {
         Object element = getRuntimeElementCacheable();
@@ -197,6 +302,9 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, MethodDeclarations.methodsToGetTopPositionInOrder);
     }
 
+    /**
+     * @return Returns the bottom most position of this element.
+     */
     @Override
     public Integer getBottomPosition() {
         Object element = getRuntimeElementCacheable();
@@ -206,8 +314,12 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return location + height;
     }
 
+    /**
+     * @return Returns the type of this element.
+     */
     @Override
     public String getTypeName() {
+        if(className != null) return className;
         Object element = getRuntimeElementCacheable();
         if(element == null) return null;
         if(element != null) return element.getClass().toString();

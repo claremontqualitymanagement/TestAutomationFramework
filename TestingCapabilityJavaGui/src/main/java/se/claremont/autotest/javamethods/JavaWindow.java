@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A JavaWindow is any GUI Window used in automation.
+ *
  * Created by jordam on 2017-02-14.
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class JavaWindow {
     MethodInvoker methodInvoker = new MethodInvoker();
-
     String titleAsRegularExpression;
 
     public JavaWindow(String titleAsRegularExpression){
@@ -26,10 +27,36 @@ public class JavaWindow {
         }
     }
 
+    /**
+     * Halts execution while waiting for this window to become visible. If it has not become visible before the timeout it returns null.
+     *
+     * @param timeoutInSeconds Timeout period to wait, stated in seconds.
+     * @return Returns the Window itself if encountered before the timeout, otherwise returning null.
+     */
+    public Object waitForWindowToAppear(int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeoutInSeconds *1000){
+            Object o = getWindow();
+            if(getWindow() != null) return o;
+            wait(100);
+        }
+        return null;
+    }
+
+    /**
+     * Returns the runtime title of this window.
+     *
+     * @return Returns the runtime title of this window.
+     */
     public String getTitle(){
         return (String) methodInvoker.invokeTheFirstEncounteredMethod(getWindow(), MethodDeclarations.titleGetterMethodsInAttemptOrder);
     }
 
+    /**
+     * Identifies and returns the runtime interaction object of this window.
+     *
+     * @return The interaction runtime instance of this window if possible to identify, otherwise null.
+     */
     public Object getWindow(){
         ArrayList<Window> windows = ApplicationStarter.getWindows();
         ArrayList<Window> nonShownWindows = new ArrayList<>();
@@ -45,6 +72,25 @@ public class JavaWindow {
         return null;
     }
 
+    /**
+     * Collects all sub element of the window and tries converting them to JavaGuiElements and returning that list.
+     * Used for PositionBasedIdentification.
+     *
+     * @return Returns all sub element of the window.
+     */
+    public List<JavaGuiElement> getComponentsAsJavaGuiElements(){
+        List<JavaGuiElement> javaGuiElements = new ArrayList<>();
+        for(Object o: getComponents()){
+            javaGuiElements.add(new JavaGuiElement(o));
+        }
+        return javaGuiElements;
+    }
+
+    /**
+     * Returns all components found at runtime in the window.
+     *
+     * @return Returns a list of all subcomponents of the window.
+     */
     public List<Object> getComponents(){
         Object window = getWindow();
         List<Object> componentList = new ArrayList<>();
@@ -81,7 +127,8 @@ public class JavaWindow {
     }
 
     /**
-     * Goes through all identified elements in the GUI and collects the displayed text in these.
+     * Goes through all identified elements in the GUI and collects the displayed text in these. Should probably only be used in debugging.
+     *
      * @return Returns a list of the texts of all identified components.
      */
     public List<String> textsInComponents(){
@@ -93,7 +140,13 @@ public class JavaWindow {
         return returnTexts;
     }
 
-    public void createWindowDescriptionClass(String outputFile){
+    /**
+     * Tries to create element descriptions for the elements in the window, to be used in automation.
+     *
+     * @param outputFile The file to write the window element descriptors to.
+     */
+    public void mapWindowToDescriptionClass(String outputFile){
+        waitForWindowToAppear(15);
         createElementDefinitions(getWindow(), outputFile);
     }
 
@@ -143,6 +196,11 @@ public class JavaWindow {
         return componentList;
     }
 
-
+    private void wait (int milliseconds){
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+        }
+    }
 
 }

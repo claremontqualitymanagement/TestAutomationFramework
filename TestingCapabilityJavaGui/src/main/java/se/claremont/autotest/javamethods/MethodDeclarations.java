@@ -3,32 +3,38 @@ package se.claremont.autotest.javamethods;
 import se.claremont.autotest.common.testcase.TestCase;
 
 /**
+ * Lists of what methods to invoke are used throughout this module, so it made sense gathering them here.
+ *
+ * If the dream of having a generic approach to test automation is achieved these should be moved to
+ * core and any technology module should just make sure their methods are within these lists - and
+ * expose their own method overrides and error handling methods.
+ *
  * Created by jordam on 2017-02-24.
  */
 public class MethodDeclarations {
-    static String[] titleGetterMethodsInAttemptOrder =             { "getTitle()" };
-    static String[] componentNameGetterMethodsInAttemptOrder =     { "getName()" };
+    public static String[] titleGetterMethodsInAttemptOrder =             { "getTitle()" };
+    public static String[] componentNameGetterMethodsInAttemptOrder =     { "getName()" };
 
     //Used for acquiring clickpoint
     static String[] componentLocationGetterMethodsInAttemptOrder = { "getLocationOnScreen()", "getLocation()" };
-    static String[] componentHightGetterMethodsInAttemptOrder =    { "getHeight()" };
-    static String[] componentWidthGetterMethodsInAttemptOrder =    { "getWidth()" };
-    static String[] methodsToGetLeftPositionInOrder =              { "getX()" };
-    static String[] methodsToGetTopPositionInOrder =               { "getY()" };
+    public static String[] componentHightGetterMethodsInAttemptOrder =    { "getHeight()" };
+    public static String[] componentWidthGetterMethodsInAttemptOrder =    { "getWidth()" };
+    public static String[] methodsToGetLeftPositionInOrder =              { "getX()" };
+    public static String[] methodsToGetTopPositionInOrder =               { "getY()" };
     //static String[] methodsToGetElementHeightInOrder =             { "getHeight()" };
     //static String[] methodsToGetElementWidthInOrder =              { "getWidth()" };
 
     //Read and write methods
-    static String[] componentWriteMethodsInAttemptOrder =          { "setText(java.lang.String)", "write(java.lang.String)", "type(java.lang.String)" };
-    static String[] textGettingMethodsInAttemptOrder =             { "getLabel()", "getText()" };
+    public static String[] componentWriteMethodsInAttemptOrder =          { "setText(java.lang.String)", "write(java.lang.String)", "type(java.lang.String)" };
+    public static String[] textGettingMethodsInAttemptOrder =             { "getText()", "getLabel()" };
 
     //State assessors
-    static String[] componentIsVisibleMethodsInAttemptOrder =      { "isShowing()", "isDisplayedWithinTimeout()", "isVisible()" };
+    public static String[] componentIsVisibleMethodsInAttemptOrder =      { "isShowing()", "isDisplayedWithinTimeout()", "isVisible()" };
 
     //Component collector helpers
-    static String[] componentParentGetterMethodsInAttemptOrder =   { "getParent()" };
-    static String[] subComponentCountMethodsInAttemptOrder =       { "getComponentCount()" };
-    static String[] subComponentGetterMethodsInAttemptOrder =      { "getComponent(int)" };
-    static String[] subAllComponentsGettersMethodsInAttemptOrder = { "getComponents()" };
+    public static String[] componentParentGetterMethodsInAttemptOrder =   { "getParent()" };
+    public static String[] subComponentCountMethodsInAttemptOrder =       { "getComponentCount()" };
+    public static String[] subComponentGetterMethodsInAttemptOrder =      { "getComponent(int)" };
+    public static String[] subAllComponentsGettersMethodsInAttemptOrder = { "getComponents()" };
 
 }

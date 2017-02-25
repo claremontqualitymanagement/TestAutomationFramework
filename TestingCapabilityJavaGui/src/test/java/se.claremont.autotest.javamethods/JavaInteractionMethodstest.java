@@ -15,23 +15,10 @@ import java.util.List;
  */
 @SuppressWarnings("WeakerAccess")
 public class JavaInteractionMethodstest extends TestSet {
-    @BeforeClass
-    public static void classSetup(){
-        javaApp  = new JavaAwtAppWithSomeSwingComponents();
-    }
-    @Before     public void testSetup() {
-        if (javaApp == null) javaApp = new JavaAwtAppWithSomeSwingComponents();
-        javaApp.hide();
-    }
-    @AfterClass public static void classTeardown(){
-        if(javaApp != null){
-            javaApp.removeAll();
-            javaApp.dispose();
-        };
-    }
 
-    String[] args = new String[]{};
-    static JavaAwtAppWithSomeSwingComponents javaApp;
+    @Before     public void testSetup() {
+        JavaTestApplicationRunner.hideWindow();
+    }
 
     private boolean logPostIsFoundInLog(LogLevel logLevel, String partOfMessage, TestCase testCase){
         for(LogPost lp : testCase.testCaseLog.logPosts){
@@ -128,17 +115,12 @@ public class JavaInteractionMethodstest extends TestSet {
     @Test
     @Ignore //This test is supposed to fail and take screenshot
     public void takeScreenshotOnFailedClick(){
-        Assume.assumeTrue(Desktop.isDesktopSupported());
-        try{
-            javaApp.show();
-        }catch (Exception e){
-            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
-        }
-        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
+        JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement button = new JavaGuiElement("CancelButton", "Canc", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.click(button);
         java.wait(10000);
+        JavaTestApplicationRunner.hideWindow();
     }
 
 
@@ -257,18 +239,11 @@ public class JavaInteractionMethodstest extends TestSet {
     @Test
     @Ignore
     public void verifyIsDisplayedPositive(){
-        Assume.assumeTrue(Desktop.isDesktopSupported());
-        try{
-            javaApp.show();
-        }catch (Exception e){
-            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
-        }
-        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
-
+        JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
-        Assert.assertTrue(javaApp.okButton.isShowing());
         Assert.assertTrue(java.isDisplayedWithinTimeout(button, java.standardTimeout));
+        JavaTestApplicationRunner.hideWindow();
     }
 
     @Test
@@ -307,20 +282,13 @@ public class JavaInteractionMethodstest extends TestSet {
     @Test
     @Ignore
     public void clickMethodShouldMoveMouseAndClick(){
-        Assume.assumeTrue(Desktop.isDesktopSupported());
-        try{
-            javaApp.show();
-        }catch (Exception e){
-            Assume.assumeTrue("Could not view application for testing." + e.toString(), false);
-        }
-        Assume.assumeTrue("Could not start application for testing.", javaApp.isShowing());
-
+        JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
-        Assert.assertTrue(javaApp.okButton.isShowing());
+        Assert.assertTrue(JavaTestApplicationRunner.javaApp.okButton.isShowing());
         java.click(button);
         java.wait(2000);
         Assert.assertTrue(java.isDisplayedWithinTimeout(button, java.standardTimeout));
-
+        JavaTestApplicationRunner.hideWindow();
     }
 }

@@ -14,7 +14,7 @@ public class JavaAppWindow {
     public void test(){
         JavaWindow window = new JavaWindow("Java test application");
         JavaAwtAppWithSomeSwingComponents javaApp = new JavaAwtAppWithSomeSwingComponents();
-        window.createWindowDescriptionClass("C:\\Temp\\OutputFile.txt");
+        window.mapWindowToDescriptionClass("C:\\Temp\\OutputFile.txt");
 
     }
 }

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This is a helper to invoke methods on any object at runtime in a generic fashion.
+ *
  * Created by jordam on 2017-02-10.
  */
 @SuppressWarnings("WeakerAccess")
@@ -24,10 +26,28 @@ public class MethodInvoker {
         this.testCase = null;
     }
 
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeTheFirstEncounteredMethod(Object component, List<String> methodNames){
         return invokeTheFirstEncounteredMethod(component, methodNames, (Object[]) null);
     }
 
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     * If a test case is provided the progress is being logged, but as DEBUG log level comments.
+     *
+     * @param testCase The test case to log to. If no test case is provided output is to console.
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @return Returns whatever the method invoked would return.
+     */
     public static Object invokeTheFirstEncounteredMethod(TestCase testCase, Object component, String[] methodNames){
         MethodInvoker m = new MethodInvoker(testCase);
         return m.invokeTheFirstEncounteredMethod(component, methodNames);
@@ -38,11 +58,30 @@ public class MethodInvoker {
         return m.getAvalableMethods(object);
     }
 
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     * If a test case is provided the progress is being logged, but as DEBUG log level comments.
+     *
+     * @param testCase The test case to log to. If no test case is provided output is to console.
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @param args Method arguments to use.
+     * @return Returns whatever the method invoked would return.
+     */
     public static Object invokeTheFirstEncounteredMethod(TestCase testCase, Object component, String[] methodNames, Object... args){
         MethodInvoker m = new MethodInvoker(testCase);
         return m.invokeTheFirstEncounteredMethod(component, methodNames, args);
     }
 
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeTheFirstEncounteredMethod(Object component, String[] methodNames){
         List<String> methods = new ArrayList<>();
         for(String method : methodNames){
@@ -51,6 +90,15 @@ public class MethodInvoker {
         return invokeTheFirstEncounteredMethod(component, methods, (Object[]) null);
     }
 
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @param args Method arguments to use.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeTheFirstEncounteredMethod(Object component, String[] methodNames, Object... args){
         List<String> methods = new ArrayList<>();
         for(String method : methodNames){
@@ -59,6 +107,15 @@ public class MethodInvoker {
         return invokeTheFirstEncounteredMethod(component, methods, args);
     }
 
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @param args Method arguments to use.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeTheFirstEncounteredMethod(Object component, List<String> methodNames, Object... args){
         if(component == null || methodNames == null || methodNames.size() == 0){
             log(LogLevel.DEBUG, "Could not invoke any of the methods ('" + String.join("', '", methodNames) + "') since the object to invoke them on was null.");
@@ -95,11 +152,30 @@ public class MethodInvoker {
         return null;
     }
 
+    /**
+     * Tries to invoke the method given upon the object given.
+     * If it is possible to invoke the method it returns the result, and otherwise it will return null.
+     * If a test case is provided the progress is being logged, but as DEBUG log level comments.
+     *
+     * @param testCase The test case to log to. If no test case is provided output is to console.
+     * @param component The object to invoke the method on.
+     * @param methodName Method name for method to invoke.
+     * @return Returns whatever the method invoked would return.
+     */
     public static Object invokeMethod(TestCase testCase, Object component, String methodName, Object... args){
         MethodInvoker m = new MethodInvoker(testCase);
         return m.invokeMethod(component, methodName, args);
     }
 
+    /**
+     * Tries to invoke the method given upon the object given.
+     * If it is possible to invoke the method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodName Method name for method to invoke.
+     * @param args Method arguments to use.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeMethod(Object component, String methodName, Object... args){
         if(args == null) return invokeMethod(component, methodName);
         if(component == null || methodName == null || methodName == ""){
@@ -132,6 +208,14 @@ public class MethodInvoker {
         return null;
     }
 
+    /**
+     * Tries to invoke the method given upon the object given.
+     * If it is possible to invoke the method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodName Method name for method to invoke.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeMethod(Object component, String methodName){
         if(component == null || methodName == null || methodName == ""){
             log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on null element.");
@@ -164,7 +248,7 @@ public class MethodInvoker {
     }
 
 
-    public Object tryInvokeMethod(Object component, String methodName){
+    private Object tryInvokeMethod(Object component, String methodName){
         if(component == null || methodName == null || methodName == ""){
             log(LogLevel.DEBUG, "Cannot invoke method '" + methodName + "' on object since either of them are null and both are needed.");
             return null;
@@ -189,6 +273,12 @@ public class MethodInvoker {
         return null;
     }
 
+    /**
+     * Returns a list of available method for the object provided.
+     *
+     * @param component The object to list the available method for.
+     * @return Returns a list of method names with their arguments types.
+     */
     public ArrayList<String> getAvalableMethods(Object component){
         Class<?> c = component.getClass();
         ArrayList<String> methods = new ArrayList<>();
@@ -198,6 +288,13 @@ public class MethodInvoker {
         return methods;
     }
 
+    /**
+     * A check if the object seem to have the method provided.
+     *
+     * @param component Object.
+     * @param methodName Method name.
+     * @return Returns true if the method name is found among the methods of the object, otherwise false.
+     */
     public boolean objectHasMethod(Object component, String methodName){
         Class<?> c = component.getClass();
         for(Method m : c.getMethods()){
@@ -208,6 +305,13 @@ public class MethodInvoker {
         return false;
     }
 
+    /**
+     * A check if the object seem to have any of the methods provided.
+     *
+     * @param component Object.
+     * @param methodNames Method names.
+     * @return Returns true if any of the method names are found among the methods of the object, otherwise false.
+     */
     public boolean objectHasAnyOfTheMethods(Object component, String[] methodNames){
         for(String methodName : methodNames){
             if(objectHasMethod(component, methodName)) {

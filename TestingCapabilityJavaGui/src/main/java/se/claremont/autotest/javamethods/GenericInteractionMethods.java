@@ -115,19 +115,6 @@ public class GenericInteractionMethods {
   */
     }
 
-    private List<Object> addSubComponents(Object component){
-        List<Object> componentList = new ArrayList<>();
-        if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
-        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
-        for(int i = 0; i<numberOfSubItems; i++){
-            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
-            componentList.add(o);
-            componentList.addAll(addSubComponents(o));
-        }
-        return componentList;
-    }
-
-
     /**
      * Writes currently active window to the test case log
      */
@@ -248,63 +235,34 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Writes the given text to the given component. Checks afterwards that the entered
+     * characters are in the object, and that they appear in the same order as written.
+     * This procedure is because some elements reformat input texts.
+     *
+     * @param guiComponent Element to write to.
+     * @param textToWrite Text to write.
+     */
     public void write(GuiComponent guiComponent, String textToWrite){
         performWrite(guiComponent, textToWrite, true);
     }
 
+    /**
+     * Writes the given text to the given component.
+     *
+     * @param guiComponent Element to write to.
+     * @param textToWrite Text to write.
+     */
     public void writeWithoutCheck(GuiComponent guiComponent, String textToWrite){
         performWrite(guiComponent, textToWrite, false);
     }
 
-    /**
-     * Writes text to a component, and makes sure the text is there.
-     *
-     * @param guiElement The GUI component to set the text of.
-     * @param textToWrite The text to enter to the component.
-     */
-    private void performWrite(GuiComponent guiElement, String textToWrite, boolean performCheckAfterwards) {
-        Object component = guiElement.getRuntimeComponent();
-        if(component == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to component " + guiElement.getName() + " since it could not be identified.");
-            log(LogLevel.INFO, "Identification procedure for " + guiElement.getName() + ":" + guiElement.getRecognitionDescription());
-            takeScreenshot();
-            return;
-        }
-        if(performCheckAfterwards){
-            for(String methodName : MethodDeclarations.componentWriteMethodsInAttemptOrder){
-                methodInvoker.invokeMethod(component, methodName, textToWrite);
-                String actualText = getText(guiElement);
-                if(actualText.equals(textToWrite)){
-                    log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ".");
-                    return;
-                } else if(allCharactersExistAndInCorrectOrder(actualText, textToWrite)){ //Sometimes for example dates are formatted
-                    log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ". Text after write is '" + actualText + "'.");
-                    return;
-                } else {
-                    log(LogLevel.DEBUG, "Tried writing the text '" + textToWrite + "' to " + guiElement.getName() + " with the method '" + methodName +
-                            "' but the resulting text is '" + actualText + ". If this still is correct you could use the write method not performing checks afterwards.");
-                }
-            }
-        } else {
-            methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentWriteMethodsInAttemptOrder, textToWrite);
-            log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ", without making sure text was correct.");
-        }
-        log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to " + guiElement.getName() + ". Text in element after operation is '" + getText(guiElement) + "'.");
-    }
-
-    private boolean allCharactersExistAndInCorrectOrder(String actualText, String expectedText){
-        String matchingString = ".*";
-        for(int i = 0; i < expectedText.length(); i++){
-            matchingString += expectedText.substring(i, i+1) + ".*";
-        }
-        return SupportMethods.isRegexMatch(actualText, matchingString);
-    }
-
     public void chooseRadioButton(GuiComponent guiElement, String s) {
+        log(LogLevel.FRAMEWORK_ERROR, "Actually radio button usage is not yet implemented. Please fix this.");
     }
 
     public void selectInDropdown(GuiComponent guiElement, String s) {
-
+        log(LogLevel.FRAMEWORK_ERROR, "Actually drop down usage is not yet implemented. Please fix this.");
     }
 
     /**
@@ -366,6 +324,8 @@ public class GenericInteractionMethods {
         }
     }
 
+
+
     /**
      * Returns the runtime text of the element.
      *
@@ -405,6 +365,13 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Checks if a component exist, but actually gives it time to appear in the GUI.
+     *
+     * @param guiElement Element to check existance of.
+     * @param timeoutInSeconds Timeout to wait.
+     * @return Returns true if found.
+     */
     public boolean existsWithTimeout(GuiComponent guiElement, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < timeoutInSeconds*1000){
@@ -418,6 +385,12 @@ public class GenericInteractionMethods {
         return false;
     }
 
+    /**
+     * Checks if an element does not exist at runtime.
+     *
+     * @param guiElement Element to check for
+     * @return Returns false if element is identified.
+     */
     public boolean doesNotExist(GuiComponent guiElement){
         boolean found = exists(guiElement);
         if(found) {
@@ -556,5 +529,60 @@ public class GenericInteractionMethods {
         if(testCase != null)
             testCase.log(logLevel, message);
     }
-    
+    /**
+     * Writes text to a component, and makes sure the text is there.
+     *
+     * @param guiElement The GUI component to set the text of.
+     * @param textToWrite The text to enter to the component.
+     */
+    private void performWrite(GuiComponent guiElement, String textToWrite, boolean performCheckAfterwards) {
+        Object component = guiElement.getRuntimeComponent();
+        if(component == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to component " + guiElement.getName() + " since it could not be identified.");
+            log(LogLevel.INFO, "Identification procedure for " + guiElement.getName() + ":" + guiElement.getRecognitionDescription());
+            takeScreenshot();
+            return;
+        }
+        if(performCheckAfterwards){
+            for(String methodName : MethodDeclarations.componentWriteMethodsInAttemptOrder){
+                methodInvoker.invokeMethod(component, methodName, textToWrite);
+                String actualText = getText(guiElement);
+                if(actualText.equals(textToWrite)){
+                    log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ".");
+                    return;
+                } else if(allCharactersExistAndInCorrectOrder(actualText, textToWrite)){ //Sometimes for example dates are formatted
+                    log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ". Text after write is '" + actualText + "'.");
+                    return;
+                } else {
+                    log(LogLevel.DEBUG, "Tried writing the text '" + textToWrite + "' to " + guiElement.getName() + " with the method '" + methodName +
+                            "' but the resulting text is '" + actualText + ". If this still is correct you could use the write method not performing checks afterwards.");
+                }
+            }
+        } else {
+            methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.componentWriteMethodsInAttemptOrder, textToWrite);
+            log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to component " + guiElement.getName() + ", without making sure text was correct.");
+            return;
+        }
+        log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to " + guiElement.getName() + ". Text in element after operation is '" + getText(guiElement) + "'.");
+    }
+
+    private boolean allCharactersExistAndInCorrectOrder(String actualText, String expectedText){
+        String matchingString = ".*";
+        for(int i = 0; i < expectedText.length(); i++){
+            matchingString += expectedText.substring(i, i+1) + ".*";
+        }
+        return SupportMethods.isRegexMatch(actualText, matchingString);
+    }
+
+    private List<Object> addSubComponents(Object component){
+        List<Object> componentList = new ArrayList<>();
+        if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
+        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        for(int i = 0; i<numberOfSubItems; i++){
+            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            componentList.add(o);
+            componentList.addAll(addSubComponents(o));
+        }
+        return componentList;
+    }
 }
