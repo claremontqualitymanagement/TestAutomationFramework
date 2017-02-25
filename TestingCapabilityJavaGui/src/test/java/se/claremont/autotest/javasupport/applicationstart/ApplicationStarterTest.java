@@ -37,9 +37,9 @@ public class ApplicationStarterTest extends TestSet {
 
     @After
     public void teardown(){
-        if(javaApp != null) javaApp.dispose();;
         ApplicationStarter.closeAllWindows();
     }
+
     @AfterClass
     public static void classTeardown(){
         try {
@@ -49,9 +49,7 @@ public class ApplicationStarterTest extends TestSet {
         }
     }
 
-    String[] args = new String[]{};
     static String tempFolder;
-    JavaAwtAppWithSomeSwingComponents javaApp;
 
     private void makeSureJavaAppIsInTempFolder(){
         File f = new File(tempFolder);
@@ -59,9 +57,10 @@ public class ApplicationStarterTest extends TestSet {
         URL url = ClassLoader.getSystemClassLoader().getResource("JavaApp.jar");
         try {
             saveFile(url, tempFolder + "JavaApp.jar");
+            Assume.assumeTrue("Warning: Could not save test file JavaApp.jar to temp folder. Hence cannot test application starter methods", Files.exists(Paths.get(tempFolder + "JavaApp.jar")));
         } catch (IOException e) {
             //noinspection ConstantConditions
-            Assume.assumeTrue(e.toString(), false);
+            Assume.assumeTrue("Warning: Could not save test file JavaApp.jar to temp folder. Hence cannot test application starter methods. Error: " + System.lineSeparator() + e.toString(), false);
         }
     }
 

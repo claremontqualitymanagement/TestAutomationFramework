@@ -37,7 +37,6 @@ public class JavaAwtAppWithSomeSwingComponents extends Frame{
         this.setTitle("Java test application");
         this.setSize(new Dimension(500, 200));
         this.doLayout();
-        //this.show();
         this.addWindowListener(new WindowAdapter() {
                                    public void windowClosing(WindowEvent we) {
                                        removeAll();

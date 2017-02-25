@@ -12,7 +12,11 @@ public class JavaTestApplicationRunner {
 
     public static void showWindow(){
         Assume.assumeTrue("Cannot start GUI interface since there is no desktop.", Desktop.isDesktopSupported());
-        javaApp.show();
+        try{
+            javaApp.show();
+        }catch (Exception e){
+            Assume.assumeTrue("Cannot start GUI interface since there is no desktop available. Error: " + System.lineSeparator() + e.toString(), false);
+        }
     }
 
     public static void hideWindow(){

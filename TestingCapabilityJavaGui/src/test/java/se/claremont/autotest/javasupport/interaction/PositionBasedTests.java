@@ -19,7 +19,7 @@ public class PositionBasedTests extends TestSet{
 
     @Before
     public void testSetup() {
-        JavaTestApplicationRunner.showWindow();
+        JavaTestApplicationRunner.hideWindow();
     }
     @After
     public void testTeardown(){
@@ -28,6 +28,7 @@ public class PositionBasedTests extends TestSet{
 
     @Test
     public void getText(){
+        JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         List<Object> objects = java.allSubElementsOf(JavaTestApplication.panel0());
         //System.out.println(String.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(JavaTestApplication.okbutton().getRuntimeComponent())));
@@ -44,10 +45,12 @@ public class PositionBasedTests extends TestSet{
         currentTestCase.log(LogLevel.INFO, textField.getClass().toString());
         currentTestCase.log(LogLevel.INFO, java.getText(((JavaGuiElement)textField).getRuntimeComponent()));
         Assert.assertTrue(java.getText(((JavaGuiElement)textField).getRuntimeComponent()).equals("Checkbox Swing"));
+        JavaTestApplicationRunner.hideWindow();
     }
 
     @Test
     public void getText2(){
+        JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
                 fromAllTheElements(JavaTestApplication.panel0().getSubElements()).
@@ -55,14 +58,16 @@ public class PositionBasedTests extends TestSet{
                 theObjectMostToTheRight();
         //java.takeScreenshot();
         Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox Swing"));
+        JavaTestApplicationRunner.hideWindow();
     }
 
     @Test
     public void toTheRightOf(){
+        JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
                 fromAllTheElements(JavaTestApplication.panel0().getSubElements()).elementImmediatelyToTheRightOf(JavaTestApplication.okbutton());
-        java.takeScreenshot();
         Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox awt"));
+        JavaTestApplicationRunner.hideWindow();
     }
 }
