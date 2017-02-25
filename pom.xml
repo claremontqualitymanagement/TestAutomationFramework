@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>2.5.7</version>
+    <version>2.5.8</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -19,14 +19,14 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>2.5.7</global.version>
-        <capability.core.version>2.2.12</capability.core.version>
-        <capability.web.version>1.0.8</capability.web.version>
-        <capability.smart.image.version>1.0.8</capability.smart.image.version>
-        <capability.rest.version>1.0.8</capability.rest.version>
-        <capability.json.version>1.0.8</capability.json.version>
-        <capability.java.version>2.0.8</capability.java.version>
-        <capability.support.version>1.1.8</capability.support.version>
+        <global.version>2.5.8</global.version>
+        <capability.core.version>2.2.13</capability.core.version>
+        <capability.web.version>1.0.9</capability.web.version>
+        <capability.smart.image.version>1.0.9</capability.smart.image.version>
+        <capability.rest.version>1.0.9</capability.rest.version>
+        <capability.json.version>1.0.9</capability.json.version>
+        <capability.java.version>2.1.0</capability.java.version>
+        <capability.support.version>1.1.9</capability.support.version>
     </properties>
 
     <modules>
@@ -114,6 +114,11 @@
         <!-- JCIFS libraries are included for support for Linux-based file systems as well as Windows based ones. -->
         <dependencies>
             <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.6.9</version>
+            </dependency>
+            <dependency>
                 <groupId>jcifs</groupId>
                 <artifactId>jcifs</artifactId>
                 <version>1.3.17</version>
@@ -124,6 +129,12 @@
                 <artifactId>mockwebserver</artifactId>
                 <version>3.4.1</version>
                 <scope>test</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
             </dependency>
             <!-- For REST interactions -->
             <dependency>
@@ -166,6 +177,17 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>1.7.21</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.21</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4</version>
+            </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -212,6 +234,64 @@
                 <groupId>sshtools</groupId>
                 <artifactId>j2ssh-common</artifactId>
                 <version>0.2.9</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.bonigarcia</groupId>
+                <artifactId>webdrivermanager</artifactId>
+                <version>1.6.0</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.github.detro.ghostdriver/phantomjsdriver -->
+            <dependency>
+                <groupId>com.github.detro.ghostdriver</groupId>
+                <artifactId>phantomjsdriver</artifactId>
+                <version>1.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>3.0.1</version>
+                <!--<version>3.1.0</version>-->
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-server</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-remote-driver</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-firefox-driver</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20160810</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+                <version>1.4.01</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

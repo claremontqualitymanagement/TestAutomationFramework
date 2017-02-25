@@ -6,7 +6,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>2.5.7</version>
+        <version>2.5.8</version>
     </parent>
 
     <artifactId>Core</artifactId>
@@ -77,7 +77,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.21</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -94,28 +93,22 @@
         <dependency>
             <groupId>org.subethamail</groupId>
             <artifactId>subethasmtp</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sshtools</groupId>
             <artifactId>j2ssh-core</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sshtools</groupId>
             <artifactId>j2ssh-daemon</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sshtools</groupId>
             <artifactId>j2ssh-common</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
