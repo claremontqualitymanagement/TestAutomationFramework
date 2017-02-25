@@ -82,6 +82,22 @@ public class MethodInvoker {
      * @param methodNames List of method names in order of invokation attempts.
      * @return Returns whatever the method invoked would return.
      */
+    public static Object invokeTheFirstEncounteredMethodFromListOfMethodNames(Object component, String[] methodNames){
+        MethodInvoker m = new MethodInvoker(null);
+        List<String> methods = new ArrayList<>();
+        for(String method : methodNames){
+            methods.add(method);
+        }
+        return m.invokeTheFirstEncounteredMethod(component, methods, (Object[]) null);
+    }
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @return Returns whatever the method invoked would return.
+     */
     public Object invokeTheFirstEncounteredMethod(Object component, String[] methodNames){
         List<String> methods = new ArrayList<>();
         for(String method : methodNames){
@@ -105,6 +121,20 @@ public class MethodInvoker {
             methods.add(method);
         }
         return invokeTheFirstEncounteredMethod(component, methods, args);
+    }
+
+    /**
+     * Tries to invoke the methods given upon the object given, in order of declaration.
+     * If it is possible to invoke a method it returns the result, and otherwise it will return null.
+     *
+     * @param component The object to invoke the method on.
+     * @param methodNames List of method names in order of invokation attempts.
+     * @param args Method arguments to use.
+     * @return Returns whatever the method invoked would return.
+     */
+    public static Object invokeTheFirstEncounteredMethodFromListOfMethodNames(Object component, String[] methodNames, Object... args){
+        MethodInvoker m = new MethodInvoker(null);
+        return m.invokeTheFirstEncounteredMethod(component, methodNames, args);
     }
 
     /**
@@ -296,6 +326,7 @@ public class MethodInvoker {
      * @return Returns true if the method name is found among the methods of the object, otherwise false.
      */
     public boolean objectHasMethod(Object component, String methodName){
+        if(component == null) return false;
         Class<?> c = component.getClass();
         for(Method m : c.getMethods()){
             if(m.toString().contains(methodName)){

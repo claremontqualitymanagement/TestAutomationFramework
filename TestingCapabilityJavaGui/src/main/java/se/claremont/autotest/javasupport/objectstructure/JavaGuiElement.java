@@ -238,14 +238,25 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     public ArrayList<JavaGuiElement> getSubElements(){
         ArrayList<JavaGuiElement> javaGuiElements = new ArrayList<>();
         GenericInteractionMethods genericInteractionMethods = new GenericInteractionMethods(null);
-        List<Object> subElements = genericInteractionMethods.allSubElementsOf(this.getRuntimeComponent());
+        Object component = this.getRuntimeElementCacheable();
+        if(component == null){
+            log(LogLevel.DEBUG, "Could not identify runtime element for element " + getName() + ". Cannot retrieve subelements from this element.");
+            return javaGuiElements;
+        }
+        List<Object> subElements = genericInteractionMethods.allSubElementsOf(component);
         for(Object object : subElements){
             try {
                 JavaGuiElement javaGuiElement = new JavaGuiElement(object);
                 javaGuiElements.add(javaGuiElement);
-                javaGuiElements.addAll(javaGuiElement.getSubElements());
+                try {
+                    javaGuiElements.addAll(javaGuiElement.getSubElements());
+                }catch (Exception e){
+                    log(LogLevel.DEBUG, "Could not retrieve subElements from " + javaGuiElement.getName() + ".");
+                    return javaGuiElements;
+                }
             }catch (Exception ignored){
-                System.out.println("Could not cast element of type '" + object.getClass().toString() + "' to JavaGuiElement. Error: " + ignored.toString());
+                log(LogLevel.DEBUG, "Could not cast element of type '" + object.getClass().toString() + "' to JavaGuiElement. Error: " + ignored.toString());
+                return javaGuiElements;
             }
         }
         return javaGuiElements;
@@ -446,8 +457,38 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     }
 
     private void log(LogLevel logLevel, String message){
-        if(testCase == null) return;
+        if(testCase == null) {
+            System.out.println(logLevel.toString() + ": " + message);
+            return;
+        }
         testCase.log(logLevel, message);
+    }
+
+    @Override
+    public String toString(){
+        String description = "[";
+        if(name == null){
+            description += "name: null";
+        } else {
+            description += "name: '" + name + "'";
+        }
+        if(recognitionString == null){
+            description += ", recognitionString: null";
+        }else{
+            description += ", recognitionString: '" + recognitionString + "'";
+        }
+        if(idType == null){
+            description += ", idType: null";
+        } else {
+            description += ", idType: '" + idType.toString() + "'";
+        }
+        if(className == null){
+            description += ", class name: null";
+        }else{
+            description += ", class name: '" + className + "'";
+        }
+        description += "', cached object stored: " + String.valueOf(cachedElement != null) + "]";
+        return description;
     }
 
 

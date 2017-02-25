@@ -65,8 +65,9 @@ public class PositionBasedTests extends TestSet{
     public void toTheRightOf(){
         JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
-        JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
-                fromAllTheElements(JavaTestApplication.panel0().getSubElements()).elementImmediatelyToTheRightOf(JavaTestApplication.okbutton());
+        java.wait(500);
+        JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.fromAllTheElements(JavaTestApplication.window().getComponentsAsJavaGuiElements()).elementImmediatelyToTheRightOf(JavaTestApplication.okbutton());
+        Assert.assertNotNull(textField);
         Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox awt"));
         JavaTestApplicationRunner.hideWindow();
     }

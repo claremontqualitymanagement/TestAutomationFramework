@@ -264,8 +264,112 @@ public class GenericInteractionMethods {
         log(LogLevel.FRAMEWORK_ERROR, "Actually radio button usage is not yet implemented. Please fix this.");
     }
 
-    public void selectInDropdown(GuiComponent guiElement, String s) {
-        log(LogLevel.FRAMEWORK_ERROR, "Actually drop down usage is not yet implemented. Please fix this.");
+    /**
+     * Selects a value in a dropdown. First an exact match is attempted. If the exact match fails a search for an
+     * option containing the given selection is attempted to be found. If that attempt fails too a regular expression
+     * pattern search is attempted.
+     *
+     * @param guiElement The dropdown element (ComboBox) to select a value in
+     * @param selection The selection expected to be able to make.
+     */
+    public void selectInDropdown(GuiComponent guiElement, String selection) {
+        Object component = guiElement.getRuntimeComponent();
+        if(component == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription());
+            return;
+        } else {
+            log(LogLevel.DEBUG, "Identified element " + guiElement.getName() + " by:" + guiElement.getRecognitionDescription());
+        }
+        Integer optionCount = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getItemCountOfComboBoxOptions);
+        if(optionCount == null) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not retrieve item count of combobox " + guiElement.getName() + ".");
+            return;
+        }
+        List<String> options = new ArrayList<>();
+        for(int i = 0; i < optionCount; i++){
+            Object optionObject = MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getSpecificComboBoxItemBasedOnIndex, i);
+            if(optionObject == null) continue;
+            String option = optionObject.toString();
+            options.add(option);
+        }
+        log(LogLevel.DEBUG, "Available options in dropdown " + guiElement.getName() + ": '" + String.join("', '", options + "'."));
+
+        for(int i = 0; i < optionCount; i++){
+            Object optionObject = MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getSpecificComboBoxItemBasedOnIndex, i);
+            if(optionObject == null) continue;
+            String option = optionObject.toString();
+            if(option.equals(selection)){
+                log(LogLevel.EXECUTED, "Selecting '" + selection + "' in dropdown " + guiElement.getName() + ".");
+                MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.setSelectionItemBasedOnIndex, i);
+                return;
+            }
+        }
+        for(int i = 0; i < optionCount; i++){
+            Object optionObject = MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getSpecificComboBoxItemBasedOnIndex, i);
+            if(optionObject == null) continue;
+            String option = optionObject.toString();
+            if(option.contains(selection)){
+                log(LogLevel.EXECUTED, "Selecting '" + selection + "' in dropdown " + guiElement.getName() + ". Actual selection option was '" + option + "'.");
+                MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.setSelectionItemBasedOnIndex, i);
+                return;
+            }
+        }
+        for(int i = 0; i < optionCount; i++){
+            Object optionObject = MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getSpecificComboBoxItemBasedOnIndex, i);
+            if(optionObject == null) continue;
+            String option = optionObject.toString();
+            if(SupportMethods.isRegexMatch(option, selection)){
+                log(LogLevel.EXECUTED, "Selecting '" + option + "' in dropdown " + guiElement.getName() + " based on regular expression pattern '" + selection + "'.");
+                MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.setSelectionItemBasedOnIndex, i);
+                return;
+            }
+        }
+        log(LogLevel.EXECUTION_PROBLEM, "Could not select '" + selection + "' in dropdown " + guiElement.getName() + "'. Identified available choices were:" + System.lineSeparator() + "'" + String.join("'" + System.lineSeparator() + "'", options) + "'");
+    }
+
+    /**
+     * Returns the currently selected value of a dropdown
+     *
+     * @param guiComponent The dropdown
+     * @return The selection
+     */
+    public String getDropDownSelectedOption(GuiComponent guiComponent){
+        List<String> selections = getDropDownSelectedOptions(guiComponent);
+        if(selections.size() == 1) return selections.get(0);
+        log(LogLevel.DEBUG, "Several selections of dropdown " + guiComponent.getName() + ". Selected values are '" + String.join("', '", selections) + "'. Returning all selections.");
+        return "[" + String.join("], [", selections) + "]";
+    }
+
+    /**
+     * Returns a list of the selected options of a dropdown
+     *
+     * @param guiElement The dropdown
+     * @return List of selected strings
+     */
+    public List<String> getDropDownSelectedOptions(GuiComponent guiElement){
+        List<String> selections = new ArrayList<>();
+        Object component = guiElement.getRuntimeComponent();
+        if(component == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription());
+            return selections;
+        } else {
+            log(LogLevel.DEBUG, "Identified element " + guiElement.getName() + " by:" + guiElement.getRecognitionDescription());
+        }
+        Object[] selectedObjects = (Object[]) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getAllSelectedObjectsInComboBox);
+        if(selectedObjects == null) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify any selections in " + guiElement.getName() + ".");
+            return selections;
+        } else if(selectedObjects.length == 0){
+            log(LogLevel.DEBUG, "Nothing seem to be selected in " + guiElement.getName() + ".");
+        }
+        for(Object o : selectedObjects){
+            selections.add(o.toString());
+        }
+        if(selections.size() > 0){
+            log(LogLevel.DEBUG, "DropDown " + guiElement.getName() + " contained selected element(s) '" + String.join("', '", selections) + "'.");
+        }
+        return selections;
+
     }
 
     /**

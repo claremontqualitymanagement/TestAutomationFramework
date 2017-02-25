@@ -82,8 +82,8 @@ public class JavaWindow {
      *
      * @return Returns all sub element of the window.
      */
-    public List<JavaGuiElement> getComponentsAsJavaGuiElements(){
-        List<JavaGuiElement> javaGuiElements = new ArrayList<>();
+    public ArrayList<JavaGuiElement> getComponentsAsJavaGuiElements(){
+        ArrayList<JavaGuiElement> javaGuiElements = new ArrayList<>();
         for(Object o: getComponents()){
             javaGuiElements.add(new JavaGuiElement(o));
         }

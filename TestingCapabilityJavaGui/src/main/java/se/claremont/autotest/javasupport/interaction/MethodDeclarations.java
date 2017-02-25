@@ -37,4 +37,10 @@ public class MethodDeclarations {
     public static String[] subComponentGetterMethodsInAttemptOrder =      { "getComponent(int)" };
     public static String[] subAllComponentsGettersMethodsInAttemptOrder = { "getComponents()" };
 
+    //ComboBox interactions
+    public static String[] getAllSelectedObjectsInComboBox =              { "getSelectedObjects()" }; //returns Object[]
+    public static String[] getItemCountOfComboBoxOptions =                { "getItemCount()" }; //returns int
+    public static String[] getSpecificComboBoxItemBasedOnIndex =          { "getItemAt(int)" }; //returns Object
+    public static String[] setSelectionItemBasedOnIndex =                 { "setSelectedIndex(int)" }; //void
+    public static String[] getAllPossibleOptionsInCombobox =              { "getItems()" }; //returns ObservableList for JavaFX
 }

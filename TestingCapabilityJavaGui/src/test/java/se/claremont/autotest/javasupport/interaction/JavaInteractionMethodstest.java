@@ -296,4 +296,23 @@ public class JavaInteractionMethodstest extends TestSet {
         Assert.assertTrue(java.isDisplayedWithinTimeout(button, java.standardTimeout));
         JavaTestApplicationRunner.hideWindow();
     }
+
+    @Test
+    public void dropDownSelectionShouldWork(){
+        GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
+        JavaGuiElement dropDown = new JavaGuiElement("Pet dropdown", "Pet dropDown", JavaGuiElement.IdType.ELEMENT_NAME);
+        java.getDropDownSelectedOption(dropDown);
+        java.selectInDropdown(dropDown, "Bird");
+        java.getDropDownSelectedOptions(dropDown);
+    }
+
+    @Test
+    public void dropDownSelectionDoesNotExistShouldPrintAvalableOptions(){
+        TestCase tempTestCase = new TestCase(null, "temp");
+        GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
+        JavaGuiElement dropDown = new JavaGuiElement("Pet dropdown", "Pet dropDown", JavaGuiElement.IdType.ELEMENT_NAME);
+        java.selectInDropdown(dropDown, "Boat");
+        Assert.assertTrue(logPostIsFoundInLog(LogLevel.EXECUTION_PROBLEM, "Could not select 'Boat' in dropdown Pet dropdown'. Identified available choices were", tempTestCase));
+        Assert.assertTrue(logPostIsFoundInLog(LogLevel.EXECUTION_PROBLEM, "'Dog'", tempTestCase));
+    }
 }
