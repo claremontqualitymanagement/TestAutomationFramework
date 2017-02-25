@@ -19,7 +19,7 @@ public class PositionBasedTests extends TestSet{
 
     @Before
     public void testSetup() {
-        JavaTestApplicationRunner.hideWindow();
+        JavaTestApplicationRunner.tryStart();
     }
     @After
     public void testTeardown(){

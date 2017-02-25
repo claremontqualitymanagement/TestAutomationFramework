@@ -12,7 +12,7 @@ public class MethodInvokerTest extends TestSet {
 
     @Before
     public void setup(){
-        JavaTestApplicationRunner.hideWindow();
+        JavaTestApplicationRunner.tryStart();
     }
 
     @Test

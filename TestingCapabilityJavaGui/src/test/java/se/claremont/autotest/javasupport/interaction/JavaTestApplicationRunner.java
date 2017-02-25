@@ -8,9 +8,23 @@ import java.awt.*;
  * Created by jordam on 2017-02-25.
  */
 public class JavaTestApplicationRunner {
-    public static final JavaAwtAppWithSomeSwingComponents javaApp = new JavaAwtAppWithSomeSwingComponents();
+    public static JavaAwtAppWithSomeSwingComponents javaApp = null;
+
+    public static void tryStart(){
+        if(javaApp == null && Desktop.isDesktopSupported()){
+            System.out.println("Desktop is supported. Starting 'Java Test Application'.");
+            try{
+                javaApp = new JavaAwtAppWithSomeSwingComponents();
+            } catch (Exception e){
+                Assume.assumeTrue("Could not start 'Java Test Application'. Prevention exist: " + e.toString(), false);
+            }
+        }else {
+            Assume.assumeTrue("No desktop available. Skipping start of 'Java Test Application'", false);
+        }
+    }
 
     public static void showWindow(){
+        if(javaApp == null) return;
         Assume.assumeTrue("Cannot start GUI interface since there is no desktop.", Desktop.isDesktopSupported());
         try{
             javaApp.show();
@@ -20,10 +34,12 @@ public class JavaTestApplicationRunner {
     }
 
     public static void hideWindow(){
+        if(javaApp == null) return;
         javaApp.hide();
     }
 
     public void exitApplication(){
+        if(javaApp == null)return;
         javaApp.removeAll();
         javaApp.dispose();
     }

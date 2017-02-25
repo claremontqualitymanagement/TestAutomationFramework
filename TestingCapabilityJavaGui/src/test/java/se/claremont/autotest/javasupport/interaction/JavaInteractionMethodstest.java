@@ -20,8 +20,10 @@ import java.util.List;
 public class JavaInteractionMethodstest extends TestSet {
 
     @Before     public void testSetup() {
-        JavaTestApplicationRunner.hideWindow();
+        JavaTestApplicationRunner.tryStart();
     }
+
+    @After     public void tearDown() { JavaTestApplicationRunner.hideWindow(); }
 
     private boolean logPostIsFoundInLog(LogLevel logLevel, String partOfMessage, TestCase testCase){
         for(LogPost lp : testCase.testCaseLog.logPosts){

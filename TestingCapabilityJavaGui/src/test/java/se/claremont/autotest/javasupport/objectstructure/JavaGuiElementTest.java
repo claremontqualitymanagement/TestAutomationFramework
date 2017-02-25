@@ -11,7 +11,7 @@ public class JavaGuiElementTest {
 
     @Before
     public void setup(){
-        JavaTestApplicationRunner.hideWindow();
+        JavaTestApplicationRunner.tryStart();
     }
 
     @Test
