@@ -1,4 +1,6 @@
-package se.claremont.autotest.javasupport.applicationstart;
+package se.claremont.autotest.javasupport.applicationstart.javawebstart;
+
+import se.claremont.autotest.javasupport.applicationstart.ChildFirstURLClassLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,12 @@ import java.util.jar.JarFile;
  * Created by jordam on 2017-02-25.
  */
 public class JavaWebStartApplicationStarter {
+    private URLClassLoader tafClassLoader;
+    private ChildFirstURLClassLoader testApplicationClassLoader;
+
+    public JavaWebStartApplicationStarter(){
+        tafClassLoader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
+    }
 
     public void startApplication(String localJarFileStorageFolder, String mainClassName, String[] args){
         for(String fileName : fileNamesInFolder(localJarFileStorageFolder)){
@@ -58,12 +66,15 @@ public class JavaWebStartApplicationStarter {
         Enumeration<JarEntry> e = jarFile.entries();
 
         URL[] urls = new URL[0];
+
         try {
-            urls = new URL[]{ new URL("jar:file:" + pathToJar+"!/") };
+            urls = new URL[]{new URL("jar:file:" + pathToJar+"!/")};
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         }
-        URLClassLoader cl = URLClassLoader.newInstance(urls);
+
+        ChildFirstURLClassLoader cl = (ChildFirstURLClassLoader) tafClassLoader.newInstance(urls);
+        //ParentLastURLClassLoader cl = new ParentLastURLClassLoader(urls);
 
         while (e.hasMoreElements()) {
             JarEntry je = e.nextElement();

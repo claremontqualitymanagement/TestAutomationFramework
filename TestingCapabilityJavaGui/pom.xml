@@ -20,6 +20,11 @@
             <artifactId>Core</artifactId>
             <version>${capability.core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityRestApi</artifactId>
+            <version>${capability.rest.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
