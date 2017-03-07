@@ -43,4 +43,8 @@ public class MethodDeclarations {
     public static String[] getSpecificComboBoxItemBasedOnIndex =          { "getItemAt(int)" }; //returns Object
     public static String[] setSelectionItemBasedOnIndex =                 { "setSelectedIndex(int)" }; //void
     public static String[] getAllPossibleOptionsInCombobox =              { "getItems()" }; //returns ObservableList for JavaFX
+
+    //Checkbox interactions
+    public static String[] getCheckboxCurrentStatus =                     { "isSelected()", "getState()" };
+    public static String[] setCheckboxCurrentStatus =                     { "setSelected(boolean)", "setState(boolean)" };
 }

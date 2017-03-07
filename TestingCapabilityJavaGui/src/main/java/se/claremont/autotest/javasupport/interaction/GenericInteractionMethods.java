@@ -496,6 +496,10 @@ public class GenericInteractionMethods {
      */
     public boolean existsWithTimeout(GuiComponent guiElement, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
+        if(guiElement == null) {
+            log(LogLevel.DEBUG, "Could not check existance of null element.");
+            return false;
+        }
         while(System.currentTimeMillis() - startTime < timeoutInSeconds*1000){
             if(guiElement.getRuntimeComponent() != null) {
                 log(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified within a " + timeoutInSeconds + " second timeout, and it was identified after " + (System.currentTimeMillis() - startTime) + " milliseconds by the identification procedure: " + guiElement.getRecognitionDescription());
@@ -623,6 +627,91 @@ public class GenericInteractionMethods {
         }
     }
 
+    public void setCheckboxToChecked(GuiComponent component){
+        setCheckboxToState(component, true, standardTimeout);
+    }
+
+    public void setCheckboxToUnChecked(GuiComponent component){
+        setCheckboxToState(component, false, standardTimeout);
+    }
+
+    public void setCheckboxToState(GuiComponent component, boolean expectedEndState){
+        setCheckboxToState(component, expectedEndState, standardTimeout);
+    }
+
+    public void setCheckboxToState(GuiComponent component, boolean expectedEndState, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        JavaGuiElement javaGuiElement = null;
+        try {
+            javaGuiElement = (JavaGuiElement)component;
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + component.getName() + " as any object with implementation to interact with. The class is " + component.getClass().toString() + ".");
+            takeScreenshot();
+            return;
+        }
+        if(!existsWithTimeout(javaGuiElement, timeoutInSeconds)) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not make sure checkbox " + component.getName() + " was checked since it could not be identified within the timeout of " + timeoutInSeconds + " seconds.");
+            takeScreenshot();
+            return;
+        }
+        Boolean selected = !expectedEndState;
+        while (!selected && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000){
+            selected = (Boolean) MethodInvoker.invokeTheFirstEncounteredMethod(null, component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus);
+            if(selected == !expectedEndState){
+                MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component.getRuntimeComponent(), MethodDeclarations.setCheckboxCurrentStatus, expectedEndState);
+                selected = (Boolean) MethodInvoker.invokeTheFirstEncounteredMethod(null, component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus);
+                if(expectedEndState){
+                    log(LogLevel.EXECUTED, "Made sure checkbox " + javaGuiElement.getName() + " was " + String.valueOf(expectedEndState).toLowerCase().replace("false", "un-").replace("true", "") + "checked.");
+                    return;
+                }
+            }else if(selected == null) {
+                selected = !expectedEndState;
+            }
+            wait(50);
+        }
+        log(LogLevel.EXECUTION_PROBLEM, "Could not make sure checkbox " + javaGuiElement.getName() + " was in state " + String.valueOf(expectedEndState).toLowerCase().replace("false", "un-").replace("true", "") + "checked.");
+        takeScreenshot();
+    }
+
+    public boolean checkboxIsChecked(GuiComponent component, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis()-startTime < timeoutInSeconds *1000){
+            Boolean isChecked = (Boolean) MethodInvoker.invokeTheFirstEncounteredMethod(null, component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus);
+            if(isChecked != null) {
+                log(LogLevel.DEBUG, "Checkbox " + component.getName() + " identified and was identified as " + String.valueOf(isChecked).toLowerCase().replace("true", "checked.").replace("false", "un-checked."));
+                return isChecked;
+            }
+            wait(50);
+        }
+        if(methodInvoker.objectHasAnyOfTheMethods(component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus)){
+            log(LogLevel.EXECUTION_PROBLEM, "Something went wrong trying to get checkbox status for " + component.getName() + ".");
+        } else {
+            log(LogLevel.EXECUTION_PROBLEM, "Checkbox " + component.getName() + " did not have any implementations of the methods '" + String.join("', '", MethodDeclarations.getCheckboxCurrentStatus) + "'. Available methods are:" + System.lineSeparator() + methodInvoker.getAvalableMethods(component.getRuntimeComponent()));
+        }
+        return false;
+    }
+
+    public void verifyCheckboxStatus(GuiComponent component, boolean expectedStatus, int timeoutInSeconds){
+        if(checkboxIsChecked(component, timeoutInSeconds) == expectedStatus){
+            log(LogLevel.VERIFICATION_PASSED, "Checkbox " + component.getName() + " was " + String.valueOf(expectedStatus).toLowerCase().replace("true", "checked").replace("false", "un-checked") + " as expected.");
+        } else {
+            log(LogLevel.VERIFICATION_FAILED, "Checkbox " + component.getName() + " was not " + String.valueOf(expectedStatus).toLowerCase().replace("true", "checked").replace("false", "un-checked") + " as expected.");
+            takeScreenshot();
+        }
+    }
+
+    public void verifyCheckboxStatus(GuiComponent component, boolean expectedStatus){
+        verifyCheckboxStatus(component, expectedStatus, standardTimeout);
+    }
+
+    public void verifyCheckboxIsChecked(GuiComponent component){
+        verifyCheckboxStatus(component, true);
+    }
+
+    public void verifyCheckboxIsUnChecked(GuiComponent component){
+        verifyCheckboxStatus(component, false);
+    }
+
     public void verifyImage(GuiComponent guiElement, String s) {
 
     }
@@ -707,4 +796,5 @@ public class GenericInteractionMethods {
         }
         return componentList;
     }
+
 }
