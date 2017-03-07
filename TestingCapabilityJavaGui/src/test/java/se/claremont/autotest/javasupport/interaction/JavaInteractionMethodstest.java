@@ -315,4 +315,40 @@ public class JavaInteractionMethodstest extends TestSet {
         Assert.assertTrue(logPostIsFoundInLog(LogLevel.EXECUTION_PROBLEM, "Could not select 'Boat' in dropdown Pet dropdown'. Identified available choices were", tempTestCase));
         Assert.assertTrue(logPostIsFoundInLog(LogLevel.EXECUTION_PROBLEM, "'Dog'", tempTestCase));
     }
+
+    @Test
+    public void checkboxAwtSettingTest(){
+        TestCase tempTestCase = new TestCase(null, "temp");
+        GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
+        JavaGuiElement checkbox = new JavaGuiElement("Checkbox awt", "Checkbox awt", JavaGuiElement.IdType.ELEMENT_NAME);
+        java.setCheckboxToChecked(checkbox);
+        Assert.assertTrue(java.checkboxIsChecked(checkbox, 3));
+    }
+
+    @Test
+    public void checkboxSwingSettingTest(){
+        TestCase tempTestCase = new TestCase(null, "temp");
+        GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
+        JavaGuiElement checkbox = new JavaGuiElement("Checkbox swing", "Checkbox swing", JavaGuiElement.IdType.ELEMENT_NAME);
+        java.setCheckboxToChecked(checkbox);
+        Assert.assertTrue(java.checkboxIsChecked(checkbox, 3));
+    }
+
+    @Test
+    public void checkboxAwtUnSettingTest(){
+        TestCase tempTestCase = new TestCase(null, "temp");
+        GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
+        JavaGuiElement checkbox = new JavaGuiElement("Checkbox awt", "Checkbox awt", JavaGuiElement.IdType.ELEMENT_NAME);
+        java.setCheckboxToUnChecked(checkbox);
+        Assert.assertFalse(java.checkboxIsChecked(checkbox, 3));
+    }
+
+    @Test
+    public void checkboxSwingUnSettingTest(){
+        TestCase tempTestCase = new TestCase(null, "temp");
+        GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
+        JavaGuiElement checkbox = new JavaGuiElement("Checkbox swing", "Checkbox swing", JavaGuiElement.IdType.ELEMENT_NAME);
+        java.setCheckboxToUnChecked(checkbox);
+        Assert.assertFalse(java.checkboxIsChecked(checkbox, 3));
+    }
 }

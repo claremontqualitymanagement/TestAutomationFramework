@@ -655,21 +655,28 @@ public class GenericInteractionMethods {
             return;
         }
         Boolean selected = !expectedEndState;
-        while (!selected && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000){
+        while (selected != expectedEndState && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000){
             selected = (Boolean) MethodInvoker.invokeTheFirstEncounteredMethod(null, component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus);
-            if(selected == !expectedEndState){
+            if(selected == null){
+                selected = !expectedEndState;
+            } else if(selected != expectedEndState){
                 MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component.getRuntimeComponent(), MethodDeclarations.setCheckboxCurrentStatus, expectedEndState);
                 selected = (Boolean) MethodInvoker.invokeTheFirstEncounteredMethod(null, component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus);
-                if(expectedEndState){
+                if(selected == expectedEndState){
                     log(LogLevel.EXECUTED, "Made sure checkbox " + javaGuiElement.getName() + " was " + String.valueOf(expectedEndState).toLowerCase().replace("false", "un-").replace("true", "") + "checked.");
                     return;
+                } else {
+                    log(LogLevel.EXECUTION_PROBLEM, "Could not set checkbox " + javaGuiElement.getName() + " to " + String.valueOf(expectedEndState).replace("true", "checked.").replace("false", "un-checked."));
+                    takeScreenshot();
+                    return;
                 }
-            }else if(selected == null) {
-                selected = !expectedEndState;
             }
             wait(50);
         }
         log(LogLevel.EXECUTION_PROBLEM, "Could not make sure checkbox " + javaGuiElement.getName() + " was in state " + String.valueOf(expectedEndState).toLowerCase().replace("false", "un-").replace("true", "") + "checked.");
+        if(!methodInvoker.objectHasAnyOfTheMethods(javaGuiElement.getRuntimeElementCacheable(), MethodDeclarations.getCheckboxCurrentStatus)){
+            log(LogLevel.INFO, "Element of class " + javaGuiElement.getRuntimeElementCacheable().getClass().toString() + " has the following methods implemented '" + String.join("', '", methodInvoker.getAvalableMethods(javaGuiElement.getRuntimeElementCacheable())) + "'. Tried invoking the methods '" + String.join("', '", MethodDeclarations.getCheckboxCurrentStatus) + "'.");
+        }
         takeScreenshot();
     }
 
