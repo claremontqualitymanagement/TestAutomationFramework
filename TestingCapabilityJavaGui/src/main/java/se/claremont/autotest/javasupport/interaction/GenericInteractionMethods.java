@@ -9,6 +9,7 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
 import se.claremont.autotest.javasupport.objectstructure.GuiComponent;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
+import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -228,6 +229,96 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Finds the element with the specified text and click on it. First attempt is exact match, then partial match, last regular expression pattern match is tried.
+     *
+     * @param window The JavaWindow to search for the element in.
+     * @param textOfElementToClick The text to find (exact match, partial match, or regular expression pattern)
+     */
+    public void clickElementWithText(JavaWindow window, String textOfElementToClick){
+        for(Object object: window.getComponents()){
+            try{
+                String objectText = (String)methodInvoker.invokeTheFirstEncounteredMethod(object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+                if(objectText != null && objectText.equals(textOfElementToClick)){
+                    click(new JavaGuiElement(object));
+                    return;
+                }
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not retrieve text from object " + object.toString() + " or could turn it into a JavaGuiElement, or could not click it. Error: " + e.toString());
+            }
+        }
+        for(Object object:  window.getComponents()){
+            try{
+                String objectText = (String)methodInvoker.invokeTheFirstEncounteredMethod(object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+                if(objectText != null && objectText.contains(textOfElementToClick)){
+                    click(new JavaGuiElement(object));
+                    return;
+                }
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not retrieve text from object " + object.toString() + " or could turn it into a JavaGuiElement, or could not click it. Error: " + e.toString());
+            }
+        }
+        for(Object object:  window.getComponents()){
+            try{
+                String objectText = (String)methodInvoker.invokeTheFirstEncounteredMethod(object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+                if(objectText != null && SupportMethods.isRegexMatch(objectText, textOfElementToClick)){
+                    click(new JavaGuiElement(object));
+                    return;
+                }
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not retrieve text from object " + object.toString() + " or could turn it into a JavaGuiElement, or could not click it. Error: " + e.toString());
+            }
+        }
+    }
+
+    /**
+     * Finds the element with the specified text and click on it. First attempt is exact match, then partial match, last regular expression pattern match is tried.
+     *
+     * @param parentElement The object where to look for sub-elements with the specified text.
+     * @param textOfElementToClick The text to find (exact match, partial match, or regular expression pattern)
+     */
+    public void clickElementWithText(GuiComponent parentElement, String textOfElementToClick){
+        String elementText = getText(parentElement);
+        if(elementText != null && (elementText.equals(textOfElementToClick) || elementText.contains(textOfElementToClick) || SupportMethods.isRegexMatch(elementText, textOfElementToClick))){
+            click(parentElement);
+            log(LogLevel.EXECUTED, "Choosed '" + textOfElementToClick + "' in radiobutton " + parentElement.getName() + ".");
+            return;
+        }
+        JavaGuiElement javaGuiElement = (JavaGuiElement) parentElement;
+        for(Object object: javaGuiElement.getSubElements()){
+            try{
+                String objectText = (String)methodInvoker.invokeTheFirstEncounteredMethod(object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+                if(objectText != null && objectText.equals(textOfElementToClick)){
+                    click(new JavaGuiElement(object));
+                    return;
+                }
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not retrieve text from object " + object.toString() + " or could turn it into a JavaGuiElement, or could not click it. Error: " + e.toString());
+            }
+        }
+        for(Object object: javaGuiElement.getSubElements()){
+            try{
+                String objectText = (String)methodInvoker.invokeTheFirstEncounteredMethod(object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+                if(objectText != null && objectText.contains(textOfElementToClick)){
+                    click(new JavaGuiElement(object));
+                    return;
+                }
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not retrieve text from object " + object.toString() + " or could turn it into a JavaGuiElement, or could not click it. Error: " + e.toString());
+            }
+        }
+        for(Object object: javaGuiElement.getSubElements()){
+            try{
+                String objectText = (String)methodInvoker.invokeTheFirstEncounteredMethod(object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+                if(objectText != null && SupportMethods.isRegexMatch(objectText, textOfElementToClick)){
+                    click(new JavaGuiElement(object));
+                    return;
+                }
+            }catch (Exception e){
+                log(LogLevel.DEBUG, "Could not retrieve text from object " + object.toString() + " or could turn it into a JavaGuiElement, or could not click it. Error: " + e.toString());
+            }
+        }
+    }
 
     /**
      * Pauses execution the stated time.
@@ -265,13 +356,22 @@ public class GenericInteractionMethods {
     }
 
     /**
-     * When implemented, this method will set radio button status
+     * When implemented, this method will set radio button status.
      *
      * @param guiElement The radio button element to interact with
-     * @param s String
+     * @param textOfElementToChoose The text of the option to choose. First attempt is exact match, then partial match, then regular expression pattern
      */
-    public void chooseRadioButton(GuiComponent guiElement, String s) {
-        log(LogLevel.FRAMEWORK_ERROR, "Actually radio button usage is not yet implemented. Please fix this.");
+    public void chooseRadioButton(GuiComponent guiElement, String textOfElementToChoose) {
+        JavaGuiElement javaGuiElement = null;
+        try{
+            javaGuiElement = (JavaGuiElement) guiElement;
+        }catch (Exception e){
+            log(LogLevel.DEBUG, "Could not convert element " + guiElement.getName() + " to a JavaGuiElement to use it as a RadioButton.");
+            takeScreenshot();
+            return;
+        }
+        clickElementWithText(javaGuiElement, textOfElementToChoose);
+        log(LogLevel.EXECUTED, "Choosed '" + textOfElementToChoose + "' in radiobutton " + javaGuiElement.getName() + ".");
     }
 
     /**
