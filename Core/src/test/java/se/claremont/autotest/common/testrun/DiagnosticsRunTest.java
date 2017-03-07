@@ -19,7 +19,9 @@ public class DiagnosticsRunTest {
     @Test
     public void test_RunTests() {
         try {
+            SuppressTestOutputFromConsoleOutput.redirectOutputChannel();
             diagnosticsRun.run();
+            SuppressTestOutputFromConsoleOutput.restoreOutputChannel();
             for(Failure testFailure: diagnosticsRun.getResult().getFailures()) {
                 System.out.println(testFailure.toString());
             }

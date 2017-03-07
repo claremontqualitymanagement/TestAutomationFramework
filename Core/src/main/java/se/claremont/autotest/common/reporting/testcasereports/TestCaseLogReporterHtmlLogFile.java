@@ -202,8 +202,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      font.w3cvalidationother  { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-weight: bold; }" + LF +
                 "      pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
-                "                             overflow: auto;" + LF +
-                "                             width: auto;" + LF +
+                "                             overflow: scroll;" + LF +
                 "                             padding: 5px;" + LF +
                 "                             background-color: #eee;" + LF +
                 "                             width: 70%;" + LF +
