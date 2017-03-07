@@ -32,7 +32,11 @@ public class GenericInteractionMethods {
     public int standardTimeout = 5;
     MethodInvoker methodInvoker;
 
-
+    /**
+     * Constructor to enable interaction with Java GUIs
+     *
+     * @param testCase The test case to log interactions to
+     */
     public GenericInteractionMethods(TestCase testCase){
         this.testCase = testCase;
         methodInvoker = new MethodInvoker(testCase);
@@ -74,6 +78,12 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Retrieves all sub-elements (recursively) of the object provided.
+     *
+     * @param component The component to identify sub-elements of
+     * @return Returns a list of the sub-elements of the provided element
+     */
     public ArrayList<Object> allSubElementsOf(Object component){
         if(component.getClass().equals(JavaGuiElement.class)) component = ((JavaGuiElement) component).getRuntimeComponent();
 
@@ -95,27 +105,6 @@ public class GenericInteractionMethods {
             componentList.addAll(addSubComponents(subElement));
         }
         return componentList;
-
-
-/*
-
-        Integer subComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
-        if(subComponentCount == null){
-            log(LogLevel.DEBUG, "Component to get sub-component from is not a container object. Reaching for its parent object.");
-            component = getContainerComponent(component);
-        }
-        subComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
-        if(subComponentCount == null){
-            log(LogLevel.DEBUG, "Could not identify any container object for the given object.");
-            return null;
-        }
-        ArrayList<java.lang.Object> objectList = new ArrayList<>();
-        for(int i = 0; i < subComponentCount; i++){
-            java.lang.Object subElement = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
-            if(subElement != null) objectList.add(subElement);
-        }
-        return objectList;
-  */
     }
 
     /**
@@ -275,6 +264,12 @@ public class GenericInteractionMethods {
         performWrite(guiComponent, textToWrite, false);
     }
 
+    /**
+     * When implemented, this method will set radio button status
+     *
+     * @param guiElement The radio button element to interact with
+     * @param s String
+     */
     public void chooseRadioButton(GuiComponent guiElement, String s) {
         log(LogLevel.FRAMEWORK_ERROR, "Actually radio button usage is not yet implemented. Please fix this.");
     }
@@ -527,6 +522,14 @@ public class GenericInteractionMethods {
         return !found;
     }
 
+    /**
+     * Checks if an element exist, but gives the element time to disappear for a timeout.
+     *
+     * @param guiElement The element to verify does not exist
+     * @param timeoutInSeconds The time to wait for the element to disappear, if needed
+     * @return Returns true if the element does not exist, or disappear within the stated
+     * timeout. If the element still exist after the timeout it returns false.
+     */
     public boolean doesNotExistWithTimeout(GuiComponent guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < timeoutInSeconds * 1000){
@@ -536,6 +539,13 @@ public class GenericInteractionMethods {
         return false;
     }
 
+    /**
+     * Checks if the element gets displayed within the timeout.
+     *
+     * @param guiElement The element to check.
+     * @param timeoutInSeconds The number of seconds to wait for the element to get displayed.
+     * @return Returns true if the element gets displayed within the given timeout period, othervise fale.
+     */
     public boolean isDisplayedWithinTimeout(GuiComponent guiElement, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
         if(!existsWithTimeout(guiElement, timeoutInSeconds)){
@@ -562,6 +572,12 @@ public class GenericInteractionMethods {
         return false;
     }
 
+    /**
+     * Checks if the element is currently displayed (no timeout, no waiting), meaning that it exists, and is set as visible in the GUI.
+     *
+     * @param guiElement The element to check.
+     * @return Returns true if element is identified, it exists, and it is visible.
+     */
     public boolean isDisplayed(GuiComponent guiElement){
         Boolean displayed = (Boolean)methodInvoker.invokeTheFirstEncounteredMethod(guiElement, MethodDeclarations.componentIsVisibleMethodsInAttemptOrder);
         if(displayed == null){
@@ -576,10 +592,23 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Checks if the element is currently not displayed (no timeout, no waiting), meaning that it does not exists, or it is set as non-visible in the GUI.
+     *
+     * @param guiElement The element to check.
+     * @return Returns false if element is identified, it exists, and it is visible.
+     */
     public boolean isNotDisplayed(GuiComponent guiElement) {
         return !isDisplayed(guiElement);
     }
 
+    /**
+     * Checks if the element get displayed within the timeout.
+     *
+     * @param guiComponent The element to check
+     * @param timeoutInSeconds The timout to wait for the element to get displayed
+     * @return Returns true if the element is identified, and is visible during the timeout
+     */
     public boolean isNotDisplayedWithTimeout(GuiComponent guiComponent, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000){
@@ -591,6 +620,11 @@ public class GenericInteractionMethods {
         return false;
     }
 
+    /**
+     * Verifies that a GUI element is displayed, and writes the outcome to the test case log.
+     *
+     * @param guiElement The GUI element to check if it is displayed
+     */
     public void verifyObjectIsDisplayed(GuiComponent guiElement) {
         if(isDisplayedWithinTimeout(guiElement, standardTimeout)){
             log(LogLevel.VERIFICATION_PASSED, "Verified that element " + guiElement.getName() + " is displayed.");
@@ -600,6 +634,11 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Verifies that a GUI element is not displayed, and writes the outcome to the test case log.
+     *
+     * @param guiElement The GUI element to check if it is displayed.
+     */
     public void verifyObjectIsNotDisplayed(GuiComponent guiElement) {
         if(!isDisplayedWithinTimeout(guiElement, standardTimeout)){
             log(LogLevel.VERIFICATION_PASSED, "Verified that element " + guiElement.getName() + " is not displayed.");
@@ -609,6 +648,12 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Verifies that a GUI element exists. An element can exist but not be displayed.
+     * Use verifyObjectIsDisplayed() if you want to make sure the element is visible.
+     *
+     * @param guiElement The GUI element to check existance of.
+     */
     public void verifyObjectExistence(GuiComponent guiElement) {
         if(existsWithTimeout(guiElement, standardTimeout)){
             log(LogLevel.VERIFICATION_PASSED, "Existance of " + guiElement.getName() + " verified.");
@@ -618,6 +663,13 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Verifies object existance, but gives the element time to appear. Writes results to log.
+     * An element can exist but set to not be visible. Other methods check if elements are displayed.
+     *
+     * @param guiElement The GUI element to check for.
+     * @param timeoutInSeconds The timeout to wait for the element to become present.
+     */
     public void verifyObjectExistenceWithTimeout(GuiComponent guiElement, int timeoutInSeconds) {
         if(existsWithTimeout(guiElement, timeoutInSeconds)){
             log(LogLevel.VERIFICATION_PASSED, "Existance of " + guiElement.getName() + " verified.");
@@ -627,18 +679,41 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Sets a checkbox to be checked (=true).
+     *
+     * @param component The checkbox element
+     */
     public void setCheckboxToChecked(GuiComponent component){
         setCheckboxToState(component, true, standardTimeout);
     }
 
+    /**
+     * Sets a checkbox to be un-checked (=false).
+     *
+     * @param component The checkbox element
+     */
     public void setCheckboxToUnChecked(GuiComponent component){
         setCheckboxToState(component, false, standardTimeout);
     }
 
+    /**
+     * Sets a checkbox element to selected state.
+     *
+     * @param component The checkbox element
+     * @param expectedEndState The expected state to set the element to (checked = true, un-checked=false).
+     */
     public void setCheckboxToState(GuiComponent component, boolean expectedEndState){
         setCheckboxToState(component, expectedEndState, standardTimeout);
     }
 
+    /**
+     * Tries to set a checkbox element to selected state for a certain number of seconds to enable elements to appear or to get enabled.
+     *
+     * @param component The checkbox element
+     * @param expectedEndState The expected state to set the element to (checked = true, un-checked=false).
+     * @param timeoutInSeconds
+     */
     public void setCheckboxToState(GuiComponent component, boolean expectedEndState, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         JavaGuiElement javaGuiElement = null;
@@ -680,6 +755,13 @@ public class GenericInteractionMethods {
         takeScreenshot();
     }
 
+    /**
+     * Returns the current status of a checkbox.
+     *
+     * @param component The checkbox element
+     * @param timeoutInSeconds The number of seconds to wait for the checkbox appearance
+     * @return Returns true if the checkbox is checked, and false if the checbox is checked or if the checkbox is not found.
+     */
     public boolean checkboxIsChecked(GuiComponent component, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis()-startTime < timeoutInSeconds *1000){
@@ -698,6 +780,13 @@ public class GenericInteractionMethods {
         return false;
     }
 
+    /**
+     * Verifies the status of a checkbox element.
+     *
+     * @param component The checkbox element
+     * @param expectedStatus True if the expectation is that the checkbox should be checked, othervise false.
+     * @param timeoutInSeconds The timeout to wait for the checkbox element to appear and get the expected status.
+     */
     public void verifyCheckboxStatus(GuiComponent component, boolean expectedStatus, int timeoutInSeconds){
         if(checkboxIsChecked(component, timeoutInSeconds) == expectedStatus){
             log(LogLevel.VERIFICATION_PASSED, "Checkbox " + component.getName() + " was " + String.valueOf(expectedStatus).toLowerCase().replace("true", "checked").replace("false", "un-checked") + " as expected.");
@@ -707,22 +796,44 @@ public class GenericInteractionMethods {
         }
     }
 
+    /**
+     * Verifies the status of a checkbox element.
+     *
+     * @param component The checkbox element
+     * @param expectedStatus True if the expectation is that the checkbox should be checked, othervise false.
+     */
     public void verifyCheckboxStatus(GuiComponent component, boolean expectedStatus){
         verifyCheckboxStatus(component, expectedStatus, standardTimeout);
     }
 
+    /**
+     * Verifies that a checkbox element is checked.
+     *
+     * @param component The checkbox element
+     */
     public void verifyCheckboxIsChecked(GuiComponent component){
         verifyCheckboxStatus(component, true);
     }
 
+    /**
+     * Verifies that a checkbox element is un-checked.
+     *
+     * @param component The checkbox element
+     */
     public void verifyCheckboxIsUnChecked(GuiComponent component){
         verifyCheckboxStatus(component, false);
     }
 
     public void verifyImage(GuiComponent guiElement, String s) {
-
+        log(LogLevel.FRAMEWORK_ERROR, "The image verification method is not yet implemented. Sorry. Please contribute by implementing it.");
     }
-    
+
+    /**
+     * Retrieves a point in the center of the element provided, if the element can be found.
+     *
+     * @param guiElement The element to find click point of
+     * @return Returns a Point in the middle of the element.
+     */
     private Point getClickablePoint(GuiComponent guiElement){
         Object component = guiElement.getRuntimeComponent();
         if(component == null){
@@ -742,11 +853,18 @@ public class GenericInteractionMethods {
         return clickPoint;
     }
 
+    /**
+     * Writes to test case if provided, and to console.
+     *
+     * @param logLevel Log level of this log post
+     * @param message Log message
+     */
     private void log(LogLevel logLevel, String message){
         System.out.println(new LogPost(logLevel, message).toString());
         if(testCase != null)
             testCase.log(logLevel, message);
     }
+
     /**
      * Writes text to a component, and makes sure the text is there.
      *
@@ -784,6 +902,14 @@ public class GenericInteractionMethods {
         log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to " + guiElement.getName() + ". Text in element after operation is '" + getText(guiElement) + "'.");
     }
 
+    /**
+     * Method using a regular expression pattern to check if all the characters in one string exists in another string, and in the same order.
+     * Used for verification of text entries.
+     *
+     * @param actualText The text to find all characters in.
+     * @param expectedText The characters to find.
+     * @return Returns true if all characters in expectedText are found in the same order in actualText.
+     */
     private boolean allCharactersExistAndInCorrectOrder(String actualText, String expectedText){
         String matchingString = ".*";
         for(int i = 0; i < expectedText.length(); i++){
@@ -792,6 +918,12 @@ public class GenericInteractionMethods {
         return SupportMethods.isRegexMatch(actualText, matchingString);
     }
 
+    /**
+     * Retrieves all sub-components of an element.
+     *
+     * @param component The element to find the sub-components of
+     * @return Returns all sub-components.
+     */
     private List<Object> addSubComponents(Object component){
         List<Object> componentList = new ArrayList<>();
         if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
