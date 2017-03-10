@@ -379,7 +379,7 @@ public class SummaryReport {
         //noinspection deprecation
         return "          <table>" + LF +
                 "            <tr>" + LF +
-                "              <td class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>&copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + ". TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license.</td>" + LF +
+                "              <td class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + ".</td>" + LF +
                 "            </tr>" + LF +
                 "          </table>" + LF;
     }
