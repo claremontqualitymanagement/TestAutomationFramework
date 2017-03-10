@@ -135,6 +135,7 @@ public class HtmlSummaryReport {
     public enum HtmlStyleNames {
         STATISTICS,
         CONTENT,
+        LICENSE_LINK,
         RESULTS_BAR,
         STATISTICS_HEADER_ROW,
         STATISTICS_COUNT,
@@ -191,6 +192,9 @@ public class HtmlSummaryReport {
                 "       .noerrorsexclamtaion    { color: black; font-weight: bold; }" + LF +
                 "       h3#settingsheading      { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "       table.settingsTable     { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-size: 80%; }" + LF +
+                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
+                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":visited      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
+                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":hover      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: underline; }" + LF +
                 resultsBarStyleInfo +
                 "    </style>" + LF + LF;
     }
@@ -397,7 +401,7 @@ public class HtmlSummaryReport {
                 "            <tr>" + LF +
                 "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
                 "            </tr><tr>" + LF +
-                "              <td width=\"100%\" class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>(c) Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "</td>" + LF +
+                "              <td width=\"100%\" class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>&copy; Claremont" + new SimpleDateFormat("yyyy").format(new Date()) + ". TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license.</td>" + LF +
                 "            </tr>" + LF +
                 "          </table>" + LF;
     }

@@ -153,7 +153,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "            <tr>" + LF +
                 "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
                 "            </tr><tr>" + LF +
-                "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>(c) Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "</td>" + LF +
+                "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>(c) Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + ". TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license. </td>" + LF +
                 "            </tr>" + LF +
                 "          </table>" + LF;
     }
@@ -190,6 +190,9 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      img.screenshot           { border: 0px none; width:105px; background: #999; }" + LF +
                 "      img.bottomlogo           { width: 20%; }" + LF +
                 "      td.bottomlogo            { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
+                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
+                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":visited      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
+                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":hover      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: underline; }" + LF +
 
                 //StylesFromExternalModules
 
