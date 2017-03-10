@@ -9,6 +9,8 @@ An Test Automated Framework brought to you from the [Claremont team](http://www.
 
 Check out our documentation [here](https://github.com/claremontqualitymanagement/TestAutomationFramework/wiki).
 
+TAF is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license. It's the same license as for example Selenium and many other open source creations. 
+
 
 
 [![travis build](https://img.shields.io/travis/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://travis-ci.org/claremontqualitymanagement/TestAutomationFramework)
