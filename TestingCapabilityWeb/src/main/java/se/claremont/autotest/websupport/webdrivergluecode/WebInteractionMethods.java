@@ -15,6 +15,7 @@ import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
+import se.claremont.autotest.javasupport.interaction.MethodInvoker;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.LinkCheck;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
@@ -386,7 +387,11 @@ public class WebInteractionMethods implements GuiDriver {
                 elementIdentified = true;
                 try {
                     text = element.getText();
-                }catch (Exception ignored){}
+                    if (text == null || text.length() == 0)
+                        text = element.getAttribute("value");
+                }catch (Exception ignored){
+                    text = (String) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, element, new String[] {"getValue()", "getOptions()", "value()", "option()", "text()", "getLabel()", "label()"});
+                }
             }
             wait(50);
         }
