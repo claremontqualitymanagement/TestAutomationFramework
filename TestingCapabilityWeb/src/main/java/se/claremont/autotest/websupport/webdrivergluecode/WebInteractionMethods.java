@@ -317,10 +317,14 @@ public class WebInteractionMethods implements GuiDriver {
         boolean elementIsDisplayed = true;
         while (elementIsDisplayed && (System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
-            if(element == null || !element.isDisplayed()){
+            try{
+                if(element == null || !element.isDisplayed()){
+                    elementIsDisplayed = false;
+                }else{
+                    wait(50);
+                }
+            }catch (Exception ignored){ //element disappeared while performing
                 elementIsDisplayed = false;
-            }else{
-                wait(50);
             }
         }
         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to disappear. " +
