@@ -61,6 +61,8 @@ public class JsonParser {
 
     @SuppressWarnings("unused")
     public static void verifyMandatoryFieldIsNotEmpty(String content, String mandatoryParameterName, TestCase testCase){
+        if(content == null) testCase.log(LogLevel.VERIFICATION_FAILED, "Content was null when trying to verify that mandatory parameter '" + mandatoryParameterName + "' was not empty.");
+        if(mandatoryParameterName == null) testCase.log(LogLevel.VERIFICATION_PROBLEM, "mandatoryParameterName was null when trying to verify that mandatory parameter was not empty.");
         JSONObject object;
         boolean parameterNameExist = true;
         String parameterValue = null;

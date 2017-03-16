@@ -25,6 +25,7 @@ public class TafRunListener extends RunListener {
         System.out.println("Test cases ignored: " + result.getIgnoreCount());
         System.out.println("Test cases failed:  " + result.getFailureCount());
         System.out.println();
+
         for (Failure failure : result.getFailures()) {
             System.out.println("Failure: " + failure.toString());
             System.out.println();

@@ -366,8 +366,19 @@ public class TableData {
         }
     }
 
+    private int getMaxNumberOfCellsPerRow(String rowDelimiter, String cellDelimiter){
+        String[] lines = originalContent.split(rowDelimiter);
+        if(lines.length < 1) return 0;
+        int maxCells = 0;
+        for(String line : lines){
+            if(line.split(cellDelimiter).length > maxCells) maxCells = line.split(cellDelimiter).length;
+        }
+        return maxCells;
+    }
+
     private void createTableDataFromContent(String originalContent, String[] headings, String rowDelimiter, String cellDilimiter){
         String[] lines = originalContent.split(rowDelimiter);
+        int maxNumberOfCellsPerRow = getMaxNumberOfCellsPerRow(rowDelimiter, cellDilimiter);
         if(lines.length < 1) return;
         if(headings == null){
             String[] firstRowCells = lines[0].split(cellDilimiter);
@@ -375,18 +386,25 @@ public class TableData {
             for(String headline : firstRowCells){
                 headlines.add(headline.trim());
             }
+            if(headlinesCount < maxNumberOfCellsPerRow){
+                log(LogLevel.DEBUG, "Cell count for headline cells is " + headlinesCount + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
+                for(int i = headlinesCount; i < maxNumberOfCellsPerRow; i++){
+                    headlines.add("");
+                }
+            }
             if(lines.length < 2) return;
             for(int i = 1; i < lines.length;i++){
+                if(lines[i].trim().length() == 0)continue;
                 List<DataCell> cellContents = new ArrayList<>();
                 String[] cells = lines[i].split(cellDilimiter);
-                if(headlinesCount != cells.length){
-                    log(LogLevel.DEBUG, "Warning: The data row '" + lines[i] + "' does not have the same number of cells as the headline row. Skipping this line.");
-                    continue;
-                }
-                if(lines[i].trim().length() == 0)continue;
-
                 for(int cellCount = 0; cellCount < cells.length; cellCount++){
                     cellContents.add(new DataCell(cells[cellCount], firstRowCells[cellCount]));
+                }
+                if(cells.length < maxNumberOfCellsPerRow){
+                    log(LogLevel.DEBUG, "Cell count for row '" + lines[i] + " cells is " + cells.length + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
+                    for(int cellBuffer = cells.length; cellBuffer < maxNumberOfCellsPerRow; cellBuffer++){
+                        cellContents.add(new DataCell("", firstRowCells[cellBuffer]));
+                    }
                 }
                 rows.add(new TableRow(cellContents));
             }
@@ -395,18 +413,25 @@ public class TableData {
             for(String headline : headings){
                 headlines.add(headline.trim());
             }
+            if(headlinesCount < maxNumberOfCellsPerRow){
+                log(LogLevel.DEBUG, "Cell count for headline cells is " + headlinesCount + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
+                for(int i = headlinesCount; i < maxNumberOfCellsPerRow; i++){
+                    headlines.add("");
+                }
+            }
             if(lines.length < 1) return;
             for(int i = 0; i < lines.length;i++){
+                if(lines[i].trim().length() == 0)continue;
                 List<DataCell> cellContents = new ArrayList<>();
                 String[] cells = lines[i].split(cellDilimiter);
-                if(headlinesCount != cells.length){
-                    log(LogLevel.DEBUG, "Warning: The data row '" + lines[i] + "' does not have the same number of cells as the headline row. Skipping this line.");
-                    continue;
-                }
-                if(lines[i].trim().length() == 0)continue;
-
                 for(int cellCount = 0; cellCount < cells.length; cellCount++){
-                    cellContents.add(new DataCell(cells[cellCount], headings[cellCount]));
+                    cellContents.add(new DataCell(cells[cellCount], headlines.get(cellCount)));
+                }
+                if(cells.length < maxNumberOfCellsPerRow){
+                    log(LogLevel.DEBUG, "Cell count for row '" + lines[i] + " cells is " + cells.length + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
+                    for(int cellBuffer = cells.length; cellBuffer < maxNumberOfCellsPerRow; cellBuffer++){
+                        cellContents.add(new DataCell("", headlines.get(cellBuffer)));
+                    }
                 }
                 rows.add(new TableRow(cellContents));
             }
