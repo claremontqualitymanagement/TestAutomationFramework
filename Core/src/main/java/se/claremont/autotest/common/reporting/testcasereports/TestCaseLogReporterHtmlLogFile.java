@@ -150,7 +150,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private String footer(){
         String versionInfo = "";
         String version = TafVersionGetter.tafVersion();
-        if(version == null){
+        if(version != null){
             versionInfo = " TAF version " + version + ".";
         }
         //noinspection deprecation
