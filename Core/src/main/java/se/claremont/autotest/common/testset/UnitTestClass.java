@@ -23,8 +23,14 @@ public class UnitTestClass {
         @Override
         protected void failed(Throwable e, Description description) {
             restoreOutputChannel();
-            System.out.print("Result: Not OK. Output:");
-            System.out.print(testOutputChannel.toString() + System.lineSeparator());
+            System.out.println("Result: Failed.");
+            System.out.println("  > Failed test '" + description.getTestClass().getName() + "." + description.getMethodName() + "'.");
+            if(testOutputChannel != null && testOutputChannel.toString().length() > 0){
+                System.out.print("  > Output from test run:" + System.lineSeparator() + testOutputFormattedForDisplay() + System.lineSeparator());
+            }
+            if(e != null && e.toString().length() > 0){
+                System.out.print("  > Error: " + e.toString() + System.lineSeparator());
+            }
         }
 
         @Override
@@ -35,10 +41,10 @@ public class UnitTestClass {
 
         @Override
         protected void skipped(org.junit.AssumptionViolatedException e, Description description) {
-            if(e.toString().length() > 0){
-                System.out.print("Result: Test ignored. Assumption validation: " + e.toString());
+            if(e.getMessage().length() > 0){
+                System.out.print("Result: Test ignored. Assumption validation: " + e.getMessage());
             } else {
-                System.out.print("Result: Test ignored.");
+                System.out.print("Result: Test ignored. Assumptions on pre-requisites for execution not met.");
             }
         }
 
@@ -82,6 +88,12 @@ public class UnitTestClass {
     private void redirectOutputToNewTestStream(){
         testOutputChannel = new ByteArrayOutputStream();
         System.setOut(new PrintStream(testOutputChannel));
+    }
+
+    private String testOutputFormattedForDisplay(){
+        String[] rows = testOutputChannel.toString().split(System.lineSeparator());
+        String indentation = "  > ";
+        return indentation + String.join(System.lineSeparator() + indentation, rows) + System.lineSeparator();
     }
 
 }
