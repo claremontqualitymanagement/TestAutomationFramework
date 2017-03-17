@@ -2,13 +2,14 @@ package se.claremont.autotest.common.support;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for the ValuePair class
  *
  * Created by jordam on 2016-09-18.
  */
-public class ValuePair_Tests {
+public class ValuePair_Tests extends UnitTestClass{
 
     @Test
     public void createAndRead(){

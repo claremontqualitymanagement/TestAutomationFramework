@@ -4,11 +4,12 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Created by jordam on 2017-01-28.
  */
-public class TableVerificationTest {
+public class TableVerificationTest extends UnitTestClass{
 
     @Test
     public void createTableData(){

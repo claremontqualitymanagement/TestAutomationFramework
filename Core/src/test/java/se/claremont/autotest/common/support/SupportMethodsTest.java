@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.File;
 
@@ -12,7 +13,7 @@ import java.io.File;
  *
  * Created by jordam on 2016-08-31.
  */
-public class SupportMethodsTest {
+public class SupportMethodsTest extends UnitTestClass{
 
     @Test
     public void isRegexMatchTest(){

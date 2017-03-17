@@ -4,11 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class DiagnosticsRunTest {
+public class DiagnosticsRunTest extends UnitTestClass{
     private DiagnosticsRun diagnosticsRun;
 
     @Before

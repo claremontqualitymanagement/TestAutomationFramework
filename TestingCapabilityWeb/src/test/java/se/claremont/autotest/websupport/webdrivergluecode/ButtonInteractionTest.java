@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.websupport.DomElement;
 
 /**
@@ -15,7 +16,7 @@ import se.claremont.autotest.websupport.DomElement;
  *
  * Created by jordam on 2017-01-18.
  */
-public class ButtonInteractionTest extends TestSet {
+public class ButtonInteractionTest extends UnitTestClass {
     @Test
     @Ignore
     /*

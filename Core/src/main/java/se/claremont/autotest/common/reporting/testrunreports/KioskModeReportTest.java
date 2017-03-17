@@ -5,11 +5,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Created by jordam on 2016-12-22.
  */
-public class KioskModeReportTest {
+public class KioskModeReportTest extends UnitTestClass{
 
     @Test
     public void evaluateTestCase(){

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.File;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class FileTesterTest {
+public class FileTesterTest extends UnitTestClass{
     private FileTester fileTester;
     @Mock
     private TestCase testCase;

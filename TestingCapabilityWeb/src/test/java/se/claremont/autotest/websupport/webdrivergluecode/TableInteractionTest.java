@@ -6,6 +6,7 @@ import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.websupport.DomElement;
 
 import java.util.ArrayList;

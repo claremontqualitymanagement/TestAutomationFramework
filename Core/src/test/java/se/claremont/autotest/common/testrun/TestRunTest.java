@@ -3,6 +3,7 @@ package se.claremont.autotest.common.testrun;
 import org.junit.Test;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  *
  * Created by magnusolsson on 2016-11-01.
  */
-public class TestRunTest {
+public class TestRunTest extends UnitTestClass{
 
     @Test
     public void checkExitCodeTableForSuccessfullyExecution(){

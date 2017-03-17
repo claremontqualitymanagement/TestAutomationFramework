@@ -7,6 +7,7 @@ import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  *
@@ -14,7 +15,7 @@ import se.claremont.autotest.common.support.SupportMethods;
  *
  * Created by jordam on 2016-08-30.
  */
-public class TestCase_Tests {
+public class TestCase_Tests extends UnitTestClass{
 
     @Test
     public void matchOfSeveralStringsInitial(){

@@ -3,6 +3,7 @@ package se.claremont.autotest.common.logging;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  *
@@ -10,7 +11,7 @@ import se.claremont.autotest.common.testcase.TestCase;
  *
  * Created by jordam on 2016-08-30.
  */
-public class KnownError_Test {
+public class KnownError_Test extends UnitTestClass {
 
     @Test
     public void equalTest(){

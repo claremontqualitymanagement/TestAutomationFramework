@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.subethamail.wiser.Wiser;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -18,7 +19,7 @@ import static org.junit.Assert.*;
  *
  * Created by jordam on 2016-09-19.
  */
-public class EmailSenderImplementationTest {
+public class EmailSenderImplementationTest extends UnitTestClass{
     private Wiser wiser;
 
     @Before

@@ -2,10 +2,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import se.claremont.autotest.common.testrun.DiagnosticsRun;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import static org.junit.Assert.assertTrue;
 
-public class DiagnosticsRunTest {
+public class DiagnosticsRunTest extends UnitTestClass {
     private DiagnosticsRun diagnosticsRun;
 
     @Before

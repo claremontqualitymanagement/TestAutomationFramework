@@ -4,13 +4,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for the TestCaseLog class
  *
  * Created by jordam on 2016-08-30.
  */
-public class TestCaseLog_Tests {
+public class TestCaseLog_Tests extends UnitTestClass{
 
     @Test
     public void logInstantiationNotNull(){

@@ -2,11 +2,12 @@ package se.claremont.autotest.common.support;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Created by jordam on 2016-11-04.
  */
-public class StringManagementTest {
+public class StringManagementTest extends UnitTestClass{
 
     @Test
     public void filePathToHtmlCheck(){

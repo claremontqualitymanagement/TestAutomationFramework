@@ -4,13 +4,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Test that the KnownErrorList class is behaving as expected
  *
  * Created by jordam on 2016-08-30.
  */
-public class KnownErrorsList_Test {
+public class KnownErrorsList_Test extends UnitTestClass {
     private final TestClass testTestSet = new TestClass();
 
     @Test

@@ -13,7 +13,7 @@ import se.claremont.autotest.common.testcase.TestCase;
  *
  * Created by jordam on 2016-08-31.
  */
-public class TestSet_Tests {
+public class TestSet_Tests extends UnitTestClass{
     @SuppressWarnings("CanBeFinal")
     @Rule public TestName currentTestName = new TestName();
 

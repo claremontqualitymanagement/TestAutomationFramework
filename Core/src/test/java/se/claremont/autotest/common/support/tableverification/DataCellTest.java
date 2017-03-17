@@ -2,11 +2,12 @@ package se.claremont.autotest.common.support.tableverification;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Created by jordam on 2017-01-28.
  */
-public class DataCellTest {
+public class DataCellTest extends UnitTestClass{
 
     @Test
     public void createDataCell(){

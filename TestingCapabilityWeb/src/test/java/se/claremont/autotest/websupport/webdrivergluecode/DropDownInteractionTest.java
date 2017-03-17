@@ -4,12 +4,13 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.websupport.DomElement;
 
 /**
  * Created by jordam on 2017-01-28.
  */
-public class DropDownInteractionTest {
+public class DropDownInteractionTest extends UnitTestClass{
     @Test
     @Ignore
     /*

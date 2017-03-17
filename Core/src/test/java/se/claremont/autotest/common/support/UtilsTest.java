@@ -3,13 +3,14 @@ package se.claremont.autotest.common.support;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.support.Utils;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests to assess Utils class in TAF Core
  *
  * Created by magnusolsson on 2016-09-23.
  */
-public class UtilsTest{
+public class UtilsTest extends UnitTestClass{
 
     @Test
     public void getInstance(){

@@ -3,13 +3,14 @@ package se.claremont.autotest.common.testrun;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for the Settings class
  *
  * Created by jordam on 2016-09-18.
  */
-public class Settings_Tests {
+public class Settings_Tests extends UnitTestClass{
 
      @Test
     public void loadDefaults(){

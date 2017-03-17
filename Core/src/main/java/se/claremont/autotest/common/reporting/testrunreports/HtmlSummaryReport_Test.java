@@ -8,13 +8,14 @@ import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for the HtmlSummaryReport class
  *
  * Created by jordam on 2016-08-31.
  */
-public class HtmlSummaryReport_Test {
+public class HtmlSummaryReport_Test extends UnitTestClass{
     @SuppressWarnings("CanBeFinal")
     @Rule public TestName currentTestName = new TestName();
 

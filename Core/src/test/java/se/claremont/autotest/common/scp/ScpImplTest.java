@@ -6,13 +6,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import se.claremont.autotest.common.scp.config.SSHServerResource;
 import se.claremont.autotest.common.support.api.Taf;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.File;
 
 /**
  * Created by magnusolsson on 2016-12-05.
  */
-public class ScpImplTest {
+public class ScpImplTest extends UnitTestClass{
     private static final String USERNAME = "test";
     private static final String PASSWORD = "password";
     private static final String ADDRESS = "127.0.0.1";

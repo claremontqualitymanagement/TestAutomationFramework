@@ -8,7 +8,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class RestSupportTest extends TestSet {
+public class RestSupportTest extends UnitTestClass {
     @Rule
     public TestName currentTestName = new TestName();
 
@@ -28,9 +30,10 @@ public class RestSupportTest extends TestSet {
 
     @Before
     public void setup() throws IOException {
-        startUpTestCase(currentTestName.getMethodName());
+        TestCase testCase = new TestCase(null, currentTestName.getMethodName());
+        //startUpTestCase(currentTestName.getMethodName());
         mockServer = new MockWebServer();
-        restSupport = new RestSupport(currentTestCase);
+        restSupport = new RestSupport(testCase);
 
         mockServer.enqueue(new MockResponse().setBody("hello"));
 

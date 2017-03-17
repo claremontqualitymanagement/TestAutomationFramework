@@ -5,11 +5,12 @@ import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestRunReporterFactory;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Created by jordam on 2017-01-04.
  */
-public class TestRunReporterFactoryTest {
+public class TestRunReporterFactoryTest extends UnitTestClass{
 
     @Test
     public void duplicateTestRunReporterAddedUsingUniqeMethodShouldNotCreateDuplicate(){

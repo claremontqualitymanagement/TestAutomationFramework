@@ -2,6 +2,7 @@ package se.claremont.autotest.common.support.tableverification;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-01-28.
  */
-public class TableRowTest {
+public class TableRowTest extends UnitTestClass{
 
     @Test
     public void rowCreationTestEmtpyRow(){

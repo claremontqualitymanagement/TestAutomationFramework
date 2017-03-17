@@ -2,6 +2,7 @@ package se.claremont.autotest.common.testrun;
 
 import org.junit.*;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.*;
 
@@ -9,7 +10,7 @@ import java.io.*;
  * Created by jordam on 2017-02-22.
  */
 @SuppressWarnings("WeakerAccess")
-public class CliTestRunnerTest {
+public class CliTestRunnerTest extends UnitTestClass {
 
     String cliIsInvokedWelcomeString = "Executing TAF (TestAutomationFramework) from CLI";
 

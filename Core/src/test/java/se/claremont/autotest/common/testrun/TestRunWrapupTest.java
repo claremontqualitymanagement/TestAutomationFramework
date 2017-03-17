@@ -7,11 +7,12 @@ import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Created by jordam on 2017-03-17.
  */
-public class TestRunWrapupTest {
+public class TestRunWrapupTest extends UnitTestClass{
 
     @Test
     public void singleTestRunReportingFromMultipleTestSetExecutions(){

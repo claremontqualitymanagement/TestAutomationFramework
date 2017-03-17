@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.support.tableverification.TableData;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,7 +12,7 @@ import java.net.URL;
 
 import static org.junit.Assert.assertNotNull;
 
-public class CsvParserTest {
+public class CsvParserTest extends UnitTestClass{
     private CsvParser csvParser;
     private FileReader fileReader;
 

@@ -3,13 +3,14 @@ package se.claremont.autotest.common.support;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.support.api.Taf;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for UserInfo class
  *
  * Created by magnusolsson on 2016-12-20.
  */
-public class TafUserInfoTest {
+public class TafUserInfoTest extends UnitTestClass{
 
     @Test
     public void getInstance(){

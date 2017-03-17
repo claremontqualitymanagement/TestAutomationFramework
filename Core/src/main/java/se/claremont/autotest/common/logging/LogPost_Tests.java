@@ -3,13 +3,14 @@ package se.claremont.autotest.common.logging;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCaseLog;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for the LogPost class
  *
  * Created by jordam on 2016-08-31.
  */
-public class LogPost_Tests {
+public class LogPost_Tests extends UnitTestClass{
 
     @Test
     public void instantiationPureText(){

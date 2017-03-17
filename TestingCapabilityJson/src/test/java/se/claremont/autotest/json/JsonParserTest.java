@@ -2,13 +2,14 @@ package se.claremont.autotest.json;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests to assure JsonParser works as expected
  *
  * Created by jordam on 2016-10-28.
  */
-public class JsonParserTest {
+public class JsonParserTest extends UnitTestClass{
 
     @Test
     public void nullJsonGet(){
