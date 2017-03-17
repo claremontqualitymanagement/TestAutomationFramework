@@ -17,11 +17,10 @@ public class TestRun {
     public static String testRunName = "";
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
     public static TestSet currentTestSet;
-    public static TafRunListener tafRunListener = null;
+    public static final TafRunListener tafRunListener = new TafRunListener();
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
-    static TafRunListener runListener = null;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -98,9 +97,4 @@ public class TestRun {
         BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 
-    public static void manageRunListener(){
-        if(runListener == null){
-            runListener = new TafRunListener();
-        }
-    }
 }

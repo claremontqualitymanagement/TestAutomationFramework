@@ -48,7 +48,6 @@ public class TestCase {
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
         TestRun.initializeIfNotInitialized();
-        TestRun.manageRunListener();
         if(knownErrorsList == null){
             knownErrorsList = new KnownErrorsList();
         }

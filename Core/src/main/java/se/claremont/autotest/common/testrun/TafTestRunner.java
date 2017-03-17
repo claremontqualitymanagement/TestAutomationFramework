@@ -17,8 +17,7 @@ public class TafTestRunner extends BlockJUnit4ClassRunner
     @Override
     public void run(RunNotifier notifier)
     {
-        if(TestRun.tafRunListener == null)
-            TestRun.tafRunListener = new TafRunListener();
+        TestRun.initializeIfNotInitialized();
         notifier.addListener(TestRun.tafRunListener);
         super.run(notifier);
     }
