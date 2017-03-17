@@ -151,7 +151,8 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         String versionInfo = "";
         String version = TafVersionGetter.tafVersion();
         if(version != null){
-            versionInfo = " TAF version " + version + ".";
+            versionInfo = "<a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework/releases\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">";
+            versionInfo += "TAF version " + version + ".</a>";
         }
         //noinspection deprecation
         return "<br><br>" +
@@ -159,7 +160,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "            <tr>" + LF +
                 "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
                 "            </tr><tr>" + LF +
-                "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "." + versionInfo + "</td>" + LF +
+                "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0 license</a>. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "." + versionInfo + "</td>" + LF +
                 "            </tr>" + LF +
                 "          </table>" + LF;
     }
