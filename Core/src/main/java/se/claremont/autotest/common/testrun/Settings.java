@@ -2,6 +2,7 @@ package se.claremont.autotest.common.testrun;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.common.reporting.TafVersionGetter;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
@@ -209,6 +210,12 @@ public class Settings extends HashMap<String, String>{
             if(valuePair.isSuppressedFromLogDisplay() || getValue(valuePair) == null || getValue(valuePair).equals("")) continue;
             stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append(valuePair.friendlyName()).append("</td><td class=\"settingsParameterValue\">").append(getValue(valuePair)).append("</td></tr>").append(SupportMethods.LF);
         }
+
+        String version = TafVersionGetter.tafVersion();
+        if(version != null) {//Version is only identified when running tests from command line usage of TAF.
+            stringBuilder.append("  <tr class=\"settings\"><td class=\"settingsParameterName\">").append("TAF version").append("</td><td class=\"settingsParameterValue\">").append(TafVersionGetter.tafVersion()).append("</td></tr>").append(SupportMethods.LF);
+        }
+
         stringBuilder.append("</table>").append(SupportMethods.LF).append("<br>").append(SupportMethods.LF);
         return stringBuilder.toString();
     }

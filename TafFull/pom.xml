@@ -273,43 +273,6 @@
         </repository>
     </distributionManagement>
 
-    <!-- heavy load, only build when needed-->
-    <!--
-    <profiles>
-        <profile>
-            <id>obfuscate</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.wvengen</groupId>
-                        <artifactId>proguard-maven-plugin</artifactId>
-                        <version>2.0.12</version>
-                        <executions>
-                            <execution>
-                                <id>proguard</id>
-                                <phase>package</phase>
-                                <goals><goal>proguard</goal></goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <obfuscate>true</obfuscate>
-                            <maxMemory>2048m</maxMemory>
-                            <includeDependency>false</includeDependency>
-                            <injar>TafFull-${global.version}.jar</injar>
-                            <outjar>TafFull-obfuscated.jar</outjar>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <proguardInclude>${basedir}/src/main/resources/proguard.conf</proguardInclude>
-                            <libs>
-                                <lib>${java.home}/lib/rt.jar</lib>
-                                <lib>${java.home}/lib/jsse.jar</lib>
-                            </libs>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
--->
     <build>
         <plugins>
             <plugin>
@@ -338,41 +301,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>com.github.wvengen</groupId>
-                <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.0.12</version>
-                <executions>
-                    <execution>
-                        <id>proguard</id>
-                        <phase>package</phase>
-                        <goals><goal>proguard</goal></goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <obfuscate>true</obfuscate>
-                    <maxMemory>2048m</maxMemory>
-                    <includeDependency>false</includeDependency>
-                    <injar>TafFull.jar</injar>
-                    <outjar>TafFull-obfuscated.jar</outjar>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <proguardInclude>${basedir}/proguard.conf</proguardInclude>
-                    <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>
-                        <lib>${java.home}/lib/jsse.jar</lib>
-                    </libs>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sf.proguard</groupId>
-                        <artifactId>proguard-base</artifactId>
-                        <version>5.3.2</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            -->
         </plugins>
     </build>
 
