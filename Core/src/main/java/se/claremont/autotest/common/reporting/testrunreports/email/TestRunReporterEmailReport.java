@@ -24,7 +24,7 @@ public class TestRunReporterEmailReport implements TestRunReporter {
             for(String recipient : recipientsString.split(",")){
                 recipients.add(recipient.trim());
             }
-            EmailSender emailSender = new EmailSender(
+            EmailSenderImplementation emailSenderImplementation = new EmailSenderImplementation(
                     TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS),
                     TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS),
                     recipients.toArray(new String[0]),
@@ -32,7 +32,7 @@ public class TestRunReporterEmailReport implements TestRunReporter {
                     htmlSummaryReport.createReport(),
                     TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_PORT),
                     TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL));
-            System.out.println(emailSender.send());
+            System.out.println(emailSenderImplementation.send());
         }
     }
 

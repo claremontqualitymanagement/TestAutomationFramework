@@ -8,13 +8,11 @@ public class TestSet1 extends TestSet {
 
     @Test
     public void test1() throws InterruptedException {
-        Thread.sleep(2000);
         Assert.assertTrue(true);
     }
 
     @Test
     public void test2() throws InterruptedException {
-        Thread.sleep(2000);
         Assert.assertTrue(true);
     }
 }

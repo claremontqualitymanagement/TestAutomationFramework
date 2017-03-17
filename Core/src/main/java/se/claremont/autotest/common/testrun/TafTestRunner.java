@@ -18,7 +18,13 @@ public class TafTestRunner extends BlockJUnit4ClassRunner
     public void run(RunNotifier notifier)
     {
         TestRun.initializeIfNotInitialized();
-        notifier.addListener(TestRun.tafRunListener);
+        try{
+            notifier.removeListener(TestRun.tafRunListener);
+        }catch (Exception e){
+            System.out.println("Warning: Trying to remove run listener that doesn't exist.");
+        }
+        notifier.addFirstListener(TestRun.tafRunListener);
+        //notifier.addListener(TestRun.tafRunListener);
         super.run(notifier);
     }
 }

@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  *
  * Created by jordam on 2016-09-19.
  */
-public class EmailSenderTest {
+public class EmailSenderImplementationTest {
     private Wiser wiser;
 
     @Before
@@ -43,7 +43,7 @@ public class EmailSenderTest {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "recipient@mail.se");
 
         String[] recipients = new String[] {"recipient@mail.com"};
-        EmailSender emailSender = new EmailSender(
+        EmailSenderImplementation emailSenderImplementation = new EmailSenderImplementation(
                 null,
                 null,
                 recipients,
@@ -51,7 +51,7 @@ public class EmailSenderTest {
                 "<html><body><h1>content string headline</h1></body></html>",
                 null,
                 "gmail");
-        String result = emailSender.send();
+        String result = emailSenderImplementation.send();
 
         assertTrue(result, result.contains("Email sent with subject 'Test email' using account 'account@yahoo.rocks' to mail host 'localhost"));
 
@@ -81,7 +81,7 @@ public class EmailSenderTest {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "recipient@mail.se");
 
         String[] recipients = new String[] {"recipient@mail.com"};
-        EmailSender emailSender = new EmailSender(
+        EmailSenderImplementation emailSenderImplementation = new EmailSenderImplementation(
                 "localhost",
                 "sender@gmail.com",
                 recipients,
@@ -89,7 +89,7 @@ public class EmailSenderTest {
                 "<html><body><h1>content string headline</h1></body></html>",
                 "2500",
                 "smtp");
-        String result = emailSender.send();
+        String result = emailSenderImplementation.send();
 
         assertTrue(result, result.contains("Sent email message successfully"));
 

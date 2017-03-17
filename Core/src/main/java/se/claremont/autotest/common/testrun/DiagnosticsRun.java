@@ -7,7 +7,6 @@ import se.claremont.autotest.common.logging.KnownError_Test;
 import se.claremont.autotest.common.logging.KnownErrorsList_Test;
 import se.claremont.autotest.common.logging.LogPost_Tests;
 import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport_Test;
-import se.claremont.autotest.common.reporting.testrunreports.SummaryReport_Tests;
 import se.claremont.autotest.common.support.ValuePair_Tests;
 import se.claremont.autotest.common.testcase.TestCaseLog_Tests;
 import se.claremont.autotest.common.testcase.TestCase_Tests;
@@ -46,8 +45,7 @@ public class DiagnosticsRun implements Runnable {
                 TestSet_Tests.class,
                 ValuePair_Tests.class,
                 HtmlSummaryReport_Test.class,
-                Settings_Tests.class,
-                SummaryReport_Tests.class);
+                Settings_Tests.class);
 
         System.setOut(originalStream);
 

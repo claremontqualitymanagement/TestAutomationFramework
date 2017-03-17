@@ -12,7 +12,7 @@ import se.claremont.autotest.common.testset.TestSet;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
-    private HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
+    public HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
 
     @Override
     public void report() {

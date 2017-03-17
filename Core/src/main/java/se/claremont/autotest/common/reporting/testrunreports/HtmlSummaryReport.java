@@ -170,7 +170,7 @@ public class HtmlSummaryReport {
                 "      body                  { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
                 "      a                     { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + ";}" + LF +
                 "      th                    { text-align: left; }" + LF +
-                "      img.toplogo           { max-width: 30%; max-height: 10%; }" + LF +
+                "      img.toplogo           { width: 30%; }" + LF +
                 "      img.bottomlogo        { width: 20%; }" + LF +
                 "      td.bottomlogo         { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; margin: 30px; }" + LF +
@@ -418,8 +418,8 @@ public class HtmlSummaryReport {
      */
     private String resultsGraphBar(){
         StringBuilder bar = new StringBuilder();
-        resultsBarStyleInfo += "      table#" + SummaryReport.HtmlStyleNames.RESULTS_BAR.toString() + "    { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width: " + barWidthInPixels + "px; }" + LF;
-        bar.append("          <table id=\"").append(SummaryReport.HtmlStyleNames.RESULTS_BAR.toString()).append("\">").append(LF);
+        resultsBarStyleInfo += "      table#" + HtmlStyleNames.RESULTS_BAR.toString() + "    { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width: " + barWidthInPixels + "px; }" + LF;
+        bar.append("          <table id=\"").append(HtmlStyleNames.RESULTS_BAR.toString()).append("\">").append(LF);
         bar.append("            <tr>").append(LF);
         if(successfulTestCases > 0){
             bar.append("              <td class=\"resultsgraphpassed\"></td>").append(LF);
