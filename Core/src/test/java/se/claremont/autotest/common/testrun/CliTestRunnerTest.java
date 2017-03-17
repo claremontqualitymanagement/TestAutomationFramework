@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.testrun;
 
 import org.junit.*;
+import se.claremont.autotest.common.testset.TestSet;
 
 import java.io.*;
 

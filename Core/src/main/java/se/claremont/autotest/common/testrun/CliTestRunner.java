@@ -175,7 +175,7 @@ public class CliTestRunner {
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-        junit.addListener(new TafRunListener());
+        //junit.addListener(new TafRunListener());
 
         for (String arg : args) {
             try {
