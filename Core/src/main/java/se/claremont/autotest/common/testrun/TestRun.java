@@ -17,6 +17,7 @@ public class TestRun {
     public static String testRunName = "";
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
     public static TestSet currentTestSet;
+    public static TafRunListener tafRunListener = null;
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
