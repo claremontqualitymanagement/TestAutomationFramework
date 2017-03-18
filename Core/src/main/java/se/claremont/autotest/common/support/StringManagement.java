@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.support;
 
 import java.io.File;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Static methods to transform strings
@@ -172,4 +174,22 @@ public class StringManagement {
                 "</pre>" +
                 SupportMethods.LF;
     }
+
+    public static String timeDurationAsString(Date startDate, Date stopDate) {
+        long diffInMillies = stopDate.getTime() - startDate.getTime();
+        List<String> timeParts = new ArrayList<>();
+        List<TimeUnit> units = new ArrayList<TimeUnit>(EnumSet.allOf(TimeUnit.class));
+        Collections.reverse(units);
+        long milliesRest = diffInMillies;
+        for ( TimeUnit unit : units ) {
+            long diff = unit.convert(milliesRest,TimeUnit.MILLISECONDS);
+            long diffInMilliesForUnit = unit.toMillis(diff);
+            milliesRest = milliesRest - diffInMilliesForUnit;
+            if(diff > 0){
+                timeParts.add(diff + " " + unit.name().toLowerCase());
+            }
+        }
+        return String.join(", ", timeParts);
+    }
+
 }

@@ -12,8 +12,8 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -262,8 +262,15 @@ public class HtmlSummaryReport {
      */
     private String htmlElementTitle(){
         return "          <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
-                "          <h1>Test reportTestRun " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</h1>" + LF;
+                "          <h1>Test run report</h1>" + LF +
+                "          <table class=\"rundetails\">" + LF +
+                "             <tr><td>Run name: </td><td>" + TestRun.testRunName + "</td></tr>" + LF +
+                "             <tr><td>Start time: </td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.startTime) + "</td></tr>" + LF +
+                "             <tr><td>Stop time :</td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.stopTime) + "</td></tr>" + LF +
+                "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.startTime, TestRun.stopTime) + "</td></tr>" + LF +
+                "          </table>" + LF;
     }
+
 
     /**
      * Produces the statistics section of the summary reportTestRun

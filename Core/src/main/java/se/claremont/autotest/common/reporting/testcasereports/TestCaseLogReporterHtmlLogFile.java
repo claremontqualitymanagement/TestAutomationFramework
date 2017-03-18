@@ -94,11 +94,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      */
     public String asHtmlSection(){
         testCase.log(LogLevel.DEBUG, "Creating HTML log content.");
-        if(testCase.testCaseLog.logPosts.size() > 0){
-            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
-        } else {
-            this.runEndTime = new Date();
-        }
+        validateTestRunEndTime();
         return htmlSectionBodyHeader() +
                 htmlSectionEncounteredKnownErrors() +
                 htmlSectionTestCaseData() +
@@ -113,11 +109,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     public void report(){
         testCase.log(LogLevel.DEBUG, "Saving html reportTestRun to '" + testCase.pathToHtmlLog + "'.");
         logger.debug( "Saving html reportTestRun to '" + testCase.pathToHtmlLog + "'." );
-        if(testCase.testCaseLog.logPosts.size() > 0){
-            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
-        } else {
-            this.runEndTime = new Date();
-        }
+        validateTestRunEndTime();
         String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
                 htmlSectionHtmlHead() +
                 "  <body>" + LF + LF +
@@ -125,6 +117,19 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "  </body>" + LF + LF +
                 "</html>" + LF;
         SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
+    }
+
+    private void validateTestRunEndTime() {
+        if(runEndTime != null) return;
+        if(testCase.stopTime != null){
+            this.runEndTime = testCase.stopTime;
+            return;
+        }
+        if(testCase.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        } else {
+            this.runEndTime = new Date();
+        }
     }
 
 
@@ -252,6 +257,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String htmlSectionBodyHeader(){
+        validateTestRunEndTime();
         return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
                 "      <img src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\" alt=\"logo\" class=\"toplogo\">" + LF + "<br>" + LF + "<br>" + LF +
                 //"      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\"></a>" + LF +
@@ -265,7 +271,8 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      <p>" + LF +
                 "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
                 "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
-                "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.stopTime) + LF +
+                "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(runEndTime) + "<br>" + LF +
+                "        Duration:   " + StringManagement.timeDurationAsString(testCase.startTime, runEndTime) + LF +
                 "      </p>" + LF +
                 "      <p>" + LF +
                 "         Number of verifications performed: " + numberOfVerificationsPerformed() + LF +

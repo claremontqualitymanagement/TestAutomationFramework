@@ -6,6 +6,8 @@ import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndexFile;
 import se.claremont.autotest.common.testset.TestSet;
 
+import java.util.Date;
+
 /**
  * A test run is the entity of every time some set(s) of test cases are run.
  * Created by jordam on 2016-08-17.
@@ -21,6 +23,8 @@ public class TestRun {
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
+    public static Date startTime;
+    public static Date stopTime;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -66,6 +70,7 @@ public class TestRun {
 
     public static void initializeIfNotInitialized() {
         if(!isInitialized){
+            startTime = new Date();
             currentTestSet = null;
             settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
@@ -93,6 +98,7 @@ public class TestRun {
 
     public static void reportTestRun(){
         initializeIfNotInitialized();
+        stopTime = new Date();
         reporters.reportTestRun();
         BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
