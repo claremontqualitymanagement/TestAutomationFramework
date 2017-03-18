@@ -119,20 +119,6 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
     }
 
-    private void validateTestRunEndTime() {
-        if(runEndTime != null) return;
-        if(testCase.stopTime != null){
-            this.runEndTime = testCase.stopTime;
-            return;
-        }
-        if(testCase.testCaseLog.logPosts.size() > 0){
-            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
-        } else {
-            this.runEndTime = new Date();
-        }
-    }
-
-
     public String htmlSectionHtmlHead(){
         return "  <head>" + LF + LF +
                 "    <title>" + testCase.testName + " execution log</title>" + LF +
@@ -146,6 +132,19 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "    </style>" + LF + LF +
                 scriptSection() +
                 "  </head>" + LF + LF;
+    }
+
+    private void validateTestRunEndTime() {
+        if(runEndTime != null) return;
+        if(testCase.stopTime != null){
+            this.runEndTime = testCase.stopTime;
+            return;
+        }
+        if(testCase.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        } else {
+            this.runEndTime = new Date();
+        }
     }
 
     /**

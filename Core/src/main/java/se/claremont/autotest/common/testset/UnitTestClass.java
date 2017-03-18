@@ -81,6 +81,27 @@ public class UnitTestClass {
         restoreOutputChannel();
     }
 
+    /**
+     * Test output from unit tests are generally suppressed, but for verification purposes the test output can be retrieved by this method.
+     *
+     * @return Returns the suppressed console output from the test.
+     */
+    public String testOutput(){
+        if(testOutputChannel == null) return null;
+        return testOutputChannel.toString();
+    }
+
+    /**
+     * Returns true if the given phrase is found in the console output from the test.
+     *
+     * @param stringToFind The string to find in the console output from the test.
+     * @return Returns true if the given string is found in the console output from the test.
+     */
+    public boolean testOutputContains(String stringToFind){
+        if(testOutputChannel == null) return false;
+        return testOutputChannel.toString().contains(stringToFind);
+    }
+
     private static void restoreOutputChannel(){
         System.setOut(originalOutputChannel);
     }

@@ -9,6 +9,7 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCaseLog;
 import se.claremont.autotest.common.testrun.TestRun;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,6 +21,7 @@ import static se.claremont.autotest.common.reporting.testcasereports.TestCaseLog
  * Created by jordam on 2016-08-25.
  */
 @SuppressWarnings("WeakerAccess")
+@XmlRootElement
 public class LogPost {
 
     private final static Logger logger = LoggerFactory.getLogger( LogPost.class );
