@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.logging;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,18 +25,19 @@ import static se.claremont.autotest.common.reporting.testcasereports.TestCaseLog
  * Created by jordam on 2016-08-25.
  */
 @SuppressWarnings("WeakerAccess")
+@JsonIgnoreProperties({"fail", "logger"})
 public class LogPost {
 
     private final static Logger logger = LoggerFactory.getLogger( LogPost.class );
 
-    public LogLevel logLevel;
-    public String message;
+    @JsonProperty public LogLevel logLevel;
+    @JsonProperty public String message;
     @JsonProperty private String htmlMessage;
     @JsonProperty public final Date date;
     @JsonProperty String testCaseName = null;
-    public String testStepName = null;
-    public String testStepClassName = null;
-    public boolean identifiedToBePartOfKnownError = false;
+    @JsonProperty public String testStepName = null;
+    @JsonProperty public String testStepClassName = null;
+    @JsonProperty public boolean identifiedToBePartOfKnownError = false;
 
     //Default dummy constructor for ObjectMapper for JSON to work
     public LogPost(){

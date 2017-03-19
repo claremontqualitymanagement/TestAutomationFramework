@@ -46,7 +46,7 @@ public class TestRunResult {
         return json;
     }
 
-    class TestCaseResultOverview{
+    public class TestCaseResultOverview{
         @JsonProperty String testName;
         @JsonProperty String testSetName;
         @JsonProperty String resultStatus;

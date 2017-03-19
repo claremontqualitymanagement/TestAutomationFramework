@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.testcase;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -21,13 +23,16 @@ import java.util.stream.Collectors;
  *
  */
 @SuppressWarnings("SameParameterValue")
+@JsonIgnoreProperties({"logger"})
 public class TestCaseLog {
 
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
 
-    public final ArrayList<LogPost> logPosts = new ArrayList<>();
-    public static int maxNumberOfCharactersInLogLevelNames = 0;
-    private String testCaseName = null;
+    @JsonProperty public final ArrayList<LogPost> logPosts = new ArrayList<>();
+    @JsonProperty public static int maxNumberOfCharactersInLogLevelNames = 0;
+    @JsonProperty private String testCaseName = null;
+
+    public TestCaseLog(){} //For JSON object mapping usage
 
     public TestCaseLog(String testCaseName){
         maxNumberOfCharactersInLogLevelNames = getMaxNumberOfCharactersInLogLevelNames();
