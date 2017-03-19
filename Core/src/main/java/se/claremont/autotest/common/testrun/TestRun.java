@@ -1,9 +1,5 @@
 package se.claremont.autotest.common.testrun;
 
-//import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndexFile;
 import se.claremont.autotest.common.testset.TestSet;
@@ -27,6 +23,7 @@ public class TestRun {
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public static Date startTime;
     public static Date stopTime;
+    public static TestRunResult testRunResult;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -76,6 +73,8 @@ public class TestRun {
             currentTestSet = null;
             settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
+            testRunResult = new TestRunResult();
+            testRunResult.setRunStartTime(startTime);
             isInitialized = true;
         }
     }
@@ -90,17 +89,6 @@ public class TestRun {
             return "https";
         }
         return TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
-    }
-
-    public String toJson(){
-        ObjectMapper mapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            System.out.println(e.toString());
-        }
-        return json;
     }
 
     public static void evaluateCurrentTestSet(){

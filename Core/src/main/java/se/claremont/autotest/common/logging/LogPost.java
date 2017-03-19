@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.logging;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -23,20 +24,23 @@ import static se.claremont.autotest.common.reporting.testcasereports.TestCaseLog
  * Created by jordam on 2016-08-25.
  */
 @SuppressWarnings("WeakerAccess")
-@XmlRootElement
 public class LogPost {
 
     private final static Logger logger = LoggerFactory.getLogger( LogPost.class );
 
-    public final LogLevel logLevel;
-    public final String message;
-    private final String htmlMessage;
-    public final Date date;
-    String testCaseName = null;
+    public LogLevel logLevel;
+    public String message;
+    @JsonProperty private String htmlMessage;
+    @JsonProperty public final Date date;
+    @JsonProperty String testCaseName = null;
     public String testStepName = null;
     public String testStepClassName = null;
     public boolean identifiedToBePartOfKnownError = false;
 
+    //Default dummy constructor for ObjectMapper for JSON to work
+    public LogPost(){
+        date = new Date();
+    }
 
     /**
      * Creates a new testCaseLog post with component sorting enabled

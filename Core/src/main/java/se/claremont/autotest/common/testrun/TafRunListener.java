@@ -17,6 +17,24 @@ public class TafRunListener extends RunListener {
         System.out.println();
     }
 
+    /*
+    public void testFinished(Description description) throws Exception {
+        TestRun.testRunResult.addTestCaseResult(description.getMethodName(), description.getClassName(), "Passed");
+    }
+
+    public void testFailure(Failure failure) throws Exception {
+        TestRun.testRunResult.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Failed");
+    }
+
+    public void testAssumptionFailure(Failure failure) {
+        TestRun.testRunResult.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Blocked");
+    }
+
+    public void testIgnored(Description description) throws Exception {
+        TestRun.testRunResult.addTestCaseResult(description.getMethodName(), description.getClassName(), "Ignored");
+    }
+    */
+
     public void testRunFinished(Result result) throws Exception {
         TestRun.reportTestRun();
         System.out.println();
@@ -31,7 +49,12 @@ public class TafRunListener extends RunListener {
             System.out.println();
         }
         System.out.println("Success for classes run: " + result.wasSuccessful() + System.lineSeparator());
+        sendRunResultToRESTServerIfApplicable();
         if (result.getFailureCount() == 0) System.out.println(celebration());
+    }
+
+    private void sendRunResultToRESTServerIfApplicable(){
+        //System.out.println("Test run results to JSON: " + TestRun.testRunResult.toJson());
     }
 
     private static String celebration(){

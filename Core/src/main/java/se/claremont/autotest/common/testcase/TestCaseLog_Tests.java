@@ -137,7 +137,7 @@ public class TestCaseLog_Tests extends UnitTestClass{
     public void toJson(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         System.out.print(testCaseLog.toJson());
-        Assert.assertTrue(testCaseLog.toJson().contains("\"logpostlist\": "));
+        Assert.assertTrue(testCaseLog.toJson(), testCaseLog.toJson().contains("\"logPosts\""));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class TestCaseLog_Tests extends UnitTestClass{
     public void methodToJsonShouldReturnLogPostIfExist(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         testCaseLog.log(LogLevel.DEBUG, "Dummy log post");
-        Assert.assertTrue(testCaseLog.toJson().contains("Dummy log post"));
+        Assert.assertTrue(testCaseLog.toJson(), testCaseLog.toJson().contains("Dummy log post"));
     }
 
     @Test

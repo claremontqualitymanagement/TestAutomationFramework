@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.logging;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * Created by jordam on 2016-08-25.
  */
 public class KnownError {
-    private final String[] regexpPatternMatchForLogString;
+    @JsonProperty private final String[] regexpPatternMatchForLogString;
     public final ArrayList<TestCase> testCasesWhereErrorWasEncountered = new ArrayList<>();
     public final String description;
 
