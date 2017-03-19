@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.testset;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.*;
@@ -17,6 +19,7 @@ import se.claremont.autotest.common.testrun.TestRun;
  * Created by jordam on 2016-08-17.
  */
 @RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
+@JsonIgnoreProperties({"currentTestCase"})
 public abstract class TestSet {
     @Rule
     public TestName currentTestNameInternal = new TestName();
@@ -38,8 +41,8 @@ public abstract class TestSet {
 
 
     public TestCase currentTestCase;
-    public String name;
-    public final KnownErrorsList knownErrorsList = new KnownErrorsList();
+    @JsonProperty public String name;
+    @JsonProperty public final KnownErrorsList knownErrorsList = new KnownErrorsList();
 
     /**
      * Setting up a new test set instance

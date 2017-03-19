@@ -15,12 +15,17 @@ import java.io.IOException;
 /**
  * Created by jordam on 2017-03-19.
  */
-public class JsonSerializationAndDeserializationTest extends UnitTestClass {
+public class JsonSerializationAndDeserializationTest {
 
     @Test
     public void testCaseSerializationAndDeserialization(){
         TestCase testCase = new TestCase();
+        testCase.addTestCaseData("DataParameter", "DataValue");
+        testCase.addKnownError("Description of known error", ".*Regexpattern.*");
+        testCase.addKnownError("Description of known error 2", new String[]{".*Regexpattern.*", "Nope"});
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Message [in ]{pure] :text\\\"this\" time.", "html message");
         testCase.log(LogLevel.INFO, "Message");
+        testCase.evaluateResultStatus();
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {

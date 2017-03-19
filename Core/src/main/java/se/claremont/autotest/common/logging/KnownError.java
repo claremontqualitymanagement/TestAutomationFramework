@@ -13,8 +13,13 @@ import java.util.ArrayList;
  */
 public class KnownError {
     @JsonProperty private final String[] regexpPatternMatchForLogString;
-    public final ArrayList<TestCase> testCasesWhereErrorWasEncountered = new ArrayList<>();
-    public final String description;
+    @JsonProperty public final ArrayList<TestCase> testCasesWhereErrorWasEncountered = new ArrayList<>();
+    @JsonProperty public final String description;
+
+    public KnownError(){
+        description = "";
+        regexpPatternMatchForLogString = new String[]{};
+    } //Default constructor for JSON purposes
 
     /**
      * Creating a known error with several testCaseLog row match strings. All strings must be matched for the known error to be considered a match.
