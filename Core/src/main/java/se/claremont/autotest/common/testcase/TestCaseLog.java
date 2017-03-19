@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.testcase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
@@ -80,15 +82,14 @@ public class TestCaseLog {
      * @return Returns the log post list in a serialized format, as a JSON object.
      */
     public String toJson(){
-        StringBuilder json = new StringBuilder();
-        ArrayList<String> logPostStrings = new ArrayList<>();
-        json.append("\"logpostlist\": [").append(SupportMethods.LF);
-        for(LogPost logPost : logPosts){
-            logPostStrings.add(logPost.toJson());
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.toString());
         }
-        json.append(String.join("," + SupportMethods.LF, logPostStrings));
-        json.append("]").append(SupportMethods.LF);
-        return json.toString();
+        return json;
     }
 
     /**

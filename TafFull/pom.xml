@@ -210,6 +210,12 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!-- JSON object mapper -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>

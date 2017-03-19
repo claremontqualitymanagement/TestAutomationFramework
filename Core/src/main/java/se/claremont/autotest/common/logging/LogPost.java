@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.logging;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.reporting.UxColors;
@@ -205,16 +207,14 @@ public class LogPost {
      * @return Return the log post instance in a serialized way in JSON format
      */
     public String toJson(){
-        return "{" + SupportMethods.LF +
-                "    \"testcasename\": \"" + this.testCaseName + "\"," + SupportMethods.LF +
-                "    \"teststepname\": \"" + this.testStepName + "\"," + SupportMethods.LF +
-                "    \"teststepclassname\": \"" + this.testStepClassName+ "\"," + SupportMethods.LF +
-                "    \"time\": \"" + new SimpleDateFormat("yyyMMdd HH:mm:ss").format(date) + "\"," + SupportMethods.LF +
-                "    \"loglevel\": \"" + StringManagement.enumCapitalNameToFriendlyString(this.logLevel.toString()) + "\"," + SupportMethods.LF +
-                "    \"puretextmessage\": \"" + this.message + "\"," + SupportMethods.LF +
-                "    \"htmlmessage\": \"" + this.htmlMessage + "\"," +
-                "    \"identifiedtobepartofknownerror\": " + String.valueOf(this.identifiedToBePartOfKnownError).toLowerCase() + SupportMethods.LF +
-                "}" + SupportMethods.LF;
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.toString());
+        }
+        return json;
     }
 
     public static String htmlStyleInformation(){

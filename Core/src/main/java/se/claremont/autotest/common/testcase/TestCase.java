@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.testcase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Assume;
 import se.claremont.autotest.common.logging.*;
@@ -326,39 +328,28 @@ public class TestCase {
     }
 
     public String toJson(){
-        StringBuilder json = new StringBuilder();
-        json.append("{\"testCaseRunInstance\": {").append(SupportMethods.LF);
-        if(testSetName != null) json.append("   \"testSetName\": \"").append(testSetName).append("\",").append(SupportMethods.LF);
-        if(testName != null) json.append("   \"testName\": \"").append(testName).append("\",").append(SupportMethods.LF);
-        if(resultStatus != null) json.append("   \"status\": \"").append(StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString())).append("\",").append(SupportMethods.LF);
-        if(uid != null) json.append("   \"guid\": \"").append(uid.toString()).append("\",").append(SupportMethods.LF);
-        if(pathToHtmlLog != null) json.append("   \"pathToHtmlLog\": \"").append(pathToHtmlLog.replace("\\", "\\\\")).append("\",").append(SupportMethods.LF);
-        if(testCaseLog != null) json.append(testCaseLog.toJson()).append(",").append(SupportMethods.LF);
-        json.append("   \"reported\": ").append(String.valueOf(reported)).append(",").append(SupportMethods.LF);
-        if(startTime != null) json.append("   \"startTime\": \"").append(new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(startTime)).append("\",").append(SupportMethods.LF);
-        if(stopTime != null) json.append("   \"stopTime\": \"").append(new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(stopTime)).append("\",").append(SupportMethods.LF);
-        if(testCaseData != null) json.append(testCaseData.toJson()).append(",").append(SupportMethods.LF);
-        if(testCaseKnownErrorsList != null) json.append("   \"testCaseKnownErrorsList\": ").append(testCaseKnownErrorsList.toJson()).append(",").append(SupportMethods.LF);
-        if(testSetKnownErrorsEncounteredInThisTestCase != null) json.append("   \"testSetKnownErrorsEncounteredInThisTestCase\": ").append(testSetKnownErrorsEncounteredInThisTestCase.toJson()).append(",").append(SupportMethods.LF);
-        if(testSetKnownErrors != null) json.append("   \"testSetKnownErrors\": ").append(testSetKnownErrors.toJson()).append(SupportMethods.LF);
-        json.append("   }").append(SupportMethods.LF);
-        json.append("}").append(SupportMethods.LF);
-        return json.toString();
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.toString());
+        }
+        return json;
     }
 
     public class TestCaseData {
         public List<ValuePair> testCaseDataList = new ArrayList<>();
 
         public String toJson(){
-            StringBuilder json = new StringBuilder();
-            List<String> datastrings = new ArrayList<>();
-            json.append("\"testCaseData\": [").append(SupportMethods.LF);
-            for(ValuePair valuePair : testCaseDataList){
-                datastrings.add("{" + SupportMethods.LF + "    \"parameter\": \"" + valuePair.parameter + "\"," + SupportMethods.LF + "\"value\": \"" + valuePair.value + "\"" + SupportMethods.LF + "}");
+            ObjectMapper mapper = new ObjectMapper();
+            String json = null;
+            try {
+                json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+            } catch (JsonProcessingException e) {
+                System.out.println(e.toString());
             }
-            json.append(String.join("," + SupportMethods.LF, datastrings));
-            json.append("    ]").append(SupportMethods.LF);
-            return json.toString();
+            return json;
         }
     }
 }

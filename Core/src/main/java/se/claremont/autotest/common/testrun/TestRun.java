@@ -2,6 +2,8 @@ package se.claremont.autotest.common.testrun;
 
 //import se.claremont.autotest.testmanagementtoolintegration.testlink.TestlinkReporter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndexFile;
 import se.claremont.autotest.common.testset.TestSet;
@@ -88,6 +90,17 @@ public class TestRun {
             return "https";
         }
         return TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
+    }
+
+    public String toJson(){
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.toString());
+        }
+        return json;
     }
 
     public static void evaluateCurrentTestSet(){

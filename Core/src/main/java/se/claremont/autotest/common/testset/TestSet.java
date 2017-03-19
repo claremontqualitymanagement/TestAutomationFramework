@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.testset;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
@@ -75,6 +77,17 @@ public abstract class TestSet {
      */
     public void startUpTestCase(String testName){
         currentTestCase = new TestCase(knownErrorsList, testName);
+    }
+
+    public String toJson(){
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.toString());
+        }
+        return json;
     }
 
     /**
