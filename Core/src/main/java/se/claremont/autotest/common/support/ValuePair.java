@@ -1,13 +1,17 @@
 package se.claremont.autotest.common.support;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Pair of parameter name and parameter value
  *
  * Created by jordam on 2016-08-25.
  */
 public class ValuePair {
-    public final String parameter;
-    public String value;
+    @JsonProperty public final String parameter;
+    @JsonProperty public String value;
+
+    public ValuePair(){ parameter = "";} //For JSON parsing
 
     /**
      * Creating a new value pair from parameter name and string based parameter value
