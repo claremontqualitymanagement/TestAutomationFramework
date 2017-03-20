@@ -2,7 +2,6 @@ package se.claremont.autotest.common.testrun;
 
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndexFile;
-import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.Date;
@@ -19,7 +18,7 @@ public class TestRun {
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
     public static TestSet currentTestSet;
     public static final TafRunListener tafRunListener = new TafRunListener();
-    public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
+    public static final TestRunReporterFactory testRunReporterFactory = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public static Date startTime;
@@ -92,13 +91,13 @@ public class TestRun {
     public static void evaluateCurrentTestSet(){
         initializeIfNotInitialized();
         if(currentTestSet != null)
-            reporters.evaluateTestSet(currentTestSet);
+            testRunReporterFactory.evaluateTestSet(currentTestSet);
     }
 
     public static void reportTestRun(){
         initializeIfNotInitialized();
         stopTime = new Date();
-        reporters.reportTestRun();
+        testRunReporterFactory.reportTestRun();
         BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 

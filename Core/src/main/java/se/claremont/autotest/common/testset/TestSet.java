@@ -36,7 +36,7 @@ public abstract class TestSet {
 
     @AfterClass
     public static void testSetClassInternalClassTeardown(){
-        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
+        TestRun.testRunReporterFactory.evaluateTestSet(TestRun.currentTestSet);
     }
 
 

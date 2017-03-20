@@ -37,7 +37,7 @@ public class RestServerInteractionTest extends UnitTestClass{
         TestCase testCase = new TestCase(null, "My testCase name");
         testCase.report();
         boolean runReporterFound = false;
-        for(TestRunReporter testRunReporter : TestRun.reporters.reporters){
+        for(TestRunReporter testRunReporter : TestRun.testRunReporterFactory.reporters){
             if(testRunReporter.getClass() == TafBackendServerTestRunReporter.class){
                 runReporterFound = true;
                 String json = ((TafBackendServerTestRunReporter)testRunReporter).toJson();

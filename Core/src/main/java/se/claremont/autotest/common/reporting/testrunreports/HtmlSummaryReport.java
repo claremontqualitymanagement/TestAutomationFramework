@@ -265,11 +265,18 @@ public class HtmlSummaryReport {
                 "          <table class=\"rundetails\">" + LF +
                 "             <tr><td>Run name: </td><td>" + TestRun.testRunName + "</td></tr>" + LF +
                 "             <tr><td>Start time: </td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.startTime) + "</td></tr>" + LF +
-                "             <tr><td>Stop time :</td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.stopTime) + "</td></tr>" + LF +
-                "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.startTime, TestRun.stopTime) + "</td></tr>" + LF +
+                "             <tr><td>Stop time :</td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(getStopTime()) + "</td></tr>" + LF +
+                "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.startTime, getStopTime()) + "</td></tr>" + LF +
                 "          </table>" + LF;
     }
 
+    private Date getStopTime(){
+        if(TestRun.stopTime != null){
+            return TestRun.stopTime;
+        } else {
+            return new Date();
+        }
+    }
 
     /**
      * Produces the statistics section of the summary reportTestRun

@@ -1,12 +1,9 @@
 package se.claremont.autotest.common.testrun;
 
 import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
-import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -18,7 +15,7 @@ public class TestRunWrapupTest extends UnitTestClass{
     public void singleTestRunReportingFromMultipleTestSetExecutions(){
         FakeEmailTestRunReporter fakeEmailTestRunReporter = new FakeEmailTestRunReporter();
         TestRun.initializeIfNotInitialized();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
+        TestRun.testRunReporterFactory.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName()};
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(fakeEmailTestRunReporter.testCaseList.size() == 4);
@@ -33,8 +30,8 @@ public class TestRunWrapupTest extends UnitTestClass{
         HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
         FakeEmailTestRunReporter fakeEmailTestRunReporter = new FakeEmailTestRunReporter();
         TestRun.initializeIfNotInitialized();
-        TestRun.reporters.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
+        TestRun.testRunReporterFactory.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
+        TestRun.testRunReporterFactory.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName()};
         try{
             CliTestRunner.runInTestMode(args);

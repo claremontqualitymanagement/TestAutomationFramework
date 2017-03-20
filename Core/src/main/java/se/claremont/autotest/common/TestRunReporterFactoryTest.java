@@ -17,6 +17,6 @@ public class TestRunReporterFactoryTest extends UnitTestClass{
         TestRun.initializeIfNotInitialized();
         TestRunReporterFactory t = new TestRunReporterFactory();
         t.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-        Assert.assertTrue("Expected 2 items (default reporters counted for) but found " + t.reporters.size(), t.reporters.size() == 2);
+        Assert.assertTrue("Expected 2 items (default testRunReporterFactory counted for) but found " + t.reporters.size(), t.reporters.size() == 2);
     }
 }
