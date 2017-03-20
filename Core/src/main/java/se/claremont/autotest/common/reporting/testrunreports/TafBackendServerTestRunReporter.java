@@ -28,6 +28,8 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
 
     public TafBackendServerTestRunReporter(){}
 
+    public List<String> getTestCasesJsonsList() { return testCasesJsonsList; }
+    public List<String> getTestSetJsonsList() { return testSetJsonsList; }
     public Date getRunStartTime() { return runStartTime; }
     public void setRunStartTime(Date runStartTime) { this.runStartTime = runStartTime; }
     public Date getRunStopTime() { return runStopTime; }
