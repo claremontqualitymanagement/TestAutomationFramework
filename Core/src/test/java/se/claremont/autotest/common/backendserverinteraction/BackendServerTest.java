@@ -7,8 +7,8 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.TestRunResult;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -60,12 +60,12 @@ public class BackendServerTest extends UnitTestClass{
         BackendServerConnection backendServerConnection = new BackendServerConnection();
         Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), backendServerConnection.isConnected());
         Assert.assertTrue(backendServerConnection.getBackendVersion(), backendServerConnection.getBackendVersion().contains("TAF"));
-        TestRunResult testRunResult = new TestRunResult();
+        TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
         TestCase testCase = new TestCase();
         testCase.log(LogLevel.INFO, "Message");
         testCase.addTestCaseData(" This Parameter", "This Value");
-        testRunResult.addTestCaseResult(testCase);
-        String response = backendServerConnection.postTestRunResult(testRunResult);
+        tafBackendServerTestRunReporter.evaluateTestCase(testCase);
+        String response = backendServerConnection.postTestRunResult(tafBackendServerTestRunReporter);
         Assert.assertTrue(response, response.toLowerCase().contains("ok"));
         Assert.assertFalse(response, response.toLowerCase().contains("not"));
     }

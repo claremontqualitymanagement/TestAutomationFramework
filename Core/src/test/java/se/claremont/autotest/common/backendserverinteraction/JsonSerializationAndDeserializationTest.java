@@ -7,8 +7,8 @@ import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.TestRunResult;
-import se.claremont.autotest.common.testset.UnitTestClass;
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
+import se.claremont.autotest.common.testset.TestSet;
 
 import java.io.IOException;
 
@@ -67,25 +67,65 @@ public class JsonSerializationAndDeserializationTest {
 
     @Test
     public void testRunResultSerializationAndDeserialization(){
-        TestRunResult testRunResult = new TestRunResult();
+        TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
         TestCase testCase = new TestCase();
         testCase.log(LogLevel.INFO, "Message");
-        testRunResult.addTestCaseResult(testCase);
+        tafBackendServerTestRunReporter.evaluateTestCase(testCase);
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {
-            json = mapper.writeValueAsString(testRunResult);
+            json = mapper.writeValueAsString(tafBackendServerTestRunReporter);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         Assert.assertNotNull(json);
-        TestRunResult testRunResultObject = null;
+        TafBackendServerTestRunReporter tafBackendServerTestRunReporterObject = null;
         try {
-            testRunResultObject = mapper.readValue(json, TestRunResult.class);
+            tafBackendServerTestRunReporterObject = mapper.readValue(json, TafBackendServerTestRunReporter.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Assert.assertNotNull(testRunResultObject);
-        testRunResult.addTestCaseResult(new TestCase());
+        Assert.assertNotNull(tafBackendServerTestRunReporterObject);
+        tafBackendServerTestRunReporter.evaluateTestCase(new TestCase());
+    }
+
+    @Test
+    public void testSetSerializationAndDeserialization(){
+        FakeTestSet fakeTestSet = new FakeTestSet();
+        TestCase testCase = new TestCase();
+        fakeTestSet.currentTestCase = testCase;
+        testCase.log(LogLevel.INFO, "Message");
+        fakeTestSet.addKnownError("KnownErrorDescription1", ".*Known error pattern1");
+        fakeTestSet.addKnownError("KnownErrorDescription2", new String[]{".*Known error pattern2" } );
+        fakeTestSet.name = "MyTestSetName";
+        TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
+        tafBackendServerTestRunReporter.evaluateTestSet(fakeTestSet);
+        tafBackendServerTestRunReporter.evaluateTestCase(testCase);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(tafBackendServerTestRunReporter);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(json);
+        System.out.println(json);
+        Assert.assertTrue(json.contains("Message"));
+        Assert.assertTrue(json.contains("KnownErrorDescription1"));
+        Assert.assertTrue(json.contains("KnownErrorDescription2"));
+        Assert.assertTrue(json.contains(".*Known error pattern1"));
+        Assert.assertTrue(json.contains(".*Known error pattern2"));
+        Assert.assertTrue(json.contains("MyTestSetName"));
+        TafBackendServerTestRunReporter tafBackendServerTestRunReporterObject = null;
+        try {
+            tafBackendServerTestRunReporterObject = mapper.readValue(json, TafBackendServerTestRunReporter.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(tafBackendServerTestRunReporterObject);
+    }
+
+    public class FakeTestSet extends TestSet{
+
     }
 }

@@ -1,8 +1,12 @@
 package se.claremont.autotest.common.testrun;
 
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.reporting.testrunreports.email.TestRunReporterEmailReport;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.TestRun;
+import se.claremont.autotest.common.testrun.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ public class TestRunReporterFactory {
     public TestRunReporterFactory(){
         TestRun.initializeIfNotInitialized();
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
+        addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
         if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
             addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());
         }

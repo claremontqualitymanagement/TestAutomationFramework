@@ -19,19 +19,19 @@ public class TafRunListener extends RunListener {
 
     /*
     public void testFinished(Description description) throws Exception {
-        TestRun.testRunResult.addTestCaseResult(description.getMethodName(), description.getClassName(), "Passed");
+        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(description.getMethodName(), description.getClassName(), "Passed");
     }
 
     public void testFailure(Failure failure) throws Exception {
-        TestRun.testRunResult.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Failed");
+        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Failed");
     }
 
     public void testAssumptionFailure(Failure failure) {
-        TestRun.testRunResult.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Blocked");
+        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Blocked");
     }
 
     public void testIgnored(Description description) throws Exception {
-        TestRun.testRunResult.addTestCaseResult(description.getMethodName(), description.getClassName(), "Ignored");
+        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(description.getMethodName(), description.getClassName(), "Ignored");
     }
     */
 
@@ -54,7 +54,7 @@ public class TafRunListener extends RunListener {
     }
 
     private void sendRunResultToRESTServerIfApplicable(){
-        //System.out.println("Test run results to JSON: " + TestRun.testRunResult.toJson());
+        //System.out.println("Test run results to JSON: " + TestRun.tafBackendServerTestRunReporter.toJson());
     }
 
     private static String celebration(){

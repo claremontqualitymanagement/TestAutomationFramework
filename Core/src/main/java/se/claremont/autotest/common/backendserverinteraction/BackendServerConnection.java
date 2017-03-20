@@ -8,7 +8,7 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.TestRunResult;
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 
 import java.io.IOException;
 
@@ -48,10 +48,10 @@ public class BackendServerConnection {
         return responseBody;
     }
 
-    public String postTestRunResult(TestRunResult testRunResult){
+    public String postTestRunResult(TafBackendServerTestRunReporter tafBackendServerTestRunReporter){
         String responseBody = null;
         if(isConnected && apiVersionCompatible){
-            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/testrun", "application/json", testRunResult.toJson());
+            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/testrun", "application/json", tafBackendServerTestRunReporter.toJson());
             System.out.println(responseBody);
         } else {
             System.out.println("Could not post test run results to TAF Backend Server version. Error: Not connected or wrong API version.");

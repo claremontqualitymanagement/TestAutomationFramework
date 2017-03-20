@@ -2,6 +2,7 @@ package se.claremont.autotest.common.testrun;
 
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndexFile;
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.Date;
@@ -23,7 +24,6 @@ public class TestRun {
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public static Date startTime;
     public static Date stopTime;
-    public static TestRunResult testRunResult;
 
     /**
      * TAF and TA test(s) standard codes.
@@ -73,8 +73,6 @@ public class TestRun {
             currentTestSet = null;
             settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
-            testRunResult = new TestRunResult();
-            testRunResult.setRunStartTime(startTime);
             isInitialized = true;
         }
     }

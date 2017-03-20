@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
@@ -34,11 +35,20 @@ public class RestServerInteractionTest extends UnitTestClass{
     public void testRunResultToJsonTest(){
         TestRun.initializeIfNotInitialized();
         TestCase testCase = new TestCase(null, "My testCase name");
-        TestRun.testRunResult.addTestCaseResult(testCase);
-        String json = TestRun.testRunResult.toJson();
-        Assert.assertNotNull(json);
-        Assert.assertTrue(json, json.contains("My testCase name"));
-        Assert.assertTrue(json, json.contains("settings"));
+        testCase.report();
+        boolean runReporterFound = false;
+        for(TestRunReporter testRunReporter : TestRun.reporters.reporters){
+            if(testRunReporter.getClass() == TafBackendServerTestRunReporter.class){
+                runReporterFound = true;
+                String json = ((TafBackendServerTestRunReporter)testRunReporter).toJson();
+                Assert.assertNotNull(json);
+                Assert.assertTrue(json, json.contains("My testCase name"));
+                Assert.assertTrue(json, json.contains("settings"));
+            }
+        }
+        Assert.assertTrue(runReporterFound);
+        TestRun.reportTestRun();
+
     }
 
     @Test

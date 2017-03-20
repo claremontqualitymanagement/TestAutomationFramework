@@ -132,7 +132,6 @@ public class TestCase {
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
         TestRun.reporters.evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
-        TestRun.testRunResult.addTestCaseResult(this);
         reported = true;
         assertExecutionResultsToTestRunner();
     }
