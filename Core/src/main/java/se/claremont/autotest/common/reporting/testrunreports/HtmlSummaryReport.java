@@ -13,7 +13,6 @@ import se.claremont.autotest.common.testset.TestSet;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -429,7 +428,7 @@ public class HtmlSummaryReport {
         bar.append("          <table id=\"").append(HtmlStyleNames.RESULTS_BAR.toString()).append("\">").append(LF);
         bar.append("            <tr>").append(LF);
         if(successfulTestCases > 0){
-            bar.append("              <td class=\"resultsgraphpassed\"></td>").append(LF);
+            bar.append("              <td class=\"resultsgraphpassed\">" + yippieTextIfNoErrors() + "</td>").append(LF);
             resultsBarStyleInfo += "      td.resultsgraphpassed { background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
         }
         if(testCasesWithOnlyKnownErrors > 0){
@@ -453,7 +452,12 @@ public class HtmlSummaryReport {
         return bar.toString();
     }
 
-
+    private String yippieTextIfNoErrors(){
+        if(this.failedTestCasesWithNewDeviations + this.testCasesWithBothNewAndKnownErrors == 0){
+            return "YIPPIE!";
+        }
+        return "";
+    }
     /**
      * Produces the HTML section for new errors in the summary testCaseLog, if new errors (errors
      * that cannot be identified as known errors) are identified in the test case logs.
