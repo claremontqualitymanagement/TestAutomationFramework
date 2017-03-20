@@ -10,6 +10,7 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +22,14 @@ import java.util.UUID;
 public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty Date runStartTime;
     @JsonProperty Date runStopTime;
-    @JsonProperty
-    Settings settings = TestRun.settings;
+    @JsonProperty String testRunName;
+    @JsonProperty Settings settings = TestRun.settings;
     @JsonProperty List<String> testCasesJsonsList = new ArrayList<>();
     @JsonProperty List<String> testSetJsonsList = new ArrayList<>();
 
-    public TafBackendServerTestRunReporter(){}
+    public TafBackendServerTestRunReporter(){
+        testRunName = TestRun.testRunName;
+    }
 
     public List<String> getTestCasesJsonsList() { return testCasesJsonsList; }
     public List<String> getTestSetJsonsList() { return testSetJsonsList; }
@@ -35,6 +38,24 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public Date getRunStopTime() { return runStopTime; }
     public void setRunStopTime(Date runStopTime) { this.runStopTime = runStopTime; }
     public Settings getSettings() { return settings; }
+    public String getTestRunName() {
+        if(testRunName == null || testRunName.trim().length() == 0){
+            List<String> testSetNames = new ArrayList<>();
+            ObjectMapper mapper = new ObjectMapper();
+            for (String testSetJson : testSetJsonsList){
+                TestSet testSet = null;
+                try {
+                    testSet = mapper.readValue(testSetJson, TestSet.class);
+                } catch (IOException e) {
+                    System.out.println(e.toString());
+                }
+                if(testSet != null){
+                    testSetNames.add(testSet.name);
+                }
+            }
+            testRunName = String.join(", " + testSetNames);
+        }
+        return testRunName; }
 
     public void evaluateTestCase(TestCase testCase){
         testCasesJsonsList.add(testCase.toJson());
