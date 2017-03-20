@@ -9,13 +9,14 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.IOException;
 
 /**
  * Created by jordam on 2017-03-19.
  */
-public class JsonSerializationAndDeserializationTest {
+public class JsonSerializationAndDeserializationTest extends UnitTestClass{
 
     @Test
     public void testCaseSerializationAndDeserialization(){
