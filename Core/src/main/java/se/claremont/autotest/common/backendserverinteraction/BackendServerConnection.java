@@ -48,11 +48,11 @@ public class BackendServerConnection {
         return responseBody;
     }
 
-    public String postTestRunResult(TafBackendServerTestRunReporter tafBackendServerTestRunReporter){
+    public String postTestRunResult(String json){
         String responseBody = null;
         if(isConnected && apiVersionCompatible){
-            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/testrun", "application/json", tafBackendServerTestRunReporter.toJson());
-            System.out.println(responseBody);
+            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/testrun", "application/json", json);
+            System.out.println("Response from test run results posting to TAF Backend Server: " + responseBody);
         } else {
             System.out.println("Could not post test run results to TAF Backend Server version. Error: Not connected or wrong API version.");
         }
@@ -93,8 +93,10 @@ public class BackendServerConnection {
                 String versionResponse = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/apiversion");
                 if(versionResponse != null && versionResponse.contains(tafFrameworkApiVersion)){
                     apiVersionCompatible = true;
+                    return;
                 }
             }
+            apiVersionCompatible = false;
         }
     }
 

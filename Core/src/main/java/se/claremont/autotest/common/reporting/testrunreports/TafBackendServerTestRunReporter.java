@@ -22,7 +22,7 @@ import java.util.UUID;
 public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty Date runStartTime;
     @JsonProperty Date runStopTime;
-    @JsonProperty String testRunName;
+    @JsonProperty String testRunName = "";
     @JsonProperty Settings settings = TestRun.settings;
     @JsonProperty List<String> testCasesJsonsList = new ArrayList<>();
     @JsonProperty List<String> testSetJsonsList = new ArrayList<>();
@@ -39,11 +39,16 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public Date getRunStopTime() { return runStopTime; }
     public void setRunStopTime(Date runStopTime) { this.runStopTime = runStopTime; }
     public Settings getSettings() { return settings; }
-    public String getTestRunName() {
+    public void setTestRunName() {
         if(testRunName == null || testRunName.trim().length() == 0){
-            testRunName = String.join(", " + testSetNames);
+            if(TestRun.testRunName != null && TestRun.testRunName.length() > 0){
+                testRunName = TestRun.testRunName;
+            } else if(String.join("", testSetNames).trim().length() > 0) {
+                testRunName = String.join(", " + testSetNames);
+            } else {
+                testRunName = "Un-named test run";
+            }
         }
-        return testRunName;
     }
 
     public void evaluateTestCase(TestCase testCase){
@@ -53,9 +58,9 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public void report(){
         setRunStartTime(TestRun.startTime);
         setRunStopTime(new Date());
-        testRunName = getTestRunName();
+        setTestRunName();
         BackendServerConnection backendServerConnection = new BackendServerConnection();
-        backendServerConnection.postTestRunResult(this);
+        backendServerConnection.postTestRunResult(toJson());
     }
 
     public void evaluateTestSet(TestSet testSet){
