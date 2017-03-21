@@ -65,7 +65,7 @@ public class BackendServerTest extends UnitTestClass{
         testCase.log(LogLevel.INFO, "Message");
         testCase.addTestCaseData(" This Parameter", "This Value");
         tafBackendServerTestRunReporter.evaluateTestCase(testCase);
-        String response = backendServerConnection.postTestRunResult(tafBackendServerTestRunReporter);
+        String response = backendServerConnection.postTestRunResult(tafBackendServerTestRunReporter.toJson());
         Assert.assertTrue(response, response.toLowerCase().contains("ok"));
         Assert.assertFalse(response, response.toLowerCase().contains("not"));
     }
