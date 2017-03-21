@@ -31,6 +31,10 @@
             <artifactId>okhttp</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
             <version>${capability.core.version}</version>

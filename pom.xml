@@ -27,6 +27,8 @@
         <capability.json.version>1.0.17</capability.json.version>
         <capability.java.version>2.1.8</capability.java.version>
         <capability.support.version>1.1.17</capability.support.version>
+        <jackson.version>2.6.3</jackson.version>
+        <selenium.version>3.0.1</selenium.version>
     </properties>
 
     <modules>
@@ -113,87 +115,62 @@
     <dependencyManagement>
         <!-- JCIFS libraries are included for support for Linux-based file systems as well as Windows based ones. -->
         <dependencies>
+
+            <!-- Mocking -->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>2.6.9</version>
             </dependency>
             <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+            </dependency>
+
+            <!-- Network shares access -->
+            <dependency>
                 <groupId>jcifs</groupId>
                 <artifactId>jcifs</artifactId>
                 <version>1.3.17</version>
                 <!--<scope>import</scope>-->
             </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>mockwebserver</artifactId>
-                <version>3.4.1</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/log4j/log4j -->
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-            </dependency>
-            <!-- For REST interactions -->
+
+            <!-- REST interactions -->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>3.4.1</version>
             </dependency>
-            <!-- JSON object mapper -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.6.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.21</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.2</version>
+            <dependency> <!-- Nedded for OkHttp -->
+                <groupId>com.squareup.okio</groupId>
+                <artifactId>okio</artifactId>
+                <version>1.11.0</version>
+            </dependency>            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>mockwebserver</artifactId>
+                <version>3.4.1</version>
+                <scope>test</scope>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-jdk-http -->
+            <!-- HTTP -->
             <dependency>
                 <groupId>org.glassfish.jersey.containers</groupId>
                 <artifactId>jersey-container-jdk-http</artifactId>
                 <version>2.23.2</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-client</artifactId>
                 <version>2.23.2</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-server</artifactId>
                 <version>2.23.2</version>
             </dependency>
-            <!-- Log4j is used for more primitive, but easily applied logging in the framework. -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.21</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.21</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>mail</artifactId>
-                <version>1.4</version>
-            </dependency>
 
+            <!-- Test runner -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -205,6 +182,34 @@
                 <artifactId>hamcrest-core</artifactId>
                 <version>1.3</version>
             </dependency>
+
+            <!-- Log4j is used for more primitive, but easily applied logging in the framework. -->
+            <!-- Logging -->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.21</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.21</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.21</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
@@ -215,16 +220,26 @@
                 <artifactId>jsch</artifactId>
                 <version>0.1.53</version>
             </dependency>
+
+            <!-- Task runner -->
             <dependency>
                 <groupId>ant</groupId>
                 <artifactId>ant-jsch</artifactId>
                 <version>1.6.5</version>
             </dependency>
+
+            <!-- Email -->
             <dependency>
                 <groupId>org.subethamail</groupId>
                 <artifactId>subethasmtp</artifactId>
                 <version>3.1.7</version>
             </dependency>
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4</version>
+            </dependency>
+
             <!-- SSH support is included for scripting purposes. -->
             <dependency>
                 <groupId>sshtools</groupId>
@@ -241,13 +256,14 @@
                 <artifactId>j2ssh-common</artifactId>
                 <version>0.2.9</version>
             </dependency>
-            <dependency>
+
+            <!-- Selenium -->
+            <dependency> <!-- Resolves and downloads correct drivers for browsers -->
                 <groupId>io.github.bonigarcia</groupId>
                 <artifactId>webdrivermanager</artifactId>
                 <version>1.6.0</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/com.github.detro.ghostdriver/phantomjsdriver -->
-            <dependency>
+            <dependency> <!-- Driver for PhantomJS, the headless browser -->
                 <groupId>com.github.detro.ghostdriver</groupId>
                 <artifactId>phantomjsdriver</artifactId>
                 <version>1.0.1</version>
@@ -255,50 +271,66 @@
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-support</artifactId>
-                <version>3.0.1</version>
+                <version>${selenium.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>3.0.1</version>
+                <version>${selenium.version}</version>
                 <!--<version>3.1.0</version>-->
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-server</artifactId>
-                <version>3.0.1</version>
+                <version>${selenium.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-remote-driver</artifactId>
-                <version>3.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.9.5</version>
+                <version>${selenium.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-firefox-driver</artifactId>
-                <version>3.0.1</version>
+                <version>${selenium.version}</version>
+            </dependency>
+
+            <!-- Data format parsing -->
+            <dependency>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+                <version>1.4.01</version>
             </dependency>
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>20160810</version>
             </dependency>
+
+            <!-- DB Access -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.6</version>
             </dependency>
 
+            <!-- JSON object mapper -->
             <dependency>
-                <groupId>xml-apis</groupId>
-                <artifactId>xml-apis</artifactId>
-                <version>1.4.01</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

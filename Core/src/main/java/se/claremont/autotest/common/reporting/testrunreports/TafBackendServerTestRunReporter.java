@@ -26,6 +26,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty Settings settings = TestRun.settings;
     @JsonProperty List<String> testCasesJsonsList = new ArrayList<>();
     @JsonProperty List<String> testSetJsonsList = new ArrayList<>();
+    List<String> testSetNames = new ArrayList<>();
 
     public TafBackendServerTestRunReporter(){
         testRunName = TestRun.testRunName;
@@ -40,34 +41,26 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public Settings getSettings() { return settings; }
     public String getTestRunName() {
         if(testRunName == null || testRunName.trim().length() == 0){
-            List<String> testSetNames = new ArrayList<>();
-            ObjectMapper mapper = new ObjectMapper();
-            for (String testSetJson : testSetJsonsList){
-                TestSet testSet = null;
-                try {
-                    testSet = mapper.readValue(testSetJson, TestSet.class);
-                } catch (IOException e) {
-                    System.out.println(e.toString());
-                }
-                if(testSet != null){
-                    testSetNames.add(testSet.name);
-                }
-            }
             testRunName = String.join(", " + testSetNames);
         }
-        return testRunName; }
+        return testRunName;
+    }
 
     public void evaluateTestCase(TestCase testCase){
         testCasesJsonsList.add(testCase.toJson());
     }
 
     public void report(){
+        setRunStartTime(TestRun.startTime);
+        setRunStopTime(new Date());
+        testRunName = getTestRunName();
         BackendServerConnection backendServerConnection = new BackendServerConnection();
         backendServerConnection.postTestRunResult(this);
     }
 
     public void evaluateTestSet(TestSet testSet){
         testSetJsonsList.add(testSet.toJson());
+        testSetNames.add(testSet.name);
     }
 
     public String toJson(){

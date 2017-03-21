@@ -19,7 +19,7 @@ import se.claremont.autotest.common.testrun.TestRun;
  * Created by jordam on 2016-08-17.
  */
 @RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
-@JsonIgnoreProperties({"currentTestCase"})
+@JsonIgnoreProperties({"currentTestCase", "currentTestNameInternal"})
 public abstract class TestSet {
     @Rule
     public TestName currentTestNameInternal = new TestName();

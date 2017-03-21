@@ -176,6 +176,7 @@ public class StringManagement {
     }
 
     public static String timeDurationAsString(Date startDate, Date stopDate) {
+        if(startDate == null || stopDate == null) return null;
         long diffInMillies = stopDate.getTime() - startDate.getTime();
         List<String> timeParts = new ArrayList<>();
         List<TimeUnit> units = new ArrayList<TimeUnit>(EnumSet.allOf(TimeUnit.class));
