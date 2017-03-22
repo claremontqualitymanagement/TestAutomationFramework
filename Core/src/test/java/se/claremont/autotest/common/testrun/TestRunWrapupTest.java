@@ -15,7 +15,7 @@ public class TestRunWrapupTest extends UnitTestClass{
     public void singleTestRunReportingFromMultipleTestSetExecutions(){
         FakeEmailTestRunReporter fakeEmailTestRunReporter = new FakeEmailTestRunReporter();
         TestRun.initializeIfNotInitialized();
-        TestRun.testRunReporterFactory.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
+        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName()};
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(fakeEmailTestRunReporter.testCaseList.size() == 4);
@@ -30,8 +30,8 @@ public class TestRunWrapupTest extends UnitTestClass{
         HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
         FakeEmailTestRunReporter fakeEmailTestRunReporter = new FakeEmailTestRunReporter();
         TestRun.initializeIfNotInitialized();
-        TestRun.testRunReporterFactory.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
-        TestRun.testRunReporterFactory.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
+        TestRun.reporters.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
+        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName()};
         try{
             CliTestRunner.runInTestMode(args);

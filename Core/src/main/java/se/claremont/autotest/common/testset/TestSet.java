@@ -21,6 +21,8 @@ import se.claremont.autotest.common.testrun.TestRun;
 @RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 @JsonIgnoreProperties({"currentTestCase", "currentTestNameInternal"})
 public abstract class TestSet {
+    @JsonProperty public String testRunId; //Used for mapping on test run server
+
     @Rule
     public TestName currentTestNameInternal = new TestName();
 
@@ -36,7 +38,7 @@ public abstract class TestSet {
 
     @AfterClass
     public static void testSetClassInternalClassTeardown(){
-        TestRun.testRunReporterFactory.evaluateTestSet(TestRun.currentTestSet);
+        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
     }
 
 
@@ -49,6 +51,7 @@ public abstract class TestSet {
      */
     public TestSet(){
         TestRun.initializeIfNotInitialized();
+        testRunId = TestRun.testRunId.toString();
         TestRun.currentTestSet = this;
         name = SupportMethods.classNameAtStacktraceLevel(3);
     }

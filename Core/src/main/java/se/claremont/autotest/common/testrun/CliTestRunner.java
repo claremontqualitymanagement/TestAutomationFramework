@@ -137,7 +137,7 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
-        TestRun.testRunReporterFactory.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         junit.addListener(new TafRunListener());
 
         for (String arg : args) {
@@ -174,7 +174,7 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
-        TestRun.testRunReporterFactory.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         //junit.addListener(new TafRunListener());
 
         for (String arg : args) {

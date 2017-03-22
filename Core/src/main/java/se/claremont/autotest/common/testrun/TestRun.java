@@ -5,6 +5,7 @@ import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndex
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * A test run is the entity of every time some set(s) of test cases are run.
@@ -18,11 +19,12 @@ public class TestRun {
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
     public static TestSet currentTestSet;
     public static final TafRunListener tafRunListener = new TafRunListener();
-    public static final TestRunReporterFactory testRunReporterFactory = new TestRunReporterFactory();
+    public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public static Date startTime;
     public static Date stopTime;
+    public static final UUID testRunId = UUID.randomUUID();
 
     /**
      * TAF and TA test(s) standard codes.
@@ -91,13 +93,13 @@ public class TestRun {
     public static void evaluateCurrentTestSet(){
         initializeIfNotInitialized();
         if(currentTestSet != null)
-            testRunReporterFactory.evaluateTestSet(currentTestSet);
+            reporters.evaluateTestSet(currentTestSet);
     }
 
     public static void reportTestRun(){
         initializeIfNotInitialized();
         stopTime = new Date();
-        testRunReporterFactory.reportTestRun();
+        reporters.reportTestRun();
         BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 

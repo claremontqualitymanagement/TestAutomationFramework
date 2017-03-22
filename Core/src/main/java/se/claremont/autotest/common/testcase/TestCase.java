@@ -42,6 +42,7 @@ public class TestCase {
     private final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     @JsonProperty public final UUID uid = UUID.randomUUID();
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
+    @JsonProperty public String testRunId; //Used for mapping on backend server
 
     public TestCase(){
         this(null, "Nameless test case");
@@ -75,6 +76,7 @@ public class TestCase {
         setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
+        testRunId = TestRun.testRunId.toString();
     }
 
     /**
@@ -130,7 +132,7 @@ public class TestCase {
         logKnownErrors();
         evaluateResultStatus();
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
-        TestRun.testRunReporterFactory.evaluateTestCase(this);
+        TestRun.reporters.evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
         reported = true;
         assertExecutionResultsToTestRunner();
@@ -224,11 +226,20 @@ public class TestCase {
      * When a test case is evaluated after a test run the result status is set
      */
     public enum ResultStatus{
-        UNEVALUATED,
-        PASSED,
-        FAILED_WITH_ONLY_KNOWN_ERRORS,
-        FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS,
-        FAILED_WITH_ONLY_NEW_ERRORS
+        UNEVALUATED (0),
+        PASSED (1),
+        FAILED_WITH_ONLY_KNOWN_ERRORS (2),
+        FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS (4),
+        FAILED_WITH_ONLY_NEW_ERRORS (3);
+
+        ResultStatus(int value){
+            this.value = value;
+        }
+        private int value;
+
+        public int value() {
+            return value;
+        }
     }
 
     /**

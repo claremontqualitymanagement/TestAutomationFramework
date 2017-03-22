@@ -1,8 +1,11 @@
 package se.claremont.autotest.common.testrun;
 
+import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
+import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 import static org.junit.Assert.assertEquals;
@@ -70,5 +73,14 @@ public class TestRunTest extends UnitTestClass{
         TestRun.settings = original;
     }
 
+    @Test
+    public void testRunIdSetting(){
+        String testRunId = TestRun.testRunId.toString();
+        Assert.assertTrue(TestRun.testRunId.toString(), testRunId != null);
+        TestSet1 testSet1 = new TestSet1();
+        Assert.assertTrue(testSet1.testRunId.equals(testRunId));
+        TestCase testCase = new TestCase();
+        Assert.assertTrue(testCase.testRunId.equals(testRunId));
+    }
 
 }

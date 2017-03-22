@@ -38,8 +38,8 @@ public class TableInteractionTest extends TestSet {
 
     @AfterClass
     public static void ClassTearDown(){
-        TestRun.testRunReporterFactory.evaluateTestSet(TestRun.currentTestSet);
-        TestRun.testRunReporterFactory.reportTestRun();
+        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
+        TestRun.reporters.reportTestRun();
     }
 
     @Test

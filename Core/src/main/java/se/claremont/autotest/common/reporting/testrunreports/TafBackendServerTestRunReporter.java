@@ -29,9 +29,20 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
     @JsonProperty public List<String> testSetJsonsList = new ArrayList<>();
     @JsonProperty public List<String> testSetNames = new ArrayList<>();
+    @JsonProperty public TestCase.ResultStatus mostSevereErrorEncountered = TestCase.ResultStatus.UNEVALUATED;
+    @JsonProperty public String testRunId;
 
     public TafBackendServerTestRunReporter(){
         testRunName = TestRun.testRunName;
+    }
+
+    public TafBackendServerTestRunReporter(String json){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.readValue(json, this.getClass());
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
     }
 
     public List<String> getTestCasesJsonsList() { return testCasesJsonsList; }
@@ -44,7 +55,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public void setTestRunName() {
         testRunName = TestRun.testRunName;
         if(testRunName == null || testRunName.trim().length() == 0){
-            testRunName = String.join(", " + testSetNames);
+            testRunName = String.join(", ", testSetNames);
         }
         if(testRunName == null || testRunName.trim().length() == 0){
             testRunName = "Un-named test run";
@@ -52,10 +63,12 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     }
 
     public void evaluateTestCase(TestCase testCase){
+        if(testCase.resultStatus.value() > mostSevereErrorEncountered.value()) mostSevereErrorEncountered = testCase.resultStatus;
         testCasesJsonsList.add(testCase.toJson());
     }
 
     public void report(){
+        testRunId = TestRun.testRunId.toString();
         setRunStartTime(TestRun.startTime);
         setRunStopTime(new Date());
         setTestRunName();
