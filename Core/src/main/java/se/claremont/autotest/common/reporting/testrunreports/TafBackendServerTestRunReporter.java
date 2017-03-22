@@ -34,6 +34,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
 
     public TafBackendServerTestRunReporter(){
         testRunName = TestRun.testRunName;
+        runStartTime = TestRun.startTime;
     }
 
     public TafBackendServerTestRunReporter(String json){
@@ -70,7 +71,11 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public void report(){
         testRunId = TestRun.testRunId.toString();
         setRunStartTime(TestRun.startTime);
-        setRunStopTime(new Date());
+        if(TestRun.stopTime == null) {
+            setRunStopTime(new Date());
+        } else {
+            setRunStopTime(TestRun.stopTime);
+        }
         setTestRunName();
         BackendServerConnection backendServerConnection = new BackendServerConnection();
         backendServerConnection.postTestRunResult(toJson());

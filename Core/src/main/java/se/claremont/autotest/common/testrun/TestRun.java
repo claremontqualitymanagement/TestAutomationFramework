@@ -22,7 +22,7 @@ public class TestRun {
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
-    public static Date startTime;
+    public static final Date startTime = new Date();
     public static Date stopTime;
     public static final UUID testRunId = UUID.randomUUID();
 
@@ -70,7 +70,6 @@ public class TestRun {
 
     public static void initializeIfNotInitialized() {
         if(!isInitialized){
-            startTime = new Date();
             currentTestSet = null;
             settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
