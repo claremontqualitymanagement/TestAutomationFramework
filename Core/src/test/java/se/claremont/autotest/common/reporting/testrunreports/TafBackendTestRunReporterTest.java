@@ -36,7 +36,11 @@ public class TafBackendTestRunReporterTest {
         tafBackendServerTestRunReporter.evaluateTestSet(testSet2);
         Assert.assertTrue(tafBackendServerTestRunReporter.testSetNames.contains(testSet2.name));
         tafBackendServerTestRunReporter.report();
-        Assert.assertTrue(tafBackendServerTestRunReporter.testRunName.contains(testSet1.name));
-        Assert.assertTrue(tafBackendServerTestRunReporter.testRunName.contains(testSet2.name));
+        if(TestRun.testRunName == null || TestRun.testRunName.length() == 0){
+            Assert.assertTrue("Expected testRunName to include '" + testSet1.name + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet1.name));
+            Assert.assertTrue("Expected testRunName to include '" + testSet2.name + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet2.name));
+        } else {
+            Assert.assertTrue("Expected testRunName to include '" + TestRun.testRunName + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(TestRun.testRunName));
+        }
     }
 }

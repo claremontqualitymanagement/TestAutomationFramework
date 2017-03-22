@@ -33,6 +33,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty public String testRunId;
 
     public TafBackendServerTestRunReporter(){
+        TestRun.initializeIfNotInitialized();
         testRunName = TestRun.testRunName;
         runStartTime = TestRun.startTime;
     }
