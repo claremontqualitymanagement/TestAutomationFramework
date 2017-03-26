@@ -6,6 +6,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -154,7 +155,7 @@ public class MethodInvoker {
             Class<?> c = component.getClass();
             for(Method m : c.getMethods()){
                 if(m.toString().contains(methodName)){
-                    String returnstring = "Invoking method '" + m.toString() + "' with arguments '" + args.toString() + "'";
+                    String returnstring = "Invoking method '" + m.toString() + "' with arguments '" + Arrays.toString(args) + "'";
                     try {
                         String returnString = ".";
                         Object returnObject = m.invoke(component, args);
