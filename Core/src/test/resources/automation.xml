@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- SSHTools automation file, defines mappings for automated configuration -->
+<!--suppress XmlUnboundNsPrefix -->
 <Automation>
     <RemoteIdentification defaultName="OpenSSH">
        <Rule startsWith="OpenSSH"/>

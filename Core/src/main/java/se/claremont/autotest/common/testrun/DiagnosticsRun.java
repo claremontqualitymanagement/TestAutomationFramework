@@ -39,6 +39,7 @@ public class DiagnosticsRun implements Runnable {
 
         System.setOut(dummyStream);
 
+        //noinspection AccessStaticViaInstance
         result = junit.runClasses(KnownError_Test.class,
                 KnownErrorsList_Test.class,
                 LogPost_Tests.class,

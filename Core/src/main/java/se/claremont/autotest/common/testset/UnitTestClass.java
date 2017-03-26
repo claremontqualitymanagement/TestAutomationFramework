@@ -14,7 +14,9 @@ import java.io.PrintStream;
  * Created by jordam on 2017-03-17.
  */
 public class UnitTestClass {
+    @SuppressWarnings("WeakerAccess")
     static PrintStream originalOutputChannel;
+    @SuppressWarnings("WeakerAccess")
     static ByteArrayOutputStream testOutputChannel;
 
     @Rule

@@ -6,6 +6,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
+ * Test class used for testing test runs
+ *
  * Created by jordam on 2017-03-17.
  */
 public class FailTestTest extends UnitTestClass{

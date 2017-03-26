@@ -156,6 +156,7 @@ public class TableData {
      *              searched for value could be a partial match, or matching through regular expression.
      * @return Returns true only if no rows matching the row pattern and matching type is found.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean verifyRowDoesNotExist(String headlineColonValueSemicolonSeparatedStringForRowMatch, CellMatchingType cellMatchingType){
         evaluate(headlineColonValueSemicolonSeparatedStringForRowMatch, cellMatchingType);
         boolean matchFound = false;

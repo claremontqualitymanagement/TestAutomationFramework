@@ -17,6 +17,7 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  * Created by jordam on 2017-03-19.
  */
 public class BackendServerTest extends UnitTestClass{
+    @SuppressWarnings("WeakerAccess")
     String serverPort = "2222";
 
     @Test

@@ -8,6 +8,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 //TODO: Why is this still included?
 /**
+ * REST server services
+ *
  * Created by jordam on 2016-10-10.
  */
 @SuppressWarnings("SameReturnValue")

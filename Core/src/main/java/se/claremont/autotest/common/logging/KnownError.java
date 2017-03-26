@@ -20,6 +20,7 @@ public class KnownError {
     public final ArrayList<TestCase> testCasesWhereErrorWasEncountered = new ArrayList<>();
     @JsonProperty public final String description;
 
+    @SuppressWarnings("WeakerAccess")
     public KnownError(){
         description = "";
         regexpPatternMatchForLogString = new String[]{};

@@ -51,6 +51,7 @@ public class TestlinkAdapterServerConnection {
         return responseBody;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public String postTestRunResult(String json){
         String responseBody = null;
         if(isConnected && apiVersionCompatible){
@@ -133,6 +134,7 @@ public class TestlinkAdapterServerConnection {
         return null;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isConnected() {
         checkConnectionStatus();
         return isConnected;

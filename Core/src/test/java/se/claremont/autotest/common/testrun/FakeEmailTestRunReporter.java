@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Used for testing of test run reporting
+ *
  * Created by jordam on 2017-03-17.
  */
 public class FakeEmailTestRunReporter implements TestRunReporter {

@@ -31,6 +31,7 @@ public class TestCaseLog {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
 
 
+    @SuppressWarnings("WeakerAccess")
     public TestCaseLog(){} //For JSON object mapping usage
 
     public TestCaseLog(String testCaseName){

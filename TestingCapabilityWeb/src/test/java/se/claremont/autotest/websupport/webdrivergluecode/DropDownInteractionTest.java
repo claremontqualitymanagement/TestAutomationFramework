@@ -8,6 +8,9 @@ import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.websupport.DomElement;
 
 /**
+ *
+ * Tests that the behaviour of dropdown method works even with delays
+ *
  * Created by jordam on 2017-01-28.
  */
 public class DropDownInteractionTest extends UnitTestClass{

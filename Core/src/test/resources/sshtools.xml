@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- The Java SSH API Configuration file -->
+<!--suppress XmlUnboundNsPrefix -->
 <SshAPIConfiguration>
   
   <!-- The Cipher configuration, add or overide default cipher implementations -->

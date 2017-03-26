@@ -22,7 +22,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 
-@SuppressWarnings({"SameParameterValue", "RedundantThrows"})
+@SuppressWarnings({"SameParameterValue", "RedundantThrows", "ConstantConditions"})
 public class SSHServerResource extends ExternalResource {
 
     private static XmlServerConfigurationContext serverPlatformConfiguration;
@@ -152,8 +152,10 @@ public class SSHServerResource extends ExternalResource {
 
     private void setupHomeDir () {
         File homeBase = new File(BASE_DIR, "home");
+        //noinspection ResultOfMethodCallIgnored
         homeBase.mkdirs();
         File userHome = new File(homeBase, userId);
+        //noinspection ResultOfMethodCallIgnored
         userHome.mkdirs();
     }
 

@@ -8,8 +8,11 @@ import java.io.PrintStream;
  *
  * Created by jordam on 2017-03-06.
  */
+@SuppressWarnings("WeakerAccess")
 public class SuppressTestOutputFromConsoleOutput {
+    @SuppressWarnings("WeakerAccess")
     static PrintStream originalOutputChannel;
+    @SuppressWarnings("WeakerAccess")
     static ByteArrayOutputStream testOutputChannel;
 
     public static void restoreOutputChannel(){

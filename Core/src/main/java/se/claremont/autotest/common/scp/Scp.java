@@ -1,11 +1,14 @@
 package se.claremont.autotest.common.scp;
 
 /**
+ * Shell interactions with Linux based machines
+ *
  * Created by magnusolsson on 2016-12-05.
  */
 @SuppressWarnings("SameParameterValue")
 public interface Scp {
 
+    @SuppressWarnings("EmptyMethod")
     void doSomeScpStuff();
 
     /**

@@ -22,13 +22,19 @@ import java.util.List;
  */
 @JsonIgnoreProperties({"testSetNames"})
 public class TafBackendServerTestRunReporter implements TestRunReporter {
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public Date runStartTime;
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public Date runStopTime;
     @JsonProperty public String testRunName = "";
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public Settings settings = TestRun.settings;
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public List<String> testSetJsonsList = new ArrayList<>();
     @JsonProperty public List<String> testSetNames = new ArrayList<>();
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public TestCase.ResultStatus mostSevereErrorEncountered = TestCase.ResultStatus.UNEVALUATED;
     @JsonProperty public String testRunId;
 
@@ -38,10 +44,12 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
         runStartTime = TestRun.startTime;
     }
 
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
     public void setRunStartTime(Date runStartTime) { this.runStartTime = runStartTime; }
+    @SuppressWarnings("WeakerAccess")
     public void setRunStopTime(Date runStopTime) { this.runStopTime = runStopTime; }
     public Settings getSettings() { return settings; }
+    @SuppressWarnings("WeakerAccess")
     public void setTestRunName() {
         testRunName = TestRun.testRunName;
         if(testRunName == null || testRunName.trim().length() == 0){

@@ -19,6 +19,7 @@ import java.util.List;
  * Created by jordam on 2017-03-19.
  */
 public class TestlinkAdapterTestRunReporter implements TestRunReporter {
+    @SuppressWarnings("WeakerAccess")
     @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
 
     public TestlinkAdapterTestRunReporter(){
@@ -40,6 +41,7 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
         //No need to evaluate test set for Testlink reporting.
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String toJson(){
         ObjectMapper mapper = new ObjectMapper();
         String json = null;

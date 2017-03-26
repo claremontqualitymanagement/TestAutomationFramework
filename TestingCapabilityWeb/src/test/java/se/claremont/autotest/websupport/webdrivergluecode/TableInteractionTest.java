@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Tests interaction with HTML tables
+ *
  * Created by jordam on 2017-01-28.
  */
 public class TableInteractionTest extends TestSet {

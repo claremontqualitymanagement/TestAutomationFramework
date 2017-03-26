@@ -9,8 +9,11 @@ import se.claremont.autotest.common.support.api.Taf;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.File;
+import java.net.URL;
 
 /**
+ * Tests of shell interactions with Linux hosts
+ *
  * Created by magnusolsson on 2016-12-05.
  */
 public class ScpImplTest extends UnitTestClass{
@@ -24,8 +27,10 @@ public class ScpImplTest extends UnitTestClass{
 
     @Test
     @Ignore
-    public void SftpUploadFileTest() throws InterruptedException {
-        String sourceFilePath = ScpImplTest.class.getClassLoader().getResource("copyfile.txt").getPath();
+    public void SftpUploadFileTest() {
+        URL source = ScpImplTest.class.getClassLoader().getResource("copyfile.txt");
+        if(source == null)return;
+        String sourceFilePath = source.getPath();
         String destinationFilePath = "/copyfile.txt";
 
         ScpImpl scp = (ScpImpl)Taf.scp();
@@ -53,6 +58,7 @@ public class ScpImplTest extends UnitTestClass{
         //cleanup
         File f = new File(destinationFilePath);
         if(f.isFile()) {
+            //noinspection ResultOfMethodCallIgnored
             f.delete();
         }
     }
