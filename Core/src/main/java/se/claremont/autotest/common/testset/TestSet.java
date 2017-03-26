@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import se.claremont.autotest.common.logging.KnownError;
@@ -20,7 +23,7 @@ import se.claremont.autotest.common.testrun.TestRun;
  */
 @RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 @JsonIgnoreProperties({"currentTestCase", "currentTestNameInternal"})
-public abstract class TestSet {
+public class TestSet { //non-abstract although it should be, to enable JSON object mapping with ease
     @JsonProperty public String testRunId; //Used for mapping on test run server
 
     @Rule

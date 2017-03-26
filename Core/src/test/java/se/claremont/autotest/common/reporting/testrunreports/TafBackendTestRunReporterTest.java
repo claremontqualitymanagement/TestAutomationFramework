@@ -1,8 +1,8 @@
 package se.claremont.autotest.common.reporting.testrunreports;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestSet1;
@@ -42,5 +42,26 @@ public class TafBackendTestRunReporterTest {
         } else {
             Assert.assertTrue("Expected testRunName to include '" + TestRun.testRunName + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(TestRun.testRunName));
         }
+    }
+
+    @Test
+    public void knownTestCaseErrorsReported(){
+        TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
+        TestSet1 testSet1 = new TestSet1();
+        TestCase testCase1 = new TestCase();
+        testCase1.addKnownError("description", ".*pattern.*");
+        testCase1.log(LogLevel.INFO, "dummy");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "pattern");
+        testCase1.log(LogLevel.INFO, "dummy");
+        testCase1.evaluateResultStatus();
+        Assert.assertTrue("testCase1 json: " + testCase1.toJson(), testCase1.toJson().contains("identifiedToBePartOfKnownError\" : true"));
+        tafBackendServerTestRunReporter.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase();
+        testCase2.addKnownError("description", ".*pattern.*");
+        testCase2.log(LogLevel.INFO, "dummy");
+        testCase1.evaluateResultStatus();
+        tafBackendServerTestRunReporter.evaluateTestCase(testCase2);
+        tafBackendServerTestRunReporter.evaluateTestSet(testSet1);
+
     }
 }

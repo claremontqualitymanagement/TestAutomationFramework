@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.logging;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -16,9 +17,9 @@ import java.util.Date;
  * Created by jordam on 2016-09-05.
  */
 public class LogFolder {
-    public static String testRunLogFolder = null;  //Used for test case logging
+    @JsonProperty public static String testRunLogFolder = null;  //Used for test case logging
     @SuppressWarnings("FieldCanBeLocal")
-    private static String baseLogFolder = null;     //Read from Settings
+    @JsonProperty private static String baseLogFolder = null;     //Read from Settings
 
     /**
      * Sets the values to run time values.

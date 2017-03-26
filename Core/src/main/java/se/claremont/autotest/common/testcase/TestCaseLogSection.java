@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.testcase;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.UxColors;
@@ -14,9 +15,9 @@ import java.util.Date;
  */
 @SuppressWarnings("WeakerAccess")
 public class TestCaseLogSection {
-     ArrayList<LogPost> logPostList = new ArrayList<>();
-    Date startTime;
-    Date stopTime;
+     @JsonProperty ArrayList<LogPost> logPostList = new ArrayList<>();
+     @JsonProperty Date startTime;
+     @JsonProperty Date stopTime;
 
      public TestCaseLogSection(ArrayList<LogPost> logPosts, Date testStartTime, Date testStopTime){
          this.startTime = testStartTime;
@@ -32,6 +33,36 @@ public class TestCaseLogSection {
                 "      h3.logsectiontitle.passed  { color: " + UxColors.GREEN.getHtmlColorCode() + ";  }" + SupportMethods.LF +
                 "      h3.logsectiontitle.failed  { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold;  }" + SupportMethods.LF +
                 htmlStyleInformationTimeGraph();
+    }
+
+    public String toHtml(){
+        StringBuilder html = new StringBuilder();
+        if(logPostList.size() > 0) {
+            html.append(timeProgressGraph(startTime, stopTime, logPostList.get(0).date, logPostList.get(logPostList.size() -1).date, 600)).append(SupportMethods.LF);
+            html.append("        <div class=\"expandable logsection level-").append(highestLogLevel().toString().toLowerCase());
+            if(hasErrors()){
+                html.append(" initially-expanded");
+            }
+            html.append("\">").append(SupportMethods.LF);
+            html.append("           <h3 title=\"Test step in class '").append(logPostList.get(0).testStepClassName).append("'\" class=\"logsectiontitle ");
+            if(hasErrors()){
+                html.append("failed\">");
+            }else {
+                html.append("passed\">");
+            }
+            //html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'   - in class: '" + logPostList.get(0).testStepClassName + "'</h3>").append(LF);
+            html.append("Test step: '<b>").append(logPostList.get(0).testStepName.replace("<", "_").replace(">", "_")).append("</b>'</h3>").append(SupportMethods.LF);
+            html.append("           <div class=\"expandable-content\">").append(SupportMethods.LF);
+            html.append("              <table class=\"logsectionlogposts\">").append(SupportMethods.LF);
+            for(LogPost logPost : logPostList){
+                html.append(logPost.toHtmlTableRow());
+            }
+            html.append("              </table>").append(SupportMethods.LF);
+            html.append("           </div>").append(SupportMethods.LF);
+            html.append("        </div>").append(SupportMethods.LF).append(SupportMethods.LF);
+
+        }
+        return html.toString();
     }
 
     private static String htmlStyleInformationTimeGraph(){
@@ -63,36 +94,6 @@ public class TestCaseLogSection {
         return highest;
     }
 
-
-    public String toHtml(){
-        StringBuilder html = new StringBuilder();
-        if(logPostList.size() > 0) {
-            html.append(timeProgressGraph(startTime, stopTime, logPostList.get(0).date, logPostList.get(logPostList.size() -1).date, 600)).append(SupportMethods.LF);
-            html.append("        <div class=\"expandable logsection level-").append(highestLogLevel().toString().toLowerCase());
-            if(hasErrors()){
-                html.append(" initially-expanded");
-            }
-            html.append("\">").append(SupportMethods.LF);
-            html.append("           <h3 title=\"Test step in class '").append(logPostList.get(0).testStepClassName).append("'\" class=\"logsectiontitle ");
-            if(hasErrors()){
-                html.append("failed\">");
-            }else {
-                html.append("passed\">");
-            }
-            //html.append("Test step: '<b>" + logPostList.get(0).testStepName + "</b>'   - in class: '" + logPostList.get(0).testStepClassName + "'</h3>").append(LF);
-            html.append("Test step: '<b>").append(logPostList.get(0).testStepName.replace("<", "_").replace(">", "_")).append("</b>'</h3>").append(SupportMethods.LF);
-            html.append("           <div class=\"expandable-content\">").append(SupportMethods.LF);
-            html.append("              <table class=\"logsectionlogposts\">").append(SupportMethods.LF);
-            for(LogPost logPost : logPostList){
-                html.append(logPost.toHtmlTableRow());
-            }
-            html.append("              </table>").append(SupportMethods.LF);
-            html.append("           </div>").append(SupportMethods.LF);
-            html.append("        </div>").append(SupportMethods.LF).append(SupportMethods.LF);
-
-        }
-        return html.toString();
-    }
 
     @SuppressWarnings("SameParameterValue")
     private String timeProgressGraph(Date wholeTimePeriodStartTime, Date wholeTimePeriodEndTime, Date partialEventStartTime, Date partialEventEndTime, int graphWidth){

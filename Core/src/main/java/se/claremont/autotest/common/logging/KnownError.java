@@ -1,6 +1,9 @@
 package se.claremont.autotest.common.logging;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 
@@ -11,9 +14,10 @@ import java.util.ArrayList;
  *
  * Created by jordam on 2016-08-25.
  */
+@JsonIgnoreProperties({"testCasesWhereErrorWasEncountered"})
 public class KnownError {
     @JsonProperty private final String[] regexpPatternMatchForLogString;
-    @JsonProperty public final ArrayList<TestCase> testCasesWhereErrorWasEncountered = new ArrayList<>();
+    public final ArrayList<TestCase> testCasesWhereErrorWasEncountered = new ArrayList<>();
     @JsonProperty public final String description;
 
     public KnownError(){
@@ -136,17 +140,14 @@ public class KnownError {
     }
 
     public String toJson(){
-        ArrayList<String> patternStrings = new ArrayList<>();
-        StringBuilder json = new StringBuilder();
-        json.append("{").append(SupportMethods.LF);
-        json.append("   \"description\": \"").append(description).append("\",").append(SupportMethods.LF);
-        json.append("   \"logmessagespatterns\": [").append(SupportMethods.LF);
-        for(String pattern : regexpPatternMatchForLogString){
-            patternStrings.add("{\"logmessagepattern\": \"" + pattern + "\"}");
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+        try {
+            result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println("Could not create json from the KnownError. Error: " + e.toString());
         }
-        json.append(String.join("," + SupportMethods.LF, patternStrings)).append(SupportMethods.LF).append("]").append(SupportMethods.LF);
-        json.append("}").append(SupportMethods.LF);
-        return json.toString();
+        return result;
     }
 
 }

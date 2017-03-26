@@ -4,18 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import se.claremont.autotest.common.backendserverinteraction.BackendServerConnection;
+import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by jordam on 2017-03-19.
@@ -38,20 +36,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
         runStartTime = TestRun.startTime;
     }
 
-    public TafBackendServerTestRunReporter(String json){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.readValue(json, this.getClass());
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        }
-    }
-
-    public List<String> getTestCasesJsonsList() { return testCasesJsonsList; }
-    public List<String> getTestSetJsonsList() { return testSetJsonsList; }
-    public Date getRunStartTime() { return runStartTime; }
     public void setRunStartTime(Date runStartTime) { this.runStartTime = runStartTime; }
-    public Date getRunStopTime() { return runStopTime; }
     public void setRunStopTime(Date runStopTime) { this.runStopTime = runStopTime; }
     public Settings getSettings() { return settings; }
     public void setTestRunName() {
@@ -65,11 +50,14 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     }
 
     public void evaluateTestCase(TestCase testCase){
+        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
+        if(testCase == null)return;
         if(testCase.resultStatus.value() > mostSevereErrorEncountered.value()) mostSevereErrorEncountered = testCase.resultStatus;
         testCasesJsonsList.add(testCase.toJson());
     }
 
     public void report(){
+        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         testRunId = TestRun.testRunId.toString();
         setRunStartTime(TestRun.startTime);
         if(TestRun.stopTime == null) {
@@ -78,11 +66,12 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
             setRunStopTime(TestRun.stopTime);
         }
         setTestRunName();
-        BackendServerConnection backendServerConnection = new BackendServerConnection();
-        backendServerConnection.postTestRunResult(toJson());
+        TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
+        tafBackendServerConnection.postTestRunResult(toJson());
     }
 
     public void evaluateTestSet(TestSet testSet){
+        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         testSetNames.add(testSet.name);
         testSetJsonsList.add(testSet.toJson());
     }

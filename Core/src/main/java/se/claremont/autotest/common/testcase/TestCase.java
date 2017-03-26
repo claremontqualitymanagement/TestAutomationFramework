@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.testcase;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,24 +26,24 @@ import java.util.stream.Collectors;
  * Created by jordam on 2016-08-17.
  */
 @SuppressWarnings("WeakerAccess")
+@JsonIgnoreProperties({"reported", "reporters", "processesRunningAtTestCaseStart", "pathToHtmlLog"})
 public class TestCase {
-    public TestCaseLog testCaseLog;
-    public String testName;
-    public String pathToHtmlLog;
+    @JsonProperty public TestCaseLog testCaseLog;
+    @JsonProperty public String testName;
     @JsonProperty public final String testSetName;
     @JsonProperty public final Date startTime;
-    public Date stopTime;
+    @JsonProperty public Date stopTime;
     @JsonProperty public final TestCaseData testCaseData;
     @JsonProperty public final KnownErrorsList testCaseKnownErrorsList = new KnownErrorsList();
     @JsonProperty private final KnownErrorsList testSetKnownErrorsEncounteredInThisTestCase = new KnownErrorsList();
-    public ResultStatus resultStatus = ResultStatus.UNEVALUATED;
-    private boolean reported = false;
-    @SuppressWarnings("WeakerAccess")
+    @JsonProperty public ResultStatus resultStatus = ResultStatus.UNEVALUATED;
     @JsonProperty public final KnownErrorsList testSetKnownErrors;
-    private final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     @JsonProperty public final UUID uid = UUID.randomUUID();
-    List<String> processesRunningAtTestCaseStart = new ArrayList<>();
     @JsonProperty public String testRunId; //Used for mapping on backend server
+    private final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
+    private boolean reported = false;
+    List<String> processesRunningAtTestCaseStart = new ArrayList<>();
+    public String pathToHtmlLog;
 
     public TestCase(){
         this(null, "Nameless test case");
@@ -132,8 +133,8 @@ public class TestCase {
         logKnownErrors();
         evaluateResultStatus();
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
-        TestRun.reporters.evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
+        TestRun.reporters.evaluateTestCase(this);
         reported = true;
         assertExecutionResultsToTestRunner();
     }
@@ -296,8 +297,7 @@ public class TestCase {
      * Also halts further test case execution.
      */
     private void assertExecutionResultsToTestRunner(){
-        if(resultStatus == ResultStatus.UNEVALUATED)
-            evaluateResultStatus();
+        if(resultStatus == ResultStatus.UNEVALUATED) evaluateResultStatus();
         if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
             Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
             if( resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
@@ -348,6 +348,7 @@ public class TestCase {
         String json = null;
         try {
             json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+            if(json == null) System.out.println("Oups! Trying to create json from test case failed. Test case: " + this.toString());
         } catch (JsonProcessingException e) {
             System.out.println(e.toString());
         }

@@ -5,9 +5,9 @@ import org.junit.Assume;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
-import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
@@ -21,21 +21,21 @@ public class BackendServerTest extends UnitTestClass{
     public void testVersionGetting(){
         TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
-        BackendServerConnection backendServerConnection = new BackendServerConnection();
-        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), backendServerConnection.isConnected());
-        Assert.assertTrue(backendServerConnection.getBackendVersion().contains("TAF"));
+        TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
+        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
+        Assert.assertTrue(tafBackendServerConnection.getBackendVersion().contains("TAF"));
     }
 
     @Test
     public void testPostingTestCase(){
         TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
-        BackendServerConnection backendServerConnection = new BackendServerConnection();
-        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), backendServerConnection.isConnected());
-        Assert.assertTrue(backendServerConnection.getBackendVersion(), backendServerConnection.getBackendVersion().contains("TAF"));
+        TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
+        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
+        Assert.assertTrue(tafBackendServerConnection.getBackendVersion(), tafBackendServerConnection.getBackendVersion().contains("TAF"));
         TestCase testCase = new TestCase();
         testCase.log(LogLevel.INFO, "My log message");
-        String response = backendServerConnection.postTestCase(testCase);
+        String response = tafBackendServerConnection.postTestCase(testCase);
         Assert.assertTrue(response, response.toLowerCase().contains("ok"));
         Assert.assertFalse(response, response.toLowerCase().contains("not"));
     }
@@ -44,11 +44,11 @@ public class BackendServerTest extends UnitTestClass{
     public void testPostingLogPost(){
         TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
-        BackendServerConnection backendServerConnection = new BackendServerConnection();
-        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), backendServerConnection.isConnected());
-        Assert.assertTrue(backendServerConnection.getBackendVersion(), backendServerConnection.getBackendVersion().contains("TAF"));
+        TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
+        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
+        Assert.assertTrue(tafBackendServerConnection.getBackendVersion(), tafBackendServerConnection.getBackendVersion().contains("TAF"));
         LogPost logPost = new LogPost(LogLevel.INFO, "My log entry.");
-        String response = backendServerConnection.postLogPost(logPost);
+        String response = tafBackendServerConnection.postLogPost(logPost);
         Assert.assertTrue(response, response.toLowerCase().contains("ok"));
         Assert.assertFalse(response, response.toLowerCase().contains("not"));
     }
@@ -57,15 +57,15 @@ public class BackendServerTest extends UnitTestClass{
     public void testPostingTestRunResultPost(){
         TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
-        BackendServerConnection backendServerConnection = new BackendServerConnection();
-        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), backendServerConnection.isConnected());
-        Assert.assertTrue(backendServerConnection.getBackendVersion(), backendServerConnection.getBackendVersion().contains("TAF"));
+        TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
+        Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
+        Assert.assertTrue(tafBackendServerConnection.getBackendVersion(), tafBackendServerConnection.getBackendVersion().contains("TAF"));
         TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
         TestCase testCase = new TestCase();
         testCase.log(LogLevel.INFO, "Message");
         testCase.addTestCaseData(" This Parameter", "This Value");
         tafBackendServerTestRunReporter.evaluateTestCase(testCase);
-        String response = backendServerConnection.postTestRunResult(tafBackendServerTestRunReporter.toJson());
+        String response = tafBackendServerConnection.postTestRunResult(tafBackendServerTestRunReporter.toJson());
         Assert.assertTrue(response, response.toLowerCase().contains("ok"));
         Assert.assertFalse(response, response.toLowerCase().contains("not"));
     }

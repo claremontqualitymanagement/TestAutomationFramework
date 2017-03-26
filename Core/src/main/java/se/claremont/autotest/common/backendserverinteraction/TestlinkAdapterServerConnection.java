@@ -8,42 +8,41 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 
 import java.io.IOException;
 
 /**
- * Created by jordam on 2017-03-19.
+ * Created by jordam on 2017-03-24.
  */
-public class BackendServerConnection {
+public class TestlinkAdapterServerConnection {
     private Boolean isConnected = null;
     private Boolean apiVersionCompatible = null;
     private String tafFrameworkApiVersion = "v1";
-    public static String defaultServerUrl = "http://-server-url-not-set-/taf";
+    public static String defaultServerUrl = "http://-server-url-not-set-/taftestlinkadapter";
 
-    public BackendServerConnection(){
+    public TestlinkAdapterServerConnection(){
         if(isConnected() && apiVersionCompatible){
-            System.out.println("New successful connection to TAF Backend Server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "' with API version '" + tafFrameworkApiVersion + "'.");
+            System.out.println("New successful connection to TAF Testlink Adapter Server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "' with API version '" + tafFrameworkApiVersion + "'.");
         } else {
-            System.out.println("Connection to TAF Backend Server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "' failed. Is connected: " + String.valueOf(isConnected) + ", API version compatile with this version (Version '" + tafFrameworkApiVersion + "'): " + String.valueOf(apiVersionCompatible) + ".");
+            System.out.println("Connection to TAF Testlink Adapter Server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "' failed. Is connected: " + String.valueOf(isConnected) + ", API version compatile with this version (Version '" + tafFrameworkApiVersion + "'): " + String.valueOf(apiVersionCompatible) + ".");
         }
     }
 
     public String getBackendVersion(){
         if(isConnected && apiVersionCompatible){
-            return sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/version");
+            return sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "/version");
         } else {
-            return "Could not get TAF Backend Server version. Error: Not connected.";
+            return "Could not get TAF Testlink Adapter Server version. Error: Not connected.";
         }
     }
 
     public String postTestCase(TestCase testCase){
         String responseBody = null;
         if(isConnected && apiVersionCompatible){
-            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/testcase", "application/json", testCase.toJson());
+            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "/" + tafFrameworkApiVersion + "/testcase", "application/json", testCase.toJson());
             System.out.println(responseBody);
         } else {
-            System.out.println("Could not post test case to TAF Backend Server version. Error: Not connected or wrong API version.");
+            System.out.println("Could not post test case to TAF Testlink Adapter Server version. Error: Not connected or wrong API version.");
         }
         return responseBody;
     }
@@ -51,10 +50,10 @@ public class BackendServerConnection {
     public String postTestRunResult(String json){
         String responseBody = null;
         if(isConnected && apiVersionCompatible){
-            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/testrun", "application/json", json);
-            System.out.println("Response from test run results posting to TAF Backend Server: " + responseBody);
+            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "/" + tafFrameworkApiVersion + "/testrun", "application/json", json);
+            System.out.println("Response from test run results posting to TAF Testlink Adapter Server: " + responseBody);
         } else {
-            System.out.println("Could not post test run results to TAF Backend Server version. Error: Not connected or wrong API version.");
+            System.out.println("Could not post test run results to TAF Testlink Adapter Server version. Error: Not connected or wrong API version.");
         }
         return responseBody;
     }
@@ -62,10 +61,10 @@ public class BackendServerConnection {
     public String postLogPost(LogPost logPost){
         String responseBody = null;
         if(isConnected && apiVersionCompatible){
-            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/" + tafFrameworkApiVersion + "/log", "application/json", logPost.toJson());
+            responseBody = sendPostRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "/" + tafFrameworkApiVersion + "/log", "application/json", logPost.toJson());
             System.out.println(responseBody);
         } else {
-            System.out.println("Could not post log entry to TAF Backend Server version. Error: Not connected or wrong API version.");
+            System.out.println("Could not post log entry to TAF Testlink Adapter Server version. Error: Not connected or wrong API version.");
         }
         return responseBody;
     }
@@ -78,19 +77,19 @@ public class BackendServerConnection {
     private void checkConnectionStatus(){
         if(isConnected == null || apiVersionCompatible == null){
             TestRun.initializeIfNotInitialized();
-            if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(defaultServerUrl)){
+            if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(defaultServerUrl)){
                 isConnected = false;
                 apiVersionCompatible = false;
                 return;
             }
-            String response = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND));
+            String response = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER));
             if(response != null && response.length() > 0){
                 isConnected = true;
             } else {
                 isConnected = false;
             }
             if(isConnected){
-                String versionResponse = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/apiversion");
+                String versionResponse = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "/apiversion");
                 if(versionResponse != null && versionResponse.contains(tafFrameworkApiVersion)){
                     apiVersionCompatible = true;
                     return;

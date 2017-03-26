@@ -23,14 +23,13 @@ import java.util.stream.Collectors;
  *
  */
 @SuppressWarnings("SameParameterValue")
-@JsonIgnoreProperties({"logger"})
+@JsonIgnoreProperties({"logger", "maxNumberOfCharactersInLogLevelNames"})
 public class TestCaseLog {
-
+    @JsonProperty public final ArrayList<LogPost> logPosts = new ArrayList<>();
+    @JsonProperty private String testCaseName = null;
+    public static int maxNumberOfCharactersInLogLevelNames = 0;
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
 
-    @JsonProperty public final ArrayList<LogPost> logPosts = new ArrayList<>();
-    @JsonProperty public static int maxNumberOfCharactersInLogLevelNames = 0;
-    @JsonProperty private String testCaseName = null;
 
     public TestCaseLog(){} //For JSON object mapping usage
 

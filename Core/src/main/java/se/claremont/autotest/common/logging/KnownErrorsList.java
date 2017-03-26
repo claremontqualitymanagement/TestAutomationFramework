@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.logging;
 
-import se.claremont.autotest.common.support.SupportMethods;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.testcase.TestCase;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
  * Created by jordam on 2016-08-25.
  */
 public class KnownErrorsList {
-    public List<KnownError> knownErrors = new ArrayList<>();
+    @JsonProperty public List<KnownError> knownErrors = new ArrayList<>();
 
     /**
      * Default constructor
@@ -70,12 +72,13 @@ public class KnownErrorsList {
     }
 
     public String toJson(){
-        StringBuilder json = new StringBuilder();
-        json.append("   {\"knownerrors\": [").append(SupportMethods.LF);
-        List<String> knownErrorStrings = new ArrayList<>();
-        for(KnownError knownError : knownErrors) knownErrorStrings.add(knownError.toJson());
-        json.append(String.join("," + SupportMethods.LF, knownErrorStrings));
-        json.append("      ]").append(SupportMethods.LF).append("}").append(SupportMethods.LF);
-        return json.toString();
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+        try {
+            result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            System.out.println("Could not create json from KnownErrorList. Error: "+ e.toString());
+        }
+        return result;
     }
 }

@@ -2,7 +2,8 @@ package se.claremont.autotest.common.testrun;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.backendserverinteraction.BackendServerConnection;
+import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
+import se.claremont.autotest.common.backendserverinteraction.TestlinkAdapterServerConnection;
 import se.claremont.autotest.common.reporting.TafVersionGetter;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
@@ -47,7 +48,8 @@ public class Settings extends HashMap<String, String>{
         PHANTOMJS_PATH_TO_EXE        ("Path to PhantomJS binary"),
         FIREFOX_PATH_TO_BROWSER_EXE  ("Path to Firefox browser binary"),
         TEST_RUN_LOG_FOLDER          ("Log folder for test run"),
-        URL_TO_TAF_BACKEND           ("URL to TAF Backend Server");
+        URL_TO_TAF_BACKEND           ("URL to TAF Backend Server"),
+        URL_TO_TESTLINK_ADAPTER      ("URL to TAF Testlink Adapter Server");
         //PLUGIN_FOLDER                ();
 
         private boolean isSuppressedFromLogDisplay;
@@ -202,7 +204,8 @@ public class Settings extends HashMap<String, String>{
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");
-        setValue(SettingParameters.URL_TO_TAF_BACKEND, BackendServerConnection.defaultServerUrl);
+        setValue(SettingParameters.URL_TO_TAF_BACKEND, TafBackendServerConnection.defaultServerUrl);
+        setValue(SettingParameters.URL_TO_TESTLINK_ADAPTER, TestlinkAdapterServerConnection.defaultServerUrl);
         //setValue(SettingParameters.PLUGIN_FOLDER, getValue(SettingParameters.BASE_LOG_FOLDER) + "Plugins");
     }
 
