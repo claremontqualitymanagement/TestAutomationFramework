@@ -99,8 +99,8 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     }
 
     public class TafBackendServerTestSet{
-        @JsonProperty KnownErrorsList knownErrorsList;
-        @JsonProperty String name;
+        @JsonProperty public KnownErrorsList knownErrorsList;
+        @JsonProperty public String name;
 
         public TafBackendServerTestSet(){}
 
