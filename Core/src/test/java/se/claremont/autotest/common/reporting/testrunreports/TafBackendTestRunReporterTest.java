@@ -1,9 +1,11 @@
 package se.claremont.autotest.common.reporting.testrunreports;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestSet1;
 import se.claremont.autotest.common.testrun.TestSet2;
@@ -14,6 +16,11 @@ import se.claremont.autotest.common.testrun.TestSet2;
  * Created by jordam on 2017-03-20.
  */
 public class TafBackendTestRunReporterTest {
+
+    @Before
+    public void testSetup(){
+        TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://anyserver:80/taf");
+    }
 
     @Test
     public void testRunNameIsSetInJson(){
