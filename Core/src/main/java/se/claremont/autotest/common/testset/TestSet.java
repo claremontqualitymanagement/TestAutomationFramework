@@ -23,11 +23,22 @@ import se.claremont.autotest.common.testrun.TestRun;
  */
 @RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 @JsonIgnoreProperties({"currentTestCase", "currentTestNameInternal"})
-public class TestSet { //non-abstract although it should be, to enable JSON object mapping with ease
-    @JsonProperty public String testRunId; //Used for mapping on test run server
+public abstract class TestSet { //non-abstract although it should be, to enable JSON object mapping with ease
+    public TestCase currentTestCase;
+    @JsonProperty public String name;
+    @JsonProperty public final KnownErrorsList knownErrorsList = new KnownErrorsList();
+
 
     @Rule
     public TestName currentTestNameInternal = new TestName();
+    /**
+     * Setting up a new test set instance
+     */
+    public TestSet(){
+        TestRun.initializeIfNotInitialized();
+        TestRun.currentTestSet = this;
+        name = SupportMethods.classNameAtStacktraceLevel(3);
+    }
 
     @Before
     public void testSetClassInternalSetup(){
@@ -42,21 +53,6 @@ public class TestSet { //non-abstract although it should be, to enable JSON obje
     @AfterClass
     public static void testSetClassInternalClassTeardown(){
         TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
-    }
-
-
-    public TestCase currentTestCase;
-    @JsonProperty public String name;
-    @JsonProperty public final KnownErrorsList knownErrorsList = new KnownErrorsList();
-
-    /**
-     * Setting up a new test set instance
-     */
-    public TestSet(){
-        TestRun.initializeIfNotInitialized();
-        testRunId = TestRun.testRunId.toString();
-        TestRun.currentTestSet = this;
-        name = SupportMethods.classNameAtStacktraceLevel(3);
     }
 
     /**

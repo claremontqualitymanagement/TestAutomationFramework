@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
+import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -36,7 +37,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty public List<String> testSetNames = new ArrayList<>();
     @SuppressWarnings("WeakerAccess")
     @JsonProperty public TestCase.ResultStatus mostSevereErrorEncountered = TestCase.ResultStatus.UNEVALUATED;
-    @JsonProperty public String testRunId;
+    @JsonProperty public String testRunId = "";
 
     public TafBackendServerTestRunReporter(){
         TestRun.initializeIfNotInitialized();
@@ -69,7 +70,6 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
 
     public void report(){
         if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
-        testRunId = TestRun.testRunId.toString();
         setRunStartTime(TestRun.startTime);
         if(TestRun.stopTime == null) {
             setRunStopTime(new Date());
@@ -84,7 +84,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public void evaluateTestSet(TestSet testSet){
         if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         testSetNames.add(testSet.name);
-        testSetJsonsList.add(testSet.toJson());
+        testSetJsonsList.add(new TafBackendServerTestSet(testSet.knownErrorsList, testSet.name).toJson());
     }
 
     public String toJson(){
@@ -96,5 +96,28 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
             System.out.println(e.toString());
         }
         return json;
+    }
+
+    public class TafBackendServerTestSet{
+        @JsonProperty KnownErrorsList knownErrorsList;
+        @JsonProperty String name;
+
+        public TafBackendServerTestSet(){}
+
+        public TafBackendServerTestSet(KnownErrorsList knownErrorsList, String name){
+            this.knownErrorsList = knownErrorsList;
+            this.name = name;
+        }
+
+        public String toJson(){
+            ObjectMapper mapper = new ObjectMapper();
+            String json = null;
+            try {
+                json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+            } catch (JsonProcessingException e) {
+                System.out.println(e.toString());
+            }
+            return json;
+        }
     }
 }

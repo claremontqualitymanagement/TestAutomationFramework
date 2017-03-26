@@ -39,7 +39,6 @@ public class TestCase {
     @JsonProperty public ResultStatus resultStatus = ResultStatus.UNEVALUATED;
     @JsonProperty public final KnownErrorsList testSetKnownErrors;
     @JsonProperty public final UUID uid = UUID.randomUUID();
-    @JsonProperty public String testRunId; //Used for mapping on backend server
     private final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
@@ -77,7 +76,6 @@ public class TestCase {
         setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
-        testRunId = TestRun.testRunId.toString();
     }
 
     /**

@@ -5,7 +5,6 @@ import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndex
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * A test run is the entity of every time some set(s) of test cases are run.
@@ -24,7 +23,6 @@ public class TestRun {
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public static final Date startTime = new Date();
     public static Date stopTime;
-    public static final UUID testRunId = UUID.randomUUID();
 
     /**
      * TAF and TA test(s) standard codes.

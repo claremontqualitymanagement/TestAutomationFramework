@@ -16,19 +16,6 @@ import se.claremont.autotest.common.testrun.TestSet2;
 public class TafBackendTestRunReporterTest {
 
     @Test
-    public void testRunIdIsSetInJson(){
-        TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
-        TestSet1 testSet1 = new TestSet1();
-        tafBackendServerTestRunReporter.evaluateTestSet(testSet1);
-        TestCase testCase = new TestCase();
-        tafBackendServerTestRunReporter.evaluateTestCase(testCase);
-        String testRunId = TestRun.testRunId.toString();
-        Assert.assertTrue(tafBackendServerTestRunReporter.toJson().contains(testRunId));
-        tafBackendServerTestRunReporter.report();
-        Assert.assertTrue(tafBackendServerTestRunReporter.testRunId.equals(testRunId));
-    }
-
-    @Test
     public void testRunNameIsSetInJson(){
         TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
         TestSet1 testSet1 = new TestSet1();

@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
+import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -20,7 +21,10 @@ public class TestRunWrapupTest extends UnitTestClass{
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName()};
         CliTestRunner.runInTestMode(args);
-        Assert.assertTrue(fakeEmailTestRunReporter.testCaseList.size() == 4);
+        for(TestCase testCase : fakeEmailTestRunReporter.testCaseList){
+            System.out.println(testCase.testName);
+        }
+        Assert.assertTrue(String.valueOf(fakeEmailTestRunReporter.testCaseList.size()), fakeEmailTestRunReporter.testCaseList.size() == 4);
         Assert.assertTrue(fakeEmailTestRunReporter.testSetList.size() == 2);
         Assert.assertTrue("Expecting one report. Was " + fakeEmailTestRunReporter.reportingCounts + ".", fakeEmailTestRunReporter.reportingCounts == 1);
     }
