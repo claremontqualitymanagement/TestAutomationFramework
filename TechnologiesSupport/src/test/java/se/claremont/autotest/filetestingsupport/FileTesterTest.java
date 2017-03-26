@@ -10,6 +10,7 @@ import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -76,7 +77,7 @@ public class FileTesterTest extends UnitTestClass{
     public void test_searchForSpecificFiles_File() {
         String dirPath = this.getClass().getClassLoader().getResource("FileContent.txt").getPath();
 
-        List<File> result = FileTester.searchForSpecificFiles(new File(dirPath), Arrays.asList("FileContent.txt"));
+        List<File> result = FileTester.searchForSpecificFiles(new File(dirPath), Collections.singletonList("FileContent.txt"));
 
         assertNotNull(result);
         assertEquals(1, result.size());
