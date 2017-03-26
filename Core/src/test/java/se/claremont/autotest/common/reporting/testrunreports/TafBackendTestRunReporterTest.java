@@ -9,6 +9,8 @@ import se.claremont.autotest.common.testrun.TestSet1;
 import se.claremont.autotest.common.testrun.TestSet2;
 
 /**
+ * Tests for interaction with a TAF Backend Server
+ *
  * Created by jordam on 2017-03-20.
  */
 public class TafBackendTestRunReporterTest {

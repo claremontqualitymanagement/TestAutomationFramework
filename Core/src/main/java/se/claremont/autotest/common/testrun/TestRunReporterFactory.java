@@ -10,6 +10,8 @@ import se.claremont.autotest.common.testset.TestSet;
 import java.util.ArrayList;
 
 /**
+ * Manages all active TestRunReporters for a test run
+ *
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterFactory {

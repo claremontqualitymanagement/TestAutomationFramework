@@ -12,6 +12,8 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
+ * Sends emails
+ *
  * Created by jordam on 2016-09-18.
  */
 public class EmailSenderImplementation implements EmailSender{
@@ -86,7 +88,7 @@ public class EmailSenderImplementation implements EmailSender{
     }
 
     private String sendThroughGmail(){
-        String returnMessage = "";
+        String returnMessage;
         String username = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
         String password = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
         this.hostName = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);

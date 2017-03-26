@@ -10,6 +10,7 @@ import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -224,9 +225,7 @@ public class CliTestRunner {
 
     private static List<String> stringArrayToList(String[] args){
         List<String> returnList = new ArrayList<>();
-        for(String arg: args){
-            returnList.add(arg);
-        }
+        Collections.addAll(returnList, args);
         return returnList;
     }
 

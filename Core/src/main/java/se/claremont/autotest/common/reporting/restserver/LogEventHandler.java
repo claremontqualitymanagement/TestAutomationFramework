@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
-
+//TODO: Why is this still included?
 /**
  * Created by jordam on 2016-10-10.
  */

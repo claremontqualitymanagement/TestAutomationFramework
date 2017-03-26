@@ -9,6 +9,8 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests interaction with REST server
+ *
  * Created by jordam on 2017-03-19.
  */
 public class RestServerInteractionTest extends UnitTestClass{

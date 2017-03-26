@@ -182,15 +182,15 @@ public class TableData {
      */
     public boolean verifyHeadingExist(String heading){
         boolean verificationPassed = false;
-        String htmlHeadingsRepresentation = "<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator();
+        StringBuilder htmlHeadingsRepresentation = new StringBuilder("<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator());
         for(String headline : headlines){
             if(headline.equals(heading)){
-                htmlHeadingsRepresentation += "      <th class=\"found_heading\">" + headline + "</th>" + System.lineSeparator();
+                htmlHeadingsRepresentation.append("      <th class=\"found_heading\">").append(headline).append("</th>").append(System.lineSeparator());
             } else {
-                htmlHeadingsRepresentation += "      <th class=\"not_found_heading\">" + headline + "</th>" + System.lineSeparator();
+                htmlHeadingsRepresentation.append("      <th class=\"not_found_heading\">").append(headline).append("</th>").append(System.lineSeparator());
             }
         }
-        htmlHeadingsRepresentation += "   </tr>" + System.lineSeparator() + "</table>" + System.lineSeparator();
+        htmlHeadingsRepresentation.append("   </tr>").append(System.lineSeparator()).append("</table>").append(System.lineSeparator());
 
         if(headlines.contains(heading.trim())){
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Heading '" + heading + "' exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
@@ -213,17 +213,17 @@ public class TableData {
         boolean verificationPassed = false;
         List<String> foundHeadings = new ArrayList<>();
         List<String> notFoundHeadings = new ArrayList<>();
-        String htmlHeadingsRepresentation = "<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator();
+        StringBuilder htmlHeadingsRepresentation = new StringBuilder("<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator());
         for(String headline : headlines){
             if(headings.contains(headline)){
-                htmlHeadingsRepresentation += "      <th class=\"found_heading\">" + headline + "</th>" + System.lineSeparator();
+                htmlHeadingsRepresentation.append("      <th class=\"found_heading\">").append(headline).append("</th>").append(System.lineSeparator());
                 foundHeadings.add(headline);
             } else {
-                htmlHeadingsRepresentation += "      <th class=\"not_found_heading\">" + headline + "</th>" + System.lineSeparator();
+                htmlHeadingsRepresentation.append("      <th class=\"not_found_heading\">").append(headline).append("</th>").append(System.lineSeparator());
                 notFoundHeadings.add(headline);
             }
         }
-        htmlHeadingsRepresentation += "   </tr>" + System.lineSeparator() + "</table>" + System.lineSeparator();
+        htmlHeadingsRepresentation.append("   </tr>").append(System.lineSeparator()).append("</table>").append(System.lineSeparator());
         if(foundHeadings.size() == headings.size()){
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Headings '" + String.join("', '", headings) + "' were found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Headings '" + String.join("', '", headings) + "' were found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
@@ -337,11 +337,11 @@ public class TableData {
 
     @Override
     public String toString(){
-        String returnString = tableElementName + System.lineSeparator() + String.join("; ", headlines) + System.lineSeparator();
+        StringBuilder returnString = new StringBuilder(tableElementName + System.lineSeparator() + String.join("; ", headlines) + System.lineSeparator());
         for(TableRow tableRow : rows){
-            returnString += tableRow.toString() + System.lineSeparator();
+            returnString.append(tableRow.toString()).append(System.lineSeparator());
         }
-        return returnString;
+        return returnString.toString();
     }
 
     public String toHtml(){
@@ -420,16 +420,16 @@ public class TableData {
                 }
             }
             if(lines.length < 1) return;
-            for(int i = 0; i < lines.length;i++){
-                if(lines[i].trim().length() == 0)continue;
+            for (String line : lines) {
+                if (line.trim().length() == 0) continue;
                 List<DataCell> cellContents = new ArrayList<>();
-                String[] cells = lines[i].split(cellDilimiter);
-                for(int cellCount = 0; cellCount < cells.length; cellCount++){
+                String[] cells = line.split(cellDilimiter);
+                for (int cellCount = 0; cellCount < cells.length; cellCount++) {
                     cellContents.add(new DataCell(cells[cellCount], headlines.get(cellCount)));
                 }
-                if(cells.length < maxNumberOfCellsPerRow){
-                    log(LogLevel.DEBUG, "Cell count for row '" + lines[i] + " cells is " + cells.length + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
-                    for(int cellBuffer = cells.length; cellBuffer < maxNumberOfCellsPerRow; cellBuffer++){
+                if (cells.length < maxNumberOfCellsPerRow) {
+                    log(LogLevel.DEBUG, "Cell count for row '" + line + " cells is " + cells.length + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
+                    for (int cellBuffer = cells.length; cellBuffer < maxNumberOfCellsPerRow; cellBuffer++) {
                         cellContents.add(new DataCell("", headlines.get(cellBuffer)));
                     }
                 }

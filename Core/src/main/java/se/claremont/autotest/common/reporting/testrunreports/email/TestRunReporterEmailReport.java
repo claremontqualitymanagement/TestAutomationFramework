@@ -10,6 +10,8 @@ import se.claremont.autotest.common.testset.TestSet;
 import java.util.ArrayList;
 
 /**
+ * Enables sending test run results via Email
+ *
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterEmailReport implements TestRunReporter {

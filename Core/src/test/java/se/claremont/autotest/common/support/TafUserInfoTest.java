@@ -35,9 +35,4 @@ public class TafUserInfoTest extends UnitTestClass{
 
     }
 
-    @Test
-    public void sendTafUserInfoDataUsingREST(){
-
-    }
-
 }

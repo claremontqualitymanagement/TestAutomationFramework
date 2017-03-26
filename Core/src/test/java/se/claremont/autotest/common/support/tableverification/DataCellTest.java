@@ -5,6 +5,8 @@ import org.junit.Test;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests for DataCell class.
+ *
  * Created by jordam on 2017-01-28.
  */
 public class DataCellTest extends UnitTestClass{

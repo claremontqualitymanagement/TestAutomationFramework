@@ -24,8 +24,8 @@ public class HtmlStyles {
 
     public static String tableVerificationStyles(){
         String returnString = "    table.tableverificationresulttable   { border:5px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; border-collapse: collapse; }" + System.lineSeparator();
-        returnString += "    table.tableverificationresulttable td { border: 2px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();;
-        returnString += "    table.tableverificationresulttable th { border: 2px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();;
+        returnString += "    table.tableverificationresulttable td { border: 2px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();
+        returnString += "    table.tableverificationresulttable th { border: 2px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();
         returnString += "    table.tableverificationresulttable tr.headlines { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();
         returnString += "    table.tableverificationresulttable tr.headlines th { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: left; font-weight: bold; }" + System.lineSeparator();
         returnString += "    table.tableverificationresulttable tr.headlines th.found_heading { color: " + UxColors.BLACK.getHtmlColorCode() + "; text-align: left; font-weight: bold; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + System.lineSeparator();

@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.reporting;
 
 /**
+ * Used throughout TAF reporting to produce HTML reports with a unified style.
+ *
  * Created by jordam on 2016-11-19.
  */
 public enum  UxColors {

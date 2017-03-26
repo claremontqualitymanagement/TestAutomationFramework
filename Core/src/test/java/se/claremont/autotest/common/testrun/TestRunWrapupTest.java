@@ -7,6 +7,8 @@ import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtml
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests that correct actions are performed on a test case after it has been performed
+ *
  * Created by jordam on 2017-03-17.
  */
 public class TestRunWrapupTest extends UnitTestClass{

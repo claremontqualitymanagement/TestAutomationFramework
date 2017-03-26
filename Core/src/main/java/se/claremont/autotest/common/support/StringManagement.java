@@ -39,18 +39,18 @@ public class StringManagement {
             return "";
         }
         instring = instring.trim();
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
 
         for(String spaceDividedWord : instring.split(" ")){
             for(String dashDividedWord : spaceDividedWord.split("-")){
                 for(String underscoreDividedWord : dashDividedWord.split("_")){
-                    returnString += firstUpperLetterTrailingLowerLetter(underscoreDividedWord);
+                    returnString.append(firstUpperLetterTrailingLowerLetter(underscoreDividedWord));
                 }
 
             }
         }
 
-        returnString = returnString.replaceAll("--", "-").
+        returnString = new StringBuilder(returnString.toString().replaceAll("--", "-").
                 replace(" ", "").
                 replace(",", "").
                 replace("–", "_").
@@ -86,14 +86,14 @@ public class StringManagement {
                 replace("^", "_").
                 replace(":", "").
                 replace("__", "_").
-                replace("Ö", "O");
+                replace("Ö", "O"));
 
 
         if(Character.isDigit(returnString.charAt(0))){
-            returnString = "_" + returnString;
+            returnString.insert(0, "_");
         } //Method names cannot start with digits
-        returnString = returnString.substring(0,1).toLowerCase() + returnString.substring(1);
-        return returnString;
+        returnString = new StringBuilder(returnString.substring(0, 1).toLowerCase() + returnString.substring(1));
+        return returnString.toString();
     }
 
     /**
@@ -179,7 +179,7 @@ public class StringManagement {
         if(startDate == null || stopDate == null) return null;
         long diffInMillies = stopDate.getTime() - startDate.getTime();
         List<String> timeParts = new ArrayList<>();
-        List<TimeUnit> units = new ArrayList<TimeUnit>(EnumSet.allOf(TimeUnit.class));
+        List<TimeUnit> units = new ArrayList<>(EnumSet.allOf(TimeUnit.class));
         Collections.reverse(units);
         long milliesRest = diffInMillies;
         for ( TimeUnit unit : units ) {

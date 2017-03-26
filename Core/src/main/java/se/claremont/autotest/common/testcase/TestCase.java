@@ -194,12 +194,12 @@ public class TestCase {
     public List<String> valuesForTestCaseDataParameter(String parameterName){
         List<String> returnStrings = testCaseData.testCaseDataList.stream().filter(valuePair -> valuePair.parameter.equals(parameterName)).map(valuePair -> valuePair.value).collect(Collectors.toList());
         if(returnStrings.size() > 0){
-            String logString = "Reading parameter values ";
+            StringBuilder logString = new StringBuilder("Reading parameter values ");
             for(String returnString : returnStrings){
-                logString = logString + "'" + returnString + "', ";
+                logString.append("'").append(returnString).append("', ");
             }
-            logString = logString + "for parameter '" + parameterName + "'.";
-            testCaseLog.log(LogLevel.DEBUG, logString);
+            logString.append("for parameter '").append(parameterName).append("'.");
+            testCaseLog.log(LogLevel.DEBUG, logString.toString());
         }else{
             testCaseLog.log(LogLevel.DEBUG, "Reading test case DATA but could not find any values for parameter '" + parameterName + "'.");
         }
@@ -299,12 +299,14 @@ public class TestCase {
     private void assertExecutionResultsToTestRunner(){
         if(resultStatus == ResultStatus.UNEVALUATED) evaluateResultStatus();
         if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
+            //noinspection ConstantConditions
             Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
             if( resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
                 TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
             else
                 TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         } else if(resultStatus == ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
+            //noinspection ConstantConditions
             Assume.assumeTrue(false);
             Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();

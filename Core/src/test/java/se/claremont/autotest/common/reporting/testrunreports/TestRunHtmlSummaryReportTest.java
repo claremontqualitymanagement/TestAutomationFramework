@@ -4,11 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.TestRunReporter;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Test the HTML summary report file from a test run
+ *
  * Created by jordam on 2017-03-20.
  */
 public class TestRunHtmlSummaryReportTest extends UnitTestClass {

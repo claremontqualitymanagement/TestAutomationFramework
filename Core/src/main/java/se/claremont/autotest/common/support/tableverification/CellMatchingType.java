@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.support.tableverification;
 
 /**
+ * Describes different ways of matching cell content
+ *
  * Created by jordam on 2017-01-28.
  */
 public enum CellMatchingType {

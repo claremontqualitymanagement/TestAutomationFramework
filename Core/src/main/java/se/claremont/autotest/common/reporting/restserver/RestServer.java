@@ -7,7 +7,10 @@ import org.glassfish.jersey.server.ResourceConfig;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
+//TODO: This should probably be removed?
 /**
+ * Local REST server
+ *
  * Created by jordam on 2016-10-10.
  */
 @SuppressWarnings("WeakerAccess")

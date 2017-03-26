@@ -12,6 +12,8 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests for TAF Backend Server
+ *
  * Created by jordam on 2017-03-19.
  */
 public class BackendServerTest extends UnitTestClass{

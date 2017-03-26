@@ -8,6 +8,8 @@ import se.claremont.autotest.common.testrun.TestRunReporterFactory;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests the test run reporter factory
+ *
  * Created by jordam on 2017-01-04.
  */
 public class TestRunReporterFactoryTest extends UnitTestClass{

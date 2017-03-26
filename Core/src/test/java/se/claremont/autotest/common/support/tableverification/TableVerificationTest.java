@@ -7,6 +7,8 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests for verification of tables
+ *
  * Created by jordam on 2017-01-28.
  */
 public class TableVerificationTest extends UnitTestClass{

@@ -12,6 +12,8 @@ import se.claremont.autotest.common.testrun.TestRun;
 import java.io.IOException;
 
 /**
+ * Attempts to connect to a TAF Backend Server, and send test result information to it, if the URL_TO_TAF_BACKEND Settings parameter is set.
+ *
  * Created by jordam on 2017-03-19.
  */
 public class TafBackendServerConnection {
@@ -83,11 +85,7 @@ public class TafBackendServerConnection {
                 return;
             }
             String response = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND));
-            if(response != null && response.length() > 0){
-                isConnected = true;
-            } else {
-                isConnected = false;
-            }
+            isConnected = response != null && response.length() > 0;
             if(isConnected){
                 String versionResponse = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND) + "/apiversion");
                 if(versionResponse != null && versionResponse.contains(tafFrameworkApiVersion)){
@@ -101,7 +99,6 @@ public class TafBackendServerConnection {
 
     private String sendGetRequest(String url){
         RestRequest restRequest = new RestRequest(url);
-        if(restRequest == null) return null;
         Response response = restRequest.execute();
         if(response == null) return null;
         if(response.code() == 200){
@@ -116,9 +113,8 @@ public class TafBackendServerConnection {
         return null;
     }
 
-    private String sendPostRequest(String url, String mediaType, String data){
+    private String sendPostRequest(String url, @SuppressWarnings("SameParameterValue") String mediaType, String data){
         RestRequest restRequest = new RestRequest(url, mediaType, data);
-        if(restRequest == null) return null;
         restRequest.builder = new Request.Builder().post(RequestBody.create(MediaType.parse(mediaType), data)).url(url);
         Response response = restRequest.execute();
         if(response == null) return null;

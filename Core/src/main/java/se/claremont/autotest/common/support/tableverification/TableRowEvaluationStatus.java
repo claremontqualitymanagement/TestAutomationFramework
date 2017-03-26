@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.support.tableverification;
 
 /**
+ * Used to mark evaluation status of table rows during verifications
+ *
  * Created by jordam on 2017-01-28.
  */
 public enum TableRowEvaluationStatus {

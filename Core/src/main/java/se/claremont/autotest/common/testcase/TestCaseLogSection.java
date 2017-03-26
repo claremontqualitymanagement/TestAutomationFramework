@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
+ * Splits test case log into test step parts to enable HTML log sections
+ *
  * Created by jordam on 2016-11-01.
  */
 @SuppressWarnings("WeakerAccess")

@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
  * User info container for who is running the TAF.
  *
  */
+@SuppressWarnings("AnonymousHasLambdaAlternative")
 public class TafUserInfoImpl implements TafUserInfo {
 
     //create localThread of the current thread

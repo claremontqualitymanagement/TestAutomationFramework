@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Collects test run information during test execution, and sends it to a TAF Backend Server after the test run.
+ *
  * Created by jordam on 2017-03-19.
  */
 @JsonIgnoreProperties({"testSetNames"})
@@ -36,6 +38,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
         runStartTime = TestRun.startTime;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setRunStartTime(Date runStartTime) { this.runStartTime = runStartTime; }
     public void setRunStopTime(Date runStopTime) { this.runStopTime = runStopTime; }
     public Settings getSettings() { return settings; }

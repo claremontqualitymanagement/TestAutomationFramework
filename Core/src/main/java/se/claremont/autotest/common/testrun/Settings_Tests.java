@@ -14,7 +14,7 @@ public class Settings_Tests extends UnitTestClass{
 
      @Test
     public void loadDefaults(){
-         Settings settings = new Settings();
+         @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") Settings settings = new Settings();
          Assert.assertTrue( !settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).isEmpty() );
      }
 

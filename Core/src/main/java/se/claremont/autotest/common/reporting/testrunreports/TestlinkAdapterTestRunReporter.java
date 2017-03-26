@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Collects test run information during a test run, and helps send it to a TAF Testlink Adapter Server.
+ *
  * Created by jordam on 2017-03-19.
  */
 public class TestlinkAdapterTestRunReporter implements TestRunReporter {

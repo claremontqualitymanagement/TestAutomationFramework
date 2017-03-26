@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A row in a table
+ *
  * Created by jordam on 2017-01-28.
  */
 @SuppressWarnings("WeakerAccess")
@@ -76,7 +78,7 @@ public class TableRow {
 
     String toHtml(){
         StringBuilder sb = new StringBuilder();
-        sb.append("   <tr class=\"tableevaluationrow " + tableRowEvaluationStatus.toString().toLowerCase() + "\">").append(System.lineSeparator());
+        sb.append("   <tr class=\"tableevaluationrow ").append(tableRowEvaluationStatus.toString().toLowerCase()).append("\">").append(System.lineSeparator());
         for(DataCell cell : dataCells){
             sb.append(cell.toHtml());
         }

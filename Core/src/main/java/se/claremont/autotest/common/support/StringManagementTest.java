@@ -5,6 +5,8 @@ import org.junit.Test;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests String manipulation methods
+ *
  * Created by jordam on 2016-11-04.
  */
 public class StringManagementTest extends UnitTestClass{

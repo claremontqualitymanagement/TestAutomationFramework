@@ -95,7 +95,7 @@ public class PlatformConfiguration {
 
     public void addVfsMount (PlatformConfiguration.VFSMount vfsMount) {
         if (null == this.vfsMounts) {
-            this.vfsMounts = new ArrayList<PlatformConfiguration.VFSMount>();
+            this.vfsMounts = new ArrayList<>();
         }
         this.vfsMounts.add(vfsMount);
     }

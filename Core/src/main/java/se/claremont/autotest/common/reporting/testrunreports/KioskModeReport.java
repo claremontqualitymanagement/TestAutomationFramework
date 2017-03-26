@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
+ * Produces a HTML file that updates it self on regular intervals - showing test results.
+ *
  * Created by jordam on 2016-12-22.
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
@@ -56,6 +58,7 @@ public class KioskModeReport {
         html += "    <h1>" + title + "</h2>" + System.lineSeparator();
         html += "    <table>" + System.lineSeparator();
         for(String resultRow : tableRows){
+            //noinspection StringConcatenationInLoop
             html += resultRow;
         }
         html += "    </table>" + System.lineSeparator();

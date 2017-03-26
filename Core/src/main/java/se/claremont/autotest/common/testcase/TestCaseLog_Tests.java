@@ -50,6 +50,7 @@ public class TestCaseLog_Tests extends UnitTestClass{
             testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Testing DEBUG");
 
         } catch (Exception e){
+            //noinspection ConstantConditions
             Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
         }
         Assert.assertTrue("New TestCaseLog() didn't have all logged items. Found " + testCaseLog.logPosts.size(), testCaseLog.logPosts.size() == 13);
@@ -70,6 +71,7 @@ public class TestCaseLog_Tests extends UnitTestClass{
             testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Testing DEBUG");
 
         } catch (Exception e){
+            //noinspection ConstantConditions
             Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
         }
         Assert.assertTrue("New TestCaseLog() didn't reportTestRun that it had encountered errors when it actually had errors.", testCaseLog.hasEncounteredErrors());
@@ -90,6 +92,7 @@ public class TestCaseLog_Tests extends UnitTestClass{
             testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Testing DEBUG");
 
         } catch (Exception e){
+            //noinspection ConstantConditions
             Assert.assertTrue("Couldn't register some LogLevel testCaseLog post.", false);
         }
         Assert.assertTrue("New TestCaseLog() didn't have all logged items.", testCaseLog.onlyErroneousLogPosts().size() == 4);

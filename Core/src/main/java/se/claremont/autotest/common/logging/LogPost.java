@@ -13,7 +13,6 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCaseLog;
 import se.claremont.autotest.common.testrun.TestRun;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -145,7 +144,7 @@ public class LogPost {
         StringBuilder sb = new StringBuilder();
         if(instring.startsWith("Saved screenshot as '")){
             String[] parts = instring.split("'");
-            sb.append("Saved screenshot as '<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[1]).append("</span>'<br><a href=\"" + TestRun.reportLinkPrefix() + "://").append(parts[1].replace("\\", "/")).append("\" target=\"_blank\"><img class=\"screenshot\" alt=\"screenshot\" src=\"" + TestRun.reportLinkPrefix() + "://").append(parts[1].replace("\\", "/")).append("\"></a>");
+            sb.append("Saved screenshot as '<span class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString())).append("\">").append(parts[1]).append("</span>'<br><a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(parts[1].replace("\\", "/")).append("\" target=\"_blank\"><img class=\"screenshot\" alt=\"screenshot\" src=\"").append(TestRun.reportLinkPrefix()).append("://").append(parts[1].replace("\\", "/")).append("\"></a>");
         }else {
             String[] parts = instring.split("'");
             if(instring.startsWith("'")){

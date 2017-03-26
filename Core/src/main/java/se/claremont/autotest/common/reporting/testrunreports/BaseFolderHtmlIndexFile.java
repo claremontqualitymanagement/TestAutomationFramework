@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
+ * Attempts to create a rudimentary HTML file listing all found test runs - to access test run HTML files.
+ *
  * Created by jordam on 2017-01-05.
  */
 @SuppressWarnings("WeakerAccess")
@@ -27,7 +29,7 @@ public class BaseFolderHtmlIndexFile {
     private String folderNamesAsHtmlTable(){
         StringBuilder htmlTableRows = new StringBuilder();
         File file = new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER));
-        String[] directories = file.list(new FilenameFilter() {
+        @SuppressWarnings("Convert2Lambda") String[] directories = file.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
                 return new File(current, name).isDirectory();
@@ -46,12 +48,11 @@ public class BaseFolderHtmlIndexFile {
                     System.out.println(e.getMessage());
                 }
             }
-            String runName = "";
+            StringBuilder runName = new StringBuilder();
             for(int i = 2; i < directoryNameParts.length; i++){
-                runName += " " + directoryNameParts[i];
+                runName.append(" ").append(directoryNameParts[i]);
             }
-            htmlTableRows
-                    .append("         <tr class=\"resultdirectory\" onclick=\"openInNewTab('" + TestRun.reportLinkPrefix() + ":///" + baseFolder + directory + "/_summary.html');\">").append(System.lineSeparator())
+            htmlTableRows.append("         <tr class=\"resultdirectory\" onclick=\"openInNewTab('").append(TestRun.reportLinkPrefix()).append(":///").append(baseFolder).append(directory).append("/_summary.html');\">").append(System.lineSeparator())
                     .append("            <td class=\"timestamp\">").append(System.lineSeparator())
                     .append("               ").append(outputTimeFormat.format(timestamp)).append(System.lineSeparator())
                     .append("            </td>").append(System.lineSeparator())

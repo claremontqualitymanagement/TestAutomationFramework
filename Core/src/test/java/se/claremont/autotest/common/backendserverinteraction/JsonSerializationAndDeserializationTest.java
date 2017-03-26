@@ -6,14 +6,16 @@ import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
-import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
+import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.IOException;
 
 /**
+ * Tests for JSON serialization and deserializations - to ensure correct information is included in JSON.
+ *
  * Created by jordam on 2017-03-19.
  */
 public class JsonSerializationAndDeserializationTest extends UnitTestClass{

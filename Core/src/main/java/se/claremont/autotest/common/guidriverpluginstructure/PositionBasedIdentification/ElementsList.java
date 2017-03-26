@@ -3,6 +3,8 @@ package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdent
 import java.util.ArrayList;
 
 /**
+ * A list of elements relevant for further evaluation to identify a specific element by its position relative to other elements.
+ *
  * Created by jordam on 2017-02-22.
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
@@ -125,7 +127,7 @@ public class ElementsList {
         int mostRight = Integer.MIN_VALUE;
         for(PositionBasedGuiElement element : this.elements){
             Integer position = element.getRightPosition();
-            if(position == null) continue;;
+            if(position == null) continue;
             if(position > mostRight){
                 returnElement = element;
                 mostRight = position;
@@ -139,7 +141,7 @@ public class ElementsList {
         int mostExtreme = Integer.MIN_VALUE;
         for(PositionBasedGuiElement element : this.elements){
             Integer position = element.getBottomPosition();
-            if(position == null) continue;;
+            if(position == null) continue;
             if(position > mostExtreme){
                 returnElement = element;
                 mostExtreme = position;
@@ -153,7 +155,7 @@ public class ElementsList {
         int mostExtreme = Integer.MAX_VALUE;
         for(PositionBasedGuiElement element : this.elements){
             Integer position = element.getTopPosition();
-            if(position == null) continue;;
+            if(position == null) continue;
             if(position < mostExtreme){
                 returnElement = element;
                 mostExtreme = position;
@@ -167,7 +169,7 @@ public class ElementsList {
         int mostExtreme = Integer.MAX_VALUE;
         for(PositionBasedGuiElement element : this.elements){
             Integer position = element.getBottomPosition();
-            if(position == null) continue;;
+            if(position == null) continue;
             if(position < mostExtreme){
                 returnElement = element;
                 mostExtreme = position;
@@ -183,11 +185,11 @@ public class ElementsList {
 
     @Override
     public String toString(){
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
         for(PositionBasedGuiElement element :elements){
-            returnString += element.toString() + System.lineSeparator();
+            returnString.append(element.toString()).append(System.lineSeparator());
         }
-        return returnString;
+        return returnString.toString();
     }
 
     public PositionBasedGuiElement elementImmediatelyToTheRightOf(PositionBasedGuiElement element){

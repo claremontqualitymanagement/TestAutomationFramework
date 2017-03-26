@@ -3,6 +3,8 @@ package se.claremont.autotest.common.support.tableverification;
 import se.claremont.autotest.common.support.SupportMethods;
 
 /**
+ * A table cell.
+ *
  * Created by jordam on 2017-01-28.
  */
 @SuppressWarnings("WeakerAccess")

@@ -33,7 +33,7 @@ public class ServerConfiguration {
 
     public void addServerHostKey (ServerConfiguration.ServerHostKey serverHostKeyI) {
         if (null == this.serverHostKey) {
-            this.serverHostKey = new ArrayList<ServerConfiguration.ServerHostKey>();
+            this.serverHostKey = new ArrayList<>();
         }
         this.serverHostKey.add(serverHostKeyI);
     }
@@ -72,7 +72,7 @@ public class ServerConfiguration {
 
     public void addAllowedAuthentication (String allowedAuthenticationI) {
         if (null == this.allowedAuthentication) {
-            this.allowedAuthentication = new ArrayList<String>();
+            this.allowedAuthentication = new ArrayList<>();
         }
         this.allowedAuthentication.add(allowedAuthenticationI);
     }
@@ -87,7 +87,7 @@ public class ServerConfiguration {
 
     public void addSubsystem (ServerConfiguration.Subsystem subsystemI) {
         if (null == this.subsystem) {
-            this.subsystem = new ArrayList<ServerConfiguration.Subsystem>();
+            this.subsystem = new ArrayList<>();
         }
         this.subsystem.add(subsystemI);
     }

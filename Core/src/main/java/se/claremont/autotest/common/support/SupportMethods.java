@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -76,6 +77,7 @@ public class SupportMethods {
             //noinspection ResultOfMethodCallIgnored
             file.getParentFile().mkdirs();
             if( !Utils.getInstance().doesFileExists( filePath ) )
+                //noinspection ResultOfMethodCallIgnored
                 file.createNewFile();
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(filePath), "utf-8"));
@@ -92,6 +94,7 @@ public class SupportMethods {
             //noinspection ResultOfMethodCallIgnored
             file.getParentFile().mkdirs();
             if( !Utils.getInstance().doesFileExists( filePath ) )
+                //noinspection ResultOfMethodCallIgnored
                 file.createNewFile();
 
             try {
@@ -107,7 +110,7 @@ public class SupportMethods {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: Could not write content to file '" + filePath + "'. Should have written:" + System.lineSeparator() + content.toString());
+            System.out.println("Error: Could not write content to file '" + filePath + "'. Should have written:" + System.lineSeparator() + Arrays.toString(content));
         }
     }
 

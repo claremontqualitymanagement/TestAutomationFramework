@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
+ * Attempts to identify version of TAF code base for reporting to log
+ *
  * Created by jordam on 2017-03-17.
  */
 public class TafVersionGetter {

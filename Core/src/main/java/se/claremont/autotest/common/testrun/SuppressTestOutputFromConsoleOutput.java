@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 /**
+ * Redirects output to temporary console for analysis in testing.
+ *
  * Created by jordam on 2017-03-06.
  */
 public class SuppressTestOutputFromConsoleOutput {

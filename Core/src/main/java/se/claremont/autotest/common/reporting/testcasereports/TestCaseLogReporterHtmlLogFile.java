@@ -40,12 +40,6 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      */
     public TestCaseLogReporterHtmlLogFile(TestCase testCase){
         this.testCase = testCase;
-        Date runStartTime;
-        if(testCase.testCaseLog.logPosts.size() > 0){
-            runStartTime = testCase.testCaseLog.logPosts.get(0).date;
-        } else {
-            runStartTime = new Date();
-        }
     }
 
     /**

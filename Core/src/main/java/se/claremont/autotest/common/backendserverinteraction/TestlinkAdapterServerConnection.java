@@ -12,6 +12,10 @@ import se.claremont.autotest.common.testrun.TestRun;
 import java.io.IOException;
 
 /**
+ * Provides a connection and interaction possibilities to a TAF Testlink Adapter Server.
+ * The TAF Testlink Adapter Server is a small piece of code that is used as a gateway
+ * or proxy to a Testlink server.
+ *
  * Created by jordam on 2017-03-24.
  */
 public class TestlinkAdapterServerConnection {
@@ -83,11 +87,7 @@ public class TestlinkAdapterServerConnection {
                 return;
             }
             String response = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER));
-            if(response != null && response.length() > 0){
-                isConnected = true;
-            } else {
-                isConnected = false;
-            }
+            isConnected = response != null && response.length() > 0;
             if(isConnected){
                 String versionResponse = sendGetRequest(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "/apiversion");
                 if(versionResponse != null && versionResponse.contains(tafFrameworkApiVersion)){
@@ -101,7 +101,6 @@ public class TestlinkAdapterServerConnection {
 
     private String sendGetRequest(String url){
         RestRequest restRequest = new RestRequest(url);
-        if(restRequest == null) return null;
         Response response = restRequest.execute();
         if(response == null) return null;
         if(response.code() == 200){
@@ -116,9 +115,9 @@ public class TestlinkAdapterServerConnection {
         return null;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private String sendPostRequest(String url, String mediaType, String data){
         RestRequest restRequest = new RestRequest(url, mediaType, data);
-        if(restRequest == null) return null;
         restRequest.builder = new Request.Builder().post(RequestBody.create(MediaType.parse(mediaType), data)).url(url);
         Response response = restRequest.execute();
         if(response == null) return null;

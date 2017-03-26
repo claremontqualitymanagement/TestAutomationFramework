@@ -1,12 +1,14 @@
 package se.claremont.autotest.common.testrun;
 
 import org.junit.*;
-import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
+ * Command line interface for setting parameters and executing test runs.
+ *
  * Created by jordam on 2017-02-22.
  */
 @SuppressWarnings("WeakerAccess")

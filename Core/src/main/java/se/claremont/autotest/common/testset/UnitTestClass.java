@@ -97,9 +97,8 @@ public class UnitTestClass {
      * @param stringToFind The string to find in the console output from the test.
      * @return Returns true if the given string is found in the console output from the test.
      */
-    public boolean testOutputContains(String stringToFind){
-        if(testOutputChannel == null) return false;
-        return testOutputChannel.toString().contains(stringToFind);
+    public boolean testOutputContains(String stringToFind) {
+        return testOutputChannel != null && testOutputChannel.toString().contains(stringToFind);
     }
 
     private static void restoreOutputChannel(){

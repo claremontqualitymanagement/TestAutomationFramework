@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Tests for TableRow class
+ *
  * Created by jordam on 2017-01-28.
  */
 public class TableRowTest extends UnitTestClass{

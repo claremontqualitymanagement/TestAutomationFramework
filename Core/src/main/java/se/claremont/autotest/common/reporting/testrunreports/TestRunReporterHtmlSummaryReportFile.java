@@ -9,6 +9,8 @@ import se.claremont.autotest.common.testrun.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 /**
+ * Saves the results of a test run to a HTML file
+ *
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {

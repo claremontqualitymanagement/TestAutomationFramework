@@ -12,7 +12,8 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 /**
@@ -108,18 +109,18 @@ public class HtmlSummaryReport {
      * @return A HTML table row formatted text string
      */
     private String solvedKnownErrorsFromTestCaseLocalKnownErrorsList(TestCase testCase) {
-        String solvedKnownErrorsString = "";
+        StringBuilder solvedKnownErrorsString = new StringBuilder();
         ArrayList<String> solvedKnownErrors = testCase.testCaseKnownErrorsList.knownErrors.stream().filter(knownError -> !knownError.encountered()).map(knownError -> knownError.description).collect(Collectors.toCollection(ArrayList::new));
         if (solvedKnownErrors.size() > 0) {
             boolean plural = (solvedKnownErrors.size() > 1);
             String s = String.valueOf(plural).toLowerCase().replace("true", "s").replace("false", "");
-            solvedKnownErrorsString += "<tr class=\"" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "\"><td colspan=\"2\">Known error" + s + " for test case <i>" + testCase.testName + "</i> not encountered</td><td colspan=\"2\">";
+            solvedKnownErrorsString.append("<tr class=\"").append(HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString()).append("\"><td colspan=\"2\">Known error").append(s).append(" for test case <i>").append(testCase.testName).append("</i> not encountered</td><td colspan=\"2\">");
             for (String solvedKnownErrorDescription : solvedKnownErrors) {
-                solvedKnownErrorsString += solvedKnownErrorDescription + "<br>" + LF;
+                solvedKnownErrorsString.append(solvedKnownErrorDescription).append("<br>").append(LF);
             }
-            solvedKnownErrorsString += "</td></tr>";
+            solvedKnownErrorsString.append("</td></tr>");
         }
-        return solvedKnownErrorsString;
+        return solvedKnownErrorsString.toString();
     }
 
     /**
@@ -351,7 +352,7 @@ public class HtmlSummaryReport {
                         if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                             link = link.replace("\\", "/").substring(6);
                         idsOfTestCases.add(testCase.uid.toString());
-                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"" + TestRun.reportLinkPrefix() + "://").append(link).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
+                        html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
                     }
                 }
                 html.append("              </ul>").append(LF);
@@ -435,7 +436,7 @@ public class HtmlSummaryReport {
         bar.append("          <table id=\"").append(HtmlStyleNames.RESULTS_BAR.toString()).append("\">").append(LF);
         bar.append("            <tr>").append(LF);
         if(successfulTestCases > 0){
-            bar.append("              <td class=\"resultsgraphpassed\">" + yippieTextIfNoErrors() + "</td>").append(LF);
+            bar.append("              <td class=\"resultsgraphpassed\">").append(yippieTextIfNoErrors()).append("</td>").append(LF);
             resultsBarStyleInfo += "      td.resultsgraphpassed { background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
         }
         if(testCasesWithOnlyKnownErrors > 0){
@@ -477,7 +478,7 @@ public class HtmlSummaryReport {
             String link = newErrorInfo.testCase.pathToHtmlLog;
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
-            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"" + TestRun.reportLinkPrefix() + "://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
+            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             for(LogPost logRow : newErrorInfo.logEntries){
                 html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
             }

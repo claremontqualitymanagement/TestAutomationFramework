@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Used to start external programs from within tests.
+ *
  * Created by jordam on 2016-09-18.
  */
 @SuppressWarnings("WeakerAccess")

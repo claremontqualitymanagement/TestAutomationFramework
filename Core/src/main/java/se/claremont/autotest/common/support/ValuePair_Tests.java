@@ -31,6 +31,7 @@ public class ValuePair_Tests extends UnitTestClass{
         try {
             ValuePair valuePair = new ValuePair(null, null);
         }catch (Exception e){
+            //noinspection ConstantConditions
             Assert.assertTrue("Cannot instantiate ValuePair with null values", false);
         }
     }

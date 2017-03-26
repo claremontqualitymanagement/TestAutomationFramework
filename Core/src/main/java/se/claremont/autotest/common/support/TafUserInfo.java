@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.support;
 
 /**
+ * Collects user information for log
+ *
  * Created by magnusolsson on 2016-12-15.
  */
 public interface TafUserInfo {

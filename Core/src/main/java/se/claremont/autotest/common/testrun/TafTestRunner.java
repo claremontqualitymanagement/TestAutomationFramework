@@ -5,6 +5,8 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
 /**
+ * A custom JUnit TestListener to enable fancier reporting
+ *
  * Created by jordam on 2017-01-20.
  */
 public class TafTestRunner extends BlockJUnit4ClassRunner

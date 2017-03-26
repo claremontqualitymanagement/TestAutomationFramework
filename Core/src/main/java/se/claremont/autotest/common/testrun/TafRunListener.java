@@ -6,6 +6,8 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 /**
+ * A custom JUnit RunListener, to enable reporting and fancy output.
+ *
  * Created by jordam on 2017-01-04.
  */
 @SuppressWarnings("WeakerAccess")
@@ -49,12 +51,7 @@ public class TafRunListener extends RunListener {
             System.out.println();
         }
         System.out.println("Success for classes run: " + result.wasSuccessful() + System.lineSeparator());
-        sendRunResultToRESTServerIfApplicable();
         if (result.getFailureCount() == 0) System.out.println(celebration());
-    }
-
-    private void sendRunResultToRESTServerIfApplicable(){
-        //System.out.println("Test run results to JSON: " + TestRun.tafBackendServerTestRunReporter.toJson());
     }
 
     private static String celebration(){

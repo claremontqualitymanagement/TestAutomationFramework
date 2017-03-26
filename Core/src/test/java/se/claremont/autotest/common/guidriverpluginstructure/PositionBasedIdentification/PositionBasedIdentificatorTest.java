@@ -7,6 +7,8 @@ import se.claremont.autotest.common.testset.UnitTestClass;
 import java.util.ArrayList;
 
 /**
+ * Tests position based element identification
+ *
  * Created by jordam on 2017-02-22.
  */
 @SuppressWarnings("WeakerAccess")

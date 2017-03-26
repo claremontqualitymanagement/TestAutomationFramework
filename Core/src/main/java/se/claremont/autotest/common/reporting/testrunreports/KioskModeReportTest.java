@@ -8,6 +8,8 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
+ * Tests for the KioskMode
+ *
  * Created by jordam on 2016-12-22.
  */
 public class KioskModeReportTest extends UnitTestClass{
