@@ -100,7 +100,7 @@ public class JnlpFile {
                 Node applicationDescription = applicationDescriptions.item(i);
                 if (applicationDescription.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) applicationDescription;
-                    if(element.getAttribute("main-class") != null);{
+                    if(element.getAttribute("main-class") != null){
                         returnString.append(element.getAttribute("main-class"));
                     }
                     NodeList arguments = element.getElementsByTagName("argument");

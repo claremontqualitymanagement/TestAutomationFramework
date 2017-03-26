@@ -9,8 +9,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class for verification and manipulation of CSV files (comma separated files).
@@ -41,10 +39,6 @@ public class CsvParser {
     }
 
     public CsvParser(String csvString, String[] headlines, String lineBreak, String dataValueDelimiter){
-        List<String[]> dataRows = new ArrayList<>();
-        for(String row : csvString.split(lineBreak)){
-            dataRows.add(row.split(dataValueDelimiter));
-        }
         csvContent = new TableData(null, "csv data", csvString, headlines, lineBreak, dataValueDelimiter);
     }
 

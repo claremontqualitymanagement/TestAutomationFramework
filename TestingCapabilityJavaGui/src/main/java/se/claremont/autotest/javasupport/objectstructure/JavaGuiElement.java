@@ -210,6 +210,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
      *
      * @return Returns the Window object that holds the element
      */
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public Object getWindow(){
         Object thisElement = getRuntimeElementCacheable();
         if(window != null){

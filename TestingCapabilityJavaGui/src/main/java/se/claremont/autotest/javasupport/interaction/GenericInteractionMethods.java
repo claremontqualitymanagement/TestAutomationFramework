@@ -112,8 +112,7 @@ public class GenericInteractionMethods {
      * Writes currently active window to the test case log
      */
     public void logCurrentActiveWindows(){
-        ApplicationStarter as = new ApplicationStarter(testCase);
-        as.logCurrentWindows(testCase);
+        ApplicationStarter.logCurrentWindows(testCase);
     }
 
 
@@ -162,6 +161,7 @@ public class GenericInteractionMethods {
         try {
             Path file = Paths.get(outputFile);
             File fileFolder = new File(outputFile);
+            //noinspection ResultOfMethodCallIgnored
             fileFolder.getParentFile().mkdirs();
 
             ImageIO.write(screenShot, "png", new File(outputFile));

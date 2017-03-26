@@ -31,6 +31,7 @@ public class PluginLoader {
         List<String> filePatterns = new ArrayList<>();
         filePatterns.add("*.jar");
         //jarFiles = FileTester.searchForSpecificFiles(TestRun.settings.getValue(SettingParameters.PLUGIN_FOLDER), filePatterns);
+        //TODO: This method does nothing?
     }
 
     private void loadAndStartPlugins(){

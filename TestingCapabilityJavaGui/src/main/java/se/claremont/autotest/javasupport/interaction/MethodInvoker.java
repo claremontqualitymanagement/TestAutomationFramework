@@ -201,7 +201,7 @@ public class MethodInvoker {
      */
     public Object invokeMethod(Object component, String methodName, Object... args){
         if(args == null) return invokeMethod(component, methodName);
-        if(component == null || methodName == null || methodName == ""){
+        if(component == null || methodName == null || methodName.equals("")){
             log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on null element.");
             return null;
         }
@@ -237,7 +237,7 @@ public class MethodInvoker {
      * @return Returns whatever the method invoked would return.
      */
     public Object invokeMethod(Object component, String methodName){
-        if(component == null || methodName == null || methodName == ""){
+        if(component == null || methodName == null || methodName.equals("")){
             log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on null element.");
             return null;
         }
@@ -266,7 +266,7 @@ public class MethodInvoker {
 
 
     private Object tryInvokeMethod(Object component, String methodName){
-        if(component == null || methodName == null || methodName == ""){
+        if(component == null || methodName == null || methodName.equals("")){
             log(LogLevel.DEBUG, "Cannot invoke method '" + methodName + "' on object since either of them are null and both are needed.");
             return null;
         }
