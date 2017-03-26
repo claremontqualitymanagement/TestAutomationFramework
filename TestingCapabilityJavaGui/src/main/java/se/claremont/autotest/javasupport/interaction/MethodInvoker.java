@@ -6,6 +6,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -85,9 +86,7 @@ public class MethodInvoker {
     public static Object invokeTheFirstEncounteredMethodFromListOfMethodNames(Object component, String[] methodNames){
         MethodInvoker m = new MethodInvoker(null);
         List<String> methods = new ArrayList<>();
-        for(String method : methodNames){
-            methods.add(method);
-        }
+        Collections.addAll(methods, methodNames);
         return m.invokeTheFirstEncounteredMethod(component, methods, (Object[]) null);
     }
     /**
@@ -100,9 +99,7 @@ public class MethodInvoker {
      */
     public Object invokeTheFirstEncounteredMethod(Object component, String[] methodNames){
         List<String> methods = new ArrayList<>();
-        for(String method : methodNames){
-            methods.add(method);
-        }
+        Collections.addAll(methods, methodNames);
         return invokeTheFirstEncounteredMethod(component, methods, (Object[]) null);
     }
 
@@ -117,9 +114,7 @@ public class MethodInvoker {
      */
     public Object invokeTheFirstEncounteredMethod(Object component, String[] methodNames, Object... args){
         List<String> methods = new ArrayList<>();
-        for(String method : methodNames){
-            methods.add(method);
-        }
+        Collections.addAll(methods, methodNames);
         return invokeTheFirstEncounteredMethod(component, methods, args);
     }
 
@@ -168,10 +163,7 @@ public class MethodInvoker {
                         }
                         log(LogLevel.DEBUG, returnString + ".");
                         return returnObject;
-                    } catch (IllegalAccessException e) {
-                        log(LogLevel.DEBUG, "Error while trying to invoke method '" + m.toString() + "'. Error: " + e.toString());
-                        return null;
-                    } catch (InvocationTargetException e) {
+                    } catch (IllegalAccessException | InvocationTargetException e) {
                         log(LogLevel.DEBUG, "Error while trying to invoke method '" + m.toString() + "'. Error: " + e.toString());
                         return null;
                     }
@@ -223,10 +215,7 @@ public class MethodInvoker {
                     }
                     log(LogLevel.EXECUTED, "Invoked method '" + methodName + "' on component of class '" + getClassName(component) + "'" + returnString);
                     return returnObject;
-                } catch (IllegalAccessException e) {
-                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
-                    return null;
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
                     return null;
                 }
@@ -262,10 +251,7 @@ public class MethodInvoker {
                     }
                     log(LogLevel.EXECUTED, "Invoked method '" + methodName + "' on component of class '" + getClassName(component) + "'" + returnString);
                     return returnObject;
-                } catch (IllegalAccessException e) {
-                    log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
-                    return null;
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     log(LogLevel.EXECUTION_PROBLEM, "Could not invoke method '" + methodName + "' on component of class '" + getClassName(component) + "'. Error: " + e.getMessage());
                     return null;
                 }
@@ -293,9 +279,7 @@ public class MethodInvoker {
                         logString += " and received '" + returnObject.toString() + "' in response";
                     log(LogLevel.DEBUG, logString + ".");
                     return returnObject;
-                } catch (IllegalAccessException e) {
-                    log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(component) + "'. Error: " + e.toString());
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(component) + "'. Error: " + e.toString());
                 }
             }
@@ -363,9 +347,7 @@ public class MethodInvoker {
             if(returnObject != null) logString += " and received '" + returnObject.toString() + "' in response";
             log(LogLevel.DEBUG, logString + ".");
             return returnObject;
-        } catch (IllegalAccessException e) {
-            log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(object) + "'. Error: " + e.toString());
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             log(LogLevel.DEBUG, "Encountered problems when invoking method '" + method.toString() + "' on element of class '" + getClassName(object) + "'. Error: " + e.toString());
         }
         return null;

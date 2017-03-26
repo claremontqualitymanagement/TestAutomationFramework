@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Helps perform tests on files.
+ *
  * Created by jordam on 2016-10-04.
  */
 @SuppressWarnings("WeakerAccess")

@@ -8,9 +8,9 @@ package se.claremont.autotest.javasupport.objectstructure;
 @SuppressWarnings("WeakerAccess")
 public interface GuiComponent {
 
-    public String getName();
+    String getName();
 
-    public Object getRuntimeComponent();
+    Object getRuntimeComponent();
 
-    public String getRecognitionDescription();
+    String getRecognitionDescription();
 }

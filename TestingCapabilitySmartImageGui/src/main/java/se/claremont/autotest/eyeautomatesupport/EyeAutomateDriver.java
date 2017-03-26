@@ -76,7 +76,7 @@ public class EyeAutomateDriver {
         String commandString = "";
         String command = null;
         String imageFile;
-        String arguments = null;
+        StringBuilder arguments = null;
         if(scriptRowParts.size() == 0) {
             testCase.log(LogLevel.DEBUG, "Command string was null.");
             return;
@@ -91,10 +91,10 @@ public class EyeAutomateDriver {
         }
         if(scriptRowParts.size() > 2){
             for(int i = 3; i < scriptRowParts.size(); i++){
-                arguments += scriptRowParts.get(i) + " ";
+                arguments.append(scriptRowParts.get(i)).append(" ");
             }
             if(arguments != null) {
-                arguments = arguments.trim();
+                arguments = new StringBuilder(arguments.toString().trim());
                 commandString += arguments + " ";
             }
         }
@@ -118,16 +118,16 @@ public class EyeAutomateDriver {
     private void executeScriptRow(ArrayList<String> scriptRowParts){
         String command = null;
         String imageFile = null;
-        String arguments = null;
+        StringBuilder arguments = null;
         if(scriptRowParts.size() == 0) return;
         if(scriptRowParts.size() > 0) command = scriptRowParts.get(0);
         if(scriptRowParts.size() > 1) imageFile = scriptRowParts.get(1);
         if(scriptRowParts.size() > 2){
             for(int i = 3; i < scriptRowParts.size(); i++){
-                arguments += scriptRowParts.get(i) + " ";
+                arguments.append(scriptRowParts.get(i)).append(" ");
             }
             if(arguments != null)
-               arguments = arguments.trim();
+               arguments = new StringBuilder(arguments.toString().trim());
         }
         if(command == null) {
             testCase.log(LogLevel.DEBUG, "Command was null.");
@@ -145,7 +145,7 @@ public class EyeAutomateDriver {
                 break;
             case "write":
                 if(scriptRowParts.size() > 2){
-                    write(new GuiImageElement(imageFile, imageFile), arguments);
+                    write(new GuiImageElement(imageFile, imageFile), arguments.toString());
                 } else {
                     executeCommand(scriptRowParts);
                 }

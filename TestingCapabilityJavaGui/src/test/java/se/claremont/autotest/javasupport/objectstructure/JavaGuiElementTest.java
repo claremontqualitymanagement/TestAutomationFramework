@@ -1,6 +1,9 @@
 package se.claremont.autotest.javasupport.objectstructure;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.javasupport.interaction.JavaTestApplication;
 import se.claremont.autotest.javasupport.interaction.JavaTestApplicationRunner;
@@ -8,6 +11,8 @@ import se.claremont.autotest.javasupport.interaction.JavaTestApplicationRunner;
 import java.util.List;
 
 /**
+ * Tests for class JavaGuiElement
+ *
  * Created by jordam on 2017-02-25.
  */
 public class JavaGuiElementTest extends UnitTestClass{

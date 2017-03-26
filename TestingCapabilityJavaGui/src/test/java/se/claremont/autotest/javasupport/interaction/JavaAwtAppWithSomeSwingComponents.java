@@ -1,17 +1,13 @@
 package se.claremont.autotest.javasupport.interaction;
 
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
-import javafx.scene.control.ComboBox;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
+ * A small application for testing
+ *
  * Created by jordam on 2017-02-08.
  */
 @SuppressWarnings("WeakerAccess")
@@ -35,6 +31,7 @@ public class JavaAwtAppWithSomeSwingComponents extends Frame{
         checkbox.setName("Checkbox awt");
         jCheckBox.setName("Checkbox swing");
         String[] dropDownChoices = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
+        //noinspection unchecked
         dropDown = new JComboBox(dropDownChoices);
         dropDown.setSelectedIndex(4);
         dropDown.setName("Pet dropDown");

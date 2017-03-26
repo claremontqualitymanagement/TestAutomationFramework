@@ -169,16 +169,16 @@ public class JavaWindow {
             String className = o.getClass().toString();
             className = className.substring(className.lastIndexOf("."));
             if(name != null){
-                sb.append("   public static JavaGuiElement " + StringManagement.methodNameWithOnlySafeCharacters(name + "_" + className)).append("() {").append(System.lineSeparator());
-                sb.append("      return new JavaGuiElement(\"" + StringManagement.methodNameWithOnlySafeCharacters(name + className.replace("(", "").replace(")", "")) + "\", \"" + name + "\", JavaGuiElement.IdType.ELEMENT_NAME);").append(System.lineSeparator());
+                sb.append("   public static JavaGuiElement ").append(StringManagement.methodNameWithOnlySafeCharacters(name + "_" + className)).append("() {").append(System.lineSeparator());
+                sb.append("      return new JavaGuiElement(\"").append(StringManagement.methodNameWithOnlySafeCharacters(name + className.replace("(", "").replace(")", ""))).append("\", \"").append(name).append("\", JavaGuiElement.IdType.ELEMENT_NAME);").append(System.lineSeparator());
                 sb.append("   }").append(System.lineSeparator()).append(System.lineSeparator());
             } else if(text != null){
-                sb.append("   public static JavaGuiElement " + StringManagement.methodNameWithOnlySafeCharacters(text + "_" + className)).append("() {").append(System.lineSeparator());
-                sb.append("      return new JavaGuiElement(\"" + StringManagement.methodNameWithOnlySafeCharacters(text + className.replace("(", "").replace(")", "")) + "\", \"" + text + "\", JavaGuiElement.IdType.ELEMENT_TEXT);").append(System.lineSeparator());
+                sb.append("   public static JavaGuiElement ").append(StringManagement.methodNameWithOnlySafeCharacters(text + "_" + className)).append("() {").append(System.lineSeparator());
+                sb.append("      return new JavaGuiElement(\"").append(StringManagement.methodNameWithOnlySafeCharacters(text + className.replace("(", "").replace(")", ""))).append("\", \"").append(text).append("\", JavaGuiElement.IdType.ELEMENT_TEXT);").append(System.lineSeparator());
                 sb.append("   }").append(System.lineSeparator()).append(System.lineSeparator());
             } else {
                 sb.append("/*").append(System.lineSeparator());
-                sb.append("   Cannot create proper code for element of class '" + o.getClass().toString() + "'.").append(System.lineSeparator());
+                sb.append("   Cannot create proper code for element of class '").append(o.getClass().toString()).append("'.").append(System.lineSeparator());
                 sb.append("   An object toString() method call returns:").append(System.lineSeparator());
                 sb.append("   ").append(o.toString()).append(System.lineSeparator());
                 sb.append("*/").append(System.lineSeparator()).append(System.lineSeparator());
@@ -204,6 +204,7 @@ public class JavaWindow {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
+            System.out.println("Could not wait " + milliseconds + " milliseconds. Error: " + e.toString());
         }
     }
 

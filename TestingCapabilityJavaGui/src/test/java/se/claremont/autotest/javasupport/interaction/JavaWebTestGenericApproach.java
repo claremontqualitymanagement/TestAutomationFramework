@@ -8,6 +8,8 @@ import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 */
 /**
+ * Test of using GenericInteractionMethods for Java with web elements.
+ *
  * Created by jordam on 2017-02-22.
  */
 @SuppressWarnings("WeakerAccess")

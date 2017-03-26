@@ -7,7 +7,6 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TafTestRunner;
 import se.claremont.autotest.common.testset.TestSet;
-import se.claremont.autotest.javasupport.interaction.JavaAwtAppWithSomeSwingComponents;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
@@ -22,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
+ * Tests starting of Java programs from TAF
+ *
  * Created by jordam on 2017-02-11.
  */
 @SuppressWarnings({"WeakerAccess", "ConstantConditions"})
@@ -127,7 +128,7 @@ public class ApplicationStarterTest extends TestSet {
 
     @Test
     @Ignore
-    public void listWindows() throws MalformedURLException {
+    public void listWindows() {
         try{
             makeSureJavaAppIsInTempFolder();
             TestCase tempTestCase = new TestCase(null, "dummy");

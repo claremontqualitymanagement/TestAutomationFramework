@@ -14,9 +14,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.jar.Attributes;
 
 /**
+ * Helps start Java applications from within TAF, so they end up in same JVM, and hence stand a
+ * better chance of being possible to interact with.
+ *
  * Created by jordam on 2017-02-10.
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
@@ -126,7 +130,7 @@ public class ApplicationStarter {
         try{
             Class c = classLoader.loadClass(className);
             log(LogLevel.DEBUG, "Loaded class '" + className + "'.");
-            Method m = c.getMethod(methodName, new Class[] { args.getClass() });
+            @SuppressWarnings("unchecked") Method m = c.getMethod(methodName, args.getClass());
             log(LogLevel.DEBUG, "Found method 'main'.");
             m.setAccessible(true);
             int mods = m.getModifiers();
@@ -171,9 +175,7 @@ public class ApplicationStarter {
     public static ArrayList<Window> getWindows(){
         ArrayList<Window> windows = new ArrayList<>();
         Window [] swingWindows = Window.getOwnerlessWindows ();
-        for(Window w : swingWindows){
-            windows.add(w);
-        }
+        Collections.addAll(windows, swingWindows);
         return windows;
     }
 
@@ -214,25 +216,25 @@ public class ApplicationStarter {
     }
 
     public static void logCurrentWindows(TestCase testCase) {
-        String logMessage = "Current active windows:" + System.lineSeparator();
+        StringBuilder logMessage = new StringBuilder("Current active windows:" + System.lineSeparator());
         for(Window w : getWindows()){
             try{
                 Frame frame = (Frame) w;
-                logMessage += "Window title: '" + frame.getTitle() + "'. Shown:" + frame.isShowing() + System.lineSeparator();
+                logMessage.append("Window title: '").append(frame.getTitle()).append("'. Shown:").append(frame.isShowing()).append(System.lineSeparator());
                 continue;
             } catch (Exception ignored){
                 testCase.log(LogLevel.DEBUG, "Could not retrieve title of Window as Frame. Error: " + ignored.getMessage());
             }
             try{
                 JFrame frame = (JFrame) w;
-                logMessage += "Window title: '" + frame.getTitle() + "'. Shown:" + frame.isShowing() + System.lineSeparator();
+                logMessage.append("Window title: '").append(frame.getTitle()).append("'. Shown:").append(frame.isShowing()).append(System.lineSeparator());
                 continue;
             } catch (Exception ignored){
                 testCase.log(LogLevel.DEBUG, "Could not retrieve title of Window as JFrame. Error: " + ignored.getMessage());
             }
-            logMessage += "Could not find title of element of class '" + w.getClass().toString() + "' since it is not implemented";
+            logMessage.append("Could not find title of element of class '").append(w.getClass().toString()).append("' since it is not implemented");
         }
-        testCase.log(LogLevel.INFO, logMessage);
+        testCase.log(LogLevel.INFO, logMessage.toString());
     }
 
     class JarClassLoader extends URLClassLoader{

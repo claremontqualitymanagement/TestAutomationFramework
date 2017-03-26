@@ -5,7 +5,10 @@ import java.security.PermissionCollection;
 import java.security.Permissions;
 import java.security.Policy;
 
+//TODO: Not using this approach for plugins anymore. Should this class stay?
 /**
+ * Genering plug in manager policy provider
+ *
  * Created by jordam on 2016-10-28.
  */
 @SuppressWarnings("WeakerAccess")

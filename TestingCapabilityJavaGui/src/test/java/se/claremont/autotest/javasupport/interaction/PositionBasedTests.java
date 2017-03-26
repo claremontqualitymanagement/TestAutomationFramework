@@ -1,12 +1,14 @@
 package se.claremont.autotest.javasupport.interaction;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Tests to make sure the relative position based identification of GUI elements work
+ *
  * Created by jordam on 2017-02-23.
  */
 @SuppressWarnings("WeakerAccess")

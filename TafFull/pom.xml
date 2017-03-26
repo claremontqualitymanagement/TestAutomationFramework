@@ -29,6 +29,7 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <!--suppress MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection -->
     <dependencies>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>

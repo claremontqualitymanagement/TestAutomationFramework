@@ -65,11 +65,11 @@ public class ChildFirstURLClassLoader extends URLClassLoader {
         return url;
     }
 
+    /**
+     * Similar to super, but local resources are enumerated before parent resources
+     */
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        /**
-         * Similar to super, but local resources are enumerated before parent resources
-         */
         Enumeration<URL> systemUrls = null;
         if (system != null) {
             systemUrls = system.getResources(name);
@@ -79,7 +79,7 @@ public class ChildFirstURLClassLoader extends URLClassLoader {
         if (getParent() != null) {
             parentUrls = getParent().getResources(name);
         }
-        final List<URL> urls = new ArrayList<URL>();
+        final List<URL> urls = new ArrayList<>();
         if (systemUrls != null) {
             while(systemUrls.hasMoreElements()) {
                 urls.add(systemUrls.nextElement());
@@ -113,6 +113,7 @@ public class ChildFirstURLClassLoader extends URLClassLoader {
         try {
             return url != null ? url.openStream() : null;
         } catch (IOException e) {
+            System.out.println("Could not get resource as a stream. Error: " + e.toString());
         }
         return null;
     }

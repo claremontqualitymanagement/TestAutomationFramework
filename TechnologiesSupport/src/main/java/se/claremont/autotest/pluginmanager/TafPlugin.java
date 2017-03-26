@@ -1,6 +1,8 @@
 package se.claremont.autotest.pluginmanager;
 
 /**
+ * Generic plugin descriptor
+ *
  * Created by jordam on 2016-10-28.
  */
 @SuppressWarnings("WeakerAccess")

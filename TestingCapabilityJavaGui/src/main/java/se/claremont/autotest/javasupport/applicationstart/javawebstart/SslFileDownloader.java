@@ -1,25 +1,26 @@
 package se.claremont.autotest.javasupport.applicationstart.javawebstart;
 
-        import okhttp3.Call;
-        import okhttp3.OkHttpClient;
-        import okhttp3.Request;
-        import okhttp3.Response;
-        import okio.BufferedSink;
-        import okio.Okio;
-        import se.claremont.autotest.common.logging.LogLevel;
-        import se.claremont.autotest.common.testcase.TestCase;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
+import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.testcase.TestCase;
 
-        import javax.net.ssl.*;
-        import java.io.File;
-        import java.io.FileNotFoundException;
-        import java.io.IOException;
-        import java.security.KeyManagementException;
-        import java.security.NoSuchAlgorithmException;
-        import java.security.SecureRandom;
-        import java.security.cert.CertificateException;
-        import java.security.cert.X509Certificate;
+import javax.net.ssl.*;
+import java.io.File;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 /**
+ * Downloads files over SSL, over HTTP
+ *
  * Created by p901dqj on 2017-01-17.
  */
 public class SslFileDownloader {
@@ -38,10 +39,6 @@ public class SslFileDownloader {
             sink = Okio.buffer(Okio.sink(downloadedFile));
             sink.writeAll(response.body().source());
             sink.close();
-        } catch (FileNotFoundException e) {
-            log(LogLevel.EXECUTION_PROBLEM, "Could not save resource content to file. " + e.getMessage());
-            e.printStackTrace();
-            return;
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not save resource content to file. " + e.getMessage());
             e.printStackTrace();
@@ -64,7 +61,7 @@ public class SslFileDownloader {
             final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
                 @Override
                 public X509Certificate[] getAcceptedIssuers() {
-                    X509Certificate[] cArrr = new X509Certificate[0];
+                    @SuppressWarnings("UnnecessaryLocalVariable") X509Certificate[] cArrr = new X509Certificate[0];
                     return cArrr;
                 }
 
@@ -93,7 +90,7 @@ public class SslFileDownloader {
             }
             clientBuilder.sslSocketFactory(sslContext.getSocketFactory());
 
-            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @SuppressWarnings("Convert2Lambda") HostnameVerifier hostnameVerifier = new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;

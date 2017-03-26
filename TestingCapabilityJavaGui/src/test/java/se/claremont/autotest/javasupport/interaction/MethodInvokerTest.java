@@ -1,12 +1,15 @@
 package se.claremont.autotest.javasupport.interaction;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 /**
+ * Test for generic method invocation method
+ *
  * Created by jordam on 2017-02-11.
  */
 @SuppressWarnings("WeakerAccess")

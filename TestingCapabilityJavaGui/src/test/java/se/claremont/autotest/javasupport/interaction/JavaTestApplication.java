@@ -3,9 +3,9 @@ package se.claremont.autotest.javasupport.interaction;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
-import java.awt.*;
-
 /**
+ * TAF GUI description for test application
+ *
  * Created by jordam on 2017-02-19.
  */
 @SuppressWarnings("WeakerAccess")

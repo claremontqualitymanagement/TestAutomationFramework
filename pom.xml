@@ -211,11 +211,6 @@
                 <version>1.7.21</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.21</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
                 <version>2.6.2</version>
@@ -359,6 +354,7 @@
         </dependencies>
     </dependencyManagement>
 
+    <!--suppress MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection -->
     <dependencies>
 
         <!-- JUnit is used as a test runner for both unit tests and for test execution from command line from built artifact. -->

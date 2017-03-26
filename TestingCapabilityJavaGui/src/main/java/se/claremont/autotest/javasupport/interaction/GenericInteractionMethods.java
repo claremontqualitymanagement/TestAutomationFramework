@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -812,7 +812,7 @@ public class GenericInteractionMethods {
      *
      * @param component The checkbox element
      * @param expectedEndState The expected state to set the element to (checked = true, un-checked=false).
-     * @param timeoutInSeconds
+     * @param timeoutInSeconds The time, in seconds to wait for successful checkbox interaction
      */
     public void setCheckboxToState(GuiComponent component, boolean expectedEndState, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
@@ -1011,11 +1011,11 @@ public class GenericInteractionMethods {
      * @return Returns true if all characters in expectedText are found in the same order in actualText.
      */
     private boolean allCharactersExistAndInCorrectOrder(String actualText, String expectedText){
-        String matchingString = ".*";
+        StringBuilder matchingString = new StringBuilder(".*");
         for(int i = 0; i < expectedText.length(); i++){
-            matchingString += expectedText.substring(i, i+1) + ".*";
+            matchingString.append(expectedText.substring(i, i + 1)).append(".*");
         }
-        return SupportMethods.isRegexMatch(actualText, matchingString);
+        return SupportMethods.isRegexMatch(actualText, matchingString.toString());
     }
 
     /**

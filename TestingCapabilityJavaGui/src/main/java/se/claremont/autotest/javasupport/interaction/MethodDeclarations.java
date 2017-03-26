@@ -1,7 +1,5 @@
 package se.claremont.autotest.javasupport.interaction;
 
-import se.claremont.autotest.common.testcase.TestCase;
-
 /**
  * Lists of what methods to invoke are used throughout this module, so it made sense gathering them here.
  *

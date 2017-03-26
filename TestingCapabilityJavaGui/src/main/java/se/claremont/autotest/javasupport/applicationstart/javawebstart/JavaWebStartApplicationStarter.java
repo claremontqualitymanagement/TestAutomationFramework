@@ -17,6 +17,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
+ * Class to start Java Web Start based applications from within TAF, to enable interaction with those.
+ *
  * Created by jordam on 2017-02-25.
  */
 public class JavaWebStartApplicationStarter {
@@ -45,12 +47,12 @@ public class JavaWebStartApplicationStarter {
         File folder = new File(foldername);
         File[] listOfFiles = folder.listFiles();
 
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getAbsolutePath());
-                filenames.add(listOfFiles[i].getAbsolutePath());
-            } else if (listOfFiles[i].isDirectory()) {
-                System.out.println("Directory " + listOfFiles[i].getName());
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                System.out.println("File " + listOfFile.getAbsolutePath());
+                filenames.add(listOfFile.getAbsolutePath());
+            } else if (listOfFile.isDirectory()) {
+                System.out.println("Directory " + listOfFile.getName());
             }
         }
         return filenames;
@@ -93,15 +95,15 @@ public class JavaWebStartApplicationStarter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void addURL(URL url) throws Exception {
         URLClassLoader classLoader
                 = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class clazz= URLClassLoader.class;
-
         // Use reflection
-        Method method= clazz.getDeclaredMethod("addURL", new Class[] { URL.class });
+        Method method= clazz.getDeclaredMethod("addURL", URL.class);
         method.setAccessible(true);
-        method.invoke(classLoader, new Object[] { url });
+        method.invoke(classLoader, url);
     }
 
     private void invokeMethodOfClass(String className, String methodName, String[] args) {
@@ -109,7 +111,7 @@ public class JavaWebStartApplicationStarter {
             URLClassLoader classLoader
                     = (URLClassLoader) ClassLoader.getSystemClassLoader();
             Class e = classLoader.loadClass(className);
-            Method m = e.getMethod(methodName, new Class[]{args.getClass()});
+            @SuppressWarnings("unchecked") Method m = e.getMethod(methodName, args.getClass());
             m.setAccessible(true);
             int mods = m.getModifiers();
             if(m.getReturnType() != Void.TYPE || !Modifier.isStatic(mods) || !Modifier.isPublic(mods)) {
@@ -117,15 +119,12 @@ public class JavaWebStartApplicationStarter {
             }
 
             try {
+                //noinspection RedundantCast
                 m.invoke((Object)null, new Object[]{args});
             } catch (IllegalAccessException e1) {
                 System.out.println(e1.toString());
             }
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.toString());
-        } catch (InvocationTargetException e) {
-            System.out.println(e.toString());
-        } catch (NoSuchMethodException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
             System.out.println(e.toString());
         }
 

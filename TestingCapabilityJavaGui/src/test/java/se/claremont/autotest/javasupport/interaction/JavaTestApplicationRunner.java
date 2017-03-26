@@ -5,6 +5,8 @@ import org.junit.Assume;
 import java.awt.*;
 
 /**
+ * Tests of Java program start class
+ *
  * Created by jordam on 2017-02-25.
  */
 public class JavaTestApplicationRunner {
@@ -28,6 +30,7 @@ public class JavaTestApplicationRunner {
         if(javaApp == null) return;
         Assume.assumeTrue("Cannot start GUI interface since there is no desktop.", Desktop.isDesktopSupported());
         try{
+            //noinspection deprecation
             javaApp.show();
         }catch (Exception e){
             Assume.assumeTrue("Cannot start GUI interface since there is no desktop available. Error: " + System.lineSeparator() + e.toString(), false);
@@ -36,6 +39,7 @@ public class JavaTestApplicationRunner {
 
     public static void hideWindow(){
         if(javaApp == null) return;
+        //noinspection deprecation
         javaApp.hide();
     }
 

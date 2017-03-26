@@ -4,9 +4,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.javasupport.interaction.JavaAwtAppWithSomeSwingComponents;
-import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 /**
+ * Test to assess successful GUI element map creation
+ *
  * Created by jordam on 2017-02-19.
  */
 public class JavaAppWindow extends UnitTestClass{

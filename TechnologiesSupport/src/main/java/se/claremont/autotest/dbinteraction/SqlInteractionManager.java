@@ -58,7 +58,7 @@ public class SqlInteractionManager {
     }
 
     private static String resultSetToString(ResultSet resultSet){
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
         if(resultSet == null) return "";
         int columnCount = getColumnCountFromResultSet(resultSet);
         List<String> headlineRow = new ArrayList<>();
@@ -69,7 +69,7 @@ public class SqlInteractionManager {
                 e.printStackTrace();
             }
         }
-        returnString += String.join(";", headlineRow) + System.lineSeparator();
+        returnString.append(String.join(";", headlineRow)).append(System.lineSeparator());
         try{
             resultSet.beforeFirst();
             while (resultSet.next()) {
@@ -77,13 +77,13 @@ public class SqlInteractionManager {
                 for(int i = 0; i < columnCount-1; i++){
                     row.add(resultSet.getString(i+1).replace("\n", ","));
                 }
-                returnString += String.join(";", row) + System.lineSeparator();
+                returnString.append(String.join(";", row)).append(System.lineSeparator());
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
         System.out.println(returnString);
-        return returnString;
+        return returnString.toString();
     }
 
     private TableData execute(String sql) {
@@ -99,9 +99,7 @@ public class SqlInteractionManager {
             if(success){
                 resultSet = stmt.getResultSet();
             }
-        }catch(SQLException se){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not execute SQL '" + sql + "' to DB '" + dbName + "' at server '" + dbUrl + "'. Error: " + se.getMessage());
-        }catch(Exception e){
+        } catch(Exception e){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not execute SQL '" + sql + "' to DB '" + dbName + "' at server '" + dbUrl + "'. Error: " + e.getMessage());
         }
         String returnString = resultSetToString(resultSet);

@@ -1,16 +1,19 @@
 package se.claremont.autotest.javasupport.applicationstart.javawebstart;
 
 import se.claremont.autotest.common.logging.LogLevel;
-        import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCase;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 /**
+ * Helps start Java Web Start based Java programs. Downloads the Java Web Start
+ * JNLP specification file, and downloads all dependency jars stated in that file.
+ *
  * Created by p901dqj on 2017-02-24.
  */
 public class JarDownloaderFromJnlp {
     TestCase testCase;
-    String baseFilePath = "C:\\temp\\";
+    String baseFilePath = System.getProperty("java.io.tmpdir") + "TAF_JNLP_temp";
     String baseUrl;
 
     public JarDownloaderFromJnlp(TestCase testCase, String baseUrl){

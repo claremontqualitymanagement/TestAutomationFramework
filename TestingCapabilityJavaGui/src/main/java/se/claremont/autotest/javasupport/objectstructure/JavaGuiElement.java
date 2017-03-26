@@ -184,6 +184,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return getRuntimeComponent();
     }
 
+    @SuppressWarnings("StringConcatenationInLoop")
     public String getRecognitionDescription(){
         int counter = 1;
         String recognitionString = System.lineSeparator();
@@ -207,7 +208,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     /**
      * Return the Window element this element resides in.
      *
-     * @return
+     * @return Returns the Window object that holds the element
      */
     public Object getWindow(){
         Object thisElement = getRuntimeElementCacheable();

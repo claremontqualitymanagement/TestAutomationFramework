@@ -1,17 +1,22 @@
 package se.claremont.autotest.javasupport.applicationstart.javawebstart;
-        import org.w3c.dom.Document;
-        import org.w3c.dom.Element;
-        import org.w3c.dom.Node;
-        import org.w3c.dom.NodeList;
-        import se.claremont.autotest.common.logging.LogLevel;
-        import se.claremont.autotest.common.support.SupportMethods;
-        import se.claremont.autotest.common.testcase.TestCase;
 
-        import javax.xml.parsers.DocumentBuilder;
-        import javax.xml.parsers.DocumentBuilderFactory;
-        import java.util.ArrayList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.autotest.common.testcase.TestCase;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
 
 /**
+ * A JNLP file describes how to start a Java application that is being
+ * started with Java Web Start. This class represents a JNLP file from
+ * a TAF perspective.
+ *
  * Created by p901dqj on 2017-01-17.
  */
 public class JnlpFile {
@@ -50,7 +55,7 @@ public class JnlpFile {
     }
 
     private void getMainJarFilePathFromJnlpFileContent(){
-        ArrayList<String> jarFiles = new ArrayList<String>();
+        ArrayList<String> jarFiles = new ArrayList<>();
         String startString = "<jar href=\"";
         String stopString = "\" main=\"true";
         String[] fileRows = content.split(System.lineSeparator());
@@ -80,7 +85,7 @@ public class JnlpFile {
     }
 
     public static String getMainClassString(String pathToJnlp){
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -96,19 +101,19 @@ public class JnlpFile {
                 if (applicationDescription.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) applicationDescription;
                     if(element.getAttribute("main-class") != null);{
-                        returnString += element.getAttribute("main-class");
+                        returnString.append(element.getAttribute("main-class"));
                     }
                     NodeList arguments = element.getElementsByTagName("argument");
                     for(int j = 0; j < arguments.getLength(); j++){
-                        returnString += " " + arguments.item(j).getTextContent();
+                        returnString.append(" ").append(arguments.item(j).getTextContent());
                     }
                 }
-                returnString += System.lineSeparator();
+                returnString.append(System.lineSeparator());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return returnString;
+        return returnString.toString();
     }
 
 
