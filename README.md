@@ -11,6 +11,8 @@ Check out our documentation [here](https://github.com/claremontqualitymanagement
 
 TAF is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license. It's the same license as for example Selenium and many other open source creations. 
 
+Maybe the easiest way to get going is to clone the [Template project for TAF](https://github.com/claremontqualitymanagement/TemplateProjectForTAF "Template project for TAF"). It is already fitted with a prepared maven pom.xml file.
+
 
 
 [![travis build](https://img.shields.io/travis/claremontqualitymanagement/TestAutomationFramework.svg?style=flat-square)](https://travis-ci.org/claremontqualitymanagement/TestAutomationFramework)
