@@ -1206,6 +1206,18 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Checks if the element is displayed directly.
+     *
+     * @param guiElement The element to check for
+     * @return Return true if the element can be found and is displayed.
+     */
+    public boolean isDisplayedWithoutTimeout(GuiElement guiElement){
+        DomElement domElement = (DomElement)guiElement;
+        WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+        return webElement != null && webElement.isDisplayed();
+    }
+
+    /**
      * Checks if specified text exist in the browser page
      *
      * @param text test string to find
@@ -1223,6 +1235,68 @@ public class WebInteractionMethods implements GuiDriver {
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
         }
+    }
+
+    /**
+     * Checks if specified text exist in the current driver page source
+     *
+     * @param text test string to find
+     * @param timeoutInSeconds The time to wait
+     */
+    public boolean textExistInPageSourceOfCurrentPageWithinTimeout(String text, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime <= timeoutInSeconds * 1000){
+            if(driver.getPageSource().contains(text)){
+                log(LogLevel.DEBUG, "Checked for text '" + text + "' to exist in current page source within "+ timeoutInSeconds + " seconds, and it was identified after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+                return true;
+            }
+            wait(50);
+        }
+        log(LogLevel.DEBUG, "Checked for text '" + text + "' to exist in page source within "+ timeoutInSeconds + " seconds. It could not be identified.");
+        return false;
+    }
+
+    /**
+     * Checks if specified text exist (maybe not displayed) on the current browser page
+     *
+     * @param text test string to find
+     * @param timeoutInSeconds The time to wait
+     */
+    public boolean textExistOnCurrentPageWithinTimeout(String text, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = new DomElement("//*[contains(text(),'" + text + "')]", DomElement.IdentificationType.BY_X_PATH);
+        while (System.currentTimeMillis() - startTime <= timeoutInSeconds * 1000){
+            WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+            if(webElement != null){
+                log(LogLevel.DEBUG, "Checked for text '" + text + "' to exist on current page within "+ timeoutInSeconds + " seconds, and it was identified after " + (System.currentTimeMillis() - startTime) + " milliseconds. No check for if the element is displayed. There are other methods for that.");
+                return true;
+            }
+            wait(50);
+        }
+        log(LogLevel.DEBUG, "Checked for text '" + text + "' to exist on page within "+ timeoutInSeconds + " seconds. It could not be identified.");
+        return false;
+    }
+
+
+    /**
+     * Checks if specified text is displayed on the current browser page
+     *
+     * @param text test string to find
+     * @param timeoutInSeconds The time to wait
+     */
+    public boolean textIsDisplayedOnCurrentPageWithinTimeout(String text, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        DomElement domElement = new DomElement("//*[contains(text(),'" + text + "')]", DomElement.IdentificationType.BY_X_PATH);
+        while (System.currentTimeMillis() - startTime <= timeoutInSeconds * 1000){
+            WebElement webElement = getRuntimeElementWithoutLogging(domElement);
+            if(webElement != null && webElement.isDisplayed()){
+                log(LogLevel.DEBUG, "Checked for text '" + text + "' to become displayed on current page within "+ timeoutInSeconds + " seconds, and it was identified after " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+                return true;
+            }
+            wait(50);
+        }
+        log(LogLevel.DEBUG, "Checked for text '" + text + "' to become displayed on page within "+ timeoutInSeconds + " seconds. It could not be identified.");
+        return false;
     }
 
     /**
