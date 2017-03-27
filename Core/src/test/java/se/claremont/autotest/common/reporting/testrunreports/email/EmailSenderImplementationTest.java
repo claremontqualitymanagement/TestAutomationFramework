@@ -2,6 +2,7 @@ package se.claremont.autotest.common.reporting.testrunreports.email;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.subethamail.wiser.Wiser;
 import se.claremont.autotest.common.testrun.Settings;
@@ -34,6 +35,7 @@ public class EmailSenderImplementationTest extends UnitTestClass{
     }
 
     @Test
+    @Ignore
     public void testGmail2() {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
         TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
