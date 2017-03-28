@@ -165,6 +165,8 @@ public class TestCaseLog {
     private void outputLogPost(LogPost logPost){
         if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.NONE))return;
         if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
+            //ColoredPrinter cp = new ColoredPrinter.Builder(1, false).attribute(Ansi.Attribute.BOLD).foreground(Ansi.FColor.BLUE).build();
+            //cp.print(logPost.toString());
             System.out.println(logPost.toString());
             return;
         } else if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.MODERATE) &&

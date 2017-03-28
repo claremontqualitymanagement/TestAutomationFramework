@@ -35,6 +35,7 @@
 
 
     <dependencies>
+
         <!-- For mail sending of reports -->
         <dependency>
             <groupId>javax.mail</groupId>

@@ -55,6 +55,11 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
         TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
     }
 
+    public void setCurrentTestCaseTestName(String name){
+        if(currentTestCase == null)return;
+        currentTestCase.setName(name);
+    }
+
     /**
      * Known errors can be entered at a test set level, making them valid for all test cases in the test set.
      * All patterns entered must be found in a test case for the known error to match

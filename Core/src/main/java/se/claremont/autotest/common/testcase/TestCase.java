@@ -78,6 +78,11 @@ public class TestCase {
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
     }
 
+    public void setName(String name){
+        log(LogLevel.DEBUG, "Resetting name for test case from '" + testName + "' to '" + name + "'.");
+        this.testName = name;
+    }
+
     /**
      * Compares the currently running processes on the executing machine with the ones that
      * were running when the test case started, and reports the difference to the test case
