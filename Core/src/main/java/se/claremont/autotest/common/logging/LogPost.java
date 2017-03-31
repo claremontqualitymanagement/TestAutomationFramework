@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.common.logging.logmessage.LogMessage;
 import se.claremont.autotest.common.reporting.UxColors;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
 import se.claremont.autotest.common.support.StringManagement;
@@ -30,6 +31,7 @@ public class LogPost {
     private final static Logger logger = LoggerFactory.getLogger( LogPost.class );
 
     @JsonProperty public LogLevel logLevel;
+    @JsonProperty public LogMessage logMessage;
     @JsonProperty public String message;
     @JsonProperty private String htmlMessage;
     @JsonProperty public final Date date;
@@ -77,6 +79,12 @@ public class LogPost {
         this.htmlMessage = "";
     }
 
+    public LogPost(LogLevel logLevel, LogMessage logMessage){
+        this.htmlMessage = logMessage.toHtml();
+        this.message = logMessage.toString();
+        this.date = new Date();
+        this.logLevel = logLevel;
+    }
 
     /**
      * Checks if the testCaseLog post is deemed as a fail

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Assume;
 import se.claremont.autotest.common.logging.*;
+import se.claremont.autotest.common.logging.logmessage.LogMessage;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterPureTextBasedLogFile;
 import se.claremont.autotest.common.support.ApplicationManager;
@@ -325,6 +326,10 @@ public class TestCase {
      */
     public void log(LogLevel logLevel, String message){
         testCaseLog.log(logLevel, message);
+    }
+
+    public void log(LogLevel logLevel, LogMessage logMessage){
+        testCaseLog.log(logLevel, logMessage);
     }
 
     /**

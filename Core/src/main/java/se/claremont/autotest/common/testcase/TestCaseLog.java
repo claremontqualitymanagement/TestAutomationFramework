@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.logging.logmessage.LogMessage;
+import se.claremont.autotest.common.logging.logmessage.LogMessagePartType;
+import se.claremont.autotest.common.logging.logmessage.TextLogMessagePart;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testrun.TestRun;
 
@@ -137,6 +140,25 @@ public class TestCaseLog {
         outputLogPost(logPost);
         logPosts.add(logPost);
         addKnownErrorSuggestionIfApplicable(logLevel, message);
+    }
+
+    public void log(LogLevel logLevel, LogMessage logMessage){
+        if(logMessage == null) logMessage = new LogMessage(new LogMessagePartType[] {new TextLogMessagePart("[null]")});
+        String testStep = "Framework actions";
+        String testStepClassName = "Framework actions";
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        for(int i= 0; i < stackTraceElements.length; i++){
+            if(stackTraceElements[i].getMethodName().equals(testCaseName)){
+                testStep = stackTraceElements[i-1].getMethodName();
+                testStepClassName = stackTraceElements[i-1].getClassName();
+            }
+        }
+        LogPost logPost = new LogPost(logLevel, logMessage.toString(), logMessage.toHtml(), testCaseName, testStep, testStepClassName);
+        outputLogPost(logPost);
+        logger.debug( logPost.toString() );
+        logPosts.add(logPost);
+        addKnownErrorSuggestionIfApplicable(logLevel, logMessage.toString());
+
     }
 
     /**
