@@ -7,6 +7,8 @@ import org.junit.Test;
 import se.claremont.autotest.common.testset.TestSet;
 
 /**
+ * Test class for checkning broken links
+ *
  * Created by jordam on 2017-03-31.
  */
 public class BrokenLinkCheckerTest extends TestSet {
