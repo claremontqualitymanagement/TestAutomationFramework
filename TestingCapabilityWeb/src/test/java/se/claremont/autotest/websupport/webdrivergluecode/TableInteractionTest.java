@@ -2,8 +2,9 @@ package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.junit.*;
 import org.junit.rules.TestName;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
@@ -24,7 +25,7 @@ public class TableInteractionTest extends TestSet {
 
     @BeforeClass
     public static void classSetup(){
-        TestRun.setSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
+        //TestRun.setSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
     }
 
     @Before
@@ -45,12 +46,13 @@ public class TableInteractionTest extends TestSet {
     }
 
     @Test
-    @Ignore
     /*
       This test case tries reading from a table that at first is not displayed.
      */
     public void delayedTableShouldBeWaitedFor(){
-        WebInteractionMethods web = new WebInteractionMethods(currentTestCase);
+        HtmlUnitDriver driver = new HtmlUnitDriver();
+        TestCase testCase = new TestCase();
+        WebInteractionMethods web = new WebInteractionMethods(testCase, driver);
         web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("delayTest.html"));
         DomElement table = new DomElement("table", DomElement.IdentificationType.BY_ID);
         List<String> headlines = new ArrayList<>();
@@ -61,6 +63,8 @@ public class TableInteractionTest extends TestSet {
         web.verifyTableHeadline(table, "Headline2");
         web.verifyTableRow(table, "Headline1:Row 2 headline1", CellMatchingType.EXACT_MATCH);
         web.makeSureDriverIsClosed();
+        testCase.evaluateResultStatus();
+        Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.PASSED));
     }
 
 }

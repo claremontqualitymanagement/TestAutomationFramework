@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Created by jordam on 2016-08-17.
  */
 @SuppressWarnings("WeakerAccess")
-@JsonIgnoreProperties({"reported", "reporters", "processesRunningAtTestCaseStart", "pathToHtmlLog"})
+@JsonIgnoreProperties({"reported", "reporters", "processesRunningAtTestCaseStart", "pathToHtmlLog", "currentTestStepName"})
 public class TestCase {
     @JsonProperty public TestCaseLog testCaseLog;
     @JsonProperty public String testName;

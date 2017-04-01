@@ -1,4 +1,4 @@
-package se.claremont.autotest.websupport;
+package se.claremont.autotest.websupport.brokenlinkcheck;
 
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;

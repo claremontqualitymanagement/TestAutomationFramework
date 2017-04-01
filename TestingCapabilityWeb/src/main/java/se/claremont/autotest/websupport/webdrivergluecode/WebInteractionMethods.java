@@ -8,7 +8,6 @@ import se.claremont.autotest.common.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
-import se.claremont.autotest.common.reporting.UxColors;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
@@ -18,8 +17,9 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
 import se.claremont.autotest.websupport.DomElement;
-import se.claremont.autotest.websupport.LinkCheck;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
+import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
+import se.claremont.autotest.websupport.brokenlinkcheck.LinkCheck;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.imageio.ImageIO;
@@ -208,76 +208,14 @@ public class WebInteractionMethods implements GuiDriver {
         WebPageCodeConstructor.ConstructWebPageCode(driver, outputPilePath);
     }
 
-    /**
-     * Checks current page for broken links and reports results to log as verifications.
-     */
-    public void reportBrokenLinks(){
-        log(LogLevel.DEBUG, "Initiating a check for broken links on current page (URL: '" + driver.getCurrentUrl() + "').");
-        long startTime = System.currentTimeMillis();
-        ArrayList<String[]> resultsTableRows = new ArrayList<>();
-        StringBuilder htmlResults = new StringBuilder();
-        StringBuilder textResults = new StringBuilder();
-        List<WebElement> links = driver.findElements(By.xpath("//a"));
-        List<Thread> linkCheckingThreads = new ArrayList<>();
-        for(WebElement link : links){
-            if(link == null)continue;
-            if(!link.isDisplayed())continue;
-            Thread linkCheck = new Thread(new LinkCheck(resultsTableRows, link.getAttribute("href")));
-            //Thread linkCheck = new Thread(new LinkCheck(testCase, link.getAttribute("href")));
-            linkCheckingThreads.add(linkCheck);
-            linkCheck.start();
-        }
+    public void reportBrokenLinksOnCurrentPage(){
+        BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, driver);
+        brokenLinkReporter.reportBrokenLinks(true);
+    }
 
-        //Code below for waiting for all threads to finish due to log timing issues
-        //noinspection ForLoopReplaceableByForEach
-        for(int i = 0; i < linkCheckingThreads.size(); i++)
-            try {
-                linkCheckingThreads.get(i).join();
-            } catch (InterruptedException e) {
-                log(LogLevel.FRAMEWORK_ERROR, "Problems with checking links on page. Error: " + e.getMessage());
-            }
-        htmlResults.append("<div class=\"linktestresults\">");
-        htmlResults.append("<style type=\"text/css\" scoped>");
-        htmlResults.append("  linkcheckresultstable  { border: 1px solid " + UxColors.DARK_GREY + "; }");
-        htmlResults.append("  tr.linkcheckheadlines { font-weight: bold; text-align: left; }");
-        htmlResults.append("  tr.linkcheckpassed { color: " + UxColors.GREEN + "; }");
-        htmlResults.append("  tr.linkcheckproblem { color: " + UxColors.RED + "; font-weight: bold; }");
-        htmlResults.append("  tr.linkcheckfail { color: " + UxColors.RED + "; font-weight: bold; }");
-        htmlResults.append("  td.linkcheckresponsetime { color: " + UxColors.MID_GREY + "; text-align: right; }");
-        htmlResults.append("</style>");
-        htmlResults.append("Checking for broken links on current page. Current URL: '").append(driver.getCurrentUrl()).append("'<br>");
-        textResults.append(System.lineSeparator()).append("Checking for broken links on current page. Current URL: '").append(driver.getCurrentUrl()).append("'").append(System.lineSeparator());
-        htmlResults.append("A total of " + resultsTableRows.size() + " links were found on page. Results listing:<br>");
-        textResults.append("A total of " + resultsTableRows.size() + " links were found on page. Results listing:").append(System.lineSeparator());
-        htmlResults.append("<table class=\"linkcheckresultstable\"><tr class=\"linkcheckheadlines\"><th>Link</th><th>Response<br>code</th><th>Response<br>time (ms)</th><th>Comment</th></tr>");
-        LogLevel logLevel = LogLevel.VERIFICATION_PASSED;
-        for(String[] linkresults : resultsTableRows){
-            String linkUrl = linkresults[0];
-            String responseCode = linkresults[1];
-            String responseTime = linkresults[2];
-            String comment = linkresults[3];
-            String rowClass = "linkcheckresultrow";
-            if(responseCode != null && (responseCode.startsWith("2") || responseCode.startsWith("3"))){
-                rowClass = "linkcheckpassed";
-                if(comment == null) comment = "Ok";
-            } else if (responseCode == null || responseCode == "null"){
-                rowClass = "linkcheckproblem";
-                if(comment == null) comment = "Problems checking link";
-                if(logLevel != LogLevel.VERIFICATION_FAILED) logLevel = LogLevel.VERIFICATION_PROBLEM;
-            } else {
-                rowClass = "linkcheckfail";
-                if(comment == null) comment = "Link fail";
-                logLevel = LogLevel.VERIFICATION_FAILED;
-             }
-            htmlResults.append("<tr class=\"" + rowClass + "\"><td class=\"linkcheckurl\">" + linkUrl + "</td><td class=\"linkcheckresponsecode\">" + responseCode + "</td><td class=\"linkcheckresponsetime\">" + responseTime + "</td><td class=\"linkcheckcomment\">" + comment + "</td></tr>");
-            textResults.append("URL: '" + linkUrl + "' => " + responseCode + " (" + responseTime + " ms) - " + comment + "").append(System.lineSeparator());
-        }
-        htmlResults.append("</table>");
-        textResults.append("Total verification time for link checks was " + (System.currentTimeMillis() - startTime) + " milliseconds.").append(System.lineSeparator());
-        htmlResults.append("<br>Total verification time for link checks was " + (System.currentTimeMillis() - startTime) + " milliseconds.<br><br>");
-        htmlResults.append("</div>");
-        testCase.logDifferentlyToTextLogAndHtmlLog(logLevel, textResults.toString(), htmlResults.toString());
-        log(LogLevel.DEBUG, "Performed a check for broken links.");
+    public void reportBrokenLinksOnCurrentPage_IncludeAllLinksAlsoNonDisplayedLinks(){
+        BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, driver);
+        brokenLinkReporter.reportBrokenLinks(false);
     }
 
     /**
@@ -1652,14 +1590,16 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
-    public void executeJavascript(String script){
+    public Object executeJavascript(String script){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
+        Object returnObject = null;
         if (driver instanceof JavascriptExecutor) {
             try {
-                ((JavascriptExecutor)driver).executeScript(script);
+                JavascriptExecutor javascriptExecutor = ((JavascriptExecutor)driver);
+                returnObject = javascriptExecutor.executeScript(script);
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED,
                         "Executed the javascript '" + script + "'.",
                         "Executed the javascript:" + StringManagement.htmlContentToDisplayableHtmlCode(script));
@@ -1675,7 +1615,7 @@ public class WebInteractionMethods implements GuiDriver {
                     "Attempted executing javascript, but browser type driver does not seem to be compatible. Javascript that did not run below:" + SupportMethods.LF + StringManagement.htmlContentToDisplayableHtmlCode(script));
             saveHtmlContentOfCurrentPage();
         }
-
+        return returnObject;
     }
 
 

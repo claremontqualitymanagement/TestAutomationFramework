@@ -6,6 +6,6 @@ package se.claremont.autotest.websupport.webdrivergluecode;
 public class TestActionsForBrokenLinkChecker {
 
     public void checkBrokenLinks(WebInteractionMethods web){
-        web.reportBrokenLinks();
+        web.reportBrokenLinksOnCurrentPage();
     }
 }
