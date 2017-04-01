@@ -190,6 +190,22 @@ public class RestSupport {
         return responseCode;
     }
 
+    /**
+     * Get the response code from the response of a GET request to a REST service.
+     *
+     * @param url The url of the REST service
+     * @return Return the response code of the request as a string.
+     */
+
+    public String responseCodeFromGetRequestWithoutLogging(String url){
+        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestResponse restResponse = restGetRequest.execute(client);
+        String responseCode = null;
+        if(restResponse != null) {
+            responseCode = restResponse.responseCode;
+        }
+        return responseCode;
+    }
 
     /**
      * Get the response body from the response of a GET request to a REST service.

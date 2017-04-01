@@ -124,6 +124,19 @@ public class TestCaseLog {
         addKnownErrorSuggestionIfApplicable(logLevel, message);
     }
 
+    public static String getCurrentTestStepName(String testCaseName){
+        String testStepClassName = "Framework actions";
+        String testStep = "Framework actions";
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        for(int i= 0; i < stackTraceElements.length; i++){
+            if(stackTraceElements[i].getMethodName().equals(testCaseName)){
+                testStep = stackTraceElements[i-1].getMethodName();
+                testStepClassName = stackTraceElements[i-1].getClassName();
+            }
+        }
+        return testStep;
+    }
+
     /**
      * Writes a testCaseLog post to the test case testCaseLog
      *

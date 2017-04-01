@@ -4,6 +4,8 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.restsupport.RestSupport;
 
+import java.util.ArrayList;
+
 /**
  * Checks a link to see if it is broken.
  *
@@ -13,41 +15,48 @@ import se.claremont.autotest.restsupport.RestSupport;
 public class LinkCheck implements Runnable{
     private final String link;
     private final TestCase testCase;
+    private final String testStepName;
+    private final ArrayList<String[]> tableRows;
 
     public LinkCheck(TestCase testCase, String link){
         this.link = link;
         this.testCase = testCase;
+        this.testStepName = testCase.getCurrentTestStepName();
+        System.out.println(this.testStepName);
+        this.tableRows = null;
+    }
+
+    public LinkCheck(ArrayList<String[]> tableRows, String link){
+        this.link = link;
+        this.testCase = null;
+        this.testStepName = null;
+        this.tableRows = tableRows;
     }
 
     private void log(LogLevel logLevel, String message){
-        testCase.testCaseLog.log(logLevel, message, message, testCase.testName, "reportBrokenLinks", "WebInteractionMethods/" + testCase.testSetName);
+        //testCase.testCaseLog.log(logLevel, message);
+        testCase.testCaseLog.log(logLevel, message, message, testCase.testName, testStepName, "WebInteractionMethods/" + testCase.testSetName);
     }
 
     @Override
     public void run() {
         String responseCode = null;
+        String[] results = new String[4];
+        results[0] = link; // 0 is link
         long startTime = System.currentTimeMillis();
         try {
             if(link.toLowerCase().startsWith("mailto:") && link.contains("@") && link.contains(".")){
-                log(LogLevel.INFO, "Reference to mail address (MailTo:) not checked for validity. Reference: '" + link + "'.");
+                results[2] = String.valueOf(System.currentTimeMillis() - startTime); //2 is execution time
+                results[3] = "Mail address. Skipped."; //3 is comment
                 return;
             }
-            responseCode = new RestSupport(testCase).responseCodeFromGetRequest(link);
+            responseCode = new RestSupport(testCase).responseCodeFromGetRequestWithoutLogging(link);
         } catch (Exception e) {
-            try {
-                log(LogLevel.VERIFICATION_PROBLEM, "Could not verify link '" + link + "' (response took " + (System.currentTimeMillis() - startTime)  + " milliseconds). Error: " + e.getMessage());
-            } catch (Exception e1){
-                log(LogLevel.FRAMEWORK_ERROR, "Could not verify link '" + link + "'. Error: " + e.getMessage());
-            }
+            results[3] = "Error: " + e.getMessage(); //3 is comment
         }
-        if(responseCode != null && (responseCode.startsWith("2") || responseCode.startsWith("3"))){
-            log(LogLevel.VERIFICATION_PASSED, "Link '" + link + "' is ok (response took " + (System.currentTimeMillis() - startTime) + " milliseconds). Response code '" + responseCode + "'");
-        } else if(responseCode == null){
-            log(LogLevel.VERIFICATION_PROBLEM, "No response at all for link '" + link + "'.");
-        } else{
-            log(LogLevel.VERIFICATION_FAILED, "Link '" + link + "' was broken (response took " + (System.currentTimeMillis() - startTime) + " milliseconds). Response code '" + responseCode + "'.");
-        }
-
+        results[1] = String.valueOf(responseCode); //1 is response code
+        results[2] = String.valueOf(System.currentTimeMillis() - startTime); //2 is execution time
+        tableRows.add(results);
     }
 
 }

@@ -328,6 +328,10 @@ public class TestCase {
         testCaseLog.log(logLevel, message);
     }
 
+    public String getCurrentTestStepName(){
+        return TestCaseLog.getCurrentTestStepName(testName);
+    }
+
     public void log(LogLevel logLevel, LogMessage logMessage){
         testCaseLog.log(logLevel, logMessage);
     }
