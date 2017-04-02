@@ -437,7 +437,7 @@ public class HtmlSummaryReport {
         bar.append("            <tr>").append(LF);
         if(successfulTestCases > 0){
             bar.append("              <td class=\"resultsgraphpassed\">").append(yippieTextIfNoErrors()).append("</td>").append(LF);
-            resultsBarStyleInfo += "      td.resultsgraphpassed { background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
+            resultsBarStyleInfo += "      td.resultsgraphpassed { font-style: italic; font-weight: bold; text-align: center; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
         }
         if(testCasesWithOnlyKnownErrors > 0){
             bar.append("              <td class=\"resultsgraphwarning\"></td>").append(LF);

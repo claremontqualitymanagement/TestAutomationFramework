@@ -172,7 +172,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width:90%; margin-left: 2%; margin-top: 1%; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
                 "      h1                      { font-size:24px; }" + LF +
-                "      img.toplogo             { width: 30%; }" + LF +
+                "      img.toplogo             { width: 20%; }" + LF +
                 "      h2                      { font-size:20px; }" + LF +
                 "      .ui-accordion .ui-accordion-content  { padding:0px; }" + LF +
                 "      table                   { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
