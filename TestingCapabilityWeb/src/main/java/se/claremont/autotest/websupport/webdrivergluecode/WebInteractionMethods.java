@@ -974,7 +974,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param guiElement The GUI element to find
      */
-    public void verifyObjectExistence(GuiElement guiElement){
+    public void verifyElementExistence(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         if(getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds) == null){
             log(LogLevel.VERIFICATION_FAILED, "Object " + domElement.LogIdentification() + " was expected to be present but could not be identified.");
@@ -988,11 +988,33 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Checks if the given object exist in the HTML. Compare with verifyObjectIsDisplayed, that also checks if the element is visible in the GUI.
+     *
+     * @param guiElement The GUI element to find
+     * @deprecated Use {@link #verifyElementExistence(GuiElement)} ()} instead. Altered for terminology standardization.
+     */
+    @Deprecated
+    public void verifyObjectExistence(GuiElement guiElement){
+        verifyElementExistence(guiElement);
+    }
+
+    /**
+     * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
+     *
+     * @param guiElement The GUI element to find
+     * @deprecated Use {@link #verifyElementIsNotDisplayed(GuiElement)} ()} instead. Altered for terminology standardization.
+     */
+    @Deprecated
+    public void verifyObjectIsNotDisplayed(GuiElement guiElement){
+        verifyElementIsNotDisplayed(guiElement);
+    }
+
+    /**
      * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
      */
-    public void verifyObjectIsNotDisplayed(GuiElement guiElement){
+    public void verifyElementIsNotDisplayed(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         long startTime = System.currentTimeMillis();
         WebElement webElement = getRuntimeElementWithoutLogging(domElement);
@@ -1023,8 +1045,21 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param guiElement The GUI element to find
      * @param timeoutInSeconds The time to wait for object disappearance.
+     * @deprecated Use {@link #verifyElementIsNotDisplayedWithTimeout(GuiElement, int)} } instead. Altered for terminology standardization.
      */
+    @Deprecated
     public void verifyObjectIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
+        verifyElementIsNotDisplayedWithTimeout(guiElement, timeoutInSeconds);
+    }
+
+
+    /**
+     * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
+     *
+     * @param guiElement The GUI element to find
+     * @param timeoutInSeconds The time to wait for object disappearance.
+     */
+    public void verifyElementIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         DomElement domElement = (DomElement) guiElement;
         long startTime = System.currentTimeMillis();
         WebElement webElement = getRuntimeElementWithoutLogging(domElement);
@@ -1114,8 +1149,19 @@ public class WebInteractionMethods implements GuiDriver {
      * Checks if the given object is displayed in the HTML. Compare with verifyObjectExistence, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
+     * @deprecated Use {@link #verifyElementIsDisplayed(GuiElement)} instead. Altered for terminology standardization.
      */
+    @Deprecated
     public void verifyObjectIsDisplayed(GuiElement guiElement){
+        verifyElementIsDisplayed(guiElement);
+    }
+
+    /**
+     * Checks if the given object is displayed in the HTML. Compare with verifyObjectExistence, that checks if the element exist in the html.
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyElementIsDisplayed(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement == null){
@@ -1139,8 +1185,19 @@ public class WebInteractionMethods implements GuiDriver {
      * Checks if the given object exist in the GUI
      *
      * @param guiElement The GUI element to find
+     * @deprecated Use {@link #verifyElementDoesNotExist(GuiElement)} instead. Altered for terminology standardization.
      */
+    @Deprecated
     public void verifyObjectDoesNotExist(GuiElement guiElement){
+        verifyElementDoesNotExist(guiElement);
+    }
+
+    /**
+     * Checks if the given object exist in the GUI
+     *
+     * @param guiElement The GUI element to find
+     */
+    public void verifyElementDoesNotExist(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         if(webElement != null){
@@ -1159,8 +1216,20 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param guiElement The GUI element to find.
      * @param timeoutInSeconds The timeout to wait for object disappearance.
+     * @deprecated Use {@link #verifyElementDoesNotExistWithTimeout(GuiElement, int)} instead. Altered for terminology standardization.
      */
+    @Deprecated
     public void verifyObjectDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
+        verifyElementDoesNotExistWithTimeout(guiElement, timeoutInSeconds);
+    }
+
+    /**
+     * Checks if the given object exist in the GUI, within a timeout.
+     *
+     * @param guiElement The GUI element to find.
+     * @param timeoutInSeconds The timeout to wait for object disappearance.
+     */
+    public void verifyElementDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, timeoutInSeconds);
@@ -1180,8 +1249,20 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param guiElement The element to verify
      * @param timeoutInSeconds The number of seconds to keep retrying before calling it a failure
+     * @deprecated Use {@link #verifyElementExistenceWithTimeout(GuiElement, int)} instead. Altered for terminology standardization.
      */
+    @Deprecated
     public void verifyObjectExistenceWithTimeout(GuiElement guiElement, int timeoutInSeconds){
+        verifyElementExistenceWithTimeout(guiElement, timeoutInSeconds);
+    }
+
+    /**
+     * Checks if an element exist in the browser within a given timeout
+     *
+     * @param guiElement The element to verify
+     * @param timeoutInSeconds The number of seconds to keep retrying before calling it a failure
+     */
+    public void verifyElementExistenceWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         DomElement domElement = (DomElement) guiElement;
         if(getRuntimeElementWithTimeout(domElement, timeoutInSeconds) == null){
             log(LogLevel.VERIFICATION_PROBLEM, "Object " + domElement.LogIdentification() + " was expected to be present but was not identified.");
