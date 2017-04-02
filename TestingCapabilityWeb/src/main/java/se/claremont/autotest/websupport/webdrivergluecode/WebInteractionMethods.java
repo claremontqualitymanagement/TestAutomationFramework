@@ -1,6 +1,8 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Methods for interaction with web elements in a web page DOM. Utilizes Selenium WebDriver components.
@@ -44,6 +48,7 @@ public class WebInteractionMethods implements GuiDriver {
     private final TestCase testCase;
     @SuppressWarnings("CanBeFinal")
     private int standardTimeoutInSeconds = 5;
+
     private class NavigationError extends Exception{}
     private class TextEnteringError extends Exception{}
     private class BrowserClosingError extends Exception{}
@@ -265,14 +270,18 @@ public class WebInteractionMethods implements GuiDriver {
         boolean elementIsEnabled = false;
         while ((System.currentTimeMillis() - startTime) <= timeoutInSeconds * 1000){
             element = getRuntimeElementWithoutLogging(domElement);
-            if(element != null && element.isEnabled()){
-                elementIsEnabled = true;
-                if(element.isDisplayed()){
-                    log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled.");
-                    return element;
+            try{
+                if(element != null && element.isEnabled()){
+                    elementIsEnabled = true;
+                    if(element.isDisplayed()){
+                        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled.");
+                        return element;
+                    }
+                }else{
+                    wait(50);
                 }
-            }else{
-                wait(50);
+            }catch (Exception ignored){
+                //Stale element exception
             }
         }
         if(element == null){
@@ -1157,7 +1166,7 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
-     * Checks if the given object is displayed in the HTML. Compare with verifyObjectExistence, that checks if the element exist in the html.
+     * Checks if the given object is displayed in the HTML. Compare with {@link #verifyObjectExistence(GuiElement)}, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
      */
@@ -2753,6 +2762,151 @@ public class WebInteractionMethods implements GuiDriver {
             testCase.log(LogLevel.DEBUG, "Waited for page title to become '" + expectedPageTitle + "', but that did not happen within the " + timeoutInSeconds + " second timeout. Page title is '" + driver.getTitle() + "'.");
         }
         return success;
+    }
+
+    public boolean pageTitleMatchRegexWithTimeout(String expectedPageTitleRegEx, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000 && !SupportMethods.isRegexMatch(driver.getTitle(), expectedPageTitleRegEx)){
+            wait(100);
+        }
+        boolean success = SupportMethods.isRegexMatch(driver.getTitle(), expectedPageTitleRegEx);
+        long timeSpent = System.currentTimeMillis() - startTime;
+        if(timeSpent > timeoutInSeconds * 1000){
+            timeSpent = timeoutInSeconds * 1000;
+        }
+        if(success){
+            testCase.log(LogLevel.DEBUG, "Waited for page title to match regular expression pattern '" + expectedPageTitleRegEx + "', and that was identified after " + timeSpent + " milliseconds. ");
+        } else {
+            testCase.log(LogLevel.DEBUG, "Waited for page title to match regular expression pattern '" + expectedPageTitleRegEx+ "', but that did not happen within the " + timeoutInSeconds + " second timeout. Page title is '" + driver.getTitle() + "'.");
+        }
+        return success;
+    }
+
+    /**
+     * Logs severe entries in browser console, client log, and driver log to test case log. Clears browser console in the process.
+     */
+    public void verifyBrowserConsoleHasNoErrors_AlsoClearsBrowserConsole(){
+        List<LogEntry> logEntries = getLogEntriesFromBrowser(Level.SEVERE);
+        List<String> logEntriesAsStrings = new ArrayList<>();
+        for(LogEntry logEntry : logEntries){
+            logEntriesAsStrings.add(logEntry.toString());
+        }
+        if(logEntries.size() > 0){
+            log(LogLevel.VERIFICATION_FAILED, "Browser has the following log posts of at least log level 'severe' in console:" + System.lineSeparator() + String.join(System.lineSeparator(), logEntriesAsStrings));
+        } else {
+            log(LogLevel.VERIFICATION_PASSED, "Browser had no severe log posts in console.");
+        }
+    }
+
+    /**
+     * Logs entries in browser console to test case log. Clears browser console in the process.
+     */
+    public void logOutputFromBrowserConsole_AlsoClearsBrowserConsole(){
+        List<LogEntry> logEntries = getLogEntriesFromBrowser(null);
+        List<String> logEntriesAsStrings = new ArrayList<>();
+        for(LogEntry logEntry : logEntries){
+            logEntriesAsStrings.add(logEntry.toString());
+        }
+        if(logEntriesAsStrings.size() > 0){
+            log(LogLevel.INFO, "Browser had the following log posts in console:" + System.lineSeparator() + String.join(System.lineSeparator(), logEntriesAsStrings));
+        } else {
+            log(LogLevel.INFO, "Browser had an empty console output.");
+        }
+    }
+
+    private List<LogEntry> getLogEntriesFromBrowser(java.util.logging.Level lowestLogLevel){
+        List<LogEntry> logPosts = new ArrayList<>();
+        Set<String> logTypes = driver.manage().logs().getAvailableLogTypes();
+        for(String logType : logTypes){
+            LogEntries logEntries = driver.manage().logs().get(logType);
+            List<LogEntry> logEntryList =  logEntries.getAll();
+            for(LogEntry logEntry : logEntryList){
+                if(lowestLogLevel == null || logEntry.getLevel().intValue() >= lowestLogLevel.intValue()){
+                    logPosts.add(logEntry);
+                }
+            }
+        }
+        return logPosts;
+    }
+
+    public void verifyElementIsAnimated(DomElement domElement, int timeoutInSeconds) {
+        long startTime = System.currentTimeMillis();
+        waitForElementToAppear(domElement, timeoutInSeconds);
+        BufferedImage bufferedImage1 = grabElementImage(domElement);
+        BufferedImage bufferedImage2 = grabElementImage(domElement);
+        boolean elementHasFinishedRendering= !bufferedImagesAreEqual(bufferedImage1, bufferedImage2);
+        while(!elementHasFinishedRendering && (System.currentTimeMillis() - startTime) < timeoutInSeconds * 1000){
+            wait(50);
+            bufferedImage2 = grabElementImage(domElement);
+            elementHasFinishedRendering = !bufferedImagesAreEqual(bufferedImage1, bufferedImage2);
+            //Initial change detection to make sure element is fully rendered and animation is started
+        }
+        wait(50);
+        bufferedImage1 = grabElementImage(domElement);
+        boolean animationHasStarted = !bufferedImagesAreEqual(bufferedImage1, bufferedImage2);
+        while(!animationHasStarted && (System.currentTimeMillis() - startTime) < timeoutInSeconds * 1000){
+            wait(50);
+            bufferedImage1 = grabElementImage(domElement);
+            animationHasStarted = !bufferedImagesAreEqual(bufferedImage1, bufferedImage2);
+            //Second change detection to make sure element actually changes
+        }
+        if(animationHasStarted){
+            log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " is detected to be animated.");
+        } else {
+            log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " could not be detected to be animated within the timeout of " + timeoutInSeconds + " seconds.");
+            saveScreenshot(getRuntimeElementWithoutLogging(domElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+        }
+    }
+
+    private boolean bufferedImagesAreEqual(BufferedImage img1, BufferedImage img2) {
+        if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
+            for (int x = 0; x < img1.getWidth(); x++) {
+                for (int y = 0; y < img1.getHeight(); y++) {
+                    if (img1.getRGB(x, y) != img2.getRGB(x, y))
+                        return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private BufferedImage grabElementImage(DomElement domElement){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+
+        WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
+        if(webElement == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " when trying to capture an image of it.");
+            saveScreenshot(null);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+            return null;
+        }
+        File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        int ImageWidth = webElement.getSize().getWidth();
+        int ImageHeight = webElement.getSize().getHeight();
+        Point point = webElement.getLocation();
+        int xCoordinate = point.getX();
+        int yCoordinate = point.getY();
+
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(screen);
+        } catch (IOException e) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not read screenshot of full screenshot when trying to capture an image of " + domElement.LogIdentification() + ".");
+            return img;
+        }
+
+        //cut Image using height, width and x y coordinates parameters.
+        BufferedImage destination = img.getSubimage(xCoordinate, yCoordinate, ImageWidth, ImageHeight);
+        return destination;
     }
 
 
