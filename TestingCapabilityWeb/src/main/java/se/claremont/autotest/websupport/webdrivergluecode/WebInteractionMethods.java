@@ -2829,6 +2829,53 @@ public class WebInteractionMethods implements GuiDriver {
         return logPosts;
     }
 
+    /**
+     * Waits for the element image to stop changing.
+     * If change does not stop after timeout is reached a log message will be produced.
+     * Waiting for standard timeout.
+     *
+     * @param guiElement The element to wait for
+     * @return Returns true if animation of element stops within the timeout.
+     */
+    public boolean waitForElementToFinishAnimation(GuiElement guiElement){
+        DomElement domElement = null;
+        try{
+            domElement = (DomElement)guiElement;
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not convert GuiElement to DomElement.");
+            return false;
+        }
+        return waitForElementToFinishAnimation(domElement, standardTimeoutInSeconds);
+    }
+
+    /**
+     * Waits for the element image to stop changing. If change does not stop after timeout is reached a log message will be produced.
+     *
+     * @param domElement The element to wait for
+     * @param timeoutInSeconds How long to wait for the element to stop animate
+     * @return Returns true if animation of element stops within the timeout.
+     */
+    public boolean waitForElementToFinishAnimation(DomElement domElement, int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        waitForElementToAppear(domElement, timeoutInSeconds);
+        BufferedImage bufferedImage1 = grabElementImage(domElement);
+        wait(50);
+        BufferedImage bufferedImage2 = grabElementImage(domElement);
+        boolean animationDetected = !bufferedImagesAreEqual(bufferedImage1, bufferedImage2);
+        while(animationDetected && (System.currentTimeMillis() - startTime) < timeoutInSeconds * 1000){
+            bufferedImage1 = grabElementImage(domElement);
+            wait(50);
+            bufferedImage2 = grabElementImage(domElement);
+            animationDetected = !bufferedImagesAreEqual(bufferedImage1, bufferedImage2);
+        }
+        if(animationDetected){
+            log(LogLevel.EXECUTION_PROBLEM, "Waited " + timeoutInSeconds + " for element " + domElement.LogIdentification() + " to stop animation, but it didn't.");
+        } else {
+            log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds until animation of element " + domElement.LogIdentification() + " had stopped.");
+        }
+        return !animationDetected;
+    }
+
     public void verifyElementIsAnimated(DomElement domElement, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
         waitForElementToAppear(domElement, timeoutInSeconds);

@@ -39,6 +39,7 @@ public class BrokenLinkReporter {
 
     private void setLogLevel(){
         for(String[] linkresults : linkCheckResults){
+            if(linkresults == null)continue;
             String responseCode = linkresults[1];
             if(responseCode != null && (responseCode.startsWith("2") || responseCode.startsWith("3"))){
                 continue;
