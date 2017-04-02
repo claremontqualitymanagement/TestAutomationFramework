@@ -2513,7 +2513,22 @@ public class WebInteractionMethods implements GuiDriver {
                     if(webElements.size() == 0){
                         webElements.addAll(driver.findElements(By.xpath("//*[contains(text(), '" + recognitionString + "')]")));
                     }
-                }else {
+                } else if(element.identificationType == DomElement.IdentificationType.By_ATTRIBUTE_VALUE){
+                    if(!recognitionString.contains("=")){
+                        log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
+                                "for example 'href=http://myserver.com/mylink' or possibly 'href=\"http://myserver.com/mylink\"'." + System.lineSeparator() +
+                                "For element " + element.name + " the recognition string was '" + recognitionString + ".");
+                        continue;
+                    }
+                    String attributeName = recognitionString.split("=")[0];
+                    String attributeValue = recognitionString.substring(recognitionString.indexOf("=") + 1);
+                    if(attributeValue.startsWith("\"") && attributeValue.endsWith("\"")){
+                        attributeValue = attributeValue.substring(1, attributeValue.length()-1);
+                    } else if (attributeValue.startsWith("'") && attributeValue.endsWith("'")){
+                        attributeValue = attributeValue.substring(1, attributeValue.length()-1);
+                    }
+                    webElements.addAll(driver.findElements(By.xpath("//*[@" + attributeName + "='" + attributeValue +"']")));
+                } else {
                     log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
                     saveDesktopScreenshot();
                     saveHtmlContentOfCurrentPage();

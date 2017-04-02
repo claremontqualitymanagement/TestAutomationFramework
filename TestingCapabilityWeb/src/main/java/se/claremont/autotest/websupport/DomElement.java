@@ -32,7 +32,8 @@ public class DomElement implements GuiElement {
         BY_CLASS,
         BY_CSS,
         BY_NAME,
-        BY_VISIBLE_TEXT
+        BY_VISIBLE_TEXT,
+        By_ATTRIBUTE_VALUE
     }
 
     /**

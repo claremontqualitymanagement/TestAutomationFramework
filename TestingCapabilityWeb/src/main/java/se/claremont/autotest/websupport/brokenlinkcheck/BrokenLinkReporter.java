@@ -60,10 +60,14 @@ public class BrokenLinkReporter {
         List<Thread> linkCheckingThreads = new ArrayList<>();
         for(WebElement link : getAllLinksOnCurrentPage()){
             if(link == null)continue;
-            if(onlyDisplayedLinks && !link.isDisplayed())continue;
-            Thread linkCheck = new Thread(new LinkCheck(resultsTableRows, link.getAttribute("href")));
-            linkCheckingThreads.add(linkCheck);
-            linkCheck.start();
+            try{
+                if(onlyDisplayedLinks && !link.isDisplayed())continue;
+                Thread linkCheck = new Thread(new LinkCheck(resultsTableRows, link.getAttribute("href")));
+                linkCheckingThreads.add(linkCheck);
+                linkCheck.start();
+            }catch (Exception e){
+                System.out.println("Problems checking link: '" + link + "': " + e.toString());
+            }
         }
 
         //Code below for waiting for all threads to finish due to log timing issues

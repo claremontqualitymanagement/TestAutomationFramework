@@ -93,7 +93,13 @@ class WebPageCodeConstructor {
                 constructors.addConstructor(new Constructor(unusedMethodName(suggestedElementName), suggestedElementConstructorString));
             }
             else if(webElement.getText() != null && webElement.getText().length() > 0){
-                if(driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size() == 1){
+                List<WebElement> matchingElements = null;
+                try{
+                    matchingElements = driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]"));
+                }catch (Exception e){
+                    System.out.println("Problems matching elements for page contruction: " + e.toString());
+                }
+                if(matchingElements != null && matchingElements.size() == 1){
                     String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(webElement.getText()) + "_" + tagNameToElementSuffix(webElement.getTagName());
                     String suggestedElementConstructorString = "";
                     int numberOfElementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + webElement.getText() + "')]")).size();

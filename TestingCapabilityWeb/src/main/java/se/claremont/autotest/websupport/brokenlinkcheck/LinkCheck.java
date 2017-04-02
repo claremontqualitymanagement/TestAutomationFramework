@@ -40,23 +40,27 @@ public class LinkCheck implements Runnable{
 
     @Override
     public void run() {
-        String responseCode = null;
-        String[] results = new String[4];
-        results[0] = link; // 0 is link
-        long startTime = System.currentTimeMillis();
-        try {
-            if(link.toLowerCase().startsWith("mailto:") && link.contains("@") && link.contains(".")){
-                results[2] = String.valueOf(System.currentTimeMillis() - startTime); //2 is execution time
-                results[3] = "Mail address. Skipped."; //3 is comment
-                return;
+        try{
+            String responseCode = null;
+            String[] results = new String[4];
+            results[0] = link; // 0 is link
+            long startTime = System.currentTimeMillis();
+            try {
+                if(link.toLowerCase().startsWith("mailto:") && link.contains("@") && link.contains(".")){
+                    results[2] = String.valueOf(System.currentTimeMillis() - startTime); //2 is execution time
+                    results[3] = "Mail address. Skipped."; //3 is comment
+                    return;
+                }
+                responseCode = new RestSupport(testCase).responseCodeFromGetRequestWithoutLogging(link);
+            } catch (Exception e) {
+                results[3] = "Error: " + e.getMessage(); //3 is comment
             }
-            responseCode = new RestSupport(testCase).responseCodeFromGetRequestWithoutLogging(link);
-        } catch (Exception e) {
-            results[3] = "Error: " + e.getMessage(); //3 is comment
+            results[1] = String.valueOf(responseCode); //1 is response code
+            results[2] = String.valueOf(System.currentTimeMillis() - startTime); //2 is execution time
+            tableRows.add(results);
+        }catch (Exception e){
+            System.out.println("Problems with link '" + link + "': " + e.toString());
         }
-        results[1] = String.valueOf(responseCode); //1 is response code
-        results[2] = String.valueOf(System.currentTimeMillis() - startTime); //2 is execution time
-        tableRows.add(results);
     }
 
 }
