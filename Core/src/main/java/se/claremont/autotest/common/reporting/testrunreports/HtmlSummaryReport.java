@@ -38,6 +38,7 @@ public class HtmlSummaryReport {
     private String testCaseSummary = "";
     private final int barWidthInPixels = 400;
     private String resultsBarStyleInfo = "";
+    private StringBuilder html;
 
 
     /**
@@ -163,8 +164,8 @@ public class HtmlSummaryReport {
      * Produces the style section for the HTML HEAD section, to visually format the reportTestRun
      * @return HTML document style section as string
      */
-    private String htmlElementStyles(){
-        return LF +
+    private void addHtmlElementStyles(){
+        html.append(LF +
                 "    <style>" + LF +
                 "      #" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      body                  { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
@@ -196,7 +197,7 @@ public class HtmlSummaryReport {
                 "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":visited      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
                 "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":hover      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: underline; }" + LF +
                 resultsBarStyleInfo +
-                "    </style>" + LF + LF;
+                "    </style>" + LF + LF);
     }
 
     /**
@@ -213,35 +214,28 @@ public class HtmlSummaryReport {
      * @return HTML document as string
      */
     public String createReport(){
-        StringBuilder html = new StringBuilder();
         if(reportShouldBeWritten()){
+            html = new StringBuilder();
             resultBarHtml = resultsGraphBar(); //Must be created before CSS Style info. Used in statistics section
             html.append("<!DOCTYPE html>").append(LF);
             html.append("<html>").append(LF).append(LF);
-            html.append("  <HEAD>").append(LF).append(LF);
-            html.append("    <title>Test summary</title>").append(LF);
-            //html.append("    <link href=\"https://fonts.googleapis.com/css?family=Roboto:300\" rel=\"stylesheet\">").append(LF);
-            html.append("    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">").append(LF);
-            html.append("    <meta charset=\"UTF-8\">").append(LF);
-            html.append("    <meta name=\"description\" content=\"Summary result for test run\">").append(LF);
-            html.append(     htmlElementStyles());
-            html.append("  </HEAD>").append(LF).append(LF);
+            addHtmlHeadSection();
             html.append("  <body>").append(LF).append(LF);
             html.append("    <table id=\"").append(HtmlStyleNames.CONTENT.toString()).append("\">").append(LF).append(LF);
             html.append("      <tr>").append(LF);
             html.append("        <td>").append(LF).append(LF);
-            html.append(     htmlElementTitle());
-            html.append(     htmlElementStatistics());
-            html.append(     htmlElementNewErrorsGrouped());
-            html.append(     htmlElementEncounteredKnownErrors());
-            html.append(     htmlElementExecutedTestCasesStatusList());
-            html.append(     htmlElementSolvedKnownErrors());
-            html.append(     htmlElementSettings());
+            addHtmlElementTitle();
+            addHtmlElementStatistics();
+            addHtmlElementNewErrorsGrouped();
+            addHtmlElementEncounteredKnownErrors();
+            addHtmlElementExecutedTestCasesStatusList();
+            addHtmlElementSolvedKnownErrors();
+            addHtmlElementSettings();
             html.append("        </td>").append(LF);
             html.append("      </tr>").append(LF).append(LF);
             html.append("      <tr>").append(LF);
             html.append("        <td class=\"centered\">").append(LF);
-            html.append(     htmlElementCopyright());
+            addHtmlElementCopyright();
             html.append("        </td>").append(LF);
             html.append("      </tr>").append(LF).append(LF);
             html.append("    </table>").append(LF).append(LF);
@@ -251,24 +245,34 @@ public class HtmlSummaryReport {
         return html.toString();
     }
 
-    private String htmlElementSettings(){
-        return "          <h3 id=\"settingsheading\">Test run settings</h2>" + LF +
-                TestRun.settings.toHtmlTable();
+    private void addHtmlHeadSection(){
+        html.append("  <head>").append(LF).append(LF);
+        html.append("    <title>Test summary</title>").append(LF);
+        html.append("    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">").append(LF);
+        html.append("    <meta charset=\"UTF-8\">").append(LF);
+        html.append("    <meta name=\"description\" content=\"Summary result for test run\">").append(LF);
+        addHtmlElementStyles();
+        html.append("  </head>").append(LF).append(LF);
+    }
+
+    private void addHtmlElementSettings(){
+        html.append("          <h3 id=\"settingsheading\">Test run settings</h2>" + LF +
+                TestRun.settings.toHtmlTable());
     }
 
     /**
      * Produces the title section of the HTML page the summary reportTestRun consists of.
      * @return HTML section as string
      */
-    private String htmlElementTitle(){
-        return "          <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
+    private void addHtmlElementTitle(){
+        html.append("          <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "          <h1>Test run report</h1>" + LF +
                 "          <table class=\"rundetails\">" + LF +
                 "             <tr><td>Run name: </td><td>" + TestRun.testRunName + "</td></tr>" + LF +
                 "             <tr><td>Start time: </td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.startTime) + "</td></tr>" + LF +
                 "             <tr><td>Stop time :</td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(getStopTime()) + "</td></tr>" + LF +
                 "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.startTime, getStopTime()) + "</td></tr>" + LF +
-                "          </table>" + LF;
+                "          </table>" + LF);
     }
 
     private Date getStopTime(){
@@ -283,8 +287,7 @@ public class HtmlSummaryReport {
      * Produces the statistics section of the summary reportTestRun
      * @return HTML section as string
      */
-    private String htmlElementStatistics(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlElementStatistics(){
         html.append("          <h2>Statistics</h2>").append(LF);
         html.append(resultBarHtml).append(LF);
         html.append("          <br>").append(LF).append(LF);
@@ -307,30 +310,26 @@ public class HtmlSummaryReport {
         }
         html.append("            <tr id=\"").append(HtmlStyleNames.STATISTICS_COUNT.toString()).append("\"><td><i>Total test case count</i></td><td><i>").append(numberOfTestCases()).append("</i></td></tr>").append(LF);
         html.append("          </table>").append(LF).append("<br>").append(LF);
-        return html.toString();
     }
 
     /**
      * Produces the HTML section for new errors encountered during a test run, grouped by similarity).
      * @return HTML section as string
      */
-    private String htmlElementNewErrorsGrouped(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlElementNewErrorsGrouped(){
         if(this.failedTestCasesWithNewDeviations + this.testCasesWithBothNewAndKnownErrors > 0){
             html.append("          <div id=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(HtmlStyleNames.NEW_ERRORS.toString())).append("\">").append(LF);
             html.append("          <h2>New deviations</h2>").append(LF);
             html.append(       newErrors());
             html.append("          </div>").append(LF).append("<br>").append(LF);
         }
-        return html.toString();
     }
 
     /**
      * Produces the HTML section for known errors
      * @return HTML section as string
      */
-    private String htmlElementEncounteredKnownErrors(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlElementEncounteredKnownErrors(){
         if(encounteredKnownErrorInfos.size() > 0){
             html.append("          <div id=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(HtmlStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
             html.append("            <h2>Encountered known errors</h2>").append(LF);
@@ -361,15 +360,13 @@ public class HtmlSummaryReport {
             html.append("            <br>").append(LF);
             html.append("          </div>").append(LF).append("<br>").append(LF);
         }
-        return html.toString();
     }
 
     /**
      * Produces the HTML section for known errors not encountered
      * @return HTML section as string
      */
-    private String htmlElementSolvedKnownErrors(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlElementSolvedKnownErrors(){
         if(solvedKnownErrorsList.size() > 0){
             ArrayList<String> displayableKnownErrors = new ArrayList<>();
             for(KnownError knownError : solvedKnownErrorsList){
@@ -386,7 +383,6 @@ public class HtmlSummaryReport {
             html.append("          <br>").append(LF);
             html.append("        </div>").append(LF).append("<br>").append(LF);
         }
-        return html.toString();
     }
 
 
@@ -396,28 +392,28 @@ public class HtmlSummaryReport {
      * results each. Includes links to individual test case logs.
      * @return HTML section as string
      */
-    private String htmlElementExecutedTestCasesStatusList(){
-        return "          <h2>Test case summary</h2>" + LF +
+    private void addHtmlElementExecutedTestCasesStatusList(){
+        html.append("          <h2>Test case summary</h2>" + LF +
                 "          <table class=\"" + HtmlStyleNames.STRIPED_ROWS.toString() + " " + HtmlStyleNames.HOVERABLE.toString() + "\" id=\"" + HtmlStyleNames.EXECUTED_TEST_CASES.toString() + "\">" + LF +
                 "            <tr class=\"testcasesummaryheadline\"><th>Test set</th><th>Test case name</th><th>Test status</th><th>Log</th></tr>" + LF +
                 "      " + testCaseSummary +
-                "          </table>" + LF + "<br>" + LF;
+                "          </table>" + LF + "<br>" + LF);
     }
 
     /**
      * Produces a document footer for the summary reportTestRun.
      * @return HTML section for footer
      */
-    private String htmlElementCopyright(){
+    private void addHtmlElementCopyright(){
         //noinspection deprecation
-        return "<br><br>" +
+        html.append("<br><br>" +
                 "          <table width=\"100%\">" + LF +
                 "            <tr>" + LF +
                 "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
                 "            </tr><tr>" + LF +
                 "              <td width=\"100%\" class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + ".</td>" + LF +
                 "            </tr>" + LF +
-                "          </table>" + LF;
+                "          </table>" + LF);
     }
 
 
@@ -437,7 +433,7 @@ public class HtmlSummaryReport {
         bar.append("            <tr>").append(LF);
         if(successfulTestCases > 0){
             bar.append("              <td class=\"resultsgraphpassed\">").append(yippieTextIfNoErrors()).append("</td>").append(LF);
-            resultsBarStyleInfo += "      td.resultsgraphpassed { font-style: italic; font-weight: bold; text-align: center; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
+            resultsBarStyleInfo += "      td.resultsgraphpassed { color: " + UxColors.WHITE.getHtmlColorCode() + "; font-style: italic; font-weight: bold; text-align: center; background-color: " + UxColors.GREEN.getHtmlColorCode() + "; height: 15px; width: " + (this.successfulTestCases * 100) / numberOfTestCases() + "%; }" + LF;
         }
         if(testCasesWithOnlyKnownErrors > 0){
             bar.append("              <td class=\"resultsgraphwarning\"></td>").append(LF);

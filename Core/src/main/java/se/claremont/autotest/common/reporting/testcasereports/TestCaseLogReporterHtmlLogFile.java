@@ -32,6 +32,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
     private final TestCase testCase;
     private Date runEndTime;
+    private StringBuilder sb = new StringBuilder();
 
     /**
      * Compiles and writes the test case HTML based execution testCaseLog.
@@ -89,12 +90,13 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     public String asHtmlSection(){
         testCase.log(LogLevel.DEBUG, "Creating HTML log content.");
         validateTestRunEndTime();
-        return htmlSectionBodyHeader() +
-                htmlSectionEncounteredKnownErrors() +
-                htmlSectionTestCaseData() +
-                htmlSectionNonEncounteredKnownTestCaseErrors() +
-                htmlSectionTestCaseLogEntries() +
-                footer();
+        addHtmlSectionBodyHeader();
+        addHtmlSectionEncounteredKnownErrors();
+        addHtmlSectionTestCaseData();
+        addHtmlSectionNonEncounteredKnownTestCaseErrors();
+        addHtmlSectionTestCaseLogEntries();
+        addFooter();
+        return sb.toString();
     }
 
     /**
@@ -142,10 +144,10 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     /**
-     * Produces a document footer for the summary reportTestRun.
-     * @return HTML section for footer
+     * Produces a document addFooter for the summary reportTestRun.
+     * @return HTML section for addFooter
      */
-    private String footer(){
+    private void addFooter(){
         String versionInfo = "";
         String version = TafVersionGetter.tafVersion();
         if(version != null){
@@ -153,14 +155,14 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
             versionInfo += "TAF version " + version + ".</a>";
         }
         //noinspection deprecation
-        return "<br><br>" +
-                "          <table class=\"footer\" width=\"100%\">" + LF +
+        sb.append("<br><br>" +
+                "          <table class=\"addFooter\" width=\"100%\">" + LF +
                 "            <tr>" + LF +
                 "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
                 "            </tr><tr>" + LF +
                 "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0 license</a>. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "." + versionInfo + "</td>" + LF +
                 "            </tr>" + LF +
-                "          </table>" + LF;
+                "          </table>" + LF);
     }
 
 
@@ -176,7 +178,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      h2                      { font-size:20px; }" + LF +
                 "      .ui-accordion .ui-accordion-content  { padding:0px; }" + LF +
                 "      table                   { border: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
-                "      table.footer            { border: 0px solid " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
+                "      table.addFooter            { border: 0px solid " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "      .pagetitle              { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; font-size:24px; font-weight: bold; }" + LF +
                 TestCaseLogSection.htmlStyleInformation() +
                 HtmlStyles.tableVerificationStyles() +
@@ -217,7 +219,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "                             padding-bottom: 20px!ie7;"  + LF +
                 "                             max - height: 600px;" + LF +
                 "      }" + LF +
-                "      .footer                  { border: 0px none; width: 100%; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; align: center; }" + LF +
+                "      .addFooter                  { border: 0px none; width: 100%; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; align: center; }" + LF +
                 htmlStyleHelpOverlay();
 
     }
@@ -249,9 +251,8 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
              "            }" + LF;
     }
 
-    private String htmlSectionBodyHeader(){
-        validateTestRunEndTime();
-        return "    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
+    private void addHtmlSectionBodyHeader(){
+        sb.append("    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
                 "      <img src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\" alt=\"logo\" class=\"toplogo\">" + LF + "<br>" + LF + "<br>" + LF +
                 //"      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\"></a>" + LF +
                 "      <br><span class=\"pagetitle\">TAF test case results log</span>" + LF +
@@ -273,7 +274,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "         Number of non-verifying execution steps performed: " + numberOfExecitionStepsPerformed() + LF +
                 "      </p>" + LF +
                 "      <br>" + LF +
-                "    </div>" + LF + LF;
+                "    </div>" + LF + LF);
     }
 
     private int numberOfVerificationsPerformed() {
@@ -332,39 +333,36 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
     }
 
-    private String htmlSectionTestCaseLogEntries(){
-        return "<br>" + LF +
+    private void addHtmlSectionTestCaseLogEntries(){
+        sb.append("<br>" + LF +
                 "      <h2>Test case log</h2>" + LF +
                 "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\">Show verbose debugging information</label>" + LF +
                 "     <div id=\"logpostlist\">" + LF + LF +
                 testStepLogPostSections(testCase) + LF +
                 "     </div>" + LF +
-                "     <br><br>" + LF;
+                "     <br><br>" + LF);
     }
 
-    private String htmlSectionTestCaseData(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlSectionTestCaseData(){
         if(testCase.testCaseData.testCaseDataList.size() > 0){
-            html.append("      <div id=\"testdata\" class=\"testcasedata expandable\" >").append(LF);
-            html.append("         <h2>Test case data</h2>").append(LF);
-            html.append("         <div id=\"expandable_content\">").append(LF);
-            html.append("         <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
+            sb.append("      <div id=\"testdata\" class=\"testcasedata expandable\" >").append(LF);
+            sb.append("         <h2>Test case data</h2>").append(LF);
+            sb.append("         <div id=\"expandable_content\">").append(LF);
+            sb.append("         <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
             for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){
-                html.append("           <tr><td class=\"").
+                sb.append("           <tr><td class=\"").
                         append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
                         append("\">").append(valuePair.parameter).append("</td><td class=\"").
                         append(enumMemberNameToLower(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_VALUE.toString()))).
                         append("\">").append(valuePair.value).append("</tr>").append(LF);
             }
-            html.append("         </table>").append(LF);
-            html.append("         </div>").append(LF);
-            html.append("      </div>").append(LF).append(LF);
+            sb.append("         </table>").append(LF);
+            sb.append("         </div>").append(LF);
+            sb.append("      </div>").append(LF).append(LF);
         }
-        return html.toString();
     }
 
-    private String htmlSectionEncounteredKnownErrors(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlSectionEncounteredKnownErrors(){
         boolean knownErrorsEncountered = false;
         for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
             if(knownError.encountered()) {
@@ -381,28 +379,26 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
             }
         }
         if(knownErrorsEncountered){
-            html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
-            html.append("      <h2>Encountered known errors</h2>").append(LF);
-            html.append("      <table class=\"encounteredknownerrors\">").append(LF);
+            sb.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
+            sb.append("      <h2>Encountered known errors</h2>").append(LF);
+            sb.append("      <table class=\"encounteredknownerrors\">").append(LF);
             for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
                 if(knownError.encountered()){
-                    html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
+                    sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
                 }
             }
             for(KnownError knownError : testCase.testSetKnownErrors.knownErrors){
                 if(knownError.encountered()){
-                    html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
+                    sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
                 }
             }
-            html.append("      </table>").append(LF);
-            html.append("    </div>").append(LF).append("<br><br>").append(LF);
+            sb.append("      </table>").append(LF);
+            sb.append("    </div>").append(LF).append("<br><br>").append(LF);
         }
-        return html.toString();
     }
 
 
-    private String htmlSectionNonEncounteredKnownTestCaseErrors(){
-        StringBuilder html = new StringBuilder();
+    private void addHtmlSectionNonEncounteredKnownTestCaseErrors(){
         boolean hasKnownErrorsNotEncountered = false;
         for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
             if(!knownError.encountered()) {
@@ -411,19 +407,17 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
             }
         }
         if(hasKnownErrorsNotEncountered){
-            html.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS_NOT_ENCOUNTERED.toString())).append("\">").append(LF);
-            html.append("      <h2>Known test case errors that were not encountered (possibly fixed)</h2>").append(LF);
-            html.append("      <table>").append(LF);
+            sb.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS_NOT_ENCOUNTERED.toString())).append("\">").append(LF);
+            sb.append("      <h2>Known test case errors that were not encountered (possibly fixed)</h2>").append(LF);
+            sb.append("      <table>").append(LF);
             for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
                 if(!knownError.encountered()){
-                    html.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
+                    sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
                 }
             }
-            html.append("      </table>").append(LF);
-            html.append("    </div>").append(LF).append(LF);
+            sb.append("      </table>").append(LF);
+            sb.append("    </div>").append(LF).append(LF);
         }
-        return html.toString();
-
     }
 
     private String testStepLogPostSections(TestCase testCase){
