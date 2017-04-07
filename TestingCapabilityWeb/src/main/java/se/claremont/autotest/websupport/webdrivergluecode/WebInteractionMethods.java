@@ -2603,7 +2603,7 @@ public class WebInteractionMethods implements GuiDriver {
                     if(webElements.size() == 0){
                         webElements.addAll(driver.findElements(By.xpath("//*[contains(text(), '" + recognitionString + "')]")));
                     }
-                } else if(element.identificationType == DomElement.IdentificationType.By_ATTRIBUTE_VALUE){
+                } else if(element.identificationType == DomElement.IdentificationType.BY_ATTRIBUTE_VALUE){
                     if(!recognitionString.contains("=")){
                         log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
                                 "for example 'href=http://myserver.com/mylink' or possibly 'href=\"http://myserver.com/mylink\"'." + System.lineSeparator() +
@@ -2956,5 +2956,10 @@ public class WebInteractionMethods implements GuiDriver {
         return destination;
     }
 
+    public Integer getRuntimeElementMatchCount(DomElement domElement) {
+        if(domElement == null) return null;
+        List<WebElement> relevantWebElements = gatherRelevantElements(domElement);
+        return relevantWebElements.size();
+    }
 
 }

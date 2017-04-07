@@ -33,7 +33,7 @@ public class DomElement implements GuiElement {
         BY_CSS,
         BY_NAME,
         BY_VISIBLE_TEXT,
-        By_ATTRIBUTE_VALUE
+        BY_ATTRIBUTE_VALUE
     }
 
     /**
@@ -105,6 +105,5 @@ public class DomElement implements GuiElement {
     public String LogIdentification(){
         return name + " (declared in page class " + page + ")";
     }
-
 
 }

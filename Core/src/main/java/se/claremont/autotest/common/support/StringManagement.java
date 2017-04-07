@@ -78,11 +78,19 @@ public class StringManagement {
                 replace("Å", "A").
                 replace("Ä", "A").
                 replace("=", "").
+                replace("#", "").
+                replace("[", "").
+                replace("]", "").
+                replace("{", "").
+                replace("}", "").
+                replace("”", "").
+                replace("\"", "").
                 replace("@", "At").
                 replace("/", "_").
                 replace("(", "_").
                 replace(")", "_").
                 replace(";", "").
+                replace(System.lineSeparator(), "_").
                 replace("^", "_").
                 replace(":", "").
                 replace("__", "_").
