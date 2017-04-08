@@ -14,23 +14,26 @@ package se.claremont.autotest.common.logging;
  * DEVIATION_EXTRA_INFO is complimentary information for debugging purposes when a deviation from expected behavior occurs
  */
 public enum LogLevel{
-    DEBUG(0, false),
-    INFO(1, false),
-    VERIFICATION_PASSED(3, false),
-    VERIFICATION_PROBLEM(4, true),
-    VERIFICATION_FAILED(5, true),
-    EXECUTED(3, false),
-    EXECUTION_PROBLEM(6, true),
-    FRAMEWORK_ERROR(7, true),
-    DEVIATION_EXTRA_INFO(4, false);
+    DEBUG("Debug", 0, false),
+    INFO("Info", 1, false),
+    VERIFICATION_PASSED("Verification passed", 3, false),
+    VERIFICATION_PROBLEM("Verification problem", 4, true),
+    VERIFICATION_FAILED("Verification failed", 5, true),
+    EXECUTED("Executed", 3, false),
+    EXECUTION_PROBLEM("Execution problem", 6, true),
+    FRAMEWORK_ERROR("Framework error", 7, true),
+    DEVIATION_EXTRA_INFO("Deviation extra info", 4, false);
 
     private final int value;
     private final boolean isFail;
-    LogLevel(int value, boolean isFail) {
+    private final String friendlyName;
+    LogLevel(String friendlyName, int value, boolean isFail) {
         this.value = value;
         this.isFail = isFail;
+        this.friendlyName = friendlyName;
     }
 
+    public String toString(){ return friendlyName; }
     public int getValue() {
         return value;
     }

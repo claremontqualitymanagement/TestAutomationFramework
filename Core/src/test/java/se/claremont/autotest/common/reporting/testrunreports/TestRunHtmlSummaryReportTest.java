@@ -47,4 +47,217 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         System.out.println(htmlReport);
         Assert.assertFalse(htmlReport, htmlReport.contains("YIPPIE!"));
     }
-}
+
+    @Test
+    public void onlyMostRelevantLogRowsShownForErroneousTestCases(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("...(2 more"));
+        Assert.assertTrue(reportContent.contains("Failed4"));
+        Assert.assertFalse(reportContent.contains("Failed3"));
+        Assert.assertFalse(reportContent.contains("Failed2"));
+        Assert.assertFalse(reportContent.contains("Passed1"));
+        Assert.assertFalse(reportContent.contains("Passed3"));
+        Assert.assertFalse(reportContent.contains("Passed2"));
+        Assert.assertFalse(reportContent.contains("Passed5"));
+        Assert.assertFalse(reportContent.contains("Passed4"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void highestLogLevelPostForNewErrorShownForErroneousTestCases(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("...(2 more"));
+        Assert.assertTrue(reportContent.contains("Failed4"));
+        Assert.assertFalse(reportContent.contains("Failed3"));
+        Assert.assertFalse(reportContent.contains("Failed2"));
+        Assert.assertFalse(reportContent.contains("Passed1"));
+        Assert.assertFalse(reportContent.contains("Passed3"));
+        Assert.assertFalse(reportContent.contains("Passed2"));
+        Assert.assertFalse(reportContent.contains("Passed5"));
+        Assert.assertFalse(reportContent.contains("Passed4"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void highestLogLevelForNewErrorAsLastLogPostShouldBePresentedCorrectly(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed11");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed12");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed13");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("...(5 more"));
+        Assert.assertTrue(reportContent.contains("Failed4"));
+        Assert.assertFalse(reportContent.contains("Failed3"));
+        Assert.assertFalse(reportContent.contains("Failed2"));
+        Assert.assertFalse(reportContent.contains("Passed1"));
+        Assert.assertFalse(reportContent.contains("Passed3"));
+        Assert.assertFalse(reportContent.contains("Passed2"));
+        Assert.assertFalse(reportContent.contains("Passed5"));
+        Assert.assertFalse(reportContent.contains("Passed4"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void highestLogLevelForNewErrorAsFirstLogPostShouldBePresentedCorrectly(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed11");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed12");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed13");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed4"));
+        Assert.assertTrue(reportContent.contains("...(5 more"));
+        Assert.assertTrue(reportContent.contains("Failed3"));
+        Assert.assertFalse(reportContent.contains("Failed1"));
+        Assert.assertFalse(reportContent.contains("Failed2"));
+        Assert.assertFalse(reportContent.contains("Passed1"));
+        Assert.assertFalse(reportContent.contains("Passed3"));
+        Assert.assertFalse(reportContent.contains("Passed2"));
+        Assert.assertFalse(reportContent.contains("Passed5"));
+        Assert.assertFalse(reportContent.contains("Passed4"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void highestLogLevelForNewErrorAsMiddleLogPostShouldBePresentedCorrectly(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed11");
+        testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed12");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed13");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        testCase1.log(LogLevel.INFO, "Passed1");
+        testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        testCase1.log(LogLevel.EXECUTED, "Passed3");
+        testCase1.log(LogLevel.DEBUG, "Passed4");
+        testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("...(1 more"));
+        Assert.assertTrue(reportContent.contains("Failed4"));
+        Assert.assertTrue(reportContent.contains("...(4 more"));
+        Assert.assertFalse(reportContent.contains("Failed1"));
+        Assert.assertFalse(reportContent.contains("Failed2"));
+        Assert.assertFalse(reportContent.contains("Passed1"));
+        Assert.assertFalse(reportContent.contains("Passed3"));
+        Assert.assertFalse(reportContent.contains("Passed2"));
+        Assert.assertFalse(reportContent.contains("Passed5"));
+        Assert.assertFalse(reportContent.contains("Passed4"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }}

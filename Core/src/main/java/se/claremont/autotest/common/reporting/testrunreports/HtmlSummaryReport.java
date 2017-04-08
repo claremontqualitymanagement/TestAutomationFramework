@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.reporting.testrunreports;
 
 import se.claremont.autotest.common.logging.KnownError;
+import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.UxColors;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
@@ -475,8 +476,61 @@ public class HtmlSummaryReport {
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
             html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
-            for(LogPost logRow : newErrorInfo.logEntries){
+            if(newErrorInfo.logEntries.size() <= 3){
+                for(LogPost logRow : newErrorInfo.logEntries){
+                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                }
+            } else {
+                LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "");
+                int mostTroubleSomeLogPostOrder = 0;
+                for(int i = 0; i < newErrorInfo.logEntries.size(); i++){
+                    LogPost logPost = newErrorInfo.logEntries.get(i);
+                    if(logPost.logLevel.getValue() > mostTroubleSomeLogPost.logLevel.getValue()){
+                        mostTroubleSomeLogPostOrder = i; //We want the first error of this log level in report
+                        mostTroubleSomeLogPost = logPost;
+                    }
+                }
+
+                //Allways print first encountered error in log
+                LogPost logRow = newErrorInfo.logEntries.get(0);
                 html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+
+                //Print the rest of the error log rows depending on where in the log the most erroneous log post was found
+                if(mostTroubleSomeLogPostOrder == 0){ //First log post is the worst
+                    if(newErrorInfo.logEntries.size() > 2){
+                        html.append("            ...(").append(newErrorInfo.logEntries.size() - 2).append(" more problem log posts)...<br>").append(LF);
+                    }
+                    if(newErrorInfo.logEntries.size() > 1){ //Last error should also be printed
+                        logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    }
+                } else if(mostTroubleSomeLogPostOrder == 1){
+                    logRow = newErrorInfo.logEntries.get(1);
+                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    if(newErrorInfo.logEntries.size() > 3){
+                        html.append("            ...(").append(newErrorInfo.logEntries.size() - 2).append(" more problem log posts)...<br>").append(LF);
+                    } else {
+                        logRow = newErrorInfo.logEntries.get(2);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    }
+                } else {
+                    if(mostTroubleSomeLogPostOrder == 2){ //If only one log post between the first error and the most troublesome: print it.
+                        logRow = newErrorInfo.logEntries.get(1);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    } else { //Suppress log posts until the most erroneous log post
+                        html.append("            ...(").append(mostTroubleSomeLogPostOrder-1).append(" more problem log posts)...<br>").append(LF);
+                    }
+
+                    logRow = newErrorInfo.logEntries.get(mostTroubleSomeLogPostOrder);
+                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+
+                    if(mostTroubleSomeLogPostOrder == newErrorInfo.logEntries.size() - 2){
+                        logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    } else if(mostTroubleSomeLogPostOrder != newErrorInfo.logEntries.size() -1){
+                        html.append("            ...(").append(newErrorInfo.logEntries.size() - mostTroubleSomeLogPostOrder - 1).append(" more problem log posts)...<br>").append(LF);
+                    }
+                }
             }
             html.append("          </p>").append(LF);
         }
