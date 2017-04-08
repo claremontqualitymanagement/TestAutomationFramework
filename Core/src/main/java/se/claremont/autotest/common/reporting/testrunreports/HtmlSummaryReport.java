@@ -215,8 +215,8 @@ public class HtmlSummaryReport {
      * @return HTML document as string
      */
     public String createReport(){
+        html = new StringBuilder();
         if(reportShouldBeWritten()){
-            html = new StringBuilder();
             resultBarHtml = resultsGraphBar(); //Must be created before CSS Style info. Used in statistics section
             html.append("<!DOCTYPE html>").append(LF);
             html.append("<html>").append(LF).append(LF);
@@ -478,9 +478,9 @@ public class HtmlSummaryReport {
             html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             if(newErrorInfo.logEntries.size() <= 3){
                 for(LogPost logRow : newErrorInfo.logEntries){
-                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                 }
-            } else {
+            } else if(newErrorInfo.logEntries.size() > 3){
                 LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "");
                 int mostTroubleSomeLogPostOrder = 0;
                 for(int i = 0; i < newErrorInfo.logEntries.size(); i++){
@@ -493,7 +493,7 @@ public class HtmlSummaryReport {
 
                 //Allways print first encountered error in log
                 LogPost logRow = newErrorInfo.logEntries.get(0);
-                html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
 
                 //Print the rest of the error log rows depending on where in the log the most erroneous log post was found
                 if(mostTroubleSomeLogPostOrder == 0){ //First log post is the worst
@@ -502,31 +502,31 @@ public class HtmlSummaryReport {
                     }
                     if(newErrorInfo.logEntries.size() > 1){ //Last error should also be printed
                         logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1);
-                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     }
                 } else if(mostTroubleSomeLogPostOrder == 1){
                     logRow = newErrorInfo.logEntries.get(1);
-                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     if(newErrorInfo.logEntries.size() > 3){
                         html.append("            ...(").append(newErrorInfo.logEntries.size() - 2).append(" more problem log posts)...<br>").append(LF);
                     } else {
                         logRow = newErrorInfo.logEntries.get(2);
-                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     }
                 } else {
                     if(mostTroubleSomeLogPostOrder == 2){ //If only one log post between the first error and the most troublesome: print it.
                         logRow = newErrorInfo.logEntries.get(1);
-                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     } else { //Suppress log posts until the most erroneous log post
                         html.append("            ...(").append(mostTroubleSomeLogPostOrder-1).append(" more problem log posts)...<br>").append(LF);
                     }
 
                     logRow = newErrorInfo.logEntries.get(mostTroubleSomeLogPostOrder);
-                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
 
                     if(mostTroubleSomeLogPostOrder == newErrorInfo.logEntries.size() - 2){
                         logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1);
-                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(logRow.message).append("<br>").append(LF);
+                        html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     } else if(mostTroubleSomeLogPostOrder != newErrorInfo.logEntries.size() -1){
                         html.append("            ...(").append(newErrorInfo.logEntries.size() - mostTroubleSomeLogPostOrder - 1).append(" more problem log posts)...<br>").append(LF);
                     }
@@ -547,6 +547,11 @@ public class HtmlSummaryReport {
             this.logEntries= logPosts;
             this.testCase = testCase;
         }
+    }
+
+    private String truncateLogMessageIfNeeded(String logMessage){
+        if(logMessage.length() < 100)return logMessage;
+        return logMessage.substring(0, 97) + "...";
     }
 
     void evaluateTestCaseLogForErrorGrouping(TestCase testCase){

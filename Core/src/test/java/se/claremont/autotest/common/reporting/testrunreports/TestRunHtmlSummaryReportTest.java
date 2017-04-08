@@ -248,10 +248,9 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         String reportContent = report.htmlSummaryReport.createReport();
         System.out.println(reportContent);
         Assert.assertTrue(reportContent.contains("Failed1"));
-        Assert.assertTrue(reportContent.contains("...(1 more"));
+        Assert.assertTrue(reportContent.contains("Failed11"));
         Assert.assertTrue(reportContent.contains("Failed4"));
         Assert.assertTrue(reportContent.contains("...(4 more"));
-        Assert.assertFalse(reportContent.contains("Failed1"));
         Assert.assertFalse(reportContent.contains("Failed2"));
         Assert.assertFalse(reportContent.contains("Passed1"));
         Assert.assertFalse(reportContent.contains("Passed3"));
@@ -260,4 +259,84 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         Assert.assertFalse(reportContent.contains("Passed4"));
         Assert.assertTrue(reportContent.contains("TestCase1"));
         Assert.assertTrue(reportContent.contains("TestCase2"));
-    }}
+    }
+
+    @Test
+    public void singleErrorShouldBeReported(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void twoErrorShouldBeReported(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed2");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("Failed2"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void threeErrorShouldBeReported(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed2");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed3");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("Failed1"));
+        Assert.assertTrue(reportContent.contains("Failed2"));
+        Assert.assertTrue(reportContent.contains("Failed3"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
+    public void longLogRowsShouldBeTruncated(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.htmlSummaryReport.createReport();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567..."));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+}
