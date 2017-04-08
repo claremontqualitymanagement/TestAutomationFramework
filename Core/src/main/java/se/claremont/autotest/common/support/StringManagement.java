@@ -194,8 +194,12 @@ public class StringManagement {
             long diff = unit.convert(milliesRest,TimeUnit.MILLISECONDS);
             long diffInMilliesForUnit = unit.toMillis(diff);
             milliesRest = milliesRest - diffInMilliesForUnit;
+            String unitName = unit.name();
             if(diff > 0){
-                timeParts.add(diff + " " + unit.name().toLowerCase());
+                if(diff == 1){
+                    unitName = unitName.substring(0, unitName.length() - 1);
+                }
+                timeParts.add(diff + " " + unitName.toLowerCase());
             }
         }
         return String.join(", ", timeParts);

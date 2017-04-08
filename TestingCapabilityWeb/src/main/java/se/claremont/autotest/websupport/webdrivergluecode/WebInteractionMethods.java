@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -201,16 +202,40 @@ public class WebInteractionMethods implements GuiDriver {
 
     /**
      * Creates the DomElements that are easily identified on current path to draft code in output file.
+     * There is also a more thorough, thus more time consuming, method of doing this;
+     * the {@link #mapCurrentPageThorough(String) mapCurrentPageThorough() } method.
      *
-     * @param outputPilePath File path to output file
+     * @param outputFilePath File path to output file
      */
-    public void mapCurrentPage(String outputPilePath){
+    public void mapCurrentPage(String outputFilePath){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
+        Date startTime = new Date();
+        log(LogLevel.DEBUG, "Starting mapping elements of the current page (" + driver.getCurrentUrl() + ").");
+        WebPageCodeConstructor.ConstructWebPageCode(driver, outputFilePath);
+        log(LogLevel.EXECUTED, "Mapped the element of the current page ('" + driver.getCurrentUrl() + "') and saved it to the file '" + outputFilePath + "'. Mapping took " + StringManagement.timeDurationAsString(startTime, new Date()) + ".");
+    }
 
-        WebPageCodeConstructor.ConstructWebPageCode(driver, outputPilePath);
+    /**
+     * Creates draft page object class content by traversing the DOM of the current page, identifying elements
+     * on the page. This method is far more time consuming than the regular {@link #mapCurrentPage(String) mapCurrentPage } method.
+     *
+     * @deprecated Still evolving. Still unstable.
+     *
+     * @param outputFilePath The file to save craft class text to.
+     */
+    @Deprecated()
+    public void mapCurrentPageThorough(String outputFilePath){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+        Date startTime = new Date();
+        log(LogLevel.DEBUG, "Starting mapping elements of the current page (" + driver.getCurrentUrl() + ").");
+        WebPageCodeConstructor.ConstructWebPageCodeThorough(driver, outputFilePath);
+        log(LogLevel.EXECUTED, "Mapped the element of the current page ('" + driver.getCurrentUrl() + "') and saved it to the file '" + outputFilePath + "'. Mapping took " + StringManagement.timeDurationAsString(startTime, new Date()) + ".");
     }
 
     public void reportBrokenLinksOnCurrentPage(){
