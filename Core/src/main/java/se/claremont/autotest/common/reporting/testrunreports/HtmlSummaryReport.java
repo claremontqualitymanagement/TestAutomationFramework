@@ -13,8 +13,7 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -321,9 +320,48 @@ public class HtmlSummaryReport {
         if(this.failedTestCasesWithNewDeviations + this.testCasesWithBothNewAndKnownErrors > 0){
             html.append("          <div id=\"").append(TestCaseLogReporterHtmlLogFile.enumMemberNameToLower(HtmlStyleNames.NEW_ERRORS.toString())).append("\">").append(LF);
             html.append("          <h2>New deviations</h2>").append(LF);
+            html.append(       identifySharedLogRows());
             html.append(       newErrors());
             html.append("          </div>").append(LF).append("<br>").append(LF);
         }
+    }
+
+    private String identifySharedLogRows() {
+        StringBuilder html = new StringBuilder();
+        html.append("          <h3 class=\"sharedlogposts\">Note: Log messages shared between several test cases found</h3>").append(System.lineSeparator());
+        Map<LogPost, List<TestCase>> possibleMatches = new HashMap<>();//Log message and list of test cases
+        for(NewErrorInfo newErrorInfo : newErrorInfos){
+            for(LogPost logPost : newErrorInfo.logEntries){
+                boolean logPostFoundInPossibleMatchesList = false;
+                for(LogPost possibleMatch : possibleMatches.keySet()){
+                    if(possibleMatch.isSimilar(logPost)){
+                        logPostFoundInPossibleMatchesList = true;
+                        if(possibleMatches.get(possibleMatch).stream().anyMatch(tc -> tc.testName.equals(newErrorInfo.testCase.testName))) continue;
+                        possibleMatches.get(possibleMatch).add(newErrorInfo.testCase);
+                    }
+                }
+                if(!logPostFoundInPossibleMatchesList){
+                    List<TestCase> testCaseList = new ArrayList<>();
+                    testCaseList.add(newErrorInfo.testCase);
+                    possibleMatches.put(logPost, testCaseList);
+                }
+            }
+        }
+        boolean sharedLogPostFound = false;
+        for(LogPost logPost : possibleMatches.keySet()){
+            if(possibleMatches.get(logPost).size() > 1){
+                sharedLogPostFound = true;
+                html.append("          <p>").append(System.lineSeparator()).append("              ").append(truncateLogMessageIfNeeded(logPost.message)).append(System.lineSeparator()).append("              <ul>").append(System.lineSeparator());
+                for(TestCase testCase : possibleMatches.get(logPost)){
+                    html.append("                 <li>").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)</li>").append(System.lineSeparator());
+                }
+                html.append("              </ul>").append(System.lineSeparator()).append("          </p>").append(System.lineSeparator());
+            }
+        }
+        if(sharedLogPostFound){
+            return html.toString();
+        }
+        return "";
     }
 
     /**
@@ -631,6 +669,15 @@ public class HtmlSummaryReport {
 
         void addTestCase(TestCase testCase){
             this.testCasesWhereSimilarLogRowsAreEncountered.add(testCase);
+        }
+    }
+
+    class SharedLogRow{
+        List<TestCase> testCaseList = new ArrayList<>();
+        LogPost logPost;
+
+        public SharedLogRow(LogPost logPost){
+            this.logPost = logPost;
         }
     }
 
