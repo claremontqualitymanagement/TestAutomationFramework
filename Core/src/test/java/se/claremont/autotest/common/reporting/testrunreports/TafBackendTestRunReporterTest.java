@@ -9,13 +9,14 @@ import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestSet1;
 import se.claremont.autotest.common.testrun.TestSet2;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Tests for interaction with a TAF Backend Server
  *
  * Created by jordam on 2017-03-20.
  */
-public class TafBackendTestRunReporterTest {
+public class TafBackendTestRunReporterTest extends UnitTestClass {
 
     @Before
     public void testSetup(){
