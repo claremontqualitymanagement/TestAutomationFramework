@@ -1,12 +1,11 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
-import org.junit.*;
-import org.junit.rules.TestName;
+import org.junit.Assert;
+import org.junit.Test;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.websupport.DomElement;
 
 import java.util.ArrayList;
@@ -17,33 +16,7 @@ import java.util.List;
  *
  * Created by jordam on 2017-01-28.
  */
-public class TableInteractionTest extends TestSet {
-
-    @Rule
-    public TestName currentTestName = new TestName();
-
-
-    @BeforeClass
-    public static void classSetup(){
-        //TestRun.setSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER, "//172.16.202.10/autotest");
-    }
-
-    @Before
-    public void testSetup(){
-        startUpTestCase(currentTestName.getMethodName());
-        name = this.getClass().getSimpleName();
-    }
-
-    @After
-    public void testTearDown(){
-        wrapUpTestCase();
-    }
-
-    @AfterClass
-    public static void ClassTearDown(){
-        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
-        TestRun.reporters.reportTestRun();
-    }
+public class TableInteractionTest extends UnitTestClass {
 
     @Test
     /*

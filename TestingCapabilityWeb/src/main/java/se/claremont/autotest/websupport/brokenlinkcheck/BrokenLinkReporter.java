@@ -27,6 +27,8 @@ public class BrokenLinkReporter {
 
     /**
      * Checks current page for broken links and reports results to log as verifications.
+     *
+     * @param onlyDisplayedLinks Set to true to filter links for displayed links.
      * TODO: Should also add context path to local links
      */
     public void reportBrokenLinks(boolean onlyDisplayedLinks){

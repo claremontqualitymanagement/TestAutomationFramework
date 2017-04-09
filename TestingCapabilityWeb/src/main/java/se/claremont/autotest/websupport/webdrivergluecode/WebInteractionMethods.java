@@ -22,7 +22,6 @@ import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
 import se.claremont.autotest.websupport.brokenlinkcheck.LinkCheck;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -262,6 +261,7 @@ public class WebInteractionMethods implements GuiDriver {
      * Pauses execution until given element is displayed.
      *
      * @param guiElement The element to wait for
+     * @param timeoutInSeconds Number of seconds to wait for object being displayed
      * @return Returns true if element appears within timeout.
      */
     public boolean waitForElementToAppear(GuiElement guiElement, int timeoutInSeconds){
@@ -285,6 +285,7 @@ public class WebInteractionMethods implements GuiDriver {
     /**
      * Pauses execution until given element is displayed.
      *
+     * @param timeoutInSeconds The number of seconds to wait for the element to become enabled.
      * @param guiElement The element to wait for
      * @return Returns true if element appears within timeout.
      */
@@ -901,7 +902,6 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
         log(LogLevel.FRAMEWORK_ERROR, "The method clickEvenIfDisabled() is not yet implemented in class WebInteractionMethods. Please do.");
-        throw new NotImplementedException();
     }
 
     /**
@@ -1346,6 +1346,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param text test string to find
      * @param timeoutInSeconds The time to wait
+     * @return Returns true if the text can be identified within the time given.
      */
     public boolean textExistInPageSourceOfCurrentPageWithinTimeout(String text, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
@@ -1365,6 +1366,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param text test string to find
      * @param timeoutInSeconds The time to wait
+     * @return Returns true if the text can be identified within the given timeout
      */
     public boolean textExistOnCurrentPageWithinTimeout(String text, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
@@ -1387,6 +1389,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param text test string to find
      * @param timeoutInSeconds The time to wait
+     * @return Returns true if the text can be identified within the given time.
      */
     public boolean textIsDisplayedOnCurrentPageWithinTimeout(String text, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();

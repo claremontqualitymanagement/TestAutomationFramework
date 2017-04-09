@@ -49,6 +49,7 @@ public class LogPost {
      * Creates a new testCaseLog post with component sorting enabled
      * @param logLevel the testCaseLog level of the testCaseLog post
      * @param message the testCaseLog message string
+     * @param htmlMessage The HTML representation of the log message - used for HTML based log reports
      */
     public LogPost(LogLevel logLevel, String message, String htmlMessage) {
         this.logLevel = logLevel;

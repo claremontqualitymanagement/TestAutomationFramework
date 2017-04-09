@@ -183,6 +183,7 @@ public class MethodInvoker {
      * @param testCase The test case to log to. If no test case is provided output is to console.
      * @param component The object to invoke the method on.
      * @param methodName Method name for method to invoke.
+     * @param args The arguments to pass to the method invoked.
      * @return Returns whatever the method invoked would return.
      */
     public static Object invokeMethod(TestCase testCase, Object component, String methodName, Object... args){
