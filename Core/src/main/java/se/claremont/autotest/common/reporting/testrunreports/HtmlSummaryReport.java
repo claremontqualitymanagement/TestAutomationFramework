@@ -328,7 +328,7 @@ public class HtmlSummaryReport {
 
     private String identifySharedLogRows() {
         StringBuilder html = new StringBuilder();
-        html.append("          <h3 class=\"sharedlogposts\">Note: Log messages shared between several test cases found</h3>").append(System.lineSeparator());
+        html.append("          <h3 class=\"sharedlogpostsheading\">Note: Similar log records in multiple test cases found</h3>").append(System.lineSeparator());
         Map<LogPost, List<TestCase>> possibleMatches = new HashMap<>();//Log message and list of test cases
         for(NewErrorInfo newErrorInfo : newErrorInfos){
             for(LogPost logPost : newErrorInfo.logEntries){
@@ -351,13 +351,14 @@ public class HtmlSummaryReport {
         for(LogPost logPost : possibleMatches.keySet()){
             if(possibleMatches.get(logPost).size() > 1){
                 sharedLogPostFound = true;
-                html.append("          <p>").append(System.lineSeparator()).append("              ").append(truncateLogMessageIfNeeded(logPost.message)).append(System.lineSeparator()).append("              <ul>").append(System.lineSeparator());
+                html.append("          <p>").append(System.lineSeparator()).append("              ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append(System.lineSeparator()).append("              <ul>").append(System.lineSeparator());
                 for(TestCase testCase : possibleMatches.get(logPost)){
                     html.append("                 <li>").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)</li>").append(System.lineSeparator());
                 }
                 html.append("              </ul>").append(System.lineSeparator()).append("          </p>").append(System.lineSeparator());
             }
         }
+        html.append("              <h3 class=\"newerrorslisting\">Log extracts for test cases with problems</h3>").append(System.lineSeparator());
         if(sharedLogPostFound){
             return html.toString();
         }
@@ -513,7 +514,7 @@ public class HtmlSummaryReport {
             String link = newErrorInfo.testCase.pathToHtmlLog;
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
-            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b>(<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
+            html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b> (<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             if(newErrorInfo.logEntries.size() <= 3){
                 for(LogPost logRow : newErrorInfo.logEntries){
                     html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);

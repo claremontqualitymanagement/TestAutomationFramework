@@ -205,7 +205,15 @@ public class LogPost {
                 }
             }
         }
-        return sb.toString();
+        String cleanedOfData = sb.toString();
+        String[] words = cleanedOfData.split(" ");
+        for(int i = 0; i < words.length; i++){
+            String word = words[i];
+            if(SupportMethods.isRegexMatch(word, "^[0-9]+$")){ // If the word only consist of numbers, like a millisecond count
+                words[i] = "...";
+            }
+        }
+        return String.join(" ", words);
     }
 
 
