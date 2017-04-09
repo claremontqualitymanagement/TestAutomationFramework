@@ -328,7 +328,7 @@ public class HtmlSummaryReport {
 
     private String identifySharedLogRows() {
         StringBuilder html = new StringBuilder();
-        html.append("          <h3 class=\"sharedlogpostsheading\">Note: Similar log records in multiple test cases found</h3>").append(System.lineSeparator());
+        html.append("          <h3 class=\"sharedlogpostsheading\">Note: Similar log records found in multiple test cases</h3>").append(System.lineSeparator());
         Map<LogPost, List<TestCase>> possibleMatches = new HashMap<>();//Log message and list of test cases
         for(NewErrorInfo newErrorInfo : newErrorInfos){
             for(LogPost logPost : newErrorInfo.logEntries){
@@ -351,11 +351,11 @@ public class HtmlSummaryReport {
         for(LogPost logPost : possibleMatches.keySet()){
             if(possibleMatches.get(logPost).size() > 1){
                 sharedLogPostFound = true;
-                html.append("          <p>").append(System.lineSeparator()).append("              ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append(System.lineSeparator()).append("              <ul>").append(System.lineSeparator());
+                html.append("          <p>").append(System.lineSeparator()).append("              ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append("<br>").append(System.lineSeparator());
                 for(TestCase testCase : possibleMatches.get(logPost)){
-                    html.append("                 <li>").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)</li>").append(System.lineSeparator());
+                    html.append("                  * ").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)<br>").append(System.lineSeparator());
                 }
-                html.append("              </ul>").append(System.lineSeparator()).append("          </p>").append(System.lineSeparator());
+                html.append(System.lineSeparator()).append("          </p>").append(System.lineSeparator());
             }
         }
         html.append("              <h3 class=\"newerrorslisting\">Log extracts for test cases with problems</h3>").append(System.lineSeparator());
