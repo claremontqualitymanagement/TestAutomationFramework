@@ -327,14 +327,12 @@ public class HtmlSummaryReport {
     }
 
     private String identifySharedLogRows() {
-        StringBuilder html = new StringBuilder();
-        html.append("          <h3 class=\"sharedlogpostsheading\">Note: Similar log records found in multiple test cases</h3>").append(System.lineSeparator());
         Map<LogPost, List<TestCase>> possibleMatches = new HashMap<>();//Log message and list of test cases
         for(NewErrorInfo newErrorInfo : newErrorInfos){
-            for(LogPost logPost : newErrorInfo.logEntries){
+            for(NewErrorLogPost logPost : newErrorInfo.logEntries){
                 boolean logPostFoundInPossibleMatchesList = false;
                 for(LogPost possibleMatch : possibleMatches.keySet()){
-                    if(possibleMatch.isSimilar(logPost)){
+                    if(possibleMatch.isSimilar(logPost.logPost)){
                         logPostFoundInPossibleMatchesList = true;
                         if(possibleMatches.get(possibleMatch).stream().anyMatch(tc -> tc.testName.equals(newErrorInfo.testCase.testName))) continue;
                         possibleMatches.get(possibleMatch).add(newErrorInfo.testCase);
@@ -343,27 +341,76 @@ public class HtmlSummaryReport {
                 if(!logPostFoundInPossibleMatchesList){
                     List<TestCase> testCaseList = new ArrayList<>();
                     testCaseList.add(newErrorInfo.testCase);
-                    possibleMatches.put(logPost, testCaseList);
+                    possibleMatches.put(logPost.logPost, testCaseList);
                 }
             }
         }
+        markLogPostsInNewErrors(possibleMatches);
+        return sharedLogRowsAsString(possibleMatches);
+    }
+
+    private void markLogPostsInNewErrors(Map<LogPost, List<TestCase>> possibleMatches){
+        for(LogPost logPost : possibleMatches.keySet()){
+            if(possibleMatches.get(logPost).size() > 1){
+                for(NewErrorInfo newErrorInfo :newErrorInfos){
+                    for(NewErrorLogPost newErrorLogPost : newErrorInfo.logEntries){
+                        if(logPost.isSimilar(newErrorLogPost.logPost)){
+                            newErrorLogPost.partOfSharedLogPostRecord = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private String sharedLogRowsAsString(Map<LogPost, List<TestCase>> possibleMatches){
         boolean sharedLogPostFound = false;
+        boolean asteriskTextShouldBePrinted = false;
+        StringBuilder html = new StringBuilder();
+        html.append("          <h3 class=\"sharedlogpostsheading\">Note: Similar log records found in multiple test cases</h3>").append(System.lineSeparator());
         for(LogPost logPost : possibleMatches.keySet()){
             if(possibleMatches.get(logPost).size() > 1){
                 sharedLogPostFound = true;
-                html.append("          <p>").append(System.lineSeparator()).append("              ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append("<br>").append(System.lineSeparator());
+                html.append("          <p>").append(System.lineSeparator()).append("              ").append(logPost.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append("<br>").append(System.lineSeparator());
                 for(TestCase testCase : possibleMatches.get(logPost)){
-                    html.append("                  * ").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)<br>").append(System.lineSeparator());
+                    html.append("                  &#9659; ").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)");
+                    if(testCaseHasProblemRecordsNotPartOfSharedLogRecords(testCase)){
+                        html.append("*");
+                        asteriskTextShouldBePrinted = true;
+                    }
+                    html.append("<br>").append(System.lineSeparator());
                 }
                 html.append(System.lineSeparator()).append("          </p>").append(System.lineSeparator());
             }
         }
-        html.append("              <h3 class=\"newerrorslisting\">Log extracts for test cases with problems</h3>").append(System.lineSeparator());
+        if(asteriskTextShouldBePrinted){
+            html.append("<p><i>* = Test case has problematic log records not part of shared log row.</i></p>").append(System.lineSeparator());
+        }
+        for(NewErrorInfo newErrorInfo : newErrorInfos){
+            if(testCaseHasProblemRecordsNotPartOfSharedLogRecords(newErrorInfo.testCase)){
+                html.append("              <h3 class=\"newerrorslisting\">Log extracts for test cases with unique problems</h3>").append(System.lineSeparator());
+                break;
+            }
+        }
         if(sharedLogPostFound){
             return html.toString();
         }
         return "";
     }
+
+    private boolean testCaseHasProblemRecordsNotPartOfSharedLogRecords(TestCase testCase) {
+        for(NewErrorInfo newErrorInfo: newErrorInfos){
+            if(newErrorInfo.testCase.isSameAs(testCase)){
+                for(NewErrorLogPost newErrorLogPost: newErrorInfo.logEntries){
+                    if(newErrorLogPost.partOfSharedLogPostRecord) continue;
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Produces the HTML section for known errors
@@ -510,20 +557,21 @@ public class HtmlSummaryReport {
     private String newErrors(){
         StringBuilder html = new StringBuilder();
         for(NewErrorInfo newErrorInfo : newErrorInfos){
+            if(!testCaseHasProblemRecordsNotPartOfSharedLogRecords(newErrorInfo.testCase))continue;
             html.append("          <p>").append(LF);
             String link = newErrorInfo.testCase.pathToHtmlLog;
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
             html.append("            <b>").append(newErrorInfo.testCase.testSetName).append(": ").append(newErrorInfo.testCase.testName).append("</b> (<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(LF);
             if(newErrorInfo.logEntries.size() <= 3){
-                for(LogPost logRow : newErrorInfo.logEntries){
-                    html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
+                for(NewErrorLogPost logRow : newErrorInfo.logEntries){
+                    html.append("            ").append(logRow.logPost.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.logPost.message)).append("<br>").append(LF);
                 }
             } else if(newErrorInfo.logEntries.size() > 3){
                 LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "");
                 int mostTroubleSomeLogPostOrder = 0;
                 for(int i = 0; i < newErrorInfo.logEntries.size(); i++){
-                    LogPost logPost = newErrorInfo.logEntries.get(i);
+                    LogPost logPost = newErrorInfo.logEntries.get(i).logPost;
                     if(logPost.logLevel.getValue() > mostTroubleSomeLogPost.logLevel.getValue()){
                         mostTroubleSomeLogPostOrder = i; //We want the first error of this log level in report
                         mostTroubleSomeLogPost = logPost;
@@ -531,7 +579,7 @@ public class HtmlSummaryReport {
                 }
 
                 //Allways print first encountered error in log
-                LogPost logRow = newErrorInfo.logEntries.get(0);
+                LogPost logRow = newErrorInfo.logEntries.get(0).logPost;
                 html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
 
                 //Print the rest of the error log rows depending on where in the log the most erroneous log post was found
@@ -540,31 +588,31 @@ public class HtmlSummaryReport {
                         html.append("            ...(").append(newErrorInfo.logEntries.size() - 2).append(" more problem log posts)...<br>").append(LF);
                     }
                     if(newErrorInfo.logEntries.size() > 1){ //Last error should also be printed
-                        logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1);
+                        logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1).logPost;
                         html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     }
                 } else if(mostTroubleSomeLogPostOrder == 1){
-                    logRow = newErrorInfo.logEntries.get(1);
+                    logRow = newErrorInfo.logEntries.get(1).logPost;
                     html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     if(newErrorInfo.logEntries.size() > 3){
                         html.append("            ...(").append(newErrorInfo.logEntries.size() - 2).append(" more problem log posts)...<br>").append(LF);
                     } else {
-                        logRow = newErrorInfo.logEntries.get(2);
+                        logRow = newErrorInfo.logEntries.get(2).logPost;
                         html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     }
                 } else {
                     if(mostTroubleSomeLogPostOrder == 2){ //If only one log post between the first error and the most troublesome: print it.
-                        logRow = newErrorInfo.logEntries.get(1);
+                        logRow = newErrorInfo.logEntries.get(1).logPost;
                         html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     } else { //Suppress log posts until the most erroneous log post
                         html.append("            ...(").append(mostTroubleSomeLogPostOrder-1).append(" more problem log posts)...<br>").append(LF);
                     }
 
-                    logRow = newErrorInfo.logEntries.get(mostTroubleSomeLogPostOrder);
+                    logRow = newErrorInfo.logEntries.get(mostTroubleSomeLogPostOrder).logPost;
                     html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
 
                     if(mostTroubleSomeLogPostOrder == newErrorInfo.logEntries.size() - 2){
-                        logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1);
+                        logRow = newErrorInfo.logEntries.get(newErrorInfo.logEntries.size()-1).logPost;
                         html.append("            ").append(logRow.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(logRow.message)).append("<br>").append(LF);
                     } else if(mostTroubleSomeLogPostOrder != newErrorInfo.logEntries.size() -1){
                         html.append("            ...(").append(newErrorInfo.logEntries.size() - mostTroubleSomeLogPostOrder - 1).append(" more problem log posts)...<br>").append(LF);
@@ -578,13 +626,24 @@ public class HtmlSummaryReport {
     }
 
 
-    private class NewErrorInfo{
-        ArrayList<LogPost> logEntries = new ArrayList<>();
+    private class NewErrorInfo {
+        ArrayList<NewErrorLogPost> logEntries = new ArrayList<>();
         final TestCase testCase;
 
         NewErrorInfo(ArrayList<LogPost> logPosts, TestCase testCase){
-            this.logEntries= logPosts;
+            for(LogPost logPost : logPosts){
+                this.logEntries.add(new NewErrorLogPost(logPost));
+            }
             this.testCase = testCase;
+        }
+    }
+
+    private class NewErrorLogPost{
+        public LogPost logPost;
+        public boolean partOfSharedLogPostRecord = false;
+
+        public NewErrorLogPost(LogPost logPost){
+            this.logPost = logPost;
         }
     }
 

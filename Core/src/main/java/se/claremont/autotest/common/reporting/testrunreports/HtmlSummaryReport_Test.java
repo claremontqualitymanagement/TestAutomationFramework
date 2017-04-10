@@ -15,7 +15,7 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  *
  * Created by jordam on 2016-08-31.
  */
-public class HtmlSummaryReport_Test extends UnitTestClass{
+public class HtmlSummaryReport_Test extends UnitTestClass {
     @SuppressWarnings("CanBeFinal")
     @Rule public TestName currentTestName = new TestName();
 
