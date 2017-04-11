@@ -50,10 +50,14 @@ public class NewErrorsList {
             }
         }
         if(asteriskTextShouldBePrinted){
-            html.append("          <p><span class=\"moreerrorsasterisk\">*</span> = <i>Test case has problematic log records not part of shared log row.</i></p>").append(System.lineSeparator());
+            html.append("          <p><span class=\"moreerrorsasterisk\">*</span> = <i>Test case also has problematic log records not part of shared log row.</i></p>").append(System.lineSeparator());
         }
         if(nonSharedErrors.size() > 0){
-            html.append("              <h3 class=\"newerrorslisting\">Log extracts for test cases with unique problems</h3>").append(System.lineSeparator());
+            html.append("              <h3 class=\"newerrorslisting\">Log extracts for failed test cases");
+            if(actualSharedErrors.size() > 0){
+                html.append(" with unique problems");
+            }
+            html.append("</h3>").append(System.lineSeparator());
             mergeNonSharedErrorsWithExactlyTheSameTestCases();
             sortLogEntriesInTimeOrder(nonSharedErrors);
             for(PotentiallySharedError potentiallySharedError : nonSharedErrors){

@@ -5,7 +5,6 @@ import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-04-10.
  */
-public class NewErrorsListTest extends UnitTestClass {
+public class NewErrorsListTest {
 
 
     @Test
@@ -74,7 +73,7 @@ public class NewErrorsListTest extends UnitTestClass {
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
-        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error.*Test1.*Test2.*Test case has problematic log records not part of shared log row.*Log extracts for test cases with unique problems.*My own error.*Test1.*";
+        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error.*Test1.*Test2.*Test case also has problematic log records not part of shared log row.*Log extracts for failed test cases with unique problems.*My own error.*Test1.*";
         Assert.assertTrue("Expected the output to be a match for the regular expression pattern:" + System.lineSeparator() + regexPattern + System.lineSeparator() + "But it was:" + System.lineSeparator() + output, SupportMethods.isRegexMatch(output, regexPattern));
     }
 
@@ -99,7 +98,7 @@ public class NewErrorsListTest extends UnitTestClass {
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
-        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error .*Test1.*Test2 .*Test case has problematic log records not part of shared log row.*Log extracts for test cases with unique problems.*My own error.*Test1.*";
+        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error .*Test1.*Test2 .*Test case also has problematic log records not part of shared log row.*Log extracts for failed test cases with unique problems.*My own error.*Test1.*";
         Assert.assertTrue("Expected the output to be a match for the regular expression pattern:" + System.lineSeparator() + regexPattern + System.lineSeparator() + "But it was:" + System.lineSeparator() + output, SupportMethods.isRegexMatch(output, regexPattern));
     }
 }
