@@ -47,15 +47,27 @@ public class TestRunHtmlSummaryReportTest {
         Assert.assertFalse(htmlReport, htmlReport.contains("YIPPIE!"));
     }
 
+    void pause() {
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void onlyMostRelevantLogRowsShownForErroneousTestCases(){
         TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
         TestCase testCase1 = new TestCase(null, "TestCase1");
         testCase1.log(LogLevel.INFO, "Text");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        pause();
         testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        pause();
         testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
@@ -87,11 +99,16 @@ public class TestRunHtmlSummaryReportTest {
         TestCase testCase1 = new TestCase(null, "TestCase1");
         testCase1.log(LogLevel.INFO, "Text");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        pause();
         testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        pause();
         testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        pause();
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
@@ -121,21 +138,27 @@ public class TestRunHtmlSummaryReportTest {
         TestCase testCase1 = new TestCase(null, "TestCase1");
         testCase1.log(LogLevel.INFO, "Text");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed11");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed12");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed13");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
         testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
         testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
@@ -171,22 +194,29 @@ public class TestRunHtmlSummaryReportTest {
         testCase1.log(LogLevel.INFO, "Text");
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed11");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed12");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed13");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
         testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
         testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
@@ -219,22 +249,31 @@ public class TestRunHtmlSummaryReportTest {
         testCase1.log(LogLevel.INFO, "Text");
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed11");
+        pause();
         testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed12");
+        pause();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed13");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
+        pause();
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
+        pause();
         testCase1.log(LogLevel.EXECUTION_PROBLEM, "Failed2");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
         testCase1.log(LogLevel.VERIFICATION_PROBLEM, "Failed3");
+        pause();
         testCase1.log(LogLevel.INFO, "Passed1");
         testCase1.log(LogLevel.DEVIATION_EXTRA_INFO, "Passed2");
         testCase1.log(LogLevel.EXECUTED, "Passed3");

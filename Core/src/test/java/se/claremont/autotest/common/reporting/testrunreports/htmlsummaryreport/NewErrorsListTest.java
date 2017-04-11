@@ -74,7 +74,7 @@ public class NewErrorsListTest extends UnitTestClass {
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
-        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error .*Test1.*Test2 .*Test case has problematic log records not part of shared log row.*Log extracts for test cases with unique problems.*My own error.*Test1.*";
+        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error.*Test1.*Test2.*Test case has problematic log records not part of shared log row.*Log extracts for test cases with unique problems.*My own error.*Test1.*";
         Assert.assertTrue("Expected the output to be a match for the regular expression pattern:" + System.lineSeparator() + regexPattern + System.lineSeparator() + "But it was:" + System.lineSeparator() + output, SupportMethods.isRegexMatch(output, regexPattern));
     }
 
