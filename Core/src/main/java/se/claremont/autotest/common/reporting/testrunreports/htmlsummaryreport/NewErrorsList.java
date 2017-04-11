@@ -36,10 +36,10 @@ public class NewErrorsList {
             for(PotentiallySharedError potentiallySharedError : actualSharedErrors){
                 html.append("          <p>").append(System.lineSeparator());
                 for(LogPost logPost : potentiallySharedError.sampleLogPosts){
-                    html.append("              ").append(logPost.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append("<br>").append(System.lineSeparator());
+                    html.append("            <span class=\"errorloglevel\">").append(logPost.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logPost.message)).append("</span><br>").append(System.lineSeparator());
                 }
                 for(TestCase testCase : potentiallySharedError.testCasesWhereEncountered){
-                    html.append("                  &#9659; ").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)");
+                    html.append("                  &#9659; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)");
                     if(testCaseHasProblemRecordsNotPartOfSharedLogRecords(testCase)){
                         html.append("<span class=\"moreerrorsasterisk\">*</span>");
                         asteriskTextShouldBePrinted = true;

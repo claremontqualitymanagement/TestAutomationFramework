@@ -33,7 +33,12 @@ public class NewErrorsListTest {
         newErrorInfos.add(new PotentiallySharedError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
         NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
-        String regexPattern = ".*Similar log records found in multiple test cases.*Verification failed. No such data .* in element Button1. Time duration .*milliseconds.*Nameless test case .*Log.*a href.*Log.*";
+        String regexPattern = ".*Similar log records found in multiple test cases" +
+                ".*Verification failed.*No such data .* in element Button1. Time duration .*milliseconds" +
+                ".*Nameless test case" +
+                ".*Log" +
+                ".*Nameless test case" +
+                ".*Log.*";
         Assert.assertTrue("Expected the output to be a match for the regular expression pattern:" + System.lineSeparator() + regexPattern + System.lineSeparator() + "But it was:" + System.lineSeparator() + newErrorsList.toString(), SupportMethods.isRegexMatch(newErrorsList.toString(), regexPattern));
     }
 
@@ -52,7 +57,11 @@ public class NewErrorsListTest {
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
-        String regexPattern = ".*Similar log records found in multiple test cases.*Verification failed. No such data .* in element Button1. Time duration .*milliseconds.*Next.*Nameless test case .*Log.*a href.*Log.*";
+        String regexPattern = ".*Similar log records found in multiple test cases" +
+                ".*Verification failed.*No such data .* in element Button1. Time duration .*milliseconds" +
+                ".*Next" +
+                ".*Nameless test case.*Log" +
+                ".*Nameless test case.*Log.*";
         Assert.assertTrue("Expected the output to be a match for the regular expression pattern:" + System.lineSeparator() + regexPattern + System.lineSeparator() + "But it was:" + System.lineSeparator() + output, SupportMethods.isRegexMatch(output, regexPattern));
         Assert.assertFalse(output.contains("Log extracts for test cases with unique problems"));
     }
@@ -98,7 +107,15 @@ public class NewErrorsListTest {
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
-        String regexPattern = ".*Similar log records found in multiple test cases.*No such data .* in element Button1.*Time duration .*milliseconds.*Next error .*Test1.*Test2 .*Test case also has problematic log records not part of shared log row.*Log extracts for failed test cases with unique problems.*My own error.*Test1.*";
+        String regexPattern = ".*Similar log records found in multiple test cases" +
+                ".*No such data .* in element Button1.*Time duration .*milliseconds" +
+                ".*Next error " +
+                ".*Test1" +
+                ".*Test2" +
+                ".*Test case also has problematic log records not part of shared log row" +
+                ".*Log extracts for failed test cases with unique problems" +
+                ".*My own error" +
+                ".*Test1.*";
         Assert.assertTrue("Expected the output to be a match for the regular expression pattern:" + System.lineSeparator() + regexPattern + System.lineSeparator() + "But it was:" + System.lineSeparator() + output, SupportMethods.isRegexMatch(output, regexPattern));
     }
 }

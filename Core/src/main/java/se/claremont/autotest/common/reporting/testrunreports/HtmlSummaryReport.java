@@ -181,6 +181,9 @@ public class HtmlSummaryReport {
                 "      td.bottomlogo         { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; margin: 30px; }" + LF +
                 "      .moreerrorsasterisk   { color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      .testcasename { font-weight: bold; }" + LF +
+                "      .errorloglevel { color: " + UxColors.RED.getHtmlColorCode() + "; }" + LF +
+                "      .testsetname  {}" + LF +
                 "      tr." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      li." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
