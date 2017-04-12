@@ -1,12 +1,10 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
+import se.claremont.autotest.restsupport.RestSupport;
 
 import static se.claremont.autotest.common.testcase.TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
 import static se.claremont.autotest.common.testcase.TestCase.ResultStatus.PASSED;
@@ -27,6 +25,12 @@ public class BrokenLinkCheckerTest extends UnitTestClass {
         HtmlUnitDriver driver = new HtmlUnitDriver();
         driver.setJavascriptEnabled(true);
         web = new WebInteractionMethods(testCase, driver);
+        Assume.assumeTrue("Internet access needed.", internetAccessExist(testCase));
+    }
+
+    private boolean internetAccessExist(TestCase testCase) {
+        RestSupport restSupport = new RestSupport(testCase);
+        return (restSupport.responseCodeFromGetRequest("http://www.claremont.se") != null);
     }
 
     @After
