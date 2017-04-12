@@ -11,25 +11,25 @@ import java.util.List;
 /**
  * Created by jordam on 2017-04-10.
  */
-public class PotentiallySharedError {
+public class NewError {
     List<TestCase> testCasesWhereEncountered = new ArrayList<>();
     List<LogPost>  sampleLogPosts = new ArrayList<>();
 
-    public PotentiallySharedError(TestCase testCase, LogPost logPost){
+    public NewError(TestCase testCase, LogPost logPost){
         this.testCasesWhereEncountered.add(testCase);
         this.sampleLogPosts.add(logPost);
     }
 
-    public PotentiallySharedError(LogPost logPost){
+    public NewError(LogPost logPost){
         sampleLogPosts.add(logPost);
     }
 
-    public PotentiallySharedError(List<TestCase> testCases, List<LogPost> sampleLogPosts){
+    public NewError(List<TestCase> testCases, List<LogPost> sampleLogPosts){
         this.testCasesWhereEncountered = testCases;
         this.sampleLogPosts = sampleLogPosts;
     }
 
-    public PotentiallySharedError(TestCase testCase, List<LogPost> logPosts){
+    public NewError(TestCase testCase, List<LogPost> logPosts){
         List<TestCase> testCases = new ArrayList<>();
         testCases.add(testCase);
         this.testCasesWhereEncountered = testCases;
@@ -45,15 +45,15 @@ public class PotentiallySharedError {
     }
 
     public boolean isSimilar(Object sharedError){
-        PotentiallySharedError comparePotentiallySharedError = null;
+        NewError compareNewError = null;
         try{
-            comparePotentiallySharedError = (PotentiallySharedError) sharedError;
+            compareNewError = (NewError) sharedError;
         }catch (Exception ignored){
             return false;
         }
-        if(comparePotentiallySharedError.testCasesWhereEncountered.size() != this.testCasesWhereEncountered.size())return false;
-        if(comparePotentiallySharedError.sampleLogPosts.size() != this.sampleLogPosts.size())return false;
-        for(TestCase compareTestCase : comparePotentiallySharedError.testCasesWhereEncountered){
+        if(compareNewError.testCasesWhereEncountered.size() != this.testCasesWhereEncountered.size())return false;
+        if(compareNewError.sampleLogPosts.size() != this.sampleLogPosts.size())return false;
+        for(TestCase compareTestCase : compareNewError.testCasesWhereEncountered){
             boolean testCaseFound = false;
             for(TestCase testCase : this.testCasesWhereEncountered){
                 if(testCase.isSameAs(compareTestCase)){
@@ -63,7 +63,7 @@ public class PotentiallySharedError {
             }
             if(!testCaseFound) return false;
         }
-        for(LogPost compareLogPost : comparePotentiallySharedError.sampleLogPosts){
+        for(LogPost compareLogPost : compareNewError.sampleLogPosts){
             boolean logPostFound = false;
             for(LogPost logPost : this.sampleLogPosts){
                 if(logPost.isSimilar(compareLogPost)){

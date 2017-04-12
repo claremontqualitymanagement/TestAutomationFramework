@@ -6,7 +6,7 @@ import org.junit.runner.notification.Failure;
 import se.claremont.autotest.common.logging.KnownError_Test;
 import se.claremont.autotest.common.logging.KnownErrorsList_Test;
 import se.claremont.autotest.common.logging.LogPost_Tests;
-import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport_Test;
+import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.HtmlSummaryReport_Test;
 import se.claremont.autotest.common.support.ValuePair_Tests;
 import se.claremont.autotest.common.testcase.TestCaseLog_Tests;
 import se.claremont.autotest.common.testcase.TestCase_Tests;

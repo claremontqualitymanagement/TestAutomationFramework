@@ -8,7 +8,7 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.HtmlStyles;
 import se.claremont.autotest.common.reporting.TafVersionGetter;
 import se.claremont.autotest.common.reporting.UxColors;
-import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport;
+import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.HtmlSummaryReport;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.ValuePair;

@@ -1,11 +1,9 @@
-package se.claremont.autotest.common.reporting.testrunreports;
+package se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport;
 
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.UxColors;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
-import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.NewErrorsList;
-import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.PotentiallySharedError;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
@@ -36,7 +34,7 @@ public class HtmlSummaryReport {
     int unevaluatedCount = 0;
     private String resultBarHtml;
     final ArrayList<KnownError> encounteredKnownErrorInfos = new ArrayList<>();
-    final ArrayList<PotentiallySharedError> newErrorInfos = new ArrayList<>();
+    final ArrayList<NewError> newErrorInfos = new ArrayList<>();
     final ArrayList<KnownError> solvedKnownErrorsList = new ArrayList<>();
     private String testCaseSummary = "";
     private final int barWidthInPixels = 400;
@@ -84,7 +82,7 @@ public class HtmlSummaryReport {
         if(errorLogMessages.size() > 0){
             List<TestCase> testCases = new ArrayList<>();
             testCases.add(testCase);
-            newErrorInfos.add(new PotentiallySharedError(testCases, errorLogMessages));
+            newErrorInfos.add(new NewError(testCases, errorLogMessages));
         }
     }
 
@@ -488,96 +486,5 @@ public class HtmlSummaryReport {
         if(logMessage.length() < 100)return logMessage;
         return logMessage.substring(0, 97) + "...";
     }
-
-    void evaluateTestCaseLogForErrorGrouping(TestCase testCase){
-        ErrorLogRowList errorLogRows = new ErrorLogRowList();
-        testCase.testCaseLog.onlyErroneousLogPosts().stream().filter(logPost -> !logPost.identifiedToBePartOfKnownError).forEachOrdered(logPost -> {
-            if (errorLogRows.logPostIsRegistered(logPost)) {
-                errorLogRows.addTestCaseForLogRow(logPost, testCase);
-            } else {
-                errorLogRows.addNewLogRowEntry(logPost, testCase);
-            }
-        });
-    }
-
-    private class ErrorLogRowList extends ArrayList<ErrorLogRow>{
-
-        boolean logPostIsRegistered(LogPost logPost){
-            for(ErrorLogRow errorLogRow : this ){
-                if(errorLogRow.logPostMessage.equals(LogPost.removeDataElements(logPost.message))){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
-        void addTestCaseForLogRow(LogPost logPost, TestCase testCase){
-            for(ErrorLogRow errorLogRow : this){
-                if(errorLogRow.logPostMessage.equals(LogPost.removeDataElements(logPost.message))){
-                    errorLogRow.addTestCase(testCase);
-                    break;
-                }
-            }
-        }
-
-        void addNewLogRowEntry(LogPost logPost, TestCase testCase){
-            this.add(new ErrorLogRow(logPost, testCase));
-        }
-    }
-
-    private class ErrorLogRow{
-        final String logPostMessage;
-        final ArrayList<TestCase> testCasesWhereSimilarLogRowsAreEncountered = new ArrayList<>();
-
-        ErrorLogRow(LogPost logPost, TestCase testCase){
-            this.logPostMessage = LogPost.removeDataElements(logPost.message);
-            this.testCasesWhereSimilarLogRowsAreEncountered.add(testCase);
-
-        }
-
-        boolean hasSameTestCasesAs(ErrorLogRow errorLogRow){
-            for(TestCase testCase : testCasesWhereSimilarLogRowsAreEncountered){
-                boolean testCaseFound = false;
-                for (TestCase testCase1 : errorLogRow.testCasesWhereSimilarLogRowsAreEncountered){
-                    if(testCase.isSameAs(testCase1)){
-                        testCaseFound = true;
-                        break;
-                    }
-                }
-                if(!testCaseFound){
-                    return false;
-                }
-            }
-            for(TestCase testCase : errorLogRow.testCasesWhereSimilarLogRowsAreEncountered){
-                boolean testCaseFound = false;
-                for (TestCase testCase1 : testCasesWhereSimilarLogRowsAreEncountered){
-                    if(testCase.isSameAs(testCase1)){
-                        testCaseFound = true;
-                        break;
-                    }
-                }
-                if(!testCaseFound){
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        void addTestCase(TestCase testCase){
-            this.testCasesWhereSimilarLogRowsAreEncountered.add(testCase);
-        }
-    }
-
-    class SharedLogRow{
-        List<TestCase> testCaseList = new ArrayList<>();
-        LogPost logPost;
-
-        public SharedLogRow(LogPost logPost){
-            this.logPost = logPost;
-        }
-    }
-
-
 
 }

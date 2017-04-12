@@ -1,6 +1,6 @@
 package se.claremont.autotest.common.reporting.testrunreports.email;
 
-import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport;
+import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.HtmlSummaryReport;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;

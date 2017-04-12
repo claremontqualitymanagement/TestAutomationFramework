@@ -17,20 +17,20 @@ public class NewErrorsListTest {
 
     @Test
     public void emptyNewErrorInfosShouldGenerateEmtpyString() throws Exception {
-        List<PotentiallySharedError> newErrorInfos = new ArrayList<>();
+        List<NewError> newErrorInfos = new ArrayList<>();
         NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
         Assert.assertTrue(newErrorsList.toString().contentEquals(""));
     }
 
     @Test
     public void singleSharedNewErrorsShouldBePrinted(){
-        List<PotentiallySharedError> newErrorInfos = new ArrayList<>();
+        List<NewError> newErrorInfos = new ArrayList<>();
         TestCase testCase1 = new TestCase();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "No such data '123' in element Button1. Time duration 321 milliseconds.");
-        newErrorInfos.add(new PotentiallySharedError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
         TestCase testCase2 = new TestCase();
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
-        newErrorInfos.add(new PotentiallySharedError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
         NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
         String regexPattern = ".*Similar log records found in multiple test cases" +
@@ -44,15 +44,15 @@ public class NewErrorsListTest {
 
     @Test
     public void multipleSharedNewErrorsShouldBePrintedInOrder(){
-        List<PotentiallySharedError> newErrorInfos = new ArrayList<>();
+        List<NewError> newErrorInfos = new ArrayList<>();
         TestCase testCase1 = new TestCase();
         testCase1.log(LogLevel.VERIFICATION_FAILED, "No such data '123' in element Button1. Time duration 321 milliseconds.");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
-        newErrorInfos.add(new PotentiallySharedError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
         TestCase testCase2 = new TestCase();
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
-        newErrorInfos.add(new PotentiallySharedError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
         NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
         String output = newErrorsList.toString();
         System.out.println(output);
@@ -68,16 +68,16 @@ public class NewErrorsListTest {
 
     @Test
     public void testCasesWithExtraProblemsShouldBePrintedSeparately(){
-        List<PotentiallySharedError> newErrorInfos = new ArrayList<>();
+        List<NewError> newErrorInfos = new ArrayList<>();
         TestCase testCase1 = new TestCase(null, "Test1");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "No such data '123' in element Button1. Time duration 321 milliseconds.");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "My own error");
-        newErrorInfos.add(new PotentiallySharedError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
         TestCase testCase2 = new TestCase(null, "Test2");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
-        newErrorInfos.add(new PotentiallySharedError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
         NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
         String output = newErrorsList.toString();
         System.out.println(output);
@@ -88,21 +88,21 @@ public class NewErrorsListTest {
 
     @Test
     public void testCasesWithExtraProblemsShouldBePrintedSeparatelyWithTotallyUnSharedTestCaseInfo(){
-        List<PotentiallySharedError> newErrorInfos = new ArrayList<>();
+        List<NewError> newErrorInfos = new ArrayList<>();
         TestCase testCase1 = new TestCase(null, "Test1");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "No such data '123' in element Button1. Time duration 321 milliseconds.");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "My own error");
-        newErrorInfos.add(new PotentiallySharedError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase1, testCase1.testCaseLog.onlyErroneousLogPosts()));
         TestCase testCase3 = new TestCase(null, "Test3");
         testCase3.log(LogLevel.VERIFICATION_FAILED, "Totally unique test case error1");
         testCase3.log(LogLevel.VERIFICATION_FAILED, "Totally unique test case error2");
         testCase3.log(LogLevel.VERIFICATION_FAILED, "Totally unique test case error3");
-        newErrorInfos.add(new PotentiallySharedError(testCase3, testCase3.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase3, testCase3.testCaseLog.onlyErroneousLogPosts()));
         TestCase testCase2 = new TestCase(null, "Test2");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
-        newErrorInfos.add(new PotentiallySharedError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
+        newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
         NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
         String output = newErrorsList.toString();
         System.out.println(output);

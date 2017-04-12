@@ -2,8 +2,8 @@ package se.claremont.autotest.common.testrun;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.common.reporting.testrunreports.HtmlSummaryReport;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
+import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.HtmlSummaryReport;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 

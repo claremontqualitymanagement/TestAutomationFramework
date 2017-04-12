@@ -1,4 +1,4 @@
-package se.claremont.autotest.common.reporting.testrunreports;
+package se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport;
 
 import org.junit.Assert;
 import org.junit.Rule;
