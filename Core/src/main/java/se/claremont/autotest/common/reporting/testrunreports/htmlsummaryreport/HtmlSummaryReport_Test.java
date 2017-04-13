@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
@@ -181,6 +182,22 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         Assert.assertTrue(htmlSummaryReport.encounteredKnownErrorInfos.size() == 0);
         Assert.assertTrue(htmlSummaryReport.newErrorInfos.size() == 1);
         Assert.assertTrue(htmlSummaryReport.solvedKnownErrorsList.size() == 1);
+    }
+
+    @Test
+    public void classPrintTest(){
+        HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        //LogPost(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
+        testCase1.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase1", "Step1", "TestClass"));
+        testCase1.evaluateResultStatus();
+        htmlSummaryReport.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        testCase2.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase2", "Step1", "TestClass"));
+        testCase2.evaluateResultStatus();
+        htmlSummaryReport.evaluateTestCase(testCase2);
+        String output = htmlSummaryReport.createReport();
+        Assert.assertTrue(output, output.contains("All errors were found in test step"));
     }
 
     class TestClass extends TestSet{

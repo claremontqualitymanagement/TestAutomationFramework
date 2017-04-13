@@ -134,7 +134,6 @@ public class TestCase {
         }
         stopTime = new Date();
         testCaseLog.log(LogLevel.INFO, "Ending test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(stopTime) + ".");
-        logKnownErrors();
         evaluateResultStatus();
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
         reporters.forEach(TestCaseLogReporter::report);
@@ -251,6 +250,7 @@ public class TestCase {
      * Evaluates test case execution testCaseLog to assess if the test case ran successfully, if known errors were encountered - or new errors. Return result status.
      */
     public void evaluateResultStatus(){
+        logKnownErrors();
         ArrayList<LogPost> erroneousPosts = testCaseLog.onlyErroneousLogPosts();
         if(erroneousPosts.size() == 0) {
             resultStatus = ResultStatus.PASSED;

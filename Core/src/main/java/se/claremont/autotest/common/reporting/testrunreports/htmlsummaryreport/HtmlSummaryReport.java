@@ -12,9 +12,7 @@ import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +38,7 @@ public class HtmlSummaryReport {
     private final int barWidthInPixels = 400;
     private String resultsBarStyleInfo = "";
     private StringBuilder html;
+    Set<String> errorClassNames = new HashSet<>();
 
 
     /**
@@ -48,8 +47,15 @@ public class HtmlSummaryReport {
      */
     public void evaluateTestCase(TestCase testCase){
         appendTestCaseResultToSummary(testCase);
+        addErrorLogPostClassNamesToList(testCase);
         evaluateTestCaseLocalKnownErrorsList(testCase);
         evaluateTestCaseUnknownErrors(testCase);
+    }
+
+    private void addErrorLogPostClassNamesToList(TestCase testCase) {
+        for(LogPost logPost : testCase.testCaseLog.onlyErroneousLogPosts()){
+            errorClassNames.add(logPost.testStepClassName);
+        }
     }
 
     private void appendTestCaseResultToSummary(TestCase testCase){
@@ -178,7 +184,7 @@ public class HtmlSummaryReport {
                 "      img.bottomlogo        { width: 20%; }" + LF +
                 "      td.bottomlogo         { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
                 "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; margin: 30px; }" + LF +
-                "      .moreerrorsasterisk   { color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
+                "      .moreerrorsasterisk   { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + LF +
                 "      .testcasename { font-weight: bold; }" + LF +
                 "      .errorloglevel { color: " + UxColors.RED.getHtmlColorCode() + "; }" + LF +
                 "      .testsetname  {}" + LF +
@@ -477,7 +483,7 @@ public class HtmlSummaryReport {
      * @return HTML section for new errors.
      */
     private String printNewErrors(){
-        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
+        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos, new ArrayList<>(errorClassNames));
         return newErrorsList.toString();
     }
 

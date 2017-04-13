@@ -99,9 +99,12 @@ public class NewError {
     public String toHtml(){
         StringBuilder html = new StringBuilder();
         html.append("          <p>").append(System.lineSeparator());
+        html.append("             <table class=\"unsharederror\">").append(System.lineSeparator());
         if(this.sampleLogPosts.size() <= 3){
             for(LogPost logPost: sampleLogPosts){
-                html.append("            <span class=\"errorloglevel\">").append(logPost.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logPost.message)).append("</span><br>").append(System.lineSeparator());
+                html.append("                <tr>").append(System.lineSeparator());
+                html.append("                   <td><span class=\"errorloglevel\">").append(logPost.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logPost.message)).append("</span></td>").append(System.lineSeparator());
+                html.append("                </tr>").append(System.lineSeparator());
             }
         } else if(sampleLogPosts.size() > 3){
             LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "");
@@ -116,50 +119,73 @@ public class NewError {
 
             //Allways print first encountered error in log
             LogPost logRow = sampleLogPosts.get(0);
-            html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+            html.append("                <tr>").append(System.lineSeparator());
+            html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+            html.append("                </tr>").append(System.lineSeparator());
 
             //Print the rest of the error log rows depending on where in the log the most erroneous log post was found
             if(mostTroubleSomeLogPostOrder == 0){ //First log post is the worst
                 if(sampleLogPosts.size() > 2){
-                    html.append("            ...(").append(sampleLogPosts.size() - 2).append(" more problem log posts)...<br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td colspan=\"2\">...(").append(sampleLogPosts.size() - 2).append(" more problem log posts)...</td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 }
                 if(sampleLogPosts.size() > 1){ //Last error should also be printed
                     logRow = sampleLogPosts.get(sampleLogPosts.size()-1);
-                    html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 }
             } else if(mostTroubleSomeLogPostOrder == 1){
                 logRow = sampleLogPosts.get(1);
-                html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+                html.append("                <tr>").append(System.lineSeparator());
+                html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+                html.append("                </tr>").append(System.lineSeparator());
                 if(sampleLogPosts.size() > 3){
-                    html.append("            ...(").append(sampleLogPosts.size() - 2).append(" more problem log posts)...<br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td colspan=\"2\">...(").append(sampleLogPosts.size() - 2).append(" more problem log posts)...</td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 } else {
                     logRow = sampleLogPosts.get(2);
-                    html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 }
             } else {
                 if(mostTroubleSomeLogPostOrder == 2){ //If only one log post between the first error and the most troublesome: print it.
                     logRow = sampleLogPosts.get(1);
-                    html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 } else { //Suppress log posts until the most erroneous log post
-                    html.append("            ...(").append(mostTroubleSomeLogPostOrder-1).append(" more problem log posts)...<br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td colspan=\"2\">...(").append(mostTroubleSomeLogPostOrder-1).append(" more problem log posts)...</td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 }
 
                 logRow = sampleLogPosts.get(mostTroubleSomeLogPostOrder);
-                html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+                html.append("                <tr>").append(System.lineSeparator());
+                html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+                html.append("                </tr>").append(System.lineSeparator());
 
                 if(mostTroubleSomeLogPostOrder == sampleLogPosts.size() - 2){
                     logRow = sampleLogPosts.get(sampleLogPosts.size()-1);
-                    html.append("            <span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span>: <span class=\"logmessage\"").append(truncateLogMessageIfNeeded(logRow.message)).append("</span><br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 } else if(mostTroubleSomeLogPostOrder != sampleLogPosts.size() -1){
-                    html.append("            ...(").append(sampleLogPosts.size() - mostTroubleSomeLogPostOrder - 1).append(" more problem log posts)...<br>").append(System.lineSeparator());
+                    html.append("                <tr>").append(System.lineSeparator());
+                    html.append("                   <td colspan=\"2\">...(").append(sampleLogPosts.size() - mostTroubleSomeLogPostOrder - 1).append(" more problem log posts)...</td>").append(System.lineSeparator());
+                    html.append("                </tr>").append(System.lineSeparator());
                 }
             }
         }
+        html.append("             </table>").append(System.lineSeparator());
         for(TestCase testCase : testCasesWhereEncountered){
             String link = testCase.pathToHtmlLog;
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
-            html.append("                  &#9659; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(System.lineSeparator());
+            html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9659; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(System.lineSeparator());
         }
         html.append("          <br>").append(System.lineSeparator());
         html.append("       </p>").append(System.lineSeparator());

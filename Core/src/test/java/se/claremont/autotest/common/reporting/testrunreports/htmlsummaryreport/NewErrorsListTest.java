@@ -18,7 +18,7 @@ public class NewErrorsListTest {
     @Test
     public void emptyNewErrorInfosShouldGenerateEmtpyString() throws Exception {
         List<NewError> newErrorInfos = new ArrayList<>();
-        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
+        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos, new ArrayList<String>());
         Assert.assertTrue(newErrorsList.toString().contentEquals(""));
     }
 
@@ -31,7 +31,7 @@ public class NewErrorsListTest {
         TestCase testCase2 = new TestCase();
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
-        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
+        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos, new ArrayList<String>());
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
         String regexPattern = ".*Similar log records found in multiple test cases" +
                 ".*Verification failed.*No such data .* in element Button1. Time duration .*milliseconds" +
@@ -53,7 +53,7 @@ public class NewErrorsListTest {
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
         newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
-        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
+        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos, new ArrayList<String>());
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
@@ -78,7 +78,7 @@ public class NewErrorsListTest {
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
         newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
-        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
+        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos, new ArrayList<String>());
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
@@ -103,7 +103,7 @@ public class NewErrorsListTest {
         testCase2.log(LogLevel.VERIFICATION_FAILED, "No such data '456' in element Button1. Time duration 987 milliseconds.");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "Next error '123'");
         newErrorInfos.add(new NewError(testCase2, testCase2.testCaseLog.onlyErroneousLogPosts()));
-        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos);
+        NewErrorsList newErrorsList = new NewErrorsList(newErrorInfos, new ArrayList<String>());
         String output = newErrorsList.toString();
         System.out.println(output);
         //String regexPattern = ".*Similar log records found in multiple test cases.*";
