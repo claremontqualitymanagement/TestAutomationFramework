@@ -191,5 +191,5 @@ public class NewError {
         html.append("       </p>").append(System.lineSeparator());
         return html.toString();
 
-}
+    }
 }

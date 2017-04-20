@@ -403,8 +403,12 @@ public class TableData {
                 }
                 if(cells.length < maxNumberOfCellsPerRow){
                     log(LogLevel.DEBUG, "Cell count for row '" + lines[i] + " cells is " + cells.length + " while maximum cell count in all the rows is " + maxNumberOfCellsPerRow + " adding empty headline cells to match.");
+                    try{
                     for(int cellBuffer = cells.length; cellBuffer < maxNumberOfCellsPerRow; cellBuffer++){
                         cellContents.add(new DataCell("", firstRowCells[cellBuffer]));
+                    }
+                    } catch (Exception e){
+                        log(LogLevel.EXECUTION_PROBLEM, "Table data for row '" + lines[i] + "' was identified to contain " + cells.length  + " cells. This is less cells than " + maxNumberOfCellsPerRow + " which is the maximum number of cells per row in the table. Tried to append empty cells to row, but failed. Error: " + e.toString());
                     }
                 }
                 rows.add(new TableRow(cellContents));

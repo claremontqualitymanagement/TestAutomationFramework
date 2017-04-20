@@ -2473,7 +2473,7 @@ public class WebInteractionMethods implements GuiDriver {
             }
             for(WebElement cell : cells){
                 try{
-                    tableContent.append(cell.getText()).append(";");
+                    tableContent.append(cell.getText().replace(";", "").replace(System.lineSeparator(), " ")).append(";");
                 } catch (Exception e) {
                     log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
                     tableContent.append(";");
