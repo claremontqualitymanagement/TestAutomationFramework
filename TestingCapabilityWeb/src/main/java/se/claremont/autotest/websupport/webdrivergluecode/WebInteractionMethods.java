@@ -301,8 +301,10 @@ public class WebInteractionMethods implements GuiDriver {
                     elementIsEnabled = true;
                     if(element.isDisplayed()){
                         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become displayed and enabled.");
-                        return element;
+                    } else {
+                        log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " milliseconds for element " + domElement.LogIdentification() + " to become enabled. Element is not visible.");
                     }
+                    return element;
                 }else{
                     wait(50);
                 }
@@ -847,7 +849,7 @@ public class WebInteractionMethods implements GuiDriver {
         }else{
             List<WebElement> trulyClickableElements = new ArrayList<>();
             for(WebElement potentialClickObject : potentialClickObjects){
-                if(potentialClickObject.isEnabled() && potentialClickObject.isDisplayed()){
+                if(potentialClickObject.isEnabled()){
                     trulyClickableElements.add(potentialClickObject);
                 }
             }
@@ -860,7 +862,17 @@ public class WebInteractionMethods implements GuiDriver {
                     errorManagementProcedures("Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage());
                 }
             }else{
-                errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but several elements was found with that text.");
+                boolean clicked = false;
+                for(WebElement webElement : trulyClickableElements){
+                    if(webElement.isDisplayed()){
+                        clicked = true;
+                        webElement.click();
+                        log(LogLevel.EXECUTED, "Clicked the element with the visible text '" + visibleText + "'.");
+                    }
+                }
+                if(!clicked){
+                    errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but several elements was found with that text.");
+                }
             }
         }
     }
@@ -931,7 +943,7 @@ public class WebInteractionMethods implements GuiDriver {
         } else if(!webElement.isEnabled()){
             errorManagementProcedures("Element " + element.LogIdentification() + " is not enabled. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.");
         } else if(!webElement.isDisplayed()){
-            errorManagementProcedures("Element " + element.LogIdentification() + " is not displayed. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.");
+            log(LogLevel.DEBUG, "Element " + element.LogIdentification() + " is not currently visible.");
         }
         while (!clicked && (System.currentTimeMillis() - startTime) < timeoutInSeconds *1000){
             try{
@@ -2473,7 +2485,7 @@ public class WebInteractionMethods implements GuiDriver {
             }
             for(WebElement cell : cells){
                 try{
-                    tableContent.append(cell.getText().replace(";", "").replace(System.lineSeparator(), " ")).append(";");
+                    tableContent.append(cell.getText().replace(";", " ").replace(System.lineSeparator(), " ")).append(";");
                 } catch (Exception e) {
                     log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
                     tableContent.append(";");
