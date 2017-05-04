@@ -243,14 +243,14 @@ public class LogPost {
         return  "      span." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.DATA.toString()) + "               { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + SupportMethods.LF +
                 "      td." + enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString()) + "            { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; width: 80px; }" + SupportMethods.LF +
                 "      td.logpostloglevel.debug                 { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF +
-                "      td.logpostloglevel.verification-passed   { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + SupportMethods.LF +
-                "      td.logpostloglevel.verification-failed   { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF +
-                "      td.logpostloglevel.verification-problem  { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF +
-                "      td.logpostloglevel.execution-problem     { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF +
+                "      td.logpostloglevel.verification.passed   { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + SupportMethods.LF +
+                "      td.logpostloglevel.verification.failed   { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF +
+                "      td.logpostloglevel.verification.problem  { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF +
+                "      td.logpostloglevel.execution.problem     { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF +
                 "      td.logpostloglevel.executed              { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF +
-                "      td.logpostloglevel.deviation-extra-info  { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + SupportMethods.LF +
+                "      td.logpostloglevel.deviation.extra.info  { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + SupportMethods.LF +
                 "      td.logpostloglevel.info                  { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + SupportMethods.LF +
-                "      td.logpostloglevel.framework-error       { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF;
+                "      td.logpostloglevel.framework.error       { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + SupportMethods.LF;
     }
 
     /**
