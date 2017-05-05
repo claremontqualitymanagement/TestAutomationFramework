@@ -9,6 +9,8 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
+import static se.claremont.autotest.common.support.SupportMethods.LF;
+
 /**
  * Saves the results of a test run to a HTML file
  *
@@ -32,6 +34,11 @@ public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
         htmlSummaryReport.evaluateTestSet(testSet);
     }
 
+    public String reportContent(){
+        String content = htmlSummaryReport.createReport();
+        content = content.replace("<head>", "<head>" + LF + "    <meta http-equiv=\"refresh\" content=\"120\">");
+        return content;
+    }
 
     /**
      * Check to see if the reportTestRun should be written at all
@@ -46,9 +53,9 @@ public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
      */
     private void writeReport(){
         if(reportShouldBeWritten()){
-            SupportMethods.saveToFile(htmlSummaryReport.createReport(), LogFolder.testRunLogFolder + "_summary.html");
+            SupportMethods.saveToFile(reportContent(), LogFolder.testRunLogFolder + "_summary.html");
             LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary reportTestRun saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
-            System.out.println(SupportMethods.LF + logPost.toString());
+            System.out.println(LF + logPost.toString());
         }
     }
 

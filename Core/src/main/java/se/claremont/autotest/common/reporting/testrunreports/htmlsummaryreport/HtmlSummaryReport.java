@@ -263,7 +263,6 @@ public class HtmlSummaryReport {
         html.append("    <title>Test summary</title>").append(LF);
         html.append("    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">").append(LF);
         html.append("    <meta charset=\"UTF-8\">").append(LF);
-        html.append("    <meta http-equiv=\"refresh\" content=\"120\">"); //For kiosk mode display of substituted HTML summary report
         html.append("    <meta name=\"description\" content=\"Summary result for test run\">").append(LF);
         addHtmlElementStyles();
         html.append("  </head>").append(LF).append(LF);

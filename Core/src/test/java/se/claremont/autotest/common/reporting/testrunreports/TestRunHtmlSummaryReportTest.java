@@ -402,6 +402,27 @@ public class TestRunHtmlSummaryReportTest {
     }
 
     @Test
+    public void testRunReportsToFileShouldReloadEveryOtherMinute(){
+        TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
+        TestCase testCase1 = new TestCase(null, "TestCase1");
+        testCase1.log(LogLevel.INFO, "Text");
+        //Framework error is the most severe type of error
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '234' found. Duration 123 milliseconds.");
+        testCase1.log(LogLevel.VERIFICATION_FAILED, "UnSharedLogRow");
+        testCase1.evaluateResultStatus();
+        report.evaluateTestCase(testCase1);
+        TestCase testCase2 = new TestCase(null, "TestCase2");
+        testCase2.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '354' found. Duration 7643 milliseconds.");
+        testCase2.evaluateResultStatus();
+        report.evaluateTestCase(testCase2);
+        String reportContent = report.reportContent();
+        System.out.println(reportContent);
+        Assert.assertTrue(reportContent.contains("<meta http-equiv=\"refresh\" content=\"120\">"));
+        Assert.assertTrue(reportContent.contains("TestCase1"));
+        Assert.assertTrue(reportContent.contains("TestCase2"));
+    }
+
+    @Test
     public void testCasesWithSimilarErrorsShouldBeReportedAsANote(){
         TestRunReporterHtmlSummaryReportFile report = new TestRunReporterHtmlSummaryReportFile();
         TestCase testCase1 = new TestCase(null, "TestCase1");
