@@ -17,7 +17,6 @@ public class DiagnosticsRunTest extends UnitTestClass {
     @Test
     public void test() {
         diagnosticsRun.run();
-
         assertTrue("There should not be any errors in the diagnostics",
                 diagnosticsRun.getResult().getFailures().isEmpty());
     }

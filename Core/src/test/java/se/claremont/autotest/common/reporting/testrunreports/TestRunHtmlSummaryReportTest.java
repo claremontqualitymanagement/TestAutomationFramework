@@ -8,13 +8,14 @@ import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.H
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Test the HTML summary report file from a test run
  *
  * Created by jordam on 2017-03-20.
  */
-public class TestRunHtmlSummaryReportTest {
+public class TestRunHtmlSummaryReportTest extends UnitTestClass {
 
     @Test
     public void yippieTextIsDisplayedWhenNoNewErrors(){

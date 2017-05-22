@@ -5,6 +5,7 @@ import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-04-10.
  */
-public class NewErrorsListTest {
+public class NewErrorsListTest extends UnitTestClass{
 
 
     @Test
