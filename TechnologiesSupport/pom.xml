@@ -40,12 +40,10 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>${capability.core.version}</version>
         </dependency>
-        <dependency>
+        <dependency>  <!-- For screen capture -->
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJavaGui</artifactId>
-            <version>${capability.java.version}</version>
         </dependency>
     </dependencies>
 

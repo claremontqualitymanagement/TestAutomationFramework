@@ -28,7 +28,7 @@
         <capability.java.version>2.1.23</capability.java.version>
         <capability.support.version>1.1.33</capability.support.version>
         <jackson.version>2.6.3</jackson.version>
-        <selenium.version>3.0.1</selenium.version>
+        <selenium.version>3.4.0</selenium.version>
     </properties>
 
     <modules>
@@ -115,6 +115,37 @@
     <dependencyManagement>
         <!-- JCIFS libraries are included for support for Linux-based file systems as well as Windows based ones. -->
         <dependencies>
+            <!-- Modules -->
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>Core</artifactId>
+                <version>${capability.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityRestApi</artifactId>
+                <version>${capability.rest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityWeb</artifactId>
+                <version>${capability.web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityJson</artifactId>
+                <version>${capability.json.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityJavaGui</artifactId>
+                <version>${capability.java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TechnologiesSupport</artifactId>
+                <version>${capability.support.version}</version>
+            </dependency>
 
             <!-- Mocking -->
             <dependency>
@@ -153,6 +184,11 @@
                 <artifactId>mockwebserver</artifactId>
                 <version>3.4.1</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.4.6</version>
             </dependency>
 
             <!-- Test runner -->

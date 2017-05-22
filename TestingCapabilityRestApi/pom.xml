@@ -35,14 +35,16 @@
             <artifactId>okio</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>${capability.core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
-            <version>${capability.json.version}</version>
         </dependency>
     </dependencies>
 

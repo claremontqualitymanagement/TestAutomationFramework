@@ -34,32 +34,26 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
-            <version>${capability.core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityRestApi</artifactId>
-            <version>${capability.rest.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityWeb</artifactId>
-            <version>${capability.web.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
-            <version>${capability.json.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJavaGui</artifactId>
-            <version>${capability.java.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TechnologiesSupport</artifactId>
-            <version>${capability.support.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>
@@ -141,6 +135,10 @@
         <dependency>
             <groupId>com.squareup.okio</groupId>
             <artifactId>okio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
         </dependency>
 
         <!-- Selenium driver manager -->
