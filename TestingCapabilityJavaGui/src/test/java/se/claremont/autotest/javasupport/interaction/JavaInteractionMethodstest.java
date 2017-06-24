@@ -28,7 +28,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     @After     public void tearDown() { JavaTestApplicationRunner.hideWindow(); }
 
     private boolean logPostIsFoundInLog(LogLevel logLevel, String partOfMessage, TestCase testCase){
-        for(LogPost lp : testCase.testCaseLog.logPosts){
+        for(LogPost lp : testCase.testCaseResult.testCaseLog.logPosts){
             if(logLevel == null) if(lp.message.contains(partOfMessage)) return true;
             if(partOfMessage == null) if(lp.logLevel.equals(logLevel)) return true;
             if(lp.logLevel == logLevel && lp.message.contains(partOfMessage))return true;
@@ -173,7 +173,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.verifyElementTextIsExactly(button, "Ok");
         boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_PASSED && logPost.message.contains("OkButton")){
                 found = true;
             }
@@ -188,7 +188,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.verifyElementTextContains(button, "O");
         boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_PASSED && logPost.message.contains("OkButton")){
                 found = true;
             }
@@ -203,7 +203,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.verifyElementTextIsRegexMatch(button, ".*k.*");
         boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_PASSED && logPost.message.contains("OkButton")){
                 found = true;
             }
@@ -218,7 +218,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.verifyElementTextIsExactly(button, "Nok");
         boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_FAILED && logPost.message.contains("OkButton")){
                 found = true;
             }
@@ -233,7 +233,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.verifyElementTextContains(button, "Nok");
         boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_FAILED && logPost.message.contains("OkButton")){
                 found = true;
             }
@@ -248,7 +248,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
         java.verifyElementTextIsRegexMatch(button, "No.*k");
         boolean found = false;
-        for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_FAILED && logPost.message.contains("OkButton")){
                 found = true;
             }

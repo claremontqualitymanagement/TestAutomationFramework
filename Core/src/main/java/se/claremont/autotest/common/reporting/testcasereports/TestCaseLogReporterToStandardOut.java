@@ -22,7 +22,7 @@ class TestCaseLogReporterToStandardOut {
     @SuppressWarnings("unused")
     public void report(){
         logger.debug( "Log for test case '" + testCase.testName + "' in test set '" + testCase.testSetName + "':" );
-        for(LogPost logPost : testCase.testCaseLog.logPosts){
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts){
             System.out.println(logPost.toString());
         }
     }

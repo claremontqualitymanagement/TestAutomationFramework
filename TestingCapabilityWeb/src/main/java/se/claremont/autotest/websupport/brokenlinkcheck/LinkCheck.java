@@ -35,7 +35,7 @@ public class LinkCheck implements Runnable{
 
     private void log(LogLevel logLevel, String message){
         //testCase.testCaseLog.log(logLevel, message);
-        testCase.testCaseLog.log(logLevel, message, message, testCase.testName, testStepName, "WebInteractionMethods/" + testCase.testSetName);
+        testCase.testCaseResult.testCaseLog.log(logLevel, message, message, testCase.testName, testStepName, "WebInteractionMethods/" + testCase.testSetName);
     }
 
     @Override

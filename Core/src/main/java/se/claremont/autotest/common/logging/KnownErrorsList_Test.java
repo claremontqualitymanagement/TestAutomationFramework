@@ -3,6 +3,7 @@ package se.claremont.autotest.common.logging;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
@@ -19,9 +20,9 @@ public class KnownErrorsList_Test extends UnitTestClass {
         KnownErrorsList knownErrorsList = new KnownErrorsList();
         TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
-        testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
-        testCase1.evaluateResultStatus();
-        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
+        testCase1.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.testCaseResult.resultStatus.toString() + "'.", testCase1.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
     }
 
     @Test
@@ -29,10 +30,10 @@ public class KnownErrorsList_Test extends UnitTestClass {
         KnownErrorsList knownErrorsList = new KnownErrorsList();
         TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
-        testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
-        testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 2.");
-        testCase1.evaluateResultStatus();
-        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS));
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 2.");
+        testCase1.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "', but was '" + testCase1.testCaseResult.resultStatus.toString() + "'.", testCase1.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS));
     }
 
     @Test
@@ -40,9 +41,9 @@ public class KnownErrorsList_Test extends UnitTestClass {
         KnownErrorsList knownErrorsList = new KnownErrorsList();
         TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
-        testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 2.");
-        testCase1.evaluateResultStatus();
-        Assert.assertTrue("Test case known error was triggered. Expected resultStatus to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS));
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 2.");
+        testCase1.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case known error was triggered. Expected resultStatus to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "', but was '" + testCase1.testCaseResult.resultStatus.toString() + "'.", testCase1.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS));
     }
 
     @Test
@@ -50,13 +51,13 @@ public class KnownErrorsList_Test extends UnitTestClass {
         KnownErrorsList knownErrorsList = new KnownErrorsList();
         TestCase testCase1 = new TestCase(knownErrorsList, "KnownErrorsList_Test");
         testCase1.addKnownError("Description1", "TestCaseLog row 1.");
-        testCase1.testCaseLog.log(LogLevel.INFO, "TestCaseLog row 1.");
-        testCase1.testCaseLog.log(LogLevel.DEBUG, "TestCaseLog row 2.");
-        testCase1.testCaseLog.log(LogLevel.EXECUTED, "TestCaseLog row 2.");
-        testCase1.testCaseLog.log(LogLevel.DEVIATION_EXTRA_INFO, "TestCaseLog row 2.");
-        testCase1.testCaseLog.log(LogLevel.VERIFICATION_PASSED, "TestCaseLog row 2.");
-        testCase1.evaluateResultStatus();
-        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCase.ResultStatus.PASSED.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.PASSED));
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.INFO, "TestCaseLog row 1.");
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.DEBUG, "TestCaseLog row 2.");
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "TestCaseLog row 2.");
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.DEVIATION_EXTRA_INFO, "TestCaseLog row 2.");
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PASSED, "TestCaseLog row 2.");
+        testCase1.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCaseResult.ResultStatus.PASSED.toString() + "', but was '" + testCase1.testCaseResult.resultStatus.toString() + "'.", testCase1.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
     }
 
 
@@ -64,9 +65,9 @@ public class KnownErrorsList_Test extends UnitTestClass {
     public void testSetKnownErrorOnlyOneLogPostThatIsKnownError(){
         testTestSet.addKnownError("Description1", "TestCaseLog row 1.");
         TestCase testCase1 = new TestCase(testTestSet.knownErrorsList, "KnownErrorsList_Test");
-        testCase1.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
-        testCase1.evaluateResultStatus();
-        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.resultStatus.toString() + "'.", testCase1.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
+        testCase1.testCaseResult.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "TestCaseLog row 1.");
+        testCase1.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.testCaseResult.resultStatus.toString() + "'.", testCase1.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
     }
 
     class TestClass extends TestSet{}

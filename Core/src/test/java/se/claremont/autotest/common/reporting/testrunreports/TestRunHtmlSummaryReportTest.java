@@ -24,10 +24,10 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase.addKnownError("KnownErrorDescription", ".*KnownErrorPattern.*");
         testCase.log(LogLevel.INFO, "Info message");
         testCase.log(LogLevel.VERIFICATION_FAILED, "KnownErrorPattern");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         testRunReporterHtmlSummaryReportFile.evaluateTestCase(testCase);
         TestCase testCase2 = new TestCase();
-        testCase2.evaluateResultStatus();
+        testCase2.testCaseResult.evaluateResultStatus();
         testRunReporterHtmlSummaryReportFile.evaluateTestCase(testCase2);
         testRunReporterHtmlSummaryReportFile.report();
         String htmlReport = testRunReporterHtmlSummaryReportFile.htmlSummaryReport.createReport();
@@ -41,10 +41,10 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         TestCase testCase = new TestCase();
         testCase.log(LogLevel.INFO, "Info message");
         testCase.log(LogLevel.VERIFICATION_FAILED, "KnownErrorPattern");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         testRunReporterHtmlSummaryReportFile.evaluateTestCase(testCase);
         TestCase testCase2 = new TestCase();
-        testCase2.evaluateResultStatus();
+        testCase2.testCaseResult.evaluateResultStatus();
         testRunReporterHtmlSummaryReportFile.evaluateTestCase(testCase2);
         testRunReporterHtmlSummaryReportFile.report();
         String htmlReport = testRunReporterHtmlSummaryReportFile.htmlSummaryReport.createReport();
@@ -78,7 +78,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -117,7 +117,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -172,7 +172,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
 
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.FRAMEWORK_ERROR, "Failed4");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -227,7 +227,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -284,7 +284,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.EXECUTED, "Passed3");
         testCase1.log(LogLevel.DEBUG, "Passed4");
         testCase1.log(LogLevel.VERIFICATION_PASSED,"Passed5");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -311,7 +311,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.INFO, "Text");
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -330,7 +330,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed2");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -351,7 +351,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed1");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed2");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "Failed3");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -371,7 +371,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase1.log(LogLevel.INFO, "Text");
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         report.evaluateTestCase(testCase2);
@@ -390,7 +390,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "UnSharedLogRow");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow");
@@ -410,11 +410,11 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '234' found. Duration 123 milliseconds.");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "UnSharedLogRow");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '354' found. Duration 7643 milliseconds.");
-        testCase2.evaluateResultStatus();
+        testCase2.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase2);
         String reportContent = report.reportContent();
         System.out.println(reportContent);
@@ -431,11 +431,11 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         //Framework error is the most severe type of error
         testCase1.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '234' found. Duration 123 milliseconds.");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "UnSharedLogRow");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
         testCase2.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '354' found. Duration 7643 milliseconds.");
-        testCase2.evaluateResultStatus();
+        testCase2.testCaseResult.evaluateResultStatus();
         report.evaluateTestCase(testCase2);
         String reportContent = report.htmlSummaryReport.createReport();
         System.out.println(reportContent);
@@ -455,17 +455,17 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase0.log(LogLevel.DEBUG, "Test");
         testCase0.log(LogLevel.FRAMEWORK_ERROR, "Framework error");
         testCase0.log(LogLevel.DEBUG, "Test");
-        testCase0.evaluateResultStatus();
+        testCase0.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase0);
         TestCase testCase1 = new TestCase(null, "TestCase1");
         //LogPost(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
-        testCase1.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase1", "Step1", "TestClass"));
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase1", "Step1", "TestClass"));
+        testCase1.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
-        testCase2.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase2", "Step1", "TestClass"));
+        testCase2.testCaseResult.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase2", "Step1", "TestClass"));
         testCase2.log(LogLevel.EXECUTION_PROBLEM, "Shared log post between test case 2 and test case 3");
-        testCase2.evaluateResultStatus();
+        testCase2.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase2);
         TestCase testCase3 = new TestCase(null, "TestCase3");
         testCase3.log(LogLevel.INFO, "Text");
@@ -475,27 +475,27 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase3.log(LogLevel.VERIFICATION_FAILED, "UnSharedLogRow");
         testCase3.log(LogLevel.EXECUTION_PROBLEM, "SharedLogRow 'xyz'. Component bac. Time 543 ms.");
         testCase3.log(LogLevel.FRAMEWORK_ERROR, "Really really long error message. Really really long error message. Really really long error message. Really really long error message. ");
-        testCase3.evaluateResultStatus();
+        testCase3.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase3);
         TestCase testCase4 = new TestCase(null, "TestCase4");
         testCase4.log(LogLevel.VERIFICATION_FAILED, "SharedLogRow '354' found. Duration 7643 milliseconds.");
         testCase4.log(LogLevel.EXECUTION_PROBLEM, "SharedLogRow 'xyz'. Component bac. Time 543 ms.");
         testCase4.log(LogLevel.FRAMEWORK_ERROR, "Really really long error message. Really really long error message. Really really long error message. Really really long error message. ");
-        testCase4.evaluateResultStatus();
+        testCase4.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase4);
         TestCase testCase5 = new TestCase(null, "TestCase5");
         testCase5.log(LogLevel.VERIFICATION_PASSED, "Yes. Did good.");
         testCase5.log(LogLevel.VERIFICATION_PASSED, "SharedLogRow '234' found. Duration 123 milliseconds.");
-        testCase5.evaluateResultStatus();
+        testCase5.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase5);
         TestCase testCase6 = new TestCase(testSet.knownErrorsList, "TestCase6");
         testCase6.log(LogLevel.VERIFICATION_FAILED, "Known error");
-        testCase6.evaluateResultStatus();
+        testCase6.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase6);
         TestCase testCase7 = new TestCase(null, "TestCase7");
         testCase7.addKnownError("Known error registered on test case 7", ".*Known error2.*");
         testCase7.log(LogLevel.VERIFICATION_FAILED, "Known error2");
-        testCase7.evaluateResultStatus();
+        testCase7.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase7);
         TestCase testCase8 = new TestCase(null, "TestCase8");
         testCase8.log(LogLevel.VERIFICATION_PASSED, "Passed");
@@ -515,7 +515,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase8.log(LogLevel.VERIFICATION_FAILED, "Nooooooooo7....");
         pause(20);
         testCase8.log(LogLevel.VERIFICATION_FAILED, "Nooooooooo8....");
-        testCase8.evaluateResultStatus();
+        testCase8.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase8);
         htmlSummaryReport.evaluateTestSet(testSet);
         String output = htmlSummaryReport.createReport();

@@ -2,6 +2,7 @@ package se.claremont.autotest.common.reporting.testrunreports;
 
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 
 import java.awt.*;
 import java.io.File;
@@ -22,10 +23,10 @@ public class KioskModeReport {
     ArrayList<String> tableRows = new ArrayList<>();
 
     public void evaluateTestCase(TestCase testCase){
-        if (testCase.resultStatus.equals(TestCase.ResultStatus.UNEVALUATED)){
-            testCase.evaluateResultStatus();
+        if (testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.UNEVALUATED)){
+            testCase.testCaseResult.evaluateResultStatus();
         }
-        switch (testCase.resultStatus){
+        switch (testCase.testCaseResult.resultStatus){
             case UNEVALUATED:
                 tableRows.add("      <tr class=\"unevaluated\"><td>Unevaluated</td><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td></tr>" + System.lineSeparator());
                 break;

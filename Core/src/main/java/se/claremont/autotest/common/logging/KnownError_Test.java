@@ -38,7 +38,7 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         Assert.assertFalse("The known error was reported found, but wasn't present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -47,10 +47,10 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
         Assert.assertTrue("The known error wasn't reported found, but was present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -59,11 +59,11 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
         Assert.assertTrue("The known error wasn't reported found, but was present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -72,10 +72,10 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
         Assert.assertFalse("The known error was reported found, but wasn't present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -84,10 +84,10 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {"Pattern1", "Pattern2"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), "KnownError_Test");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern4");
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern4");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
         Assert.assertFalse("The known error was reported found, but wasn't present in the testCaseLog", knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -95,9 +95,9 @@ public class KnownError_Test extends UnitTestClass {
     public void thisErrorIsEncounteredSingleRowTest(){
         KnownError knownError = new KnownError("Description", ".*TestCaseLog row.*");
         TestCase testCase = new TestCase(new KnownErrorsList(), this.getClass().getName());
-        testCase.testCaseLog.log(LogLevel.DEBUG, "No error TestCaseLog row");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.DEBUG, "No error TestCaseLog row");
         Assert.assertFalse(knownError.thisErrorIsEncountered(testCase));
-        testCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "No error TestCaseLog row");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "No error TestCaseLog row");
         Assert.assertTrue(knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -106,8 +106,8 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {".*TestCaseLog row.*", ".*Problem.*"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), this.getClass().getName());
-        testCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "No error TestCaseLog row");
-        testCase.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "Problem");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "No error TestCaseLog row");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTION_PROBLEM, "Problem");
         Assert.assertTrue(knownError.thisErrorIsEncountered(testCase));
     }
 
@@ -116,9 +116,9 @@ public class KnownError_Test extends UnitTestClass {
         String[] patterns = {"TestCaseLog row", "Problem"};
         KnownError knownError = new KnownError("Description", patterns);
         TestCase testCase = new TestCase(new KnownErrorsList(), this.getClass().getName());
-        testCase.testCaseLog.log(LogLevel.DEBUG, "No error TestCaseLog row");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.DEBUG, "No error TestCaseLog row");
         Assert.assertFalse(knownError.thisErrorIsEncountered(testCase));
-        testCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Problem");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Problem");
         Assert.assertFalse(knownError.thisErrorIsEncountered(testCase));
     }
 

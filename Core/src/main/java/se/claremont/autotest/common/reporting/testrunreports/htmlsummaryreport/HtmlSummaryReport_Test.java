@@ -27,7 +27,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.log(LogLevel.EXECUTED, "Test");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 1);
         Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
@@ -46,7 +46,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.log(LogLevel.EXECUTION_PROBLEM, "Execution problem");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
         Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 1);
@@ -66,7 +66,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.log(LogLevel.VERIFICATION_FAILED, "Failed verification");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
         Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
@@ -86,7 +86,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.addKnownError("Fixed error", "String that is not encountered.");
         testCase.log(LogLevel.EXECUTED, "Framework error");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 1);
         Assert.assertTrue(htmlSummaryReport.failedTestCasesWithNewDeviations == 0);
@@ -106,7 +106,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.addKnownError("Fixed error", "String that is not encountered.");
         testCase.log(LogLevel.FRAMEWORK_ERROR, "Framework error");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
         Assert.assertTrue("New deviations count was expected to be 1 but was " + htmlSummaryReport.failedTestCasesWithNewDeviations + ".", htmlSummaryReport.failedTestCasesWithNewDeviations == 1);
@@ -127,7 +127,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.log(LogLevel.VERIFICATION_FAILED, "Failed verification");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         htmlSummaryReport.evaluateTestSet(testSet);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
@@ -149,7 +149,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.log(LogLevel.EXECUTED, "Framework error");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         htmlSummaryReport.evaluateTestSet(testSet);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 1);
@@ -171,7 +171,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         testCase.log(LogLevel.DEBUG, "Test");
         testCase.log(LogLevel.FRAMEWORK_ERROR, "Framework error");
         testCase.log(LogLevel.DEBUG, "Test");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase);
         htmlSummaryReport.evaluateTestSet(testSet);
         Assert.assertTrue(htmlSummaryReport.successfulTestCases == 0);
@@ -189,12 +189,12 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
         TestCase testCase1 = new TestCase(null, "TestCase1");
         //LogPost(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
-        testCase1.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase1", "Step1", "TestClass"));
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase1", "Step1", "TestClass"));
+        testCase1.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase(null, "TestCase2");
-        testCase2.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase2", "Step1", "TestClass"));
-        testCase2.evaluateResultStatus();
+        testCase2.testCaseResult.testCaseLog.logPosts.add(new LogPost(LogLevel.EXECUTION_PROBLEM, "Problem", "<p>Problem</p>", "TestCase2", "Step1", "TestClass"));
+        testCase2.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase2);
         String output = htmlSummaryReport.createReport();
         Assert.assertTrue(output, output.contains("All errors were found in test step"));

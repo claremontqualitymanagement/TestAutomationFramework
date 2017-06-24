@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -19,9 +20,9 @@ public class KioskModeReportTest extends UnitTestClass{
         KioskModeReport kioskDisplay = new KioskModeReport();
         TestCase testCase = new TestCase(null, "dummy");
         testCase.log(LogLevel.VERIFICATION_PASSED, "text");
-        Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.UNEVALUATED));
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.UNEVALUATED));
         kioskDisplay.evaluateTestCase(testCase);
-        Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.PASSED));
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
     }
 
     @Test
@@ -30,9 +31,9 @@ public class KioskModeReportTest extends UnitTestClass{
         KioskModeReport kioskDisplay = new KioskModeReport();
         TestCase testCase = new TestCase(null, "dummy");
         testCase.log(LogLevel.VERIFICATION_PASSED, "text");
-        Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.UNEVALUATED));
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.UNEVALUATED));
         kioskDisplay.evaluateTestCase(testCase);
-        Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.PASSED));
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
         kioskDisplay.create("C:\\temp\\reportTestRun.html", "Dummy tests", 4);
         kioskDisplay.openInDefaultBrowser();
     }

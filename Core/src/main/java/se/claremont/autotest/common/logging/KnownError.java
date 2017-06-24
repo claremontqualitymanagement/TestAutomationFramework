@@ -118,7 +118,7 @@ public class KnownError {
     public boolean thisErrorIsEncountered(TestCase testCase){
         for(String pattern : regexpPatternMatchForLogString){
             boolean thisPatternFound = false;
-            for(LogPost logPost : testCase.testCaseLog.onlyErroneousLogPosts()){
+            for(LogPost logPost : testCase.testCaseResult.testCaseLog.onlyErroneousLogPosts()){
                 if(SupportMethods.isRegexMatch(logPost.message, pattern)){
                     thisPatternFound = true;
                     logPost.identifiedToBePartOfKnownError = true;

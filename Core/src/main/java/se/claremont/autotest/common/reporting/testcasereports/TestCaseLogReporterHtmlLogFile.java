@@ -132,12 +132,12 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private void validateTestRunEndTime() {
         if(runEndTime != null) return;
-        if(testCase.stopTime != null){
-            this.runEndTime = testCase.stopTime;
+        if(testCase.testCaseResult.stopTime != null){
+            this.runEndTime = testCase.testCaseResult.stopTime;
             return;
         }
-        if(testCase.testCaseLog.logPosts.size() > 0){
-            this.runEndTime = testCase.testCaseLog.logPosts.get(testCase.testCaseLog.logPosts.size()-1).date;
+        if(testCase.testCaseResult.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCase.testCaseResult.testCaseLog.logPosts.get(testCase.testCaseResult.testCaseLog.logPosts.size()-1).date;
         } else {
             this.runEndTime = new Date();
         }
@@ -263,10 +263,10 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
                 "      <p>" + LF +
-                "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "<br>" + LF +
-                "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.startTime) + "<br>" + LF +
+                "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "<br>" + LF +
+                "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.testCaseResult.startTime) + "<br>" + LF +
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(runEndTime) + "<br>" + LF +
-                "        Duration:   " + StringManagement.timeDurationAsString(testCase.startTime, runEndTime) + LF +
+                "        Duration:   " + StringManagement.timeDurationAsString(testCase.testCaseResult.startTime, runEndTime) + LF +
                 "      </p>" + LF +
                 "      <p>" + LF +
                 "         Number of verifications performed: " + numberOfVerificationsPerformed() + LF +
@@ -279,7 +279,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private int numberOfVerificationsPerformed() {
         int count = 0;
-        for(LogPost logPost : testCase.testCaseLog.logPosts){
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_PASSED || logPost.logLevel == LogLevel.VERIFICATION_FAILED){
                 count++;
             }
@@ -289,7 +289,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private int numberOfExecitionStepsPerformed() {
         int count = 0;
-        for(LogPost logPost : testCase.testCaseLog.logPosts){
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.EXECUTED){
                 count++;
             }
@@ -326,7 +326,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String status(){
-        if(testCase.testCaseLog.hasEncounteredErrors()){
+        if(testCase.testCaseResult.testCaseLog.hasEncounteredErrors()){
             return "      <p class=\"statussymbol\">Status: <b class=\"bad\">&#x2717;</b></p>" + LF;
         } else {
             return "      <p class=\"statussymbol\">Status: <b class=\"good\">&#x2713;</b></p>" + LF;
@@ -344,12 +344,12 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private void addHtmlSectionTestCaseData(){
-        if(testCase.testCaseData.testCaseDataList.size() > 0){
+        if(testCase.testCaseResult.testCaseData.testCaseDataList.size() > 0){
             sb.append("      <div id=\"testdata\" class=\"testcasedata expandable\" >").append(LF);
             sb.append("         <h2>Test case data</h2>").append(LF);
             sb.append("         <div id=\"expandable_content\">").append(LF);
             sb.append("         <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
-            for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){
+            for(ValuePair valuePair : testCase.testCaseResult.testCaseData.testCaseDataList){
                 sb.append("           <tr><td class=\"").
                         append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
                         append("\">").append(valuePair.parameter).append("</td><td class=\"").
@@ -421,9 +421,9 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String testStepLogPostSections(TestCase testCase){
-        if(testCase.testCaseLog.logPosts.size() == 0) return null;
+        if(testCase.testCaseResult.testCaseLog.logPosts.size() == 0) return null;
         StringBuilder html = new StringBuilder();
-        ArrayList<TestCaseLogSection> logSections = testCase.testCaseLog.toLogSections();
+        ArrayList<TestCaseLogSection> logSections = testCase.testCaseResult.testCaseLog.toLogSections();
         for(TestCaseLogSection testCaseLogSection : logSections){
             html.append(testCaseLogSection.toHtml());
         }

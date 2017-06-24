@@ -6,8 +6,8 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.restsupport.RestSupport;
 
-import static se.claremont.autotest.common.testcase.TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
-import static se.claremont.autotest.common.testcase.TestCase.ResultStatus.PASSED;
+import static se.claremont.autotest.common.testcase.TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
+import static se.claremont.autotest.common.testcase.TestCaseResult.ResultStatus.PASSED;
 
 /**
  * Test class for checkning broken links
@@ -42,24 +42,24 @@ public class BrokenLinkCheckerTest extends UnitTestClass {
     public void linkReportsShouldBeProducedNegative(){
         web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("brokenLinkCheckTest.html"));
         web.reportBrokenLinksOnCurrentPage();
-        testCase.evaluateResultStatus();
-        Assert.assertTrue(testCase.resultStatus.equals(FAILED_WITH_ONLY_NEW_ERRORS));
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(FAILED_WITH_ONLY_NEW_ERRORS));
     }
 
     @Test
     public void linkReportsShouldBeProducedPositive(){
         web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("brokenLinkCheckTestPositive.html"));
         web.reportBrokenLinksOnCurrentPage();
-        testCase.evaluateResultStatus();
-        Assert.assertTrue(testCase.resultStatus.equals(PASSED));
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(PASSED));
     }
 
     @Test
     public void linkReportsShouldBeProducedWithHiddenLinks(){
         web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("brokenLinkCheckTest.html"));
         web.reportBrokenLinksOnCurrentPage_IncludeAllLinksAlsoNonDisplayedLinks();
-        testCase.evaluateResultStatus();
-        Assert.assertTrue(testCase.resultStatus.equals(FAILED_WITH_ONLY_NEW_ERRORS));
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(FAILED_WITH_ONLY_NEW_ERRORS));
     }
 
 }

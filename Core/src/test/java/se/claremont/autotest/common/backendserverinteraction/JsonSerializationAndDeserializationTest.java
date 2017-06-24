@@ -28,7 +28,7 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
         testCase.addKnownError("Description of known error 2", new String[]{".*Regexpattern.*", "Nope"});
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Message [in ]{pure] :text\\\"this\" time.", "html message");
         testCase.log(LogLevel.INFO, "Message");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {

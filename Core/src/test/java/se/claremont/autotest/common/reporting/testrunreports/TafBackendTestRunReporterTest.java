@@ -50,13 +50,13 @@ public class TafBackendTestRunReporterTest extends UnitTestClass {
         testCase1.log(LogLevel.INFO, "dummy");
         testCase1.log(LogLevel.VERIFICATION_FAILED, "pattern");
         testCase1.log(LogLevel.INFO, "dummy");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         Assert.assertTrue("testCase1 json: " + testCase1.toJson(), testCase1.toJson().contains("identifiedToBePartOfKnownError\" : true"));
         tafBackendServerTestRunReporter.evaluateTestCase(testCase1);
         TestCase testCase2 = new TestCase();
         testCase2.addKnownError("description", ".*pattern.*");
         testCase2.log(LogLevel.INFO, "dummy");
-        testCase1.evaluateResultStatus();
+        testCase1.testCaseResult.evaluateResultStatus();
         tafBackendServerTestRunReporter.evaluateTestCase(testCase2);
         tafBackendServerTestRunReporter.evaluateTestSet(testSet1);
 

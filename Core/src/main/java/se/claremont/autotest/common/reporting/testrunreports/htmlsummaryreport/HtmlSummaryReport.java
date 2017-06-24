@@ -7,6 +7,7 @@ import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporte
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
@@ -53,7 +54,7 @@ public class HtmlSummaryReport {
     }
 
     private void addErrorLogPostClassNamesToList(TestCase testCase) {
-        for(LogPost logPost : testCase.testCaseLog.onlyErroneousLogPosts()){
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.onlyErroneousLogPosts()){
             errorClassNames.add(logPost.testStepClassName);
         }
     }
@@ -62,9 +63,9 @@ public class HtmlSummaryReport {
         String link = testCase.pathToHtmlLog;
         if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
             link = link.replace("\\", "/").substring(6);
-        testCaseSummary += "            <tr class=\"" + testCase.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString()) + "</td><td><a href=\"" + TestRun.reportLinkPrefix() + "://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
+        testCaseSummary += "            <tr class=\"" + testCase.testCaseResult.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "</td><td><a href=\"" + TestRun.reportLinkPrefix() + "://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
         //testCaseSummary += solvedKnownErrorsFromTestCaseLocalKnownErrorsList(testCase);
-        switch (testCase.resultStatus){
+        switch (testCase.testCaseResult.resultStatus){
             case PASSED:
                 successfulTestCases++;
                 break;
@@ -84,7 +85,7 @@ public class HtmlSummaryReport {
     }
 
     private void evaluateTestCaseUnknownErrors(TestCase testCase){
-        ArrayList<LogPost> errorLogMessages = testCase.testCaseLog.onlyErroneousLogPosts().stream().filter(logPost -> !logPost.identifiedToBePartOfKnownError).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<LogPost> errorLogMessages = testCase.testCaseResult.testCaseLog.onlyErroneousLogPosts().stream().filter(logPost -> !logPost.identifiedToBePartOfKnownError).collect(Collectors.toCollection(ArrayList::new));
         if(errorLogMessages.size() > 0){
             List<TestCase> testCases = new ArrayList<>();
             testCases.add(testCase);
@@ -192,11 +193,11 @@ public class HtmlSummaryReport {
                 "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      li." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "      table#" + HtmlStyleNames.STATISTICS.toString() + "                           { background-color: " + UxColors.WHITE.getHtmlColorCode() +"; border-collapse: collapse; border: 1p solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; width: " + barWidthInPixels + "px; }" + LF +
-                "      ." + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "             { color: " + UxColors.DARK_YELLOW.getHtmlColorCode() + "; }" + LF +
-                "      ." + TestCase.ResultStatus.PASSED.toString() + "                                    { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
-                "      ." + TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "     { color: " + UxColors.ORANGE.getHtmlColorCode() +"; font-weight: bold; }" + LF +
-                "      ." + TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "               { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
-                "      ." + TestCase.ResultStatus.UNEVALUATED.toString() + "                               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: center; }" + LF +
+                "      ." + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "             { color: " + UxColors.DARK_YELLOW.getHtmlColorCode() + "; }" + LF +
+                "      ." + TestCaseResult.ResultStatus.PASSED.toString() + "                                    { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
+                "      ." + TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "     { color: " + UxColors.ORANGE.getHtmlColorCode() +"; font-weight: bold; }" + LF +
+                "      ." + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "               { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
+                "      ." + TestCaseResult.ResultStatus.UNEVALUATED.toString() + "                               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: center; }" + LF +
                 "      ." + HtmlStyleNames.COPYRIGHT.toString() + "                                 { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; }" + LF +
                 "       tr#" + HtmlStyleNames.STATISTICS_COUNT.toString() + "          { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "       tr#" + HtmlStyleNames.STATISTICS_HEADER_ROW.toString() + "          { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; text-aligned: left; }" + LF +

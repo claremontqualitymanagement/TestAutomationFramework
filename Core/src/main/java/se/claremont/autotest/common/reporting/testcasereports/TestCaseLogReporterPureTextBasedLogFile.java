@@ -32,10 +32,10 @@ public class TestCaseLogReporterPureTextBasedLogFile implements TestCaseLogRepor
      */
     private String pureTextLogText(){
         StringBuilder logText = new StringBuilder(SupportMethods.LF + "Test case '" + testCase.testName + "'" + SupportMethods.LF + SupportMethods.LF);
-        logText.append("Test status: ").append(StringManagement.enumCapitalNameToFriendlyString(testCase.resultStatus.toString())).append(SupportMethods.LF).append(SupportMethods.LF);
-        if(testCase.testCaseData.testCaseDataList.size() > 0){
+        logText.append("Test status: ").append(StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString())).append(SupportMethods.LF).append(SupportMethods.LF);
+        if(testCase.testCaseResult.testCaseData.testCaseDataList.size() > 0){
             logText.append("Test case data:").append(SupportMethods.LF);
-            for(ValuePair valuePair : testCase.testCaseData.testCaseDataList){
+            for(ValuePair valuePair : testCase.testCaseResult.testCaseData.testCaseDataList){
                 logText.append(valuePair.toString()).append(SupportMethods.LF);
             }
             logText.append(SupportMethods.LF);
@@ -48,7 +48,7 @@ public class TestCaseLogReporterPureTextBasedLogFile implements TestCaseLogRepor
             logText.append(SupportMethods.LF);
         }
         logText.append("Test execution testCaseLog").append(SupportMethods.LF);
-        logText.append(testCase.testCaseLog.toString()).append(SupportMethods.LF);
+        logText.append(testCase.testCaseResult.testCaseLog.toString()).append(SupportMethods.LF);
         return logText.toString();
     }
 }

@@ -89,8 +89,8 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
         public TestlinkTestCaseMapper(TestCase testCase){
             this.testName = testCase.testName;
             this.testSetName = testCase.testSetName;
-            this.notes = testCase.testCaseLog.toString();
-            this.executionStatus = testCase.resultStatus.toString();
+            this.notes = testCase.testCaseResult.testCaseLog.toString();
+            this.executionStatus = testCase.testCaseResult.resultStatus.toString();
         }
 
         @SuppressWarnings("WeakerAccess")

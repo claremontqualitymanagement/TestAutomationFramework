@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.TestRunReporter;
@@ -36,7 +37,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty public List<String> testSetJsonsList = new ArrayList<>();
     @JsonProperty public List<String> testSetNames = new ArrayList<>();
     @SuppressWarnings("WeakerAccess")
-    @JsonProperty public TestCase.ResultStatus mostSevereErrorEncountered = TestCase.ResultStatus.UNEVALUATED;
+    @JsonProperty public TestCaseResult.ResultStatus mostSevereErrorEncountered = TestCaseResult.ResultStatus.UNEVALUATED;
     @JsonProperty public String testRunId = "";
 
     public TafBackendServerTestRunReporter(){
@@ -64,7 +65,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public void evaluateTestCase(TestCase testCase){
         if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         if(testCase == null)return;
-        if(testCase.resultStatus.value() > mostSevereErrorEncountered.value()) mostSevereErrorEncountered = testCase.resultStatus;
+        if(testCase.testCaseResult.resultStatus.value() > mostSevereErrorEncountered.value()) mostSevereErrorEncountered = testCase.testCaseResult.resultStatus;
         testCasesJsonsList.add(testCase.toJson());
     }
 

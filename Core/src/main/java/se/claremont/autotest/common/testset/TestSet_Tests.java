@@ -7,6 +7,7 @@ import org.junit.rules.TestName;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 
 /**
  * Tests for the TestSet class
@@ -28,9 +29,9 @@ public class TestSet_Tests extends UnitTestClass{
         TestClass testSet = new TestClass();
         testSet.addKnownError("Description", ".*Pattern string.*");
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
-        testSet.currentTestCase.evaluateResultStatus();
-        Assert.assertTrue("Expected result status of test case to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.resultStatus.toString() + ".", testSet.currentTestCase.resultStatus == TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
+        testSet.currentTestCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase.testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
     @Test
@@ -39,26 +40,26 @@ public class TestSet_Tests extends UnitTestClass{
         testSet.addKnownError("Description", "PatternString1");
         testSet.addKnownError("Description", "PatternString2");
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString1");
-        testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString2");
-        testSet.currentTestCase.evaluateResultStatus();
-        Assert.assertTrue(testSet.currentTestCase.resultStatus == TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString1");
+        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString2");
+        testSet.currentTestCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testSet.currentTestCase.testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
     @Test
     public void wrapUpCurrentTestSetShould(){
         TestClass testSet = new TestClass();
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
+        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
         //testSet.currentTestCase.evaluateResultStatus();
         TestCase theTestCase = testSet.currentTestCase;
         testSet.wrapUpTestCase();
         Assert.assertNotNull(testSet);
         Assert.assertNotNull(theTestCase);
-        Assert.assertNotNull(theTestCase.stopTime);
+        Assert.assertNotNull(theTestCase.testCaseResult.stopTime);
 
         boolean logRowAboutEndingExecutionFound = false;
-        for(LogPost logPost : theTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : theTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.message.contains("Ending test execution at ")){
                 logRowAboutEndingExecutionFound = true;
                 break;
@@ -67,7 +68,7 @@ public class TestSet_Tests extends UnitTestClass{
         Assert.assertTrue(logRowAboutEndingExecutionFound);
 
         boolean logRowAboutEvaluatingTestResultStatusFound = false;
-        for(LogPost logPost : theTestCase.testCaseLog.logPosts){
+        for(LogPost logPost : theTestCase.testCaseResult.testCaseLog.logPosts){
             if(logPost.message.contains("Evaluated test result status to")){
                 logRowAboutEvaluatingTestResultStatusFound = true;
                 break;
@@ -82,9 +83,9 @@ public class TestSet_Tests extends UnitTestClass{
         TestClass testSet = new TestClass();
         testSet.addKnownError("Description", new String[] {".*Pattern string.*"});
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
-        testSet.currentTestCase.evaluateResultStatus();
-        Assert.assertTrue("Expected result status of test case to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.resultStatus.toString() + ".", testSet.currentTestCase.resultStatus == TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
+        testSet.currentTestCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase.testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
     class TestClass extends TestSet{}

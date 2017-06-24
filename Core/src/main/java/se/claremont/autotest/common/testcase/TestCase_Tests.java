@@ -22,7 +22,7 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(new KnownErrorsList(), "TestCase_Tests");
         String[] patterns = {"Pattern1", "Pattern2"};
         testCase.addKnownError("Description", patterns);
-        Assert.assertTrue("Test case status expected to be '" + TestCase.ResultStatus.UNEVALUATED.toString() + "', but was '" + testCase.resultStatus.toString() + "'.", testCase.resultStatus.equals(TestCase.ResultStatus.UNEVALUATED));
+        Assert.assertTrue("Test case status expected to be '" + TestCaseResult.ResultStatus.UNEVALUATED.toString() + "', but was '" + testCase.testCaseResult.resultStatus.toString() + "'.", testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.UNEVALUATED));
     }
 
     @Test
@@ -30,9 +30,9 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(new KnownErrorsList(), "TestCase_Tests");
         String[] patterns = {"Pattern1", "Pattern2"};
         testCase.addKnownError("Description", patterns);
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.evaluateResultStatus();
-        Assert.assertTrue("Test case status expected to be '" + TestCase.ResultStatus.PASSED.toString() + "', but was '" + testCase.resultStatus.toString() + "'.", testCase.resultStatus.equals(TestCase.ResultStatus.PASSED));
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case status expected to be '" + TestCaseResult.ResultStatus.PASSED.toString() + "', but was '" + testCase.testCaseResult.resultStatus.toString() + "'.", testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
     }
 
     @Test
@@ -40,10 +40,10 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(new KnownErrorsList(), "TestCase_Tests");
         String[] patterns = {"Pattern1", "Pattern2"};
         testCase.addKnownError("Description", patterns);
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
-        testCase.evaluateResultStatus();
-        Assert.assertTrue("Test case status expected to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase.resultStatus.toString() + "'.", testCase.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case status expected to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase.testCaseResult.resultStatus.toString() + "'.", testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
     }
 
     @Test
@@ -51,11 +51,11 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(new KnownErrorsList(), "TestCase_Tests");
         String[] patterns = {"Pattern1", "Pattern2"};
         testCase.addKnownError("Description", patterns);
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
-        testCase.evaluateResultStatus();
-        Assert.assertTrue("Test case status expected to be '" + TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "', but was '" + testCase.resultStatus.toString() + "'.", testCase.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS));
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern1");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case status expected to be '" + TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "', but was '" + testCase.testCaseResult.resultStatus.toString() + "'.", testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS));
     }
 
     @Test
@@ -63,11 +63,11 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(new KnownErrorsList(), "TestCase_Tests");
         String[] patterns = {"Pattern1", "Pattern2"};
         testCase.addKnownError("Description", patterns);
-        testCase.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
-        testCase.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
-        testCase.evaluateResultStatus();
-        Assert.assertTrue("Test case status expected to be '" + TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "', but was '" + testCase.resultStatus.toString() + "'.", testCase.resultStatus.equals(TestCase.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS));
+        testCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "Pattern0");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern2");
+        testCase.testCaseResult.testCaseLog.log(LogLevel.VERIFICATION_PROBLEM, "Pattern3");
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Test case status expected to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "', but was '" + testCase.testCaseResult.resultStatus.toString() + "'.", testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS));
     }
 
     @Test
@@ -110,18 +110,18 @@ public class TestCase_Tests extends UnitTestClass{
 
         //Passed
         testCase.log(LogLevel.VERIFICATION_PASSED, "Text");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
 
         //Only new error
         testCase.log(LogLevel.FRAMEWORK_ERROR, "Other error");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
 
         //Both new and known errors
         testCase.log(LogLevel.VERIFICATION_FAILED, "Text");
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
 
         knownErrorsList.add(new KnownError("TEST2", ".*Other error.*"));
-        testCase.evaluateResultStatus();
+        testCase.testCaseResult.evaluateResultStatus();
     }
 
     @Ignore("Fails on mac, needs to be tested on windows")
@@ -130,7 +130,7 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(null, "dummy");
         testCase.writeProcessListDeviationsFromSystemStartToLog();
 
-        boolean processesFound = testCase.testCaseLog.logPosts.stream().
+        boolean processesFound = testCase.testCaseResult.testCaseLog.logPosts.stream().
                 anyMatch(logPost -> logPost.message.contains("No changes to what processes are running, from test case start until now, could be detected."));
 
         Assert.assertTrue("Changes in processes when not expecting any", processesFound);
@@ -144,7 +144,7 @@ public class TestCase_Tests extends UnitTestClass{
 
         testCase.writeProcessListDeviationsFromSystemStartToLog();
 
-        boolean logRowAboutChangesToRunningProcessesFound = testCase.testCaseLog.logPosts.stream().
+        boolean logRowAboutChangesToRunningProcessesFound = testCase.testCaseResult.testCaseLog.logPosts.stream().
                 anyMatch(logPost -> logPost.message.contains("Process(es) added since test case start: '"));
 
 

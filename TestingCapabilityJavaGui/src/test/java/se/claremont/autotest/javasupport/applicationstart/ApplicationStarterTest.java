@@ -136,12 +136,12 @@ public class ApplicationStarterTest extends TestSet {
             as.startJar(new URL("file:///" + tempFolder.replace("\\", "/") + "JavaApp.jar"));
             ApplicationStarter.logCurrentWindows(tempTestCase);
             boolean found = false;
-            for(LogPost logPost : tempTestCase.testCaseLog.logPosts){
+            for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
                 if(logPost.message.contains("Window title: 'Java test application'. Shown:true")){
                     found = true;
                 }
             }
-            Assert.assertTrue(tempTestCase.testCaseLog.toString(), found);
+            Assert.assertTrue(tempTestCase.testCaseResult.testCaseLog.toString(), found);
         }catch (Exception e){
             Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
         }

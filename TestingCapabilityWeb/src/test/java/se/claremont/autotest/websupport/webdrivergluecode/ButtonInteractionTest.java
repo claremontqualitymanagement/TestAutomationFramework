@@ -52,7 +52,7 @@ public class ButtonInteractionTest extends UnitTestClass {
         try{
             web.click(new DomElement("button", DomElement.IdentificationType.BY_ID), 1);
         }catch (Exception ignored){}
-        LogPost error = testCase.testCaseLog.firstNonSuccessfulLogPost();
+        LogPost error = testCase.testCaseResult.testCaseLog.firstNonSuccessfulLogPost();
         Assert.assertNotNull(error);
         Assert.assertTrue(error.toString().contains("Execution problem"));
         Assert.assertTrue(error.toString().contains("Seems unnatural to click it"));

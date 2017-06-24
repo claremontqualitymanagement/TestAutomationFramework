@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.websupport.DomElement;
 
@@ -36,8 +37,8 @@ public class TableInteractionTest extends UnitTestClass {
         web.verifyTableHeadline(table, "Headline2");
         web.verifyTableRow(table, "Headline1:Row 2 headline1", CellMatchingType.EXACT_MATCH);
         web.makeSureDriverIsClosed();
-        testCase.evaluateResultStatus();
-        Assert.assertTrue(testCase.resultStatus.equals(TestCase.ResultStatus.PASSED));
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
     }
 
 }
