@@ -68,7 +68,7 @@ public class TestCase {
         long maxMemory = Runtime.getRuntime().maxMemory();
         memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
         testCaseResult.testCaseLog.log(LogLevel.INFO, "Running tests as user '" + Taf.tafUserInfon().getUserAccountName() + "' on machine with " + Taf.tafUserInfon().getOperatingSystemName() + " as operating system (version reported as '" + Taf.tafUserInfon().getOperatingSystemVersion() + "', and architecture '" + Taf.tafUserInfon().getOperatingSystemArchitecture() +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
-        reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
+        reporters.add(new TestCaseLogReporterPureTextBasedLogFile(testCaseResult));
         reporters.add(new TestCaseLogReporterHtmlLogFile(testCaseResult));
         setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
