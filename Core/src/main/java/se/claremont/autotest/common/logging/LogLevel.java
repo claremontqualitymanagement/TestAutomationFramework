@@ -37,6 +37,7 @@ public enum LogLevel{
     public int getValue() {
         return value;
     }
+    @SuppressWarnings("unused")
     public boolean isFail() {return isFail; }
 
 }

@@ -125,13 +125,12 @@ public class TestCaseLog {
     }
 
     public static String getCurrentTestStepName(String testCaseName){
-        String testStepClassName = "Framework actions";
         String testStep = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
             if(stackTraceElements[i].getMethodName().equals(testCaseName)){
                 testStep = stackTraceElements[i-1].getMethodName();
-                testStepClassName = stackTraceElements[i-1].getClassName();
+                //testStepClassName = stackTraceElements[i-1].getClassName();
             }
         }
         return testStep;

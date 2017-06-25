@@ -3,7 +3,6 @@ package se.claremont.autotest.common.testcase;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.logging.KnownError;
-import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.StringManagement;
@@ -32,7 +31,6 @@ public class TestCaseResult {
     @JsonProperty public TestCaseData testCaseData;
     @JsonProperty public ResultStatus resultStatus = ResultStatus.UNEVALUATED;
     @JsonProperty public final UUID uid = UUID.randomUUID();
-    @JsonProperty private final KnownErrorsList testSetKnownErrorsEncounteredInThisTestCase = new KnownErrorsList();
     @JsonProperty public List<KnownError> knownErrorsEncountered;
     @JsonProperty public List<KnownError> knownErrorsNotEncountered;
 
@@ -57,7 +55,7 @@ public class TestCaseResult {
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
     }
 
-    public void assessResults(TestCase testCase){
+    public void assessResults(){
         stopTime = new Date();
         testCaseLog.log(LogLevel.INFO, "Ending test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(stopTime) + ".");
         evaluateResultStatus();

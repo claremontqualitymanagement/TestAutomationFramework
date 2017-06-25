@@ -13,6 +13,7 @@ import java.util.List;
 public class TestCaseData {
     public List<ValuePair> testCaseDataList = new ArrayList<>();
 
+    @SuppressWarnings("unused")
     public String toJson() {
         ObjectMapper mapper = new ObjectMapper();
         String json = null;

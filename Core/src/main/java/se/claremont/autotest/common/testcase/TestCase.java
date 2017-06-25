@@ -130,7 +130,7 @@ public class TestCase {
         if(reported){
            return;
         }
-        testCaseResult.assessResults(this);
+        testCaseResult.assessResults();
         reporters.forEach(TestCaseLogReporter::report);
         TestRun.reporters.evaluateTestCase(this);
         assertExecutionResultsToTestRunner();
@@ -225,6 +225,7 @@ public class TestCase {
         return TestCaseLog.getCurrentTestStepName(testName);
     }
 
+    @SuppressWarnings("unused")
     public void log(LogLevel logLevel, LogMessage logMessage){
         testCaseResult.testCaseLog.log(logLevel, logMessage);
     }
