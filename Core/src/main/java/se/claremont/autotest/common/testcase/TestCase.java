@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
+import org.junit.Assume;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogFolder;
@@ -129,6 +131,9 @@ public class TestCase {
            return;
         }
         testCaseResult.assessResults(this);
+        reporters.forEach(TestCaseLogReporter::report);
+        TestRun.reporters.evaluateTestCase(this);
+        assertExecutionResultsToTestRunner();
         reported = true;
     }
 
@@ -256,5 +261,27 @@ public class TestCase {
         }
         return json;
     }
+
+    /**
+     * Marks the test case status in the style of the test runner according to result status.
+     * Also halts further test case execution.
+     */
+    private void assertExecutionResultsToTestRunner(){
+        if(testCaseResult.resultStatus == TestCaseResult.ResultStatus.UNEVALUATED) testCaseResult.evaluateResultStatus();
+        if(testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
+            //noinspection ConstantConditions
+            Assert.assertFalse(SupportMethods.LF + testCaseResult.testCaseLog.toString(), true);
+            if( testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
+                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
+            else
+                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+        } else if(testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
+            //noinspection ConstantConditions
+            Assume.assumeTrue(false);
+            Assert.assertFalse(SupportMethods.LF + testCaseResult.testCaseLog.toString(), true);
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+        }
+    }
+
 
 }

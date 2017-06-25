@@ -2,14 +2,11 @@ package se.claremont.autotest.common.testcase;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.junit.Assert;
-import org.junit.Assume;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.StringManagement;
-import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.text.SimpleDateFormat;
@@ -65,9 +62,6 @@ public class TestCaseResult {
         testCaseLog.log(LogLevel.INFO, "Ending test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(stopTime) + ".");
         evaluateResultStatus();
         testCaseLog.log(LogLevel.DEBUG, "Evaluated test result status to '" + StringManagement.enumCapitalNameToFriendlyString(resultStatus.toString()) + "'.");
-        testCase.reporters.forEach(TestCaseLogReporter::report);
-        TestRun.reporters.evaluateTestCase(testCase);
-        assertExecutionResultsToTestRunner();
     }
 
     private void identifyEncounteredKnownErrors(){
@@ -152,26 +146,5 @@ public class TestCaseResult {
         }
     }
 
-
-    /**
-     * Marks the test case status in the style of the test runner according to result status.
-     * Also halts further test case execution.
-     */
-    private void assertExecutionResultsToTestRunner(){
-        if(resultStatus == ResultStatus.UNEVALUATED) evaluateResultStatus();
-        if(resultStatus == ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS || resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS){
-            //noinspection ConstantConditions
-            Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
-            if( resultStatus == ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
-                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
-            else
-                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
-        } else if(resultStatus == ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
-            //noinspection ConstantConditions
-            Assume.assumeTrue(false);
-            Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
-            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
-        }
-    }
 
 }
