@@ -60,7 +60,7 @@ public class HtmlSummaryReport {
     }
 
     private void appendTestCaseResultToSummary(TestCase testCase){
-        String link = testCase.pathToHtmlLog;
+        String link = testCase.pathToHtmlLogFile;
         if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
             link = link.replace("\\", "/").substring(6);
         testCaseSummary += "            <tr class=\"" + testCase.testCaseResult.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "</td><td><a href=\"" + TestRun.reportLinkPrefix() + "://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
@@ -363,7 +363,7 @@ public class HtmlSummaryReport {
                         }
                     }
                     if(!alreadyReported){
-                        String link = testCase.pathToHtmlLog;
+                        String link = testCase.pathToHtmlLogFile;
                         if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                             link = link.replace("\\", "/").substring(6);
                         idsOfTestCases.add(testCase.uid.toString());

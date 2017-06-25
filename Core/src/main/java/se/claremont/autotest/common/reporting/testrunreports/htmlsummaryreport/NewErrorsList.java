@@ -72,7 +72,7 @@ public class NewErrorsList {
                 }
                 html.append("             </table>").append(System.lineSeparator());
                 for(TestCase testCase : newError.testCasesWhereEncountered){
-                    html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9655; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)");
+                    html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9655; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"" + testCase.pathToHtmlLogFile + "\">Log</a>)");
                     if(testCaseHasProblemRecordsNotPartOfSharedLogRecords(testCase)){
                         html.append("<span class=\"moreerrorsasterisk\">*</span>");
                         asteriskTextShouldBePrinted = true;

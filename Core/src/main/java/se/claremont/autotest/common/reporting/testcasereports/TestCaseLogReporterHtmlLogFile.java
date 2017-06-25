@@ -12,9 +12,10 @@ import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.H
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.ValuePair;
-import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testcase.TestCaseLog;
 import se.claremont.autotest.common.testcase.TestCaseLogReporter;
 import se.claremont.autotest.common.testcase.TestCaseLogSection;
+import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 
@@ -30,17 +31,17 @@ import java.util.Date;
 @SuppressWarnings("WeakerAccess")
 public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
-    private final TestCase testCase;
+    private final TestCaseResult testCaseResult;
     private Date runEndTime;
     private StringBuilder sb = new StringBuilder();
 
     /**
      * Compiles and writes the test case HTML based execution testCaseLog.
      *
-     * @param testCase the test case
+     * @param testCaseResult the test case
      */
-    public TestCaseLogReporterHtmlLogFile(TestCase testCase){
-        this.testCase = testCase;
+    public TestCaseLogReporterHtmlLogFile(TestCaseResult testCaseResult){
+        this.testCaseResult = testCaseResult;
     }
 
     /**
@@ -88,7 +89,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * @return HTML
      */
     public String asHtmlSection(){
-        testCase.log(LogLevel.DEBUG, "Creating HTML log content.");
+        testCaseResult.testCaseLog.log(LogLevel.DEBUG, "Creating HTML log content.");
         validateTestRunEndTime();
         addHtmlSectionBodyHeader();
         addHtmlSectionEncounteredKnownErrors();
@@ -103,8 +104,8 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * Saves the output of the test case to an HTML formatted text file
      */
     public void report(){
-        testCase.log(LogLevel.DEBUG, "Saving html reportTestRun to '" + testCase.pathToHtmlLog + "'.");
-        logger.debug( "Saving html reportTestRun to '" + testCase.pathToHtmlLog + "'." );
+        testCaseResult.testCaseLog.log(LogLevel.DEBUG, "Saving html reportTestRun to '" + testCaseResult.pathToHtmlLogFile + "'.");
+        logger.debug( "Saving html reportTestRun to '" + testCaseResult.pathToHtmlLogFile + "'." );
         validateTestRunEndTime();
         String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
                 htmlSectionHtmlHead() +
@@ -112,14 +113,14 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 asHtmlSection() +
                 "  </body>" + LF + LF +
                 "</html>" + LF;
-        SupportMethods.saveToFile(html, testCase.pathToHtmlLog);
+        SupportMethods.saveToFile(html, testCaseResult.pathToHtmlLogFile);
     }
 
     public String htmlSectionHtmlHead(){
         return "  <head>" + LF + LF +
-                "    <title>" + testCase.testName + " execution log</title>" + LF +
+                "    <title>" + testCaseResult.testName + " execution log</title>" + LF +
                 "    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">" + LF +
-                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCase.testName + "\"/>" + LF +
+                "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCaseResult.testName + "\"/>" + LF +
                 "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
                 "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF + LF +
                 "    <link rel=\"stylesheet\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css\"/>\n" + LF + LF +
@@ -132,12 +133,12 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private void validateTestRunEndTime() {
         if(runEndTime != null) return;
-        if(testCase.testCaseResult.stopTime != null){
-            this.runEndTime = testCase.testCaseResult.stopTime;
+        if(testCaseResult.stopTime != null){
+            this.runEndTime = testCaseResult.stopTime;
             return;
         }
-        if(testCase.testCaseResult.testCaseLog.logPosts.size() > 0){
-            this.runEndTime = testCase.testCaseResult.testCaseLog.logPosts.get(testCase.testCaseResult.testCaseLog.logPosts.size()-1).date;
+        if(testCaseResult.testCaseLog.logPosts.size() > 0){
+            this.runEndTime = testCaseResult.testCaseLog.logPosts.get(testCaseResult.testCaseLog.logPosts.size()-1).date;
         } else {
             this.runEndTime = new Date();
         }
@@ -261,12 +262,12 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      </span>" + LF +
                 status() + "<br>" + LF +
                 //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
-                "      <h1>Test results for test case '" + testCase.testName + "'</h1>" + LF +
+                "      <h1>Test results for test case '" + testCaseResult.testName + "'</h1>" + LF +
                 "      <p>" + LF +
-                "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "<br>" + LF +
-                "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCase.testCaseResult.startTime) + "<br>" + LF +
+                "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCaseResult.resultStatus.toString()) + "<br>" + LF +
+                "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCaseResult.startTime) + "<br>" + LF +
                 "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(runEndTime) + "<br>" + LF +
-                "        Duration:   " + StringManagement.timeDurationAsString(testCase.testCaseResult.startTime, runEndTime) + LF +
+                "        Duration:   " + StringManagement.timeDurationAsString(testCaseResult.startTime, runEndTime) + LF +
                 "      </p>" + LF +
                 "      <p>" + LF +
                 "         Number of verifications performed: " + numberOfVerificationsPerformed() + LF +
@@ -279,7 +280,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private int numberOfVerificationsPerformed() {
         int count = 0;
-        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts){
+        for(LogPost logPost : testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.VERIFICATION_PASSED || logPost.logLevel == LogLevel.VERIFICATION_FAILED){
                 count++;
             }
@@ -289,7 +290,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     private int numberOfExecitionStepsPerformed() {
         int count = 0;
-        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts){
+        for(LogPost logPost : testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.EXECUTED){
                 count++;
             }
@@ -326,7 +327,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private String status(){
-        if(testCase.testCaseResult.testCaseLog.hasEncounteredErrors()){
+        if(testCaseResult.testCaseLog.hasEncounteredErrors()){
             return "      <p class=\"statussymbol\">Status: <b class=\"bad\">&#x2717;</b></p>" + LF;
         } else {
             return "      <p class=\"statussymbol\">Status: <b class=\"good\">&#x2713;</b></p>" + LF;
@@ -338,18 +339,18 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "      <h2>Test case log</h2>" + LF +
                 "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\">Show verbose debugging information</label>" + LF +
                 "     <div id=\"logpostlist\">" + LF + LF +
-                testStepLogPostSections(testCase) + LF +
+                testStepLogPostSections(testCaseResult.testCaseLog) + LF +
                 "     </div>" + LF +
                 "     <br><br>" + LF);
     }
 
     private void addHtmlSectionTestCaseData(){
-        if(testCase.testCaseResult.testCaseData.testCaseDataList.size() > 0){
+        if(testCaseResult.testCaseData.testCaseDataList.size() > 0){
             sb.append("      <div id=\"testdata\" class=\"testcasedata expandable\" >").append(LF);
             sb.append("         <h2>Test case data</h2>").append(LF);
             sb.append("         <div id=\"expandable_content\">").append(LF);
             sb.append("         <table class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.STRIPED.toString())).append("\" id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA.toString())).append("\">").append(LF);
-            for(ValuePair valuePair : testCase.testCaseResult.testCaseData.testCaseDataList){
+            for(ValuePair valuePair : testCaseResult.testCaseData.testCaseDataList){
                 sb.append("           <tr><td class=\"").
                         append(enumMemberNameToLower(HtmlLogStyleNames.TEST_CASE_DATA_PARAMETER_NAME.toString())).
                         append("\">").append(valuePair.parameter).append("</td><td class=\"").
@@ -363,34 +364,12 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private void addHtmlSectionEncounteredKnownErrors(){
-        boolean knownErrorsEncountered = false;
-        for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
-            if(knownError.encountered()) {
-                knownErrorsEncountered = true;
-                break;
-            }
-        }
-        if(!knownErrorsEncountered){
-            for(KnownError knownError : testCase.testSetKnownErrors.knownErrors){
-                if(knownError.encountered()){
-                    knownErrorsEncountered = true;
-                    break;
-                }
-            }
-        }
-        if(knownErrorsEncountered){
+        if(testCaseResult.knownErrorsEncountered.size() > 0){
             sb.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS.toString())).append("\">").append(LF);
             sb.append("      <h2>Encountered known errors</h2>").append(LF);
             sb.append("      <table class=\"encounteredknownerrors\">").append(LF);
-            for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
-                if(knownError.encountered()){
-                    sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
-                }
-            }
-            for(KnownError knownError : testCase.testSetKnownErrors.knownErrors){
-                if(knownError.encountered()){
-                    sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
-                }
+            for(KnownError knownError : testCaseResult.knownErrorsEncountered){
+                sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
             }
             sb.append("      </table>").append(LF);
             sb.append("    </div>").append(LF).append("<br><br>").append(LF);
@@ -399,18 +378,11 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
 
     private void addHtmlSectionNonEncounteredKnownTestCaseErrors(){
-        boolean hasKnownErrorsNotEncountered = false;
-        for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
-            if(!knownError.encountered()) {
-                hasKnownErrorsNotEncountered = true;
-                break;
-            }
-        }
-        if(hasKnownErrorsNotEncountered){
+        if(testCaseResult.knownErrorsNotEncountered.size() > 0){
             sb.append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERRORS_NOT_ENCOUNTERED.toString())).append("\">").append(LF);
             sb.append("      <h2>Known test case errors that were not encountered (possibly fixed)</h2>").append(LF);
             sb.append("      <table>").append(LF);
-            for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
+            for(KnownError knownError : testCaseResult.knownErrorsNotEncountered){
                 if(!knownError.encountered()){
                     sb.append("        <tr><td class=\"").append(enumMemberNameToLower(HtmlLogStyleNames.KNOWN_ERROR.toString())).append("\">").append(knownError.description).append("</td></tr>").append(LF);
                 }
@@ -420,10 +392,10 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
     }
 
-    private String testStepLogPostSections(TestCase testCase){
-        if(testCase.testCaseResult.testCaseLog.logPosts.size() == 0) return null;
+    private String testStepLogPostSections(TestCaseLog testCaseLog){
+        if(testCaseResult.testCaseLog.logPosts.size() == 0) return null;
         StringBuilder html = new StringBuilder();
-        ArrayList<TestCaseLogSection> logSections = testCase.testCaseResult.testCaseLog.toLogSections();
+        ArrayList<TestCaseLogSection> logSections = testCaseResult.testCaseLog.toLogSections();
         for(TestCaseLogSection testCaseLogSection : logSections){
             html.append(testCaseLogSection.toHtml());
         }

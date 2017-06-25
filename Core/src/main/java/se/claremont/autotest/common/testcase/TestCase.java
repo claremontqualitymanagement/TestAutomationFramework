@@ -40,7 +40,7 @@ public class TestCase {
     final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
-    @JsonProperty public String pathToHtmlLog;
+    @JsonProperty public String pathToHtmlLogFile;
 
     public TestCase(){
         this(null, "Nameless test case");
@@ -69,7 +69,7 @@ public class TestCase {
         memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
         testCaseResult.testCaseLog.log(LogLevel.INFO, "Running tests as user '" + Taf.tafUserInfon().getUserAccountName() + "' on machine with " + Taf.tafUserInfon().getOperatingSystemName() + " as operating system (version reported as '" + Taf.tafUserInfon().getOperatingSystemVersion() + "', and architecture '" + Taf.tafUserInfon().getOperatingSystemArchitecture() +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(this));
-        reporters.add(new TestCaseLogReporterHtmlLogFile(this));
+        reporters.add(new TestCaseLogReporterHtmlLogFile(testCaseResult));
         setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
@@ -111,7 +111,7 @@ public class TestCase {
      */
     private void setLogFolderIfNotAlreadySet(){
         LogFolder.setLogFolder(testSetName.replace(".", "_"));
-        pathToHtmlLog = LogFolder.testRunLogFolder + testName + ".html";
+        pathToHtmlLogFile = LogFolder.testRunLogFolder + testName + ".html";
     }
 
 

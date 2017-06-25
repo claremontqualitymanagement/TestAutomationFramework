@@ -15,6 +15,7 @@ import se.claremont.autotest.common.testrun.TestRun;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,11 +31,17 @@ public class TestCaseResult {
     @JsonProperty public String testSetName;
     @JsonProperty public Date startTime;
     @JsonProperty public Date stopTime;
+    @JsonProperty public String pathToHtmlLogFile;
     @JsonProperty public TestCaseData testCaseData;
     @JsonProperty public ResultStatus resultStatus = ResultStatus.UNEVALUATED;
     @JsonProperty public final UUID uid = UUID.randomUUID();
     @JsonProperty private final KnownErrorsList testSetKnownErrorsEncounteredInThisTestCase = new KnownErrorsList();
+    @JsonProperty public List<KnownError> knownErrorsEncountered;
+    @JsonProperty public List<KnownError> knownErrorsNotEncountered;
 
+    /**
+     * This constructor is only used automatic for JSON transformation
+     */
     public TestCaseResult(){
         testSetName = "Tests constructed from JSON";
         startTime = new Date();
@@ -47,6 +54,9 @@ public class TestCaseResult {
         startTime = new Date();
         testSetName = testCase.testSetName;
         testName = testCase.testName;
+        knownErrorsEncountered = new ArrayList<>();
+        knownErrorsNotEncountered = new ArrayList<>();
+        pathToHtmlLogFile = testCase.pathToHtmlLogFile;
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
     }
 
@@ -60,11 +70,35 @@ public class TestCaseResult {
         assertExecutionResultsToTestRunner();
     }
 
+    private void identifyEncounteredKnownErrors(){
+        testCaseLog.log(LogLevel.DEBUG, "Assessing test case testCaseLog for known errors.");
+        for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors) {
+            if(knownError.thisErrorIsEncountered(testCase)) {
+                knownErrorsEncountered.add(knownError);
+            } else {
+                knownErrorsNotEncountered.add(knownError);
+            }
+        }
+        for(KnownError knownError : testCase.testSetKnownErrors.knownErrors){
+            if(knownError.thisErrorIsEncountered(testCase)){
+                knownErrorsEncountered.add(knownError);
+            } else {
+                knownErrorsNotEncountered.add(knownError);
+            }
+        }
+        if(knownErrorsEncountered.size() == 0){
+            testCaseLog.log(LogLevel.DEBUG, "No registered known errors were encountered during test execution.");
+        } else {
+            for(KnownError knownError : knownErrorsEncountered){
+                testCaseLog.log(LogLevel.INFO, "Known error '" + knownError.description + "' was encountered during test execution.");
+            }
+        }
+    }
+
     /**
      * Evaluates test case execution testCaseLog to assess if the test case ran successfully, if known errors were encountered - or new errors. Return result status.
      */
     public void evaluateResultStatus(){
-        logKnownErrors();
         ArrayList<LogPost> erroneousPosts = testCaseLog.onlyErroneousLogPosts();
         if(erroneousPosts.size() == 0) {
             resultStatus = ResultStatus.PASSED;
@@ -73,40 +107,28 @@ public class TestCaseResult {
             testCaseLog.log(LogLevel.INFO, message);
             return;
         }
-
-        testCase.testCaseKnownErrorsList.assessLogForKnownErrors(testCase);
-        testCase.testSetKnownErrors.assessLogForKnownErrors(testCase);
-        //testSetKnownErrorsEncounteredInThisTestCase = KnownErrorsList.returnEncounteredKnownErrorsFromKnownErrorsListMatchedToLog(testSetKnownErrors, testCaseLog);
-
-        boolean knownErrorsEncountered = false;
-        boolean newErrorsEncountered = false;
-        for(LogPost logPost : testCaseLog.onlyErroneousLogPosts()){
-            if(logPost.identifiedToBePartOfKnownError){
-                knownErrorsEncountered = true;
-                if(newErrorsEncountered) break; //if both are set to true: continue
-            }else{
-                newErrorsEncountered = true;
-                if(knownErrorsEncountered) break;
+        identifyEncounteredKnownErrors();
+        if(knownErrorsEncountered.size() > 0){
+            for(LogPost logPost : testCaseLog.onlyErroneousLogPosts()){
+                if(!logPost.identifiedToBePartOfKnownError){
+                    String message = "   (⊙_◎)   Both new and known errors found for test case '" + testName + "'.";
+                    resultStatus = ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS;
+                    System.out.println(message);
+                    testCaseLog.log(LogLevel.INFO, message);
+                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                    return;
+                }
             }
-        }
-
-        if(newErrorsEncountered && knownErrorsEncountered){
-            String message = "   (⊙_◎)   Both new and known errors found for test case '" + testName + "'.";
-            resultStatus = ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS;
-            System.out.println(message);
+            resultStatus = ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS;
+            String message = " ¯\\_(ツ)_/¯ Deviations found, but all of them was marked as known for test case '" + testName + "'.";
             testCaseLog.log(LogLevel.INFO, message);
-            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
-        } else if (newErrorsEncountered){
+            System.out.println(message);
+        } else {
             resultStatus = ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
             String message = "  ٩(͡๏̯͡๏)۶  Deviations not marked as known was found for test case '" + testName + "'.";
             System.out.println(message);
             testCaseLog.log(LogLevel.INFO, message);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
-        } else {
-            resultStatus = ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS;
-            String message = " ¯\\_(ツ)_/¯ Deviations found, but all of them was marked as known for test case '" + testName + "'.";
-            testCaseLog.log(LogLevel.INFO, message);
-            System.out.println(message);
         }
     }
 
@@ -150,19 +172,6 @@ public class TestCaseResult {
             Assert.assertFalse(SupportMethods.LF + testCaseLog.toString(), true);
             TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
         }
-    }
-
-    private void logKnownErrors(){
-        testCaseLog.log(LogLevel.DEBUG, "Assessing test case testCaseLog for known errors.");
-        testCase.testCaseKnownErrorsList.assessLogForKnownErrors(testCase);
-        testCase.testCaseKnownErrorsList.knownErrors.stream().filter(KnownError::encountered).forEachOrdered(knownError -> testCaseLog.log(LogLevel.INFO, "Known error '" + knownError.description + "' encountered during execution."));
-        for(KnownError knownError : testCase.testCaseKnownErrorsList.nonencounteredKnownErrors().knownErrors){
-            testCaseLog.log(LogLevel.INFO, "Known error '" + knownError.description + "' was not encountered during test execution.");
-        }
-
-        //testSetKnownErrorsEncounteredInThisTestCase = KnownErrorsList.returnEncounteredKnownErrorsFromKnownErrorsListMatchedToLog(testSetKnownErrors, testCaseLog);
-
-        testSetKnownErrorsEncounteredInThisTestCase.knownErrors.stream().filter(KnownError::encountered).forEachOrdered(knownError -> testCaseLog.log(LogLevel.INFO, "Known error from test set '" + knownError.description + "' encountered during execution."));
     }
 
 }

@@ -84,7 +84,7 @@ public class NewError {
             html.append("              ").append(logPost.logLevel.toString()).append(": ").append(truncateLogMessageIfNeeded(LogPost.removeDataElements(logPost.message))).append("<br>").append(System.lineSeparator());
         }
         for(TestCase testCase : testCasesWhereEncountered){
-            html.append("                  &#9659; ").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLog + "\">Log</a>)<br>");
+            html.append("                  &#9659; ").append(testCase.testName).append(" (<a href=\"" + testCase.pathToHtmlLogFile + "\">Log</a>)<br>");
         }
         html.append(System.lineSeparator()).append("          </p>").append(System.lineSeparator());
         return html.toString();
@@ -182,7 +182,7 @@ public class NewError {
         }
         html.append("             </table>").append(System.lineSeparator());
         for(TestCase testCase : testCasesWhereEncountered){
-            String link = testCase.pathToHtmlLog;
+            String link = testCase.pathToHtmlLogFile;
             if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
                 link = link.replace("\\", "/").substring(6);
             html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9659; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"").append(TestRun.reportLinkPrefix()).append("://").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(System.lineSeparator());
