@@ -2291,15 +2291,20 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         boolean doneOk = false;
+        TableData tableData = null;
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
-            TableData tableData = tableDataFromGuiElement(tableElement, false);
+            try{
+                tableData = tableDataFromGuiElement(tableElement, false);
+            }catch (Exception ignored){
+                tableData = null;
+            }
             if(tableData == null) {
                 wait(50);
                 continue;
             }
             doneOk = tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
         }
-        TableData tableData = tableDataFromGuiElement(tableElement, true);
+        tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null){
             testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not retrieve data from " + domElement.LogIdentification() + ".");
             saveScreenshot(getRuntimeElementWithoutLogging(domElement));
@@ -2458,37 +2463,85 @@ public class WebInteractionMethods implements GuiDriver {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             return null;
         }
-        List<WebElement> rows;
+        List<WebElement> rows = new ArrayList<>();
         try {
-            rows = tableElement.findElements(By.xpath(".//tr"));
+            rows = tableElement.findElements(By.xpath("./tr"));
         }catch (Exception e){
-            if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of table rows for HTML table " + domElement.LogIdentification() + ".");
-            saveScreenshot(tableElement);
-            saveDesktopScreenshot();
-            saveHtmlContentOfCurrentPage();
-            writeRunningProcessListDeviationsSinceTestCaseStart();
-            return null;
+            if(logErrors) testCase.log(LogLevel.DEBUG, "Cannot get hold of table rows directly under the TABLE element for HTML table " + domElement.LogIdentification() + ".");
+            rows = new ArrayList<>();        }
+        if(rows.size() == 0){
+            try {
+                rows = tableElement.findElements(By.xpath("./*/tr")); //Row definitions under <tbody>/<thead>/<tfoot> tags
+            }catch (Exception e){
+                if(logErrors) testCase.log(LogLevel.DEBUG, "Cannot get hold of table rows one step below the TABLE element for HTML table " + domElement.LogIdentification() + ".");
+                rows = new ArrayList<>();
+            }
         }
-        for(WebElement row : rows){
-            List<WebElement> cells;
-            try{
-                cells = row.findElements(By.xpath("(.//td|.//th)"));
-            } catch (Exception e){
-                if(logErrors) {
-                    testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot find any table cells for table " + domElement.LogIdentification() + " for row '" + row.toString() + "'.");
-                    saveScreenshot(tableElement);
-                    saveDesktopScreenshot();
-                    saveHtmlContentOfCurrentPage();
-                    writeRunningProcessListDeviationsSinceTestCaseStart();
-                }
+        if(rows.size() == 0){
+            try {
+                rows = tableElement.findElements(By.xpath(".//tr"));
+            }catch (Exception e){
+                if(logErrors) testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot get hold of any table rows for HTML table " + domElement.LogIdentification() + ".");
+                saveScreenshot(tableElement);
+                saveDesktopScreenshot();
+                saveHtmlContentOfCurrentPage();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
                 return null;
             }
-            for(WebElement cell : cells){
+        }
+        for(WebElement row : rows){
+            List<WebElement> cells = new ArrayList<>();
+            try{
+                cells = row.findElements(By.xpath("(./td|./th)"));
+            } catch (Exception e){
+                if(logErrors) {
+                    testCase.log(LogLevel.DEBUG, "Cannot find any table cells directly under the ROW element for table " + domElement.LogIdentification() + " for row '" + row.toString() + "'.");
+                    cells = new ArrayList<>();
+                }
+            }
+            if(cells.size() == 0) {
                 try{
-                    tableContent.append(cell.getText().replace(";", " ").replace(System.lineSeparator(), " ")).append(";");
-                } catch (Exception e) {
-                    log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
-                    tableContent.append(";");
+                    cells = row.findElements(By.xpath("(./*/td|./*/th)"));
+                } catch (Exception e){
+                    if(logErrors) {
+                        testCase.log(LogLevel.DEBUG, "Cannot find any table cells one step below the ROW element for table " + domElement.LogIdentification() + " for row '" + row.toString() + "'.");
+                        cells = new ArrayList<>();
+                    }
+                }
+            }
+            if(cells.size() == 0){;
+                try{
+                    cells = row.findElements(By.xpath("(.//td|.//th)"));
+                } catch (Exception e){
+                    if(logErrors) {
+                        testCase.log(LogLevel.DEBUG, "Cannot find any table cells for row '" + row.toString() + "' in table " + domElement.LogIdentification() + ".");
+                        saveScreenshot(tableElement);
+                        saveDesktopScreenshot();
+                        saveHtmlContentOfCurrentPage();
+                        writeRunningProcessListDeviationsSinceTestCaseStart();
+                    }
+                }
+            }
+            if(cells.size() == 0){
+                tableContent.append(";");
+                tableContent.append(SupportMethods.LF);
+                continue;
+            }
+            for(WebElement cell : cells){
+                Integer colSpan = 1;
+                try{
+                    colSpan = Integer.parseInt(cell.getAttribute("colspan"));
+                }catch(Exception ignored){
+                    colSpan = 1;
+                }
+                if(colSpan == null) colSpan = 1;
+                for (int i = 0; i < colSpan ; i++){
+                    try{
+                        tableContent.append(cell.getText().replace(";", " ").replace(System.lineSeparator(), " ")).append(";");
+                    } catch (Exception e) {
+                        log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
+                        tableContent.append(";");
+                    }
                 }
             }
             tableContent.append(SupportMethods.LF);
