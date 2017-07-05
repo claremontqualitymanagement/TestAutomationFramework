@@ -154,4 +154,28 @@ public class TableInteractionTest extends UnitTestClass {
         testCase.testCaseResult.evaluateResultStatus();
         Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
     }
+
+    @Test
+    public void trimmedSpacesTestInCellsAndMultipleSearchesToFulfillRowVerification(){
+        HtmlUnitDriver driver = new HtmlUnitDriver();
+        TestCase testCase = new TestCase();
+        WebInteractionMethods web = new WebInteractionMethods(testCase, driver);
+        web.navigate("file://" + TestHelper.getTestFileFromTestResourcesFolder("tableTest.html"));
+        DomElement table = new DomElement("trimmedSpacesTest", DomElement.IdentificationType.BY_ID);
+        List<String> headlines = new ArrayList<>();
+        headlines.add("Heading1");
+        headlines.add("Heading3");
+        headlines.add("Heading2");
+        web.verifyTableHeadlines(table, headlines);
+        web.verifyTableHeadline(table, "Heading1");
+        web.verifyTableHeadline(table, "Heading2");
+        web.verifyTableHeadline(table, "Heading3");
+        web.verifyTableRow(table, "Heading1:Row2Heading1", CellMatchingType.EXACT_MATCH);
+        web.verifyTableRow(table, "Heading2:Row3Heading2;Heading3:Row3Heading3", CellMatchingType.EXACT_MATCH);
+        web.verifyTableRow(table, "Heading1:Row3Heading1;Heading2:Row3Heading2;Heading3:Row3Heading3", CellMatchingType.EXACT_MATCH);
+        web.verifyTableRow(table, "Heading2:Row3Heading2;Heading1:Row3Heading1;Heading3:Row3Heading3", CellMatchingType.EXACT_MATCH);
+        web.makeSureDriverIsClosed();
+        testCase.testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.PASSED));
+    }
 }

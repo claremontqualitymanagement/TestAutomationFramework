@@ -421,7 +421,7 @@ public class TableData {
                     }
                 }
                 for(int cellCount = 0; cellCount < cells.length; cellCount++){
-                    cellContents.add(new DataCell(cells[cellCount], headlines.get(cellCount)));
+                    cellContents.add(new DataCell(cells[cellCount].trim(), headlines.get(cellCount).trim()));
                 }
                 rows.add(new TableRow(cellContents));
             }
@@ -455,7 +455,7 @@ public class TableData {
                     }
                 }
                 for (int cellCount = 0; cellCount < cells.length; cellCount++) {
-                    cellContents.add(new DataCell(cells[cellCount], headlines.get(cellCount)));
+                    cellContents.add(new DataCell(cells[cellCount].trim(), headlines.get(cellCount).trim()));
                 }
                 rows.add(new TableRow(cellContents));
             }
