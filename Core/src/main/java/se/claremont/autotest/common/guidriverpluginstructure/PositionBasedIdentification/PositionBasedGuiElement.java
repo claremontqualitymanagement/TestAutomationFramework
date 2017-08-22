@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification;
 
+import java.util.ArrayList;
+
 /**
  * An interface for any type of GUI element used for position based identification, regardless of technology
  *
@@ -11,4 +13,6 @@ public interface PositionBasedGuiElement {
     Integer getTopPosition();
     Integer getBottomPosition();
     String getTypeName(); // Something like: return this.getClass().toString();
+    Object runtimeElement();
+    ArrayList<PositionBasedGuiElement> childElements();
 }

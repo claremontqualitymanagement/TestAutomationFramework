@@ -99,6 +99,16 @@ public class PositionBasedIdentificatorTest extends UnitTestClass{
             return type;
         }
 
+        @Override
+        public Object runtimeElement() {
+            return this;
+        }
+
+        @Override
+        public ArrayList<PositionBasedGuiElement> childElements() {
+            return new ArrayList<>();
+        }
+
         public String getName(){return name;}
     }
 

@@ -108,6 +108,11 @@
             <version>${evosuiteVersion}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- For mail sending of reports -->
         <dependency>

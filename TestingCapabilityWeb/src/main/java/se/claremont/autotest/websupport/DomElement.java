@@ -1,6 +1,12 @@
 package se.claremont.autotest.websupport;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.WrapsDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
+import se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification.PositionBasedWebElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,6 +104,41 @@ public class DomElement implements GuiElement {
         this.identificationType = identificationType;
     }
 
+
+    public DomElement(WebElement webElement){
+        this.name = "Dynamically identified " + webElement.getTagName() + " element";
+        this.recognitionStrings = new ArrayList<>();
+        this.recognitionStrings.add(getElementXPath(webElement));
+        this.identificationType = IdentificationType.BY_X_PATH;
+        this.page = "TempElementPage";
+    }
+
+    public DomElement(PositionBasedWebElement positionBasedWebElement){
+        this.name = "Dynamically identified " + positionBasedWebElement.webElement.getTagName() + " element " + positionBasedWebElement.getText();
+        this.recognitionStrings = new ArrayList<>();
+        this.recognitionStrings.add(getElementXPath(positionBasedWebElement.webElement));
+        this.identificationType = IdentificationType.BY_X_PATH;
+        this.page = "TempElementPage";
+    }
+
+    private WebDriver getDriver(WebElement webElement){
+        WebDriver driver = null;
+        try{
+            driver = ((WrapsDriver) webElement).getWrappedDriver();
+        }catch (Exception ignored){ }
+        return driver;
+    }
+
+    public PositionBasedWebElement asPositionBasedWebElement(WebInteractionMethods web){
+        return new PositionBasedWebElement(web.getRuntimeElementWithoutLogging(this));
+    }
+
+    public String getElementXPath(WebElement element) {
+        if(element == null) return null;
+        WebDriver driver = getDriver(element);
+        if(driver == null) return null;
+        return (String)((JavascriptExecutor)driver).executeScript("gPt=function(c){if(c.id!==''){return'id(\"'+c.id+'\")'}if(c===document.body){return c.tagName}var a=0;var e=c.parentNode.childNodes;for(var b=0;b<e.length;b++){var d=e[b];if(d===c){return gPt(c.parentNode)+'/'+c.tagName+'['+(a+1)+']'}if(d.nodeType===1&&d.tagName===c.tagName){a++}}};return gPt(arguments[0]).toLowerCase();", element);
+    }
     /**
      * Enables unified logging formats for element references in the testCaseLog
      * @return a string to use in testCaseLog posts

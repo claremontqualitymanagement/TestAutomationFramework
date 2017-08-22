@@ -1,19 +1,6 @@
 package se.claremont.autotest.common.reporting.testrunreports.email;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.subethamail.wiser.Wiser;
-import se.claremont.autotest.common.testrun.Settings;
-import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 /**
  * Email sending tests
@@ -21,6 +8,7 @@ import static org.junit.Assert.*;
  * Created by jordam on 2016-09-19.
  */
 public class EmailSenderImplementationTest extends UnitTestClass{
+    /*
     private Wiser wiser;
 
     @Before
@@ -110,4 +98,5 @@ public class EmailSenderImplementationTest extends UnitTestClass{
             fail("Should not throw exception: " + e.getMessage());
         }
     }
+    */
 }

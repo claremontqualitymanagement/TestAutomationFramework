@@ -355,6 +355,20 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return null;
     }
 
+    @Override
+    public Object runtimeElement() {
+        return cachedElement;
+    }
+
+    @Override
+    public ArrayList<PositionBasedGuiElement> childElements() {
+        ArrayList<PositionBasedGuiElement> list = new ArrayList<>();
+        for (JavaGuiElement javaGuiElement : getSubElements()){
+            list.add(javaGuiElement);
+        }
+        return list;
+    }
+
     private List<Object> getWindowComponents() {
         List<Object> objects = new ArrayList<>();
         if(window != null){

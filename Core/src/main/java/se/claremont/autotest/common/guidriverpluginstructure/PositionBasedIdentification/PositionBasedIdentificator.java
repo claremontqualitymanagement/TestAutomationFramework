@@ -20,6 +20,11 @@ public class PositionBasedIdentificator {
         return elements;
     }
 
+    public static ElementsList fromAllSubElementsOf(PositionBasedGuiElement positionBasedGuiElement){
+        return new ElementsList(positionBasedGuiElement.childElements());
+    }
+
+
     public static ElementsList fromAllTheElements(List<Object> elements){
         ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for(Object element : elements){
