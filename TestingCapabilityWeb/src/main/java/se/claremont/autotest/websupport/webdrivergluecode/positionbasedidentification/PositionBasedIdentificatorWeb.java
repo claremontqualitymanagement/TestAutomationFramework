@@ -42,4 +42,5 @@ public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
                 keepElementsToTheRightOf(relativeElement).
                 theObjectMostToTheLeft().runtimeElement());
     }
+
 }

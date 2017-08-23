@@ -57,10 +57,11 @@ public class ElementsList {
 
     public ElementsList keepElementsToTheLeftOf(PositionBasedGuiElement relativeElement){
         ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
+        Integer relativeElementPosition = relativeElement.getLeftPosition();
+        if(relativeElementPosition == null) return new ElementsList(returnElements);
         for (PositionBasedGuiElement possibleElement : this.elements){
             Integer possibleElementPosition = possibleElement.getRightPosition();
-            Integer relativeElementPosition = relativeElement.getLeftPosition();
-            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition == null) continue;
             if(possibleElementPosition < relativeElementPosition) {
                 returnElements.add(possibleElement);
             }
@@ -70,10 +71,11 @@ public class ElementsList {
 
     public ElementsList keepElementsAbove(PositionBasedGuiElement relativeElement){
         ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
+        Integer relativeElementPosition = relativeElement.getTopPosition();
+        if(relativeElementPosition == null) return new ElementsList(returnElements);
         for (PositionBasedGuiElement possibleElement : this.elements){
             Integer possibleElementPosition = possibleElement.getBottomPosition();
-            Integer relativeElementPosition = relativeElement.getTopPosition();
-            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition == null) continue;
             if(possibleElementPosition < relativeElementPosition) {
                 returnElements.add(possibleElement);
             }
@@ -83,10 +85,11 @@ public class ElementsList {
 
     public ElementsList keepElementsBelow(PositionBasedGuiElement relativeElement){
         ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
+        Integer relativeElementPosition = relativeElement.getBottomPosition();
+        if(relativeElementPosition == null) return new ElementsList(returnElements);
         for (PositionBasedGuiElement possibleElement : this.elements){
             Integer possibleElementPosition = possibleElement.getTopPosition();
-            Integer relativeElementPosition = relativeElement.getBottomPosition();
-            if(possibleElementPosition == null || relativeElementPosition == null) continue;
+            if(possibleElementPosition == null) continue;
             if(possibleElementPosition > relativeElementPosition) {
                 returnElements.add(possibleElement);
             }

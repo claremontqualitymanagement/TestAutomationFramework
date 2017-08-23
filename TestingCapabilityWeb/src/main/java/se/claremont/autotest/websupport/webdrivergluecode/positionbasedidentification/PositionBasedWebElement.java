@@ -172,4 +172,16 @@ public class PositionBasedWebElement implements se.claremont.autotest.common.gui
         }
         return displayed;
     }
+
+    @Override
+    public String toString(){
+        return "[PositionBasedWebElement: ElementType='" + getTypeName() + "', " +
+                "text='" + getText() + "', " +
+                "top=" + getTopPosition() + ", " +
+                "bottom=" + getBottomPosition() + ", " +
+                "left=" + getLeftPosition() + ", " +
+                "right=" + getRightPosition() + ", " +
+                "displayed=" + String.valueOf(isDisplayed()) +
+                "]";
+    }
 }

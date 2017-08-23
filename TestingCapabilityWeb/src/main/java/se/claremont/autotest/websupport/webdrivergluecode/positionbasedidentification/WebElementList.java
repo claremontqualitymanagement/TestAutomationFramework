@@ -34,4 +34,15 @@ public class WebElementList extends ElementsList{
         return new WebElementList(returnList);
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[WebElementList: ");
+        for(PositionBasedGuiElement element : elements){
+            sb.append(element).toString();
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
 }

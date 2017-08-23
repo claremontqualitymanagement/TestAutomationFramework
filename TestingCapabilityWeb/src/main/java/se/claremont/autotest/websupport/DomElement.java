@@ -147,4 +147,18 @@ public class DomElement implements GuiElement {
         return name + " (declared in page class " + page + ")";
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[DomElement: ");
+        sb.append("Name='").append(name).append("', ");
+        sb.append("page='").append(page).append("', ");
+        for(String recognitionString : recognitionStrings){
+            sb.append(" recognitionString='").append(recognitionString).append("', ");
+        }
+        sb.append("identificationType='").append(identificationType.toString()).append("', ");
+        sb.append("ordinalNumber=").append(String.valueOf(ordinalNumber)).append("]");
+        return sb.toString();
+    }
+
 }
