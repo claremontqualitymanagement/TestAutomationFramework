@@ -113,6 +113,22 @@ public class DomElement implements GuiElement {
         this.page = "TempElementPage";
     }
 
+    public DomElement(WebElement webElement, String elementName, String elementPageName){
+        if(elementName == null){
+            this.name = "Dynamically identified " + webElement.getTagName() + " element";
+        } else {
+            this.name = elementName;
+        }
+        this.recognitionStrings = new ArrayList<>();
+        this.recognitionStrings.add(getElementXPath(webElement));
+        this.identificationType = IdentificationType.BY_X_PATH;
+        if(elementPageName == null){
+            this.page = "TempElementPage";
+        } else {
+            this.page = elementPageName;
+        }
+    }
+
     public DomElement(PositionBasedWebElement positionBasedWebElement){
         this.name = "Dynamically identified " + positionBasedWebElement.webElement.getTagName() + " element " + positionBasedWebElement.getText();
         this.recognitionStrings = new ArrayList<>();

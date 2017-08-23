@@ -29,7 +29,7 @@ public class PositionBasedIdentificatorTest extends UnitTestClass{
 
     @Test
     public void referencingToTheRightOfAndBelow(){
-        PositionBasedGuiElement element = PositionBasedIdentificator.fromAllTheElements(gui()).
+        PositionBasedGuiElement element = (PositionBasedGuiElement)PositionBasedIdentificator.fromAllTheElements(gui()).
                 keepElementsToTheRightOf(bottomLeftButton).
                 theObjectMostToTheBottom();
         Assert.assertNotNull("Ended up with no element", element);
@@ -39,7 +39,7 @@ public class PositionBasedIdentificatorTest extends UnitTestClass{
 
     @Test
     public void referencingToTheLeftOfAndBelow(){
-        PositionBasedGuiElement element = PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsToTheLeftOf(bottomRightButton).theObjectMostToTheBottom();
+        PositionBasedGuiElement element = (PositionBasedGuiElement)PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsToTheLeftOf(bottomRightButton).theObjectMostToTheBottom();
         Assert.assertNotNull("Ended up with no element", element);
         TestPositionBasedIdentificationObject testObject = (TestPositionBasedIdentificationObject) element;
         Assert.assertTrue(testObject.getName(), testObject.getName().equals("Ok button"));
@@ -47,7 +47,7 @@ public class PositionBasedIdentificatorTest extends UnitTestClass{
 
     @Test
     public void referencingToTheLeftOfAndAbove(){
-        PositionBasedGuiElement element = PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsToTheLeftOf(bottomRightButton).theObjectMostToTheTop();
+        PositionBasedGuiElement element = (PositionBasedGuiElement)PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsToTheLeftOf(bottomRightButton).theObjectMostToTheTop();
         Assert.assertNotNull("Ended up with no element", element);
         TestPositionBasedIdentificationObject testObject = (TestPositionBasedIdentificationObject) element;
         Assert.assertTrue(testObject.getName(), testObject.getName().equals("Label for editfield"));
@@ -55,7 +55,7 @@ public class PositionBasedIdentificatorTest extends UnitTestClass{
 
     @Test
     public void typeFilter(){
-        PositionBasedGuiElement element = PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsOfType("EditField").theOnlyElementThatShouldBeLeft();
+        PositionBasedGuiElement element = (PositionBasedGuiElement)PositionBasedIdentificator.fromAllTheElements(gui()).keepElementsOfType("EditField").theOnlyElementThatShouldBeLeft();
         Assert.assertNotNull("Ended up with no element", element);
         TestPositionBasedIdentificationObject testObject = (TestPositionBasedIdentificationObject) element;
         Assert.assertTrue(testObject.getName(), testObject.getName().equals("Edit field"));

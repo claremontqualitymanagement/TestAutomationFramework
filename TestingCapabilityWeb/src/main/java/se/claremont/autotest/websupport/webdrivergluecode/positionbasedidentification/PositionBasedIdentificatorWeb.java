@@ -1,6 +1,5 @@
 package se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification;
 
-import org.openqa.selenium.WebElement;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.websupport.DomElement;
@@ -35,12 +34,12 @@ public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
         return fromAllSubElementsOf(posElement.parentElement().asDomElement(), web);
     }
 
-    public static PositionBasedWebElement findElementImmediatelyToTheRightOfText(String text, WebInteractionMethods web){
+    public static DomElement elementImmediatelyToTheRightOfText(String text, WebInteractionMethods web){
         PositionBasedWebElement relativeElement = new PositionBasedWebElement(text, web);
-        return new PositionBasedWebElement((WebElement)fromAllElementsInTheSameContainerObjectAsElementWithText(text, web).
-                atTheSameHeightAs(relativeElement).
-                keepElementsToTheRightOf(relativeElement).
-                theObjectMostToTheLeft().runtimeElement());
+        return fromAllElementsInTheSameContainerObjectAsElementWithText(text, web).
+                atTheSameHeightAs(text, web, 10, 10).
+                keepElementsToTheRightOf(text, web).
+                theObjectMostToTheLeft();
     }
 
 }

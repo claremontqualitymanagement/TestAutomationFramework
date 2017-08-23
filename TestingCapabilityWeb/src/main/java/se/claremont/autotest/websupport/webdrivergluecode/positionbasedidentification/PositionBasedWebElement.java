@@ -68,9 +68,13 @@ public class PositionBasedWebElement implements se.claremont.autotest.common.gui
 
     }
 
+    public WebElement asWebElement() {return getWebElement(); }
+
     public DomElement asDomElement(){
         return new DomElement(webElement);
     }
+
+    public DomElement asDomElement(String elementName, String elementPageName) { return new DomElement(webElement, elementName, elementPageName); }
 
     public ArrayList<PositionBasedWebElement> childrenRecursive(){
         List<WebElement> subElements = webElement.findElements(By.xpath("//*"));
