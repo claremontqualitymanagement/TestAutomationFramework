@@ -5,6 +5,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,8 +14,10 @@ import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.jar.Attributes;
 
 /**
@@ -33,6 +36,160 @@ public class ApplicationStarter {
 
     public ApplicationStarter(TestCase testCase){
         this.testCase = testCase;
+    }
+
+    public void addFilesToClassPath(String filePath){
+
+    }
+
+    public void addFolderToClassPath(String folderName){
+
+    }
+
+    /**
+     * Equivalent of java CLI start parameter -D
+     *
+     * @param variableName Name of variable to set (the rest of the parameter after '-D' at the command prompt.
+     * @param variableValue The environment value to set.
+     */
+    public void setEnvironmentVariable(String variableName, String variableValue){
+
+    }
+
+    /**
+     * Attempts to load a Windows DLL (Dynamic Link Library) file in order for a Java program to
+     * be able to access the classes and methods within.
+     *
+     * DLL files are sensitive to bit length. Not all DLL compiled for 32 bits can be run in a 64 bit environment.
+     *
+     * @param filePath The file path to the DLL file
+     */
+    public void loadDLLFile(String filePath){
+
+    }
+
+    /**
+     * Attempts to load the identified Windows DLL (Dynamic Link Library) files in the specified folder in order for a Java program to
+     * be able to access the classes and methods within.
+     *
+     * DLL files are sensitive to bit length. Not all DLL compiled for 32 bits can be run in a 64 bit environment.
+     *
+     * @param folderPath
+     */
+    public void loadAllDLLsInFolder(String folderPath){
+
+    }
+
+    /**
+     * A few of the JVM settings that are settable from the command line
+     * (usually with -X option) can be manipulated or added programatically.
+     * This method attempts to do that.
+     *
+     * @param settingName The name of the parameter to attempt to set.
+     * @param settingValue The settings value to try to apply.
+     */
+    public void setJVMSetting(String settingName, String settingValue){
+
+    }
+
+    public void startProgramFromCLI(String cliStartString){
+        testCase.log(LogLevel.DEBUG, "Attempting to start Java program from CLI string '" + cliStartString + "'.");
+        if(cliStartString == null || cliStartString.length() == 0){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not start jar from empty string.");
+            return;
+        }
+        String[] parts = cliStartString.split(" ");
+        parts = applyJVMSettings(parts);
+        parts = applyEnvironmentVariables(parts);
+        parts = applyClassPath(parts);
+        parts = removeJavaProgramStatement(parts);
+        String jarFile = identifyJarFile(parts);
+        parts = removeJarFileParameterFromPars(parts);
+        if(jarFile == null){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not identify jar start file in CLI string '" + cliStartString + "'.");
+            return;
+        }
+        try {
+            testCase.log(LogLevel.DEBUG, "Starting jar file '" + jarFile + "' with arguments '" + String.join(" ", parts) + "'.");
+            startJar(new File(jarFile).toURI().toURL(), parts);
+        } catch (MalformedURLException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Error encountered while trying to start jar file. Error: " + e.getMessage());
+        }
+    }
+
+    private String[] removeJarFileParameterFromPars(String[] parts) {
+        List<String> remainingParts = new ArrayList<>();
+        for(int i = 0; i < parts.length;i++){
+            String part = parts[i];
+            if(part.trim().toLowerCase().equals("-jar")){
+                if(parts.length > i) {
+                    i++;
+                }
+            } else {
+                remainingParts.add(part);
+            }
+        }
+        return remainingParts.toArray(new String[0]);
+    }
+
+    private String identifyJarFile(String[] parts) {
+        for(int i = 0; i < parts.length; i++){
+            String part = parts[i];
+            if(part.trim().toLowerCase().equals("-jar") && parts.length > i){
+                return parts[i+1];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Unfortunately will not yet cope with java.exe paths stated with spaces in the folder names.
+     *
+     * @param parts The arguments
+     * @return Returns the rest of the arguments.
+     */
+    private String[] removeJavaProgramStatement(String[] parts) {
+        List<String> remainingParts = new ArrayList<>();
+        for(String part : parts){
+            if(
+                    part.trim().toLowerCase().equals("java") ||
+                    part.trim().toLowerCase().equals("javaw") ||
+                    part.trim().toLowerCase().endsWith(File.separator + "javaw") ||
+                    part.trim().toLowerCase().endsWith(File.separator + "java") ||
+                    part.trim().toLowerCase().equals("java.exe") ||
+                    part.trim().toLowerCase().equals("javaw") ||
+                    part.trim().toLowerCase().endsWith(File.separator + "javaw.exe") ||
+                    part.trim().toLowerCase().endsWith(File.separator + "java.exe")){
+                testCase.log(LogLevel.DEBUG, "Removed JRE argument from CLI path since JRE is managed through ClassLoaders.");
+            }else{
+                remainingParts.add(part);
+            }
+        }
+        return remainingParts.toArray(new String[0]);
+    }
+
+    private String[] applyClassPath(String[] parts) {
+        List<String> remainingParts = new ArrayList<>();
+        for(int i = 0; i < parts.length; i++){
+            String part = parts[i];
+            if(part.trim().toLowerCase().equals("-cp") || part.trim().toLowerCase().equals("-classpath")){
+                if(parts.length == i){
+                    testCase.log(LogLevel.EXECUTION_PROBLEM, "Expecting java classpath since " + part + " was stated. None found.");
+                }
+                String[] classPaths = parts[i+1].split(File.pathSeparator);
+                for(String classPath : classPaths){
+                    if(Files.isDirectory(new File(classPath).toPath())){
+                        addFolderToClassPath(classPath);
+                    }else {
+                        addFilesToClassPath(classPath);
+                    }
+                }
+                i++;
+            } else {
+                remainingParts.add(parts[i]);
+            }
+        }
+        return remainingParts.toArray(new String[0]);
     }
 
     public void startJar(String filePath){
@@ -66,6 +223,48 @@ public class ApplicationStarter {
             startJar(fileUrl, args);
         }
 
+    }
+
+    private String[] applyEnvironmentVariables(String[] parts) {
+        List<String> remainingParts = new ArrayList<>();
+        for(String part : parts){
+            if(part.trim().startsWith("-D")){
+                String[] setting = part.trim().split("=");
+                String settingName = setting[0].trim().substring(2);
+                String settingValue = "";
+                if(setting.length>1){
+                    for(int i = 1; i < setting.length; i++){
+                        settingValue += setting[i] + "=";
+                    }
+                    settingValue = settingValue.substring(0, settingValue.length()-1);
+                }
+                setEnvironmentVariable(settingName, settingValue);
+            } else {
+                remainingParts.add(part);
+            }
+        }
+        return remainingParts.toArray(new String[0]);
+    }
+
+    private String[] applyJVMSettings(String[] parts) {
+        List<String> remainingParts = new ArrayList<>();
+        for(String part : parts){
+            if(part.trim().startsWith("-X")){
+                String[] setting = part.trim().split("=");
+                String settingName = setting[0].trim().substring(2);
+                String settingValue = "";
+                if(setting.length>1){
+                    for(int i = 1; i < setting.length; i++){
+                        settingValue += setting[i] + "=";
+                    }
+                    settingValue = settingValue.substring(0, settingValue.length()-1);
+                }
+                setJVMSetting(settingName, settingValue);
+            } else {
+                remainingParts.add(part);
+            }
+        }
+        return remainingParts.toArray(new String[0]);
     }
 
     public void startJar(URL url){
