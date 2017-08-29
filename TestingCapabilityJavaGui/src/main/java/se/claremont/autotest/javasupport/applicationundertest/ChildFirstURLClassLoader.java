@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.applicationstart;
+package se.claremont.autotest.javasupport.applicationundertest;
 
 import java.io.IOException;
 import java.io.InputStream;

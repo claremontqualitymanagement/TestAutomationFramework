@@ -6,7 +6,8 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
+import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.objectstructure.GuiComponent;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
@@ -32,6 +33,7 @@ public class GenericInteractionMethods {
     TestCase testCase;
     public int standardTimeout = 5;
     MethodInvoker methodInvoker;
+    ApplicationUnderTest app;
 
     /**
      * Constructor to enable interaction with Java GUIs
@@ -41,6 +43,10 @@ public class GenericInteractionMethods {
     public GenericInteractionMethods(TestCase testCase){
         this.testCase = testCase;
         methodInvoker = new MethodInvoker(testCase);
+    }
+
+    public void setApplicationUnderTest(ApplicationUnderTest app){
+        this.app = app;
     }
 
     /**
@@ -112,9 +118,12 @@ public class GenericInteractionMethods {
      * Writes currently active window to the test case log
      */
     public void logCurrentActiveWindows(){
-        ApplicationStarter.logCurrentWindows(testCase);
+        if(app == null){
+            log(LogLevel.EXECUTION_PROBLEM, "You need to use the method setApplicationUnderTest() in the GenericInteractionMethods class in order to use the logCurrentActiveWindows() method.");
+            return;
+        }
+        app.logCurrentWindows(testCase);
     }
-
 
 
     /**

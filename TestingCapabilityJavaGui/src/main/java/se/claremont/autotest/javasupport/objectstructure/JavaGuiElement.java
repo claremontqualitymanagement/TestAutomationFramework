@@ -4,7 +4,7 @@ import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdenti
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -217,7 +217,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             return window.getWindow();
         } else {
             List<Object> objects = new ArrayList<>();
-            List<Window> windows = ApplicationStarter.getWindows();
+            Window[] windows = Window.getOwnerlessWindows ();
             List<Window> nonDisplayedWindows = new ArrayList<>();
             for(Window w : windows){
                 if(!w.isShowing()) {
@@ -376,7 +376,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             recognitionDescription.add("Identified " + objects.size() + " objects in the window.");
         } else {
             recognitionDescription.add("No window was given for object. Trying to identify java windows.");
-            List<Window> windows = ApplicationStarter.getWindows();
+            Window[] windows = Window.getOwnerlessWindows ();
             List<Window> nonDisplayedWindows = new ArrayList<>();
             for(Window w : windows){
                 if(!w.isShowing()) {

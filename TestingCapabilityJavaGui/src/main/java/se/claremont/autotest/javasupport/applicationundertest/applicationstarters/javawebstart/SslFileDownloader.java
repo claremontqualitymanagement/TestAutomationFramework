@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.applicationstart.javawebstart;
+package se.claremont.autotest.javasupport.applicationundertest.applicationstarters.javawebstart;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;

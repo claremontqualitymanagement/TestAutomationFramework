@@ -5,7 +5,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
-import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
@@ -41,7 +41,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
         List<String> texts = new ArrayList<>();
-        for (Window w : ApplicationStarter.getWindows()){
+        for (Window w : Window.getOwnerlessWindows()){
             JavaWindow javaWindow = new JavaWindow(w);
             texts.addAll(javaWindow.textsInComponents());
         }

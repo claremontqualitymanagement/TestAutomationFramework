@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.applicationstart;
+package se.claremont.autotest.javasupport.applicationundertest;
 
 import java.net.URL;
 import java.net.URLClassLoader;

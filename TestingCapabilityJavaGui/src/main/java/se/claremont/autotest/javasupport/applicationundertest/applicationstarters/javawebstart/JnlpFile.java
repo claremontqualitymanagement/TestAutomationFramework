@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.applicationstart.javawebstart;
+package se.claremont.autotest.javasupport.applicationundertest.applicationstarters.javawebstart;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

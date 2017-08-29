@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.applicationstart;
+package se.claremont.autotest.javasupport.applicationundertest;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -7,6 +7,7 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TafTestRunner;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
@@ -38,7 +39,7 @@ public class ApplicationStarterTest extends TestSet {
 
     @After
     public void teardown(){
-        ApplicationStarter.closeAllWindows();
+        ApplicationUnderTest.closeAllWindows();
     }
 
     @AfterClass
@@ -105,7 +106,7 @@ public class ApplicationStarterTest extends TestSet {
         } catch (MalformedURLException e) {
             Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
         }
-        ApplicationStarter.closeAllWindows();
+        ApplicationUnderTest.closeAllWindows();
     }
 
     @Test
@@ -120,7 +121,7 @@ public class ApplicationStarterTest extends TestSet {
             Object c = button.getRuntimeComponent();
             Assert.assertNotNull(c);
             Assert.assertTrue(c.toString().contains("Ok"));
-            ApplicationStarter.closeAllWindows();
+            ApplicationUnderTest.closeAllWindows();
         }catch (Exception e){
             Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
         }
@@ -134,7 +135,7 @@ public class ApplicationStarterTest extends TestSet {
             TestCase tempTestCase = new TestCase(null, "dummy");
             ApplicationStarter as = new ApplicationStarter(tempTestCase);
             as.startJar(new URL("file:///" + tempFolder.replace("\\", "/") + "JavaApp.jar"));
-            ApplicationStarter.logCurrentWindows(tempTestCase);
+            ApplicationUnderTest.logCurrentWindows(tempTestCase);
             boolean found = false;
             for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
                 if(logPost.message.contains("Window title: 'Java test application'. Shown:true")){
@@ -145,7 +146,7 @@ public class ApplicationStarterTest extends TestSet {
         }catch (Exception e){
             Assume.assumeTrue("Could not start application for testing." + e.toString(), false);
         }
-        ApplicationStarter.closeAllWindows();
+        ApplicationUnderTest.closeAllWindows();
     }
 
 }

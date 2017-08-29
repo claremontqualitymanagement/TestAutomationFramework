@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.applicationstart.javawebstart;
+package se.claremont.autotest.javasupport.applicationundertest.applicationstarters.javawebstart;
 
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;

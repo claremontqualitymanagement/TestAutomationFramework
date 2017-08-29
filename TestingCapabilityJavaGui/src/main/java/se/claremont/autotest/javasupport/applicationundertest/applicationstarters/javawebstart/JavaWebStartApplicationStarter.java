@@ -1,6 +1,6 @@
-package se.claremont.autotest.javasupport.applicationstart.javawebstart;
+package se.claremont.autotest.javasupport.applicationundertest.applicationstarters.javawebstart;
 
-import se.claremont.autotest.javasupport.applicationstart.ChildFirstURLClassLoader;
+import se.claremont.autotest.javasupport.applicationundertest.ChildFirstURLClassLoader;
 
 import java.io.File;
 import java.io.IOException;

@@ -2,7 +2,7 @@ package se.claremont.autotest.javasupport.objectstructure;
 
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.javasupport.applicationstart.ApplicationStarter;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -62,7 +62,8 @@ public class JavaWindow {
      * @return The interaction runtime instance of this window if possible to identify, otherwise null.
      */
     public Object getWindow(){
-        ArrayList<Window> windows = ApplicationStarter.getWindows();
+        Window[] windows = Window.getOwnerlessWindows();
+        if(windows.length == 0) return null;
         ArrayList<Window> nonShownWindows = new ArrayList<>();
         for(Window w : windows){
             String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(w, MethodDeclarations.titleGetterMethodsInAttemptOrder);

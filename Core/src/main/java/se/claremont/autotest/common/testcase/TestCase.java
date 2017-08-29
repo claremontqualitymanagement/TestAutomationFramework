@@ -48,6 +48,10 @@ public class TestCase {
         this(null, "Nameless test case");
     }
 
+    public TestCase(String testName){
+        this(null, testName);
+    }
+
     /**
      * Setting up a new test case run and prepares it for execution
      *
@@ -56,9 +60,8 @@ public class TestCase {
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
         TestRun.initializeIfNotInitialized();
-        if(knownErrorsList == null){
-            knownErrorsList = new KnownErrorsList();
-        }
+        if(testName == null) testName = "Nameless test case";
+        if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetName = SupportMethods.classNameAtStacktraceLevel(4);
         testCaseKnownErrorsList = new KnownErrorsList();
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
