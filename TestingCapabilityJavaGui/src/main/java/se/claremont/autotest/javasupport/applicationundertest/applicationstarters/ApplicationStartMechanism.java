@@ -2,6 +2,8 @@ package se.claremont.autotest.javasupport.applicationundertest.applicationstarte
 
 import se.claremont.autotest.common.testcase.TestCase;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,11 @@ public class ApplicationStartMechanism {
     }
 
     public void run(){
-
+        ApplicationStarter as = new ApplicationStarter(testCase);
+        try {
+            as.startJar(new URL(startUrlOrPathToJarFile), mainClass, arguments.toArray(new String[0]));
+        } catch (MalformedURLException e) {
+            System.out.println("Could not start program '" + startUrlOrPathToJarFile + "', with start class '" + mainClass + "' and arguments '" + String.join("', '", arguments) + "'. Error:" + e.toString());
+        }
     }
 }

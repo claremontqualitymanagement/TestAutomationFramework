@@ -130,14 +130,12 @@ public class TestCase {
      * Interpreting test case results and writing to logs
      */
     public void report(){
-        if(reported){
-           return;
-        }
+        if(reported) return;
         testCaseResult.assessResults();
         reporters.forEach(TestCaseLogReporter::report);
         TestRun.reporters.evaluateTestCase(this);
-        assertExecutionResultsToTestRunner();
         reported = true;
+        assertExecutionResultsToTestRunner();
     }
 
 

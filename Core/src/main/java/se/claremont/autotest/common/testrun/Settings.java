@@ -43,6 +43,7 @@ public class Settings extends HashMap<String, String>{
         EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES("Report email recipients"),
         BASE_LOG_FOLDER              ("Report log folder"),
         CONSOLE_LOG_LEVEL            ("Console log level"),
+        PARALLEL_TEST_EXECUTION_MODE("Parallel test execution"),
         PATH_TO_LOGO                 ("Path to custom report top logotype image", true),
         //CHROME_DRIVER_PATH_TO_EXE    (),
         PHANTOMJS_PATH_TO_EXE        ("Path to PhantomJS binary"),
@@ -194,6 +195,7 @@ public class Settings extends HashMap<String, String>{
             setValue(SettingParameters.PHANTOMJS_PATH_TO_EXE, getValue(SettingParameters.BASE_LOG_FOLDER) + "phantomjs.exe");
         }
         setValue(SettingParameters.TEST_RUN_LOG_FOLDER, "");
+        setValue(SettingParameters.PARALLEL_TEST_EXECUTION_MODE, "1");
         setValue(SettingParameters.PATH_TO_LOGO, "http://46.101.193.212/TAF/images/claremontlogo.gif");
         setValue(SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "");
         setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");

@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.testrun;
 
+import org.junit.experimental.ParallelComputer;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.slf4j.Logger;
@@ -177,7 +178,7 @@ public class CliTestRunner {
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-        //junit.addListener(new TafRunListener());
+        junit.addListener(new TafRunListener());
 
         for (String arg : args) {
             try {
@@ -196,7 +197,25 @@ public class CliTestRunner {
             System.out.println(System.lineSeparator() + "No test classes given for execution." + System.lineSeparator()+ System.lineSeparator() + "If in doubt of how to use this command line interface, please try the help switch or the Wiki.");
             return null;
         }
-        return junit.run(classes.toArray(new Class[0]));
+        Result result = null;
+        //return junit.run(classes.toArray(new Class[0]));
+        if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("methods") ||
+                TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("true")){
+            System.out.println("Running test methods in parallel.");
+            result = junit.runClasses(new ParallelComputer(false, true), classes.toArray(new Class[0]));
+            System.out.println(result.toString());
+        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("classes")){
+            result = junit.runClasses(new ParallelComputer(true, false), classes.toArray(new Class[0]));
+        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("both")){
+            result = junit.runClasses(new ParallelComputer(true, true), classes.toArray(new Class[0]));
+        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("false")){
+            result = junit.run(classes.toArray(new Class[0]));
+        } else {
+            //System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', or 'false'. Not running tests in parallel.");
+            result = junit.runClasses(new ParallelComputer(false, false), classes.toArray(new Class[0]));
+            //System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', or 'false'. Not running tests in parallel.");
+        }
+        return result;
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -206,6 +225,17 @@ public class CliTestRunner {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void printResults(Result result){
+        if(result == null){
+            System.out.println("Strange. No test result result found from test run.");
+            return;
+        }
+        System.out.println("Ran " + result.getRunCount() + " test cases. Success: " + result.wasSuccessful());
+        System.out.println("Successful: " + (result.getRunCount() - result.getFailureCount()));
+        System.out.println("Ignored:    " + result.getIgnoreCount());
+        System.out.println("Failed:     " + result.getFailureCount());
     }
 
     private static void printErrorMessageUponWrongJavaVersion(){

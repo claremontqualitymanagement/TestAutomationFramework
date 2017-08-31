@@ -1,6 +1,22 @@
 package se.claremont.autotest.common.reporting.testrunreports.email;
 
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.subethamail.wiser.Wiser;
+import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import java.io.IOException;
+
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Email sending tests
@@ -8,8 +24,8 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  * Created by jordam on 2016-09-19.
  */
 public class EmailSenderImplementationTest extends UnitTestClass{
-    /*
     private Wiser wiser;
+    /*
 
     @Before
     public void setup() {
@@ -21,6 +37,7 @@ public class EmailSenderImplementationTest extends UnitTestClass{
     public void tearDown() {
         wiser.stop();
     }
+*/
 
     @Test
     @Ignore
@@ -46,7 +63,7 @@ public class EmailSenderImplementationTest extends UnitTestClass{
 
         assertTrue(result, result.contains("Email sent with subject 'Test email' using account 'account@yahoo.rocks' to mail host 'localhost"));
 
-        assertFalse(wiser.getMessages().isEmpty());
+        Assert.assertFalse(wiser.getMessages().isEmpty());
 
         try {
             MimeMessage msg = wiser.getMessages().get(0).getMimeMessage();
@@ -98,5 +115,4 @@ public class EmailSenderImplementationTest extends UnitTestClass{
             fail("Should not throw exception: " + e.getMessage());
         }
     }
-    */
 }

@@ -4,6 +4,7 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.junit.runner.RunWith;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,6 +14,7 @@ import java.io.PrintStream;
  *
  * Created by jordam on 2017-03-17.
  */
+@RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 public class UnitTestClass {
     @SuppressWarnings("WeakerAccess")
     static PrintStream originalOutputChannel;
