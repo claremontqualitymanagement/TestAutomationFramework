@@ -208,12 +208,12 @@ public class CliTestRunner {
             result = junit.runClasses(new ParallelComputer(true, false), classes.toArray(new Class[0]));
         } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("both")){
             result = junit.runClasses(new ParallelComputer(true, true), classes.toArray(new Class[0]));
-        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("false")){
+        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("false") ||
+                TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("none")){
             result = junit.run(classes.toArray(new Class[0]));
         } else {
-            //System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', or 'false'. Not running tests in parallel.");
+            System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', 'both', 'none', 'true', or 'false'. Resorting to default by not running tests in parallel.");
             result = junit.runClasses(new ParallelComputer(false, false), classes.toArray(new Class[0]));
-            //System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', or 'false'. Not running tests in parallel.");
         }
         return result;
     }

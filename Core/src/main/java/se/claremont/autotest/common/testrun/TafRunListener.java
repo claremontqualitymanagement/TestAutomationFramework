@@ -41,7 +41,6 @@ public class TafRunListener extends RunListener {
     */
 
     public void testRunFinished(Result result) throws Exception {
-        tryCloseThreadPool(TafTestRunner.getThreadPool());
         TestRun.reportTestRun();
         System.out.println();
         System.out.println("Test run finished.");
@@ -56,17 +55,6 @@ public class TafRunListener extends RunListener {
         }
         System.out.println("Success for classes run: " + result.wasSuccessful() + System.lineSeparator());
         if (result.getFailureCount() == 0) System.out.println(celebration());
-    }
-
-    private void tryCloseThreadPool(ExecutorService threadPool){
-        if(threadPool == null) return;
-        try {
-            threadPool.shutdown();
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Got interrupted", e);
-        }
     }
 
     private static String celebration(){

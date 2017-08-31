@@ -79,6 +79,7 @@ public class EmailSenderImplementationTest extends UnitTestClass{
     }
 
     @Test
+    @Ignore
     public void testSmtp() {
         //TestRun.settings.setValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "password");
         TestRun.setSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME, "account@yahoo.rocks");
