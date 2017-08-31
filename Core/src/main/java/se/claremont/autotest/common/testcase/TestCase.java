@@ -67,6 +67,7 @@ public class TestCase {
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetKnownErrors = knownErrorsList;
         this.testName = testName;
+        setLogFolderIfNotAlreadySet();
         testCaseResult = new TestCaseResult(this);
         addTestCaseData("Test case name", testName);
         String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
@@ -75,7 +76,6 @@ public class TestCase {
         testCaseResult.testCaseLog.log(LogLevel.INFO, "Running tests as user '" + Taf.tafUserInfon().getUserAccountName() + "' on machine with " + Taf.tafUserInfon().getOperatingSystemName() + " as operating system (version reported as '" + Taf.tafUserInfon().getOperatingSystemVersion() + "', and architecture '" + Taf.tafUserInfon().getOperatingSystemArchitecture() +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(testCaseResult));
         reporters.add(new TestCaseLogReporterHtmlLogFile(testCaseResult));
-        setLogFolderIfNotAlreadySet();
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
     }
@@ -132,8 +132,8 @@ public class TestCase {
     public void report(){
         if(reported) return;
         testCaseResult.assessResults();
-        reporters.forEach(TestCaseLogReporter::report);
         TestRun.reporters.evaluateTestCase(this);
+        reporters.forEach(TestCaseLogReporter::report);
         reported = true;
         assertExecutionResultsToTestRunner();
     }

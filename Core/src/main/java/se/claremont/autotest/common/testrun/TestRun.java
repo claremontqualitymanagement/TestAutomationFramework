@@ -97,7 +97,7 @@ public class TestRun {
         initializeIfNotInitialized();
         stopTime = new Date();
         reporters.reportTestRun();
-        BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
+        //BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 
 }
