@@ -4,14 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
+import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
+import se.claremont.autotest.common.junitcustomization.TafTestRunner;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 /**
  * Tests for JSON serialization and deserializations - to ensure correct information is included in JSON.
@@ -95,15 +99,14 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
     @Test
     public void testSetSerializationAndDeserialization(){
         FakeTestSet fakeTestSet = new FakeTestSet();
-        TestCase testCase = new TestCase();
-        fakeTestSet.currentTestCase = testCase;
-        testCase.log(LogLevel.INFO, "Message");
+        fakeTestSet.startUpTestCase("mytest");
+        fakeTestSet.currentTestCase().log(LogLevel.INFO, "Message");
         fakeTestSet.addKnownError("KnownErrorDescription1", ".*Known error pattern1");
         fakeTestSet.addKnownError("KnownErrorDescription2", new String[]{".*Known error pattern2" } );
         fakeTestSet.name = "MyTestSetName";
         TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
+        tafBackendServerTestRunReporter.evaluateTestCase(fakeTestSet.currentTestCase());
         tafBackendServerTestRunReporter.evaluateTestSet(fakeTestSet);
-        tafBackendServerTestRunReporter.evaluateTestCase(testCase);
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {
@@ -128,7 +131,15 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
         Assert.assertNotNull(tafBackendServerTestRunReporterObject);
     }
 
-    public class FakeTestSet extends TestSet{
+    public static class FakeTestSet extends TestSet{
+
+        public FakeTestSet(){
+            super();
+            TafParallelTestCaseRunner.testSets = new HashSet<>();
+        }
+
+        @Test
+        public void dummyTest(){}
 
     }
 }

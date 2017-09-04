@@ -5,14 +5,19 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.common.junitcustomization.TafResult;
+import se.claremont.autotest.common.junitcustomization.TafTestRunner;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
+import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * CLI runner class for the test automation framework
@@ -25,6 +30,7 @@ public class CliTestRunner {
     private static List<String> remainingArguments ;
     private final static Logger logger = LoggerFactory.getLogger( CliTestRunner.class );
     private static boolean testMode = false;
+    public static String threadCountForParallelExecution = null;
 
 //    public static final TestRun testRun = new TestRun();
     private static final String LF = SupportMethods.LF;
@@ -140,7 +146,7 @@ public class CliTestRunner {
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-        junit.addListener(new TafRunListener());
+        junit.addListener(TestRun.tafRunListener);
 
         for (String arg : args) {
             if (arg.toLowerCase().equals("diagnostic") || arg.toLowerCase().equals("diagnostics")) {
@@ -173,12 +179,10 @@ public class CliTestRunner {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    private static Result runTestClasses(){
+    private static void runTestClasses(){
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
-        JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-        junit.addListener(new TafRunListener());
 
         for (String arg : args) {
             try {
@@ -192,30 +196,9 @@ public class CliTestRunner {
                 remainingArguments.remove(arg);
             }
         }
-
-        if(classes.size() == 0) {
-            System.out.println(System.lineSeparator() + "No test classes given for execution." + System.lineSeparator()+ System.lineSeparator() + "If in doubt of how to use this command line interface, please try the help switch or the Wiki.");
-            return null;
-        }
-        Result result = null;
-        //return junit.run(classes.toArray(new Class[0]));
-        if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("methods") ||
-                TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("true")){
-            System.out.println("Running test methods in parallel.");
-            result = junit.runClasses(new ParallelComputer(false, true), classes.toArray(new Class[0]));
-            System.out.println(result.toString());
-        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("classes")){
-            result = junit.runClasses(new ParallelComputer(true, false), classes.toArray(new Class[0]));
-        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("both")){
-            result = junit.runClasses(new ParallelComputer(true, true), classes.toArray(new Class[0]));
-        } else if(TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("false") ||
-                TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE).toLowerCase().equals("none")){
-            result = junit.run(classes.toArray(new Class[0]));
-        } else {
-            System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', 'both', 'none', 'true', or 'false'. Resorting to default by not running tests in parallel.");
-            result = junit.runClasses(new ParallelComputer(false, false), classes.toArray(new Class[0]));
-        }
-        return result;
+        TafTestRunner tafTestRunner = new TafTestRunner();
+        TafResult tafResult = tafTestRunner.run(classes);
+        System.out.println(tafResult.toString());
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -260,7 +243,7 @@ public class CliTestRunner {
         return returnList;
     }
 
-    static void runInTestMode(String[] args){
+    public static void runInTestMode(String[] args){
         testMode = true;
         executeRunSequence(args);
     }
@@ -290,4 +273,5 @@ public class CliTestRunner {
     public static void main(String [] args) {
         executeRunSequence(args);
     }
+
 }

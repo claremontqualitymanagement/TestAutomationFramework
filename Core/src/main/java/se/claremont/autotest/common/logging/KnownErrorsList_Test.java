@@ -70,5 +70,9 @@ public class KnownErrorsList_Test extends UnitTestClass {
         Assert.assertTrue("Test case known error wasn't triggered. Expected resultStatus to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "', but was '" + testCase1.testCaseResult.resultStatus.toString() + "'.", testCase1.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS));
     }
 
-    class TestClass extends TestSet{}
+    public static class TestClass extends TestSet{
+
+        @Test
+        public void dummyTest(){}
+    }
 }

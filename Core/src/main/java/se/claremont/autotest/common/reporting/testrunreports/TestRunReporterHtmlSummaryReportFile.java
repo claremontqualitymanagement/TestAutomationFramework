@@ -6,7 +6,7 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.HtmlSummaryReport;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.TestRunReporter;
+import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 import static se.claremont.autotest.common.support.SupportMethods.LF;

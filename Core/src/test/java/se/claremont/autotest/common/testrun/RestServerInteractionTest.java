@@ -1,11 +1,13 @@
 package se.claremont.autotest.common.testrun;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -34,6 +36,7 @@ public class RestServerInteractionTest extends UnitTestClass{
     }
 
     @Test
+    @Ignore
     public void testRunResultToJsonTest(){
         TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://phonyaddress.org");

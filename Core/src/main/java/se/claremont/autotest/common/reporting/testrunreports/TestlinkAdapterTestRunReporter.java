@@ -7,7 +7,7 @@ import se.claremont.autotest.common.backendserverinteraction.TestlinkAdapterServ
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.TestRunReporter;
+import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;

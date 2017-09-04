@@ -1,34 +1,32 @@
 package se.claremont.autotest.common.testrun;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import se.claremont.autotest.common.testset.UnitTestClass;
+import se.claremont.autotest.common.testset.TestSet;
 
-public class ParallelExecutionTest {
+public class ParallelExecution_TestClass2 extends TestSet{
 
     @Test
     public void parallelExecutionTestCase1() {
-        System.out.println("Starting test 1");
+        System.out.println("Starting class 2, test 1");
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
-        System.out.println("Ending test 1");
+        System.out.println("Ending class 2, test 1");
         Assert.assertTrue(true);
     }
 
     @Test
     public void parallelExecutionTestCase2() {
-        System.out.println("Starting test 2");
+        System.out.println("Starting class 2, test 2");
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
-        System.out.println("Ending test 2");
+        System.out.println("Ending clas 2, test 2");
         Assert.assertTrue(true);
     }
 }

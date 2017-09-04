@@ -25,22 +25,26 @@ public class CliTestRunnerTest extends UnitTestClass {
 
     @BeforeClass
     public static void rememberOriginalOutputChannel(){
+        UnitTestClass.rememberOriginalOutputChannel();
         originalOutputChannel = System.out;
     }
 
     @Before
     public void changeOutPutChannel(){
+        super.startUp();
         testOutputChannel = new ByteArrayOutputStream();
         System.setOut(new PrintStream(testOutputChannel));
     }
 
     @After
     public void restoreOutPutChannelAfterTest(){
+        super.restoreOutPutChannelAfterTest();
         System.setOut(originalOutputChannel);
     }
 
     @AfterClass
     public static void restore(){
+        UnitTestClass.restore();
         System.setOut(originalOutputChannel);
     }
 

@@ -200,8 +200,10 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
         Assert.assertTrue(output, output.contains("All errors were found in test step"));
     }
 
-    class TestClass extends TestSet{
+    public static class TestClass extends TestSet{
 
+        @Test
+        public void dummyTest(){}
     }
 
 }

@@ -535,7 +535,9 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         }
     }
 
-    class TestClass extends TestSet{
+    public static class TestClass extends TestSet{
 
+        @Test
+        public void dummyTest(){}
     }
 }

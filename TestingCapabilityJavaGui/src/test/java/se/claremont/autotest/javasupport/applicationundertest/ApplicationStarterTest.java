@@ -1,11 +1,9 @@
 package se.claremont.autotest.javasupport.applicationundertest;
 
 import org.junit.*;
-import org.junit.runner.RunWith;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.TafTestRunner;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
@@ -27,7 +25,6 @@ import java.nio.file.Paths;
  * Created by jordam on 2017-02-11.
  */
 @SuppressWarnings({"WeakerAccess", "ConstantConditions"})
-@RunWith(TafTestRunner.class)
 public class ApplicationStarterTest extends TestSet {
     @BeforeClass
     public static void classSetup(){ tempFolder = System.getProperty("java.io.tmpdir"); }
@@ -89,16 +86,16 @@ public class ApplicationStarterTest extends TestSet {
     @Ignore
     public void startApp(){
         makeSureJavaAppIsInTempFolder();
-        ApplicationStarter as = new ApplicationStarter(currentTestCase);
+        ApplicationStarter as = new ApplicationStarter(currentTestCase());
         try {
             as.startJar(new URL("file:///" + tempFolder.replace("\\", "/") + "JavaApp.jar"));
             Frame app = (Frame) as.getWindow();
             Assert.assertTrue(app != null);
-            GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
+            GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase());
             JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
             Object c = button.getRuntimeComponent();
             Assert.assertNotNull(c);
-            currentTestCase.log(LogLevel.INFO, "Button text: '" + java.getText(button) + "'.");
+            currentTestCase().log(LogLevel.INFO, "Button text: '" + java.getText(button) + "'.");
             Assert.assertTrue(c.toString().contains("Ok"));
             java.verifyElementTextIsExactly(button, "Ok");
             java.verifyElementTextContains(button, "k");
@@ -114,9 +111,9 @@ public class ApplicationStarterTest extends TestSet {
     public void appStartFromString(){
         try {
             makeSureJavaAppIsInTempFolder();
-            ApplicationStarter as = new ApplicationStarter(currentTestCase);
+            ApplicationStarter as = new ApplicationStarter(currentTestCase());
             as.startJar(tempFolder + "JavaApp.jar");
-            GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase);
+            GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase());
             JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
             Object c = button.getRuntimeComponent();
             Assert.assertNotNull(c);

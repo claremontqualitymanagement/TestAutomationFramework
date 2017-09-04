@@ -23,12 +23,12 @@ public class TestlinkTestRunReporterTest extends TestSet{
     @Test
     @Ignore
     public void reportTestCaseTest(){
-        currentTestCase.log(LogLevel.INFO, "Hey! It works! ");
+        currentTestCase().log(LogLevel.INFO, "Hey! It works! ");
     }
 
     @Test
     @Ignore
     public void reportTestCaseTest2(){
-        currentTestCase.log(LogLevel.INFO, "Hey! It works! ");
+        currentTestCase().log(LogLevel.INFO, "Hey! It works! ");
     }
 }

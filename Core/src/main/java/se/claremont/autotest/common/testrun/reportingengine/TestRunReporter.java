@@ -1,4 +1,4 @@
-package se.claremont.autotest.common.testrun;
+package se.claremont.autotest.common.testrun.reportingengine;
 
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;

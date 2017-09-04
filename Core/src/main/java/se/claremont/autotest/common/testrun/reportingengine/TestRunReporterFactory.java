@@ -1,10 +1,14 @@
-package se.claremont.autotest.common.testrun;
+package se.claremont.autotest.common.testrun.reportingengine;
 
+import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
+import se.claremont.autotest.common.backendserverinteraction.TestlinkAdapterServerConnection;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.reporting.testrunreports.TestlinkAdapterTestRunReporter;
 import se.claremont.autotest.common.reporting.testrunreports.email.TestRunReporterEmailReport;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;
@@ -20,8 +24,12 @@ public class TestRunReporterFactory {
     public TestRunReporterFactory(){
         TestRun.initializeIfNotInitialized();
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
-        addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
-        addTestRunReporterIfNotAlreadyRegistered(new TestlinkAdapterTestRunReporter());
+        if(!TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) {
+            addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
+        }
+        if(!TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(TestlinkAdapterServerConnection.defaultServerUrl)){
+            addTestRunReporterIfNotAlreadyRegistered(new TestlinkAdapterTestRunReporter());
+        }
         if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
             addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());
         }
@@ -54,6 +62,8 @@ public class TestRunReporterFactory {
     }
 
     public void reportTestRun(){
-        reporters.forEach(TestRunReporter::report);
+        for(TestRunReporter testRunReporter : reporters){
+            testRunReporter.report();
+        }
     }
 }

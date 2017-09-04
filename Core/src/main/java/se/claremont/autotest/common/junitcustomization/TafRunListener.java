@@ -1,12 +1,13 @@
-package se.claremont.autotest.common.testrun;
+package se.claremont.autotest.common.junitcustomization;
 
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+import se.claremont.autotest.common.testrun.TestRun;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A custom JUnit RunListener, to enable reporting and fancy output.
@@ -16,30 +17,14 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("WeakerAccess")
 public class TafRunListener extends RunListener {
 
+    @Override
     public void testRunStarted(Description description){
         System.out.println();
         System.out.println("Test run has started. This may take a while. Strange output may occur below from the tests being performed.");
         System.out.println();
     }
 
-    /*
-    public void testFinished(Description description) throws Exception {
-        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(description.getMethodName(), description.getClassName(), "Passed");
-    }
-
-    public void testFailure(Failure failure) throws Exception {
-        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Failed");
-    }
-
-    public void testAssumptionFailure(Failure failure) {
-        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(failure.getDescription().getMethodName(), failure.getDescription().getClassName(), "Blocked");
-    }
-
-    public void testIgnored(Description description) throws Exception {
-        TestRun.tafBackendServerTestRunReporter.addTestCaseResult(description.getMethodName(), description.getClassName(), "Ignored");
-    }
-    */
-
+    @Override
     public void testRunFinished(Result result) throws Exception {
         TestRun.reportTestRun();
         System.out.println();

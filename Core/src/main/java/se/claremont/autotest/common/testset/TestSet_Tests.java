@@ -29,9 +29,9 @@ public class TestSet_Tests extends UnitTestClass{
         TestClass testSet = new TestClass();
         testSet.addKnownError("Description", ".*Pattern string.*");
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
-        testSet.currentTestCase.testCaseResult.evaluateResultStatus();
-        Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase.testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+        testSet.currentTestCase().log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
+        testSet.currentTestCase().testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase().testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase().testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
     @Test
@@ -40,19 +40,19 @@ public class TestSet_Tests extends UnitTestClass{
         testSet.addKnownError("Description", "PatternString1");
         testSet.addKnownError("Description", "PatternString2");
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString1");
-        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString2");
-        testSet.currentTestCase.testCaseResult.evaluateResultStatus();
-        Assert.assertTrue(testSet.currentTestCase.testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+        testSet.currentTestCase().testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString1");
+        testSet.currentTestCase().testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "PatternString2");
+        testSet.currentTestCase().testCaseResult.evaluateResultStatus();
+        Assert.assertTrue(testSet.currentTestCase().testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
     @Test
     public void wrapUpCurrentTestSetShould(){
         TestClass testSet = new TestClass();
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
-        //testSet.currentTestCase.evaluateResultStatus();
-        TestCase theTestCase = testSet.currentTestCase;
+        testSet.currentTestCase().testCaseResult.testCaseLog.log(LogLevel.EXECUTED, "PatternString1");
+        //testSet.currentTestCase().evaluateResultStatus();
+        TestCase theTestCase = testSet.currentTestCase();
         testSet.wrapUpTestCase();
         Assert.assertNotNull(testSet);
         Assert.assertNotNull(theTestCase);
@@ -83,11 +83,15 @@ public class TestSet_Tests extends UnitTestClass{
         TestClass testSet = new TestClass();
         testSet.addKnownError("Description", new String[] {".*Pattern string.*"});
         testSet.startUpTestCase(currentTestName.getMethodName());
-        testSet.currentTestCase.testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
-        testSet.currentTestCase.testCaseResult.evaluateResultStatus();
-        Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase.testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase.testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
+        testSet.currentTestCase().testCaseResult.testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Pattern string");
+        testSet.currentTestCase().testCaseResult.evaluateResultStatus();
+        Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase().testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase().testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
-    class TestClass extends TestSet{}
+    public static class TestClass extends TestSet{
+
+        @Test
+        public void dummyTest(){}
+    }
 
 }

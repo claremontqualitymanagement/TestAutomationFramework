@@ -1,10 +1,12 @@
 package se.claremont.autotest.common.testrun;
 
+import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
+import se.claremont.autotest.common.junitcustomization.TafRunListener;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
-import se.claremont.autotest.common.reporting.testrunreports.BaseFolderHtmlIndexFile;
+import se.claremont.autotest.common.testrun.reportingengine.TestRunReporterFactory;
 import se.claremont.autotest.common.testset.TestSet;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * A test run is the entity of every time some set(s) of test cases are run.
@@ -16,7 +18,7 @@ public class TestRun {
     public static int fileCounter = 0;
     public static String testRunName = "";
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
-    public static TestSet currentTestSet;
+    public static List<TestSet> currentTestSets = new ArrayList<>();
     public static final TafRunListener tafRunListener = new TafRunListener();
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
@@ -68,7 +70,6 @@ public class TestRun {
 
     public static void initializeIfNotInitialized() {
         if(!isInitialized){
-            currentTestSet = null;
             settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
             isInitialized = true;
@@ -87,14 +88,12 @@ public class TestRun {
         return TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
     }
 
-    public static void evaluateCurrentTestSet(){
-        initializeIfNotInitialized();
-        if(currentTestSet != null)
-            reporters.evaluateTestSet(currentTestSet);
-    }
-
     public static void reportTestRun(){
         initializeIfNotInitialized();
+        for(TestSet testSet : TafParallelTestCaseRunner.testSets){
+            TestRun.reporters.evaluateTestSet(testSet);
+        }
+        TafParallelTestCaseRunner.testSets = new HashSet<>();
         stopTime = new Date();
         reporters.reportTestRun();
         //BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();

@@ -4,29 +4,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
+import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A test set is a set of test cases
  *
  * Created by jordam on 2016-08-17.
  */
-@RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
+//@RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 @JsonIgnoreProperties({"currentTestCase", "currentTestNameInternal"})
 public abstract class TestSet { //non-abstract although it should be, to enable JSON object mapping with ease
-    public TestCase currentTestCase;
+    List<TestCase> currentTestCases = new ArrayList<>();
     @JsonProperty public String name;
     @JsonProperty public final KnownErrorsList knownErrorsList = new KnownErrorsList();
+    static Object testSet;
 
 
     @Rule
@@ -35,14 +37,34 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
      * Setting up a new test set instance
      */
     public TestSet(){
+        testSet = this;
         TestRun.initializeIfNotInitialized();
-        TestRun.currentTestSet = this;
         name = SupportMethods.classNameAtStacktraceLevel(3);
+    }
+
+    public TestCase currentTestCase(){
+        for(TestCase testCase : currentTestCases){
+            if(testCase.testName.equals(new TestName().getMethodName())) return testCase;
+        }
+        if(currentTestCases.size() == 1) return currentTestCases.get(0);
+        return null;
     }
 
     @Before
     public void testSetClassInternalSetup(){
+        addTestSetToRunnerIfNotAlreadyThere();
         startUpTestCase(currentTestNameInternal.getMethodName());
+    }
+
+    private void addTestSetToRunnerIfNotAlreadyThere(){
+        boolean testSetRegisteredInRunner = TafParallelTestCaseRunner.testSetNames.contains(name);
+        for(String testSetName : TafParallelTestCaseRunner.testSetNames){
+            if(testSetName.equals(this.name)) testSetRegisteredInRunner = true;
+        }
+        if(!testSetRegisteredInRunner) {
+            TafParallelTestCaseRunner.testSetNames.add(name);
+            TafParallelTestCaseRunner.testSets.add(this);
+        }
     }
 
     @After
@@ -50,14 +72,9 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
         wrapUpTestCase();
     }
 
-    @AfterClass
-    public static void testSetClassInternalClassTeardown(){
-        TestRun.reporters.evaluateTestSet(TestRun.currentTestSet);
-    }
-
     public void setCurrentTestCaseTestName(String name){
-        if(currentTestCase == null)return;
-        currentTestCase.setName(name);
+        if(currentTestCase() == null)return;
+        currentTestCase().setName(name);
     }
 
     /**
@@ -86,7 +103,7 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
      * @param testName The name of the test, for reporting purposes.
      */
     public void startUpTestCase(String testName){
-        currentTestCase = new TestCase(knownErrorsList, testName);
+        currentTestCases.add(new TestCase(knownErrorsList, testName));
     }
 
     public String toJson(){
@@ -105,9 +122,9 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
      * Test case tear down procedure at the test set level
       */
     protected void wrapUpTestCase(){
-        if(currentTestCase == null)return;
-        currentTestCase.report();
-        currentTestCase = null;
+        if(currentTestCase() == null)return;
+        currentTestCase().report();
+        currentTestCases.remove(currentTestCase());
     }
 
 
