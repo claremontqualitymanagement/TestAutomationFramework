@@ -84,6 +84,20 @@ public class CliTestRunner {
         }
     }
 
+    private static void setSystemPropertiesIfStatedWithMinusD() {
+        String[] args = stringListToArray(remainingArguments);
+        for(String arg : args){
+            if(arg.trim().length() > 0 && arg.startsWith("-D") && arg.contains("=")){
+                String[] parts = arg.split("=");
+                if(parts[0].trim().length() > 0 && parts.length > 1) {
+                    String parameterName = parts[0].trim().substring(2);
+                    System.setProperty(parameterName, arg.trim().substring(arg.trim().indexOf("=") + 1).trim());
+                    System.out.println("Setting system property '" + arg.trim().split("=")[0].trim().substring(2) + "' to value '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
+                    remainingArguments.remove(arg);
+                }
+            }
+        }
+    }
 
     private static void setRunSettingsParametersGivenAsArguments(){
         String[] args = stringListToArray(remainingArguments);
@@ -252,6 +266,7 @@ public class CliTestRunner {
         System.out.println(System.lineSeparator() + "Executing TAF (TestAutomationFramework) from CLI." + System.lineSeparator());
         remainingArguments = stringArrayToList(args);
         printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
+        setSystemPropertiesIfStatedWithMinusD();
         printHelpTextIfApplicable();
         System.out.println("Argument(s) given:" + System.lineSeparator()  +
                 " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
