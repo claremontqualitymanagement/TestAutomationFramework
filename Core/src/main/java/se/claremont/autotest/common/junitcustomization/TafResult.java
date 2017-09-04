@@ -64,7 +64,7 @@ public class TafResult {
 
     @Override
     public String toString(){
-        String returnString = "[TafResult: Tests run = " + count + ", ignored =" + ignoreCount + ", failed = " + failureCount + "]";
+        String returnString = "[TafResult: Tests run = " + count + ", ignored = " + ignoreCount + ", failed = " + failureCount + "]";
         if(failureCount > 0){
             returnString += "Failures:" + System.lineSeparator();
             for(Failure f : failures){

@@ -45,10 +45,20 @@ public class TafTestRunner_Tests {
     public void parallelExecutionTwoThreads(){
         setup();
         int numberOfThreads = 2;
-        String[] args = new String[]{ "PARALLEL_TEST_EXECUTION_MODE=" + numberOfThreads, ParallelExecution_TestClass1.class.getName(), ParallelExecution_TestClass2.class.getName(), "-Dtestprop=yay"};
+        String[] args = new String[]{ "PARALLEL_TEST_EXECUTION_MODE=" + numberOfThreads, ParallelExecution_TestClass1.class.getName(), ParallelExecution_TestClass2.class.getName()};
         CliTestRunner.runInTestMode(args);
         assertDuration(timePerTestCase*numberOfTestCases/numberOfThreads, timePerTestCase*numberOfTestCases/numberOfThreads+bufferTimeAccepted);
         assertReporting();
+    }
+
+    @Test
+    public void settingSystemPropertiesFromCLI(){
+        setup();
+        int numberOfThreads = 2;
+        System.setProperty("testprop", "dummy");
+        String[] args = new String[]{ "PARALLEL_TEST_EXECUTION_MODE=" + numberOfThreads, ParallelExecution_TestClass1.class.getName(), "-Dtestprop=yay"};
+        CliTestRunner.runInTestMode(args);
+        Assert.assertTrue(System.getProperty("testprop").equals("yay"));
     }
 
     @Test
