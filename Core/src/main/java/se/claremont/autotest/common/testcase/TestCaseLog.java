@@ -32,7 +32,7 @@ public class TestCaseLog {
     @JsonProperty private String testCaseName = null;
     public static int maxNumberOfCharactersInLogLevelNames = 0;
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
-    private static String testCaseMethodName;
+    private static String testCaseMethodName = null;
 
     public TestCaseLog(){}
 
@@ -120,6 +120,7 @@ public class TestCaseLog {
             if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
+                break;
             }
         }
         LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStep, testStepClassName);

@@ -65,7 +65,7 @@ public class TestCase {
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
         TestRun.initializeIfNotInitialized();
-        testCaseMethodName = currentTestNameInternal.getMethodName();
+        this.testCaseMethodName = testName;
         if(testName == null) testName = "Nameless test case";
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetName = SupportMethods.classNameAtStacktraceLevel(4);
