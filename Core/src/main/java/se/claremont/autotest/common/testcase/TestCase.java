@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Assume;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogFolder;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
  * Created by jordam on 2016-08-17.
  */
 @SuppressWarnings("WeakerAccess")
-@JsonIgnoreProperties({"reported", "reporters", "processesRunningAtTestCaseStart", "currentTestStepName"})
+@JsonIgnoreProperties({"reported", "reporters", "processesRunningAtTestCaseStart", "currentTestStepName", "testCaseMethodName", "currentTestNameInternal"})
 public class TestCase {
     public TestCaseResult testCaseResult;
     @JsonProperty public String testName;
@@ -39,10 +41,13 @@ public class TestCase {
     @JsonProperty public final KnownErrorsList testCaseKnownErrorsList;
     @JsonProperty public final KnownErrorsList testSetKnownErrors;
     @JsonProperty public final UUID uid = UUID.randomUUID();
+    final String testCaseMethodName;
     final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
     @JsonProperty public String pathToHtmlLogFile;
+    @Rule
+    public TestName currentTestNameInternal = new TestName();
 
     public TestCase(){
         this(null, "Nameless test case");
@@ -60,6 +65,7 @@ public class TestCase {
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName){
         TestRun.initializeIfNotInitialized();
+        testCaseMethodName = currentTestNameInternal.getMethodName();
         if(testName == null) testName = "Nameless test case";
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetName = SupportMethods.classNameAtStacktraceLevel(4);

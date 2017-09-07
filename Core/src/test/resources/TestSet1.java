@@ -1,18 +1,18 @@
-package se.claremont.autotest.common.testrun;
+package test;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.testset.TestSet;
 
-public class TestSet2 extends TestSet{
+public class TestSet1 extends TestSet {
 
     @Test
-    public void test3(){
+    public void test1(){
         Assert.assertTrue(true);
     }
 
     @Test
-    public void test4(){
+    public void test2(){
         Assert.assertTrue(true);
     }
 }

@@ -53,20 +53,31 @@ public class TafTestRunner {
                 }
                 try {
                     tafResult.addTestResult(p.run());
-                    return tafResult;
+                    runListener.testRunStarted(null);
                 } catch (ExecutionException e) {
                     System.out.println("Could not execute tests by using parallel execution in thread pool. Try executing with PARALLEL_TEST_EXECUTION_MODE 'none', 'classes', 'methods', 'both'. Error: " + e.toString());
-                    return tafResult;
                 } catch (InterruptedException e) {
                     System.out.println("Could not execute tests by using parallel execution in thread pool. Try executing with PARALLEL_TEST_EXECUTION_MODE 'none', 'classes', 'methods', 'both'. Error: " + e.toString());
-                    return tafResult;
                 }
+                if(tafResult.getFailureCount() > 0){
+                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                }
+                TestRun.reportTestRun();
+                try {
+                    runListener.testRunFinished(new Result());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tafResult;
             }
             if(threads != 1) System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', 'both', 'none', 'true', 'false', or a numeric value indicating the number of concurrent execution threads to use for execution. Resorting to default by not running tests in parallel.");
             System.out.println("Running test methods in sequence. No parallelism.");
-            runListener.testRunStarted(null);
             tafResult.addTestResult(junit.run(classes.toArray(new Class[0])));
         }
+        if(tafResult.getFailureCount() > 0){
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+        }
+        TestRun.reportTestRun();
         try {
             runListener.testRunFinished(new Result());
         } catch (Exception e) {

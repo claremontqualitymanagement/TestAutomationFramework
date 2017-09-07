@@ -23,8 +23,8 @@ public class TafTestRunner_Tests {
 
     private void assertReporting(){
         Assert.assertTrue("Expected one test run report, but found " + fakeTestRunReporter.numberOfReportsPerformed + "." + System.lineSeparator() + fakeTestRunReporter.toString(), fakeTestRunReporter.numberOfReportsPerformed == 1);
-        Assert.assertTrue("Expected four test evaluations performed, but found " + fakeTestRunReporter.numberOfTestCaseEvaluationsPerformed + "." + System.lineSeparator() + fakeTestRunReporter.toString(), fakeTestRunReporter.numberOfTestCaseEvaluationsPerformed == 4);
-        //Assert.assertTrue("Expected two test set evaluations performed, but found " + fakeTestRunReporter.numberOfTestSetEvaluationsPerformed + "." + System.lineSeparator() + fakeTestRunReporter.toString(), fakeTestRunReporter.numberOfTestSetEvaluationsPerformed == 2);
+        Assert.assertTrue("Expected four test evaluations performed, but found " + fakeTestRunReporter.numberOfTestCaseEvaluationsPerformed + "." + System.lineSeparator() + fakeTestRunReporter.toString(), fakeTestRunReporter.testCaseNames.size() == 4);
+        //Assert.assertTrue("Expected two test set evaluations performed, but found " + fakeTestRunReporter.numberOfTestSetEvaluationsPerformed + "." + System.lineSeparator() + fakeTestRunReporter.toString(), fakeTestRunReporter.testSetNames.size() == 2);
     }
 
     private void assertDuration(int lowestExpectedDurationInSeconds, int highestExpectedDurationInSeconds){

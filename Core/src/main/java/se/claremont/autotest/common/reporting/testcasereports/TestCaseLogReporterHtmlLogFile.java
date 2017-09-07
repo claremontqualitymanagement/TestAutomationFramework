@@ -104,6 +104,10 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * Saves the output of the test case to an HTML formatted text file
      */
     public void report(){
+        SupportMethods.saveToFile(createReport(), testCaseResult.pathToHtmlLogFile);
+    }
+
+    String createReport(){
         testCaseResult.testCaseLog.log(LogLevel.DEBUG, "Saving html reportTestRun to '" + testCaseResult.pathToHtmlLogFile + "'.");
         logger.debug( "Saving html reportTestRun to '" + testCaseResult.pathToHtmlLogFile + "'." );
         validateTestRunEndTime();
@@ -113,7 +117,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 asHtmlSection() +
                 "  </body>" + LF + LF +
                 "</html>" + LF;
-        SupportMethods.saveToFile(html, testCaseResult.pathToHtmlLogFile);
+        return html;
     }
 
     public String htmlSectionHtmlHead(){
@@ -392,7 +396,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
     }
 
-    private String testStepLogPostSections(TestCaseLog testCaseLog){
+    String testStepLogPostSections(TestCaseLog testCaseLog){
         if(testCaseResult.testCaseLog.logPosts.size() == 0) return null;
         StringBuilder html = new StringBuilder();
         ArrayList<TestCaseLogSection> logSections = testCaseResult.testCaseLog.toLogSections();

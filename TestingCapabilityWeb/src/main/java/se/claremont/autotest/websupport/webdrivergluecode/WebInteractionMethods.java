@@ -1,6 +1,8 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.Select;
@@ -24,6 +26,8 @@ import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
 import se.claremont.autotest.websupport.brokenlinkcheck.LinkCheck;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -913,7 +917,24 @@ public class WebInteractionMethods implements GuiDriver {
      * @param timeoutInSeconds The number of seconds to wait and try to click
      */
     public void clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
-        log(LogLevel.FRAMEWORK_ERROR, "The method clickEvenIfDisabled() is not yet implemented in class WebInteractionMethods. Please do.");
+        waitForElementToAppear(guiElement);
+        WebElement webElement = getRuntimeElementWithoutLogging((DomElement)guiElement);
+        if(webElement == null){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + ((DomElement)guiElement).LogIdentification() + " to click blindly at.");
+            return;
+        }
+        Point topLeft = webElement.getLocation();
+        Point clickPoint = new Point (topLeft.getX() + webElement.getSize().width/2, topLeft.getY() + webElement.getSize().height/2);
+        Robot r = null;
+        try {
+            r = new Robot();
+            r.mouseMove(clickPoint.getX(),clickPoint.getY());
+            r.mousePress( InputEvent.BUTTON1_MASK );
+            r.mouseRelease( InputEvent.BUTTON1_MASK );
+            testCase.log(LogLevel.EXECUTED, "Clicked blindly at element position for element " + ((DomElement)guiElement).LogIdentification() + " (at point '" + clickPoint.x + "x" + clickPoint.y + "').");
+        } catch (AWTException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click blindly at element " + ((DomElement)guiElement).LogIdentification() + " at point '" + clickPoint.x + "x" + clickPoint.y + "'. Error: " + e.toString());
+        }
     }
 
     /**

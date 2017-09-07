@@ -44,7 +44,7 @@ public class TestCaseResult {
 
     public TestCaseResult(TestCase testCase){
         this.testCase = testCase;
-        testCaseLog = new TestCaseLog();
+        testCaseLog = new TestCaseLog(testCase.testName, testCase.testCaseMethodName);
         testCaseData = new TestCaseData();
         startTime = new Date();
         testSetName = testCase.testSetName;

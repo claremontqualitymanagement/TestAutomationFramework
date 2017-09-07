@@ -5,10 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testhelpers.ResourceManager;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.TestSet1;
-import se.claremont.autotest.common.testrun.TestSet2;
+import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -24,18 +24,18 @@ public class TafBackendTestRunReporterTest extends UnitTestClass {
     }
 
     @Test
-    public void testRunNameIsSetInJson(){
+    public void testRunNameIsSetInJson() throws IllegalAccessException, InstantiationException {
         TafBackendServerTestRunReporter tafBackendServerTestRunReporter = new TafBackendServerTestRunReporter();
-        TestSet1 testSet1 = new TestSet1();
-        tafBackendServerTestRunReporter.evaluateTestSet(testSet1);
-        Assert.assertTrue(tafBackendServerTestRunReporter.testSetNames.contains(testSet1.name));
-        TestSet2 testSet2 = new TestSet2();
-        tafBackendServerTestRunReporter.evaluateTestSet(testSet2);
-        Assert.assertTrue(tafBackendServerTestRunReporter.testSetNames.contains(testSet2.name));
+        Class<TestSet> testSet1 = ResourceManager.extractFileFromResourcesAndCompileAndLoadIt("TestSet1.java");
+        tafBackendServerTestRunReporter.evaluateTestSet(testSet1.newInstance());
+        Assert.assertTrue(tafBackendServerTestRunReporter.testSetNames.contains(testSet1.getName()));
+        Class<TestSet> testSet2 = ResourceManager.extractFileFromResourcesAndCompileAndLoadIt("TestSet2.java");
+        tafBackendServerTestRunReporter.evaluateTestSet(testSet2.newInstance());
+        Assert.assertTrue(testSet2.getName(), String.join("", tafBackendServerTestRunReporter.testSetNames).contains(testSet2.getName()));
         tafBackendServerTestRunReporter.report();
         if(TestRun.testRunName == null || TestRun.testRunName.length() == 0){
-            Assert.assertTrue("Expected testRunName to include '" + testSet1.name + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet1.name));
-            Assert.assertTrue("Expected testRunName to include '" + testSet2.name + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet2.name));
+            Assert.assertTrue("Expected testRunName to include '" + testSet1.getName()+ "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet1.getName()));
+            Assert.assertTrue("Expected testRunName to include '" + testSet2.getName() + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet2.getName()));
         } else {
             Assert.assertTrue("Expected testRunName to include '" + TestRun.testRunName + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(TestRun.testRunName));
         }
@@ -59,6 +59,9 @@ public class TafBackendTestRunReporterTest extends UnitTestClass {
         testCase1.testCaseResult.evaluateResultStatus();
         tafBackendServerTestRunReporter.evaluateTestCase(testCase2);
         tafBackendServerTestRunReporter.evaluateTestSet(testSet1);
+    }
+
+    class TestSet1 extends TestSet{
 
     }
 }

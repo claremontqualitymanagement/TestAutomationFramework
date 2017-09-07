@@ -1,10 +1,10 @@
-package se.claremont.autotest.common.testrun;
+package test;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.testset.TestSet;
 
-public class TestSet2 extends TestSet{
+public class TestSet2 extends TestSet {
 
     @Test
     public void test3(){

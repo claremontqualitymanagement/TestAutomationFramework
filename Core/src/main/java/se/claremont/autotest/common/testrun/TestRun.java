@@ -3,9 +3,11 @@ package se.claremont.autotest.common.testrun;
 import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
 import se.claremont.autotest.common.junitcustomization.TafRunListener;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
+import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporterFactory;
 import se.claremont.autotest.common.testset.TestSet;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -19,13 +21,16 @@ public class TestRun {
     public static String testRunName = "";
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
     public static List<TestSet> currentTestSets = new ArrayList<>();
-    public static final TafRunListener tafRunListener = new TafRunListener();
     public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
     public static boolean isInitialized = false;
     public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public static final Date startTime = new Date();
     public static Date stopTime;
 
+    public TestRun(){
+        initializeIfNotInitialized();
+        testRunName = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+    }
     /**
      * TAF and TA test(s) standard codes.
      */
@@ -63,7 +68,7 @@ public class TestRun {
         settings.setValue(parameter, value);
     }
 
-    public static void setCustomSettingsValue(String parameter, String value){
+    public void setCustomSettingsValue(String parameter, String value){
         initializeIfNotInitialized();
         settings.setCustomValue(parameter, value);
     }
@@ -73,25 +78,26 @@ public class TestRun {
             settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
             isInitialized = true;
+            TafParallelTestCaseRunner.testSets = new HashSet<>();
         }
     }
 
     public static String reportLinkPrefix(){
         initializeIfNotInitialized();
-        if(TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
-                TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
-        if(TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
+        if(settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
+                settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
+        if(settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
             return "http";
-        } else if (TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
+        } else if (settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
             return "https";
         }
-        return TestRun.settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
+        return settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
     }
 
     public static void reportTestRun(){
         initializeIfNotInitialized();
         for(TestSet testSet : TafParallelTestCaseRunner.testSets){
-            TestRun.reporters.evaluateTestSet(testSet);
+            reporters.evaluateTestSet(testSet);
         }
         TafParallelTestCaseRunner.testSets = new HashSet<>();
         stopTime = new Date();

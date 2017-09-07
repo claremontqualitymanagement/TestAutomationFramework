@@ -26,18 +26,23 @@ import java.util.stream.Collectors;
  *
  */
 @SuppressWarnings("SameParameterValue")
-@JsonIgnoreProperties({"logger", "maxNumberOfCharactersInLogLevelNames"})
+@JsonIgnoreProperties({"logger", "maxNumberOfCharactersInLogLevelNames", "testCaseMethodName"})
 public class TestCaseLog {
     @JsonProperty public final ArrayList<LogPost> logPosts = new ArrayList<>();
     @JsonProperty private String testCaseName = null;
     public static int maxNumberOfCharactersInLogLevelNames = 0;
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
+    private static String testCaseMethodName;
 
+    public TestCaseLog(){}
 
     @SuppressWarnings("WeakerAccess")
-    public TestCaseLog(){} //For JSON object mapping usage
+    public TestCaseLog(String testCaseMethodName){
+        this.testCaseMethodName = testCaseMethodName;
+    } //For JSON object mapping usage
 
-    public TestCaseLog(String testCaseName){
+    public TestCaseLog(String testCaseName, String testCaseMethodName){
+        this.testCaseMethodName = testCaseMethodName;
         maxNumberOfCharactersInLogLevelNames = getMaxNumberOfCharactersInLogLevelNames();
         this.testCaseName = testCaseName;
     }
@@ -112,7 +117,7 @@ public class TestCaseLog {
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseName)){
+            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
             }
@@ -128,7 +133,7 @@ public class TestCaseLog {
         String testStep = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseName)){
+            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
                 testStep = stackTraceElements[i-1].getMethodName();
                 //testStepClassName = stackTraceElements[i-1].getClassName();
             }
@@ -160,7 +165,7 @@ public class TestCaseLog {
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseName)){
+            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
             }
@@ -185,7 +190,7 @@ public class TestCaseLog {
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseName)){
+            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
             }

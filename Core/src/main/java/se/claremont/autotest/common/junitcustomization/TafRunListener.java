@@ -26,7 +26,6 @@ public class TafRunListener extends RunListener {
 
     @Override
     public void testRunFinished(Result result) throws Exception {
-        TestRun.reportTestRun();
         System.out.println();
         System.out.println("Test run finished.");
         System.out.println("Test cases run:     " + result.getRunCount());

@@ -47,7 +47,7 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Assert.assertNotNull(testCaseObject);
+        Assert.assertNotNull(json, testCaseObject);
         testCaseObject.log(LogLevel.INFO, "Message2");
     }
 

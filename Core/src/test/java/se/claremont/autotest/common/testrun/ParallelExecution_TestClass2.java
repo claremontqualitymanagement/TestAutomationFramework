@@ -7,7 +7,7 @@ import se.claremont.autotest.common.testset.TestSet;
 public class ParallelExecution_TestClass2 extends TestSet{
 
     @Test
-    public void parallelExecutionTestCase1() {
+    public void parallelExecutionTestCase3() {
         System.out.println("Starting class 2, test 1");
         try {
             Thread.sleep(3000);
@@ -19,7 +19,7 @@ public class ParallelExecution_TestClass2 extends TestSet{
     }
 
     @Test
-    public void parallelExecutionTestCase2() {
+    public void parallelExecutionTestCase4() {
         System.out.println("Starting class 2, test 2");
         try {
             Thread.sleep(3000);

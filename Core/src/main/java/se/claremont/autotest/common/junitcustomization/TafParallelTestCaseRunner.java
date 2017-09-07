@@ -37,7 +37,6 @@ public class TafParallelTestCaseRunner {
     }
 
     public TafResult run() throws ExecutionException, InterruptedException {
-        jUnitCore.removeListener(TestRun.tafRunListener);
         TafResult tafResult = new TafResult();
         JUnitCore jUnitCore = new JUnitCore();
         TafRunListener runListener = new TafRunListener();
@@ -62,7 +61,6 @@ public class TafParallelTestCaseRunner {
         for(Future<Result> future : set){
             tafResult.addTestResult(future.get());
         }
-        jUnitCore.removeListener(TestRun.tafRunListener);
         return tafResult;
     }
 

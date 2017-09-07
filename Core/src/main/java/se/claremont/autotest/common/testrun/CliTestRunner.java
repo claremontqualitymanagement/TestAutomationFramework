@@ -1,23 +1,17 @@
 package se.claremont.autotest.common.testrun;
 
-import org.junit.experimental.ParallelComputer;
 import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.runner.Request;
 import se.claremont.autotest.common.junitcustomization.TafResult;
 import se.claremont.autotest.common.junitcustomization.TafTestRunner;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
-import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * CLI runner class for the test automation framework
@@ -28,32 +22,95 @@ import java.util.concurrent.ExecutionException;
 public class CliTestRunner {
 
     private static List<String> remainingArguments ;
-    private final static Logger logger = LoggerFactory.getLogger( CliTestRunner.class );
     private static boolean testMode = false;
-    public static String threadCountForParallelExecution = null;
 
 //    public static final TestRun testRun = new TestRun();
     private static final String LF = SupportMethods.LF;
 
     private static String helpText() {
-        return "Usage instruction: " + LF + LF +
+        return "Usage instructions: " +
+                LF + LF +
+                "java.exe -jar TafFull.jar [help] [diagnostic] [parallel_test_execution_mode=none] [run_settings_alterations...] [RunName=name] [System_property_alterations...] [com.company.packagepath.TestClassName...]" +
+                LF + LF +
+                "This syntax is explained below. If no arguments are given a short help text pointing to this help text is displayed." +
+                LF + LF +
+                "Tell what test classes to run" + LF +
+                "-----------------------------" + LF +
+                "Any program argument not falling into the categories below will be interpreted as a name of a class containing JUnit tests." + LF +
+                "Test classes must be stated with their full package path, but without the .class file extention." +
+                LF + LF +
+                "If no classes containing tests are stated no tests will run." + LF + LF +
+                "Diagnostic run" + LF +
+                "--------------" + LF +
                 "Command line options consists of " +
                 "listed test classes to be run, or the keyword 'diagnostics' to run the unit tests and " +
                 "the diagnostics tests to ensure the local installation is ok. A diagnostic run output results from failed tests as debug information." +
                 LF + LF +
+                "Setting a test run name" + LF +
+                "-----------------------" + LF +
                 "A test run name can be set using the argument runName" + LF +
-                "Example: RunName=MyTestRun1stOfApril" + LF +
                 "This test run name will be used for log folder name creation." + LF +
+                "Example: RunName=MyTestRun1stOfSeptember" + LF +
                 LF + LF +
+                "Default run name is based on class names and a time stamp." +
+                LF + LF +
+                "Running tests in parallel" + LF +
+                "-------------------------" + LF +
+                "Tests are normally run i sequence, but sometimes you want them to run in parallel. TAF allows a few " +
+                "different methods for doing this by using the argument PARALLEL_TEST_EXECUTION_MODE. Examples:" + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=methods will run test methodss in classes in parallel." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=classes will run test classes in parallel." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=none will run test methodss in classes in sequence." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=false is same as PARALLEL_TEST_EXECUTION_MODE=none." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=true is same as PARALLEL_TEST_EXECUTION_MODE=methods." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=4 is executing tests in a thread pool with 4 threads." +
+                LF + LF +
+                "Using a test run properties file" + LF +
+                "--------------------------------" + LF +
                 "If you want to initiate a test run it sometimes can be convenient to just point to a prepared runSettings file with properties. This could for example be very useful when running your tests in a CI/CD environment. You can do this by providing the argument 'settingsfile' or 'runsettingsfile'. E.g.:" + LF +
                 LF + LF +
-                " java -jar MyTestProject.jar runSettingsFile=C:\\temp\\runSettings.properties com.organization.testproject.MyTestClass1 com.organization.testproject.MyTestClass2" + LF + LF +
+                " java -jar MyTestProject.jar runSettingsFile=C:\\temp\\runSettings.properties com.organization.testproject.MyTestClass1 com.organization.testproject.MyTestClass2" +
+                LF + LF +
                 "The line above will use the settings parameters in the C:\\Temp\\runSettings.properties file to execute the tests in the classes MyTestClass1 and MyTestClass2 found in the package 'com.organization.testproject'." +
                 "If test classes are listed as arguments the output of those tests are displayed. This output can be quite extensive, and sometimes it is beneficial to make sure you can read it all." +
                 LF + LF +
+                "If no test run properties file is given, one will be created in the test report base folder if no file already exist there." + LF + LF +
+                "Test report folder" + LF +
+                "------------------" + LF +
                 "Test output from test classes extending the TestSet class is saved to the output log folder." + LF + LF +
+                "Test output folder is controlled via a run settings parameter called BASE_LOG_FOLDER. You can set this as any other run setting. See below." +
+                LF + LF +
+                "Default folder is a folder called TAF in the active user's user folder." +
+                LF + LF +
+                "Setting test run settings" + LF +
+                "-------------------------" + LF +
                 "Settings from file can be overwritten by stating them as arguments using equal sign in between parameter name and parameter value:" + LF +
-                "emailRecipients=firstName.lastName@organization.com" + LF + LF;
+                "emailRecipients=firstName.lastName@organization.com" + LF + LF +
+                "If the parameter name corresponds to a test run setting variable name this variable will be given the value stated. If not a custom run settings variable will be created with this value." +
+                LF + LF +
+                "Setting system properties" + LF +
+                "-------------------------" + LF +
+                "By using regular -D java notation you can set system properties as arguments to execution. Example:" +
+                LF + LF +
+                "java -jar Tests.jar -Dtestenvironment=dev" +
+                LF + LF +
+                "The line above will set the system property 'testenvironment' to 'dev'." +
+                LF + LF +
+                "Test run exit value" + LF +
+                "-------------------" + LF +
+                "To be useful with build engines, like for example Jenkins or Team City, a successful test run will return an exit code of '0' (zero). The exact exit code for failed test runs will depend on the run result status." +
+                LF + LF +
+                "Viewing this help text" + LF +
+                "----------------------" + LF +
+                "This help text is displayed by giving any of the arguments:" + LF +
+                "   help" + LF +
+                "   man" + LF +
+                "   -h" + LF +
+                "   -man" + LF +
+                "   --man" + LF +
+                "   -help" + LF +
+                "   --help" +
+                LF + LF;
     }
 
     private static void setRunSettingsFileIfGivenAsArgument(){
@@ -152,7 +209,11 @@ public class CliTestRunner {
         else
             System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
 
-        if(!testMode) System.exit(TestRun.exitCode);
+        if(!testMode) {
+            System.exit(TestRun.exitCode);
+        } else {
+            System.setProperty("TAF latest test run exit code", String.valueOf(TestRun.exitCode));
+        }
     }
 
     private static void runDiagnosticTestsIfWanted(){
@@ -160,7 +221,6 @@ public class CliTestRunner {
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-        junit.addListener(TestRun.tafRunListener);
 
         for (String arg : args) {
             if (arg.toLowerCase().equals("diagnostic") || arg.toLowerCase().equals("diagnostics")) {
@@ -197,12 +257,18 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
-
+        int testCount = 0;
         for (String arg : args) {
             try {
-                classes.add(Class.forName(arg));
-                System.out.println("Found test class '" + arg + "'.");
-                remainingArguments.remove(arg);
+                Request r = Request.aClass(Class.forName(arg));
+                testCount += r.getRunner().testCount();
+                if(r.getRunner().testCount() > 0){
+                    System.out.println("Found test class '" + arg + "' containing " + r.getRunner().testCount() + " tests.");
+                    classes.add(Class.forName(arg));
+                    remainingArguments.remove(arg);
+                } else {
+                    System.out.println("WARNING: Class '" + Class.forName(arg) + "' does not seem to contain any tests. Not adding it.");
+                }
             } catch (ClassNotFoundException e) {
                 System.out.println(System.lineSeparator() + "WARNING: Expecting argument '" + arg +
                         "' to be a class containing tests, but no such class could be found. " +
@@ -212,7 +278,9 @@ public class CliTestRunner {
         }
         TafTestRunner tafTestRunner = new TafTestRunner();
         TafResult tafResult = tafTestRunner.run(classes);
-        System.out.println(tafResult.toString());
+        if(tafResult.getFailureCount() > 0){
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+        }
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -224,7 +292,7 @@ public class CliTestRunner {
         }
     }
 
-    private static void printResults(Result result){
+    private static void printResults(TafResult result){
         if(result == null){
             System.out.println("Strange. No test result result found from test run.");
             return;

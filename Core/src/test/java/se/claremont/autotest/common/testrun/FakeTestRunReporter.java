@@ -17,7 +17,6 @@ public class FakeTestRunReporter implements TestRunReporter {
     List<String> testCaseNames = new ArrayList<>();
 
     public FakeTestRunReporter(){
-        TafParallelTestCaseRunner.testSets = new HashSet<>();
     }
 
     @Override
@@ -28,6 +27,7 @@ public class FakeTestRunReporter implements TestRunReporter {
     @Override
     public void evaluateTestCase(TestCase testCase) {
         numberOfTestCaseEvaluationsPerformed++;
+        System.out.println("Evaluating test case '" + testCase.testName + "'.");
         testCaseNames.add(testCase.testSetName + "." + testCase.testName);
     }
 
