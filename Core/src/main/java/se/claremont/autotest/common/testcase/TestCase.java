@@ -41,7 +41,7 @@ public class TestCase {
     @JsonProperty public final KnownErrorsList testCaseKnownErrorsList;
     @JsonProperty public final KnownErrorsList testSetKnownErrors;
     @JsonProperty public final UUID uid = UUID.randomUUID();
-    final String testCaseMethodName;
+    public final String testCaseMethodName;
     final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
@@ -57,18 +57,22 @@ public class TestCase {
         this(null, testName);
     }
 
+    public TestCase(KnownErrorsList knownErrorsList, String testName){
+        this(knownErrorsList, testName, SupportMethods.classNameAtStacktraceLevel(4));
+    }
+
     /**
      * Setting up a new test case run and prepares it for execution
      *
      *  @param knownErrorsList An instance of KnownErrorsList. Could be null. Used for test set level known errors.
      *  @param testName The name of the test. For reporting purposes.
      */
-    public TestCase(KnownErrorsList knownErrorsList, String testName){
+    public TestCase(KnownErrorsList knownErrorsList, String testName, String testSetName){
         TestRun.initializeIfNotInitialized();
         this.testCaseMethodName = testName;
+        this.testSetName = testSetName;
         if(testName == null) testName = "Nameless test case";
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
-        testSetName = SupportMethods.classNameAtStacktraceLevel(4);
         testCaseKnownErrorsList = new KnownErrorsList();
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetKnownErrors = knownErrorsList;
@@ -85,6 +89,7 @@ public class TestCase {
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
     }
+
 
     public void setName(String name){
         log(LogLevel.DEBUG, "Resetting name for test case from '" + testName + "' to '" + name + "'.");

@@ -39,12 +39,28 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
     public TestSet(){
         testSet = this;
         TestRun.initializeIfNotInitialized();
-        name = SupportMethods.classNameAtStacktraceLevel(3);
+        name = findTestSetName();
+        if(name == null) name = SupportMethods.classNameAtStacktraceLevel(3);
     }
+
+    private String findTestSetName(){
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        for(int i = 0 ; i < elements.length; i++){
+            StackTraceElement s = elements[i];
+            if(s.getClassName().equals("se.claremont.autotest.common.testset.TestSet") &&
+                    s.getMethodName().equals("findTestSetName") &&
+                    elements.length > i+2){
+                return elements[i+2].getClassName();
+            }
+            //System.out.println(i + "). Class: '" + s.getClassName() + "', method: '" + s.getMethodName() + "'.");
+        }
+        return null;
+    }
+
 
     public TestCase currentTestCase(){
         for(TestCase testCase : currentTestCases){
-            if(testCase.testName.equals(new TestName().getMethodName())) return testCase;
+            if(testCase.testCaseMethodName.equals(new TestName().getMethodName())) return testCase;
         }
         if(currentTestCases.size() == 1) return currentTestCases.get(0);
         return null;
@@ -55,6 +71,7 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
         addTestSetToRunnerIfNotAlreadyThere();
         startUpTestCase(currentTestNameInternal.getMethodName());
     }
+
 
     private void addTestSetToRunnerIfNotAlreadyThere(){
         boolean testSetRegisteredInRunner = TafParallelTestCaseRunner.testSetNames.contains(name);
@@ -103,7 +120,11 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
      * @param testName The name of the test, for reporting purposes.
      */
     public void startUpTestCase(String testName){
-        currentTestCases.add(new TestCase(knownErrorsList, testName));
+        currentTestCases.add(new TestCase(knownErrorsList, testName, name));
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public String toJson(){

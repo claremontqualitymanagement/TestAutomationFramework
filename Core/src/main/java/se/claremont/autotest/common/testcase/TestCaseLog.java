@@ -114,7 +114,7 @@ public class TestCaseLog {
     public void log(LogLevel logLevel, String message){
         if(message == null) message = "[null]";
         String testStep = "Framework actions";
-        String testStepClassName = "Framework actions";
+        String testStepClassName = "Framework actions"; //todo: Check why test case log sections do not work in parallel test case execution
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
             if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){

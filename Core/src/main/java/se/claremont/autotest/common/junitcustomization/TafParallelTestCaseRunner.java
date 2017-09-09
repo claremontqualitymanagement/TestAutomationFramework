@@ -6,10 +6,13 @@ import org.junit.runner.Request;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
+import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testcase.TestCaseRunner;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,8 +47,12 @@ public class TafParallelTestCaseRunner {
         RunNotifier runNotifier = new RunNotifier();
         runListener.testRunStarted(null);
         for(Class<?> c : testClasses){
+            if(!c.isAssignableFrom(TestSet.class) || !c.isAssignableFrom(UnitTestClass.class)){
+                System.out.println("WARNING: Class " + c.getName() + " does not seem to extend TestSet or UnitTestClass. Running it antway,");
+            }
             Method[] methodsInClass = c.getDeclaredMethods();
             for(Method method : methodsInClass){
+                TestCase testCase = new TestCase(null, method.getName(), c.getName());
                 Request testMethodRequest = Request.method(c, method.getName());
                 set.add(threadPoolExecutor.submit(new TestCaseRunner(testMethodRequest, jUnitCore, runNotifier)));
             }
@@ -64,5 +71,21 @@ public class TafParallelTestCaseRunner {
         return tafResult;
     }
 
+    private void setTestSetNameIfApplicable(Class<?> c){
+        if(!c.isAssignableFrom(TestSet.class))return;
+        Method[] methodsInClass = c.getDeclaredMethods();
+        for(Method method : methodsInClass){
+            if(method.getName().equals("setName")){
+                try {
+                    method.invoke(c.getName());
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
 
 }
