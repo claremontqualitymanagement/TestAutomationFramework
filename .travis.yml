@@ -13,7 +13,7 @@ jdk:
 #  - oraclejdk7
 #  - openjdk6
 script:
-- mvn clean install
+- travis_wait 15 mvn clean install
 - mvn javadoc:aggregate-jar
 - mvn source:aggregate
 #- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run -DskipTests
