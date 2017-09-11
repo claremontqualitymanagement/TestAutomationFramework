@@ -1,5 +1,5 @@
 # Always validate your .travis.yml file at http://lint.travis-ci.org
-language: java
+language: travis_wait 30 java
 sudo: false
 install: true
 addons:
