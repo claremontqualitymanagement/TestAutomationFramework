@@ -1,5 +1,5 @@
 # Always validate your .travis.yml file at http://lint.travis-ci.org
-language: travis_wait 30 java
+language: java
 sudo: false
 install: true
 addons:
@@ -13,7 +13,7 @@ jdk:
 #  - oraclejdk7
 #  - openjdk6
 script:
-- travis_wait 15 mvn clean install
+- mvn clean install
 - mvn javadoc:aggregate-jar
 - mvn source:aggregate
 #- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run -DskipTests
