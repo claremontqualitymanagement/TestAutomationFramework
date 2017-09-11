@@ -2,6 +2,7 @@ package se.claremont.autotest.common.testcase;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.junit.runner.Result;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
@@ -54,6 +55,7 @@ public class TestCaseResult {
         pathToHtmlLogFile = testCase.pathToHtmlLogFile;
         testCaseLog.log(LogLevel.INFO, "Starting test execution at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) + ".");
     }
+
 
     public void assessResults(){
         stopTime = new Date();

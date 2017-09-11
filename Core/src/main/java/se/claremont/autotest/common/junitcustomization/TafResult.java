@@ -12,6 +12,7 @@ public class TafResult {
     private int failureCount;
     private List<Failure> failures;
     private final Long startTime;
+    private String testMethodName = null;
 
     public TafResult() {
         this.count = 0;
@@ -28,6 +29,10 @@ public class TafResult {
         for(Failure failure : junitResult.getFailures()){
             this.failures.add(failure);
         }
+    }
+
+    public void setTestMethodName(String testMethodName){
+        this.testMethodName = testMethodName;
     }
 
     public void addTestResult(TafResult tafResult){

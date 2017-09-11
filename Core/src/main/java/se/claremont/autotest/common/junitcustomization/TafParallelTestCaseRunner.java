@@ -43,7 +43,7 @@ public class TafParallelTestCaseRunner {
         TafResult tafResult = new TafResult();
         JUnitCore jUnitCore = new JUnitCore();
         TafRunListener runListener = new TafRunListener();
-        Set<Future<Result>> set = new HashSet<Future<Result>>();
+        Set<Future<TafResult>> set = new HashSet<Future<TafResult>>();
         RunNotifier runNotifier = new RunNotifier();
         runListener.testRunStarted(null);
         for(Class<?> c : testClasses){
@@ -52,9 +52,9 @@ public class TafParallelTestCaseRunner {
             }
             Method[] methodsInClass = c.getDeclaredMethods();
             for(Method method : methodsInClass){
-                TestCase testCase = new TestCase(null, method.getName(), c.getName());
                 Request testMethodRequest = Request.method(c, method.getName());
-                set.add(threadPoolExecutor.submit(new TestCaseRunner(testMethodRequest, jUnitCore, runNotifier)));
+                String testName = method.getName();
+                set.add(threadPoolExecutor.submit(new TestCaseRunner(testMethodRequest, jUnitCore, runNotifier, testName)));
             }
         }
         threadPoolExecutor.shutdown();
@@ -65,7 +65,7 @@ public class TafParallelTestCaseRunner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for(Future<Result> future : set){
+        for(Future<TafResult> future : set){
             tafResult.addTestResult(future.get());
         }
         return tafResult;
