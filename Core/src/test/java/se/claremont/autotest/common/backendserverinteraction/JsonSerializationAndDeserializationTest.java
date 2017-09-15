@@ -99,7 +99,7 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
     @Test
     public void testSetSerializationAndDeserialization(){
         FakeTestSet fakeTestSet = new FakeTestSet();
-        fakeTestSet.startUpTestCase("mytest");
+        fakeTestSet.startUpTestCase("mytest", this.getClass().getName());
         fakeTestSet.currentTestCase().log(LogLevel.INFO, "Message");
         fakeTestSet.addKnownError("KnownErrorDescription1", ".*Known error pattern1");
         fakeTestSet.addKnownError("KnownErrorDescription2", new String[]{".*Known error pattern2" } );

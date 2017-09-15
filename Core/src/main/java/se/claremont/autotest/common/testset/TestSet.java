@@ -6,6 +6,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.*;
 import org.junit.rules.TestName;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
 import se.claremont.autotest.common.logging.KnownError;
@@ -30,9 +33,15 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
     @JsonProperty public final KnownErrorsList knownErrorsList = new KnownErrorsList();
     static Object testSet;
 
-
     @Rule
-    public TestName currentTestNameInternal = new TestName();
+    final public TestRule traceTestWatcher = new TestWatcher() {
+        @Override
+        protected void starting(Description d) {
+            addTestSetToRunnerIfNotAlreadyThere();
+            startUpTestCase(d.getMethodName(), d.getClassName());
+        }
+    };
+
     /**
      * Setting up a new test set instance
      */
@@ -48,12 +57,6 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
         }
         if(currentTestCases.size() == 1) return currentTestCases.get(0);
         return null;
-    }
-
-    @Before
-    public void testSetClassInternalSetup(){
-        addTestSetToRunnerIfNotAlreadyThere();
-        startUpTestCase(currentTestNameInternal.getMethodName());
     }
 
     private void addTestSetToRunnerIfNotAlreadyThere(){
@@ -102,8 +105,8 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
      * Procedures common for all test cases
      * @param testName The name of the test, for reporting purposes.
      */
-    public void startUpTestCase(String testName){
-        currentTestCases.add(new TestCase(knownErrorsList, testName));
+    public void startUpTestCase(String testName, String testSetName){
+        currentTestCases.add(new TestCase(knownErrorsList, testName, testSetName));
     }
 
     public String toJson(){

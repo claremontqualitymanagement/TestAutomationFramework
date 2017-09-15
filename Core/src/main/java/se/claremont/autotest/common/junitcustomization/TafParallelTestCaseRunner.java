@@ -1,13 +1,10 @@
 package se.claremont.autotest.common.junitcustomization;
 
-import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
 import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import se.claremont.autotest.common.testcase.TestCaseRunner;
-import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.lang.reflect.Method;

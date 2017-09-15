@@ -3,16 +3,12 @@ package se.claremont.autotest.common.junitcustomization;
 import org.junit.experimental.ParallelComputer;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
-import org.junit.runner.notification.RunNotifier;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class TafTestRunner {
 
@@ -52,8 +48,8 @@ public class TafTestRunner {
                     p.addTestClasses(c);
                 }
                 try {
-                    tafResult.addTestResult(p.run());
                     runListener.testRunStarted(null);
+                    tafResult.addTestResult(p.run());
                 } catch (ExecutionException e) {
                     System.out.println("Could not execute tests by using parallel execution in thread pool. Try executing with PARALLEL_TEST_EXECUTION_MODE 'none', 'classes', 'methods', 'both'. Error: " + e.toString());
                 } catch (InterruptedException e) {

@@ -57,18 +57,22 @@ public class TestCase {
         this(null, testName);
     }
 
+    public TestCase(KnownErrorsList knownErrorsList, String testName){
+        this(knownErrorsList, testName, SupportMethods.classNameAtStacktraceLevel(4));
+    }
+
     /**
      * Setting up a new test case run and prepares it for execution
      *
      *  @param knownErrorsList An instance of KnownErrorsList. Could be null. Used for test set level known errors.
      *  @param testName The name of the test. For reporting purposes.
      */
-    public TestCase(KnownErrorsList knownErrorsList, String testName){
+    public TestCase(KnownErrorsList knownErrorsList, String testName, String testSetName){
         TestRun.initializeIfNotInitialized();
         this.testCaseMethodName = testName;
         if(testName == null) testName = "Nameless test case";
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
-        testSetName = SupportMethods.classNameAtStacktraceLevel(4);
+        this.testSetName = testSetName;
         testCaseKnownErrorsList = new KnownErrorsList();
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetKnownErrors = knownErrorsList;
