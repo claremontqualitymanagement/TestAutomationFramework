@@ -1,6 +1,7 @@
 package se.claremont.autotest.websupport;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.json.JsonParser;
@@ -131,7 +132,7 @@ public class W3CHtmlValidatorService {
 
     private void reportResultsToTestCaseLog(LogLevel logLevel, String textLogMessage, ArrayList<String> htmlLogMessage){
         if(logLevel == LogLevel.VERIFICATION_FAILED || (logLevel == LogLevel.INFO && verbose)){
-            testCase.logDifferentlyToTextLogAndHtmlLog(logLevel, textLogMessage, String.join("<hr>", htmlLogMessage));
+            testCase.logDifferentlyToTextLogAndHtmlLog(logLevel, textLogMessage, StringManagement.join("<hr>", htmlLogMessage));
         } else {
             testCase.log(LogLevel.VERIFICATION_PASSED, "No indications of anything in the HTML to act on after validation of HTML with W3C validation service.");
         }

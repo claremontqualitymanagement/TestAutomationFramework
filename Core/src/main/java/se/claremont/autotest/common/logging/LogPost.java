@@ -214,7 +214,7 @@ public class LogPost {
                 words[i] = "...";
             }
         }
-        return String.join(" ", words);
+        return StringManagement.join(" ", words);
     }
 
 

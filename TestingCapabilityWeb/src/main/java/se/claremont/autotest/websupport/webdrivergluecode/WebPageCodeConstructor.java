@@ -110,7 +110,10 @@ class WebPageCodeConstructor {
     }
 
     private boolean methodNameAlreadyUsed(String nameToTry){
-        return methodNames.stream().anyMatch(m -> m.equals(nameToTry));
+        for(String methodName : methodNames){
+            if(methodName.equals(nameToTry)) return true;
+        }
+        return false;
     }
 
     /**

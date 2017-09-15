@@ -1,4 +1,5 @@
 import org.junit.Assume;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testset.TestSet;
 
 import javax.tools.JavaCompiler;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,7 +38,7 @@ public class ResourceManager {
     public static Class extractFileFromResourcesAndCompileAndLoadIt(File resourceFile) {
         String source = null;
         try {
-            source = String.join(System.lineSeparator(), Files.readAllLines(resourceFile.toPath()));
+            source = StringManagement.join(System.lineSeparator(), Files.readAllLines(resourceFile.toPath(), Charset.defaultCharset()));
         } catch (IOException e) {
             Assume.assumeTrue("Could not read resource file '" + resourceFile.getName() + "'.", false);
             return null;

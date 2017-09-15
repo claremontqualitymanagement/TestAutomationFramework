@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-04-10.
  */
-public class NewError {
+public class NewError implements Comparable<NewError>{
     List<TestCase> testCasesWhereEncountered = new ArrayList<>();
     List<LogPost>  sampleLogPosts = new ArrayList<>();
 
@@ -191,5 +191,10 @@ public class NewError {
         html.append("       </p>").append(System.lineSeparator());
         return html.toString();
 
+    }
+
+    @Override
+    public int compareTo(NewError o) {
+        return Integer.compare(this.getNumberOfTestCases(), o.getNumberOfTestCases());
     }
 }

@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.support.tableverification;
 
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class TableRow {
         for(DataCell dataCell : dataCells){
             returnStrings.add(dataCell.dataContent);
         }
-        return String.join("; ", returnStrings);
+        return StringManagement.join("; ", returnStrings);
     }
 
     boolean headlineExist(String headline, CellMatchingType cellMatchingType){

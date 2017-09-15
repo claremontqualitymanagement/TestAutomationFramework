@@ -7,7 +7,6 @@ import se.claremont.autotest.common.testcase.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A list of known errors.
@@ -62,12 +61,18 @@ public class KnownErrorsList {
     }
 
     public KnownErrorsList nonencounteredKnownErrors(){
-        List<KnownError> nonencountered = knownErrors.stream().filter(knownError -> !knownError.encountered()).collect(Collectors.toList());
+        List<KnownError> nonencountered = new ArrayList<>();
+        for(KnownError ke : knownErrors){
+            if(!ke.encountered()) nonencountered.add(ke);
+        }
         return new KnownErrorsList(nonencountered);
     }
 
     public KnownErrorsList encounteredKnownErrors(){
-        List<KnownError> encountered = knownErrors.stream().filter(KnownError::encountered).collect(Collectors.toList());
+        List<KnownError> encountered = new ArrayList<>();
+        for(KnownError ke : knownErrors){
+            if(ke.encountered()) encountered.add(ke);
+        }
         return new KnownErrorsList(encountered);
     }
 

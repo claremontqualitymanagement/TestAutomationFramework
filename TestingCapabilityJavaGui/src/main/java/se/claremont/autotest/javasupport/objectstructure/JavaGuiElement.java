@@ -2,6 +2,7 @@ package se.claremont.autotest.javasupport.objectstructure;
 
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
@@ -70,7 +71,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             className = object.getClass().toString();
         }catch (Exception e){
             log(LogLevel.DEBUG, "Could not create JavaGuiElement from Object. Error: "+ e.toString());
-            log(LogLevel.DEBUG, "Possible methods of object are:" + System.lineSeparator() + String.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(object)));
+            log(LogLevel.DEBUG, "Possible methods of object are:" + System.lineSeparator() + StringManagement.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(object)));
         }
     }
 

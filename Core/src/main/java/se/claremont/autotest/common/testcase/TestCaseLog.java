@@ -17,7 +17,6 @@ import se.claremont.autotest.common.testrun.TestRun;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 /**
  * Test case execution testCaseLog.
@@ -235,7 +234,11 @@ public class TestCaseLog {
      * @return LogPost list consisting of only the non-successful testCaseLog posts of the testCaseLog
      */
     public ArrayList<LogPost> onlyErroneousLogPosts(){
-        return logPosts.stream().filter(LogPost::isFail).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<LogPost> errorPosts = new ArrayList<>();
+        for(LogPost logPost : logPosts){
+            if(logPost.isFail()) errorPosts.add(logPost);
+        }
+        return errorPosts;
     }
 
     /**

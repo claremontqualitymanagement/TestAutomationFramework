@@ -16,13 +16,15 @@ import java.util.Properties;
 public class ScpImpl implements Scp {
 
     //create localThread of the current thread
-    private static ThreadLocal<ScpImpl> myScp = ThreadLocal.withInitial(ScpImpl::new);
+    private static ThreadLocal<ScpImpl> myScp = null;
     private int port = 22;
 
     private ScpImpl() {}
 
     //get instace of the object and access all the methods of it
     public static ScpImpl getInstance(){
+        myScp = new ThreadLocal();
+        myScp.set(ScpImpl.getInstance());
         return myScp.get();
     }
 

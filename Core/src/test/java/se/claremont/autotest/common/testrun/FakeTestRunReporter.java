@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.testrun;
 
 import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
@@ -45,9 +46,9 @@ public class FakeTestRunReporter implements TestRunReporter {
                 "   numberOfTestCaseEvaluationsPerformed=" + numberOfTestCaseEvaluationsPerformed + System.lineSeparator() +
                 "   numberOfTestSetEvaluationsPerformed=" + numberOfTestSetEvaluationsPerformed + System.lineSeparator() +
                 "   TestSets registered for evaluation:" + System.lineSeparator() +
-                "      [" + String.join("]" + System.lineSeparator() + "      [", testSetNames) + "]" + System.lineSeparator() +
+                "      [" + StringManagement.join("]" + System.lineSeparator() + "      [", testSetNames) + "]" + System.lineSeparator() +
                 "   TestCases registered for evaluation:" + System.lineSeparator() +
-                "      [" + String.join("]" + System.lineSeparator() + "      [", testCaseNames) + "]" + System.lineSeparator() +
+                "      [" + StringManagement.join("]" + System.lineSeparator() + "      [", testCaseNames) + "]" + System.lineSeparator() +
                 "]";
 
     }

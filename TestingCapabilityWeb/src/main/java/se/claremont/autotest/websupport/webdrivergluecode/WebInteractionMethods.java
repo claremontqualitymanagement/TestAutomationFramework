@@ -1716,27 +1716,27 @@ public class WebInteractionMethods implements GuiDriver {
                     }
 
                 }
-                //log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
+                //log(LogLevel.DEBUG, StringManagement.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
                 if (!valueMissingOnRow)
                 {
                     allValuesFoundInRow = true;
                     row.click();
                     break;
                 } else if (someValueFoundInRow){
-                    partialMatches.add("'" + String.join("', '", rowStrings) + "'");
+                    partialMatches.add("'" + StringManagement.join("', '", rowStrings) + "'");
                 }
             }
             if(!allValuesFoundInRow){
-                log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + String.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
+                log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + StringManagement.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO,
-                        "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + String.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
-                        "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + String.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
+                        "Rows with partial matches for '"  + StringManagement.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + StringManagement.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
+                        "Rows with partial matches for '"  + StringManagement.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + StringManagement.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
                 saveScreenshot(webElement);
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
             } else {
                 doneOk = true;
-                log(LogLevel.EXECUTED, "Clicked the row with values '" + String.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
+                log(LogLevel.EXECUTED, "Clicked the row with values '" + StringManagement.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
             }
         }
     }
@@ -2062,7 +2062,7 @@ public class WebInteractionMethods implements GuiDriver {
                     return;
                 }
             }
-            errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.");
+            errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + StringManagement.join("', '", optionStrings) + "'.");
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' crashed with error." + e.getMessage());
             saveScreenshot(webElement);
@@ -2160,7 +2160,7 @@ public class WebInteractionMethods implements GuiDriver {
                 log(LogLevel.DEBUG, "Could not get text value for selected element when attempting to get selections for " + domElement.LogIdentification() + ". " + e.getMessage());
             }
         }
-        return "['" + String.join("','", selectedStrings) + "']";
+        return "['" + StringManagement.join("','", selectedStrings) + "']";
     }
 
 
@@ -2193,11 +2193,11 @@ public class WebInteractionMethods implements GuiDriver {
         }
         WebElement webElement = waitForElementToBeEnabled(domElement, standardTimeoutInSeconds);
         if(webElement == null) {
-            errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
+            errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + StringManagement.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("select"))
-            errorManagementProcedures("Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
+            errorManagementProcedures("Trying to select '" + StringManagement.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
 
         //Create Select element and log originally selected values
         boolean allSelectionsOkSoFar = true;
@@ -2209,7 +2209,7 @@ public class WebInteractionMethods implements GuiDriver {
             for(WebElement selectedOption : select.getAllSelectedOptions()){
                 selectedOptions.add(selectedOption.getText());
             }
-            log(LogLevel.DEBUG, "Initial selected value(s) in " + domElement.LogIdentification() + ": '" + String.join("', '", selectedOptions) + "'.");
+            log(LogLevel.DEBUG, "Initial selected value(s) in " + domElement.LogIdentification() + ": '" + StringManagement.join("', '", selectedOptions) + "'.");
 
             //Save logging info - what options actually was enabled
             List<WebElement> options = select.getOptions();
@@ -2241,19 +2241,19 @@ public class WebInteractionMethods implements GuiDriver {
                 }
             }
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Something went terribly bad while trying to select '" + String.join("', '", selections) + "' in " + domElement.LogIdentification() + ". " + e.getMessage());
+            log(LogLevel.FRAMEWORK_ERROR, "Something went terribly bad while trying to select '" + StringManagement.join("', '", selections) + "' in " + domElement.LogIdentification() + ". " + e.getMessage());
             errorManagementProcedures("This should not happen.");
         }
 
         //Log results
         if(allSelectionsOkSoFar){
-            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Found available options in " + domElement.LogIdentification() + ": '" + String.join("', '", optionStrings) + "'.",
-                    "Found available options in " + domElement.LogIdentification() + ": '" + String.join("', '", optionStrings) + "'.");
-            log(LogLevel.EXECUTED, "Selected '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Found available options in " + domElement.LogIdentification() + ": '" + StringManagement.join("', '", optionStrings) + "'.",
+                    "Found available options in " + domElement.LogIdentification() + ": '" + StringManagement.join("', '", optionStrings) + "'.");
+            log(LogLevel.EXECUTED, "Selected '" + StringManagement.join("', '", selections) + "' in dropdown " + domElement.LogIdentification());
         } else {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
-                    "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",
-                    "Could not select:<ul><li>'" + String.join("'</li><li>'", nonSelectedStrings) + "'</li></ul> in element " + domElement.LogIdentification() + " when attempting to select: <ul><li>'" + String.join("'</li><li>'", selections) + "'</li></ul>. Available options are:<ul><li>'" + String.join("'</li><li>'", optionStrings) + "'</li></ul>.");
+                    "Could not select '" + StringManagement.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + StringManagement.join("', '", selections) + "'. Available options are :'" + StringManagement.join("', '", optionStrings) + "'.",
+                    "Could not select:<ul><li>'" + StringManagement.join("'</li><li>'", nonSelectedStrings) + "'</li></ul> in element " + domElement.LogIdentification() + " when attempting to select: <ul><li>'" + StringManagement.join("'</li><li>'", selections) + "'</li></ul>. Available options are:<ul><li>'" + StringManagement.join("'</li><li>'", optionStrings) + "'</li></ul>.");
             saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -2428,12 +2428,12 @@ public class WebInteractionMethods implements GuiDriver {
         DomElement table = (DomElement) tableElement;
         boolean found = waitForElementToAppear(tableElement);
         if(!found){
-            log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + table.LogIdentification() + " to verify headlines '" + String.join("', '", expectedHeadlines) + "' in." );
+            log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + table.LogIdentification() + " to verify headlines '" + StringManagement.join("', '", expectedHeadlines) + "' in." );
             return;
         }
         TableData tableData = tableDataFromGuiElement(tableElement, false);
         if(tableData == null) {
-            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + " when trying to verify headlines '" + String.join("', '", expectedHeadlines) + "'.");
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + " when trying to verify headlines '" + StringManagement.join("', '", expectedHeadlines) + "'.");
             saveScreenshot(getRuntimeElementWithoutLogging((DomElement)tableElement));
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
@@ -2906,7 +2906,7 @@ public class WebInteractionMethods implements GuiDriver {
             logEntriesAsStrings.add(logEntry.toString());
         }
         if(logEntries.size() > 0){
-            log(LogLevel.VERIFICATION_FAILED, "Browser has the following log posts of at least log level 'severe' in console:" + System.lineSeparator() + String.join(System.lineSeparator(), logEntriesAsStrings));
+            log(LogLevel.VERIFICATION_FAILED, "Browser has the following log posts of at least log level 'severe' in console:" + System.lineSeparator() + StringManagement.join(System.lineSeparator(), logEntriesAsStrings));
         } else {
             log(LogLevel.VERIFICATION_PASSED, "Browser had no severe log posts in console.");
         }
@@ -2922,7 +2922,7 @@ public class WebInteractionMethods implements GuiDriver {
             logEntriesAsStrings.add(logEntry.toString());
         }
         if(logEntriesAsStrings.size() > 0){
-            log(LogLevel.INFO, "Browser had the following log posts in console:" + System.lineSeparator() + String.join(System.lineSeparator(), logEntriesAsStrings));
+            log(LogLevel.INFO, "Browser had the following log posts in console:" + System.lineSeparator() + StringManagement.join(System.lineSeparator(), logEntriesAsStrings));
         } else {
             log(LogLevel.INFO, "Browser had an empty console output.");
         }

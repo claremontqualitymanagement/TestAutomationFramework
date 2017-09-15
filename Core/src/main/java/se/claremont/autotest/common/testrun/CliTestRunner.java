@@ -5,6 +5,7 @@ import org.junit.runner.Request;
 import se.claremont.autotest.common.junitcustomization.TafResult;
 import se.claremont.autotest.common.junitcustomization.TafTestRunner;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
@@ -337,7 +338,7 @@ public class CliTestRunner {
         setSystemPropertiesIfStatedWithMinusD();
         printHelpTextIfApplicable();
         System.out.println("Argument(s) given:" + System.lineSeparator()  +
-                " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
+                " * " + StringManagement.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
                 "Interpreting arguments.");
         TestRun.initializeIfNotInitialized(); // No need to remove arguments from argument array for not being test classes
         setRunSettingsFileIfGivenAsArgument();

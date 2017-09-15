@@ -20,6 +20,8 @@ import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @SuppressWarnings({"SameParameterValue", "RedundantThrows", "ConstantConditions"})
@@ -43,10 +45,12 @@ public class SSHServerResource extends ExternalResource {
     @Override
     protected void before () throws Throwable {
         setupConfiguration();
-
-        Executors.newSingleThreadExecutor().submit(() -> {
-            start();
-            return null;
+        Executors.newSingleThreadExecutor().submit(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                SSHServerResource.this.start();
+                return null;
+            }
         });
     }
 
@@ -103,7 +107,7 @@ public class SSHServerResource extends ExternalResource {
         configureServer ();
     }
 
-    private void start () throws IOException {
+    private Object start () throws IOException {
         SshServer server = new SshServer() {
             public void configureServices (ConnectionProtocol connection) throws IOException {
                 connection.addChannelFactory(SessionChannelFactory.SESSION_CHANNEL,
@@ -120,6 +124,7 @@ public class SSHServerResource extends ExternalResource {
         };
 
         server.startServer();
+        return null;
     }
 
     private void configureServer () throws ConfigurationException {

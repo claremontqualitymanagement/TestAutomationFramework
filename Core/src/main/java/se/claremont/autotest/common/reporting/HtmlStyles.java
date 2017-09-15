@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.reporting;
 
+import se.claremont.autotest.common.support.StringManagement;
+
 import java.util.ArrayList;
 
 /**
@@ -12,7 +14,7 @@ public class HtmlStyles {
     public static ArrayList<String> styleSections = new ArrayList<>();
 
     public static String asString(){
-        return System.lineSeparator() + "    " + String.join(System.lineSeparator() + "    ", styleSections) + System.lineSeparator();
+        return System.lineSeparator() + "    " + StringManagement.join(System.lineSeparator() + "    ", styleSections) + System.lineSeparator();
     }
 
     public static void addStyleInfo(String styles){

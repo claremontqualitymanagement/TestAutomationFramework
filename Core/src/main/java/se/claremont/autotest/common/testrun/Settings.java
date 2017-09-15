@@ -9,14 +9,16 @@ import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Relevant test execution parameters. Usually used in a TestRun context.
@@ -127,11 +129,14 @@ public class Settings extends HashMap<String, String>{
         if(settingFile.exists()){
             setValue(SettingParameters.RUN_SETTINGS_FILE, settingsFilePath);
         }
-        try (Stream<String> stream = Files.lines(Paths.get(settingsFilePath))) {
-            stream.forEach(lines::add);
-            for(String line : lines){
+        try {
+            Path file = Paths.get(settingsFilePath);
+            BufferedReader reader = Files.newBufferedReader(file, Charset.defaultCharset());
+            String line = reader.readLine();
+            while (line != null) {
                 if(!line.contains("=")) continue;
                 setCustomValue(line.split("=")[0], line.split("=")[line.split("=").length-1]);
+                line = reader.readLine();
             }
         } catch (IOException e) { //No file exist yet
             logger.warn( "Could not read TAF settings from file '" + settingsFilePath + "'. Don't worry. Continuing with default values, and attempting saving of the settings to file '" + settingsFilePath + "' for next time.");

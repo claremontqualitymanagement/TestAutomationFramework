@@ -16,16 +16,17 @@ import se.claremont.autotest.common.logging.logmessage.LogMessage;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterPureTextBasedLogFile;
 import se.claremont.autotest.common.support.ApplicationManager;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.ValuePair;
 import se.claremont.autotest.common.support.api.Taf;
 import se.claremont.autotest.common.testrun.TestRun;
+import sun.awt.SunHints;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Test case information used during and after a test case execution.
@@ -57,18 +58,23 @@ public class TestCase {
         this(null, testName);
     }
 
+    public TestCase(KnownErrorsList knownErrorsList, String testName){
+        this(knownErrorsList, testName, SupportMethods.classNameAtStacktraceLevel(4));
+    }
+
     /**
      * Setting up a new test case run and prepares it for execution
      *
      *  @param knownErrorsList An instance of KnownErrorsList. Could be null. Used for test set level known errors.
      *  @param testName The name of the test. For reporting purposes.
+     *  @param testSetName The name of the class containing the tests
      */
-    public TestCase(KnownErrorsList knownErrorsList, String testName){
+    public TestCase(KnownErrorsList knownErrorsList, String testName, String testSetName){
         TestRun.initializeIfNotInitialized();
         this.testCaseMethodName = testName;
         if(testName == null) testName = "Nameless test case";
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
-        testSetName = SupportMethods.classNameAtStacktraceLevel(4);
+        this.testSetName = testSetName;
         testCaseKnownErrorsList = new KnownErrorsList();
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetKnownErrors = knownErrorsList;
@@ -106,8 +112,8 @@ public class TestCase {
         copyOfProcessListAtStart.removeAll(processesRunningAtTestCaseStart);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Process(es) added since test case start: '").append(String.join("', '", copyOfCurrentProcesses)).append("'.").append(SupportMethods.LF);
-        sb.append("Process(es) that has exited since test case start: '").append(String.join("', '", copyOfProcessListAtStart)).append("'.").append(SupportMethods.LF);
+        sb.append("Process(es) added since test case start: '").append(StringManagement.join("', '", copyOfCurrentProcesses)).append("'.").append(SupportMethods.LF);
+        sb.append("Process(es) that has exited since test case start: '").append(StringManagement.join("', '", copyOfProcessListAtStart)).append("'.").append(SupportMethods.LF);
         if(copyOfProcessListAtStart.isEmpty() && copyOfCurrentProcesses.isEmpty()){
             log(LogLevel.DEBUG, "No changes to what processes are running, from test case start until now, could be detected.");
         } else {
@@ -139,7 +145,9 @@ public class TestCase {
         if(reported) return;
         testCaseResult.assessResults();
         TestRun.reporters.evaluateTestCase(this);
-        reporters.forEach(TestCaseLogReporter::report);
+        for(TestCaseLogReporter reporter : reporters){
+            reporter.report();
+        }
         reported = true;
         assertExecutionResultsToTestRunner();
     }
@@ -185,7 +193,10 @@ public class TestCase {
      */
     @SuppressWarnings("WeakerAccess")
     public List<String> valuesForTestCaseDataParameter(String parameterName){
-        List<String> returnStrings = testCaseResult.testCaseData.testCaseDataList.stream().filter(valuePair -> valuePair.parameter.equals(parameterName)).map(valuePair -> valuePair.value).collect(Collectors.toList());
+        List<String> returnStrings = new ArrayList<>();
+        for(ValuePair valuePair : testCaseResult.testCaseData.testCaseDataList){
+            if(valuePair.parameter.equals(parameterName)) returnStrings.add(valuePair.value);
+        }
         if(returnStrings.size() > 0){
             StringBuilder logString = new StringBuilder("Reading parameter values ");
             for(String returnString : returnStrings){

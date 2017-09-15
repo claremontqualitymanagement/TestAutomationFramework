@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testhelpers.ResourceManager;
 import se.claremont.autotest.common.testrun.Settings;
@@ -31,7 +32,7 @@ public class TafBackendTestRunReporterTest extends UnitTestClass {
         Assert.assertTrue(tafBackendServerTestRunReporter.testSetNames.contains(testSet1.getName()));
         Class<TestSet> testSet2 = ResourceManager.extractFileFromResourcesAndCompileAndLoadIt("TestSet2.java");
         tafBackendServerTestRunReporter.evaluateTestSet(testSet2.newInstance());
-        Assert.assertTrue(testSet2.getName(), String.join("", tafBackendServerTestRunReporter.testSetNames).contains(testSet2.getName()));
+        Assert.assertTrue(testSet2.getName(), StringManagement.join("", tafBackendServerTestRunReporter.testSetNames).contains(testSet2.getName()));
         tafBackendServerTestRunReporter.report();
         if(TestRun.testRunName == null || TestRun.testRunName.length() == 0){
             Assert.assertTrue("Expected testRunName to include '" + testSet1.getName()+ "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet1.getName()));

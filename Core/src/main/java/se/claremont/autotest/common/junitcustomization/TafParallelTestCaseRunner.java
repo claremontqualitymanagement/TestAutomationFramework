@@ -65,5 +65,12 @@ public class TafParallelTestCaseRunner {
         return tafResult;
     }
 
+    class TempTestSet extends TestSet{
+        TempTestSet(){
+            super();
+        }
+
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.support.tableverification;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 
@@ -194,11 +195,11 @@ public class TableData {
         htmlHeadingsRepresentation.append("   </tr>").append(System.lineSeparator()).append("</table>").append(System.lineSeparator());
 
         if(headlines.contains(heading.trim())){
-            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Heading '" + heading + "' exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
+            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Heading '" + heading + "' exist among the headlines '" + StringManagement.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Heading '" + heading + "' found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
             verificationPassed = true;
         } else {
-            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Heading '" + heading + "' does not exist among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
+            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Heading '" + heading + "' does not exist among the headlines '" + StringManagement.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Heading '" + heading + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
         }
         return verificationPassed;
@@ -226,8 +227,8 @@ public class TableData {
         }
         htmlHeadingsRepresentation.append("   </tr>").append(System.lineSeparator()).append("</table>").append(System.lineSeparator());
         if(foundHeadings.size() == headings.size()){
-            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Headings '" + String.join("', '", headings) + "' were found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
-                    "Headings '" + String.join("', '", headings) + "' were found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
+            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Headings '" + StringManagement.join("', '", headings) + "' were found among the headlines '" + StringManagement.join("', '", headlines) + "' of " + tableElementName + ".",
+                    "Headings '" + StringManagement.join("', '", headings) + "' were found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
             verificationPassed = true;
         } else {
             List<String> missingHeadlines = new ArrayList<>();
@@ -235,8 +236,8 @@ public class TableData {
                 if(foundHeadings.contains(heading)) continue;
                 missingHeadlines.add(heading);
             }
-            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Verified existence of headings '" + String.join("', '", headings) + "', but the heading(s) '" + String.join("', '", missingHeadlines) + "' could not be found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
-                    "Verified existence of headings '" + String.join("', '", headings) + "', but the heading(s) '" + String.join("', '", missingHeadlines) + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
+            logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Verified existence of headings '" + StringManagement.join("', '", headings) + "', but the heading(s) '" + StringManagement.join("', '", missingHeadlines) + "' could not be found among the headlines '" + StringManagement.join("', '", headlines) + "' of " + tableElementName + ".",
+                    "Verified existence of headings '" + StringManagement.join("', '", headings) + "', but the heading(s) '" + StringManagement.join("', '", missingHeadlines) + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
         }
         return verificationPassed;
     }
@@ -338,7 +339,7 @@ public class TableData {
 
     @Override
     public String toString(){
-        StringBuilder returnString = new StringBuilder(tableElementName + System.lineSeparator() + String.join("; ", headlines) + System.lineSeparator());
+        StringBuilder returnString = new StringBuilder(tableElementName + System.lineSeparator() + StringManagement.join("; ", headlines) + System.lineSeparator());
         for(TableRow tableRow : rows){
             returnString.append(tableRow.toString()).append(System.lineSeparator());
         }
@@ -469,7 +470,7 @@ public class TableData {
         for(String pair : pairs){
             String headline = pair.split(":")[0].trim();
             if(!headlineExist(headline, cellMatchingType)){
-                log(LogLevel.VERIFICATION_PROBLEM, "Headline '" + headline + "' not found among '" + String.join("', '", headlines) + "' which are the headlines of " + tableElementName + ".");
+                log(LogLevel.VERIFICATION_PROBLEM, "Headline '" + headline + "' not found among '" + StringManagement.join("', '", headlines) + "' which are the headlines of " + tableElementName + ".");
                 continue;
             }
             for(TableRow row : rows){
@@ -498,7 +499,7 @@ public class TableData {
             if(pair.split(":").length > 1) value = pair.substring(pair.indexOf(":") + 1);
             values.add(value);
         }
-        TableData oracleTable = new TableData(null, null, String.join(";", headlines) + System.lineSeparator() + String.join(";", values));
+        TableData oracleTable = new TableData(null, null, StringManagement.join(";", headlines) + System.lineSeparator() + StringManagement.join(";", values));
         return oracleTable.toHtml();
     }
 

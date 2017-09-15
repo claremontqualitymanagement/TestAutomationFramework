@@ -28,7 +28,8 @@
         <capability.java.version>2.2.7</capability.java.version>
         <capability.support.version>1.1.51</capability.support.version>
         <jackson.version>2.6.3</jackson.version>
-        <selenium.version>3.4.0</selenium.version>
+        <selenium.version>2.53.1</selenium.version>
+        <jdk.version>7</jdk.version>
     </properties>
 
     <modules>
@@ -517,8 +518,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>

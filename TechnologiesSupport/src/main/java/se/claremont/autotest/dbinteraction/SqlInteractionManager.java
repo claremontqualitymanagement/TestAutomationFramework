@@ -1,6 +1,7 @@
 package se.claremont.autotest.dbinteraction;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
@@ -69,7 +70,7 @@ public class SqlInteractionManager {
                 e.printStackTrace();
             }
         }
-        returnString.append(String.join(";", headlineRow)).append(System.lineSeparator());
+        returnString.append(StringManagement.join(";", headlineRow)).append(System.lineSeparator());
         try{
             resultSet.beforeFirst();
             while (resultSet.next()) {
@@ -77,7 +78,7 @@ public class SqlInteractionManager {
                 for(int i = 0; i < columnCount-1; i++){
                     row.add(resultSet.getString(i+1).replace("\n", ","));
                 }
-                returnString.append(String.join(";", row)).append(System.lineSeparator());
+                returnString.append(StringManagement.join(";", row)).append(System.lineSeparator());
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -130,10 +131,10 @@ public class SqlInteractionManager {
                 searchString.add(pair.split("=")[0] + " = '" + pair.split("=")[pair.split("=").length] + "'");
             }
         }
-        String sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" AND ", searchString) + ";";
+        String sql = "SELECT * FROM " + tableName + " WHERE " + StringManagement.join(" AND ", searchString) + ";";
         TableData td = execute(sql);
         if(td.dataRowCount() == 0){
-            sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" OR ", searchString) + ";";
+            sql = "SELECT * FROM " + tableName + " WHERE " + StringManagement.join(" OR ", searchString) + ";";
             td = execute(sql);
             td.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
         } else {

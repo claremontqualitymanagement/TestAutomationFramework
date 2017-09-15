@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
 import se.claremont.autotest.common.logging.KnownErrorsList;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.common.testrun.Settings;
@@ -55,7 +56,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     public void setTestRunName() {
         testRunName = TestRun.testRunName;
         if(testRunName == null || testRunName.trim().length() == 0){
-            testRunName = String.join(", ", testSetNames);
+            testRunName = StringManagement.join(", ", testSetNames);
         }
         if(testRunName == null || testRunName.trim().length() == 0){
             testRunName = "Un-named test run";

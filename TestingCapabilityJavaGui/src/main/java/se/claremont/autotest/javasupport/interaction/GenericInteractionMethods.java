@@ -3,6 +3,7 @@ package se.claremont.autotest.javasupport.interaction;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -411,7 +412,7 @@ public class GenericInteractionMethods {
             String option = optionObject.toString();
             options.add(option);
         }
-        log(LogLevel.DEBUG, "Available options in dropdown " + guiElement.getName() + ": '" + String.join("', '", options + "'."));
+        log(LogLevel.DEBUG, "Available options in dropdown " + guiElement.getName() + ": '" + StringManagement.join("', '", options) + "'.");
 
         for(int i = 0; i < optionCount; i++){
             Object optionObject = MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getSpecificComboBoxItemBasedOnIndex, i);
@@ -443,7 +444,7 @@ public class GenericInteractionMethods {
                 return;
             }
         }
-        log(LogLevel.EXECUTION_PROBLEM, "Could not select '" + selection + "' in dropdown " + guiElement.getName() + "'. Identified available choices were:" + System.lineSeparator() + "'" + String.join("'" + System.lineSeparator() + "'", options) + "'");
+        log(LogLevel.EXECUTION_PROBLEM, "Could not select '" + selection + "' in dropdown " + guiElement.getName() + "'. Identified available choices were:" + System.lineSeparator() + "'" + StringManagement.join("'" + System.lineSeparator() + "'", options) + "'");
     }
 
     /**
@@ -455,8 +456,8 @@ public class GenericInteractionMethods {
     public String getDropDownSelectedOption(GuiComponent guiComponent){
         List<String> selections = getDropDownSelectedOptions(guiComponent);
         if(selections.size() == 1) return selections.get(0);
-        log(LogLevel.DEBUG, "Several selections of dropdown " + guiComponent.getName() + ". Selected values are '" + String.join("', '", selections) + "'. Returning all selections.");
-        return "[" + String.join("], [", selections) + "]";
+        log(LogLevel.DEBUG, "Several selections of dropdown " + guiComponent.getName() + ". Selected values are '" + StringManagement.join("', '", selections) + "'. Returning all selections.");
+        return "[" + StringManagement.join("], [", selections) + "]";
     }
 
     /**
@@ -485,7 +486,7 @@ public class GenericInteractionMethods {
             selections.add(o.toString());
         }
         if(selections.size() > 0){
-            log(LogLevel.DEBUG, "DropDown " + guiElement.getName() + " contained selected element(s) '" + String.join("', '", selections) + "'.");
+            log(LogLevel.DEBUG, "DropDown " + guiElement.getName() + " contained selected element(s) '" + StringManagement.join("', '", selections) + "'.");
         }
         return selections;
 
@@ -859,7 +860,7 @@ public class GenericInteractionMethods {
         }
         log(LogLevel.EXECUTION_PROBLEM, "Could not make sure checkbox " + javaGuiElement.getName() + " was in state " + String.valueOf(expectedEndState).toLowerCase().replace("false", "un-").replace("true", "") + "checked.");
         if(!methodInvoker.objectHasAnyOfTheMethods(javaGuiElement.getRuntimeElementCacheable(), MethodDeclarations.getCheckboxCurrentStatus)){
-            log(LogLevel.INFO, "Element of class " + javaGuiElement.getRuntimeElementCacheable().getClass().toString() + " has the following methods implemented '" + String.join("', '", methodInvoker.getAvalableMethods(javaGuiElement.getRuntimeElementCacheable())) + "'. Tried invoking the methods '" + String.join("', '", MethodDeclarations.getCheckboxCurrentStatus) + "'.");
+            log(LogLevel.INFO, "Element of class " + javaGuiElement.getRuntimeElementCacheable().getClass().toString() + " has the following methods implemented '" + StringManagement.join("', '", methodInvoker.getAvalableMethods(javaGuiElement.getRuntimeElementCacheable())) + "'. Tried invoking the methods '" + StringManagement.join("', '", MethodDeclarations.getCheckboxCurrentStatus) + "'.");
         }
         takeScreenshot();
     }
@@ -884,7 +885,7 @@ public class GenericInteractionMethods {
         if(methodInvoker.objectHasAnyOfTheMethods(component.getRuntimeComponent(), MethodDeclarations.getCheckboxCurrentStatus)){
             log(LogLevel.EXECUTION_PROBLEM, "Something went wrong trying to get checkbox status for " + component.getName() + ".");
         } else {
-            log(LogLevel.EXECUTION_PROBLEM, "Checkbox " + component.getName() + " did not have any implementations of the methods '" + String.join("', '", MethodDeclarations.getCheckboxCurrentStatus) + "'. Available methods are:" + System.lineSeparator() + methodInvoker.getAvalableMethods(component.getRuntimeComponent()));
+            log(LogLevel.EXECUTION_PROBLEM, "Checkbox " + component.getName() + " did not have any implementations of the methods '" + StringManagement.join("', '", MethodDeclarations.getCheckboxCurrentStatus) + "'. Available methods are:" + System.lineSeparator() + methodInvoker.getAvalableMethods(component.getRuntimeComponent()));
         }
         return false;
     }

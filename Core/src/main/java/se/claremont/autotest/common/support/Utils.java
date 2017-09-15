@@ -16,7 +16,7 @@ public class Utils {
 
     private final static Logger logger = LoggerFactory.getLogger( Utils.class );
     private static Utils instance = null;
-    public final int SUPPORTED_TAF_JVM_VERSION = 8;
+    public final int SUPPORTED_TAF_JVM_VERSION = 7;
 
     private Utils() {
 

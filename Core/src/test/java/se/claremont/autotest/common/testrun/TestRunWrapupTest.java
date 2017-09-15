@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testhelpers.ResourceManager;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
@@ -60,9 +61,9 @@ public class TestRunWrapupTest extends UnitTestClass{
             String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName() };
             CliTestRunner.runInTestMode(args);
             Assert.assertTrue("Expected 4 test cases evaluated. Was: " + String.valueOf
-                    (fakeTestRunReporter.testCaseNames.size()) + ", namely '" + String.join("', '", fakeTestRunReporter.testCaseNames) + "'.", fakeTestRunReporter.numberOfTestCaseEvaluationsPerformed == 4);
+                    (fakeTestRunReporter.testCaseNames.size()) + ", namely '" + StringManagement.join("', '", fakeTestRunReporter.testCaseNames) + "'.", fakeTestRunReporter.numberOfTestCaseEvaluationsPerformed == 4);
             Assert.assertTrue("Expected 4 test cases evaluated. Was: " + String.valueOf
-                    (fakeTestRunReporter.testCaseNames.size()) + ", namely '" + String.join("', '", fakeTestRunReporter.testCaseNames) + "'.", fakeTestRunReporter.testCaseNames.size() == 4);
+                    (fakeTestRunReporter.testCaseNames.size()) + ", namely '" + StringManagement.join("', '", fakeTestRunReporter.testCaseNames) + "'.", fakeTestRunReporter.testCaseNames.size() == 4);
             //Assert.assertTrue("Expected 2 test sets in testSetList. Was " +fakeTestRunReporter.testSetNames.size() + ". '" + String.join("', '", testSets) + "'." , fakeTestRunReporter.testSetNames.size() == 2);
             Assert.assertTrue("Expecting one report. Was " + fakeTestRunReporter.numberOfReportsPerformed + ".", fakeTestRunReporter.numberOfReportsPerformed == 1);
         }finally {

@@ -14,7 +14,6 @@ import se.claremont.autotest.common.testset.TestSet;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A summary of the test results for a number of test cases, like a test set or a test run.
@@ -85,7 +84,10 @@ public class HtmlSummaryReport {
     }
 
     private void evaluateTestCaseUnknownErrors(TestCase testCase){
-        ArrayList<LogPost> errorLogMessages = testCase.testCaseResult.testCaseLog.onlyErroneousLogPosts().stream().filter(logPost -> !logPost.identifiedToBePartOfKnownError).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<LogPost> errorLogMessages = new ArrayList<>();
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.onlyErroneousLogPosts()){
+            if(!logPost.identifiedToBePartOfKnownError) errorLogMessages.add(logPost);
+        }
         if(errorLogMessages.size() > 0){
             List<TestCase> testCases = new ArrayList<>();
             testCases.add(testCase);
@@ -121,7 +123,10 @@ public class HtmlSummaryReport {
      */
     private String solvedKnownErrorsFromTestCaseLocalKnownErrorsList(TestCase testCase) {
         StringBuilder solvedKnownErrorsString = new StringBuilder();
-        ArrayList<String> solvedKnownErrors = testCase.testCaseKnownErrorsList.knownErrors.stream().filter(knownError -> !knownError.encountered()).map(knownError -> knownError.description).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<String> solvedKnownErrors = new ArrayList<>();
+        for(KnownError knownError : testCase.testCaseKnownErrorsList.knownErrors){
+            if(!knownError.encountered()) solvedKnownErrors.add(knownError.description);
+        }
         if (solvedKnownErrors.size() > 0) {
             boolean plural = (solvedKnownErrors.size() > 1);
             String s = String.valueOf(plural).toLowerCase().replace("true", "s").replace("false", "");

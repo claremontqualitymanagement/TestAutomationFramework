@@ -61,7 +61,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(domElement == null || web == null) {
             identificationDescription.add("Could not attempt to only keep elements to the right of reference element since WebInteractionMethods or the reference element was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.keepElementsToTheRightOf(domElement.asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) to the right of element [" + domElement.LogIdentification() + "] were kept. ");
@@ -72,7 +72,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(domElement == null || web == null) {
             identificationDescription.add("Could not attempt to only keep elements to the left of reference element since WebInteractionMethods or the reference element was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription );
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription );
         }
         WebElementList returnList = convertElementListToWebElementList(super.keepElementsToTheLeftOf(domElement.asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) to the left of element [" + domElement.LogIdentification() + "] were kept. " + duration(startTime));
@@ -83,7 +83,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(domElement == null || web == null) {
             identificationDescription.add("Could not attempt to only keep elements above the reference element since WebInteractionMethods or the reference element was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.keepElementsAbove(domElement.asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) above the element [" + domElement.LogIdentification() + "] were kept. " + duration(startTime));
@@ -94,7 +94,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(domElement == null || web == null) {
             identificationDescription.add("Could not attempt to only keep elements below the reference element since WebInteractionMethods or the reference element was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.keepElementsBelow(domElement.asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) below the element [" + domElement.LogIdentification() + "] were kept. " + duration(startTime));
@@ -121,7 +121,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(domElement == null || web == null) {
             identificationDescription.add("Could not attempt to identify the elements at the same height as the reference element since either the reference element or the WebInteractionMethods object was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.atTheSameHeightAs(domElement.asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) at the same hight as element [" + domElement.LogIdentification() + "] were kept. " + duration(startTime));
@@ -132,7 +132,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(domElement == null || web == null) {
             identificationDescription.add("Could not attempt to identify the elements at the same height as the reference element since either the reference element or the WebInteractionMethods object was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.atTheSameHeightAs(domElement.asPositionBasedWebElement(web), marginPixelsAbove, marginPixelsBelow), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) at the same hight as element [" + domElement.LogIdentification() + "] were kept (margin above " + marginPixelsAbove + "px and margin below " + marginPixelsBelow + "px.) " + duration(startTime));
@@ -143,7 +143,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(web == null) {
             identificationDescription.add("Could not attempt to identify the elements at the same height as the reference element since the WebInteractionMethods object was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.atTheSameHeightAs(identifyDomElementFromText(elementText).asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) at the same hight as element with test " + elementText + "' were kept. " + duration(startTime));
@@ -154,7 +154,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(elementText == null || web == null) {
             identificationDescription.add("Could not attempt to identify the elements at the same height as the reference element since either the reference element or the WebInteractionMethods object was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<PositionBasedWebElement>(), web, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.atTheSameHeightAs(identifyDomElementFromText(elementText).asPositionBasedWebElement(web), marginPixelsAbove, marginPixelsBelow), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) at the same hight as element with text '" + elementText + "' were kept (margin above " + marginPixelsAbove + "px and margin below " + marginPixelsBelow + "px.) " + duration(startTime));

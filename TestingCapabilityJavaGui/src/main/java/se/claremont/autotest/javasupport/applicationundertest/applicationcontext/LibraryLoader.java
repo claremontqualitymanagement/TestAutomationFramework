@@ -1,6 +1,7 @@
 package se.claremont.autotest.javasupport.applicationundertest.applicationcontext;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 
 import java.io.File;
@@ -170,13 +171,13 @@ public class LibraryLoader {
         if(filenames.size() == 0){
             logMessage.append("Could not find any jar files in folder '" + foldername + "'.").append(System.lineSeparator());
         } else {
-            logMessage.append("Found the following jar files in folder '" + foldername + "':").append(System.lineSeparator()).append(String.join(System.lineSeparator() + " * ", filenames)).append(System.lineSeparator());
+            logMessage.append("Found the following jar files in folder '" + foldername + "':").append(System.lineSeparator()).append(StringManagement.join(System.lineSeparator() + " * ", filenames)).append(System.lineSeparator());
         }
         if(subDirectories.size() > 0){
-            logMessage.append("Found the following sub-directories in the folder:").append(System.lineSeparator()).append(String.join(System.lineSeparator() + " * ", subDirectories)).append(System.lineSeparator());
+            logMessage.append("Found the following sub-directories in the folder:").append(System.lineSeparator()).append(StringManagement.join(System.lineSeparator() + " * ", subDirectories)).append(System.lineSeparator());
         }
         if(nonJarFiles.size() > 0){
-            logMessage.append("Found the following non-jar-files in the folder:").append(System.lineSeparator()).append(String.join(System.lineSeparator() + " * ", nonJarFiles)).append(System.lineSeparator());
+            logMessage.append("Found the following non-jar-files in the folder:").append(System.lineSeparator()).append(StringManagement.join(System.lineSeparator() + " * ", nonJarFiles)).append(System.lineSeparator());
         }
         testCase.log(LogLevel.INFO, logMessage.toString());
 

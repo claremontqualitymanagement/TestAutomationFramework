@@ -4,6 +4,7 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import se.claremont.autotest.common.support.StringManagement;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -119,7 +120,7 @@ public abstract class UnitTestClass {
     private String testOutputFormattedForDisplay(){
         String[] rows = testOutputChannel.toString().split(System.lineSeparator());
         String indentation = "  > ";
-        return indentation + String.join(System.lineSeparator() + indentation, rows) + System.lineSeparator();
+        return indentation + StringManagement.join(System.lineSeparator() + indentation, rows) + System.lineSeparator();
     }
 
 }

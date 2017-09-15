@@ -1,6 +1,7 @@
 package se.claremont.autotest.javasupport.applicationundertest.applicationstarters;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationcontext.ApplicationContextManager;
 
@@ -36,7 +37,7 @@ public class ApplicationStartMechanismCli extends ApplicationStartMechanism {
             return;
         }
         try {
-            testCase.log(LogLevel.DEBUG, "Starting jar file '" + jarFile + "' with arguments '" + String.join(" ", parts) + "'.");
+            testCase.log(LogLevel.DEBUG, "Starting jar file '" + jarFile + "' with arguments '" + StringManagement.join(" ", parts) + "'.");
             //startJar(new File(jarFile).toURI().toURL(), parts);
             MethodInvoker.invokeMethodOfClass(classLoader, testCase, mainClass, "main", parts);
         } catch (Exception e) {

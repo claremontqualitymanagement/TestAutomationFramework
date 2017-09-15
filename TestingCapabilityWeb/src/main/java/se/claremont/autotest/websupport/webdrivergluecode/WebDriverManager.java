@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.testcase.TestCase;
@@ -111,14 +112,14 @@ public class WebDriverManager {
         fileNamesToFind.add("iexplore.exe");
         fileNamesToFind.add("chrome.exe");
         fileNamesToFind.add("phantomjs.exe");
-        testCase.log(LogLevel.EXECUTED, "Scanning machine hard drive for browsers named '" + String.join("', '", fileNamesToFind) + "'.");
+        testCase.log(LogLevel.EXECUTED, "Scanning machine hard drive for browsers named '" + StringManagement.join("', '", fileNamesToFind) + "'.");
         List<File> browsers = scanComputerForBrowsersAndRegisterTheirLocations(fileNamesToFind);
         List<String> browserPaths = new ArrayList<>();
         for(File browser : browsers){
             browserPaths.add(browser.getAbsolutePath());
         }
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Identified local browsers on execution machine:" + SupportMethods.LF + "'" + String.join("'" + SupportMethods.LF + "'", browserPaths) + "'",
-                "Identified local browsers on execution machine:<br>" + SupportMethods.LF + "'" + String.join("'<br>" + SupportMethods.LF + "'", browserPaths) + "'<br>");
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Identified local browsers on execution machine:" + SupportMethods.LF + "'" + StringManagement.join("'" + SupportMethods.LF + "'", browserPaths) + "'",
+                "Identified local browsers on execution machine:<br>" + SupportMethods.LF + "'" + StringManagement.join("'<br>" + SupportMethods.LF + "'", browserPaths) + "'<br>");
     }
 
     private static List<File> scanComputerForBrowsersAndRegisterTheirLocations(List<String> fileNames){

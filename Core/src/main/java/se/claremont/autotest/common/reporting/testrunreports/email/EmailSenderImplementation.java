@@ -2,6 +2,7 @@ package se.claremont.autotest.common.reporting.testrunreports.email;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -118,7 +119,7 @@ public class EmailSenderImplementation implements EmailSender{
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(String.join(",", recipientAddresses)));
+                    InternetAddress.parse(StringManagement.join(",", recipientAddresses)));
             message.setSubject(subjectLine);
             message.setContent(htmlContent, "text/html");
             //message.setText(htmlContent);

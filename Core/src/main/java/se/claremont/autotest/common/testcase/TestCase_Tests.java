@@ -6,6 +6,7 @@ import org.junit.Test;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
@@ -130,10 +131,14 @@ public class TestCase_Tests extends UnitTestClass{
         TestCase testCase = new TestCase(null, "dummy");
         testCase.writeProcessListDeviationsFromSystemStartToLog();
 
-        boolean processesFound = testCase.testCaseResult.testCaseLog.logPosts.stream().
-                anyMatch(logPost -> logPost.message.contains("No changes to what processes are running, from test case start until now, could be detected."));
-
-        Assert.assertTrue("Changes in processes when not expecting any", processesFound);
+        boolean found = false;
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts) {
+            if (logPost.message.contains("No changes to what processes are running, from test case start until now, could be detected.")) {
+                found = true;
+                break;
+            }
+        }
+        Assert.assertTrue("Changes in processes when not expecting any", found);
     }
 
     @Ignore("Fails on travis")
@@ -144,11 +149,14 @@ public class TestCase_Tests extends UnitTestClass{
 
         testCase.writeProcessListDeviationsFromSystemStartToLog();
 
-        boolean logRowAboutChangesToRunningProcessesFound = testCase.testCaseResult.testCaseLog.logPosts.stream().
-                anyMatch(logPost -> logPost.message.contains("Process(es) added since test case start: '"));
-
-
-        Assert.assertTrue(logRowAboutChangesToRunningProcessesFound);
+        boolean found = false;
+        for(LogPost logPost : testCase.testCaseResult.testCaseLog.logPosts){
+            if(logPost.message.contains("Process(es) added since test case start: '")) {
+                found = true;
+                break;
+            }
+        }
+        Assert.assertTrue(found);
     }
 
 

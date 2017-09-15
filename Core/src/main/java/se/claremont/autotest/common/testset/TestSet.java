@@ -72,9 +72,9 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
         wrapUpTestCase();
     }
 
-    public void setCurrentTestCaseTestName(String name){
-        if(currentTestCase() == null)return;
-        currentTestCase().setName(name);
+
+    public void setName(String name){
+        this.name = name;
     }
 
     /**

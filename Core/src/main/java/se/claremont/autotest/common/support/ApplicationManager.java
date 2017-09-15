@@ -40,9 +40,9 @@ public class ApplicationManager {
         try {
             App app = new App(commands, testCase);
             (new Thread(app)).start();
-            //testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
+            //testCase.log(LogLevel.EXECUTED, "Started program '" + StringManagement.join(" ", commands) + "'.");
         } catch (Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Coult not start program '" + String.join(" ", commands) + "'. "  + e.getMessage());
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Coult not start program '" + StringManagement.join(" ", commands) + "'. "  + e.getMessage());
         }
     }
 
@@ -78,13 +78,14 @@ public class ApplicationManager {
 
     public void killProgram(){
         testCase.log(LogLevel.DEBUG, "Closing process '" + process.toString() + "'.");
-        process.destroyForcibly();
+        process.destroy();
+        /*
         if(process.isAlive()){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not close process '" + process.toString() + "'.");
         }else {
             testCase.log(LogLevel.EXECUTED, "Closed application process.");
         }
-
+        */
     }
 
     public List<String> listActiveRunningProcessesOnLocalMachine(){
@@ -151,9 +152,9 @@ public class ApplicationManager {
                     return;
                 }
                 process = new ProcessBuilder(commands).start();
-                testCase.log(LogLevel.EXECUTED, "Started program '" + String.join(" ", commands) + "'.");
+                testCase.log(LogLevel.EXECUTED, "Started program '" + StringManagement.join(" ", commands) + "'.");
             } catch (IOException e) {
-                testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot start program '" + String.join(" ", commands) + "'. Message: " + e.getMessage());
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot start program '" + StringManagement.join(" ", commands) + "'. Message: " + e.getMessage());
             }
         }
 

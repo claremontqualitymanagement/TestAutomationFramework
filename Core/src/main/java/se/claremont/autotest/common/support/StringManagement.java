@@ -28,6 +28,30 @@ public class StringManagement {
 
     }
 
+    public static String join(String joint, HashSet<String> stringList){
+        return join(joint, stringList.toArray(new String[0]));
+    }
+
+    public static String join(String joint, List<String> stringList){
+        return join(joint, stringList.toArray(new String[0]));
+    }
+
+    public static String join(String joint, Set<String> stringSet){
+        return join(joint, stringSet.toArray(new String[0]));
+    }
+
+    public static String join(String joint, String[] stringList){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < stringList.length; i++){
+            sb.append(stringList[i]).append(joint);
+        }
+        String returnString = sb.toString();
+        if(returnString.length() >= joint.length()){
+            returnString = returnString.substring(0, returnString.length()-joint.length());
+        }
+        return returnString;
+    }
+
     /**
      * Method naming should only consist of method name safe characters, and be formatted according to method naming conventions in java, and according to coding guidelines.
      *
@@ -202,7 +226,7 @@ public class StringManagement {
                 timeParts.add(diff + " " + unitName.toLowerCase());
             }
         }
-        return String.join(", ", timeParts);
+        return StringManagement.join(", ", timeParts);
     }
 
 }

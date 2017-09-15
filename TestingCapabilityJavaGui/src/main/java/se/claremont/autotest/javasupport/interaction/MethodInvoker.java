@@ -1,6 +1,7 @@
 package se.claremont.autotest.javasupport.interaction;
 
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 
 import java.lang.reflect.InvocationTargetException;
@@ -144,7 +145,7 @@ public class MethodInvoker {
      */
     public Object invokeTheFirstEncounteredMethod(Object component, List<String> methodNames, Object... args){
         if(component == null || methodNames == null || methodNames.size() == 0){
-            log(LogLevel.DEBUG, "Could not invoke any of the methods ('" + String.join("', '", methodNames) + "') since the object to invoke them on was null.");
+            log(LogLevel.DEBUG, "Could not invoke any of the methods ('" + StringManagement.join("', '", methodNames) + "') since the object to invoke them on was null.");
             return null;
         }
         for(String methodName : methodNames){
@@ -171,7 +172,7 @@ public class MethodInvoker {
                 }
             }
         }
-        log(LogLevel.FRAMEWORK_ERROR, "None of the suggested methods ('" + String.join("', '", methodNames) + "') were found to be suitable for element of class '" + getClassName(component) + "'. The methods available for this object are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)));
+        log(LogLevel.FRAMEWORK_ERROR, "None of the suggested methods ('" + StringManagement.join("', '", methodNames) + "') were found to be suitable for element of class '" + getClassName(component) + "'. The methods available for this object are:" + System.lineSeparator() + StringManagement.join(System.lineSeparator(), getAvalableMethods(component)));
         return null;
     }
 
@@ -224,7 +225,7 @@ public class MethodInvoker {
             }
         }
         log(LogLevel.EXECUTION_PROBLEM, "Tried invoking method '" + methodName + "' on component, but that method could not be found for this component." + System.lineSeparator() +
-                "Class is '" + getClassName(component) + "' and available methods are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)) +
+                "Class is '" + getClassName(component) + "' and available methods are:" + System.lineSeparator() + StringManagement.join(System.lineSeparator(), getAvalableMethods(component)) +
                 System.lineSeparator() + "Remember to cast any return object upon usage.");
         return null;
     }
@@ -260,7 +261,7 @@ public class MethodInvoker {
             }
         }
         log(LogLevel.EXECUTION_PROBLEM, "Tried invoking method '" + methodName + "' on component, but that method could not be found for this component." + System.lineSeparator() +
-                "Class is '" + getClassName(component) + "' and available methods are:" + System.lineSeparator() + String.join(System.lineSeparator(), getAvalableMethods(component)) +
+                "Class is '" + getClassName(component) + "' and available methods are:" + System.lineSeparator() + StringManagement.join(System.lineSeparator(), getAvalableMethods(component)) +
                 System.lineSeparator() + "Remember to cast any return object upon usage.");
         return null;
     }

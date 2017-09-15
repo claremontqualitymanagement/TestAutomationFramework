@@ -2,10 +2,12 @@ package se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport;
 
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.Arrays.sort;
 
 /**
  * Created by jordam on 2017-04-10.
@@ -117,27 +119,35 @@ public class NewErrorsList {
             } else {
                 returnString += "Classes ";
             }
-            returnString += "where errors were found: '" + String.join("', '", classNames.keySet() + "'<br>.") + System.lineSeparator();
+            returnString += "where errors were found: '" + StringManagement.join("', '", classNames.keySet()) + "'<br>." + System.lineSeparator();
         }
         if(testStepNames.size() == 1){
-            returnString += "All errors were found in test step '" + String.join("', '", testStepNames.keySet() + "'<br>.") + System.lineSeparator();
+            returnString += "All errors were found in test step '" + StringManagement.join("', '", testStepNames.keySet()) + "'<br>." + System.lineSeparator();
         }
         return returnString;
     }
 
     private void moveUnSharedLogPostsToOtherList() {
-        actualSharedErrors.stream().filter(o -> o.testCasesWhereEncountered.size() == 1).forEach(o -> nonSharedErrors.add(o));
-        actualSharedErrors = actualSharedErrors.stream().filter(o -> o.testCasesWhereEncountered.size() > 1).collect(Collectors.toList());
+        List<NewError> removeList = new ArrayList<>();
+        for(NewError error : actualSharedErrors){
+            if(error.testCasesWhereEncountered.size() == 1) {
+                nonSharedErrors.add(error);
+                removeList.add(error);
+            }
+        }
+        actualSharedErrors.removeAll(removeList);
     }
 
     private void sortSharedErrorsWithThoseWhoHasTheMostTestCasesFirst() {
-        actualSharedErrors.stream().sorted(Comparator.comparingInt(NewError::getNumberOfTestCases).reversed());
+        for(NewError error : actualSharedErrors){
+            sort(actualSharedErrors.toArray());
+        }
     }
 
     private boolean testCaseHasProblemRecordsNotPartOfSharedLogRecords(TestCase testCase) {
         for(NewError newError : nonSharedErrors){
-            if(newError.testCasesWhereEncountered.stream().anyMatch(o -> o.isSameAs(testCase))){
-                return true;
+            for(TestCase testCase1 : newError.testCasesWhereEncountered){
+                if(testCase1.isSameAs(testCase)) return true;
             }
         }
         return false;
@@ -261,8 +271,9 @@ public class NewErrorsList {
     }
 
     private void convertPotentialMatchingLogPostsListToSharedErrorsList() {
-        potentialMatchingLogPosts.stream()
-                .forEach(o -> actualSharedErrors.add(new NewError(o)));
+        for(LogPost logPost : potentialMatchingLogPosts){
+            actualSharedErrors.add(new NewError(logPost));
+        }
     }
 
     private void fillPotentialMatchingLogPostsList(){

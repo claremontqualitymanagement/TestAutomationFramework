@@ -17,8 +17,9 @@ public class TestExecutionTest extends UnitTestClass{
 
     @After
     public void teardown() throws IOException {
-        for(File directory : new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER)).listFiles(File::isDirectory)){
-            if(directory.getName().contains(runName)){
+        File baseFolder = new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        for(File directory : baseFolder.listFiles()){
+            if(directory.isDirectory() && directory.getName().contains(runName)){
                 directory.delete();
                 return;
             }
@@ -38,8 +39,9 @@ public class TestExecutionTest extends UnitTestClass{
      }
 
      private boolean summaryFileFound(){
-         for(File directory : new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER)).listFiles(File::isDirectory)){
-             if(directory.getName().contains(runName)){
+        File baseLogFolder = new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+         for(File directory : baseLogFolder.listFiles()){
+             if(directory.isDirectory() && directory.getName().contains(runName)){
                  for(File file : directory.listFiles()){
                      if(file.getName().equals("_summary.html")){
                          return true;
