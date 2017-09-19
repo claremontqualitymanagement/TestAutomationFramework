@@ -68,7 +68,7 @@ public class TestRun {
         settings.setValue(parameter, value);
     }
 
-    public void setCustomSettingsValue(String parameter, String value){
+    public static void setCustomSettingsValue(String parameter, String value){
         initializeIfNotInitialized();
         settings.setCustomValue(parameter, value);
     }
