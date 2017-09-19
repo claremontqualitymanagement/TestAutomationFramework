@@ -41,7 +41,4 @@ public class TestCaseHtmlReportTests {
         Assert.assertTrue(testCase.testCaseResult.testCaseLog.toLogSections().size() == 2);
     }
 
-
-
-
 }

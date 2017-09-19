@@ -1751,9 +1751,19 @@ public class WebInteractionMethods implements GuiDriver {
             try {
                 JavascriptExecutor javascriptExecutor = ((JavascriptExecutor)driver);
                 returnObject = javascriptExecutor.executeScript(script);
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED,
-                        "Executed the javascript '" + script + "'.",
-                        "Executed the javascript:" + StringManagement.htmlContentToDisplayableHtmlCode(script));
+                String returnObjectAsString = null;
+                if(returnObject != null){
+                    try{
+                        returnObjectAsString = returnObject.toString();
+                    }catch (Exception ignored){}
+                }
+                String logMessageText = "Executed the javascript '" + script + "'.";
+                String logMessageHtml = "Executed the javascript:" + StringManagement.htmlContentToDisplayableHtmlCode(script);
+                if(returnObjectAsString != null){
+                    logMessageText += " Returned '" + returnObjectAsString + "'.";
+                    logMessageHtml += "<br>Returned:<br>" + StringManagement.htmlContentToDisplayableHtmlCode(returnObjectAsString);
+                }
+                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, logMessageText, logMessageHtml);
             }catch (Exception e){
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                         "Errors while trying to run the javascript:" + SupportMethods.LF + script + SupportMethods.LF + "Error:" + SupportMethods.LF + e.toString(),

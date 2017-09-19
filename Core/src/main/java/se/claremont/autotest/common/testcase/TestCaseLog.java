@@ -153,7 +153,7 @@ public class TestCaseLog {
      * @param testStepClassName The name of the test class
      */
     public void log(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
-        LogPost logPost = new LogPost(logLevel, message, null, testCaseName, testStepName, testStepClassName);
+        LogPost logPost = new LogPost(logLevel, message, htmlMessage, testCaseName, testStepName, testStepClassName);
         logger.debug( logPost.toString() );
         outputLogPost(logPost);
         logPosts.add(logPost);

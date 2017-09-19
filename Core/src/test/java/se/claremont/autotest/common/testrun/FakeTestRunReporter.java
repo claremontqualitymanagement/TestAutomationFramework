@@ -33,7 +33,6 @@ public class FakeTestRunReporter implements TestRunReporter {
 
     @Override
     public void evaluateTestSet(TestSet testSet) {
-        //Todo: Examine why the assessments for these indicate zero evaluations.
         numberOfTestSetEvaluationsPerformed++;
         testSetNames.add(testSet.name);
     }

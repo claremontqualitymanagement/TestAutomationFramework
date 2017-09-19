@@ -197,7 +197,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "     .logpost:nth-child(odd), .testdatapost:nth-child(odd)  { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
                 "     .logpost, .testdatapost                                { border-bottom: 1px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
                 "      td.logPostLogLevel       { width: 130px; }" + LF +
-                "      td.logMessage            { max-width: 99%; }" + LF +
+                "      td.logMessage            { max-width: 99%; overflow: scroll; }" + LF +
                 "      img.screenshot:hover     { margin: -1px -2px -2px -1px; width: 340px; }" + SupportMethods.LF +
                 "      img.screenshot           { border: 0px none; width:105px; background: #999; }" + LF +
                 "      img.bottomlogo           { width: 20%; }" + LF +
