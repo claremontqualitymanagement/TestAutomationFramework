@@ -9,7 +9,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebInteractionMethodsTest extends TestSet{
+public class WebInteractionMethodsTest {
 
     @Test
     public void childObjectIdentificationTest(){
