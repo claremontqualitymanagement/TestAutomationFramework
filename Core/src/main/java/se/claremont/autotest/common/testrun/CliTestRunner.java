@@ -209,10 +209,10 @@ public class CliTestRunner {
         else
             System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
 
-        if(!testMode) {
-            System.exit(TestRun.exitCode);
-        } else {
+        if(testMode) {
             System.setProperty("TAF latest test run exit code", String.valueOf(TestRun.exitCode));
+        } else {
+            System.exit(TestRun.exitCode);
         }
     }
 
