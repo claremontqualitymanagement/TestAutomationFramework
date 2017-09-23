@@ -35,22 +35,33 @@ public class ResourceManager {
         }
     }
 
-    public static Class extractFileFromResourcesAndCompileAndLoadIt(File resourceFile) {
-        String source = null;
+    private static String getContent(File resourceFile){
         try {
-            source = String.join(System.lineSeparator(), Files.readAllLines(resourceFile.toPath()));
+            return String.join(System.lineSeparator(), Files.readAllLines(resourceFile.toPath()));
         } catch (IOException e) {
-            Assume.assumeTrue("Could not read resource file '" + resourceFile.getName() + "'.", false);
             return null;
         }
+    }
+
+    private static String packagePath(String source, File resourceFile){
         String[] sourceFileLines = source.split(System.lineSeparator());
-        String packagePath = "";
         for(String line : sourceFileLines){
             if(line.trim().startsWith("package")){
-                packagePath = line.trim().substring(8).replace(";", "" ).replace(".", "/") + "/" + resourceFile.getName();
-                break;
+                return line.
+                        trim().
+                        substring("package".length()).
+                        replace(";", "" ).
+                        replace(".", "/") +
+                        "/" + resourceFile.getName();
             }
         }
+        return "";
+    }
+
+    public static Class extractFileFromResourcesAndCompileAndLoadIt(File resourceFile) {
+        String source = getContent(resourceFile);
+        Assume.assumeNotNull("Could not retrieve content from resource file '" + resourceFile.getName() + "'.");
+        String packagePath = packagePath(source, resourceFile);
         File root = new File("/java"); // On Windows running on C:\, this is C:\java.
         File sourceFile = new File(root, packagePath);
         sourceFile.getParentFile().mkdirs();
