@@ -1,6 +1,8 @@
 package se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification;
 
+import org.openqa.selenium.WebElement;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
+import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
@@ -8,14 +10,16 @@ import java.util.ArrayList;
 
 public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
 
-    private static WebInteractionMethods web;
-
     public static WebElementList fromAllSubElementsOf(DomElement domElement, WebInteractionMethods web){
         long startTime = System.currentTimeMillis();
         ArrayList<String> identificationDescription = new ArrayList<>();
         WebElementList webElementList = new WebElementList(domElement.asPositionBasedWebElement(web).childrenRecursive(), web, identificationDescription);
         webElementList.identificationDescription.add("Identified " + webElementList.elements.size() + " sub-element(s) of " + domElement.LogIdentification() + ". Operation took " + (System.currentTimeMillis() - startTime) + " milliseconds. ");
         return webElementList;
+    }
+
+    public static DomElement subElementOfOtherElement(DomElement parentElement, DomElement childElement, WebInteractionMethods web){
+        return new DomElement(web.getRuntimeElementWithoutLogging(parentElement, childElement));
     }
 
     public static WebElementList fromAllSubElementsOfElementWithText(String text, WebInteractionMethods web){

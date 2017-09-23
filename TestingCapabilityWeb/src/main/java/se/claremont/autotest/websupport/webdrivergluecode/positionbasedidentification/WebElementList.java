@@ -36,6 +36,7 @@ public class WebElementList extends ElementsList{
         return (System.currentTimeMillis()-startTime) + " milliseconds spent in this operation. ";
     }
 
+
     public WebElementList keepOnlyVisibleElements(){
         long startTime = System.currentTimeMillis();
         ArrayList<PositionBasedWebElement> returnList = new ArrayList<>();

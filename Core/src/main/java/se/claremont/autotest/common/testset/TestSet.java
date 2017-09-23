@@ -28,7 +28,7 @@ import java.util.List;
 //@RunWith(se.claremont.autotest.common.testrun.TafTestRunner.class)
 @JsonIgnoreProperties({"currentTestCase", "currentTestNameInternal"})
 public abstract class TestSet { //non-abstract although it should be, to enable JSON object mapping with ease
-    List<TestCase> currentTestCases = new ArrayList<>();
+    public List<TestCase> currentTestCases = new ArrayList<>();
     @JsonProperty public String name;
     @JsonProperty public final KnownErrorsList knownErrorsList = new KnownErrorsList();
     static Object testSet;

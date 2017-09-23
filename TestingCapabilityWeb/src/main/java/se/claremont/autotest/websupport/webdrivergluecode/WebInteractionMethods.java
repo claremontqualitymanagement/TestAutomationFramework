@@ -2692,6 +2692,19 @@ public class WebInteractionMethods implements GuiDriver {
     }
 
     /**
+     * Gets a runtime element from the WebDriver driver to be able to interact with it
+     *
+     * @param parent The DomElement limiting search scope. Only the descendants of this element will be searched.
+     * @param descendantToReturn The DomElement being sought after.
+     * @return WebElement for WebDriver interaction
+     */
+    public WebElement getRuntimeElementWithoutLogging(DomElement parent, DomElement descendantToReturn){
+        if(parent == null || descendantToReturn == null) return null;
+        List<WebElement> relevantWebElements = gatherRelevantElements(parent, descendantToReturn);
+        return mostRelevantElement(relevantWebElements, descendantToReturn);
+    }
+
+    /**
      * Gathers a list of relevant elements when trying to get hold of the WebElement corresponding to a DomElement.
      *
      * @param element The DomElement to find
@@ -2753,6 +2766,77 @@ public class WebInteractionMethods implements GuiDriver {
         }
         return webElements;
     }
+
+    /**
+     * Gathers a list of relevant elements when trying to get hold of the WebElement corresponding to a DomElement.
+     *
+     * @param parentDomElement The root element. Search is limited to descendants of this element.
+     * @param descendantToFind The DomElement to find amoing the descendants of parentDomElement.
+     * @return Returns a list of relevant matches for DomElement
+     */
+    private List<WebElement> gatherRelevantElements(DomElement parentDomElement, DomElement descendantToFind){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+        if(parentDomElement == null) return null;
+        WebElement parent = getRuntimeElementWithoutLogging(parentDomElement);
+        if(parent == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Cannot find parent element " + parentDomElement.LogIdentification() + " so cannot find the DomElement " + descendantToFind.LogIdentification() + " among its descendants.");
+            return null;
+        }
+
+        List<WebElement> webElements = new ArrayList<>();
+        if(descendantToFind == null) {
+            log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
+            return webElements;
+        }
+        try {
+            for(String recognitionString : descendantToFind.recognitionStrings){
+                if (descendantToFind.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
+                    webElements.addAll(parent.findElements(By.linkText(recognitionString)));
+                } else if (descendantToFind.identificationType == DomElement.IdentificationType.BY_ID) {
+                    webElements.addAll(parent.findElements(By.id(recognitionString)));
+                } else if(descendantToFind.identificationType == DomElement.IdentificationType.BY_X_PATH) {
+                    webElements.addAll(parent.findElements(By.xpath(recognitionString)));
+                } else if(descendantToFind.identificationType == DomElement.IdentificationType.BY_NAME) {
+                    webElements.addAll(parent.findElements(By.name(recognitionString)));
+                } else if (descendantToFind.identificationType == DomElement.IdentificationType.BY_CSS){
+                    webElements.addAll(parent.findElements(By.cssSelector(recognitionString)));
+                } else if (descendantToFind.identificationType == DomElement.IdentificationType.BY_CLASS){
+                    webElements.addAll(parent.findElements(By.className(recognitionString)));
+                } else if (descendantToFind.identificationType == DomElement.IdentificationType.BY_VISIBLE_TEXT){
+                    webElements.addAll(parent.findElements(By.xpath(".//*[text()='" + recognitionString + "']")));
+                    if(webElements.size() == 0){
+                        webElements.addAll(parent.findElements(By.xpath(".//*[contains(text(), '" + recognitionString + "')]")));
+                    }
+                } else if(descendantToFind.identificationType == DomElement.IdentificationType.BY_ATTRIBUTE_VALUE){
+                    if(!recognitionString.contains("=")){
+                        log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
+                                "for example 'href=http://myserver.com/mylink' or possibly 'href=\"http://myserver.com/mylink\"'." + System.lineSeparator() +
+                                "For element " + descendantToFind.name + " the recognition string was '" + recognitionString + ".");
+                        continue;
+                    }
+                    String attributeName = recognitionString.split("=")[0];
+                    String attributeValue = recognitionString.substring(recognitionString.indexOf("=") + 1);
+                    if(attributeValue.startsWith("\"") && attributeValue.endsWith("\"")){
+                        attributeValue = attributeValue.substring(1, attributeValue.length()-1);
+                    } else if (attributeValue.startsWith("'") && attributeValue.endsWith("'")){
+                        attributeValue = attributeValue.substring(1, attributeValue.length()-1);
+                    }
+                    webElements.addAll(driver.findElements(By.xpath("//*[@" + attributeName + "='" + attributeValue +"']")));
+                } else {
+                    log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + descendantToFind.LogIdentification() + ", but the IdentificationType '" + descendantToFind.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
+                    saveDesktopScreenshot();
+                    saveHtmlContentOfCurrentPage();
+                }
+            }
+        }catch (Exception e){
+            log(LogLevel.DEBUG, "Tried to identify " + descendantToFind.LogIdentification() + ", but something went wrong. " + e.getMessage());
+        }
+        return webElements;
+    }
+
 
     /**
      * If several elements are found, the displayed one is returned. If several still are displayed, returning the enabled one.
