@@ -1,5 +1,6 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -69,6 +70,13 @@ public class WebInteractionMethods implements GuiDriver {
             WebDriverManager webDriverManager = new WebDriverManager(testCase);
             driver = webDriverManager.initializeWebDriver(webBrowser);
             driver.manage().window().maximize();
+            if(driver.getWindowHandles() == null || driver.getWindowHandles().size() == 0){
+                log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized driver.");
+                saveScreenshot(null);
+                saveDesktopScreenshot();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
+                haltFurtherExecution();
+            }
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
             saveScreenshot(null);
@@ -90,8 +98,15 @@ public class WebInteractionMethods implements GuiDriver {
             WebDriverManager webDriverManager = new WebDriverManager(testCase);
             driver = webDriverManager.initializeWebDriver(browserType);
             driver.manage().window().maximize();
+            if(driver.getWindowHandles() == null || driver.getWindowHandles().size() == 0){
+                log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized driver.");
+                saveScreenshot(null);
+                saveDesktopScreenshot();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
+                haltFurtherExecution();
+            }
         }catch (Exception e){
-            log(LogLevel.FRAMEWORK_ERROR, "Could not initialize if not driver is initialized. Error: " + e.toString());
+            log(LogLevel.EXECUTION_PROBLEM, "Could not initialize if not driver is initialized. Error: " + e.toString());
             saveScreenshot(null);
             saveDesktopScreenshot();
             writeRunningProcessListDeviationsSinceTestCaseStart();
@@ -104,6 +119,13 @@ public class WebInteractionMethods implements GuiDriver {
         try{
             this.driver = driver;
             driver.manage().window().maximize();
+            if(driver.getWindowHandles() == null || driver.getWindowHandles().size() == 0){
+                log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver.");
+                saveScreenshot(null);
+                saveDesktopScreenshot();
+                writeRunningProcessListDeviationsSinceTestCaseStart();
+                haltFurtherExecution();
+            }
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Could not initializeIfNotInitialized driver. Error: " + e.getMessage());
             saveScreenshot(null);

@@ -83,7 +83,21 @@ public class TestCase {
         String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
         long maxMemory = Runtime.getRuntime().maxMemory();
         memoryInfo += "Maximum memory (bytes): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory) + ". ";
-        testCaseResult.testCaseLog.log(LogLevel.INFO, "Running tests as user '" + Taf.tafUserInfon().getUserAccountName() + "' on machine with " + Taf.tafUserInfon().getOperatingSystemName() + " as operating system (version reported as '" + Taf.tafUserInfon().getOperatingSystemVersion() + "', and architecture '" + Taf.tafUserInfon().getOperatingSystemArchitecture() +"') and " + Runtime.getRuntime().availableProcessors() + " processors. " + memoryInfo);
+        testCaseResult.testCaseLog.log(LogLevel.INFO,
+                "Running tests as user '" + Taf.tafUserInfon().getUserAccountName() +
+                "' on machine with " + Taf.tafUserInfon().getOperatingSystemName() +
+                        " as operating system (version reported as '" + Taf.tafUserInfon().getOperatingSystemVersion() +
+                        "', and architecture '" + Taf.tafUserInfon().getOperatingSystemArchitecture() +
+                        "') and " + Runtime.getRuntime().availableProcessors() + " processors. " +
+                        memoryInfo);
+        addTestCaseData("Test client", Taf.tafUserInfon().getCanonicalHostName() + " (" + Taf.tafUserInfon().getHostName() + " at " + Taf.tafUserInfon().getHostAdress() + ")");
+        addTestCaseData("Test client OS user", Taf.tafUserInfon().getUserAccountName());
+        addTestCaseData("Test client OS", Taf.tafUserInfon().getOperatingSystemName());
+        addTestCaseData("Test client OS version", Taf.tafUserInfon().getOperatingSystemVersion());
+        addTestCaseData("Test client architecture", Taf.tafUserInfon().getOperatingSystemArchitecture());
+        addTestCaseData("Test client CPU core count", String.valueOf(Runtime.getRuntime().availableProcessors()));
+        addTestCaseData("Test client memory", memoryInfo);
+        addTestCaseData("Java version", Taf.tafUserInfon().getJavaVersion());
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(testCaseResult));
         reporters.add(new TestCaseLogReporterHtmlLogFile(testCaseResult));
         ApplicationManager applicationManager = new ApplicationManager(this);
