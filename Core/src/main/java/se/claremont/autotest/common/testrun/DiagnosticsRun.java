@@ -30,6 +30,7 @@ public class DiagnosticsRun implements Runnable {
 
     @Override
     public void run() {
+        long startTime = System.currentTimeMillis();
         PrintStream originalStream = System.out;
 
         PrintStream dummyStream    = new PrintStream(new OutputStream(){
@@ -48,6 +49,7 @@ public class DiagnosticsRun implements Runnable {
                 TestSet_Tests.class,
                 ValuePair_Tests.class,
                 HtmlSummaryReport_Test.class,
+                EnvironmentSetupTests.class,
                 Settings_Tests.class);
 
         System.setOut(originalStream);
@@ -58,6 +60,7 @@ public class DiagnosticsRun implements Runnable {
         }
 
         System.out.println();
+        System.out.println("Diagnostic test run took " + (System.currentTimeMillis() - startTime)/1000 + " seconds." + System.lineSeparator());
         System.out.println("#Diagnostic tests run: " + result.getRunCount());
         System.out.println("#Failed tests: " + result.getFailureCount());
         System.out.println(System.lineSeparator() + "Over all diagnostics result. Successful: " + result.wasSuccessful());
