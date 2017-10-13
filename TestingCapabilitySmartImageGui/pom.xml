@@ -33,6 +33,10 @@
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TechnologiesSupport</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityWeb</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

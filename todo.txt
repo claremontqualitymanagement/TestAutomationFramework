@@ -3,4 +3,4 @@ Re-enable EyeAutomate support (with their jar file in resources folder)
 Place EnvironmentSetupTests class in resources folder
 Create plugin-structure for reports
 Create plugin-structure for technologies
-Replace java classes with the new ones - including Helper class
+Replace java classes with the new ones

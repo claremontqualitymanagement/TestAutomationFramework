@@ -124,6 +124,9 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return "  <head>" + LF + LF +
                 "    <title>" + testCaseResult.testName + " execution log</title>" + LF +
                 "    <link rel=\"shortcut icon\" href=\"http://46.101.193.212/TAF/images/facicon.png\">" + LF +
+                "    <link rel=\"stylesheet\" href=\"https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css\">" + System.lineSeparator() +
+                "    <script src=\"https://code.jquery.com/jquery-1.11.3.min.js\"></script>" + System.lineSeparator() +
+                "    <script src=\"https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js\"></script>" + System.lineSeparator() +
                 "    <meta name=\"description\" content=\"Test case result for test run for test case " + testCaseResult.testName + "\"/>" + LF +
                 "    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" + LF +
                 "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>" + LF + LF +

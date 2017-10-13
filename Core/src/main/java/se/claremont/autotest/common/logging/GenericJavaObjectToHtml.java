@@ -14,6 +14,7 @@ public class GenericJavaObjectToHtml {
 
     public static String toHtml(Object object, int depth){
         if(object == null) return "<span class='nullobject'><i>null</i></span>";
+        if(depth > 15) return "<span class='overflowerror'><i>...</i></span>";
         if(returnAsPureText(object)) return tab(depth) + (String)object.toString().replace(System.lineSeparator(), "<br>" + System.lineSeparator()) ;
         String html = invokeDeclaredToHtmlMethodIfExist(object); //If the element type has a toHtml() method, use this.
         if(html != null) return html;

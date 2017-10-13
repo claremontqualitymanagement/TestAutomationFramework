@@ -1,19 +1,27 @@
 package se.claremont.autotest.eyeautomatesupport;
 
 import eyeautomate.ScriptRunner;
+import org.junit.Assume;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.common.logging.GenericJavaObjectToHtml;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Driver for image based GUI automation with smart image recognition. This enables any OS to be automated.
@@ -32,7 +40,39 @@ public class EyeAutomateDriver {
         } else {
             this.testCase = testCase;
         }
+        addJarFileToClassPath(getTestFileFromTestResourcesFolder("libs/EyeAutomate.jar"));
+        testCase.log(LogLevel.INFO, "Started EyeAutomate driver:" + System.lineSeparator() + GenericJavaObjectToHtml.toHtml(scriptRunner));
     }
+
+    public static String getTestFileFromTestResourcesFolder(String fileName){
+        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
+        assertNotNull("Could not identify file '" + fileName + "'", url);
+        File file = new File(url.getPath());
+        Assume.assumeNotNull(file);
+        return file.getAbsolutePath();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private void addURL(URL url) throws Exception {
+        URLClassLoader classLoader
+                = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class clazz= URLClassLoader.class;
+        // Use reflection
+        Method method= clazz.getDeclaredMethod("addURL", URL.class);
+        method.setAccessible(true);
+        method.invoke(classLoader, url);
+    }
+
+    private void addJarFileToClassPath(String filePath){
+        try {
+            testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
+            addURL(new File(filePath).toURL());
+        } catch (Exception e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + filePath + "' to classpath. Error: " + e.getMessage());
+        }
+    }
+
 
     public void runScriptFile(String filePath){
         scriptRunner.runScript(filePath);

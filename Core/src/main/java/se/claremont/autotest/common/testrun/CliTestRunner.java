@@ -220,7 +220,7 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         JUnitCore junit = new JUnitCore();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+        //TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
 
         for (String arg : args) {
             if (arg.toLowerCase().equals("diagnostic") || arg.toLowerCase().equals("diagnostics")) {

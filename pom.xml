@@ -38,7 +38,7 @@
         <module>TestingCapabilityJson</module>
         <module>TestingCapabilityRestApi</module>
         <module>TestingCapabilityWeb</module>
-        <!--<module>TestingCapabilitySmartImageGui</module>-->
+        <module>TestingCapabilitySmartImageGui</module>
         <module>TafFull</module>
         <!--
         <module>SandboxTests</module>

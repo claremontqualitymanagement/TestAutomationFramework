@@ -54,9 +54,14 @@ public class DiagnosticsRun implements Runnable {
 
         System.setOut(originalStream);
 
-        if (result.getFailures().size() > 0) System.out.println();
-        for (Failure failure : result.getFailures()) {
-            System.out.println("Identified failure: " + failure.toString());
+        if (result.getFailures().size() > 0) {
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
+            System.out.println();
+            for (Failure failure : result.getFailures()) {
+                System.out.println("Identified failure: " + failure.toString());
+            }
+        } else {
+            TestRun.exitCode = TestRun.ExitCodeTable.INIT_OK.getValue();
         }
 
         System.out.println();

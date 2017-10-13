@@ -112,7 +112,7 @@ public class LibraryLoader {
     }
 
     public void tryLoadLibrary(java.lang.String path){
-        if(path.contains("WFAPILink.dll"))return;
+        //if(path.contains("WFAPILink.dll"))return;
         if(path == null || path.length() == 0 || Files.isDirectory(Paths.get(path))){
             log(LogLevel.EXECUTION_PROBLEM, "Cannot load file since file path is empty.");
             return;
