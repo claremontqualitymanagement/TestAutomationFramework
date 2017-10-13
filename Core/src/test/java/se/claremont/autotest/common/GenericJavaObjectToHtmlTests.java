@@ -1,8 +1,14 @@
 package se.claremont.autotest.common;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.GenericJavaObjectToHtml;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GenericJavaObjectToHtmlTests {
 
@@ -20,5 +26,22 @@ public class GenericJavaObjectToHtmlTests {
     @Test
     public void primitivesTestStringReplacementOfLineBreakWithBrTag(){
         Assert.assertTrue("'" + GenericJavaObjectToHtml.toHtml("String" + System.lineSeparator()) + "'", GenericJavaObjectToHtml.toHtml("String" + System.lineSeparator()).contains("String<br>"));
+    }
+
+    @Test
+    @Ignore
+    public void nameIdentificationTests() throws IOException {
+        Files.write(Paths.get("C:\\temp\\test.html"), GenericJavaObjectToHtml.toHtmlPage(new TestObject()).getBytes());
+        //System.out.println(GenericJavaObjectToHtml.toHtml(new TestObject()));
+    }
+
+    class TestObject{
+        String name = "ThisTestObject";
+        TestObject2 subObject = new TestObject2();
+
+    }
+
+    class TestObject2{
+        String id = "12425";
     }
 }

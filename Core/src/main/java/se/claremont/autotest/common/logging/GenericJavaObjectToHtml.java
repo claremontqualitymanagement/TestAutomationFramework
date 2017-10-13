@@ -9,7 +9,7 @@ import java.util.Map;
 public class GenericJavaObjectToHtml {
 
     public static String toHtml(Object object){
-        return toHtml(object, 1);
+        return toHtml(object, 5);
     }
 
     public static String toHtml(Object object, int depth){
@@ -19,9 +19,24 @@ public class GenericJavaObjectToHtml {
         if(html != null) return html;
         StringBuilder sb = new StringBuilder();
         sb.append(tab(depth)).append("<div data-role='collapsible' class='").append(object.getClass().getSimpleName().toLowerCase()).append("'>").append(System.lineSeparator());
-        sb.append(tab(depth + 1)).append("<h" + depth + ">").append(System.lineSeparator()).append("<span class='classname'>").append(object.getClass().getSimpleName()).append("</span></h" + depth + ">").append(System.lineSeparator());
+        String objectIdentification = attemptFindElementIdentification(object, 30);
+        if(objectIdentification == null){
+            sb.append(tab(depth + 1))
+                    .append("<h" + depth + ">")
+                    .append("<span class='classname'>")
+                    .append(object.getClass().getSimpleName())
+                    .append("</span></h" + depth + ">")
+                    .append(System.lineSeparator());
+        } else {
+            sb.append(tab(depth + 1))
+                    .append("<h" + depth + ">")
+                    .append("<span class='classname'>")
+                    .append(object.getClass().getSimpleName())
+                    .append(": '").append(objectIdentification).append("'</span></h" + depth + ">")
+                    .append(System.lineSeparator());
+        }
         sb.append(tab(depth + 1)).append("<p>").append(System.lineSeparator());
-        sb.append("<table>").append(System.lineSeparator());
+        sb.append(tab(depth + 2)).append("<table>").append(System.lineSeparator());
         for(Field field : object.getClass().getDeclaredFields()){
             field.setAccessible(true);
             Object value = null;
@@ -32,22 +47,23 @@ public class GenericJavaObjectToHtml {
             }
             if(Collection.class.isAssignableFrom(object.getClass())){ //If the object is a collection
                 for(Object o : (Collection)object){
-                    sb.append(toHtml(o, depth + 1)).append(System.lineSeparator());
+                    sb.append(toHtml(o, depth + 3)).append(System.lineSeparator());
                 }
             } else if(Map.class.isAssignableFrom(object.getClass())){ //If the object is a map
                 for(java.lang.Object o : ((Map) object).keySet()){
-                    sb.append(toHtml(((Map)object).get(o), depth + 1)).append(System.lineSeparator());
+                    sb.append(toHtml(((Map)object).get(o), depth + 3)).append(System.lineSeparator());
                 }
             } else if(object.getClass().isArray()){
                 Object[] array = (Object[])object;
                 for(Object o : array){
-                    sb.append(toHtml(o, depth + 1)).append(System.lineSeparator());
+                    sb.append(toHtml(o, depth + 3)).append(System.lineSeparator());
                 }
             } else {
-                sb.append(tab(depth + 1)).append("<tr><td>").append(field.getName()).append("</td><td>").append(toHtml(value, depth + 1)).append("</td></tr>").append(System.lineSeparator());
+                if(field.getName().equals("this$0")) continue;
+                sb.append(tab(depth + 3)).append("<tr><td>").append(field.getName()).append("</td><td>").append(toHtml(value, depth + 3)).append("</td></tr>").append(System.lineSeparator());
             }
         }
-        sb.append("</table>").append(System.lineSeparator());
+        sb.append(tab(depth + 2)).append("</table>").append(System.lineSeparator());
         sb.append(tab(depth + 1)).append("</p>").append(System.lineSeparator());
         sb.append(tab(depth)).append("</div>").append(System.lineSeparator());
         return sb.toString();
@@ -68,6 +84,42 @@ public class GenericJavaObjectToHtml {
                 + "</html>" + System.lineSeparator();
     }
 
+    private static String attemptFindElementIdentification(Object object, int nameLengthLimit){
+        String objectName = invokeNameGettingMethodIfExist(object);
+        if(objectName != null) return "name=" + truncateString(objectName, nameLengthLimit);
+        objectName = attemptGetValueForFieldsNamed(object, new String[] {"name"});
+        if(objectName != null) return "name=" + truncateString(objectName, nameLengthLimit);
+        objectName = invokeIdGettingMethodIfExist(object);
+        if(objectName != null) return "id=" + truncateString(objectName, nameLengthLimit);
+        objectName = attemptGetValueForFieldsNamed(object, new String[]{"id"});
+        if(objectName != null) return "id=" + truncateString(objectName, nameLengthLimit);
+        objectName = attemptGetValueForFieldsNamed(object, new String[]{"guid", "uuid"});
+        if(objectName != null) return "uuid=" + truncateString(objectName, nameLengthLimit);
+        return null;
+    }
+
+    private static String truncateString(String instring, int length){
+        if(instring == null) return null;
+        if(instring.length() < length) return instring;
+        return instring.substring(0, length);
+    }
+
+    private static String attemptGetValueForFieldsNamed(Object object, String[] fieldNames){
+        for(Field field : object.getClass().getDeclaredFields()){
+            if(!field.getType().getSimpleName().equals("String")) continue;
+            field.setAccessible(true);
+            Object value = null;
+            for(String fieldName : fieldNames){
+                if(field.getName().toLowerCase().equals(fieldName)){
+                    try {
+                        value = field.get(object);
+                    } catch (IllegalAccessException ignored) {}
+                }
+                if (value != null) return value.toString();
+            }
+        }
+        return null;
+    }
 
     private static String invokeDeclaredToHtmlMethodIfExist(Object object){
         Class c = object.getClass();
@@ -75,10 +127,40 @@ public class GenericJavaObjectToHtml {
             if(method.getName().equals("toHtml") && method.getReturnType().equals(String.class)){
                 try {
                     return (String)method.invoke(object);
+                } catch (IllegalAccessException ignored) {
+                } catch (InvocationTargetException ignored) {
+                }
+            }
+        }
+        return null;
+    }
+
+    private static String invokeNameGettingMethodIfExist(Object object){
+        Class c = object.getClass();
+        for (Method method : c.getDeclaredMethods()) {
+            if(
+                    (method.getName().toLowerCase().replace("_", "").equals("name")
+                            || method.getName().toLowerCase().replace("_", "").equals("getname")
+                    )
+                            && method.getReturnType().equals(String.class)){
+                try {
+                    return (String)method.invoke(object);
+                } catch (IllegalAccessException ignored) {
+                } catch (InvocationTargetException ignored) {
+                }
+            }
+        }
+        return null;
+    }
+
+    private static String invokeIdGettingMethodIfExist(Object object){
+        Class c = object.getClass();
+        for (Method method : c.getDeclaredMethods()) {
+            if((method.getName().toLowerCase().replace("_", "").equals("id") || method.getName().toLowerCase().replace("_", "").equals("getid")) && method.getReturnType().equals(String.class)){
+                try {
+                    return (String)method.invoke(object);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();
                 }
             }
         }

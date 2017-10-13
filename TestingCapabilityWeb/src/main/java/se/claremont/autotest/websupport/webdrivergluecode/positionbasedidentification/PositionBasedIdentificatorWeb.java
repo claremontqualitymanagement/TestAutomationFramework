@@ -1,7 +1,7 @@
 package se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification;
 
-import org.openqa.selenium.WebElement;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
+import se.claremont.autotest.common.logging.GenericJavaObjectToHtml;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
@@ -15,6 +15,7 @@ public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
         ArrayList<String> identificationDescription = new ArrayList<>();
         WebElementList webElementList = new WebElementList(domElement.asPositionBasedWebElement(web).childrenRecursive(), web, identificationDescription);
         webElementList.identificationDescription.add("Identified " + webElementList.elements.size() + " sub-element(s) of " + domElement.LogIdentification() + ". Operation took " + (System.currentTimeMillis() - startTime) + " milliseconds. ");
+        web.getTestCase().testCaseResult.testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, null, "Identified the following elements:" + System.lineSeparator() + GenericJavaObjectToHtml.toHtml(webElementList));
         return webElementList;
     }
 
@@ -29,6 +30,7 @@ public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
         identificationDescription.add("Identified element [" + domElement.LogIdentification() + "] with text '" + text + "' to gather sub-elements from. Operation took " + (System.currentTimeMillis()-startTime) + " milliseconds. ");
         WebElementList webElementList = new WebElementList(domElement.asPositionBasedWebElement(web).childrenRecursive(), web, identificationDescription);
         webElementList.identificationDescription.add("Identified " + webElementList.elements.size() + " sub-element(s) of " + domElement.LogIdentification() + ". Operation took " + (System.currentTimeMillis() - startTime) + " milliseconds. ");
+        web.getTestCase().testCaseResult.testCaseLog.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, null, "Identified the following elements:" + System.lineSeparator() + GenericJavaObjectToHtml.toHtml(webElementList));
         return webElementList;
     }
 
