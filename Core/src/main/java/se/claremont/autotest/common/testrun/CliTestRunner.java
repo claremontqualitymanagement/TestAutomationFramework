@@ -252,7 +252,6 @@ public class CliTestRunner {
         }
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     private static void runTestClasses(){
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();

@@ -63,6 +63,8 @@ public class StringManagement {
                 replace("\\", "_").
                 replace("\"", "").
                 replace("'", "").
+                replace("—", "_").
+                replace("«", "_").
                 replace("!", "").
                 replace("?", "").
                 replace("é", "e").
@@ -84,6 +86,8 @@ public class StringManagement {
                 replace("{", "").
                 replace("}", "").
                 replace("”", "").
+                replace("-", "_").
+                replace(System.lineSeparator(), "").
                 replace("\"", "").
                 replace("@", "At").
                 replace("/", "_").

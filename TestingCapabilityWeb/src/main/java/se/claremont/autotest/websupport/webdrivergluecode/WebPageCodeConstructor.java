@@ -80,7 +80,7 @@ class WebPageCodeConstructor {
         if(numberOfUnMappedElements > 0){
             descriptors += System.lineSeparator() + "//If you run the ConstructWebPageCode() method with mapEvenBadlyIdentifiedElements = true the " + numberOfUnMappedElements + " elements now currently not mapped will get Xpath identifications.";
         }
-        SupportMethods.saveToFile(descriptors, pathToOutputFile);
+        SupportMethods.saveToFile(pageClassHeader(driver.getTitle()) + descriptors + pageClassFooter(), pathToOutputFile);
         return descriptors;
     }
 
@@ -107,6 +107,21 @@ class WebPageCodeConstructor {
         }
         methodNames.add(methodNameToTry);
         return methodNameToTry;
+    }
+
+    private static String pageClassHeader(String pageTitle){
+        StringBuilder sb = new StringBuilder();
+        sb.append("import se.claremont.autotest.websupport.DomElement;").append(System.lineSeparator());
+        sb.append(System.lineSeparator());
+        String className = StringManagement.methodNameWithOnlySafeCharacters(pageTitle);
+        if(className.length() > 50) className = className.substring(0,50);
+        sb.append("public class " + className.substring(0, 1).toUpperCase() + className.substring(1)).append("Page {").append(System.lineSeparator());
+        sb.append(System.lineSeparator());
+        return sb.toString();
+    }
+
+    private static String pageClassFooter(){
+        return System.lineSeparator() + "}" + System.lineSeparator();
     }
 
     private boolean methodNameAlreadyUsed(String nameToTry){
@@ -379,8 +394,8 @@ class WebPageCodeConstructor {
                     String suggestedElementConstructorString = "";
                     int numberOfElementsFound = driver.findElements(By.xpath("//" + tagName + "[contains(text(),'" + text + "')]")).size();
                     if (numberOfElementsFound == 1) {
-                        suggestedElementConstructorString += "\"//" + tagName + "[contains(text(),'" + text.replace("\"", "\\\"") + "')]\", DomElement.IdentificationType.BY_X_PATH";
-                        return new Constructor(unusedMethodName(suggestedElementName), suggestedElementConstructorString.replace("\"", "\\\""));
+                        suggestedElementConstructorString += "\"//" + tagName + "[contains(text(),'" + text.replace("\"", "\\\"").replace("'", "\"") + "')]\", DomElement.IdentificationType.BY_X_PATH";
+                        return new Constructor(unusedMethodName(suggestedElementName), suggestedElementConstructorString);
                     }
                 }
             }
