@@ -52,6 +52,7 @@ public class WebInteractionMethods implements GuiDriver {
     public WebDriver driver;
     private final TestCase testCase;
     @SuppressWarnings("CanBeFinal")
+
     private int standardTimeoutInSeconds = 5;
 
     private class NavigationError extends Exception{}
@@ -94,6 +95,10 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public WebInteractionMethods(TestCase testCase, WebDriverManager.WebBrowserType browserType){
         this.testCase = testCase;
+        if(browserType == WebDriverManager.WebBrowserType.NONE) {
+            driver = null;
+            return;
+        }
         try{
             WebDriverManager webDriverManager = new WebDriverManager(testCase);
             driver = webDriverManager.initializeWebDriver(browserType);
@@ -1707,59 +1712,68 @@ public class WebInteractionMethods implements GuiDriver {
         boolean doneOk = false;
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement)guiTableElement;
-        WebElement webElement;
-        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds *1000){
-            webElement = getRuntimeElementWithoutLogging(domElement);
-            List<String> partialMatches = new ArrayList<>();
-            boolean allValuesFoundInRow = false;
-            List<WebElement> rows = webElement.findElements(By.xpath(".//tr"));
-            for (WebElement row : rows)
-            {
-                ArrayList<String> rowStrings = new ArrayList<>();
-                boolean someValueFoundInRow = false;
-                boolean valueMissingOnRow = false;
-                List<WebElement> cells = row.findElements(By.xpath("(.//td | .//th)"));
-                for(String textToFindOnRow : textsToFindOnRow)
+        WebElement webElement = null;
+        try{
+            while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds *1000){
+                webElement = getRuntimeElementWithoutLogging(domElement);
+                List<String> partialMatches = new ArrayList<>();
+                boolean allValuesFoundInRow = false;
+                List<WebElement> rows = webElement.findElements(By.xpath(".//tr"));
+                for (WebElement row : rows)
                 {
-                    boolean thisValueFoundOnRow = false;
-                    for(WebElement cell : cells)
+                    ArrayList<String> rowStrings = new ArrayList<>();
+                    boolean someValueFoundInRow = false;
+                    boolean valueMissingOnRow = false;
+                    List<WebElement> cells = row.findElements(By.xpath("(.//td | .//th)"));
+                    for(String textToFindOnRow : textsToFindOnRow)
                     {
-                        rowStrings.add(cell.getText());
-                        if (cell.getText().contains(textToFindOnRow))
+                        boolean thisValueFoundOnRow = false;
+                        for(WebElement cell : cells)
                         {
-                            thisValueFoundOnRow = true;
-                            someValueFoundInRow = true;
+                            rowStrings.add(cell.getText());
+                            if (cell.getText().contains(textToFindOnRow))
+                            {
+                                thisValueFoundOnRow = true;
+                                someValueFoundInRow = true;
+                            }
                         }
-                    }
-                    if (!thisValueFoundOnRow)
-                    {
-                        valueMissingOnRow = true;
-                        break;
-                    }
+                        if (!thisValueFoundOnRow)
+                        {
+                            valueMissingOnRow = true;
+                            break;
+                        }
 
+                    }
+                    //log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
+                    if (!valueMissingOnRow)
+                    {
+                        allValuesFoundInRow = true;
+                        row.click();
+                        break;
+                    } else if (someValueFoundInRow){
+                        partialMatches.add("'" + String.join("', '", rowStrings) + "'");
+                    }
                 }
-                //log(LogLevel.DEBUG, String.join(", ", rowStrings) + " > Match: " + String.valueOf(!valueMissingOnRow));
-                if (!valueMissingOnRow)
-                {
-                    allValuesFoundInRow = true;
-                    row.click();
-                    break;
-                } else if (someValueFoundInRow){
-                    partialMatches.add("'" + String.join("', '", rowStrings) + "'");
+                if(!allValuesFoundInRow){
+                    log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + String.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
+                    testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO,
+                            "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + String.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
+                            "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + String.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
+                    saveScreenshot(webElement);
+                    saveDesktopScreenshot();
+                    saveHtmlContentOfCurrentPage();
+                    haltFurtherExecution();
+                } else {
+                    doneOk = true;
+                    log(LogLevel.EXECUTED, "Clicked the row with values '" + String.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
                 }
             }
-            if(!allValuesFoundInRow){
-                log(LogLevel.EXECUTION_PROBLEM, "Could not find row matching '" + String.join("', '", textsToFindOnRow) + "' in " + domElement.LogIdentification() + ".");
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEVIATION_EXTRA_INFO,
-                        "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':" + System.lineSeparator() + "[" + String.join("]" + System.lineSeparator() + "[", partialMatches) + "]",
-                        "Rows with partial matches for '"  + String.join("', '", textsToFindOnRow) + "':<br><table><tr><td>" + String.join("</td></tr><tr><td>", partialMatches) + "</td></tr></table>");
-                saveScreenshot(webElement);
-                saveDesktopScreenshot();
-                saveHtmlContentOfCurrentPage();
-            } else {
-                doneOk = true;
-                log(LogLevel.EXECUTED, "Clicked the row with values '" + String.join("', '", textsToFindOnRow) + "' in table " + domElement.LogIdentification() + ".");
-            }
+        } catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not pick table row. Error: " + e.toString());
+            saveScreenshot(webElement);
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            haltFurtherExecution();
         }
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.backendserverinteraction.TestlinkAdapterServerConnection;
+import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -29,12 +30,14 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
     public void evaluateTestCase(TestCase testCase){
         if(testCase == null)return;
         if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(TestlinkAdapterServerConnection.defaultServerUrl)) return;
+        testCase.log(LogLevel.INFO, "Logging test case results for test case '" + testCase.testName + "' to Testlink Adapter server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'.");
         testCasesJsonsList.add(testCase.toJson());
         testlinkTestCasesFromTestRun.testCases.add(new TestlinkTestCaseMapper(testCase));
     }
 
     public void report(){
         if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(TestlinkAdapterServerConnection.defaultServerUrl)) return;
+        System.out.println(System.lineSeparator() + "Sending test run results to Testlink Adapter server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'." + System.lineSeparator());
         TestlinkAdapterServerConnection testlinkAdapterServerConnection = new TestlinkAdapterServerConnection();
         testlinkAdapterServerConnection.postTestRunResult(testlinkTestCasesFromTestRun.toJson());
     }

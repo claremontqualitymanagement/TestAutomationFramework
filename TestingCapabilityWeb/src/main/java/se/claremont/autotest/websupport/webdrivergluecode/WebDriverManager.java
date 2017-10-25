@@ -47,6 +47,7 @@ public class WebDriverManager {
         MARIONETTE,
         EDGE,
         OPERA,
+        NONE,
         REMOTE_INTERNET_EXPLORER
     }
 

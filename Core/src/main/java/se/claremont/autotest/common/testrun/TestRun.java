@@ -16,7 +16,7 @@ import java.util.*;
  */
 @SuppressWarnings("WeakerAccess")
 public class TestRun {
-    public static Settings settings;
+    public static Settings settings = new Settings();
     public static int fileCounter = 0;
     public static String testRunName = "";
     public static int exitCode = ExitCodeTable.INIT_OK.getValue();
@@ -75,10 +75,9 @@ public class TestRun {
 
     public static void initializeIfNotInitialized() {
         if(!isInitialized){
-            settings = new Settings();
             exitCode = ExitCodeTable.INIT_OK.getValue();
-            isInitialized = true;
             TafParallelTestCaseRunner.testSets = new HashSet<>();
+            isInitialized = true;
         }
     }
 
