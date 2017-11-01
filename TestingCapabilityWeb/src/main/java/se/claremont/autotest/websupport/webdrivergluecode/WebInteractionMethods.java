@@ -2687,7 +2687,6 @@ public class WebInteractionMethods implements GuiDriver {
             haltFurtherExecution();
         }
 
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".html";
         String LF = SupportMethods.LF;
         String htmlStyle =                 "          pre              { font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;" + LF +
                 "                             margin-bottom: 10px;" + LF +
@@ -2712,11 +2711,26 @@ public class WebInteractionMethods implements GuiDriver {
                 "         " + StringManagement.htmlContentToDisplayableHtmlCode(driver.getPageSource()) + LF + LF +
                 "   </body>" + LF +
                 "</html>" + LF;
-        SupportMethods.saveToFile(html, filePath);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Page source saved as '" + filePath.replace("\\", "/") + "'.", "<a href=\"" + TestRun.reportLinkPrefix() + "://" + filePath.replace("\\", "/") + "\" target=\"_blank\">View saved page (source)</a>");
+
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".html";
         TestRun.fileCounter++;
+
+        SupportMethods.saveToFile(html, filePath);
+
+        logPageSourceSaving(filePath);
     }
 
+    private void logPageSourceSaving(String filePath){
+        String htmlFilePath = filePath.replace("\\", "/");
+        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
+            if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
+                htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
+            htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
+        }
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Page source saved as '" + filePath + "'.",
+                "Page source saved as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
+                        "<span class=\"htmlsourcefilepath\">" + filePath + "</span></a>");
+    }
 
     /**
      * Halts further execution of the test case when further execution is considered non-valuable
