@@ -763,7 +763,8 @@ public class WebInteractionMethods implements GuiDriver {
                 htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
             }
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved browser screenshot as '" + filePath + "'.",
-                    "Saved browser screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + filePath + "</a><br>" +
+                    "Saved browser screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
+                            "<span class=\"screenshotfile\">" + filePath + "</span></a><br>" +
                             "<a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
                             "<img src=\"" + htmlFilePath + "\" alt=\"browser screenshot\" class=\"screenshot\">" +
                             "</a>");

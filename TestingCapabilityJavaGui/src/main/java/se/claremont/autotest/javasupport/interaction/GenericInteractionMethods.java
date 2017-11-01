@@ -207,7 +207,8 @@ public class GenericInteractionMethods {
             htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
         }
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved desktop screenshot as '" + filePath + "'.",
-                "Saved desktop screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + filePath + "</a><br>" +
+                "Saved desktop screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
+                        "<span class=\"screenshotfile\">" + filePath + "</span></a><br>" +
                         "<a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
                         "<img src=\"" + htmlFilePath + "\" alt=\"browser screenshot\" class=\"screenshot\">" +
                         "</a>");
