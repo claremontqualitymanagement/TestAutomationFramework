@@ -3,9 +3,12 @@ package se.claremont.autotest.eyeautomatesupport;
 import eyeautomate.ScriptRunner;
 import org.junit.Assume;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
-import se.claremont.autotest.common.logging.GenericJavaObjectToHtml;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.logging.LogPost;
+import se.claremont.autotest.common.reporting.HtmlStyles;
+import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
@@ -35,47 +38,25 @@ public class EyeAutomateDriver {
     private final TestCase testCase;
 
     public EyeAutomateDriver(TestCase testCase){
-        if(testCase == null){
-            this.testCase = new TestCase(null, "EyeAutomateRunner");
-        } else {
-            this.testCase = testCase;
-        }
-        addJarFileToClassPath(getTestFileFromTestResourcesFolder("libs/EyeAutomate.jar"));
-        testCase.log(LogLevel.INFO, "Started EyeAutomate driver:" + System.lineSeparator() + GenericJavaObjectToHtml.toHtml(scriptRunner));
+        if(testCase == null) testCase = new TestCase(null, "EyeAutomateRunner");
+        HtmlStyles.addStyleInfo(HtmlStyleElements.styles);
+        this.testCase = testCase;
+        addJarFileToClassPath(getTestFileFromTestResourcesFolder("EyeAutomate.jar"));
+        testCase.log(LogLevel.INFO, "Started EyeAutomate driver.");
     }
-
-    public static String getTestFileFromTestResourcesFolder(String fileName){
-        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
-        assertNotNull("Could not identify file '" + fileName + "'", url);
-        File file = new File(url.getPath());
-        Assume.assumeNotNull(file);
-        return file.getAbsolutePath();
-    }
-
-
-    @SuppressWarnings("unchecked")
-    private void addURL(URL url) throws Exception {
-        URLClassLoader classLoader
-                = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class clazz= URLClassLoader.class;
-        // Use reflection
-        Method method= clazz.getDeclaredMethod("addURL", URL.class);
-        method.setAccessible(true);
-        method.invoke(classLoader, url);
-    }
-
-    private void addJarFileToClassPath(String filePath){
-        try {
-            testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
-            addURL(new File(filePath).toURL());
-        } catch (Exception e) {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + filePath + "' to classpath. Error: " + e.getMessage());
-        }
-    }
-
 
     public void runScriptFile(String filePath){
-        scriptRunner.runScript(filePath);
+        Log(LogLevel.DEBUG, "Attempting to run scriptFile '" + filePath + "'.");
+        if(!Files.exists(Paths.get(filePath))){
+            Log(LogLevel.EXECUTION_PROBLEM, "Attempting to run EyeAutomate script file '" + filePath + "', but it does not exist.");
+            return;
+        }
+        boolean success = scriptRunner.runScript(filePath);
+        if(success){
+            Log(LogLevel.EXECUTED, "Executed EyeAutomate script file '" + filePath + "' successfully.");
+        } else {
+            Log(LogLevel.EXECUTION_PROBLEM, "Could not successfully execute EyeAutomate script file '" + filePath + "'.");
+        }
         /*
         String script = SupportMethods.getFileContent(filePath);
         String[] scriptRows = script.split(System.lineSeparator());
@@ -93,14 +74,15 @@ public class EyeAutomateDriver {
         */
     }
 
-    public void executeCommand(String commandLine){
+    public boolean executeCommand(String commandLine){
         String[] scriptRowParts = commandLine.split(" ");
         ArrayList<String> validParts = new ArrayList<>();
         for(String part : scriptRowParts){
             if(part.trim().length() == 0) continue;
             validParts.add(part);
         }
-        executeCommand(validParts);
+        boolean success = executeCommand(validParts);
+        return success;
     }
 
     public void wait(int seconds){
@@ -112,14 +94,15 @@ public class EyeAutomateDriver {
         }
     }
 
-    private void executeCommand(ArrayList<String> scriptRowParts){
+    private boolean executeCommand(ArrayList<String> scriptRowParts){
+        Log(LogLevel.DEBUG, "Attempting to run EyeAutomate command '" + String.join(" ", scriptRowParts) + "'.");
         String commandString = "";
         String command = null;
         String imageFile;
         StringBuilder arguments = null;
         if(scriptRowParts.size() == 0) {
-            testCase.log(LogLevel.DEBUG, "Command string was null.");
-            return;
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "EyeAutomate command string was null. Cannot execute command.");
+            return false;
         }
         if(scriptRowParts.size() > 0) {
             command = scriptRowParts.get(0);
@@ -153,6 +136,7 @@ public class EyeAutomateDriver {
             saveDesktopScreenshot();
             haltFurtherExecution();
         }
+        return success;
     }
 
     private void executeScriptRow(ArrayList<String> scriptRowParts){
@@ -167,10 +151,10 @@ public class EyeAutomateDriver {
                 arguments.append(scriptRowParts.get(i)).append(" ");
             }
             if(arguments != null)
-               arguments = new StringBuilder(arguments.toString().trim());
+                arguments = new StringBuilder(arguments.toString().trim());
         }
         if(command == null) {
-            testCase.log(LogLevel.DEBUG, "Command was null.");
+            testCase.log(LogLevel.DEBUG, "EyeAutomate command string was null.");
             return;
         }
         switch (command.toLowerCase()){
@@ -197,25 +181,41 @@ public class EyeAutomateDriver {
     }
 
     public void click(GuiElement element){
+        click(element, true);
+    }
+
+    public void click(GuiElement element, boolean performLogging){
+        if(performLogging) verifyGuiElementFileExistance(element);
         GuiImageElement guiImageElement = (GuiImageElement) element;
         boolean success = scriptRunner.runScript("Click", "Click \"" + guiImageElement.getImageFilePath() + "\"", null);
-        if(success){
-            testCase.log(LogLevel.EXECUTED, "Clicked the '" + guiImageElement.getName() + "' element.");
-        } else {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + guiImageElement.getName() + "' element.");
+        if(success && performLogging){
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Clicked the '" + guiImageElement.getName() + "' element ('" + guiImageElement.getImageFilePath() + "').",
+                    "Clicked " + guiImageElementToHtml(guiImageElement));
+        } else if(performLogging) {
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + guiImageElement.getName() +
+                            "' element located at '" + guiImageElement.getImageFilePath() + "'. The file was found, but the click could not be performed.",
+                    "Could not click " + guiImageElementToHtml(guiImageElement));
             saveScreenshot(element);
             saveDesktopScreenshot();
             haltFurtherExecution();
         }
     }
 
+    /**
+     * Clicking the provided image, with an offset from the middle point.
+     * @param element The element as base for click
+     * @param offsetX The horizontal offset, positive numbers to the right
+     * @param offsetY The vertical offset, positive numbers downwards
+     */
     public void click(GuiElement element, int offsetX, int offsetY){
+        verifyGuiElementFileExistance(element);
         GuiImageElement guiImageElement = (GuiImageElement) element;
         boolean success = scriptRunner.runScript("Click", "Click \"" + guiImageElement.getImageFilePath() + "\"", String.valueOf(offsetX) + " " + String.valueOf(offsetY));
         if(success){
-            testCase.log(LogLevel.EXECUTED, "Clicked the '" + guiImageElement.getName() + "' element with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + ".");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Clicked the '" + guiImageElement.getName() + "' element with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + ".",
+                    "Clicked with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + " to " + guiImageElementToHtml(guiImageElement));
         } else {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + guiImageElement.getName() + "' element with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + ".");
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + " to " + guiImageElementToHtml(guiImageElement));
             saveScreenshot(element);
             saveDesktopScreenshot();
             haltFurtherExecution();
@@ -223,12 +223,14 @@ public class EyeAutomateDriver {
     }
 
     public void click(GuiElement element, String offsetX, String offsetY){
+        verifyGuiElementFileExistance(element);
         GuiImageElement guiImageElement = (GuiImageElement) element;
         boolean success = scriptRunner.runScript("Click", "Click \"" + guiImageElement.getImageFilePath() + "\"", offsetX + " " + offsetY);
         if(success){
-            testCase.log(LogLevel.EXECUTED, "Clicked the '" + guiImageElement.getName() + "' element with offset X:" + offsetX + ", Y:" + offsetY + ".");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Clicked the '" + guiImageElement.getName() + "' element with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + ".",
+                    "Clicked with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + " to " + guiImageElementToHtml(guiImageElement));
         } else {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click the '" + guiImageElement.getName() + "' element with offset X:" + offsetX + ", Y:" + offsetY + ".");
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click with offset X:" + String.valueOf(offsetX) + ", Y:" + String.valueOf(offsetY) + " to " + guiImageElementToHtml(guiImageElement));
             saveScreenshot(element);
             saveDesktopScreenshot();
             haltFurtherExecution();
@@ -236,13 +238,16 @@ public class EyeAutomateDriver {
     }
 
     public void write(GuiElement element, String text){
+        verifyGuiElementFileExistance(element);
         GuiImageElement guiImageElement = (GuiImageElement) element;
         click(element);
         boolean success = scriptRunner.runScript("Write", "Write \"" + text + "\"", null);
         if(success){
-            testCase.log(LogLevel.EXECUTED, "Wrote '" + text + "' to the '" + guiImageElement.getName() + "' element.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Wrote '" + text + "' to the '" + guiImageElement.getName() + "' element.",
+                    "Wrote '" + text + "' to " + guiImageElementToHtml(guiImageElement));
         } else {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + text + "' to the '" + guiImageElement.getName() + "' element.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not write '" + text + "' to the '" + guiImageElement.getName() + "' element (" + guiImageElement.getImageFilePath() + ").",
+                    "Could not write '" + text + "' to " + guiImageElementToHtml(guiImageElement));
             saveScreenshot(element);
             saveDesktopScreenshot();
             haltFurtherExecution();
@@ -250,12 +255,15 @@ public class EyeAutomateDriver {
     }
 
     public void moveMouseToElement(GuiElement element){
+        verifyGuiElementFileExistance(element);
         GuiImageElement guiImageElement = (GuiImageElement) element;
         boolean success = scriptRunner.runScript("WaitMouseMove", "WaitMouseMove \"" + guiImageElement.getImageFilePath() + "\"", null);
         if(success){
-            testCase.log(LogLevel.DEBUG, "Moved mouse cursor to the '" + guiImageElement.getName() + "' element.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Moved mouse cursor to the '" + guiImageElement.getName() + "' element (" + guiImageElement.getImageFilePath() + ").",
+                    "Moved mouse cursor to " + guiImageElementToHtml(guiImageElement));
         } else {
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not move the mouse cursor to '" + guiImageElement.getName() + "' element.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not move the mouse cursor to '" + guiImageElement.getName() + "' element.",
+                    "Could not move mouse cursor to " + guiImageElementToHtml(guiImageElement));
             saveScreenshot(element);
             saveDesktopScreenshot();
             haltFurtherExecution();
@@ -263,19 +271,38 @@ public class EyeAutomateDriver {
     }
 
     public void verifyImage(GuiElement element){
+        verifyGuiElementFileExistance(element);
         GuiImageElement guiImageElement = (GuiImageElement) element;
         boolean success = scriptRunner.runScript("WaitVerify", "WaitVerify \"" + guiImageElement.getImageFilePath() + "\"", null);
         if(success){
-            testCase.log(LogLevel.VERIFICATION_PASSED, "Found match for '" + guiImageElement.getName() + "'.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Found match for '" + guiImageElement.getName() + "' (" + guiImageElement.getImageFilePath() + ").",
+                    "Found image match for " + guiImageElementToHtml(guiImageElement));
         } else {
-            testCase.log(LogLevel.VERIFICATION_FAILED, "Could not find any match for '" + guiImageElement.getName() + "'.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Could not find any match for '" + guiImageElement.getName() + "' element (" + guiImageElement.getImageFilePath() + ").",
+                    "Could not find any match for " + guiImageElementToHtml(guiImageElement));
             saveScreenshot(element);
             saveDesktopScreenshot();
             haltFurtherExecution();
         }
     }
 
-    void haltFurtherExecution(){
+    public void exists(GuiElement element) {
+        GuiImageElement guiImageElement = (GuiImageElement) element;
+        boolean success = scriptRunner.callCommand("Find", new String[]{guiImageElement.getImageFilePath()}, null);
+        if(success){
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Found match for '" + guiImageElement.getName() + "' (" + guiImageElement.getImageFilePath() + ").",
+                    "Found image match for " + guiImageElementToHtml(guiImageElement));
+        } else {
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Could not find any match for '" + guiImageElement.getName() + "' element (" + guiImageElement.getImageFilePath() + ").",
+                    "Could not find any match for " + guiImageElementToHtml(guiImageElement));
+        }
+    }
+
+    private String guiImageElementToHtml(GuiImageElement guiImageElement){
+        return "the " + guiImageElement.toHtml();
+    }
+
+    public void haltFurtherExecution(){
         testCase.writeProcessListDeviationsFromSystemStartToLog();
         testCase.report();
     }
@@ -294,6 +321,8 @@ public class EyeAutomateDriver {
 
             CopyOption copyOption = StandardCopyOption.REPLACE_EXISTING;
             try {
+                File file = new File(filePath);
+                file.getParentFile().mkdirs();
                 Files.copy(Paths.get(guiImageElement.getImageFilePath()), Paths.get(filePath), copyOption);
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Image of element in question copied from '" + guiImageElement.getImageFilePath() + "' to '" + filePath + "'.",
                         "Image of element<br><img src=\"file://" + filePath + "\" alt=\"Image " + filePath + "\">");
@@ -314,4 +343,66 @@ public class EyeAutomateDriver {
 
     }
 
+    public void Log(LogLevel logLevel, String message){
+        if(testCase == null){
+            System.out.println(new LogPost(logLevel, message).toString());
+            return;
+        }
+        testCase.log(logLevel, message);
+    }
+
+    private void verifyGuiElementFileExistance(GuiElement guiElement){
+        GuiImageElement guiImageElement = (GuiImageElement)guiElement;
+        if(guiElement == null
+                || guiImageElement == null
+                || guiImageElement.getImageFilePath() == null
+                || guiImageElement.getImageFilePath().trim().length() == 0
+                || !Files.exists(Paths.get(guiImageElement.getImageFilePath()))){
+            String name = "";
+            try{
+                name = guiImageElement.getName();
+            }catch (Exception ignored){}
+            String path = "";
+            try{
+                path = ((GuiImageElement) guiElement).getImageFilePath();
+            }catch (Exception ignored) {}
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not identify the '" + name + "' element since its image file could not be found at '" + path + "'.");
+            saveScreenshot(guiElement);
+            saveDesktopScreenshot();
+            haltFurtherExecution();
+        } else {
+            testCase.log(LogLevel.DEBUG, "Identified image file for element '" + guiImageElement.getName() + "' at '" + guiImageElement.getImageFilePath() + "'.");
+        }
+
+    }
+
+    private static String getTestFileFromTestResourcesFolder(String fileName){
+        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
+        assertNotNull("Could not identify file '" + fileName + "'", url);
+        File file = new File(url.getPath());
+        Assume.assumeNotNull(file);
+        return file.getAbsolutePath();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addURL(URL url) throws Exception {
+        URLClassLoader classLoader
+                = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class clazz= URLClassLoader.class;
+        // Use reflection
+        Method method= clazz.getDeclaredMethod("addURL", URL.class);
+        method.setAccessible(true);
+        method.invoke(classLoader, url);
+    }
+
+    private void addJarFileToClassPath(String filePath){
+        try {
+            testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
+            addURL(new File(filePath).toURL());
+        } catch (Exception e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + filePath + "' to classpath. Error: " + e.getMessage());
+        }
+    }
+
 }
+

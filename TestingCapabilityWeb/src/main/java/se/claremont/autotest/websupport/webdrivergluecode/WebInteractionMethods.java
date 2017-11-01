@@ -18,6 +18,7 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -755,7 +756,17 @@ public class WebInteractionMethods implements GuiDriver {
         */
         if(fileImage != null){
             SupportMethods.saveToFile(fileImage, filePath);
-            log(LogLevel.INFO, "Saved screenshot as '" + filePath + "'.");
+            String htmlFilePath = filePath.replace("\\", "/");
+            if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
+                if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
+                    htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
+                htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
+            }
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved browser screenshot as '" + filePath + "'.",
+                    "Saved browser screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + filePath + "</a><br>" +
+                            "<a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
+                            "<img src=\"" + htmlFilePath + "\" alt=\"browser screenshot\" class=\"screenshot\">" +
+                            "</a>");
         } else {
             log(LogLevel.DEBUG, "Could not save screenshot to '" + filePath + "' since the image data was empty.");
         }

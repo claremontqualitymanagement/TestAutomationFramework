@@ -293,6 +293,7 @@ public class DomElement implements GuiElement {
                 "   };" +
                 "   return '//' + gPt(arguments[0]).toLowerCase();", element);
     }
+
     /**
      * Enables unified logging formats for element references in the testCaseLog
      * @return a string to use in testCaseLog posts

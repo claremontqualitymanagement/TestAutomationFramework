@@ -5,6 +5,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
@@ -16,6 +17,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -141,10 +143,7 @@ public class GenericInteractionMethods {
         g.takeScreenshot();
     }
 
-    /**
-     * Saves a screenshot of all screens and writes its save path to the test case log.
-     */
-    public void takeScreenshot(){
+    private BufferedImage GrabAllScreens(){
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] screens = ge.getScreenDevices();
 
@@ -161,23 +160,57 @@ public class GenericInteractionMethods {
             robot = new Robot();
         } catch (AWTException e) {
             log(LogLevel.DEBUG, "Could not start Robot framework for taking desktop screenshot.");
-            return;
+            return null;
         }
         BufferedImage screenShot = robot.createScreenCapture(allScreenBounds);
+        return  screenShot;
+    }
 
-        String outputFile = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
+    private String saveScreenshotToFile(BufferedImage screenShot){
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
         TestRun.fileCounter++;
         try {
-            Path file = Paths.get(outputFile);
-            File fileFolder = new File(outputFile);
-            //noinspection ResultOfMethodCallIgnored
-            fileFolder.getParentFile().mkdirs();
+            if (screenShot == null) {
+                log(LogLevel.INFO, "Could not take desktop screenshot.");
+                return null;
+            }
 
-            ImageIO.write(screenShot, "png", new File(outputFile));
-            log(LogLevel.INFO, "Saved screenshot as '" + outputFile + "'.");
-        } catch (IOException e) {
-            log(LogLevel.DEBUG, "Could not save screenshot of desktop. Error: " + e.getMessage());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(screenShot, "png", baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+
+            SupportMethods.saveToFile(imageInByte, filePath);
+        } catch (Exception e) {
+            log(LogLevel.INFO, "Could not save desktop screenshot. Error: " + e.toString());
+            return null;
         }
+        return filePath;
+    }
+
+
+    /**
+     * Saves a screenshot of all screens and writes its save path to the test case log.
+     */
+    public void takeScreenshot(){
+        BufferedImage screenShot = GrabAllScreens();
+        String fileName = saveScreenshotToFile(screenShot);
+        logDesktopScreenshot(fileName);
+    }
+
+    private void logDesktopScreenshot(String filePath){
+        String htmlFilePath = filePath.replace("\\", "/");
+        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
+            if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
+                htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
+            htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
+        }
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved desktop screenshot as '" + filePath + "'.",
+                "Saved desktop screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + filePath + "</a><br>" +
+                        "<a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
+                        "<img src=\"" + htmlFilePath + "\" alt=\"browser screenshot\" class=\"screenshot\">" +
+                        "</a>");
     }
 
     /**
