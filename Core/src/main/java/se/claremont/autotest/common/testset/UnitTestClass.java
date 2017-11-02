@@ -47,10 +47,15 @@ public abstract class UnitTestClass {
 
         @Override
         protected void skipped(org.junit.AssumptionViolatedException e, Description description) {
+            restoreOutputChannel();
             if(e.getMessage().length() > 0){
-                System.out.print("Result: Test ignored. Assumption validation: " + e.getMessage());
+                System.out.println("Result: Test ignored. Assumption validation: " + e.getMessage());
             } else {
-                System.out.print("Result: Test ignored. Assumptions on pre-requisites for execution not met.");
+                System.out.println("Result: Test ignored. Assumptions on pre-requisites for execution not met.");
+            }
+            System.out.println("  > Ignored test '" + description.getTestClass().getName() + "." + description.getMethodName() + "'.");
+            if(testOutputChannel != null && testOutputChannel.toString().length() > 0){
+                System.out.print("  > Output from test run:" + System.lineSeparator() + testOutputFormattedForDisplay() + System.lineSeparator());
             }
         }
 

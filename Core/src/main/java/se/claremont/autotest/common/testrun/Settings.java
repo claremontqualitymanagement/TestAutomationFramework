@@ -93,11 +93,21 @@ public class Settings extends HashMap<String, String>{
     }
 
     void setValue(SettingParameters settingParameters, String value){
-        put(settingParameters.friendlyName(), value);
+        if(this.containsKey(settingParameters.toString())){
+            replace(settingParameters.toString(), value);
+        } else if(this.containsKey(settingParameters.friendlyName)){
+            replace(settingParameters.friendlyName, value);
+        } else {
+            put(settingParameters.friendlyName(), value);
+        }
     }
 
     void setCustomValue(String parameter, String value){
-        put(parameter, value);
+        if(this.containsKey(parameter)){
+            replace(parameter, value);
+        }else {
+            put(parameter, value);
+        }
     }
 
     String getCustomValue(String parameter){
@@ -131,7 +141,7 @@ public class Settings extends HashMap<String, String>{
             stream.forEach(lines::add);
             for(String line : lines){
                 if(!line.contains("=")) continue;
-                setCustomValue(line.split("=")[0], line.split("=")[line.split("=").length-1]);
+                setCustomValue(line.split("=")[0], line.substring(line.indexOf('=') + 1));
             }
         } catch (IOException e) { //No file exist yet
             logger.warn( "Could not read TAF settings from file '" + settingsFilePath + "'. Don't worry. Continuing with default values, and attempting saving of the settings to file '" + settingsFilePath + "' for next time.");

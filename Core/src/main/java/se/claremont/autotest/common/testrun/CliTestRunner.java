@@ -9,9 +9,9 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.Console;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * CLI runner class for the test automation framework
@@ -168,8 +168,16 @@ public class CliTestRunner {
                             parameterName = parameterName.toUpperCase();
                         }
                     }
-                    TestRun.settings.setCustomValue(parameterName, arg.trim().substring(arg.trim().indexOf("=") + 1).trim());
-                    System.out.println("Setting parameter '" + arg.trim().split("=")[0].trim() + "' to value '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
+                    if(TestRun.getCustomSettingsValue(parameterName) != null
+                            && TestRun.getCustomSettingsValue(parameterName).trim().length() > 0){
+                        System.out.println("Updating test run settings parameter '" +
+                                parameterName + "' from '" + TestRun.getCustomSettingsValue(parameterName) +
+                                "' to '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
+                    } else {
+                        System.out.println("Setting parameter '" + arg.trim().split("=")[0].trim() +
+                                "' to value '" + arg.trim().substring(arg.trim().indexOf("=") + 1).trim() + "'.");
+                    }
+                    TestRun.setCustomSettingsValue(parameterName, arg.trim().substring(arg.trim().indexOf("=") + 1).trim());
                     remainingArguments.remove(arg);
                 }
             }
@@ -205,9 +213,9 @@ public class CliTestRunner {
 
     private static void exitWithExitCode(){
         if (TestRun.exitCode == TestRun.ExitCodeTable.INIT_OK.getValue())
-            System.out.println(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode= " + TestRun.exitCode);
+            System.out.println(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode = " + TestRun.exitCode);
         else
-            System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode= " + TestRun.exitCode);
+            System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode = " + TestRun.exitCode);
 
         if(testMode) {
             System.setProperty("TAF latest test run exit code", String.valueOf(TestRun.exitCode));
@@ -267,11 +275,13 @@ public class CliTestRunner {
                     remainingArguments.remove(arg);
                 } else {
                     System.out.println("WARNING: Class '" + Class.forName(arg) + "' does not seem to contain any tests. Not adding it.");
+                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
                 }
             } catch (ClassNotFoundException e) {
                 System.out.println(System.lineSeparator() + "WARNING: Expecting argument '" + arg +
                         "' to be a class containing tests, but no such class could be found. " +
                         "Are you sure you used a correct package path to the test class?");
+                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
                 remainingArguments.remove(arg);
             }
         }
@@ -324,9 +334,70 @@ public class CliTestRunner {
         return returnList;
     }
 
-    public static void runInTestMode(String[] args){
+    public static int runInTestMode(String[] args, Class<?> testClass)  {
+        return runInTestMode(args, new Class<?>[]{testClass});
+    }
+
+    private static void logLoadedClasses() {
+        ClassLoader myCL = Thread.currentThread().getContextClassLoader();
+        while (myCL != null) {
+            System.out.println("ClassLoader: " + myCL);
+            try {
+                for (Iterator iter = list(myCL); iter.hasNext();) {
+                    System.out.println("\t" + iter.next());
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            myCL = myCL.getParent();
+        }
+    }
+
+    private static Object runInTestMode(String[] args, Object runafter){
         testMode = true;
         executeRunSequence(args);
+        return runafter;
+    }
+
+    private static Iterator list(ClassLoader CL)
+            throws NoSuchFieldException, SecurityException,
+            IllegalArgumentException, IllegalAccessException {
+        Class CL_class = CL.getClass();
+        while (CL_class != java.lang.ClassLoader.class) {
+            CL_class = CL_class.getSuperclass();
+        }
+        java.lang.reflect.Field ClassLoader_classes_field = CL_class
+                .getDeclaredField("classes");
+        ClassLoader_classes_field.setAccessible(true);
+        Vector classes = (Vector) ClassLoader_classes_field.get(CL);
+        return classes.iterator();
+    }
+
+    public static int runInTestMode(String[] args, Class<?>[] testClasses){
+        testMode = true;
+        List<String> arguments = new ArrayList<>();
+        for(String arg : args){
+            arguments.add(arg);
+        }
+        if(testClasses != null){
+            logLoadedClasses();
+            for(Class<?> klass : testClasses){
+                arguments.add((klass.getName()));
+                try {
+                    Class.forName(klass.getName());
+                } catch (ClassNotFoundException e) {
+                    System.out.println(e.toString());
+                }
+            }
+        }
+        executeRunSequence(arguments.stream().toArray(String[]::new));
+        return TestRun.exitCode;
+    }
+
+    public static int runInTestMode(String[] args){
+        return runInTestMode(args, (Class<?>[])null);
     }
 
     private static void executeRunSequence(String[] args){

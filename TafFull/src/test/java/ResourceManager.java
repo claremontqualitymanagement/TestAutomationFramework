@@ -3,6 +3,7 @@ import se.claremont.autotest.common.testset.TestSet;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -53,7 +54,9 @@ public class ResourceManager {
         File sourceFile = new File(root, packagePath);
         sourceFile.getParentFile().mkdirs();
         try {
+            System.out.println("Attempting to write '" + sourceFile.toPath().toAbsolutePath() + "'.");
             Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
+            System.out.println("Wrote resource file '" + resourceFile + "' to '" + sourceFile.getAbsolutePath() + "'.");
         } catch (IOException e) {
             Assume.assumeTrue("Could not write compiled source file for '" + resourceFile.getName() + "' to disk.", false);
             return null;
@@ -69,11 +72,12 @@ public class ResourceManager {
         }
         tryCleanOutFile(sourceFile);
         String classFilePath = new File(root, packagePath.substring(0, packagePath.length() - ".java".length()) + ".class").getPath();
+        System.out.println("Compiled file '" + classFilePath + "'.");
 
         // Load and instantiate compiled class.
         URLClassLoader classLoader = null;
         try {
-            classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+            classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()}, ClassLoader.getSystemClassLoader());
         } catch (MalformedURLException e) {
             Assume.assumeTrue("Could not create an URL from '" + root.getName() + "'.", false);
             tryCleanOutFile(new File(classFilePath));

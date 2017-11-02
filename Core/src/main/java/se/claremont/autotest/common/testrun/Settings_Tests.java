@@ -1,8 +1,6 @@
 package se.claremont.autotest.common.testrun;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
@@ -11,6 +9,18 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  * Created by jordam on 2016-09-18.
  */
 public class Settings_Tests extends UnitTestClass{
+
+    @BeforeClass
+    public static void setup(){
+        TestRun.setCustomSettingsValue("myparametername", "classSetupValue");
+    }
+
+    @Before
+    public void testCaseSetup(){
+        Assert.assertTrue(TestRun.getCustomSettingsValue("myparametername").equals("classSetupValue"));
+        TestRun.setCustomSettingsValue("myparametername", "testSetupValue");
+        Assert.assertTrue(TestRun.getCustomSettingsValue("myparametername").equals("testSetupValue"));
+    }
 
      @Test
     public void loadDefaults(){
@@ -31,6 +41,15 @@ public class Settings_Tests extends UnitTestClass{
         settings.setCustomValue("dummy", "dummyvalue");
         settings.setCustomValue("dummy", "dummyvalue2");
         Assert.assertTrue(settings.getCustomValue("dummy").equals("dummyvalue2"));
+    }
+
+    @Test
+    public void updateFixParameter(){
+        Settings settings = new Settings();
+        settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "dummyfolder");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).equals("dummyfolder"));
+        settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "dummyfolder2");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).equals("dummyfolder2"));
     }
 
     @Test
@@ -61,14 +80,5 @@ public class Settings_Tests extends UnitTestClass{
         settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.toString(), "MyNewPath");
         Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("MyNewPath"));
     }
-
-    @Test
-    @Ignore
-    public void settingRuntimeValuesForSettingsWithCLIShouldOverrideOtherSettings(){
-        String[] args = {"testRun=testRun", "Settings_Tests"};
-        CliTestRunner.main(args);
-        Assert.assertTrue(TestRun.settings.getCustomValue("testRun").equals("testRun"));
-    }
-
 
 }
