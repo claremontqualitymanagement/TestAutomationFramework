@@ -11,13 +11,13 @@ import se.claremont.autotest.common.testset.UnitTestClass;
 public class Settings_Tests extends UnitTestClass{
 
     @BeforeClass
-    public static void setup(){
+    public static void classsetup(){
         TestRun.setCustomSettingsValue("myparametername", "classSetupValue");
+        Assert.assertTrue(TestRun.getCustomSettingsValue("myparametername").equals("classSetupValue"));
     }
 
     @Before
     public void testCaseSetup(){
-        Assert.assertTrue(TestRun.getCustomSettingsValue("myparametername").equals("classSetupValue"));
         TestRun.setCustomSettingsValue("myparametername", "testSetupValue");
         Assert.assertTrue(TestRun.getCustomSettingsValue("myparametername").equals("testSetupValue"));
     }

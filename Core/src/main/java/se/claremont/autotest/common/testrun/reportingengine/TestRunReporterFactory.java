@@ -28,7 +28,8 @@ public class TestRunReporterFactory {
             addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
         }
         addTestRunReporterIfNotAlreadyRegistered(new TestlinkAdapterTestRunReporter());
-        if(TestRun.settings.getValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null){
+        if(TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null
+                && TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS).length() > 0){
             addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());
         }
     }

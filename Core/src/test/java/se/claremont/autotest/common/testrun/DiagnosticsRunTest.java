@@ -20,9 +20,9 @@ public class DiagnosticsRunTest extends UnitTestClass{
     @Test
     public void test_RunTests() {
         try {
-            SuppressTestOutputFromConsoleOutput.redirectOutputChannel();
+            //SuppressTestOutputFromConsoleOutput.redirectOutputChannel();
             diagnosticsRun.run();
-            SuppressTestOutputFromConsoleOutput.restoreOutputChannel();
+            //SuppressTestOutputFromConsoleOutput.restoreOutputChannel();
             for(Failure testFailure: diagnosticsRun.getResult().getFailures()) {
                 System.out.println(testFailure.toString());
             }

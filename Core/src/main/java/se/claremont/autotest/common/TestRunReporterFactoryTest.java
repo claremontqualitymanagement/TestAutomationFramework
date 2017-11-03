@@ -23,7 +23,7 @@ public class TestRunReporterFactoryTest extends UnitTestClass{
         for(TestRunReporter testRunReporter : t.reporters){
             System.out.println(testRunReporter.getClass().getName());
         }
-        Assert.assertTrue("Expected 4 items (default reporters counted for) but found " + t.reporters.size(), t.reporters.size() == 2);
+        Assert.assertTrue("Expected 2 items (default reporters counted for) but found " + t.reporters.size(), t.reporters.size() == 2);
 
     }
 }

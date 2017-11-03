@@ -103,7 +103,8 @@ public class TestCase_Tests extends UnitTestClass{
     //Used for printing test
     @Test
     @Ignore
-    public void testCaseEvaluationStatusPrintoutCheck(){
+    public void
+    testCaseEvaluationStatusPrintoutCheck(){
         KnownErrorsList knownErrorsList = new KnownErrorsList();
         knownErrorsList.add(new KnownError("TEST", ".*Text.*"));
         TestCase testCase = new TestCase(knownErrorsList, "dummy");
