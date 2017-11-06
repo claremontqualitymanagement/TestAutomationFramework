@@ -51,14 +51,10 @@ public class TafParallelTestCaseRunner {
         threadPoolExecutor.shutdown();
         threadPoolExecutor.awaitTermination(60, TimeUnit.MINUTES);
         if(!threadPoolExecutor.isTerminated()) threadPoolExecutor.shutdownNow();
-        try {
-            runListener.testRunFinished(new Result());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         for(Future<TafResult> future : set){
             tafResult.addTestResult(future.get());
         }
+        runListener.testRunFinished(tafResult);
         return tafResult;
     }
 

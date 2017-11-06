@@ -6,6 +6,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;
+import se.claremont.autotest.common.support.ColoredConsolePrinter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -31,7 +32,7 @@ public abstract class UnitTestClass {
         @Override
         protected void failed(Throwable e, Description description) {
             restoreOutputChannel();
-            System.out.println("Result: Failed.");
+            System.out.println("Result: " + ColoredConsolePrinter.red("Failed."));
             System.out.println("  > Failed test '" + description.getTestClass().getName() + "." + description.getMethodName() + "'.");
             if(testOutputChannel != null && testOutputChannel.toString().length() > 0){
                 System.out.print("  > Output from test run:" + System.lineSeparator() + testOutputFormattedForDisplay() + System.lineSeparator());
@@ -44,16 +45,16 @@ public abstract class UnitTestClass {
         @Override
         protected void succeeded(Description description) {
             restoreOutputChannel();
-            System.out.print("Result: OK.");
+            System.out.print("Result: " + ColoredConsolePrinter.green("OK."));
         }
 
         @Override
         protected void skipped(org.junit.AssumptionViolatedException e, Description description) {
             restoreOutputChannel();
             if(e.getMessage().length() > 0){
-                System.out.println("Result: Test ignored. Assumption validation: " + e.getMessage());
+                System.out.println("Result: " + ColoredConsolePrinter.yellow("Test ignored") + ". Assumption validation: " + e.getMessage());
             } else {
-                System.out.println("Result: Test ignored. Assumptions on pre-requisites for execution not met.");
+                System.out.println("Result: " + ColoredConsolePrinter.yellow("Test ignored") + ". Assumptions on pre-requisites for execution not met.");
             }
             System.out.println("  > Ignored test '" + description.getTestClass().getName() + "." + description.getMethodName() + "'.");
             if(testOutputChannel != null && testOutputChannel.toString().length() > 0){

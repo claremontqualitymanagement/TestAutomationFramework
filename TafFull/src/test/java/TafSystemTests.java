@@ -78,5 +78,17 @@ public class TafSystemTests extends TestSet{
         web.makeSureDriverIsClosed();
     }
 
+    @Test
+    public void coloringOfLogPostsTests(){
+        currentTestCase().log(LogLevel.INFO, "INFO, should be blue.");
+        currentTestCase().log(LogLevel.DEBUG, "DEBUG, should be cyan.");
+        currentTestCase().log(LogLevel.EXECUTED, "EXECUTED, should be black.");
+        currentTestCase().log(LogLevel.EXECUTION_PROBLEM, "EXECUTION_PROBLEM, should be red.");
+        currentTestCase().log(LogLevel.VERIFICATION_PASSED, "VERIFICATION_PASSED, should be green.");
+        currentTestCase().log(LogLevel.VERIFICATION_FAILED, "VERIFICATION_FAILED, should be red.");
+        currentTestCase().log(LogLevel.FRAMEWORK_ERROR, "FRAMEWORK_ERROR, should be red.");
+        currentTestCase().log(LogLevel.VERIFICATION_PROBLEM, "VERIFICATION_PROBLEM, should be red.");
+        currentTestCase().log(LogLevel.DEVIATION_EXTRA_INFO, "DEVIATION_EXTRA_INFO, should be black.");
+    }
 
 }

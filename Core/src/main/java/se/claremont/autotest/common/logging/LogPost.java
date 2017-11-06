@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.logging.logmessage.LogMessage;
 import se.claremont.autotest.common.reporting.UxColors;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
+import se.claremont.autotest.common.support.ColoredConsolePrinter;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCaseLog;
@@ -111,7 +112,17 @@ public class LogPost {
     }
 
     public @Override String toString(){
-        return new SimpleDateFormat("HH:mm:ss").format(date) + " " + logLevelToString(logLevel.toString()) + " " + message;// + " - (test case '" + testCaseName + "', test step '" + testStepName + "' in class '" + testStepClassName + "').";
+        String logLevelString = logLevelToString(logLevel.toString());
+        if(logLevel.isFail()){
+            logLevelString = ColoredConsolePrinter.bold(ColoredConsolePrinter.red(logLevelString));
+        } else if(logLevel == LogLevel.DEBUG){
+            logLevelString = ColoredConsolePrinter.cyan(logLevelString);
+        } else if(logLevel == LogLevel.INFO){
+            logLevelString = ColoredConsolePrinter.blue(logLevelString);
+        } else if(logLevel == LogLevel.VERIFICATION_PASSED){
+            logLevelString = ColoredConsolePrinter.green(logLevelString);
+        }
+        return new SimpleDateFormat("HH:mm:ss").format(date) + " " + logLevelString + " " + message;// + " - (test case '" + testCaseName + "', test step '" + testStepName + "' in class '" + testStepClassName + "').";
     }
 
     public @Override boolean equals(Object object){

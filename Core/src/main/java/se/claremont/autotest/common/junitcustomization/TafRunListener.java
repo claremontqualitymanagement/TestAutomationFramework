@@ -24,8 +24,7 @@ public class TafRunListener extends RunListener {
         System.out.println();
     }
 
-    @Override
-    public void testRunFinished(Result result) throws Exception {
+    public void testRunFinished(TafResult result) {
         System.out.println();
         System.out.println("Test run finished.");
         System.out.println("Test cases run:     " + result.getRunCount());
@@ -38,7 +37,11 @@ public class TafRunListener extends RunListener {
             System.out.println();
         }
         System.out.println("Success for classes run: " + result.wasSuccessful() + System.lineSeparator());
-        if (result.getFailureCount() == 0) System.out.println(celebration());
+        if (result.getFailureCount() == 0) {
+            System.out.println(celebration());
+        } else{
+            System.out.println((oups()));
+        }
     }
 
     private static String celebration(){
@@ -51,6 +54,18 @@ public class TafRunListener extends RunListener {
                 "       |_|  |_| .__/| .__/|_|\\___(_)" + System.lineSeparator() +
                 "              | |   | |             " + System.lineSeparator() +
                 "              |_|   |_|             " + System.lineSeparator();
+    }
+
+    private static String oups(){
+        return System.lineSeparator() +
+                "   ____                  _ " + System.lineSeparator() +
+                "  / __ \\                | |" + System.lineSeparator() +
+                " | |  | |_   _ _ __  ___| |" +System.lineSeparator() +
+                " | |  | | | | | '_ \\/ __| |" + System.lineSeparator() +
+                " | |__| | |_| | |_) \\__ \\_|" + System.lineSeparator() +
+                "  \\____/ \\__,_| .__/|___(_)" + System.lineSeparator() +
+                "              | |          " + System.lineSeparator() +
+                "              |_|          " + System.lineSeparator();
     }
 
 
