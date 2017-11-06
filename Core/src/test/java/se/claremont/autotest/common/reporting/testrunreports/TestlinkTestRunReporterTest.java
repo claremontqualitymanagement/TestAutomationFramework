@@ -7,6 +7,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**
  * Sandbox tests for Testlink interaction

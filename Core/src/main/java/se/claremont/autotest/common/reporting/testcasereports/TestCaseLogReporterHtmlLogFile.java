@@ -344,7 +344,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private void addHtmlSectionTestCaseLogEntries(){
         sb.append("<br>" + LF +
                 "      <h2>Test case log</h2>" + LF +
-                "     <label><input type=\"checkbox\" id=\"showDebugCheckbox\">Show verbose debugging information</label>" + LF +
+                "     <label><input type=\"checkbox\" onclick=\"showDebug()\" id=\"showDebugCheckbox\">Show verbose debugging information</label>" + LF +
                 "     <div id=\"logpostlist\">" + LF + LF +
                 testStepLogPostSections(testCaseResult.testCaseLog) + LF +
                 "     </div>" + LF +
