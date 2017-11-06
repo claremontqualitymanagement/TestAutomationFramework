@@ -29,7 +29,6 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
 
     public void evaluateTestCase(TestCase testCase){
         if(testCase == null)return;
-        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(TestlinkAdapterServerConnection.defaultServerUrl)) return;
         testCase.log(LogLevel.INFO, "Logging test case results for test case '" + testCase.testName + "' to Testlink Adapter server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'.");
         testCasesJsonsList.add(testCase.toJson());
         testlinkTestCasesFromTestRun.testCases.add(new TestlinkTestCaseMapper(testCase));

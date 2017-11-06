@@ -63,7 +63,6 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     }
 
     public void evaluateTestCase(TestCase testCase){
-        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         if(testCase == null)return;
         if(testCase.testCaseResult.resultStatus.value() > mostSevereErrorEncountered.value()) mostSevereErrorEncountered = testCase.testCaseResult.resultStatus;
         testCasesJsonsList.add(testCase.toJson());

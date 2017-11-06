@@ -24,14 +24,9 @@ public class TestRunReporterFactory {
     public TestRunReporterFactory(){
         TestRun.initializeIfNotInitialized();
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
-        if(!TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) {
-            addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
-        }
+        addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
         addTestRunReporterIfNotAlreadyRegistered(new TestlinkAdapterTestRunReporter());
-        if(TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS) != null
-                && TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS).length() > 0){
-            addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());
-        }
+        addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterEmailReport());
     }
 
     public void addTestRunReporterIfNotAlreadyRegistered(TestRunReporter testRunReporter){
