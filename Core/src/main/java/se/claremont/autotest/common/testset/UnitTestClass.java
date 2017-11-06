@@ -32,7 +32,7 @@ public abstract class UnitTestClass {
         @Override
         protected void failed(Throwable e, Description description) {
             restoreOutputChannel();
-            System.out.println("Result: " + ColoredConsolePrinter.red("Failed."));
+            System.out.println("Result: " + ColoredConsolePrinter.bold(ColoredConsolePrinter.red("Failed.")));
             System.out.println("  > Failed test '" + description.getTestClass().getName() + "." + description.getMethodName() + "'.");
             if(testOutputChannel != null && testOutputChannel.toString().length() > 0){
                 System.out.print("  > Output from test run:" + System.lineSeparator() + testOutputFormattedForDisplay() + System.lineSeparator());

@@ -36,6 +36,10 @@ public class TafRunListener extends RunListener {
             System.out.println("Failure: " + failure.toString());
             System.out.println();
         }
+        if(result.getFailureCount() > 0){
+            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+        }
+
         System.out.println("Success for classes run: " + result.wasSuccessful() + System.lineSeparator());
         if (result.getFailureCount() == 0) {
             System.out.println(celebration());

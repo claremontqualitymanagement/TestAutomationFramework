@@ -36,10 +36,8 @@ public class TafParallelTestCaseRunner {
     public TafResult run() throws ExecutionException, InterruptedException {
         TafResult tafResult = new TafResult();
         JUnitCore jUnitCore = new JUnitCore();
-        TafRunListener runListener = new TafRunListener();
         Set<Future<TafResult>> set = new HashSet<Future<TafResult>>();
         RunNotifier runNotifier = new RunNotifier();
-        runListener.testRunStarted(null);
         for(Class<?> c : testClasses){
             Method[] methodsInClass = c.getDeclaredMethods();
             for(Method method : methodsInClass){
@@ -54,7 +52,6 @@ public class TafParallelTestCaseRunner {
         for(Future<TafResult> future : set){
             tafResult.addTestResult(future.get());
         }
-        runListener.testRunFinished(tafResult);
         return tafResult;
     }
 

@@ -94,7 +94,11 @@ public class LogPost {
      * @return Return true if the testCaseLog level is in the fail category
      */
     public boolean isFail(){
-        return !(logLevel.equals(LogLevel.DEBUG) || logLevel.equals(LogLevel.EXECUTED) || logLevel.equals(LogLevel.INFO) || logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO) || logLevel.equals(LogLevel.VERIFICATION_PASSED));
+        return !(logLevel.equals(LogLevel.DEBUG)
+                || logLevel.equals(LogLevel.EXECUTED)
+                || logLevel.equals(LogLevel.INFO)
+                || logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO)
+                || logLevel.equals(LogLevel.VERIFICATION_PASSED));
     }
 
     /**
