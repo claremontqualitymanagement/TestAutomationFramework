@@ -24,6 +24,11 @@ public class TafRunListener extends RunListener {
         System.out.println();
     }
 
+    //Only here to prevent standard output
+    @Override
+    public void testRunFinished(Result result) throws Exception {
+    }
+
     public void testRunFinished(TafResult result) {
         System.out.println();
         System.out.println("Test run finished.");
