@@ -26,6 +26,7 @@ import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
 import se.claremont.autotest.websupport.brokenlinkcheck.LinkCheck;
+import se.claremont.autotest.websupport.elementidentification.WebElementIdentifier;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -229,6 +230,22 @@ public class WebInteractionMethods implements GuiDriver {
         }catch (NavigationError e){
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not navigate to url '" + url + "'.", "Could not navigate to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'.");
         }
+    }
+
+    /**
+     * Maps the element of the current page to a page element file.
+     * @param outputFilePath The path to the output file
+     * @param quickAndSloppyMode The quickAndSloppyMode does not perform the time
+     * consuming recursive check if elements can be uniquely identified with a sub-element
+     * search from any parent.
+     */
+    public void mapCurrentPageWithBy(String outputFilePath, boolean quickAndSloppyMode){
+        if(driver == null){
+            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            haltFurtherExecution();
+        }
+        WebPageCodeConstructorWithBy constructor = new WebPageCodeConstructorWithBy(this);
+        constructor.createPageObjectFromCurrentPage(outputFilePath, quickAndSloppyMode);
     }
 
     /**
@@ -2783,7 +2800,15 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
             return webElements;
         }
+        if(element.by != null){
+            WebElement returnElement = WebElementIdentifier.getWebElement(testCase, driver, element, true);
+            if(returnElement != null){
+                webElements.add(returnElement);
+                return webElements;
+            }
+        }
         try {
+            if(element.recognitionStrings == null) return webElements;
             for(String recognitionString : element.recognitionStrings){
                 if (element.identificationType == DomElement.IdentificationType.BY_LINK_TEXT) {
                     webElements.addAll(driver.findElements(By.linkText(recognitionString)));

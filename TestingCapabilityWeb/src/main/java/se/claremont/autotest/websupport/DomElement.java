@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.websupport.elementidentification.By;
+import se.claremont.autotest.websupport.elementidentification.WebElementIdentifier;
 import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification.PositionBasedWebElement;
 
@@ -25,9 +27,10 @@ public class DomElement implements GuiElement {
 
     @SuppressWarnings("WeakerAccess")
     public final String name;
-    private final String page;
-    public final List<String> recognitionStrings;
-    public final IdentificationType identificationType;
+    private String page = null;
+    public By by;
+    public List<String> recognitionStrings;
+    public IdentificationType identificationType;
     public Integer ordinalNumber = null;
 
     /**
@@ -73,6 +76,21 @@ public class DomElement implements GuiElement {
         this.name = identifyElementName();
         this.page = callingMethodUsingConstructor.getClassName();
         this.identificationType = identificationType;
+    }
+
+
+    public DomElement(By by){
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        //this.name = callingMethodUsingConstructor.getMethodName();
+        this.name = identifyElementName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.by = by;
+    }
+
+    public DomElement(By by, String name){
+        this.name = name;
+        this.by = by;
     }
 
     /**
@@ -217,7 +235,7 @@ public class DomElement implements GuiElement {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        if(elementNameMatchesNameOfAJunitTest(elementName, klass) || elementName.equals("<init>")) {
+        if(recognitionStrings != null && (elementNameMatchesNameOfAJunitTest(elementName, klass) || elementName.equals("<init>"))) {
             elementName = "'" + String.join(" and ", recognitionStrings) + "'";
         }
         /*
@@ -299,7 +317,11 @@ public class DomElement implements GuiElement {
      * @return a string to use in testCaseLog posts
      */
     public String LogIdentification(){
-        return name + " (declared in page class " + page + ")";
+        {
+            String idMessage = name;
+            if(page != null && page.length() > 0) idMessage += " (declared in page class " + page + ")";
+            return idMessage;
+        }
     }
 
     @Override
@@ -308,10 +330,17 @@ public class DomElement implements GuiElement {
         sb.append("[DomElement: ");
         sb.append("Name='").append(name).append("', ");
         sb.append("page='").append(page).append("', ");
-        for(String recognitionString : recognitionStrings){
-            sb.append(" recognitionString='").append(recognitionString).append("', ");
+        if(recognitionStrings != null){
+            for(String recognitionString : recognitionStrings){
+                sb.append(" recognitionString='").append(recognitionString).append("', ");
+            }
         }
-        sb.append("identificationType='").append(identificationType.toString()).append("', ");
+        if(by != null) {
+            sb.append("by='").append(by.toString()).append("', ");
+            sb.append("generatedXPath='").append(WebElementIdentifier.createXPathFromBy(by)).append("', ");
+        }
+        if(identificationType != null)
+            sb.append("identificationType='").append(identificationType.toString()).append("', ");
         sb.append("ordinalNumber=").append(String.valueOf(ordinalNumber)).append("]");
         return sb.toString();
     }
