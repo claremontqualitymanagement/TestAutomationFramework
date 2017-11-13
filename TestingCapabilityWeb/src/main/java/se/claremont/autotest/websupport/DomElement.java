@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Object declaration mechanisms for web elements
- *
+ * <p>
  * Created by jordam on 2016-08-17.
  */
 @SuppressWarnings("unused")
@@ -27,59 +27,18 @@ public class DomElement implements GuiElement {
 
     @SuppressWarnings("WeakerAccess")
     public final String name;
-    private String page = null;
     public By by;
     public List<String> recognitionStrings;
     public IdentificationType identificationType;
     public Integer ordinalNumber = null;
+    private String page = null;
 
     /**
-     * Identification mechanisms
+     * Declares a DOM element on a web page, for use in automation.
+     *
+     * @param by Describes how to identify the DOM element.
      */
-    public enum IdentificationType{
-        BY_LINK_TEXT,
-        BY_X_PATH,
-        BY_ID,
-        BY_CLASS,
-        BY_CSS,
-        BY_NAME,
-        BY_VISIBLE_TEXT,
-        BY_ATTRIBUTE_VALUE
-    }
-
-    /**
-     * Declares a DOM element to be used in test execution
-     * @param recognitionString the recognition string that identifies the object
-     * @param identificationType what mechanism to use for identification
-     * @param name Element name, for logging.
-     */
-    public DomElement (String recognitionString, IdentificationType identificationType, String name){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        //this.name = callingMethodUsingConstructor.getMethodName();
-        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
-        this.name = name;
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.identificationType = identificationType;
-    }
-
-    /**
-     * Declares a DOM element to be used in test execution
-     * @param recognitionString the recognition string that identifies the object
-     * @param identificationType what mechanism to use for identification
-     */
-    public DomElement (String recognitionString, IdentificationType identificationType){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        //this.name = callingMethodUsingConstructor.getMethodName();
-        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
-        this.name = identifyElementName();
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.identificationType = identificationType;
-    }
-
-
-    public DomElement(By by){
+    public DomElement(By by) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
         //this.name = callingMethodUsingConstructor.getMethodName();
@@ -88,141 +47,250 @@ public class DomElement implements GuiElement {
         this.by = by;
     }
 
-    public DomElement(By by, String name){
+    /**
+     * Declares a DOM element on a web page, for use in automation.
+     *
+     * @param by   Describes how to identify the DOM element.
+     * @param name The element name, to be used in logs.
+     */
+    public DomElement(By by, String name) {
         this.name = name;
         this.by = by;
     }
 
     /**
-     * Constructor for use for example with several languages
+     * Defines a DOM element based on the given Selenium WebElement.
      *
-     * @param alternativeRecognitionStrings An array of recognition strings for this element
-     * @param identificationType The method of identification
-     * @param name Element name, for logging.
+     * @param webElement The Selenium WebElement to use as base for this DomElement.
      */
-    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, String name){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        this.name = name;
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.identificationType = identificationType;
-        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
-    }
-
-    /**
-     * Constructor for use for example with several languages
-     *
-     * @param alternativeRecognitionStrings An array of recognition strings for this element
-     * @param identificationType The method of identification
-     */
-    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        this.name = identifyElementName();
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.identificationType = identificationType;
-        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
-    }
-
-    /**
-     * Declares a DOM element to be used in test execution
-     * @param recognitionString the recognition string that identifies the object
-     * @param identificationType what mechanism to use for identification
-     * @param ordinalNumber The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
-     * @param name Element name, for logging.
-     */
-    public DomElement (String recognitionString, IdentificationType identificationType, Integer ordinalNumber, String name){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        this.name = name;
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
-        this.ordinalNumber = ordinalNumber;
-        this.identificationType = identificationType;
-    }
-
-    /**
-     * Declares a DOM element to be used in test execution
-     * @param recognitionString the recognition string that identifies the object
-     * @param identificationType what mechanism to use for identification
-     * @param ordinalNumber The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
-     */
-    public DomElement (String recognitionString, IdentificationType identificationType, Integer ordinalNumber){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        this.name = identifyElementName();
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
-        this.ordinalNumber = ordinalNumber;
-        this.identificationType = identificationType;
-    }
-
-    /**
-     * Constructor for use for example with several languages
-     *
-     * @param alternativeRecognitionStrings An array of recognition strings for this element
-     * @param identificationType The method of identification
-     * @param ordinalNumber The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
-     * @param name Element name, for logging.
-     */
-    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber, String name){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        this.name = name;
-        this.ordinalNumber = ordinalNumber;
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
-        this.identificationType = identificationType;
-    }
-
-    /**
-     * Constructor for use for example with several languages
-     *
-     * @param alternativeRecognitionStrings An array of recognition strings for this element
-     * @param identificationType The method of identification
-     * @param ordinalNumber The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
-     */
-    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
-        this.name = identifyElementName();
-        this.ordinalNumber = ordinalNumber;
-        this.page = callingMethodUsingConstructor.getClassName();
-        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
-        this.identificationType = identificationType;
-    }
-
-
-    public DomElement(WebElement webElement){
+    public DomElement(WebElement webElement) {
         this.name = "Dynamically identified " + webElement.getTagName() + " element";
         this.recognitionStrings = new ArrayList<>();
         this.recognitionStrings.add(getElementXPath(webElement));
         this.identificationType = IdentificationType.BY_X_PATH;
-        this.page = "TempElementPage";
+        this.page = getElementPageNameFromCurrentTitle(webElement);
     }
 
-    public DomElement(WebElement webElement, String elementName, String elementPageName){
-        if(elementName == null){
+    /**
+     * Defines a DOM element based on the given Selenium WebElement.
+     *
+     * @param webElement      Selenium WebElement object.
+     * @param elementName     The name for the element, for use in logs.
+     * @param elementPageName The name of the page of the element, for use in logs.
+     */
+    public DomElement(WebElement webElement, String elementName, String elementPageName) {
+        if (elementName == null) {
             this.name = "Dynamically identified " + webElement.getTagName() + " element";
         } else {
             this.name = elementName;
         }
         this.recognitionStrings = new ArrayList<>();
+        this.by = By.xpath(getElementXPath(webElement));
         this.recognitionStrings.add(getElementXPath(webElement));
         this.identificationType = IdentificationType.BY_X_PATH;
-        if(elementPageName == null){
-            this.page = "TempElementPage";
-        } else {
-            this.page = elementPageName;
+        if (elementPageName == null) {
+            elementPageName = getElementPageNameFromCurrentTitle(webElement);
+        }
+        this.page = elementPageName;
+    }
+
+    private String getElementPageNameFromCurrentTitle(WebElement webElement) {
+        try {
+            WebDriver driver = getDriver(webElement);
+            return driver.getTitle();
+        } catch (Exception e) {
+            return "TempElementPage";
         }
     }
 
-    public DomElement(PositionBasedWebElement positionBasedWebElement){
+    /**
+     * Declares a DOM element to be used in test execution.
+     *
+     * @param recognitionString  the recognition string that identifies the object.
+     * @param identificationType what mechanism to use for identification.
+     * @param name               Element name, for logging.
+     * @deprecated Although still working the recommended way is using By statements.
+     */
+    @Deprecated
+    public DomElement(String recognitionString, IdentificationType identificationType, String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        //this.name = callingMethodUsingConstructor.getMethodName();
+        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
+        this.name = name;
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.by = setByFromRecognitionStringAndIdentificationType(recognitionString, identificationType);
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Declares a DOM element to be used in test execution.
+     *
+     * @param recognitionString  the recognition string that identifies the object.
+     * @param identificationType what mechanism to use for identification.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String recognitionString, IdentificationType identificationType) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        //this.name = callingMethodUsingConstructor.getMethodName();
+        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
+        this.name = identifyElementName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.by = setByFromRecognitionStringAndIdentificationType(recognitionString, identificationType);
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Constructor for use for example with several languages.
+     *
+     * @param alternativeRecognitionStrings An array of recognition strings for this element.
+     * @param identificationType            The method of identification.
+     * @param name                          Element name, for logging.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        this.name = name;
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.identificationType = identificationType;
+        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
+    }
+
+    /**
+     * Constructor for use for example with several languages.
+     *
+     * @param alternativeRecognitionStrings An array of recognition strings for this element.
+     * @param identificationType            The method of identification.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        this.name = identifyElementName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.identificationType = identificationType;
+        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
+    }
+
+    /**
+     * Declares a DOM element to be used in test execution.
+     *
+     * @param recognitionString  the recognition string that identifies the object.
+     * @param identificationType what mechanism to use for identification.
+     * @param ordinalNumber      The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
+     * @param name               Element name, for logging.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String recognitionString, IdentificationType identificationType, Integer ordinalNumber, String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        this.name = name;
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.by = setByFromRecognitionStringAndIdentificationType(recognitionString, identificationType);
+        if (this.by != null) this.by = this.by.andByOrdinalNumber(ordinalNumber);
+        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
+        this.ordinalNumber = ordinalNumber;
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Declares a DOM element to be used in test execution.
+     *
+     * @param recognitionString  the recognition string that identifies the object.
+     * @param identificationType what mechanism to use for identification.
+     * @param ordinalNumber      The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String recognitionString, IdentificationType identificationType, Integer ordinalNumber) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        this.name = identifyElementName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.by = setByFromRecognitionStringAndIdentificationType(recognitionString, identificationType);
+        if (this.by != null) this.by = this.by.andByOrdinalNumber(ordinalNumber);
+        this.recognitionStrings = new ArrayList<>(Collections.singletonList(recognitionString));
+        this.ordinalNumber = ordinalNumber;
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Constructor for use for example with several languages.
+     *
+     * @param alternativeRecognitionStrings An array of recognition strings for this element.
+     * @param identificationType            The method of identification.
+     * @param ordinalNumber                 The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
+     * @param name                          Element name, for logging.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber, String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        this.name = name;
+        this.ordinalNumber = ordinalNumber;
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Constructor for use for example with several languages.
+     *
+     * @param alternativeRecognitionStrings An array of recognition strings for this element.
+     * @param identificationType            The method of identification.
+     * @param ordinalNumber                 The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
+     * @deprecated The recommended way of declaring elements is with By statement.
+     */
+    @Deprecated
+    public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        this.name = identifyElementName();
+        this.ordinalNumber = ordinalNumber;
+        this.page = callingMethodUsingConstructor.getClassName();
+        this.recognitionStrings = new ArrayList<>(Arrays.asList(alternativeRecognitionStrings));
+        this.identificationType = identificationType;
+    }
+
+    /**
+     * Defines a DOM element on a web page, based on its relative position with other elements on the page.
+     *
+     * @param positionBasedWebElement A DOM element prepared for position based identification.
+     */
+    public DomElement(PositionBasedWebElement positionBasedWebElement) {
         this.name = "Dynamically identified " + positionBasedWebElement.webElement.getTagName() + " element " + positionBasedWebElement.getText();
         this.recognitionStrings = new ArrayList<>();
         this.recognitionStrings.add(getElementXPath(positionBasedWebElement.webElement));
         this.identificationType = IdentificationType.BY_X_PATH;
         this.page = "TempElementPage";
+    }
+
+    private By setByFromRecognitionStringAndIdentificationType(String recognitionString, IdentificationType identificationType) {
+        switch (identificationType) {
+            case BY_CSS:
+                return By.cssSelector(recognitionString);
+            case BY_CLASS:
+                return By.className(recognitionString);
+            case BY_ID:
+                return By.id(recognitionString);
+            case BY_X_PATH:
+                return By.xpath(recognitionString);
+            case BY_VISIBLE_TEXT:
+                return By.textContainsString(recognitionString);
+            case BY_NAME:
+                return By.name(recognitionString);
+            case BY_LINK_TEXT:
+                return By.exactText(recognitionString).andByTagName("a");
+            default:
+                return null;
+        }
     }
 
     private String identifyElementName() {
@@ -235,7 +303,7 @@ public class DomElement implements GuiElement {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        if(recognitionStrings != null && (elementNameMatchesNameOfAJunitTest(elementName, klass) || elementName.equals("<init>"))) {
+        if (recognitionStrings != null && (elementNameMatchesNameOfAJunitTest(elementName, klass) || elementName.equals("<init>"))) {
             elementName = "'" + String.join(" and ", recognitionStrings) + "'";
         }
         /*
@@ -255,11 +323,11 @@ public class DomElement implements GuiElement {
         return elementName;
     }
 
-    private boolean elementNameMatchesNameOfAJunitTest(String elementName, Class klass){
-        for(Method m : klass.getMethods()){
-            if(!m.getName().equals(elementName)) continue;
-            for(Annotation a : m.getDeclaredAnnotations()){
-                if(a.annotationType().toString().equals("interface org.junit.Test")){
+    private boolean elementNameMatchesNameOfAJunitTest(String elementName, Class klass) {
+        for (Method m : klass.getMethods()) {
+            if (!m.getName().equals(elementName)) continue;
+            for (Annotation a : m.getDeclaredAnnotations()) {
+                if (a.annotationType().toString().equals("interface org.junit.Test")) {
                     return true;
                 }
             }
@@ -267,30 +335,52 @@ public class DomElement implements GuiElement {
         return false;
     }
 
+    /**
+     * Searches the descendants for the given DOM element, using the WebInteractionMethods given.
+     *
+     * @param domElement The DOM element that should exist among the descendants of this element.
+     * @param web        WebInteractionMethods to use.
+     * @return Returns the DomElement, for later use.
+     */
     public DomElement getDomElementFromDescendants(DomElement domElement, WebInteractionMethods
-            web){
+            web) {
         return new DomElement(web.getRuntimeElementWithoutLogging(this, domElement));
     }
 
     //Don't like this since it brings a bond to Selenium from this class
-    private WebDriver getDriver(WebElement webElement){
+    private WebDriver getDriver(WebElement webElement) {
         WebDriver driver = null;
-        try{
+        try {
             driver = ((WrapsDriver) webElement).getWrappedDriver();
-        }catch (Exception ignored){ }
+        } catch (Exception ignored) {
+        }
         return driver;
     }
 
-    public PositionBasedWebElement asPositionBasedWebElement(WebInteractionMethods web){
+    /**
+     * Converts a DomElement to a PositionBasedWebElement.
+     *
+     * @param web WebInteractionMethods to use.
+     * @return Returns this element as a PositionBasedWebElement.
+     */
+    public PositionBasedWebElement asPositionBasedWebElement(WebInteractionMethods web) {
         return new PositionBasedWebElement(web.getRuntimeElementWithoutLogging(this));
     }
 
+    /**
+     * Retrieves the xpath of the current element, in the current browser, and with the current web page structure.
+     * Remember that different web browsers parses the DOM differently, giving different xpaths. Hence this method
+     * should only be used for runtime xpath context, not permanent declarations.
+     *
+     * @param element The Selenium WebElement object to find the xpath for.
+     * @return Returns the xpath as a String object.
+     */
     public String getElementXPath(WebElement element) {
-        if(element == null) return null;
+        if (element == null) return null;
         WebDriver driver = getDriver(element);
-        if(driver == null) return null;
+        if (driver == null) return null;
         String tag = element.getTagName();
-        return (String)((JavascriptExecutor)driver).executeScript("" +
+        return (String) ((JavascriptExecutor) driver).executeScript("" +
                 "gPt=function(c){" +
 //                "   if(c.id!==''){" +
 //                "       return'//*[@id=\"'+c.id+'\"]'" +
@@ -313,36 +403,51 @@ public class DomElement implements GuiElement {
     }
 
     /**
-     * Enables unified logging formats for element references in the testCaseLog
-     * @return a string to use in testCaseLog posts
+     * Enables unified logging formats for element references in the testCaseLog.
+     *
+     * @return a string to use in testCaseLog posts.
      */
-    public String LogIdentification(){
+    public String LogIdentification() {
         {
             String idMessage = name;
-            if(page != null && page.length() > 0) idMessage += " (declared in page class " + page + ")";
+            if (page != null && page.length() > 0) idMessage += " (declared in page class " + page + ")";
             return idMessage;
         }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[DomElement: ");
         sb.append("Name='").append(name).append("', ");
         sb.append("page='").append(page).append("', ");
-        if(recognitionStrings != null){
-            for(String recognitionString : recognitionStrings){
+        if (recognitionStrings != null) {
+            for (String recognitionString : recognitionStrings) {
                 sb.append(" recognitionString='").append(recognitionString).append("', ");
             }
         }
-        if(by != null) {
+        if (by != null) {
             sb.append("by='").append(by.toString()).append("', ");
             sb.append("generatedXPath='").append(WebElementIdentifier.createXPathFromBy(by)).append("', ");
         }
-        if(identificationType != null)
+        if (identificationType != null)
             sb.append("identificationType='").append(identificationType.toString()).append("', ");
         sb.append("ordinalNumber=").append(String.valueOf(ordinalNumber)).append("]");
         return sb.toString();
+    }
+
+    /**
+     * Identification mechanisms
+     */
+    public enum IdentificationType {
+        BY_LINK_TEXT,
+        BY_X_PATH,
+        BY_ID,
+        BY_CLASS,
+        BY_CSS,
+        BY_NAME,
+        BY_VISIBLE_TEXT,
+        BY_ATTRIBUTE_VALUE
     }
 
 }
