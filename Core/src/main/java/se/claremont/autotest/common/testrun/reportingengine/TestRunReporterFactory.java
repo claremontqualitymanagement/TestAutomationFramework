@@ -22,7 +22,6 @@ public class TestRunReporterFactory {
     public ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public TestRunReporterFactory(){
-        TestRun.initializeIfNotInitialized();
         reporters.add(new TestRunReporterHtmlSummaryReportFile());
         addTestRunReporterIfNotAlreadyRegistered(new TafBackendServerTestRunReporter());
         addTestRunReporterIfNotAlreadyRegistered(new TestlinkAdapterTestRunReporter());

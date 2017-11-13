@@ -9,9 +9,7 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
 
-import java.io.Console;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * CLI runner class for the test automation framework
@@ -119,7 +117,7 @@ public class CliTestRunner {
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
                 if((parts[0].trim().toLowerCase().equals("settingsfile") || parts[0].trim().toLowerCase().equals("runsettingsfile")) && parts.length > 1) {
-                    TestRun.settings = new Settings(arg.trim().substring(arg.indexOf("=") + 1).trim());
+                    TestRun.getInstance().settings = new Settings(arg.trim().substring(arg.indexOf("=") + 1).trim());
                     System.out.println("Run settings properties file = '" + parts[1].trim() + "'.");
                     remainingArguments.remove(arg);
                 }
@@ -133,7 +131,7 @@ public class CliTestRunner {
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
                 if(parts[0].trim().toLowerCase().equals("runname") && parts.length > 1) {
-                    TestRun.testRunName = arg.trim().substring(arg.indexOf("=") + 1).trim();
+                    TestRun.getInstance().testRunName = arg.trim().substring(arg.indexOf("=") + 1).trim();
                     System.out.println("Run name is set to '" + parts[1].trim() + "'.");
                     remainingArguments.remove(arg);
                 }
@@ -188,7 +186,7 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         if (args.length == 0) {
             System.out.print(helpText());
-            TestRun.exitCode = TestRun.ExitCodeTable.INIT_OK.getValue();
+            TestRun.setExitCode(TestRun.ExitCodeTable.INIT_OK.getValue());
             exitWithExitCode();
             return;
         }
@@ -204,7 +202,7 @@ public class CliTestRunner {
                     ){
                 System.out.print(helpText());
                 remainingArguments.remove(arg);
-                TestRun.exitCode = TestRun.ExitCodeTable.INIT_OK.getValue();
+                TestRun.setExitCode(TestRun.ExitCodeTable.INIT_OK.getValue());
                 exitWithExitCode();
                 return;
             }
@@ -212,15 +210,15 @@ public class CliTestRunner {
     }
 
     private static void exitWithExitCode(){
-        if (TestRun.exitCode == TestRun.ExitCodeTable.INIT_OK.getValue())
-            System.out.println(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode = " + TestRun.exitCode);
+        if (TestRun.getExitCode() == TestRun.ExitCodeTable.INIT_OK.getValue())
+            System.out.println(System.lineSeparator() + "TAF RUNNING SUCCESSFULLY WITH exitCode = " + TestRun.getExitCode());
         else
-            System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode = " + TestRun.exitCode);
+            System.out.println(System.lineSeparator() + "TAF RUNNING ERROR WITH exitCode = " + TestRun.getExitCode());
 
         if(testMode) {
-            System.setProperty("TAF latest test run exit code", String.valueOf(TestRun.exitCode));
+            System.setProperty("TAF latest test run exit code", String.valueOf(TestRun.getExitCode()));
         } else {
-            System.exit(TestRun.exitCode);
+            System.exit(TestRun.getExitCode());
         }
     }
 
@@ -251,7 +249,7 @@ public class CliTestRunner {
                 }
 
                 if (!diag.getResult().getFailures().isEmpty()) {
-                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                    TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
                 }
                 remainingArguments.remove(arg);
                 exitWithExitCode();
@@ -263,7 +261,7 @@ public class CliTestRunner {
     private static void runTestClasses(){
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+        TestRun.getReporterFactory().addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         int testCount = 0;
         for (String arg : args) {
             try {
@@ -275,20 +273,20 @@ public class CliTestRunner {
                     remainingArguments.remove(arg);
                 } else {
                     System.out.println("WARNING: Class '" + Class.forName(arg) + "' does not seem to contain any tests. Not adding it.");
-                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                    TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
                 }
             } catch (ClassNotFoundException e) {
                 System.out.println(System.lineSeparator() + "WARNING: Expecting argument '" + arg +
                         "' to be a class containing tests, but no such class could be found. " +
                         "Are you sure you used a correct package path to the test class?");
-                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
                 remainingArguments.remove(arg);
             }
         }
         TafTestRunner tafTestRunner = new TafTestRunner();
         TafResult tafResult = tafTestRunner.run(classes);
         if(tafResult.getFailureCount() > 0){
-            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+            TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
         }
     }
 
@@ -316,7 +314,7 @@ public class CliTestRunner {
         if( Utils.getInstance().checkSupportedJavaVersionForTAF() ) return;
         System.out.println( "Running java version (" + Taf.tafUserInfon().getJavaVersion() + ") is not supported for TAF. Please use Java " + Utils.getInstance().SUPPORTED_TAF_JVM_VERSION + " or newer version!" );
         System.out.println(System.lineSeparator() + helpText());
-        TestRun.exitCode = TestRun.ExitCodeTable.RUN_TAF_ERROR_FATAL.getValue();
+        TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TAF_ERROR_FATAL.getValue());
         exitWithExitCode();
     }
 
@@ -393,7 +391,7 @@ public class CliTestRunner {
             }
         }
         executeRunSequence(arguments.stream().toArray(String[]::new));
-        return TestRun.exitCode;
+        return TestRun.getExitCode();
     }
 
     public static int runInTestMode(String[] args){
@@ -409,7 +407,6 @@ public class CliTestRunner {
         System.out.println("Argument(s) given:" + System.lineSeparator()  +
                 " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
                 "Interpreting arguments.");
-        TestRun.initializeIfNotInitialized(); // No need to remove arguments from argument array for not being test classes
         setRunSettingsFileIfGivenAsArgument();
         setRunNameIfGivenAsArgument();
         setRunSettingsParametersGivenAsArguments();

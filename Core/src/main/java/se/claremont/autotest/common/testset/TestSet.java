@@ -47,7 +47,6 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
      */
     public TestSet(){
         testSet = this;
-        TestRun.initializeIfNotInitialized();
         name = SupportMethods.classNameAtStacktraceLevel(3);
     }
 

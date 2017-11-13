@@ -167,8 +167,8 @@ public class GenericInteractionMethods {
     }
 
     private String saveScreenshotToFile(BufferedImage screenShot){
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
-        TestRun.fileCounter++;
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.getFileCounter() + ".png";
+        TestRun.increaseFileCounter();
         try {
             if (screenShot == null) {
                 log(LogLevel.INFO, "Could not take desktop screenshot.");

@@ -161,7 +161,7 @@ public class WebElementIdentifier {
         if (testCase == null) {
             System.out.println(logPost.toString());
         } else {
-            testCase.testCaseResult.testCaseLog.logPosts.add(logPost);
+            testCase.log(logPost.logLevel, logPost.message);
         }
     }
 

@@ -38,12 +38,11 @@ public class RestServerInteractionTest extends UnitTestClass{
     @Test
     @Ignore
     public void testRunResultToJsonTest(){
-        TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://phonyaddress.org");
         TestCase testCase = new TestCase(null, "My testCase name");
         testCase.report();
         boolean runReporterFound = false;
-        for(TestRunReporter testRunReporter : TestRun.reporters.reporters){
+        for(TestRunReporter testRunReporter : TestRun.getReporterFactory().reporters){
             if(testRunReporter.getClass() == TafBackendServerTestRunReporter.class){
                 runReporterFound = true;
                 String json = ((TafBackendServerTestRunReporter)testRunReporter).toJson();

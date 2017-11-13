@@ -308,8 +308,8 @@ public class EyeAutomateDriver {
     }
 
     public void saveScreenshot(GuiElement element) {
-        String filePath = LogFolder.testRunLogFolder + this.testCase.testName + TestRun.fileCounter + ".png";
-        ++TestRun.fileCounter;
+        String filePath = LogFolder.testRunLogFolder + this.testCase.testName + TestRun.getFileCounter() + ".png";
+        TestRun.increaseFileCounter();
         if(element == null){
             saveDesktopScreenshot();
         } else {

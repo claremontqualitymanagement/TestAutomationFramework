@@ -68,7 +68,6 @@ public class TestCase {
      *  @param testName The name of the test. For reporting purposes.
      */
     public TestCase(KnownErrorsList knownErrorsList, String testName, String testSetName){
-        TestRun.initializeIfNotInitialized();
         this.testCaseMethodName = testName;
         if(testName == null) testName = "Nameless test case";
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
@@ -156,7 +155,7 @@ public class TestCase {
     public void report(){
         if(reported) return;
         testCaseResult.assessResults();
-        TestRun.reporters.evaluateTestCase(this);
+        TestRun.getReporterFactory().evaluateTestCase(this);
         reporters.forEach(TestCaseLogReporter::report);
         reported = true;
         assertExecutionResultsToTestRunner();
@@ -298,14 +297,14 @@ public class TestCase {
             //noinspection ConstantConditions
             Assert.assertFalse(SupportMethods.LF + testCaseResult.testCaseLog.toString(), true);
             if( testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS )
-                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
+                TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue());
             else
-                TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
         } else if(testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS){
             //noinspection ConstantConditions
             Assume.assumeTrue(false);
             Assert.assertFalse(SupportMethods.LF + testCaseResult.testCaseLog.toString(), true);
-            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+            TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
         }
     }
 

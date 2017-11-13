@@ -14,10 +14,8 @@ public class TafTestRunner_Tests {
 
     public void setup(){
         fakeTestRunReporter = new FakeTestRunReporter();
-        TestRun.isInitialized = false;
-        TestRun.initializeIfNotInitialized();
-        TestRun.reporters.reporters.clear();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeTestRunReporter);
+        TestRun.getReporterFactory().reporters.clear();
+        TestRun.addTestRunReporterIfNotAlreadyRegistered(fakeTestRunReporter);
         startTime = System.currentTimeMillis();
     }
 

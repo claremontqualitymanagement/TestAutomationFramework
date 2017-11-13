@@ -42,7 +42,7 @@ public class TafRunListener extends RunListener {
             System.out.println();
         }
         if(result.getFailureCount() > 0){
-            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+            TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
         }
 
         System.out.println("Success for classes run: " + result.wasSuccessful() + System.lineSeparator());

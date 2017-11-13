@@ -271,7 +271,7 @@ public class HtmlSummaryReport {
 
     private void addHtmlElementSettings(){
         html.append("          <h3 id=\"settingsheading\">Test run settings</h2>" + LF +
-                TestRun.settings.toHtmlTable());
+                TestRun.getSettings().toHtmlTable());
     }
 
     /**
@@ -282,19 +282,18 @@ public class HtmlSummaryReport {
         html.append("          <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
                 "          <h1>Test run report</h1>" + LF +
                 "          <table class=\"rundetails\">" + LF +
-                "             <tr><td>Run name: </td><td>" + TestRun.testRunName + "</td></tr>" + LF +
-                "             <tr><td>Start time: </td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.startTime) + "</td></tr>" + LF +
+                "             <tr><td>Run name: </td><td>" + TestRun.getRunName() + "</td></tr>" + LF +
+                "             <tr><td>Start time: </td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.getStartTime()) + "</td></tr>" + LF +
                 "             <tr><td>Stop time :</td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(getStopTime()) + "</td></tr>" + LF +
-                "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.startTime, getStopTime()) + "</td></tr>" + LF +
+                "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.getStartTime(), getStopTime()) + "</td></tr>" + LF +
                 "          </table>" + LF);
     }
 
     private Date getStopTime(){
-        if(TestRun.stopTime != null){
-            return TestRun.stopTime;
-        } else {
-            return new Date();
+        if(TestRun.getStopTime() == null){
+            TestRun.setStopTime(new Date());
         }
+        return TestRun.getStopTime();
     }
 
     /**

@@ -36,7 +36,7 @@ public class Settings_Tests extends UnitTestClass {
             Assume.assumeTrue("Could not delete temporary file '" + tempFilePath + "'. Error: " + e.toString(), false);
         }
         try {
-            TestRun.settings.writeSettingsParametersToFile(tempFilePath);
+            TestRun.getSettings().writeSettingsParametersToFile(tempFilePath);
         }catch (Exception e){
             Assume.assumeTrue("Could not write run settings to file", false);
         }
@@ -57,21 +57,21 @@ public class Settings_Tests extends UnitTestClass {
 
     @Test
     public void settingsInRunSettingsFileShouldOverwriteDefaultValues(){
-        TestRun.settings = new Settings();
+        TestRun.reloadSettings();
         Assert.assertTrue(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
         TestRun.setSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
         String tempFilePath = createTemporaryRunSettingsFileWithCurrentSettings();
-        TestRun.settings.clear();
-        TestRun.settings = new Settings(tempFilePath);
+        TestRun.getSettings().clear();
+        Settings settings = new Settings(tempFilePath);
         deleteTemporarySettingsFile(tempFilePath);
-        Assert.assertTrue(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
     }
 
     @Test
     public void settingsInCliShouldOverwriteRunSettingsFileSettings(){
         TestRun.setSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
         String tempFilePath = createTemporaryRunSettingsFileWithCurrentSettings();
-        TestRun.settings.clear();
+        TestRun.reloadSettings();
         CliTestRunner.runInTestMode(new String[] {"runsettingsfile=" + tempFilePath, "HTML_REPORTS_LINK_PREFIX=ftp"});
         deleteTemporarySettingsFile(tempFilePath);
         Assert.assertTrue(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("ftp"));

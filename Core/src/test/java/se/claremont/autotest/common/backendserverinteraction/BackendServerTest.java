@@ -22,7 +22,6 @@ public class BackendServerTest extends UnitTestClass{
 
     @Test
     public void testVersionGetting(){
-        TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
         TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
         Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
@@ -31,7 +30,6 @@ public class BackendServerTest extends UnitTestClass{
 
     @Test
     public void testPostingTestCase(){
-        TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
         TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
         Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
@@ -45,7 +43,6 @@ public class BackendServerTest extends UnitTestClass{
 
     @Test
     public void testPostingLogPost(){
-        TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
         TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
         Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
@@ -58,7 +55,6 @@ public class BackendServerTest extends UnitTestClass{
 
     @Test
     public void testPostingTestRunResultPost(){
-        TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://127.0.0.1:" + serverPort + "/taf");
         TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
         Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());

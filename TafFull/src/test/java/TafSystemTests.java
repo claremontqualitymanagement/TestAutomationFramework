@@ -79,6 +79,7 @@ public class TafSystemTests extends TestSet{
     }
 
     @Test
+    @Ignore("Cannot test colors in output automatically.")
     public void coloringOfLogPostsTests(){
         currentTestCase().log(LogLevel.INFO, "INFO, should be blue.");
         currentTestCase().log(LogLevel.DEBUG, "DEBUG, should be cyan.");

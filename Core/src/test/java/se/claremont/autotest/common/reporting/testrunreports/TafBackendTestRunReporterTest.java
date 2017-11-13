@@ -33,11 +33,11 @@ public class TafBackendTestRunReporterTest extends UnitTestClass {
         tafBackendServerTestRunReporter.evaluateTestSet(testSet2.newInstance());
         Assert.assertTrue(testSet2.getName(), String.join("", tafBackendServerTestRunReporter.testSetNames).contains(testSet2.getName()));
         tafBackendServerTestRunReporter.report();
-        if(TestRun.testRunName == null || TestRun.testRunName.length() == 0){
+        if(TestRun.getRunName() == null || TestRun.getRunName().length() == 0){
             Assert.assertTrue("Expected testRunName to include '" + testSet1.getName()+ "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet1.getName()));
             Assert.assertTrue("Expected testRunName to include '" + testSet2.getName() + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(testSet2.getName()));
         } else {
-            Assert.assertTrue("Expected testRunName to include '" + TestRun.testRunName + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(TestRun.testRunName));
+            Assert.assertTrue("Expected testRunName to include '" + TestRun.getRunName() + "', but it was '" + tafBackendServerTestRunReporter.testRunName + "'.", tafBackendServerTestRunReporter.testRunName.contains(TestRun.getRunName()));
         }
     }
 

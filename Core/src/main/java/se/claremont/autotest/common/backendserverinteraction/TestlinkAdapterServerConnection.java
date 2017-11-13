@@ -81,7 +81,6 @@ public class TestlinkAdapterServerConnection {
 
     private void checkConnectionStatus(){
         if(isConnected == null || apiVersionCompatible == null){
-            TestRun.initializeIfNotInitialized();
             if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(defaultServerUrl)){
                 isConnected = false;
                 apiVersionCompatible = false;

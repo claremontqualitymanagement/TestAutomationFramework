@@ -15,57 +15,57 @@ public class TestRunTest extends UnitTestClass{
 
     @Test
     public void checkExitCodeTableForSuccessfullyExecution(){
-        TestRun.exitCode = TestRun.ExitCodeTable.INIT_OK.getValue();
-        assertEquals(TestRun.ExitCodeTable.INIT_OK.getValue(), TestRun.exitCode);
+        TestRun.setExitCode(TestRun.ExitCodeTable.INIT_OK.getValue());
+        assertEquals(TestRun.ExitCodeTable.INIT_OK.getValue(), TestRun.getExitCode());
     }
 
     @Test
     public void unsetCustomSettingsValueForHtmlReportsLinkPrefixShouldReturnFileLink(){
-        Settings original = TestRun.settings;
-        TestRun.settings = new Settings();
+        Settings original = TestRun.getSettings();
+        TestRun.reloadSettings();
         assertTrue("Expected 'file' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("file"));
-        TestRun.settings = original;
+        TestRun.setSettings(original);
     }
 
     @Test
     public void customSettingsValueForHtmlReportsLinkPrefixSetToHttpShouldReturnHttpLink(){
-        Settings original = TestRun.settings;
+        Settings original = TestRun.getSettings();
         Settings s = new Settings();
         s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
-        TestRun.settings = s;
+        TestRun.setSettings(s);
         assertTrue("Expected 'http' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("http"));
-        TestRun.settings = original;
+        TestRun.setSettings(original);
     }
 
     @Test
     public void customSettingsValueForHtmlReportsLinkPrefixSetToHttpsShouldReturnHttpsLink(){
-        Settings original = TestRun.settings;
+        Settings original = TestRun.getSettings();
         Settings s = new Settings();
         s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "https");
-        TestRun.settings = s;
+        TestRun.setSettings(s);
         assertTrue("Expected 'https' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("https"));
-        TestRun.settings = original;
+        TestRun.setSettings(original);
     }
 
     @Test
     public void customSettingsValueForHtmlReportsLinkPrefixSetToFileShouldReturnFileLink(){
-        Settings original = TestRun.settings;
+        Settings original = TestRun.getSettings();
         Settings s = new Settings();
         s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
-        TestRun.settings = s;
+        TestRun.setSettings(s);
         assertTrue("Expected 'file' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("file"));
-        TestRun.settings = original;
+        TestRun.setSettings(original);
     }
 
     @Test
     public void customSettingsValueForHtmlReportsLinkPrefixSetToNonManagedValueShouldReturnFileLink(){
-        Settings original = TestRun.settings;
+        Settings original = TestRun.getSettings();
         Settings s = new Settings();
         s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "customLinkType");
-        TestRun.settings = s;
+        TestRun.setSettings(s);
 
         assertTrue("Expected 'customLinkType' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("customLinkType"));
-        TestRun.settings = original;
+        TestRun.setSettings(original);
     }
 
 }

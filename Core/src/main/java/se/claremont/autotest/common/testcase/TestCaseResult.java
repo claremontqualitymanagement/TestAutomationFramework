@@ -109,7 +109,7 @@ public class TestCaseResult {
                     resultStatus = ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS;
                     System.out.println(message);
                     testCaseLog.log(LogLevel.INFO, message);
-                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                    TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
                     return;
                 }
             }
@@ -122,7 +122,7 @@ public class TestCaseResult {
             String message = "  ٩(͡๏̯͡๏)۶  Deviations not marked as known was found for test case '" + testName + "'.";
             System.out.println(message);
             testCaseLog.log(LogLevel.INFO, message);
-            TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue();
+            TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_FATAL.getValue());
         }
     }
 

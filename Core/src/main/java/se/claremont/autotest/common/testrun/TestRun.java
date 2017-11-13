@@ -4,6 +4,7 @@ import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner
 import se.claremont.autotest.common.junitcustomization.TafRunListener;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
+import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporterFactory;
 import se.claremont.autotest.common.testset.TestSet;
 
@@ -16,21 +17,91 @@ import java.util.*;
  */
 @SuppressWarnings("WeakerAccess")
 public class TestRun {
-    public static Settings settings = new Settings();
-    public static int fileCounter = 0;
-    public static String testRunName = "";
-    public static int exitCode = ExitCodeTable.INIT_OK.getValue();
-    public static List<TestSet> currentTestSets = new ArrayList<>();
-    public static final TestRunReporterFactory reporters = new TestRunReporterFactory();
-    public static boolean isInitialized = false;
-    public static ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
-    public static final Date startTime = new Date();
-    public static Date stopTime;
+    public Settings settings = new Settings();
+    public int fileCounter = 0;
+    public String testRunName = "TAFTestRun";
+    public int exitCode = ExitCodeTable.INIT_OK.getValue();
+    public List<TestSet> currentTestSets = new ArrayList<>();
+    public final TestRunReporterFactory reporters = new TestRunReporterFactory();
+    public ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
+    public final Date startTime = new Date();
+    public Date stopTime;
 
-    public TestRun(){
-        initializeIfNotInitialized();
-        testRunName = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+    private static TestRun instance;
+
+    private TestRun(){
+        TafParallelTestCaseRunner.testSets = new HashSet<>();
     }
+
+    static TestRun getInstance(){
+        if(instance == null){
+            synchronized (TestRun.class) {
+                if(instance == null){
+                    instance = new TestRun();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public static Settings getSettings() {
+        return getInstance().settings;
+    }
+
+    public static String getRunName(){
+        return getInstance().testRunName;
+    }
+
+    public static int getExitCode() {
+        return getInstance().exitCode;
+    }
+
+    public static void addTestRunReporterIfNotAlreadyRegistered(TestRunReporter reporter) {
+        getInstance().reporters.addTestRunReporterIfNotAlreadyRegistered(reporter);
+    }
+
+    public static void addTestRunReporter(TestRunReporter reporter) {
+        getInstance().reporters.addTestRunReporter(reporter);
+    }
+
+    public static void clearReporterFactory(){
+        getInstance().reporters.reporters.clear();
+    }
+
+    //For testing purposes
+    public static void reloadSettings() {
+        getInstance().settings = new Settings();
+    }
+
+    //For testing purposes
+    static void setSettings(Settings settings) {
+        getInstance().settings = settings;
+    }
+
+    public static int getFileCounter() {
+        return getInstance().fileCounter;
+    }
+
+    public static void increaseFileCounter(){
+        getInstance().fileCounter++;
+    }
+
+    private static class TestRunSingletonHelper{
+        public static final TestRun INSTANCE = new TestRun();
+    }
+
+    public static ConsoleLogLevel getConsoleLogLevel(){
+        return getInstance().consoleLogLevel;
+    }
+
+    public static TestRunReporterFactory getReporterFactory(){
+        return getInstance().reporters;
+    }
+
+    public static void setExitCode(int exitCodeValue){
+        getInstance().exitCode = exitCodeValue;
+    }
+
     /**
      * TAF and TA test(s) standard codes.
      */
@@ -53,54 +124,52 @@ public class TestRun {
     }
 
     public static String getSettingsValue(Settings.SettingParameters parameter){
-        initializeIfNotInitialized();
-        return settings.getValue(parameter);
+        return getInstance().settings.getValue(parameter);
     }
 
     @SuppressWarnings("SameParameterValue")
     public static String getCustomSettingsValue(String parameter){
-        initializeIfNotInitialized();
-        return settings.getCustomValue(parameter);
+        return getInstance().settings.getCustomValue(parameter);
+    }
+
+    public static Date getStartTime() {
+        return getInstance().startTime;
+    }
+
+    public static Date getStopTime(){
+        return getInstance().stopTime;
+    }
+
+    public static void setStopTime(Date stopTime){
+        getInstance().stopTime = stopTime;
     }
 
     public static void setSettingsValue(Settings.SettingParameters parameter, String value){
-        initializeIfNotInitialized();
-        settings.setValue(parameter, value);
+        getInstance().settings.setValue(parameter, value);
     }
 
     public static void setCustomSettingsValue(String parameter, String value){
-        initializeIfNotInitialized();
-        settings.setCustomValue(parameter, value);
-    }
-
-    public static void initializeIfNotInitialized() {
-        if(!isInitialized){
-            exitCode = ExitCodeTable.INIT_OK.getValue();
-            TafParallelTestCaseRunner.testSets = new HashSet<>();
-            isInitialized = true;
-        }
+        getInstance().settings.setCustomValue(parameter, value);
     }
 
     public static String reportLinkPrefix(){
-        initializeIfNotInitialized();
-        if(settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
-                settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
-        if(settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
+        if(getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
+                getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
+        if(getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
             return "http";
-        } else if (settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
+        } else if (getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
             return "https";
         }
-        return settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
+        return getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
     }
 
     public static void reportTestRun(){
-        initializeIfNotInitialized();
         for(TestSet testSet : TafParallelTestCaseRunner.testSets){
-            reporters.evaluateTestSet(testSet);
+            getInstance().reporters.evaluateTestSet(testSet);
         }
         TafParallelTestCaseRunner.testSets = new HashSet<>();
-        stopTime = new Date();
-        reporters.reportTestRun();
+        getInstance().stopTime = new Date();
+        getInstance().reporters.reportTestRun();
         //BaseFolderHtmlIndexFile baseFolderHtmlIndexFile = new BaseFolderHtmlIndexFile();
     }
 

@@ -12,16 +12,15 @@ import java.util.List;
 public class TestRunExitCodeTest extends UnitTestClass{
 
     public void setup(){
-        TestRun.isInitialized = false;
-        TestRun.initializeIfNotInitialized();
+        TestRun.setExitCode(TestRun.ExitCodeTable.INIT_OK.getValue());
         System.setProperty("TAF latest test run exit code", "0");
-        TestRun.reporters.reporters.clear();
+        TestRun.getReporterFactory().reporters.clear();
     }
 
     @Test
     public void initialValue(){
         setup();
-        Assert.assertTrue(TestRun.exitCode == 0);
+        Assert.assertTrue(TestRun.getExitCode() == 0);
     }
 
     @Test
@@ -38,7 +37,7 @@ public class TestRunExitCodeTest extends UnitTestClass{
         List<Class<?>> classes = new ArrayList<>();
         classes.add(ResourceManager.extractFileFromResourcesAndCompileAndLoadIt("PassingTestClass.java"));
         Assert.assertTrue(new TafTestRunner().run(classes).wasSuccessful());
-        Assert.assertTrue("Exit code was not " + TestRun.ExitCodeTable.INIT_OK.getValue() + ". It was " + TestRun.exitCode, TestRun.exitCode == TestRun.ExitCodeTable.INIT_OK.getValue());
+        Assert.assertTrue("Exit code was not " + TestRun.ExitCodeTable.INIT_OK.getValue() + ". It was " + TestRun.getExitCode(), TestRun.getExitCode()== TestRun.ExitCodeTable.INIT_OK.getValue());
     }
 
     @Test
@@ -47,7 +46,7 @@ public class TestRunExitCodeTest extends UnitTestClass{
         List<Class<?>> classes = new ArrayList<>();
         classes.add(ResourceManager.extractFileFromResourcesAndCompileAndLoadIt("ExceptionThrowingTestClass.java"));
         Assert.assertFalse(new TafTestRunner().run(classes).wasSuccessful());
-        Assert.assertTrue("Exit code was not " + TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue() + ". It was " + TestRun.exitCode, TestRun.exitCode == TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
+        Assert.assertTrue("Exit code was not " + TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue() + ". It was " + TestRun.getExitCode(), TestRun.getExitCode() == TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
     }
 
     @Test
@@ -56,7 +55,7 @@ public class TestRunExitCodeTest extends UnitTestClass{
         List<Class<?>> classes = new ArrayList<>();
         classes.add(ResourceManager.extractFileFromResourcesAndCompileAndLoadIt("FailingTestClass.java"));
         Assert.assertFalse(new TafTestRunner().run(classes).wasSuccessful());
-        Assert.assertTrue("Exit code was not " + TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue() + ". It was " + TestRun.exitCode, TestRun.exitCode == TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
+        Assert.assertTrue("Exit code was not " + TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue() + ". It was " + TestRun.getExitCode(), TestRun.getExitCode() == TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
     }
 
 

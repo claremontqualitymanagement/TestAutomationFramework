@@ -37,7 +37,6 @@ public class SupportMethodsTest extends UnitTestClass{
             f = new File(LogFolder.testRunLogFolder + "dummyFile" + i + ".txt");
             fileExist = f.exists() && !f.isDirectory();
             Assert.assertTrue(fileExist);
-            //noinspection ResultOfMethodCallIgnored
             f.delete();
         }catch (Exception e){
             Assert.fail("Could not save to disk at '" + LogFolder.testRunLogFolder + "'");

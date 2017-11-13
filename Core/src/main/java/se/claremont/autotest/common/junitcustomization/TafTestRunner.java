@@ -2,7 +2,6 @@ package se.claremont.autotest.common.junitcustomization;
 
 import org.junit.experimental.ParallelComputer;
 import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -15,7 +14,7 @@ public class TafTestRunner {
     public TafResult run(List<Class<?>> classes) {
         JUnitCore junit = new JUnitCore();
         TafResult tafResult = new TafResult();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+        TestRun.getReporterFactory().addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         TafRunListener runListener = new TafRunListener();
 
         if (classes.size() == 0) {
@@ -57,7 +56,7 @@ public class TafTestRunner {
                     System.out.println("Could not execute tests by using parallel execution in thread pool. Try executing with PARALLEL_TEST_EXECUTION_MODE 'none', 'classes', 'methods', 'both'. Error: " + e.toString());
                 }
                 if(tafResult.getFailureCount() > 0){
-                    TestRun.exitCode = TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue();
+                    TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
                 }
             } else {
                 if(threads != 1) System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', 'both', 'none', 'true', 'false', or a numeric value indicating the number of concurrent execution threads to use for execution. Resorting to default by not running tests in parallel.");

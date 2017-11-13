@@ -203,13 +203,13 @@ public class TestCaseLog {
     }
 
     private void outputLogPost(LogPost logPost){
-        if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.NONE))return;
-        if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
+        if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.NONE))return;
+        if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
             //ColoredPrinter cp = new ColoredPrinter.Builder(1, false).attribute(Ansi.Attribute.BOLD).foreground(Ansi.FColor.BLUE).build();
             //cp.print(logPost.toString());
             System.out.println(logPost.toString());
             return;
-        } else if(TestRun.consoleLogLevel.equals(ConsoleLogLevel.MODERATE) &&
+        } else if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.MODERATE) &&
                 (logPost.logLevel.equals(LogLevel.DEBUG) ||
                  logPost.logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO) ||
                  logPost.logLevel.equals(LogLevel.INFO))
@@ -262,7 +262,7 @@ public class TestCaseLog {
         ArrayList<TestCaseLogSection> logSectionsList = new ArrayList<>();
         ArrayList<LogPost> logPostsInTestStep = new ArrayList<>();
         for(LogPost logPost : logPosts){
-            if(!logPost.testStepName.equals(lastTestStepName)){
+            if(logPost.testStepName != null && !logPost.testStepName.equals(lastTestStepName)){
                 logSectionsList.add(new TestCaseLogSection(logPostsInTestStep, startTime, stopTime));
                 logPostsInTestStep = new ArrayList<>();
                 lastTestStepName = logPost.testStepName;

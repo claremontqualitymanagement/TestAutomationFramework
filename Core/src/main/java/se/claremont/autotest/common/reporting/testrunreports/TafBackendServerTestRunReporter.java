@@ -30,7 +30,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty public Date runStopTime;
     @JsonProperty public String testRunName = "";
     @SuppressWarnings("WeakerAccess")
-    @JsonProperty public Settings settings = TestRun.settings;
+    @JsonProperty public Settings settings;
     @SuppressWarnings("WeakerAccess")
     @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
     @SuppressWarnings("WeakerAccess")
@@ -41,19 +41,14 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @JsonProperty public String testRunId = "";
 
     public TafBackendServerTestRunReporter(){
-        TestRun.initializeIfNotInitialized();
-        testRunName = TestRun.testRunName;
-        runStartTime = TestRun.startTime;
     }
 
-    @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
-    public void setRunStartTime(Date runStartTime) { this.runStartTime = runStartTime; }
     @SuppressWarnings("WeakerAccess")
     public void setRunStopTime(Date runStopTime) { this.runStopTime = runStopTime; }
     public Settings getSettings() { return settings; }
     @SuppressWarnings("WeakerAccess")
     public void setTestRunName() {
-        testRunName = TestRun.testRunName;
+        testRunName = TestRun.getRunName();
         if(testRunName == null || testRunName.trim().length() == 0){
             testRunName = String.join(", ", testSetNames);
         }
@@ -70,12 +65,11 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
 
     public void report(){
         if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
-        setRunStartTime(TestRun.startTime);
-        if(TestRun.stopTime == null) {
-            setRunStopTime(new Date());
-        } else {
-            setRunStopTime(TestRun.stopTime);
+        runStartTime = TestRun.getStartTime();
+        if(TestRun.getStopTime() == null) {
+            TestRun.setStopTime(new Date());
         }
+        setRunStopTime(TestRun.getStopTime());
         setTestRunName();
         TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
         tafBackendServerConnection.postTestRunResult(toJson());

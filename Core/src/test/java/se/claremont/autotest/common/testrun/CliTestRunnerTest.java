@@ -133,7 +133,6 @@ public class CliTestRunnerTest extends UnitTestClass {
     @Test
     public void settingsShouldBeOverruledFromCli(){
         String[] args = {"PATH_TO_LOGO=http://mysite.com/logo.png"};
-        TestRun.initializeIfNotInitialized();
         TestRun.setSettingsValue(Settings.SettingParameters.PATH_TO_LOGO, "dummylogo.jpg");
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains(cliIsInvokedWelcomeString));
@@ -144,7 +143,6 @@ public class CliTestRunnerTest extends UnitTestClass {
     @Test
     public void customSettingsShouldBeSetFromCli(){
         String[] args = {"MyCustomSetting=Happy"};
-        TestRun.initializeIfNotInitialized();
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains(cliIsInvokedWelcomeString));
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains("Happy"));
@@ -155,11 +153,10 @@ public class CliTestRunnerTest extends UnitTestClass {
     @Test
     public void testRunNameShouldBeSetFromCli(){
         String[] args = {"runname=HappyTest"};
-        TestRun.initializeIfNotInitialized();
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains(cliIsInvokedWelcomeString));
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains("runname=HappyTest"));
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains("Run name is set to 'HappyTest'"));
-        Assert.assertTrue(testOutputChannel.toString(), TestRun.testRunName.equals("HappyTest"));
+        Assert.assertTrue(testOutputChannel.toString(), TestRun.getRunName().equals("HappyTest"));
     }
 }

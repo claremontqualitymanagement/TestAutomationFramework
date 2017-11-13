@@ -741,9 +741,9 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.DEBUG, "Could not highlight any element before screenshot. Error: " + e.getMessage());
         }
 
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".png";
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.getFileCounter() + ".png";
         logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
-        TestRun.fileCounter++;
+        TestRun.increaseFileCounter();
         byte[] fileImage;
         try{
             fileImage = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
@@ -2729,8 +2729,8 @@ public class WebInteractionMethods implements GuiDriver {
                 "   </body>" + LF +
                 "</html>" + LF;
 
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.fileCounter + ".html";
-        TestRun.fileCounter++;
+        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.getFileCounter() + ".html";
+        TestRun.increaseFileCounter();
 
         SupportMethods.saveToFile(html, filePath);
 

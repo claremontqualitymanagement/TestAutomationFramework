@@ -29,7 +29,7 @@ public class TestExecutionTest extends UnitTestClass{
     public void testRunReportProduced(){
         checkWriteAccess();
          runName = UUID.randomUUID().toString();
-         TestRun.isInitialized = false;
+         //TestRun.isInitialized = false;
          LogFolder.testRunLogFolder = null;
          String[] args = new String[] { "runName=" + runName, TafSystemTests.class.getName()};
          CliTestRunner.runInTestMode(args);

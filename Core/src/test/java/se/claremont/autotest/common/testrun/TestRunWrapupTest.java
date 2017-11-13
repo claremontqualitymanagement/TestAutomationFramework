@@ -18,9 +18,8 @@ public class TestRunWrapupTest extends UnitTestClass{
     @Test
     public void singleTestRunReportingFromMultipleTestSetExecutions(){
         FakeTestRunReporter fakeEmailTestRunReporter = new FakeTestRunReporter();
-        TestRun.initializeIfNotInitialized();
-        TestRun.reporters.reporters.clear();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
+        TestRun.getReporterFactory().reporters.clear();
+        TestRun.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", "PARALLEL_TEST_EXECUTION_MODE=1", TestSet1.class.getName(), TestSet2.class.getName() };
         CliTestRunner.runInTestMode(args);
         for(String testCase : fakeEmailTestRunReporter.testCaseNames){
@@ -35,9 +34,8 @@ public class TestRunWrapupTest extends UnitTestClass{
     @Test
     public void singleTestRunReportingFromMultipleTestSetExecutionsParallelExecutionByThreads(){
         FakeTestRunReporter fakeEmailTestRunReporter = new FakeTestRunReporter();
-        TestRun.initializeIfNotInitialized();
-        TestRun.reporters.reporters.clear();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
+        TestRun.getReporterFactory().reporters.clear();
+        TestRun.addTestRunReporterIfNotAlreadyRegistered(fakeEmailTestRunReporter);
         String[] args = {"runname=HappyTest", "PARALLEL_TEST_EXECUTION_MODE=2", TestSet1.class.getName(), TestSet2.class.getName() };
         CliTestRunner.runInTestMode(args);
         for(String testCase : fakeEmailTestRunReporter.testCaseNames){
@@ -51,10 +49,9 @@ public class TestRunWrapupTest extends UnitTestClass{
 
     @Test
     public void singleTestRunReportingFromMultipleTestSetExecutionsParallelExecutionByClasses() throws IllegalAccessException, InstantiationException {
-        TestRun.initializeIfNotInitialized();
-        TestRun.reporters.reporters.clear();
+        TestRun.getReporterFactory().reporters.clear();
         FakeTestRunReporter fakeTestRunReporter = new FakeTestRunReporter();
-        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(fakeTestRunReporter);
+        TestRun.addTestRunReporterIfNotAlreadyRegistered(fakeTestRunReporter);
 //        TestRun.reporters.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         try{
             String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName() };
@@ -66,7 +63,7 @@ public class TestRunWrapupTest extends UnitTestClass{
             //Assert.assertTrue("Expected 2 test sets in testSetList. Was " +fakeTestRunReporter.testSetNames.size() + ". '" + String.join("', '", testSets) + "'." , fakeTestRunReporter.testSetNames.size() == 2);
             Assert.assertTrue("Expecting one report. Was " + fakeTestRunReporter.numberOfReportsPerformed + ".", fakeTestRunReporter.numberOfReportsPerformed == 1);
         }finally {
-            TestRun.reporters.reporters.clear();
+            TestRun.getReporterFactory().reporters.clear();
         }
     }
 
@@ -75,9 +72,8 @@ public class TestRunWrapupTest extends UnitTestClass{
     public void summaryReportShouldHaveExactlyOneInstanceOfEachTest(){
         TestRunReporterHtmlSummaryReportFile testRunReporterHtmlSummaryReportFile = new TestRunReporterHtmlSummaryReportFile();
         FakeTestRunReporter fakeEmailTestRunReporter = new FakeTestRunReporter();
-        TestRun.initializeIfNotInitialized();
-        TestRun.reporters.reporters.clear();
-        TestRun.reporters.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
+        TestRun.getReporterFactory().reporters.clear();
+        TestRun.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName() };
         try{
             CliTestRunner.runInTestMode(args);
