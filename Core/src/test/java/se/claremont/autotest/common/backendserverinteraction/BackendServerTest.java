@@ -47,7 +47,7 @@ public class BackendServerTest extends UnitTestClass{
         TafBackendServerConnection tafBackendServerConnection = new TafBackendServerConnection();
         Assume.assumeTrue("No backend server running at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND), tafBackendServerConnection.isConnected());
         Assert.assertTrue(tafBackendServerConnection.getBackendVersion(), tafBackendServerConnection.getBackendVersion().contains("TAF"));
-        LogPost logPost = new LogPost(LogLevel.INFO, "My log entry.");
+        LogPost logPost = new LogPost(LogLevel.INFO, "My log entry.", "", "", "", "");
         String response = tafBackendServerConnection.postLogPost(logPost);
         Assert.assertTrue(response, response.toLowerCase().contains("ok"));
         Assert.assertFalse(response, response.toLowerCase().contains("not"));

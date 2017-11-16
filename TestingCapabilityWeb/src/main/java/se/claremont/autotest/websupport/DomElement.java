@@ -48,6 +48,54 @@ public class DomElement implements GuiElement {
     }
 
     /**
+     * Please, use the more powerful se.claremont.autotest.websupport.elementidentification.By instead.
+     * This constructor converts the Selenium By to the TAF By class. With this you get the logging of TAF,
+     * but not the flexibility and versatility of the TAF By class.
+     *
+     * @param seleniumBy Regular Selenium By statement.
+     */
+    public DomElement(org.openqa.selenium.By seleniumBy) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
+        //this.name = callingMethodUsingConstructor.getMethodName();
+        this.name = identifyElementName();
+        this.page = callingMethodUsingConstructor.getClassName();
+        switch (seleniumBy.getClass().getSimpleName()) {
+            case "ById":
+                by = By.id(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByClassName":
+                by = By.className(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByXPath":
+                by = By.xpath(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByName":
+                by = By.name(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByCssSelector":
+                by = By.cssSelector(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByTagName":
+                by = By.tagName(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByLinkText":
+                by = By.tagName("a").andByExactText(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            case "ByPartialLinkText":
+                by = By.tagName("a").andByTextContainsString(removeSeleniumByTypeFromString(seleniumBy));
+                break;
+            default:
+                System.out.println(seleniumBy.toString());
+                break;
+        }
+    }
+
+    private String removeSeleniumByTypeFromString(org.openqa.selenium.By seleniumBy) {
+        return seleniumBy.toString().substring(seleniumBy.toString().indexOf(": ") + 2);
+    }
+
+    /**
      * Declares a DOM element on a web page, for use in automation.
      *
      * @param by   Describes how to identify the DOM element.
@@ -109,9 +157,7 @@ public class DomElement implements GuiElement {
      * @param recognitionString  the recognition string that identifies the object.
      * @param identificationType what mechanism to use for identification.
      * @param name               Element name, for logging.
-     * @deprecated Although still working the recommended way is using By statements.
      */
-    @Deprecated
     public DomElement(String recognitionString, IdentificationType identificationType, String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -128,9 +174,7 @@ public class DomElement implements GuiElement {
      *
      * @param recognitionString  the recognition string that identifies the object.
      * @param identificationType what mechanism to use for identification.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String recognitionString, IdentificationType identificationType) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -148,9 +192,7 @@ public class DomElement implements GuiElement {
      * @param alternativeRecognitionStrings An array of recognition strings for this element.
      * @param identificationType            The method of identification.
      * @param name                          Element name, for logging.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -165,9 +207,7 @@ public class DomElement implements GuiElement {
      *
      * @param alternativeRecognitionStrings An array of recognition strings for this element.
      * @param identificationType            The method of identification.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -184,9 +224,7 @@ public class DomElement implements GuiElement {
      * @param identificationType what mechanism to use for identification.
      * @param ordinalNumber      The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
      * @param name               Element name, for logging.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String recognitionString, IdentificationType identificationType, Integer ordinalNumber, String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -205,9 +243,7 @@ public class DomElement implements GuiElement {
      * @param recognitionString  the recognition string that identifies the object.
      * @param identificationType what mechanism to use for identification.
      * @param ordinalNumber      The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String recognitionString, IdentificationType identificationType, Integer ordinalNumber) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -227,9 +263,7 @@ public class DomElement implements GuiElement {
      * @param identificationType            The method of identification.
      * @param ordinalNumber                 The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
      * @param name                          Element name, for logging.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber, String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];
@@ -246,9 +280,7 @@ public class DomElement implements GuiElement {
      * @param alternativeRecognitionStrings An array of recognition strings for this element.
      * @param identificationType            The method of identification.
      * @param ordinalNumber                 The ordinal number of the occurrence on the web page, if multiple matches for search criteria.
-     * @deprecated The recommended way of declaring elements is with By statement.
      */
-    @Deprecated
     public DomElement(String[] alternativeRecognitionStrings, IdentificationType identificationType, Integer ordinalNumber) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement callingMethodUsingConstructor = stackTraceElements[2];

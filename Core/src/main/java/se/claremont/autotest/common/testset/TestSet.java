@@ -103,6 +103,8 @@ public abstract class TestSet { //non-abstract although it should be, to enable 
     /**
      * Procedures common for all test cases
      * @param testName The name of the test, for reporting purposes.
+     * @param testSetName The name of the class extending TestSet, to enable logging
+     * in multi-threaded parallel execution.
      */
     public void startUpTestCase(String testName, String testSetName){
         currentTestCases.add(new TestCase(knownErrorsList, testName, testSetName));

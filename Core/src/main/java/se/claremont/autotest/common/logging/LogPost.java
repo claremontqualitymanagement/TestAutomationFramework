@@ -42,23 +42,36 @@ public class LogPost {
     @JsonProperty public boolean identifiedToBePartOfKnownError = false;
 
     //Default dummy constructor for ObjectMapper for JSON to work
-    public LogPost(){
+    LogPost(){
         date = new Date();
     }
 
+    /*
     /**
      * Creates a new testCaseLog post with component sorting enabled
      * @param logLevel the testCaseLog level of the testCaseLog post
      * @param message the testCaseLog message string
      * @param htmlMessage The HTML representation of the log message - used for HTML based log reports
      */
+    /*
     public LogPost(LogLevel logLevel, String message, String htmlMessage) {
         this.logLevel = logLevel;
         this.message = message;
         this.htmlMessage = htmlMessage;
         this.date = new Date();
     }
+    */
 
+    /**
+     * Creating a log post for a test log.
+     *
+     * @param logLevel The type of log post, also relevant for severity.
+     * @param message Text based representation of the log message.
+     * @param htmlMessage HTML based representation of the log message. If left as null, the text message will be used instead.
+     * @param testCaseName The name of the test case, for logging, but also to identify the test step name through reflection.
+     * @param testStepName The test step name, for HTML logging purposes.
+     * @param testStepClassName The test step class name - to ease debugging.
+     */
     public LogPost(LogLevel logLevel, String message, String htmlMessage, String testCaseName, String testStepName, String testStepClassName){
         this.logLevel = logLevel;
         this.message = message;
@@ -69,23 +82,39 @@ public class LogPost {
         this.testCaseName = testCaseName;
     }
 
-    /**
-     * Creates a new testCaseLog post
-     * @param logLevel the testCaseLog level of the testCaseLog post
-     * @param message the testCaseLog message string
-     */
+    /*
+
+/**
+ * Creates a new testCaseLog post
+ * @param logLevel the testCaseLog level of the testCaseLog post
+ * @param message the testCaseLog message string
+ */
+    /*
     public LogPost(LogLevel logLevel, String message){
         this.logLevel = logLevel;
         this.message = message;
         this.date = new Date();
         this.htmlMessage = "";
     }
+    */
 
-    public LogPost(LogLevel logLevel, LogMessage logMessage){
+    /**
+     * Creating a log post for a test log.
+     *
+     * @param logLevel The type of log post, also relevant for severity.
+     * @param logMessage The log message (possibly divided into different parts of different types).
+     * @param testCaseName The name of the test case, for logging, but also to identify the test step name through reflection.
+     * @param testStepName The test step name, for HTML logging purposes.
+     * @param testStepClassName The test step class name - to ease debugging.
+     */
+    public LogPost(LogLevel logLevel, LogMessage logMessage, String testCaseName, String testStepName, String testStepClassName){
         this.htmlMessage = logMessage.toHtml();
         this.message = logMessage.toString();
         this.date = new Date();
         this.logLevel = logLevel;
+        this.testCaseName = testCaseName;
+        this.testStepName = testStepName;
+        this.testStepClassName = testStepClassName;
     }
 
     /**

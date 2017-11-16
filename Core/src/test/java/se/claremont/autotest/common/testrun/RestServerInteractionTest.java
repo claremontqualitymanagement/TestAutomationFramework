@@ -58,7 +58,7 @@ public class RestServerInteractionTest extends UnitTestClass{
 
     @Test
     public void logPostAsJsonTest(){
-        LogPost logPost = new LogPost(LogLevel.INFO, "My message");
+        LogPost logPost = new LogPost(LogLevel.INFO, "My message", "", "", "", "");
         Assert.assertNotNull(logPost);
         Assert.assertNotNull(logPost.toJson());
         Assert.assertTrue(logPost.toJson(), logPost.toJson().contains("My message"));

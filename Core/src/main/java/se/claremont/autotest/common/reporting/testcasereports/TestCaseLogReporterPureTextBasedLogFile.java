@@ -2,6 +2,7 @@ package se.claremont.autotest.common.reporting.testcasereports;
 
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.LogFolder;
+import se.claremont.autotest.common.support.ColoredConsolePrinter;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.ValuePair;
@@ -32,7 +33,11 @@ public class TestCaseLogReporterPureTextBasedLogFile implements TestCaseLogRepor
      */
     private String pureTextLogText(){
         StringBuilder logText = new StringBuilder(SupportMethods.LF + "Test case '" + testCaseResult.testName + "'" + SupportMethods.LF + SupportMethods.LF);
-        logText.append("Test status: ").append(StringManagement.enumCapitalNameToFriendlyString(testCaseResult.resultStatus.toString())).append(SupportMethods.LF).append(SupportMethods.LF);
+        logText
+                .append("Test status: ")
+                .append(StringManagement.enumCapitalNameToFriendlyString(testCaseResult.resultStatus.toString()))
+                .append(SupportMethods.LF)
+                .append(SupportMethods.LF);
         if(testCaseResult.testCaseData.testCaseDataList.size() > 0){
             logText.append("Test case data:").append(SupportMethods.LF);
             for(ValuePair valuePair : testCaseResult.testCaseData.testCaseDataList){
@@ -48,7 +53,7 @@ public class TestCaseLogReporterPureTextBasedLogFile implements TestCaseLogRepor
             logText.append(SupportMethods.LF);
         }
         logText.append("Test execution testCaseLog").append(SupportMethods.LF);
-        logText.append(testCaseResult.testCaseLog.toString()).append(SupportMethods.LF);
+        logText.append(ColoredConsolePrinter.removeFormattingFromString(testCaseResult.testCaseLog.toString())).append(SupportMethods.LF);
         return logText.toString();
     }
 }

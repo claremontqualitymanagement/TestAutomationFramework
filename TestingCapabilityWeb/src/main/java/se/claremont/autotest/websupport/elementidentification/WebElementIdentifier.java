@@ -52,7 +52,7 @@ public class WebElementIdentifier {
                 log(new LogPost(LogLevel.DEBUG, "Could not identify any matches for '" + domElement.name
                         + "' by using xpath:" + System.lineSeparator() + "'" + xpath + "'"
                         + System.lineSeparator() + "Built from By statement:"
-                        + System.lineSeparator() + domElement.by.toString()));
+                        + System.lineSeparator() + domElement.by.toString(), null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 return null;
             }
             int ordinalNumber = 1;
@@ -74,23 +74,23 @@ public class WebElementIdentifier {
                         ", based on its By statement: + " + System.lineSeparator() +
                         domElement.by.toString() + System.lineSeparator() +
                         "Elements found:" + System.lineSeparator() +
-                        String.join(System.lineSeparator(), elementDescriptions)));
+                        String.join(System.lineSeparator(), elementDescriptions), null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 return elements.get(0);
             }
             if (ordinalNumber < 1) {
-                log(new LogPost(LogLevel.DEBUG, "Ordinal number to identify element '" + domElement.name + "' is less than one. Must be a positive integer."));
+                log(new LogPost(LogLevel.DEBUG, "Ordinal number to identify element '" + domElement.name + "' is less than one. Must be a positive integer.", null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 return null;
             }
             returnElement = elements.get(ordinalNumber - 1);
         } catch (Exception poff) {
-            log(new LogPost(LogLevel.DEBUG, "Something went wrong trying to identify element '" + domElement.name + "'. Error: " + poff.toString()));
+            log(new LogPost(LogLevel.DEBUG, "Something went wrong trying to identify element '" + domElement.name + "'. Error: " + poff.toString(), null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
             return null;
         }
         if (returnElement != null) log(new LogPost(LogLevel.DEBUG, "Found exactly one IWebElement match for element '" +
                 domElement.name + "' using xpath:" + System.lineSeparator() +
                 "'" + xpath + "'" + System.lineSeparator() +
                 ", created from the By statement:" + System.lineSeparator() +
-                domElement.by.toString()));
+                domElement.by.toString(), null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
         return returnElement;
 
     }
@@ -99,7 +99,7 @@ public class WebElementIdentifier {
         try {
             List<WebElement> potentialMatches = driver.findElements(org.openqa.selenium.By.cssSelector(cssLocatorDescription()));
             if (potentialMatches == null || potentialMatches.size() == 0) {
-                log(new LogPost(LogLevel.DEBUG, "Could not identify any match for element '" + domElement.name + "'. Used CSS identification to try to find it."));
+                log(new LogPost(LogLevel.DEBUG, "Could not identify any match for element '" + domElement.name + "'. Used CSS identification to try to find it.", null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 return null;
             }
             int ordinalNumber = 1;
@@ -109,13 +109,13 @@ public class WebElementIdentifier {
                 }
             }
             if (ordinalNumber > potentialMatches.size()) {
-                log(new LogPost(LogLevel.DEBUG, "Was expected to return element number " + ordinalNumber + " among the elements matching search criteria for '" + domElement.name + "' but only " + potentialMatches.size() + " element(s) were found. Continuing using the first element, even if this could be the wrong one."));
+                log(new LogPost(LogLevel.DEBUG, "Was expected to return element number " + ordinalNumber + " among the elements matching search criteria for '" + domElement.name + "' but only " + potentialMatches.size() + " element(s) were found. Continuing using the first element, even if this could be the wrong one.", null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
             }
             if (potentialMatches.size() == 1) {
-                log(new LogPost(LogLevel.DEBUG, "Found exactly one match for element '" + domElement.name + "' identified by CSS identification."));
+                log(new LogPost(LogLevel.DEBUG, "Found exactly one match for element '" + domElement.name + "' identified by CSS identification.", null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 return potentialMatches.get(0);
             } else {
-                log(new LogPost(LogLevel.DEBUG, "Found " + potentialMatches.size() + " elements given the search conditions when trying to identify the '" + domElement.name + "' element. Continuing using match number " + ordinalNumber + ", even if this could be the wrong element."));
+                log(new LogPost(LogLevel.DEBUG, "Found " + potentialMatches.size() + " elements given the search conditions when trying to identify the '" + domElement.name + "' element. Continuing using match number " + ordinalNumber + ", even if this could be the wrong element.", null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 if (ordinalNumber > 0) {
                     return potentialMatches.get(ordinalNumber - 1);
                 }
@@ -123,7 +123,7 @@ public class WebElementIdentifier {
             }
 
         } catch (Exception e) {
-            log(new LogPost(LogLevel.DEBUG, "Could not identify element '" + domElement.name + "'. Error: " + e.toString()));
+            log(new LogPost(LogLevel.DEBUG, "Could not identify element '" + domElement.name + "'. Error: " + e.toString(), null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
             return null;
         }
     }

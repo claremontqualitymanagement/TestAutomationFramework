@@ -53,7 +53,7 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
 
     @Test
     public void logPostSerializationAndDeserialization(){
-        LogPost logPost = new LogPost(LogLevel.INFO, "Message");
+        LogPost logPost = new LogPost(LogLevel.INFO, "Message", "", null, null, null);
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {

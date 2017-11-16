@@ -14,14 +14,14 @@ public class LogPost_Tests extends UnitTestClass{
 
     @Test
     public void instantiationPureText(){
-        LogPost logPost = new LogPost(LogLevel.EXECUTED, "Executed stuff.");
+        LogPost logPost = new LogPost(LogLevel.EXECUTED, "Executed stuff.", null, "", "", "");
         Assert.assertNotNull(logPost);
     }
 
     @Test
     public void registerAllLogLevelsAndCheckToString(){
         for(LogLevel logLevel : LogLevel.values()){
-            LogPost logPost = new LogPost(logLevel, "Test1");
+            LogPost logPost = new LogPost(logLevel, "Test1", null, "", "", "");
             Assert.assertTrue(logPost.toString().toLowerCase().replace("_", " ").contains(logLevel.toString().toLowerCase().replace("_", " ")));
             Assert.assertTrue(logPost.toString().contains("Test1"));
         }
@@ -31,7 +31,7 @@ public class LogPost_Tests extends UnitTestClass{
     public void isFailedTest(){
         TestCaseLog testCaseLog = new TestCaseLog("isFailedTest");
         for(LogLevel logLevel : LogLevel.values()){
-            LogPost logPost = new LogPost(logLevel, "Test1");
+            LogPost logPost = new LogPost(logLevel, "Test1", null, null, null, null);
             if(logPost.isFail()){
                 testCaseLog.logPosts.add(logPost);
             }
@@ -41,43 +41,43 @@ public class LogPost_Tests extends UnitTestClass{
 
     @Test
     public void isSimilarTestPassed(){
-        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' då.");
-        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' då.");
+        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' då.", "", "", "", "");
+        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' då.", "", "", "", "");
         Assert.assertTrue(logPost1.isSimilar(logPost2));
     }
 
     @Test
     public void isSimilarTestFailed1(){
-        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' då.");
-        LogPost logPost2 = new LogPost(LogLevel.INFO, "Hej '321' då.");
+        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' då.", "", "", "", "");
+        LogPost logPost2 = new LogPost(LogLevel.INFO, "Hej '321' då.", "", "", "", "");
         Assert.assertFalse(logPost1.isSimilar(logPost2));
     }
 
     @Test
     public void isSimilarTestFailed2(){
-        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "He1 '123' då.");
-        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' då.");
+        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "He1 '123' då.", "", "", "", "");
+        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' då.", "", "", "", "");
         Assert.assertFalse(logPost1.isSimilar(logPost2));
     }
 
     @Test
     public void isSimilarTestFailed3(){
-        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' då.");
-        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' du.");
+        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' då.", "", "", "", "");
+        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' du.", "", "", "", "");
         Assert.assertFalse(logPost1.isSimilar(logPost2));
     }
 
     @Test
     public void isSimilarTestFailed4(){
-        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' nej.");
-        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' nja.");
+        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "Hej '123' nej.", "", "", "", "");
+        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "Hej '321' nja.", "", "", "", "");
         Assert.assertFalse(logPost1.isSimilar(logPost2));
     }
 
     @Test
     public void isSimilarTestFailed5(){
-        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "'Hej' 123 då.");
-        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "'He1' 123 då.");
+        LogPost logPost1 = new LogPost(LogLevel.EXECUTED, "'Hej' 123 då.", "", "", "", "");
+        LogPost logPost2 = new LogPost(LogLevel.EXECUTED, "'He1' 123 då.", "", "", "", "");
         Assert.assertTrue(logPost1.isSimilar(logPost2));
     }
 

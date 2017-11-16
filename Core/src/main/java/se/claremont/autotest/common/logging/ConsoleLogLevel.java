@@ -7,6 +7,7 @@ package se.claremont.autotest.common.logging;
  */
 public enum ConsoleLogLevel {
     ERRORS,
+
     VERBOSE,
     MODERATE,
     NONE

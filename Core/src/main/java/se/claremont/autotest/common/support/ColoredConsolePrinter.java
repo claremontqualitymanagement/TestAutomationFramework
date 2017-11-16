@@ -37,4 +37,18 @@ public class ColoredConsolePrinter {
         return ANSI_BOLD + stringToFormat + ANSI_RESET;
     }
 
+    public static String removeFormattingFromString(String instring){
+        return instring
+                .replace(ANSI_RESET, "")
+                .replace(ANSI_BLUE, "")
+                .replace(ANSI_BOLD, "")
+                .replace(ANSI_CYAN, "")
+                .replace(ANSI_GREEN, "")
+                .replace(ANSI_RED, "")
+                .replace(ANSI_YELLOW, "")
+                .replace(ANSI_BLACK, "")
+                .replace(ANSI_PURPLE, "")
+                .replace(ANSI_WHITE, "");
+    }
+
 }

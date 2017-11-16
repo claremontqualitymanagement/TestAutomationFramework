@@ -1,6 +1,7 @@
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.elementidentification.By;
@@ -66,5 +67,11 @@ public class DomElementTest{
     @Test
     public void namelessVariableNameSettingTest(){
         Assert.assertTrue(new DomElement("'dummyRecognition'", DomElement.IdentificationType.BY_VISIBLE_TEXT).name, new DomElement("dummyRecognition", DomElement.IdentificationType.BY_VISIBLE_TEXT).name.equals("'dummyRecognition'"));
+    }
+
+    @Test
+    public void seleniumByAsArg(){
+        DomElement domElement = new DomElement(org.openqa.selenium.By.partialLinkText("Hej"));
+        System.out.println(domElement.toString());
     }
 }

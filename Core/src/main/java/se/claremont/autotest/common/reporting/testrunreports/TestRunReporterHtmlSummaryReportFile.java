@@ -54,7 +54,7 @@ public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
     private void writeReport(){
         if(reportShouldBeWritten()){
             SupportMethods.saveToFile(reportContent(), LogFolder.testRunLogFolder + "_summary.html");
-            LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary reportTestRun saved as '" + LogFolder.testRunLogFolder + "_summary.html'.");
+            LogPost logPost = new LogPost(LogLevel.EXECUTED, "Summary reportTestRun saved as '" + LogFolder.testRunLogFolder + "_summary.html'.", null,"Framework", "Framework actions", this.getClass().getSimpleName());
             System.out.println(LF + logPost.toString());
         }
     }

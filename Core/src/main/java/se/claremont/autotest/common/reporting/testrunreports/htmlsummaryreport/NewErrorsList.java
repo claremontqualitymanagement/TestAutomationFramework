@@ -198,7 +198,7 @@ public class NewErrorsList {
         for(NewError newError : newErrors){
             List<LogPost> tempList = new ArrayList<>();
             while(newError.sampleLogPosts.size() > 0){
-                LogPost dummy = new LogPost(LogLevel.DEBUG, "");
+                LogPost dummy = new LogPost(LogLevel.DEBUG, "", "", "", "", "");
                 int index = -1;
                 for(int i = 0; i < newError.sampleLogPosts.size(); i++){
                     LogPost logPost = newError.sampleLogPosts.get(i);

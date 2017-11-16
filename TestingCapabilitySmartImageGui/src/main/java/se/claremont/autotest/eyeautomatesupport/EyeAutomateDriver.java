@@ -345,7 +345,7 @@ public class EyeAutomateDriver {
 
     public void Log(LogLevel logLevel, String message){
         if(testCase == null){
-            System.out.println(new LogPost(logLevel, message).toString());
+            System.out.println(new LogPost(logLevel, message, null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()).toString());
             return;
         }
         testCase.log(logLevel, message);

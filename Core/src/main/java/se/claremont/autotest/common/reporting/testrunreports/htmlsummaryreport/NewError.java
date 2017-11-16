@@ -107,7 +107,7 @@ public class NewError {
                 html.append("                </tr>").append(System.lineSeparator());
             }
         } else if(sampleLogPosts.size() > 3){
-            LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "");
+            LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "", "", "", "", "");
             int mostTroubleSomeLogPostOrder = 0;
             for(int i = 0; i < sampleLogPosts.size(); i++){
                 LogPost logPost = sampleLogPosts.get(i);

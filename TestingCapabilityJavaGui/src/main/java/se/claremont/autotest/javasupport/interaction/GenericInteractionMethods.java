@@ -1003,7 +1003,7 @@ public class GenericInteractionMethods {
      * @param message Log message
      */
     private void log(LogLevel logLevel, String message){
-        System.out.println(new LogPost(logLevel, message).toString());
+        System.out.println(new LogPost(logLevel, message, "", "", "", "").toString());
         if(testCase != null)
             testCase.log(logLevel, message);
     }
