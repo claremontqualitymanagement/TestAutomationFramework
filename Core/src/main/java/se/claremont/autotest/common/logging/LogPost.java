@@ -304,7 +304,7 @@ public class LogPost {
     @SuppressWarnings("SameParameterValue")
     public String toHtmlTableRow(){
         StringBuilder sb = new StringBuilder();
-        String logRowClass = this.logLevel.toString().toLowerCase().replace("_", "-");
+        String logRowClass = this.logLevel.toString().toLowerCase().replace("_", "-").trim();
         //String logRowClass = enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.LOG_ROW.toString());
         String rowMessage;
         if(htmlMessage == null || htmlMessage.length() == 0){
@@ -312,10 +312,28 @@ public class LogPost {
         } else {
           rowMessage = htmlMessage;
         }
-        sb.append("              <tr class=\"logpost ").append(logRowClass).append("\">").append(SupportMethods.LF);
-        sb.append("                 <td class=\"").append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString())).append("\">").append(new SimpleDateFormat("HH:mm:ss").format(date)).append("</td>").append(SupportMethods.LF);
-        sb.append("                 <td class=\"logpostloglevel ").append(logRowClass).append("\">").append(logLevelToString(logLevel.toString().trim())).append("</td>").append(SupportMethods.LF);
-        sb.append("                 <td class=\"logmessage\">").append(SupportMethods.LF).append(SupportMethods.LF).append(substituteDataElements(rowMessage)).append(SupportMethods.LF).append(SupportMethods.LF).append("                 </td>").append(SupportMethods.LF);
+        sb.append("              <tr class=\"logpost ").append(logRowClass).append("\">")
+                .append(SupportMethods.LF);
+        sb.append("                 <td class=\"")
+                .append(enumMemberNameToLower(TestCaseLogReporterHtmlLogFile.HtmlLogStyleNames.TIMESTAMP.toString()))
+                .append("\">")
+                .append(new SimpleDateFormat("HH:mm:ss").format(date))
+                .append("</td>")
+                .append(SupportMethods.LF);
+        sb.append("                 <td class=\"logpostloglevel ")
+                .append(logRowClass)
+                .append("\">")
+                .append(logLevelToString(logLevel.toString().trim()))
+                .append("</td>")
+                .append(SupportMethods.LF);
+        sb.append("                 <td class=\"logmessage\">")
+                .append(SupportMethods.LF)
+                .append(SupportMethods.LF)
+                .append(substituteDataElements(rowMessage))
+                .append(SupportMethods.LF)
+                .append(SupportMethods.LF)
+                .append("                 </td>")
+                .append(SupportMethods.LF);
         sb.append("              </tr>").append(SupportMethods.LF);
         return sb.toString();
     }

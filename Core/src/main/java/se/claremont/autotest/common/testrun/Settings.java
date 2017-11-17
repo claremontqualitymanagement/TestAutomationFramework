@@ -36,7 +36,7 @@ public class Settings extends HashMap<String, String> {
         EMAIL_ACCOUNT_USER_PASSWORD("Email account user password", true),
         EMAIL_SERVER_ADDRESS("Email server address", true),
         RUN_SETTINGS_FILE("Run settings file"),
-        HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER("Access path to files"),
+        //HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER("Access path to files"),
         EMAIL_SERVER_PORT("Email server port", true),
         EMAIL_SMTP_OR_GMAIL("Email send method (SMTP or GMAIL)", true),
         HTML_REPORTS_LINK_PREFIX("HTML reports link prefix"),
@@ -170,12 +170,25 @@ public class Settings extends HashMap<String, String> {
     public Settings() {
         loadDefaults();
         readFromFileIfItExistElseTryToCreateFile(getValue(SettingParameters.BASE_LOG_FOLDER) + "runSettings.properties");
+        setHtmlReportPrefixFromBaseFolderIfNotSetExplicitly();
     }
 
     public Settings(String pathToSettingsPropertiesFile) {
         loadDefaults();
         setValue(SettingParameters.RUN_SETTINGS_FILE, pathToSettingsPropertiesFile);
         readFromFileIfItExistElseTryToCreateFile(pathToSettingsPropertiesFile);
+        setHtmlReportPrefixFromBaseFolderIfNotSetExplicitly();
+    }
+
+    private void setHtmlReportPrefixFromBaseFolderIfNotSetExplicitly(){
+        if(getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) == null || getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).length() == 0){
+            String baseLogFolder = getValue(SettingParameters.BASE_LOG_FOLDER);
+            if(baseLogFolder.contains("://") && baseLogFolder.indexOf("://") < 7){
+                setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, baseLogFolder.substring(0, baseLogFolder.indexOf("://")));
+            } else {
+                setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
+            }
+        }
     }
 
     /**
@@ -212,8 +225,8 @@ public class Settings extends HashMap<String, String> {
         setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_SERVER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_NAME, "");
-        setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
-        setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER, getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + getValue(SettingParameters.BASE_LOG_FOLDER));
+        setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, null); //For SMB references this needs to be set after BaseLogFolder - hence set from constructor.
+        //setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER, getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + getValue(SettingParameters.BASE_LOG_FOLDER));
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
         setValue(SettingParameters.EMAIL_SMTP_OR_GMAIL, "");

@@ -780,11 +780,14 @@ public class WebInteractionMethods implements GuiDriver {
                 htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
             }
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved browser screenshot as '" + filePath + "'.",
-                    "Saved browser screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
-                            "<span class=\"screenshotfile\">" + filePath + "</span></a><br>" +
-                            "<a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
-                            "<img src=\"" + htmlFilePath + "\" alt=\"browser screenshot\" class=\"screenshot\">" +
-                            "</a>");
+                    "Saved browser screenshot as " + System.lineSeparator() +
+                            "   <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + System.lineSeparator() +
+                            "      <span class=\"screenshotfile\">" + filePath + "</span>" + System.lineSeparator() +
+                            "   </a>" + System.lineSeparator() +
+                            "   <br>" + System.lineSeparator() +
+                            "   <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + System.lineSeparator() +
+                            "      <img src=\"" + htmlFilePath + "\" alt=\"browser screenshot\" class=\"screenshot\">" + System.lineSeparator() +
+                            "   </a>");
         } else {
             log(LogLevel.DEBUG, "Could not save screenshot to '" + filePath + "' since the image data was empty.");
         }
