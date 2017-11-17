@@ -897,9 +897,9 @@ public class WebInteractionMethods implements GuiDriver {
         }
         if(potentialClickObjects.size() == 1){
             if(!potentialClickObjects.get(0).isDisplayed())
-                errorManagementProcedures("Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is hidden from view.");
+                errorManagementProcedures("Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is hidden from view.", potentialClickObjects.get(0));
             if(!potentialClickObjects.get(0).isEnabled())
-                errorManagementProcedures("Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is disabled.");
+                errorManagementProcedures("Attempting to click the element with the visible text '" + visibleText + "'. It exists but it is disabled.", potentialClickObjects.get(0));
             try {
                 potentialClickObjects.get(0).click();
                 log(LogLevel.EXECUTED, "Clicked the element with visible text '" + visibleText + "'.");
@@ -919,7 +919,7 @@ public class WebInteractionMethods implements GuiDriver {
                     trulyClickableElements.get(0).click();
                     log(LogLevel.EXECUTED, "Clicked the element with the visible text '" + visibleText + "'.");
                 }catch (Exception e){
-                    errorManagementProcedures("Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage());
+                    errorManagementProcedures("Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage(), trulyClickableElements.get(0));
                 }
             }else{
                 boolean clicked = false;
@@ -931,7 +931,7 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                 }
                 if(!clicked){
-                    errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but several elements was found with that text.");
+                    errorManagementProcedures("Attempted to click element with visible text '" + visibleText + "', but several elements was found with that text.", null);
                 }
             }
         }
@@ -1009,29 +1009,32 @@ public class WebInteractionMethods implements GuiDriver {
      * @param timeoutInSeconds The number of seconds to wait and try to click
      */
     public void click(GuiElement guiElement, int timeoutInSeconds){
-        DomElement element = (DomElement) guiElement;
-        long startTime = System.currentTimeMillis();
-        boolean clicked = false;
-        String errorMessage = null;
+        DomElement element    = (DomElement) guiElement;
+        long startTime        = System.currentTimeMillis();
+        boolean clicked       = false;
+        String errorMessage   = null;
+        WebElement webElement = null;
+
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
-        WebElement webElement = waitForElementToBeEnabled(guiElement, timeoutInSeconds);
-        if(webElement == null){
-            errorManagementProcedures("Could not identify element " + element.LogIdentification() + " in the GUI.");
-        } else if(!webElement.isEnabled()){
-            errorManagementProcedures("Element " + element.LogIdentification() + " is not enabled. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.");
-        } else if(!webElement.isDisplayed()){
-            log(LogLevel.DEBUG, "Element " + element.LogIdentification() + " is not currently visible.");
-        }
-        while (!clicked && (System.currentTimeMillis() - startTime) < timeoutInSeconds *1000){
+
+        while (!clicked && (System.currentTimeMillis() - startTime) <= timeoutInSeconds *1000){
+            webElement = getRuntimeElementWithoutLogging(element);
+
+            if(webElement == null || !webElement.isEnabled() || !webElement.isDisplayed()){
+                try { Thread.sleep(50); } catch (InterruptedException e) { }
+                continue;
+            }
+
             try{
-                Thread.sleep(50);
                 //noinspection ConstantConditions
                 webElement.click();
                 clicked = true;
             } catch (Exception e){
                 errorMessage = e.getMessage();
+                try { Thread.sleep(50); } catch (InterruptedException e1) { }
             }
         }
+
         if(clicked){
             log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification() + " element after " + String.valueOf(System.currentTimeMillis() - startTime) + " milliseconds.");
         } else if(errorMessage != null){
@@ -1040,9 +1043,17 @@ public class WebInteractionMethods implements GuiDriver {
             } else {
                 testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR, "Could not click on element " + element.LogIdentification() + ". " + errorMessage, "Could not click och element " + element.LogIdentification() + ".<br>Error:<br><br>" + errorMessage);
             }
-            errorManagementProcedures("Could not click element " + element.LogIdentification() + ".");
+            errorManagementProcedures("Could not click element " + element.LogIdentification() + ".", webElement);
         } else {
-            errorManagementProcedures("Could not successfully click on the " + element.LogIdentification() + " element.");
+            if(webElement == null){
+                errorManagementProcedures("Could not identify element " + element.LogIdentification() + " in the GUI.", null);
+            }
+            if(!webElement.isEnabled()){
+                errorManagementProcedures("Element " + element.LogIdentification() + " is not enabled. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.", webElement);
+            } else if(!webElement.isDisplayed()){
+                log(LogLevel.DEBUG, "Element " + element.LogIdentification() + " is not currently visible.");
+            }
+            errorManagementProcedures("Could not successfully click on the " + element.LogIdentification() + " element.", webElement);
         }
     }
 
@@ -2137,7 +2148,7 @@ public class WebInteractionMethods implements GuiDriver {
                     return;
                 }
             }
-            errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.");
+            errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.", webElement);
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Method 'chooseRadioButton()' crashed with error." + e.getMessage());
             saveScreenshot(webElement);
@@ -2203,12 +2214,12 @@ public class WebInteractionMethods implements GuiDriver {
                 } catch (Exception e){
                     log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
                     webElement = null;
-                    errorManagementProcedures("This should not happen.");
+                    errorManagementProcedures("This should not happen.", webElement);
                 }
             }
         }
         if(webElement == null){
-            errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.");
+            errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.", null);
         }
     }
 
@@ -2268,11 +2279,11 @@ public class WebInteractionMethods implements GuiDriver {
         }
         WebElement webElement = waitForElementToBeEnabled(domElement, standardTimeoutInSeconds);
         if(webElement == null) {
-            errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.");
+            errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.", null);
             return;
         }
         if(!webElement.getTagName().toLowerCase().equals("select"))
-            errorManagementProcedures("Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.");
+            errorManagementProcedures("Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.", webElement);
 
         //Create Select element and log originally selected values
         boolean allSelectionsOkSoFar = true;
@@ -2317,7 +2328,7 @@ public class WebInteractionMethods implements GuiDriver {
             }
         }catch (Exception e){
             log(LogLevel.FRAMEWORK_ERROR, "Something went terribly bad while trying to select '" + String.join("', '", selections) + "' in " + domElement.LogIdentification() + ". " + e.getMessage());
-            errorManagementProcedures("This should not happen.");
+            errorManagementProcedures("This should not happen.", webElement);
         }
 
         //Log results
@@ -3032,9 +3043,9 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param errorMessage The error message to write to the test case log as a EXECUTION_PROBLEM log post.
      */
-    private void errorManagementProcedures(String errorMessage){
+    private void errorManagementProcedures(String errorMessage, WebElement webElement){
         log(LogLevel.EXECUTION_PROBLEM, errorMessage);
-        saveScreenshot(null);
+        saveScreenshot(webElement);
         saveDesktopScreenshot();
         saveHtmlContentOfCurrentPage();
         writeRunningProcessListDeviationsSinceTestCaseStart();
