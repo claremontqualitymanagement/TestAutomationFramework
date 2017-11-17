@@ -26,6 +26,28 @@ public class Settings_Tests extends UnitTestClass {
         Assert.assertTrue(TestRun.getCustomSettingsValue("myparametername").equals("cliValue"));
     }
 
+    @Test
+    public void htmlReportPrefixFromBaseFolderTest(){
+        Settings s = new Settings();
+        Assert.assertNotNull(s.getValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
+        s.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "smb://myserver.mycompany.mycountry/mypath");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("smb"));
+    }
+
+    @Test
+    public void htmlReportPrefixFromBaseFolderTest2(){
+        Settings s = new Settings();
+        Assert.assertNotNull(s.getValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
+        s.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "smb://myserver.mycompany.mycountry/mypath");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("smb"));
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
+        s.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "file://myserver.mycompany.mycountry/mypath");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
+    }
+
     private String createTemporaryRunSettingsFileWithCurrentSettings(){
         String tempFilePath = System.getProperty("java.io.tmpdir")
                 + "runsettings.properties";

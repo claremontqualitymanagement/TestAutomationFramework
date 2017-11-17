@@ -86,13 +86,27 @@ public class Settings extends HashMap<String, String> {
     }
 
     public String getValue(SettingParameters settingParameters) {
+        if(settingParameters == SettingParameters.HTML_REPORTS_LINK_PREFIX ){
+            if((get(settingParameters.toString()) == null || get(settingParameters.toString()).length() == 0) && (
+                    get(settingParameters.friendlyName()) == null || get(settingParameters.friendlyName()).length() == 0)){
+                String baseLogFolder = getValue(SettingParameters.BASE_LOG_FOLDER);
+                if(baseLogFolder.contains("://") && baseLogFolder.indexOf("://") < 7){
+                    return baseLogFolder.substring(0, baseLogFolder.indexOf("://"));
+                } else {
+                    return "file";
+                }
+            } else {
+                if(get(settingParameters.toString()) != null) return get(settingParameters.toString());
+                return get(settingParameters.friendlyName());
+            }
+        }
         String value = get(settingParameters.toString());
         if (value == null)
             value = get(settingParameters.friendlyName());
         return value;
     }
 
-    void setValue(SettingParameters settingParameters, String value) {
+    public void setValue(SettingParameters settingParameters, String value) {
         if (this.containsKey(settingParameters.toString())) {
             replace(settingParameters.toString(), value);
         } else if (this.containsKey(settingParameters.friendlyName)) {
@@ -170,14 +184,12 @@ public class Settings extends HashMap<String, String> {
     public Settings() {
         loadDefaults();
         readFromFileIfItExistElseTryToCreateFile(getValue(SettingParameters.BASE_LOG_FOLDER) + "runSettings.properties");
-        setHtmlReportPrefixFromBaseFolderIfNotSetExplicitly();
     }
 
     public Settings(String pathToSettingsPropertiesFile) {
         loadDefaults();
         setValue(SettingParameters.RUN_SETTINGS_FILE, pathToSettingsPropertiesFile);
         readFromFileIfItExistElseTryToCreateFile(pathToSettingsPropertiesFile);
-        setHtmlReportPrefixFromBaseFolderIfNotSetExplicitly();
     }
 
     private void setHtmlReportPrefixFromBaseFolderIfNotSetExplicitly(){
@@ -225,7 +237,7 @@ public class Settings extends HashMap<String, String> {
         setValue(SettingParameters.EMAIL_SENDER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_SERVER_ADDRESS, "");
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_NAME, "");
-        setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, null); //For SMB references this needs to be set after BaseLogFolder - hence set from constructor.
+        //setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, null); //For SMB references this needs to be set after BaseLogFolder - hence set from constructor.
         //setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX_TO_APPENDED_FILES_BASE_FOLDER, getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + getValue(SettingParameters.BASE_LOG_FOLDER));
         setValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD, "");
         setValue(SettingParameters.EMAIL_SERVER_PORT, "");
