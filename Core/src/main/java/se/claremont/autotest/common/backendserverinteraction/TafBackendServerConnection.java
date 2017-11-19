@@ -19,7 +19,8 @@ import java.io.IOException;
 public class TafBackendServerConnection {
     private Boolean isConnected = null;
     private Boolean apiVersionCompatible = null;
-    private String tafFrameworkApiVersion = "v1";
+    private final String tafFrameworkApiVersion = "v1";
+    @SuppressWarnings("CanBeFinal")
     public static String defaultServerUrl = "http://-server-url-not-set-/taf";
 
     public TafBackendServerConnection(){
@@ -71,6 +72,7 @@ public class TafBackendServerConnection {
         return responseBody;
     }
 
+    @SuppressWarnings("unused")
     public boolean apiVersionCompatibleWithBackend(){
         checkConnectionStatus();
         return apiVersionCompatible;

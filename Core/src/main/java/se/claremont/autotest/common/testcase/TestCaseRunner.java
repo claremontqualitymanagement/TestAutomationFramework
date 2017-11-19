@@ -8,7 +8,7 @@ import se.claremont.autotest.common.junitcustomization.TafResult;
 import java.util.concurrent.Callable;
 
 public class TestCaseRunner implements Callable<TafResult> {
-    private Request request;
+    private final Request request;
 
     public TestCaseRunner(Request request) {
         this.request = request;

@@ -19,8 +19,8 @@ import java.util.Date;
  */
 @SuppressWarnings("WeakerAccess")
 public class BaseFolderHtmlIndexFile {
-    SimpleDateFormat directoryPartTimeFormat = new SimpleDateFormat("yyyyMMdd HHmmss");
-    SimpleDateFormat outputTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    final SimpleDateFormat directoryPartTimeFormat = new SimpleDateFormat("yyyyMMdd HHmmss");
+    final SimpleDateFormat outputTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public BaseFolderHtmlIndexFile(){
         SupportMethods.saveToFile(htmlContent(), TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER) + "index.html" );

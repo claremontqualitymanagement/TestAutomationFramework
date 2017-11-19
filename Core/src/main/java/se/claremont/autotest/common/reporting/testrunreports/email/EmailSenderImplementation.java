@@ -16,7 +16,7 @@ import java.util.Properties;
  *
  * Created by jordam on 2016-09-18.
  */
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "CanBeFinal"})
 public class EmailSenderImplementation implements EmailSender{
 
     private final static Logger logger = LoggerFactory.getLogger( EmailSenderImplementation.class );

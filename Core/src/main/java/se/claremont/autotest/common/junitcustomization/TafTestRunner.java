@@ -44,7 +44,7 @@ public class TafTestRunner {
             //noinspection ConstantConditions
             if (threadMode != null && threads > 1) {
                 System.out.println("Running test methods in parallel in " + threads + " concurrent execution threads.");
-                TafParallelTestCaseRunner p = new TafParallelTestCaseRunner(threads, junit);
+                TafParallelTestCaseRunner p = new TafParallelTestCaseRunner(threads);
                 for (Class c : classes) {
                     p.addTestClasses(c);
                 }

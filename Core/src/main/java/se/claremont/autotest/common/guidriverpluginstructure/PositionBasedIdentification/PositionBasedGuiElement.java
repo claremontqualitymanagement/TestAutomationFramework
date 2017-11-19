@@ -7,6 +7,7 @@ import java.util.ArrayList;
  *
  * Created by jordam on 2016-10-02.
  */
+@SuppressWarnings("unused")
 public interface PositionBasedGuiElement {
     Integer getLeftPosition();
     Integer getRightPosition();

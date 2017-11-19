@@ -10,7 +10,7 @@ public class TafResult {
     private int count;
     private int ignoreCount;
     private int failureCount;
-    private List<Failure> failures;
+    private final List<Failure> failures;
     private final Long startTime;
 
     public TafResult() {
@@ -51,6 +51,7 @@ public class TafResult {
         return failures;
     }
 
+    @SuppressWarnings("unused")
     public long getRunTime(){
         return System.currentTimeMillis() - startTime;
     }

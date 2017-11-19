@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 public class TafUserInfoImpl implements TafUserInfo {
 
     //create localThread of the current thread
-    private static ThreadLocal<TafUserInfoImpl> myTafUserInfo = new ThreadLocal<TafUserInfoImpl>() {
+    private static final ThreadLocal<TafUserInfoImpl> myTafUserInfo = new ThreadLocal<TafUserInfoImpl>() {
         @Override protected TafUserInfoImpl initialValue() {
             return new TafUserInfoImpl();
         }

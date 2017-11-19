@@ -16,12 +16,12 @@ import java.util.concurrent.*;
 
 public class TafParallelTestCaseRunner {
 
-    private ThreadPoolExecutor threadPoolExecutor;
-    private List<Class<?>> testClasses = new ArrayList<>();
+    private final ThreadPoolExecutor threadPoolExecutor;
+    private final List<Class<?>> testClasses = new ArrayList<>();
     public static Set<TestSet> testSets = new HashSet<>();
-    public static Set<String> testSetNames = new HashSet<>();
+    public static final Set<String> testSetNames = new HashSet<>();
 
-    public TafParallelTestCaseRunner(int threadCount, JUnitCore jUnitCore){
+    public TafParallelTestCaseRunner(int threadCount){
         threadPoolExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(threadCount);
     }
 
@@ -37,7 +37,6 @@ public class TafParallelTestCaseRunner {
             for(Method method : methodsInClass){
                 if(!method.isAnnotationPresent(Test.class))continue;
                 Request testMethodRequest = Request.method(c, method.getName());
-                String testName = method.getName();
                 set.add(threadPoolExecutor.submit(new TestCaseRunner(testMethodRequest)));
             }
         }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("WeakerAccess")
 public class HtmlStyles {
-    public static ArrayList<String> styleSections = new ArrayList<>();
+    public final static ArrayList<String> styleSections = new ArrayList<>();
 
     public static String asString(){
         return System.lineSeparator() + "    " + String.join(System.lineSeparator() + "    ", styleSections) + System.lineSeparator();

@@ -19,7 +19,7 @@ public enum  UxColors {
     WHITE("white"),
     BLACK("black");
 
-    private String htmlColorCode;
+    private final String htmlColorCode;
 
     UxColors(String htmlColorCode){
         this.htmlColorCode = htmlColorCode;

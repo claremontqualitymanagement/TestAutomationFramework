@@ -69,7 +69,6 @@ public class TestRunWrapupTest extends UnitTestClass{
     //Test case used to check that exactly four test cases were reported in the _summary.html report file
     public void summaryReportShouldHaveExactlyOneInstanceOfEachTest(){
         TestRunReporterHtmlSummaryReportFile testRunReporterHtmlSummaryReportFile = new TestRunReporterHtmlSummaryReportFile();
-        FakeTestRunReporter fakeEmailTestRunReporter = new FakeTestRunReporter();
         TestRun.getReporterFactory().reporters.clear();
         TestRun.addTestRunReporter(testRunReporterHtmlSummaryReportFile);
         String[] args = {"runname=HappyTest", TestSet1.class.getName(), TestSet2.class.getName() };

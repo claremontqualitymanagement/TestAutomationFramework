@@ -20,6 +20,7 @@ public class TestRun {
     public int exitCode = ExitCodeTable.INIT_OK.getValue();
     public List<TestSet> currentTestSets = new ArrayList<>();
     public final TestRunReporterFactory reporters = new TestRunReporterFactory();
+    @SuppressWarnings("CanBeFinal")
     public ConsoleLogLevel consoleLogLevel = ConsoleLogLevel.MODERATE;
     public final Date startTime = new Date();
     public Date stopTime;

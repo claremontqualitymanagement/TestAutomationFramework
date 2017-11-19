@@ -35,6 +35,7 @@ public class GenericJavaObjectToHtmlTests {
         //System.out.println(GenericJavaObjectToHtml.toHtml(new TestObject()));
     }
 
+    @SuppressWarnings("unused")
     class TestObject{
         String name = "ThisTestObject";
         TestObject2 subObject = new TestObject2();

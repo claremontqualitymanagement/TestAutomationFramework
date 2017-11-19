@@ -5,7 +5,7 @@ package se.claremont.autotest.common.logging.logmessage;
  */
 public class TextLogMessagePart implements LogMessagePartType{
 
-    private String logMessage;
+    private final String logMessage;
 
     public TextLogMessagePart(String logMessage){
         this.logMessage = logMessage;

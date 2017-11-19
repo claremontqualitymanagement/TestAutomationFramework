@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
+@SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused"})
 @XmlRootElement (name = "ServerConfiguration")
 @XmlAccessorType (XmlAccessType.FIELD)
 public class ServerConfiguration {

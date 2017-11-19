@@ -21,7 +21,7 @@ public class ApplicationManager {
 
     private final static Logger logger = LoggerFactory.getLogger( ApplicationManager.class );
 
-    TestCase testCase;
+    final TestCase testCase;
     BufferedReader output;
     String programName;
     Process process;
@@ -131,8 +131,8 @@ public class ApplicationManager {
     }
 
     class App implements Runnable{
-        List<String> commands = new ArrayList<>();
-        TestCase testCase;
+        final List<String> commands = new ArrayList<>();
+        final TestCase testCase;
         Process process;
 
         public App(List<String> commands, TestCase testCase){

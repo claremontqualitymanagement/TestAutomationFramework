@@ -20,7 +20,7 @@ import java.util.Date;
 public class KioskModeReport {
     String html = null;
     String filePath = null;
-    ArrayList<String> tableRows = new ArrayList<>();
+    final ArrayList<String> tableRows = new ArrayList<>();
 
     @SuppressWarnings("SpellCheckingInspection")
     public void evaluateTestCase(TestCase testCase){

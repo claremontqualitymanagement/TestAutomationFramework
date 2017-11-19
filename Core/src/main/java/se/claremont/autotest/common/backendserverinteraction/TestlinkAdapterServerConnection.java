@@ -18,10 +18,12 @@ import java.io.IOException;
  *
  * Created by jordam on 2017-03-24.
  */
+@SuppressWarnings("unused")
 public class TestlinkAdapterServerConnection {
     private Boolean isConnected = null;
     private Boolean apiVersionCompatible = null;
-    private String tafFrameworkApiVersion = "v1";
+    private final String tafFrameworkApiVersion = "v1";
+    @SuppressWarnings("CanBeFinal")
     public static String defaultServerUrl = "http://-server-url-not-set-/taftestlinkadapter";
 
     public TestlinkAdapterServerConnection(){

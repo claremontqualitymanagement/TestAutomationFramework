@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 class NewErrorsList {
     private List<NewError> allErrorsFromTestRunPerTestCase = new ArrayList<>();
     private List<NewError> actualSharedErrors = new ArrayList<>();
-    private List<NewError> nonSharedErrors = new ArrayList<>();
-    private List<LogPost> potentialMatchingLogPosts = new ArrayList<>(); //All encountered log posts for all new errors
-    private List<String> classesForRunTestCases;
+    private final List<NewError> nonSharedErrors = new ArrayList<>();
+    private final List<LogPost> potentialMatchingLogPosts = new ArrayList<>(); //All encountered log posts for all new errors
+    private final List<String> classesForRunTestCases;
 
     public NewErrorsList(List<NewError> allErrorsFromTestRunPerTestCase, List<String> classesForRunTestCases){
         this.allErrorsFromTestRunPerTestCase = allErrorsFromTestRunPerTestCase;
@@ -128,6 +128,7 @@ class NewErrorsList {
     }
 
     private void moveUnSharedLogPostsToOtherList() {
+        //noinspection Convert2MethodRef
         actualSharedErrors.stream().filter(o -> o.testCasesWhereEncountered.size() == 1).forEach(o -> nonSharedErrors.add(o));
         actualSharedErrors = actualSharedErrors.stream().filter(o -> o.testCasesWhereEncountered.size() > 1).collect(Collectors.toList());
     }

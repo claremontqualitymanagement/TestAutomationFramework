@@ -11,7 +11,7 @@ import java.util.List;
  * Created by jordam on 2017-06-24.
  */
 public class TestCaseData {
-    public List<ValuePair> testCaseDataList = new ArrayList<>();
+    public final List<ValuePair> testCaseDataList = new ArrayList<>();
 
     @SuppressWarnings("unused")
     public String toJson() {

@@ -33,7 +33,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLogReporterHtmlLogFile.class );
     private final TestCaseResult testCaseResult;
     private Date runEndTime;
-    private StringBuilder sb = new StringBuilder();
+    private final StringBuilder sb = new StringBuilder();
 
     /**
      * Compiles and writes the test case HTML based execution testCaseLog.
@@ -355,7 +355,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 .append("     <label><input type=\"checkbox\" onclick=\"showDebug()\" id=\"showDebugCheckbox\">Show verbose debugging information</label>").append(LF)
                 .append("     <div id=\"logpostlist\">").append(LF)
                 .append(LF)
-                .append(testStepLogPostSections(testCaseResult.testCaseLog)).append(LF)
+                .append(testStepLogPostSections()).append(LF)
                 .append("     </div>").append(LF)
                 .append("     <br><br>").append(LF);
     }
@@ -408,7 +408,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
     }
 
-    String testStepLogPostSections(TestCaseLog testCaseLog){
+    String testStepLogPostSections(){
         if(testCaseResult.testCaseLog.logPosts.size() == 0) return null;
         StringBuilder html = new StringBuilder();
         ArrayList<TestCaseLogSection> logSections = testCaseResult.testCaseLog.toLogSections();

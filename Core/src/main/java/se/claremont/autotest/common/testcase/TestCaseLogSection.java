@@ -17,8 +17,9 @@ import java.util.Date;
  */
 @SuppressWarnings("WeakerAccess")
 public class TestCaseLogSection {
-     @JsonProperty ArrayList<LogPost> logPostList = new ArrayList<>();
-     @JsonProperty Date startTime;
+     @JsonProperty final ArrayList<LogPost> logPostList = new ArrayList<>();
+     @JsonProperty final Date startTime;
+     @SuppressWarnings("CanBeFinal")
      @JsonProperty Date stopTime;
 
      public TestCaseLogSection(ArrayList<LogPost> logPosts, Date testStartTime, Date testStopTime){

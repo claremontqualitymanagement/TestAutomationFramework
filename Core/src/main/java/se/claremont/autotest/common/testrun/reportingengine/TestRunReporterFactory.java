@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterFactory {
-    public ArrayList<TestRunReporter> reporters = new ArrayList<>();
+    public final ArrayList<TestRunReporter> reporters = new ArrayList<>();
 
     public TestRunReporterFactory(){
         reporters.add(new TestRunReporterHtmlSummaryReportFile());

@@ -4,7 +4,7 @@ package se.claremont.autotest.common.logging.logmessage;
  * Created by jordam on 2017-03-29.
  */
 public class ElementName implements LogMessagePartType{
-    private String logMessage;
+    private final String logMessage;
 
     public ElementName(String elementName){
         this.logMessage = elementName;

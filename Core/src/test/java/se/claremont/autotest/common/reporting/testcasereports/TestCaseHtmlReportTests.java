@@ -24,7 +24,7 @@ public class TestCaseHtmlReportTests extends UnitTestClass {
         testCase.testCaseResult.testCaseLog.log(LogLevel.INFO, "Testing", "<br>Testing", "Noname testcase", "Step1", "TestClass");
         testCase.testCaseResult.testCaseLog.log(LogLevel.INFO, "Testing", "<br>Testing", "Noname testcase", "Step1", "TestClass");
         TestCaseLogReporterHtmlLogFile testCaseLogReporterHtmlLogFile = new TestCaseLogReporterHtmlLogFile(testCase.testCaseResult);
-        testCaseLogReporterHtmlLogFile.testStepLogPostSections(testCase.testCaseResult.testCaseLog);
+        testCaseLogReporterHtmlLogFile.testStepLogPostSections();
     }
 
     @Test

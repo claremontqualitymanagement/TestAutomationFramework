@@ -24,8 +24,8 @@ public class TestCaseResult {
     private TestCase testCase;
     @JsonProperty public TestCaseLog testCaseLog;
     @JsonProperty public String testName;
-    @JsonProperty public String testSetName;
-    @JsonProperty public Date startTime;
+    @JsonProperty public final String testSetName;
+    @JsonProperty public final Date startTime;
     @JsonProperty public Date stopTime;
     @JsonProperty public String pathToHtmlLogFile;
     @JsonProperty public TestCaseData testCaseData;
@@ -138,7 +138,7 @@ public class TestCaseResult {
         ResultStatus(int value){
             this.value = value;
         }
-        private int value;
+        private final int value;
 
         public int value() {
             return value;

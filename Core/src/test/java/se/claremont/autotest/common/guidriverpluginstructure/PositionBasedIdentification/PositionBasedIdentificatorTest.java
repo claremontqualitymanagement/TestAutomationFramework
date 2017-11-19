@@ -13,10 +13,10 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("WeakerAccess")
 public class PositionBasedIdentificatorTest extends UnitTestClass{
-    TestPositionBasedIdentificationObject leftLabel = new TestPositionBasedIdentificationObject("Label for editfield", 10, 100, 50, 150, "myTool.Label");
-    TestPositionBasedIdentificationObject rightEditField = new TestPositionBasedIdentificationObject("Edit field", 150, 250, 50, 150, "myTool.EditField");
-    TestPositionBasedIdentificationObject bottomLeftButton = new TestPositionBasedIdentificationObject("Ok button", 10, 100, 200, 250, "myTool.Button");
-    TestPositionBasedIdentificationObject bottomRightButton = new TestPositionBasedIdentificationObject("Cancel button", 160, 250, 200, 250, "myTool.Button");
+    final TestPositionBasedIdentificationObject leftLabel = new TestPositionBasedIdentificationObject("Label for editfield", 10, 100, 50, 150, "myTool.Label");
+    final TestPositionBasedIdentificationObject rightEditField = new TestPositionBasedIdentificationObject("Edit field", 150, 250, 50, 150, "myTool.EditField");
+    final TestPositionBasedIdentificationObject bottomLeftButton = new TestPositionBasedIdentificationObject("Ok button", 10, 100, 200, 250, "myTool.Button");
+    final TestPositionBasedIdentificationObject bottomRightButton = new TestPositionBasedIdentificationObject("Cancel button", 160, 250, 200, 250, "myTool.Button");
 
     public ElementsList gui(){
         ArrayList<PositionBasedGuiElement> elementsList = new ArrayList<>();
@@ -63,12 +63,12 @@ public class PositionBasedIdentificatorTest extends UnitTestClass{
 
 
     public class TestPositionBasedIdentificationObject implements PositionBasedGuiElement {
-        int left;
-        int right;
-        int top;
-        int bottom;
-        String type;
-        String name;
+        final int left;
+        final int right;
+        final int top;
+        final int bottom;
+        final String type;
+        final String name;
 
         public TestPositionBasedIdentificationObject(String name, int left, int right, int top, int bottom, String type){
             this.left = left;

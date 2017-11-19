@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@SuppressWarnings({"SameParameterValue", "DefaultAnnotationParam"})
+@SuppressWarnings({"SameParameterValue", "DefaultAnnotationParam", "unused"})
 @XmlRootElement ( name = "PlatformConfiguration" )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PlatformConfiguration {

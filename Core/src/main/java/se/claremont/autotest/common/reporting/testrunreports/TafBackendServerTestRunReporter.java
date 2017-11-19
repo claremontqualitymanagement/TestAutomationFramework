@@ -34,10 +34,10 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     @SuppressWarnings("WeakerAccess")
     @JsonProperty public Settings settings;
     @SuppressWarnings("WeakerAccess")
-    @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
+    @JsonProperty public final List<String> testCasesJsonsList = new ArrayList<>();
     @SuppressWarnings("WeakerAccess")
-    @JsonProperty public List<String> testSetJsonsList = new ArrayList<>();
-    @JsonProperty public List<String> testSetNames = new ArrayList<>();
+    @JsonProperty public final List<String> testSetJsonsList = new ArrayList<>();
+    @JsonProperty public final List<String> testSetNames = new ArrayList<>();
     @SuppressWarnings("WeakerAccess")
     @JsonProperty public TestCaseResult.ResultStatus mostSevereErrorEncountered = TestCaseResult.ResultStatus.UNEVALUATED;
     @JsonProperty public String testRunId = "";

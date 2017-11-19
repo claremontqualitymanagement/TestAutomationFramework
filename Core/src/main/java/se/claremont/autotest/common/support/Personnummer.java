@@ -18,6 +18,7 @@ class Personnummer {
      *
      * @param instring string to parse for Personnummer
      */
+    @SuppressWarnings("UnusedAssignment") //Todo: This method is not yet complete
     public Personnummer(String instring){
         String date;
         Date date1;

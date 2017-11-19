@@ -39,7 +39,7 @@ public class HtmlSummaryReport {
     private final int barWidthInPixels = 400;
     private String resultsBarStyleInfo = "";
     private StringBuilder html;
-    private Set<String> errorClassNames = new HashSet<>();
+    private final Set<String> errorClassNames = new HashSet<>();
 
 
     /**

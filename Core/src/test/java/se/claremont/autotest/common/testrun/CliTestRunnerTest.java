@@ -14,7 +14,7 @@ import java.io.PrintStream;
 @SuppressWarnings("WeakerAccess")
 public class CliTestRunnerTest extends UnitTestClass {
 
-    String cliIsInvokedWelcomeString = "Executing TAF (TestAutomationFramework) from CLI";
+    final String cliIsInvokedWelcomeString = "Executing TAF (TestAutomationFramework) from CLI";
 
     static PrintStream originalOutputChannel;
     static ByteArrayOutputStream testOutputChannel;

@@ -9,7 +9,7 @@ import java.io.File;
  */
 @SuppressWarnings("WeakerAccess")
 public class LogMessageWithFile extends LogMessage{
-    private File file;
+    private final File file;
 
     public LogMessageWithFile(String logMessage, File file) {
         super(logMessage);

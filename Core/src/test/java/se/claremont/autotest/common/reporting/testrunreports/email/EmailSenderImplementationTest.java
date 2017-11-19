@@ -1,8 +1,6 @@
 package se.claremont.autotest.common.reporting.testrunreports.email;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.subethamail.wiser.Wiser;
 import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -25,8 +23,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class EmailSenderImplementationTest extends UnitTestClass{
     private Wiser wiser;
-    /*
 
+    /*
     @Before
     public void setup() {
         wiser = new Wiser(2500);
@@ -37,7 +35,7 @@ public class EmailSenderImplementationTest extends UnitTestClass{
     public void tearDown() {
         wiser.stop();
     }
-*/
+    */
 
     @Test
     @Ignore

@@ -10,6 +10,7 @@ import java.io.IOException;
 @SuppressWarnings("WeakerAccess")
 public class JunitDummyAuthenticationProvider extends NativeAuthenticationProvider {
 
+    @SuppressWarnings("unused")
     public JunitDummyAuthenticationProvider() {
         System.out.println("JunitDummyAuthenticationProvider is in use. This is only for testing.");
     }

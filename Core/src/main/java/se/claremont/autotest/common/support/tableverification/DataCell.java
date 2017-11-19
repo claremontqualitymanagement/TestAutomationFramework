@@ -9,8 +9,8 @@ import se.claremont.autotest.common.support.SupportMethods;
  */
 @SuppressWarnings("WeakerAccess")
 class DataCell {
-    String correspontingHeadline;
-    String dataContent;
+    final String correspontingHeadline;
+    final String dataContent;
     DataCellEvaluationStatus dataCellEvaluationStatus = DataCellEvaluationStatus.UNEVALUATED;
 
     DataCell(String dataContent, String correspontingHeadline){

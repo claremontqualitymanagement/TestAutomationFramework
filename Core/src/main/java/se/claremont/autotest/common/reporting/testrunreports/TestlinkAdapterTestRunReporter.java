@@ -21,8 +21,8 @@ import java.util.List;
  */
 public class TestlinkAdapterTestRunReporter implements TestRunReporter {
     @SuppressWarnings("WeakerAccess")
-    @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
-    private TestlinkTestCasesFromTestRun testlinkTestCasesFromTestRun = new TestlinkTestCasesFromTestRun();
+    @JsonProperty public final List<String> testCasesJsonsList = new ArrayList<>();
+    private final TestlinkTestCasesFromTestRun testlinkTestCasesFromTestRun = new TestlinkTestCasesFromTestRun();
 
     public TestlinkAdapterTestRunReporter(){
     }
@@ -58,7 +58,7 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
     }
 
     class TestlinkTestCasesFromTestRun {
-        @JsonProperty ArrayList<TestlinkTestCaseMapper> testCases = new ArrayList<>();
+        @JsonProperty final ArrayList<TestlinkTestCaseMapper> testCases = new ArrayList<>();
 
         @SuppressWarnings("WeakerAccess")
         public String toJson(){

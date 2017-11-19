@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 @JsonIgnoreProperties({"reported", "reporters", "processesRunningAtTestCaseStart", "currentTestStepName", "testCaseMethodName", "currentTestNameInternal"})
 public class TestCase {
-    public TestCaseResult testCaseResult;
+    public final TestCaseResult testCaseResult;
     @JsonProperty public String testName;
     @JsonProperty public final String testSetName;
     @JsonProperty public final KnownErrorsList testCaseKnownErrorsList;

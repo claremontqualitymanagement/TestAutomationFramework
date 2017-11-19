@@ -10,7 +10,7 @@ import java.util.List;
 @SuppressWarnings("StringConcatenationInLoop")
 public class LogMessage {
 
-    List<LogMessagePartType> logMessageParts = new ArrayList<>();
+    final List<LogMessagePartType> logMessageParts = new ArrayList<>();
 
     public LogMessage(String logMessage) {
         substituteDataElements(logMessage);

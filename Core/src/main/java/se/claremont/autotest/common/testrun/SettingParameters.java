@@ -134,17 +134,13 @@ public enum SettingParameters {
      */
     URL_TO_TESTLINK_ADAPTER("URL to TAF Testlink Adapter Server");
 
-    private boolean isSuppressedFromLogDisplay;
-    private String friendlyName;
+    private final boolean isSuppressedFromLogDisplay;
+    private final String friendlyName;
 
+    @SuppressWarnings("unused") //Needed for automatic JSON management
     SettingParameters() {
         this.friendlyName = StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(this.toString().replace("_", " "));
         this.isSuppressedFromLogDisplay = false;
-    }
-
-    SettingParameters(boolean isSuppressedFromLogDisplay) {
-        this.isSuppressedFromLogDisplay = isSuppressedFromLogDisplay;
-        this.friendlyName = StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(this.toString().replace("_", " "));
     }
 
     SettingParameters(String friendlyName, boolean isSuppressedFromLogDisplay) {

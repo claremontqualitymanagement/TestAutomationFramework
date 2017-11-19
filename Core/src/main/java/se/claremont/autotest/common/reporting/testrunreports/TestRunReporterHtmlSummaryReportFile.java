@@ -17,7 +17,7 @@ import static se.claremont.autotest.common.support.SupportMethods.LF;
  * Created by jordam on 2016-09-19.
  */
 public class TestRunReporterHtmlSummaryReportFile implements TestRunReporter {
-    public HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
+    public final HtmlSummaryReport htmlSummaryReport = new HtmlSummaryReport();
 
     @Override
     public void report() {

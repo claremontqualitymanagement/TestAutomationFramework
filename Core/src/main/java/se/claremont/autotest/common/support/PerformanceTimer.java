@@ -10,9 +10,9 @@ import se.claremont.autotest.common.testcase.TestCase;
  */
 @SuppressWarnings("WeakerAccess")
 public class PerformanceTimer {
-    String name;
+    final String name;
     long startTime;
-    TestCase testCase;
+    final TestCase testCase;
 
     /**
      * Constructor. Also starts timer.

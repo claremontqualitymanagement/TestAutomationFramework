@@ -80,7 +80,6 @@ public class RestRequest {
      * @return Returns the response of the request.
      */
     public Response execute(OkHttpClient client){
-        long startTime = System.currentTimeMillis();
         Response response = null;
         request = builder.build();
         try {

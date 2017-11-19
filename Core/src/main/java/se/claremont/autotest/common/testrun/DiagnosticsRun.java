@@ -20,7 +20,7 @@ import java.io.PrintStream;
  *
  */
 public class DiagnosticsRun implements Runnable {
-    private JUnitCore junit;
+    private final JUnitCore junit;
     private Result result;
 
     public DiagnosticsRun(JUnitCore jUnitCore){

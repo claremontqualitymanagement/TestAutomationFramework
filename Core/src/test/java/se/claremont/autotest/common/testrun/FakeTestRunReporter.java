@@ -11,8 +11,8 @@ public class FakeTestRunReporter implements TestRunReporter {
     int numberOfReportsPerformed = 0;
     int numberOfTestCaseEvaluationsPerformed = 0;
     private int numberOfTestSetEvaluationsPerformed = 0;
-    private List<String> testSetNames = new ArrayList<>();
-    List<String> testCaseNames = new ArrayList<>();
+    private final List<String> testSetNames = new ArrayList<>();
+    final List<String> testCaseNames = new ArrayList<>();
 
     public FakeTestRunReporter(){
     }

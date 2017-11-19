@@ -27,7 +27,7 @@ import java.util.List;
 @JsonIgnoreProperties({"currentTestCase", "currentTestCases"})
 public abstract class TestSet {
 
-    private List<TestCase> currentTestCases = new ArrayList<>();
+    private final List<TestCase> currentTestCases = new ArrayList<>();
 
     @JsonProperty
     public String name;
