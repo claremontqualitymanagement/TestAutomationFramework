@@ -18,7 +18,6 @@ import java.io.PrintStream;
 /**
  * Performs a run of selected tests, to assess if a TAF installation is ready to run tests.
  *
- * Created by jordam on 2016-12-23.
  */
 public class DiagnosticsRun implements Runnable {
     private JUnitCore junit;

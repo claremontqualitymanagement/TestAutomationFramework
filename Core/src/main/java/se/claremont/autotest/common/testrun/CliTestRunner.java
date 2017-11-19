@@ -12,9 +12,9 @@ import se.claremont.autotest.common.support.api.Taf;
 import java.util.*;
 
 /**
- * CLI runner class for the test automation framework
- *
- * Created by jordam on 2016-08-27.
+ * CLI runner class for the test automation framework.
+ * Used to set up execution environment and start selected
+ * tests from the command prompt.
  */
 @SuppressWarnings("WeakerAccess")
 public class CliTestRunner {
@@ -22,7 +22,87 @@ public class CliTestRunner {
     private static List<String> remainingArguments ;
     private static boolean testMode = false;
 
-//    public static final TestRun testRun = new TestRun();
+    /**
+     * Actual runner method setting up test settings and executing tests.
+     * @param args arguments
+     */
+    public static void main(String [] args) {
+        executeRunSequence(args);
+    }
+
+    /**
+     * Used to enable unit testing and system testing ot the TAF framework - essentially
+     * preventing the use of ExitCode at the end of the test run, thus making it possible
+     * to evaluate the state at the end of a test run.
+     *
+     * @param args CLI run arguments to be passed to normal runner.
+     * @param testClasses Classes to run during the test.
+     * @return Returns the exit code that the test run would exit with.
+     */
+    public static int runInTestMode(String[] args, Class<?>[] testClasses){
+        testMode = true;
+        List<String> arguments = new ArrayList<>();
+        for(String arg : args){
+            arguments.add(arg);
+        }
+        if(testClasses != null){
+            logLoadedClasses();
+            for(Class<?> klass : testClasses){
+                arguments.add((klass.getName()));
+                try {
+                    Class.forName(klass.getName());
+                } catch (ClassNotFoundException e) {
+                    System.out.println(e.toString());
+                }
+            }
+        }
+        executeRunSequence(arguments.stream().toArray(String[]::new));
+        return TestRun.getExitCode();
+    }
+
+    /**
+     * Used to enable unit testing and system testing ot the TAF framework - essentially
+     * preventing the use of ExitCode at the end of the test run, thus making it possible
+     * to evaluate the state at the end of a test run.
+     *
+     * @param args CLI run arguments to be passed to normal runner.
+     * @return Returns the exit code that the test run would exit with.
+     */
+    public static int runInTestMode(String[] args){
+        return runInTestMode(args, (Class<?>[])null);
+    }
+
+    /**
+     * Used to enable unit testing and system testing ot the TAF framework - essentially
+     * preventing the use of ExitCode at the end of the test run, thus making it possible
+     * to evaluate the state at the end of a test run.
+     *
+     * @param args CLI run arguments to be passed to normal runner.
+     * @param testClass Class to run during the test.
+     * @return Returns the exit code that the test run would exit with.
+     */
+    public static int runInTestMode(String[] args, Class<?> testClass)  {
+        return runInTestMode(args, new Class<?>[]{testClass});
+    }
+
+    private static void executeRunSequence(String[] args){
+        System.out.println(System.lineSeparator() + "Executing TAF (TestAutomationFramework) from CLI." + System.lineSeparator());
+        remainingArguments = stringArrayToList(args);
+        printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
+        setSystemPropertiesIfStatedWithMinusD();
+        printHelpTextIfApplicable();
+        System.out.println("Argument(s) given:" + System.lineSeparator()  +
+                " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
+                "Interpreting arguments.");
+        setRunSettingsFileIfGivenAsArgument();
+        setRunNameIfGivenAsArgument();
+        setRunSettingsParametersGivenAsArguments();
+        runDiagnosticTestsIfWanted();
+        runTestClasses();
+        pause(1000);
+        exitWithExitCode();
+    }
+
     private static final String LF = SupportMethods.LF;
 
     private static String helpText() {
@@ -332,10 +412,6 @@ public class CliTestRunner {
         return returnList;
     }
 
-    public static int runInTestMode(String[] args, Class<?> testClass)  {
-        return runInTestMode(args, new Class<?>[]{testClass});
-    }
-
     private static void logLoadedClasses() {
         ClassLoader myCL = Thread.currentThread().getContextClassLoader();
         while (myCL != null) {
@@ -373,55 +449,5 @@ public class CliTestRunner {
         return classes.iterator();
     }
 
-    public static int runInTestMode(String[] args, Class<?>[] testClasses){
-        testMode = true;
-        List<String> arguments = new ArrayList<>();
-        for(String arg : args){
-            arguments.add(arg);
-        }
-        if(testClasses != null){
-            logLoadedClasses();
-            for(Class<?> klass : testClasses){
-                arguments.add((klass.getName()));
-                try {
-                    Class.forName(klass.getName());
-                } catch (ClassNotFoundException e) {
-                    System.out.println(e.toString());
-                }
-            }
-        }
-        executeRunSequence(arguments.stream().toArray(String[]::new));
-        return TestRun.getExitCode();
-    }
-
-    public static int runInTestMode(String[] args){
-        return runInTestMode(args, (Class<?>[])null);
-    }
-
-    private static void executeRunSequence(String[] args){
-        System.out.println(System.lineSeparator() + "Executing TAF (TestAutomationFramework) from CLI." + System.lineSeparator());
-        remainingArguments = stringArrayToList(args);
-        printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
-        setSystemPropertiesIfStatedWithMinusD();
-        printHelpTextIfApplicable();
-        System.out.println("Argument(s) given:" + System.lineSeparator()  +
-                " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
-                "Interpreting arguments.");
-        setRunSettingsFileIfGivenAsArgument();
-        setRunNameIfGivenAsArgument();
-        setRunSettingsParametersGivenAsArguments();
-        runDiagnosticTestsIfWanted();
-        runTestClasses();
-        pause(1000);
-        exitWithExitCode();
-    }
-
-    /**
-     * Actual runner method
-     * @param args arguments
-     */
-    public static void main(String [] args) {
-        executeRunSequence(args);
-    }
 
 }

@@ -45,8 +45,7 @@ public class LogMessage {
     }
 
     public boolean equals(LogMessage logMessage){
-        if(this.logMessageParts.equals(logMessage.logMessageParts))return true;
-        return false;
+        return this.logMessageParts.equals(logMessage.logMessageParts);
     }
 
     public boolean isSimilarButWithDifferentData(LogMessage logMessage){

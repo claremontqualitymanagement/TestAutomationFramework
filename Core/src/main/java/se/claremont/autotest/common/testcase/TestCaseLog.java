@@ -38,11 +38,11 @@ public class TestCaseLog {
 
     @SuppressWarnings("WeakerAccess")
     public TestCaseLog(String testCaseMethodName){
-        this.testCaseMethodName = testCaseMethodName;
+        TestCaseLog.testCaseMethodName = testCaseMethodName;
     } //For JSON object mapping usage
 
     public TestCaseLog(String testCaseName, String testCaseMethodName){
-        this.testCaseMethodName = testCaseMethodName;
+        TestCaseLog.testCaseMethodName = testCaseMethodName;
         maxNumberOfCharactersInLogLevelNames = getMaxNumberOfCharactersInLogLevelNames();
         this.testCaseName = testCaseName;
     }

@@ -23,7 +23,6 @@ public class LogMessageWithFile extends LogMessage{
     public boolean equals(LogMessage logMessage){
         if(logMessage.getClass() != LogMessageWithFile.class) return false;
         LogMessageWithFile logMessageWithFile = (LogMessageWithFile) logMessage;
-        if(this.logMessageParts.equals(logMessage.logMessageParts) && ((logMessageWithFile.file == null && file == null) || logMessageWithFile.file.equals(file))) return true;
-        return false;
+        return this.logMessageParts.equals(logMessage.logMessageParts) && ((logMessageWithFile.file == null && file == null) || logMessageWithFile.file.equals(file));
     }
 }
