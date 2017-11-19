@@ -39,6 +39,7 @@ class NewErrorsList {
         return html.toString();
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String nonSharedErrorsAsString() {
         mergeNonSharedErrorsWithExactlyTheSameTestCases();
         StringBuilder html = new StringBuilder();
@@ -57,6 +58,7 @@ class NewErrorsList {
         return html.toString();
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String sharedErrorsAsString() {
         StringBuilder html = new StringBuilder();
         boolean asteriskTextShouldBePrinted = false;
@@ -131,12 +133,12 @@ class NewErrorsList {
     }
 
     private void sortSharedErrorsWithThoseWhoHasTheMostTestCasesFirst() {
-        actualSharedErrors
+        actualSharedErrors = actualSharedErrors
                 .stream()
                 .sorted(Comparator
                         .comparingInt(NewError::getNumberOfTestCases)
                         .reversed()
-                );
+                ).collect(Collectors.toList());
     }
 
     private boolean testCaseHasProblemRecordsNotPartOfSharedLogRecords(TestCase testCase) {
@@ -174,8 +176,8 @@ class NewErrorsList {
                     actualSharedErrors.add(new NewError(actualSharedErrors.get(i).testCasesWhereEncountered, logPosts));
                     actualSharedErrors.remove(j);
                     actualSharedErrors.remove(i);
-                    if(i < 0) i--;
-                    if(j < 0) j--;
+                    if(i > 0) i--;
+                    if(j > 0) j--;
                 }
             }
         }
@@ -265,6 +267,7 @@ class NewErrorsList {
         }
     }
 
+    @SuppressWarnings("SimplifyStreamApiCallChains")
     private void convertPotentialMatchingLogPostsListToSharedErrorsList() {
         potentialMatchingLogPosts.stream()
                 .forEach(o -> actualSharedErrors.add(new NewError(o)));

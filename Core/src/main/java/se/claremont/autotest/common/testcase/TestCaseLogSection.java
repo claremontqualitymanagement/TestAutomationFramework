@@ -30,6 +30,7 @@ public class TestCaseLogSection {
          //}
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static String htmlStyleInformation(){
         return  "      table.logsectionlogposts { width: 100%; }" + SupportMethods.LF +
                 "      h3.logsectiontitle.passed  { color: " + UxColors.GREEN.getHtmlColorCode() + ";  }" + SupportMethods.LF +
@@ -37,6 +38,7 @@ public class TestCaseLogSection {
                 htmlStyleInformationTimeGraph();
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public String toHtml(){
         StringBuilder html = new StringBuilder();
         if(logPostList.size() > 0) {
@@ -67,10 +69,11 @@ public class TestCaseLogSection {
         return html.toString();
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private static String htmlStyleInformationTimeGraph(){
         return "         table.timegraph.padding                  { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; width: 100%; }" + SupportMethods.LF +
-                "         table.timegraph.datatabell               { font-weight: normal; border-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; width: auto; }" + SupportMethods.LF +
-                "         tr.timegraph.rubrikrad                   { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; border: 1px solid " + UxColors.LIGHT_GREY.getHtmlColorCode() + ";}" + SupportMethods.LF +
+                "         table.timegraph.datatabel                { font-weight: normal; border-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; width: auto; }" + SupportMethods.LF +
+                "         tr.timegraph.headlinerow                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; border: 1px solid " + UxColors.LIGHT_GREY.getHtmlColorCode() + ";}" + SupportMethods.LF +
                 "         td.timegraph                             { border: 1px solid " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF +
                 "         td.before                      { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + SupportMethods.LF +
                 "         td.during                      { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + SupportMethods.LF +
@@ -97,7 +100,7 @@ public class TestCaseLogSection {
     }
 
 
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "SpellCheckingInspection"})
     private String timeProgressGraph(Date wholeTimePeriodStartTime, Date wholeTimePeriodEndTime, Date partialEventStartTime, Date partialEventEndTime, int graphWidth){
         if(logPostList.size() == 0) return null;
         long wholePeriod = wholeTimePeriodEndTime.getTime() - wholeTimePeriodStartTime.getTime();

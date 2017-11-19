@@ -212,9 +212,7 @@ public class TableData {
      * @return Returns true if all headings are found, otherwise false.
      */
     public boolean verifyHeadingsExist(List<String> headings){
-        boolean verificationPassed = false;
         List<String> foundHeadings = new ArrayList<>();
-        List<String> notFoundHeadings = new ArrayList<>();
         StringBuilder htmlHeadingsRepresentation = new StringBuilder("<table class=\"tableverificationresulttable\">" + System.lineSeparator() + "   <tr class=\"headlines\">" + System.lineSeparator());
         for(String headline : headlines){
             if(headings.contains(headline)){
@@ -222,14 +220,13 @@ public class TableData {
                 foundHeadings.add(headline);
             } else {
                 htmlHeadingsRepresentation.append("      <th class=\"not_found_heading\">").append(headline).append("</th>").append(System.lineSeparator());
-                notFoundHeadings.add(headline);
             }
         }
         htmlHeadingsRepresentation.append("   </tr>").append(System.lineSeparator()).append("</table>").append(System.lineSeparator());
         if(foundHeadings.size() == headings.size()){
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_PASSED, "Headings '" + String.join("', '", headings) + "' were found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Headings '" + String.join("', '", headings) + "' were found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
-            verificationPassed = true;
+            return true;
         } else {
             List<String> missingHeadlines = new ArrayList<>();
             for(String heading : headings){
@@ -238,8 +235,8 @@ public class TableData {
             }
             logDifferentlyToTextLogAndHtmlLog(LogLevel.VERIFICATION_FAILED, "Verified existence of headings '" + String.join("', '", headings) + "', but the heading(s) '" + String.join("', '", missingHeadlines) + "' could not be found among the headlines '" + String.join("', '", headlines) + "' of " + tableElementName + ".",
                     "Verified existence of headings '" + String.join("', '", headings) + "', but the heading(s) '" + String.join("', '", missingHeadlines) + "' could not be found among the headings of " + tableElementName + ".<br>" + htmlHeadingsRepresentation);
+            return false;
         }
-        return verificationPassed;
     }
 
     /**
@@ -368,6 +365,7 @@ public class TableData {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private int getMaxNumberOfCellsPerRow(String rowDelimiter, String cellDelimiter){
         String[] lines = originalContent.split(rowDelimiter);
         if(lines == null || lines.length < 1) return 0;
@@ -435,6 +433,7 @@ public class TableData {
                     headlines.add("");
                 }
             }
+            //noinspection ConstantConditions
             if(lines.length < 1) return;
             for (String line : lines) {
                 if (line.trim().length() == 0) continue;

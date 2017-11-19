@@ -45,7 +45,7 @@ class NewError {
     }
 
     public boolean isSimilar(Object sharedError){
-        NewError compareNewError = null;
+        NewError compareNewError;
         try{
             compareNewError = (NewError) sharedError;
         }catch (Exception ignored){
@@ -96,6 +96,7 @@ class NewError {
         return logMessage.substring(0, 97) + "...";
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public String toHtml(){
         StringBuilder html = new StringBuilder();
         html.append("          <p>").append(System.lineSeparator());
@@ -106,7 +107,7 @@ class NewError {
                 html.append("                   <td><span class=\"errorloglevel\">").append(logPost.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logPost.message)).append("</span></td>").append(System.lineSeparator());
                 html.append("                </tr>").append(System.lineSeparator());
             }
-        } else if(sampleLogPosts.size() > 3){
+        } else {
             LogPost mostTroubleSomeLogPost = new LogPost(LogLevel.DEBUG, "", "", "", "", "");
             int mostTroubleSomeLogPostOrder = 0;
             for(int i = 0; i < sampleLogPosts.size(); i++){
@@ -117,7 +118,7 @@ class NewError {
                 }
             }
 
-            //Allways print first encountered error in log
+            //Always print first encountered error in log
             LogPost logRow = sampleLogPosts.get(0);
             html.append("                <tr>").append(System.lineSeparator());
             html.append("                   <td><span class=\"errorloglevel\">").append(logRow.logLevel.toString()).append("</span></td><td><span class=\"logmessage\">").append(truncateLogMessageIfNeeded(logRow.message)).append("</span></td>").append(System.lineSeparator());

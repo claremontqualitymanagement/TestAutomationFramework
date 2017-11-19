@@ -173,6 +173,7 @@ public class HtmlSummaryReport {
     /**
      * Produces the style section for the HTML HEAD section, to visually format the reportTestRun
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private void addHtmlElementStyles(){
         html
                 .append(LF)
@@ -278,6 +279,7 @@ public class HtmlSummaryReport {
     /**
      * Produces the title section of the HTML page the summary reportTestRun consists of.
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private void addHtmlElementTitle(){
         html
                 .append("          <img class=\"toplogo\" src=\"").append(TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO)).append("\">").append(LF)
@@ -470,6 +472,7 @@ public class HtmlSummaryReport {
         return bar.toString();
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String yippieTextIfNoErrors(){
         if(this.failedTestCasesWithNewDeviations + this.testCasesWithBothNewAndKnownErrors == 0){
             return "YIPPIE!";

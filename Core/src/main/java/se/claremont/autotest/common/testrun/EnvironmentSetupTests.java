@@ -8,8 +8,8 @@ import java.io.File;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class EnvironmentSetupTests extends UnitTestClass{
-    File reportFolder ;
-    boolean reportFolderCreatedForTest = false;
+    private File reportFolder ;
+    private boolean reportFolderCreatedForTest = false;
 
     @Before
     public void before(){
@@ -35,6 +35,7 @@ public class EnvironmentSetupTests extends UnitTestClass{
         Assert.assertTrue("The base log folder is set to '" + TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER) + "' but this is not a directory.", reportFolder.isDirectory());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void checkFileWritePriviligeToBaseReportFolder(){
         if(!reportFolder.exists()) {
@@ -49,6 +50,7 @@ public class EnvironmentSetupTests extends UnitTestClass{
             writeFile = new File(subDirectory.getPath() + "tempFile.txt");
             writeFile.createNewFile();
         } catch (Exception e){
+            //noinspection ConstantConditions
             Assert.assertTrue("Could not write file.", false);
         } finally {
             try {

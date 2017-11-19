@@ -16,6 +16,7 @@ import java.util.Properties;
  *
  * Created by jordam on 2016-09-18.
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class EmailSenderImplementation implements EmailSender{
 
     private final static Logger logger = LoggerFactory.getLogger( EmailSenderImplementation.class );
@@ -28,6 +29,7 @@ public class EmailSenderImplementation implements EmailSender{
     private String hostServerPort;
     private EmailSendType emailSendType;
 
+    @SuppressWarnings("SpellCheckingInspection")
     enum EmailSendType{
         SMTP,
         GMAIL,

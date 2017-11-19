@@ -22,6 +22,7 @@ public class HtmlStyles {
         styleSections.add(styles);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static String tableVerificationStyles(){
         String returnString = "    table.tableverificationresulttable   { border:5px solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; border-collapse: collapse; }" + System.lineSeparator();
         returnString += "    table.tableverificationresulttable td { border: 2px solid " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + System.lineSeparator();

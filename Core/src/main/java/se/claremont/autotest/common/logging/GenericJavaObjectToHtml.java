@@ -12,6 +12,7 @@ public class GenericJavaObjectToHtml {
         return toHtml(object, 5);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static String toHtml(Object object, int depth){
         if(object == null) return "<span class='nullobject'><i>null</i></span>";
         if(depth > 15) return "<span class='overflowerror'><i>...</i></span>";

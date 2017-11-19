@@ -119,6 +119,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "</html>" + LF;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public String htmlSectionHtmlHead(){
         return "  <head>" + LF + LF +
                 "    <title>" + testCaseResult.testName + " execution log</title>" + LF +
@@ -153,6 +154,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     /**
      * Produces a document addFooter for the summary reportTestRun.
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private void addFooter(){
         String versionInfo = "";
         String version = TafVersionGetter.tafVersion();
@@ -179,6 +181,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      * Used to append HTML style information to the HTML based testCaseLog
      * @return A HTML formatted string to incorporate in the style tag in the HTML testCaseLog
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private static String styles(){
         return "      body                    { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 14px; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; width:90%; margin-left: 2%; margin-top: 1%; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
                 "      h1, h2                  { margin-top: 20px; margin-bottom: 10px; line-height: 1.1; font-family: inherit; }" + LF +
@@ -280,7 +283,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 .append("      <p>").append(LF)
                 .append("         Number of verifications performed: ").append(numberOfVerificationsPerformed()).append(LF)
                 .append("         <br>").append(LF)
-                .append("         Number of non-verifying execution steps performed: ").append(numberOfExecitionStepsPerformed()).append(LF)
+                .append("         Number of non-verifying execution steps performed: ").append(numberOfExecutionStepsPerformed()).append(LF)
                 .append("      </p>").append(LF)
                 .append("      <br>").append(LF)
                 .append("    </div>").append(LF)
@@ -297,7 +300,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         return count;
     }
 
-    private int numberOfExecitionStepsPerformed() {
+    private int numberOfExecutionStepsPerformed() {
         int count = 0;
         for(LogPost logPost : testCaseResult.testCaseLog.logPosts){
             if(logPost.logLevel == LogLevel.EXECUTED){
@@ -322,7 +325,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "<b>Progress bar</b><br>" + LF +
                 "Between log sections a thin line can be seen. This is a progress bar that indicate how much time was spent in this log section." + LF +
                 "<br><br>" +
-                "<b>Debug log rows diplay</b><br>" + LF +
+                "<b>Debug log rows display</b><br>" + LF +
                 "More detailed information is displayed if the <b>debug checkbox</b> is checked. Then even debug log entries are displayed." + LF +
                 "<br><br>" + LF +
                 "<b>Test step class name</b><br>" + LF +
@@ -335,6 +338,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 "More information could be reached by clicking the logo in the top left corner of this document and checking out the GitHub Wiki.<br>" + LF + LF;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String status(){
         if(testCaseResult.testCaseLog.hasEncounteredErrors()){
             return "      <p class=\"statussymbol\">Status: <b class=\"bad\">&#x2717;</b></p>" + LF;
@@ -343,6 +347,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void addHtmlSectionTestCaseLogEntries(){
         sb
                 .append("<br>").append(LF)
@@ -419,6 +424,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
      */
     private static final String LF = SupportMethods.LF;
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String scriptSection(){
         return "      <script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>" + LF +
                 "      <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js\"></script>" + LF +

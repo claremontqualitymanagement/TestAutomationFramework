@@ -8,6 +8,7 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  *
  * Created by jordam on 2016-09-18.
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class Settings_Tests extends UnitTestClass{
 
     @BeforeClass

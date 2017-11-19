@@ -25,7 +25,7 @@ import static se.claremont.autotest.common.reporting.testcasereports.TestCaseLog
  *
  * Created by jordam on 2016-08-25.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "SpellCheckingInspection"})
 @JsonIgnoreProperties({"fail", "logger"})
 public class LogPost {
 
@@ -301,7 +301,7 @@ public class LogPost {
      * Used for HTML formatting for HTML based logs
      * @return Returns a table row element in HTML syntax
      */
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "SpellCheckingInspection"})
     public String toHtmlTableRow(){
         StringBuilder sb = new StringBuilder();
         String logRowClass = this.logLevel.toString().toLowerCase().replace("_", "-").trim();
@@ -326,6 +326,7 @@ public class LogPost {
                 .append(logLevelToString(logLevel.toString().trim()))
                 .append("</td>")
                 .append(SupportMethods.LF);
+        //noinspection SpellCheckingInspection
         sb.append("                 <td class=\"logmessage\">")
                 .append(SupportMethods.LF)
                 .append(SupportMethods.LF)

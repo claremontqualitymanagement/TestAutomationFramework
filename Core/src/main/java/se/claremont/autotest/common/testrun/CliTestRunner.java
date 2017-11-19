@@ -39,6 +39,7 @@ public class CliTestRunner {
      * @param testClasses Classes to run during the test.
      * @return Returns the exit code that the test run would exit with.
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static int runInTestMode(String[] args, Class<?>[] testClasses){
         testMode = true;
         List<String> arguments = new ArrayList<>();
@@ -103,6 +104,7 @@ public class CliTestRunner {
 
     private static final String LF = SupportMethods.LF;
 
+    @SuppressWarnings("SpellCheckingInspection")
     private static String helpText() {
         return "Usage instructions: " +
                 LF + LF +
@@ -113,7 +115,7 @@ public class CliTestRunner {
                 "Tell what test classes to run" + LF +
                 "-----------------------------" + LF +
                 "Any program argument not falling into the categories below will be interpreted as a name of a class containing JUnit tests." + LF +
-                "Test classes must be stated with their full package path, but without the .class file extention." +
+                "Test classes must be stated with their full package path, but without the .class file extension." +
                 LF + LF +
                 "If no classes containing tests are stated no tests will run." + LF + LF +
                 "Diagnostic run" + LF +
@@ -134,9 +136,9 @@ public class CliTestRunner {
                 "-------------------------" + LF +
                 "Tests are normally run i sequence, but sometimes you want them to run in parallel. TAF allows a few " +
                 "different methods for doing this by using the argument PARALLEL_TEST_EXECUTION_MODE. Examples:" + LF +
-                "PARALLEL_TEST_EXECUTION_MODE=methods will run test methodss in classes in parallel." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=methods will run test methods in classes in parallel." + LF +
                 "PARALLEL_TEST_EXECUTION_MODE=classes will run test classes in parallel." + LF +
-                "PARALLEL_TEST_EXECUTION_MODE=none will run test methodss in classes in sequence." + LF +
+                "PARALLEL_TEST_EXECUTION_MODE=none will run test methods in classes in sequence." + LF +
                 "PARALLEL_TEST_EXECUTION_MODE=false is same as PARALLEL_TEST_EXECUTION_MODE=none." + LF +
                 "PARALLEL_TEST_EXECUTION_MODE=true is same as PARALLEL_TEST_EXECUTION_MODE=methods." + LF +
                 "PARALLEL_TEST_EXECUTION_MODE=4 is executing tests in a thread pool with 4 threads." +
@@ -189,12 +191,13 @@ public class CliTestRunner {
                 LF + LF;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private static void setRunSettingsFileIfGivenAsArgument(){
         String[] args = stringListToArray(remainingArguments);
         for(String arg : args){
             if(arg.trim().length() > 0 && arg.contains("=")){
                 String[] parts = arg.split("=");
-                if((parts[0].trim().toLowerCase().equals("settingsfile") || parts[0].trim().toLowerCase().equals("runsettingsfile")) && parts.length > 1) {
+                if((parts[0].trim().equalsIgnoreCase("settingsfile") || parts[0].trim().equalsIgnoreCase("runsettingsfile")) && parts.length > 1) {
                     TestRun.getInstance().settings = new Settings(arg.trim().substring(arg.indexOf("=") + 1).trim());
                     System.out.println("Run settings properties file = '" + parts[1].trim() + "'.");
                     remainingArguments.remove(arg);
@@ -203,6 +206,7 @@ public class CliTestRunner {
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private static void setRunNameIfGivenAsArgument(){
         String[] args = stringListToArray(remainingArguments);
         for(String arg : args){
@@ -300,6 +304,7 @@ public class CliTestRunner {
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private static void runDiagnosticTestsIfWanted(){
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
@@ -415,8 +420,8 @@ public class CliTestRunner {
         while (myCL != null) {
             System.out.println("ClassLoader: " + myCL);
             try {
-                for (Iterator iter = list(myCL); iter.hasNext();) {
-                    System.out.println("\t" + iter.next());
+                for (Iterator iterator = list(myCL); iterator.hasNext();) {
+                    System.out.println("\t" + iterator.next());
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
@@ -425,10 +430,10 @@ public class CliTestRunner {
         }
     }
 
-    private static Object runInTestMode(String[] args, Object runafter){
+    private static Object runInTestMode(String[] args, Object runAfter){
         testMode = true;
         executeRunSequence(args);
-        return runafter;
+        return runAfter;
     }
 
     private static Iterator list(ClassLoader CL)

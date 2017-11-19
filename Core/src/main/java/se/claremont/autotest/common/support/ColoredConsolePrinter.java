@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.support;
 
+@SuppressWarnings("WeakerAccess")
 public class ColoredConsolePrinter {
 
     public static final String ANSI_RESET = "\u001B[0m";

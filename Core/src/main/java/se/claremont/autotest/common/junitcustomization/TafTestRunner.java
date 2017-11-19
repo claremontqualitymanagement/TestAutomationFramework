@@ -41,6 +41,7 @@ public class TafTestRunner {
                 threads = Integer.parseInt(threadMode);
             } catch (Exception ignored) {
             }
+            //noinspection ConstantConditions
             if (threadMode != null && threads > 1) {
                 System.out.println("Running test methods in parallel in " + threads + " concurrent execution threads.");
                 TafParallelTestCaseRunner p = new TafParallelTestCaseRunner(threads, junit);

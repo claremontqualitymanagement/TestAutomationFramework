@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 
 public class GenericJavaObjectToHtmlTests {
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void nullObjectTest(){
         String object = null;

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TestRunExitCodeTest extends UnitTestClass{
 
-    public void setup(){
+    private void setup(){
         TestRun.setExitCode(TestRun.ExitCodeTable.INIT_OK.getValue());
         System.setProperty("TAF latest test run exit code", "0");
         TestRun.getReporterFactory().reporters.clear();

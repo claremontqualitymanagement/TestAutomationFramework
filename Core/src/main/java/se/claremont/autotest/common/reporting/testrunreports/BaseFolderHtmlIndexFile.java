@@ -64,7 +64,7 @@ public class BaseFolderHtmlIndexFile {
         return htmlTableRows.toString();
     }
 
-
+    @SuppressWarnings("SpellCheckingInspection")
     private String htmlContent(){
         return "<!DOCTYPE html>" + System.lineSeparator() +
                 "<html lang=\"en\">" + System.lineSeparator() +

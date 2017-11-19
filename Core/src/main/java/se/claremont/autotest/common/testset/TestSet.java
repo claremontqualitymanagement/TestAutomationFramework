@@ -77,7 +77,7 @@ public abstract class TestSet {
     }
 
     /**
-     * TAF internal test teardown method.
+     * TAF internal test tear down method.
      */
     @After
     public void testSetClassInternalTearDown() {

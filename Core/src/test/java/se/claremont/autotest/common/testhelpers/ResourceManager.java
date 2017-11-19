@@ -16,9 +16,11 @@ import java.nio.file.Paths;
 
 public class ResourceManager {
 
-    public static File getFileFromResources(String fileName){
+    private static File getFileFromResources(String fileName){
         ClassLoader classLoader = ResourceManager.class.getClassLoader();
-        return new File(classLoader.getResource(fileName).getFile());
+        URL url = classLoader.getResource(fileName);
+        if(url == null) return null;
+        return new File(url.getFile());
     }
 
     public static Class extractFileFromResourcesAndCompileAndLoadIt(String resourceFile){
@@ -34,8 +36,8 @@ public class ResourceManager {
         }
     }
 
-    public static Class extractFileFromResourcesAndCompileAndLoadIt(File resourceFile) {
-        String source = null;
+    private static Class extractFileFromResourcesAndCompileAndLoadIt(File resourceFile) {
+        String source;
         try {
             source = String.join(System.lineSeparator(), Files.readAllLines(resourceFile.toPath()));
         } catch (IOException e) {
@@ -73,7 +75,7 @@ public class ResourceManager {
         String classFilePath = new File(root, packagePath.substring(0, packagePath.length() - ".java".length()) + ".class").getPath();
 
         // Load and instantiate compiled class.
-        URLClassLoader classLoader = null;
+        URLClassLoader classLoader;
         try {
             classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
         } catch (MalformedURLException e) {
@@ -83,7 +85,7 @@ public class ResourceManager {
         }
         String className = packagePath.replace("/", ".").replace(".java", "");
         Assume.assumeTrue("Could not read compiled class file for class '" + className + "' at '" + classFilePath + "'.", Files.isReadable(Paths.get(classFilePath)));
-        Class<?> cls = null; // Should print "hello".
+        Class<?> cls; // Should print "hello".
         try {
             cls = Class.forName(className, false, classLoader);
         } catch (ClassNotFoundException e) {
@@ -96,7 +98,7 @@ public class ResourceManager {
         return cls;
     }
 
-    public static void tryCleanOutFile(File file){
+    private static void tryCleanOutFile(File file){
         try {
             Files.delete(file.toPath());
         } catch (IOException e) {

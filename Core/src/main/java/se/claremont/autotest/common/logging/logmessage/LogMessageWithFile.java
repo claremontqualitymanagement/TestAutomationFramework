@@ -7,6 +7,7 @@ import java.io.File;
  *
  * Created by jordam on 2017-03-31.
  */
+@SuppressWarnings("WeakerAccess")
 public class LogMessageWithFile extends LogMessage{
     private File file;
 
@@ -20,9 +21,13 @@ public class LogMessageWithFile extends LogMessage{
         this.file = file;
     }
 
-    public boolean equals(LogMessage logMessage){
-        if(logMessage.getClass() != LogMessageWithFile.class) return false;
+    @SuppressWarnings({"SimplifiableIfStatement", "ConstantConditions"})
+    public boolean equals(Object logMessage) {
+        if (logMessage.getClass() != this.getClass()) return false;
         LogMessageWithFile logMessageWithFile = (LogMessageWithFile) logMessage;
-        return this.logMessageParts.equals(logMessage.logMessageParts) && ((logMessageWithFile.file == null && file == null) || logMessageWithFile.file.equals(file));
+        if (file == null && logMessageWithFile.file != null) return false;
+        if (logMessageWithFile.file == null && file != null) return false;
+        if (file == null && logMessageWithFile.file == null && this.logMessageParts.equals(logMessageWithFile.logMessageParts)) return true;
+        return this.logMessageParts.equals(logMessageWithFile.logMessageParts) && logMessageWithFile.file.equals(file);
     }
 }

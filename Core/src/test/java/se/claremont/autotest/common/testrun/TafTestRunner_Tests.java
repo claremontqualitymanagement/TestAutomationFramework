@@ -4,14 +4,14 @@ import org.junit.*;
 import org.junit.runners.model.InitializationError;
 
 public class TafTestRunner_Tests {
-    long startTime;
-    FakeTestRunReporter fakeTestRunReporter;
-    int bufferTimeAccepted = 4;
-    int numberOfTestCases = 4;
-    int timePerTestCase = 3;
-    int getNumberOfTestClasses = 2;
+    private long startTime;
+    private FakeTestRunReporter fakeTestRunReporter;
+    private int bufferTimeAccepted = 4;
+    private int numberOfTestCases = 4;
+    private int timePerTestCase = 3;
+    private int getNumberOfTestClasses = 2;
 
-    public void setup(){
+    private void setup(){
         fakeTestRunReporter = new FakeTestRunReporter();
         TestRun.getReporterFactory().reporters.clear();
         TestRun.addTestRunReporterIfNotAlreadyRegistered(fakeTestRunReporter);

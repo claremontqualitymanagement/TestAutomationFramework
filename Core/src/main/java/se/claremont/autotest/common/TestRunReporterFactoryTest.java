@@ -15,7 +15,7 @@ import se.claremont.autotest.common.testset.UnitTestClass;
 public class TestRunReporterFactoryTest extends UnitTestClass{
 
     @Test
-    public void duplicateTestRunReporterAddedUsingUniqeMethodShouldNotCreateDuplicate(){
+    public void duplicateTestRunReporterAddedUsingUniqueMethodShouldNotCreateDuplicate(){
         TestRunReporterFactory t = new TestRunReporterFactory();
         t.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
         for(TestRunReporter testRunReporter : t.reporters){

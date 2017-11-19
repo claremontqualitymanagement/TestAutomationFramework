@@ -199,7 +199,7 @@ public class TestCaseLog_Tests extends UnitTestClass{
     public void methodToStringShouldReturnDebugRowsIfErrorsExist(){
         TestCaseLog testCaseLog = new TestCaseLog("dummy");
         testCaseLog.log(LogLevel.DEBUG, "Dummy log post");
-        testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Framework errora");
+        testCaseLog.log(LogLevel.FRAMEWORK_ERROR, "Framework errors");
         Assert.assertTrue(testCaseLog.toString().contains("Dummy log post"));
     }
 

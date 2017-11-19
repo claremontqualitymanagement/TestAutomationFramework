@@ -30,7 +30,7 @@ public class Settings extends HashMap<String, String> {
 
     private final static Logger logger = LoggerFactory.getLogger(Settings.class);
 
-    //Some of these setting parameters are suppressed from log display in the summary reportTestRun, where these settings othervice is displayed.
+    //Some of these setting parameters are suppressed from log display in the summary reportTestRun, where these settings otherwise is displayed.
 
     public String getValue(SettingParameters settingParameters) {
         if(settingParameters == SettingParameters.HTML_REPORTS_LINK_PREFIX ){
@@ -152,9 +152,10 @@ public class Settings extends HashMap<String, String> {
     /**
      * Default values for Settings parameters
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private void loadDefaults() {
 
-        //TODO: We need to figure out were to set root folder TAF, in mac jvm doesn't have sufficent rights!!!
+        //TODO: We need to figure out were to set root folder TAF, in mac jvm doesn't have sufficient rights!!!
         //macintosh
         if (Utils.getInstance().amIMacOS()) {
             //setValueForProperty("baseLogFolder", Utils.getInstance().getRootDirectory() + "TAF" + File.separator);

@@ -6,8 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Assume;
-import org.junit.Rule;
-import org.junit.rules.TestName;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.logging.LogFolder;
@@ -71,7 +69,6 @@ public class TestCase {
         if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         this.testSetName = testSetName;
         testCaseKnownErrorsList = new KnownErrorsList();
-        if(knownErrorsList == null) knownErrorsList = new KnownErrorsList();
         testSetKnownErrors = knownErrorsList;
         this.testName = testName;
         setLogFolderIfNotAlreadySet();

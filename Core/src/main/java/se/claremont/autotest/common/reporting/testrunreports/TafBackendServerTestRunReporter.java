@@ -24,6 +24,7 @@ import java.util.List;
  * Created by jordam on 2017-03-19.
  */
 @JsonIgnoreProperties({"testSetNames"})
+@SuppressWarnings("SpellCheckingInspection")
 public class TafBackendServerTestRunReporter implements TestRunReporter {
     @SuppressWarnings("WeakerAccess")
     @JsonProperty public Date runStartTime;

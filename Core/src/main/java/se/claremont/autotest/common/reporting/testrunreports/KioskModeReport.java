@@ -22,6 +22,7 @@ public class KioskModeReport {
     String filePath = null;
     ArrayList<String> tableRows = new ArrayList<>();
 
+    @SuppressWarnings("SpellCheckingInspection")
     public void evaluateTestCase(TestCase testCase){
         if (testCase.testCaseResult.resultStatus.equals(TestCaseResult.ResultStatus.UNEVALUATED)){
             testCase.testCaseResult.evaluateResultStatus();
@@ -48,7 +49,7 @@ public class KioskModeReport {
     public void create(String filePath, String title, int reloadIntervalInSeconds){
         this.filePath = filePath;
         html = "<!DOCTYPE html>" + System.lineSeparator();
-        html += "<hmtl>" + System.lineSeparator();
+        html += "<html>" + System.lineSeparator();
         html += "  <head>" + System.lineSeparator();
         html += "    <meta http-equiv=\"refresh\" content=\"" + reloadIntervalInSeconds + "\" >" + System.lineSeparator();
         html += "    <style>" + System.lineSeparator();
@@ -65,7 +66,7 @@ public class KioskModeReport {
         html += "    </table>" + System.lineSeparator();
         html += "    <div class=\"lastruntimestamp\">Last updated " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + "</div>" + System.lineSeparator();
         html += "  </body>" + System.lineSeparator();
-        html += "</hmtl>" + System.lineSeparator();
+        html += "</html>" + System.lineSeparator();
         save();
     }
 
@@ -77,10 +78,11 @@ public class KioskModeReport {
         try {
             Desktop.getDesktop().open(new File(filePath));
         } catch (IOException e) {
-            System.out.println("Something went wrong trying to open the KioskModeReport in default browser. Filepath = '" + filePath + "'. Error: " + e.getMessage());
+            System.out.println("Something went wrong trying to open the KioskModeReport in default browser. File path = '" + filePath + "'. Error: " + e.getMessage());
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String styleInfo(){
         return
                 "      body            { background-color: black; }" + System.lineSeparator() +
