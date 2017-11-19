@@ -8,7 +8,7 @@ import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testcase.TestCaseResult;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
@@ -39,7 +39,7 @@ public class HtmlSummaryReport {
     private final int barWidthInPixels = 400;
     private String resultsBarStyleInfo = "";
     private StringBuilder html;
-    Set<String> errorClassNames = new HashSet<>();
+    private Set<String> errorClassNames = new HashSet<>();
 
 
     /**
@@ -172,46 +172,46 @@ public class HtmlSummaryReport {
 
     /**
      * Produces the style section for the HTML HEAD section, to visually format the reportTestRun
-     * @return HTML document style section as string
      */
     private void addHtmlElementStyles(){
-        html.append(LF +
-                "    <style>" + LF +
-                "      #" + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
-                "      body                  { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; background-color: " + UxColors.LIGHT_BLUE.getHtmlColorCode() + "; }" + LF +
-                "      a                     { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + ";}" + LF +
-                "      th                    { text-align: left; }" + LF +
-                "      img.toplogo           { width: 30%; }" + LF +
-                "      img.bottomlogo        { width: 20%; }" + LF +
-                "      td.bottomlogo         { text-align: center; background-color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
-                "      table#" + HtmlStyleNames.CONTENT.toString() + "      { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; padding: 30px; margin: 30px; }" + LF +
-                "      .moreerrorsasterisk   { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; }" + LF +
-                "      .testcasename { font-weight: bold; }" + LF +
-                "      .errorloglevel { color: " + UxColors.RED.getHtmlColorCode() + "; }" + LF +
-                "      .testsetname  {}" + LF +
-                "      tr." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
-                "      tr." + HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString() + "       { font-weight: bold; color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
-                "      li." + HtmlStyleNames.HOVERABLE.toString() + ":hover           { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
-                "      table#" + HtmlStyleNames.STATISTICS.toString() + "                           { background-color: " + UxColors.WHITE.getHtmlColorCode() +"; border-collapse: collapse; border: 1p solid " + UxColors.DARK_GREY.getHtmlColorCode() + "; width: " + barWidthInPixels + "px; }" + LF +
-                "      ." + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + "             { color: " + UxColors.DARK_YELLOW.getHtmlColorCode() + "; }" + LF +
-                "      ." + TestCaseResult.ResultStatus.PASSED.toString() + "                                    { color: " + UxColors.GREEN.getHtmlColorCode() + "; }" + LF +
-                "      ." + TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString() + "     { color: " + UxColors.ORANGE.getHtmlColorCode() +"; font-weight: bold; }" + LF +
-                "      ." + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString() + "               { color: " + UxColors.RED.getHtmlColorCode() + "; font-weight: bold; }" + LF +
-                "      ." + TestCaseResult.ResultStatus.UNEVALUATED.toString() + "                               { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; text-align: center; }" + LF +
-                "      ." + HtmlStyleNames.COPYRIGHT.toString() + "                                 { background-color: " + UxColors.WHITE.getHtmlColorCode() + "; color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-align: center; }" + LF +
-                "       tr#" + HtmlStyleNames.STATISTICS_COUNT.toString() + "          { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; }" + LF +
-                "       tr#" + HtmlStyleNames.STATISTICS_HEADER_ROW.toString() + "          { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; text-aligned: left; }" + LF +
-                "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + "                                    { background-color: " + UxColors.MID_GREY.getHtmlColorCode() + "; text-align: left; }" + LF +
-                "       tr.testcasesummaryheadline                                     { background-color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; color: " + UxColors.WHITE.getHtmlColorCode() + "; }" + LF +
-                "       table." + HtmlStyleNames.STRIPED_ROWS.toString() + " tr:nth-child(even)                 { background-color: " + UxColors.LIGHT_GREY.getHtmlColorCode() + "; }" + LF +
-                "       .noerrorsexclamtaion    { color: black; font-weight: bold; }" + LF +
-                "       h3#settingsheading      { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; }" + LF +
-                "       table.settingsTable     { color: " + UxColors.DARK_GREY.getHtmlColorCode() + "; font-size: 80%; }" + LF +
-                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
-                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":visited      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: none; }" + LF +
-                "      a." + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + ":hover      { color: " + UxColors.DARK_BLUE.getHtmlColorCode() + "; text-decoration: underline; }" + LF +
-                resultsBarStyleInfo +
-                "    </style>" + LF + LF);
+        html
+                .append(LF)
+                .append("    <style>").append(LF)
+                .append("      #").append(HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString()).append("               { color: ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("      body                  { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color: ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; background-color: ").append(UxColors.LIGHT_BLUE.getHtmlColorCode()).append("; }").append(LF)
+                .append("      a                     { color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append(";}").append(LF)
+                .append("      th                    { text-align: left; }").append(LF)
+                .append("      img.toplogo           { width: 30%; }").append(LF)
+                .append("      img.bottomlogo        { width: 20%; }").append(LF)
+                .append("      td.bottomlogo         { text-align: center; background-color: ").append(UxColors.WHITE.getHtmlColorCode()).append("; }").append(LF)
+                .append("      table#").append(HtmlStyleNames.CONTENT.toString()).append("      { background-color: ").append(UxColors.WHITE.getHtmlColorCode()).append("; padding: 30px; margin: 30px; }").append(LF)
+                .append("      .moreerrorsasterisk   { color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; }").append(LF)
+                .append("      .testcasename { font-weight: bold; }").append(LF)
+                .append("      .errorloglevel { color: ").append(UxColors.RED.getHtmlColorCode()).append("; }").append(LF)
+                .append("      .testsetname  {}").append(LF)
+                .append("      tr.").append(HtmlStyleNames.HOVERABLE.toString()).append(":hover           { background-color: ").append(UxColors.MID_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("      tr.").append(HtmlStyleNames.SOLVED_KNOWN_ERRORS.toString()).append("       { font-weight: bold; color: ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("      li.").append(HtmlStyleNames.HOVERABLE.toString()).append(":hover           { background-color: ").append(UxColors.MID_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("      table#").append(HtmlStyleNames.STATISTICS.toString()).append("                           { background-color: ").append(UxColors.WHITE.getHtmlColorCode()).append("; border-collapse: collapse; border: 1p solid ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; width: ").append(barWidthInPixels).append("px; }").append(LF)
+                .append("      .").append(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString()).append("             { color: ").append(UxColors.DARK_YELLOW.getHtmlColorCode()).append("; }").append(LF)
+                .append("      .").append(TestCaseResult.ResultStatus.PASSED.toString()).append("                                    { color: ").append(UxColors.GREEN.getHtmlColorCode()).append("; }").append(LF)
+                .append("      .").append(TestCaseResult.ResultStatus.FAILED_WITH_BOTH_NEW_AND_KNOWN_ERRORS.toString()).append("     { color: ").append(UxColors.ORANGE.getHtmlColorCode()).append("; font-weight: bold; }").append(LF)
+                .append("      .").append(TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS.toString()).append("               { color: ").append(UxColors.RED.getHtmlColorCode()).append("; font-weight: bold; }").append(LF)
+                .append("      .").append(TestCaseResult.ResultStatus.UNEVALUATED.toString()).append("                               { color: ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; text-align: center; }").append(LF)
+                .append("      .").append(HtmlStyleNames.COPYRIGHT.toString()).append("                                 { background-color: ").append(UxColors.WHITE.getHtmlColorCode()).append("; color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; text-align: center; }").append(LF)
+                .append("       tr#").append(HtmlStyleNames.STATISTICS_COUNT.toString()).append("          { background-color: ").append(UxColors.MID_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("       tr#").append(HtmlStyleNames.STATISTICS_HEADER_ROW.toString()).append("          { background-color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; color: ").append(UxColors.WHITE.getHtmlColorCode()).append("; text-aligned: left; }").append(LF)
+                .append("       table.").append(HtmlStyleNames.STRIPED_ROWS.toString()).append("                                    { background-color: ").append(UxColors.MID_GREY.getHtmlColorCode()).append("; text-align: left; }").append(LF)
+                .append("       tr.testcasesummaryheadline                                     { background-color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; color: ").append(UxColors.WHITE.getHtmlColorCode()).append("; }").append(LF)
+                .append("       table.").append(HtmlStyleNames.STRIPED_ROWS.toString()).append(" tr:nth-child(even)                 { background-color: ").append(UxColors.LIGHT_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("       .noerrorsexclamtaion    { color: black; font-weight: bold; }").append(LF)
+                .append("       h3#settingsheading      { color: ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; }").append(LF)
+                .append("       table.settingsTable     { color: ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; font-size: 80%; }").append(LF)
+                .append("      a.").append(HtmlStyleNames.LICENSE_LINK.toString().toLowerCase()).append("      { color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; text-decoration: none; }").append(LF)
+                .append("      a.").append(HtmlStyleNames.LICENSE_LINK.toString().toLowerCase()).append(":visited      { color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; text-decoration: none; }").append(LF)
+                .append("      a.").append(HtmlStyleNames.LICENSE_LINK.toString().toLowerCase()).append(":hover      { color: ").append(UxColors.DARK_BLUE.getHtmlColorCode()).append("; text-decoration: underline; }").append(LF)
+                .append(resultsBarStyleInfo).append("    </style>").append(LF)
+                .append(LF);
     }
 
     /**
@@ -270,23 +270,24 @@ public class HtmlSummaryReport {
     }
 
     private void addHtmlElementSettings(){
-        html.append("          <h3 id=\"settingsheading\">Test run settings</h2>" + LF +
-                TestRun.getSettings().toHtmlTable());
+        html
+                .append("          <h3 id=\"settingsheading\">Test run settings</h2>").append(LF)
+                .append(TestRun.getSettings().toHtmlTable());
     }
 
     /**
      * Produces the title section of the HTML page the summary reportTestRun consists of.
-     * @return HTML section as string
      */
     private void addHtmlElementTitle(){
-        html.append("          <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
-                "          <h1>Test run report</h1>" + LF +
-                "          <table class=\"rundetails\">" + LF +
-                "             <tr><td>Run name: </td><td>" + TestRun.getRunName() + "</td></tr>" + LF +
-                "             <tr><td>Start time: </td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.getStartTime()) + "</td></tr>" + LF +
-                "             <tr><td>Stop time :</td><td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(getStopTime()) + "</td></tr>" + LF +
-                "             <tr><td>Duration: </td><td>" + StringManagement.timeDurationAsString(TestRun.getStartTime(), getStopTime()) + "</td></tr>" + LF +
-                "          </table>" + LF);
+        html
+                .append("          <img class=\"toplogo\" src=\"").append(TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO)).append("\">").append(LF)
+                .append("          <h1>Test run report</h1>").append(LF)
+                .append("          <table class=\"rundetails\">").append(LF)
+                .append("             <tr><td>Run name: </td><td>").append(TestRun.getRunName()).append("</td></tr>").append(LF)
+                .append("             <tr><td>Start time: </td><td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(TestRun.getStartTime())).append("</td></tr>").append(LF)
+                .append("             <tr><td>Stop time :</td><td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(getStopTime())).append("</td></tr>").append(LF)
+                .append("             <tr><td>Duration: </td><td>").append(StringManagement.timeDurationAsString(TestRun.getStartTime(), getStopTime())).append("</td></tr>").append(LF)
+                .append("          </table>").append(LF);
     }
 
     private Date getStopTime(){
@@ -298,7 +299,6 @@ public class HtmlSummaryReport {
 
     /**
      * Produces the statistics section of the summary reportTestRun
-     * @return HTML section as string
      */
     private void addHtmlElementStatistics(){
         html.append("          <h2>Statistics</h2>").append(LF);
@@ -327,7 +327,6 @@ public class HtmlSummaryReport {
 
     /**
      * Produces the HTML section for new errors encountered during a test run, grouped by similarity).
-     * @return HTML section as string
      */
     private void addHtmlElementNewErrorsGrouped(){
         if(this.failedTestCasesWithNewDeviations + this.testCasesWithBothNewAndKnownErrors > 0){
@@ -342,7 +341,6 @@ public class HtmlSummaryReport {
 
     /**
      * Produces the HTML section for known errors
-     * @return HTML section as string
      */
     private void addHtmlElementEncounteredKnownErrors(){
         if(encounteredKnownErrorInfos.size() > 0){
@@ -379,7 +377,6 @@ public class HtmlSummaryReport {
 
     /**
      * Produces the HTML section for known errors not encountered
-     * @return HTML section as string
      */
     private void addHtmlElementSolvedKnownErrors(){
         if(solvedKnownErrorsList.size() > 0){
@@ -405,30 +402,32 @@ public class HtmlSummaryReport {
     /**
      * Produces the HTML section for the list of executed test cases and their
      * results each. Includes links to individual test case logs.
-     * @return HTML section as string
      */
     private void addHtmlElementExecutedTestCasesStatusList(){
-        html.append("          <h2>Test case summary</h2>" + LF +
-                "          <table class=\"" + HtmlStyleNames.STRIPED_ROWS.toString() + " " + HtmlStyleNames.HOVERABLE.toString() + "\" id=\"" + HtmlStyleNames.EXECUTED_TEST_CASES.toString() + "\">" + LF +
-                "            <tr class=\"testcasesummaryheadline\"><th>Test set</th><th>Test case name</th><th>Test status</th><th>Log</th></tr>" + LF +
-                "      " + testCaseSummary +
-                "          </table>" + LF + "<br>" + LF);
+        html
+                .append("          <h2>Test case summary</h2>").append(LF)
+                .append("          <table class=\"").append(HtmlStyleNames.STRIPED_ROWS.toString()).append(" ").append(HtmlStyleNames.HOVERABLE.toString()).append("\" id=\"").append(HtmlStyleNames.EXECUTED_TEST_CASES.toString()).append("\">").append(LF)
+                .append("            <tr class=\"testcasesummaryheadline\"><th>Test set</th><th>Test case name</th><th>Test status</th><th>Log</th></tr>").append(LF)
+                .append("      ").append(testCaseSummary)
+                .append("          </table>").append(LF)
+                .append("          <br>").append(LF);
     }
 
     /**
      * Produces a document footer for the summary reportTestRun.
-     * @return HTML section for footer
      */
     private void addHtmlElementCopyright(){
         //noinspection deprecation
-        html.append("<br><br>" +
-                "          <table width=\"100%\">" + LF +
-                "            <tr>" + LF +
-                "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
-                "            </tr><tr>" + LF +
-                "              <td width=\"100%\" class=\"" + HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0</a> license. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + ".</td>" + LF +
-                "            </tr>" + LF +
-                "          </table>" + LF);
+        html
+                .append("          <br>").append(LF)
+                .append("          <br>").append(LF)
+                .append("          <table width=\"100%\">").append(LF)
+                .append("            <tr>").append(LF)
+                .append("              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>").append(LF)
+                .append("            </tr><tr>").append(LF)
+                .append("              <td width=\"100%\" class=\"").append(HtmlStyleNames.COPYRIGHT.toString()).append("\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"").append(HtmlStyleNames.LICENSE_LINK.toString().toLowerCase()).append("\">Apache 2.0</a> license. &copy; Claremont ").append(new SimpleDateFormat("yyyy").format(new Date())).append(".</td>").append(LF)
+                .append("            </tr>").append(LF)
+                .append("          </table>").append(LF);
     }
 
 

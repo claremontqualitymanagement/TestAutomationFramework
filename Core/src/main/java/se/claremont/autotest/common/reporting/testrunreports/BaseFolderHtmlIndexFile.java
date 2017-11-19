@@ -1,7 +1,7 @@
 package se.claremont.autotest.common.reporting.testrunreports;
 
 import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.io.File;
@@ -23,12 +23,12 @@ public class BaseFolderHtmlIndexFile {
     SimpleDateFormat outputTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public BaseFolderHtmlIndexFile(){
-        SupportMethods.saveToFile(htmlContent(), TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER) + "index.html" );
+        SupportMethods.saveToFile(htmlContent(), TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER) + "index.html" );
     }
 
     private String folderNamesAsHtmlTable(){
         StringBuilder htmlTableRows = new StringBuilder();
-        File file = new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        File file = new File(TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER));
         @SuppressWarnings("Convert2Lambda") String[] directories = file.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
@@ -37,7 +37,7 @@ public class BaseFolderHtmlIndexFile {
         });
         if(directories == null) return null;
         Arrays.sort(directories, Collections.reverseOrder());
-        String baseFolder = TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER).replace("\\", "/");
+        String baseFolder = TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER).replace("\\", "/");
         for(String directory : directories) {
             String[] directoryNameParts = directory.split("_");
             Date timestamp = null;
@@ -226,7 +226,7 @@ public class BaseFolderHtmlIndexFile {
                 "   <body>" + System.lineSeparator() +
                 "" + System.lineSeparator() +
                 "      <div id=\"head\">" + System.lineSeparator() +
-                "         <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + System.lineSeparator() +
+                "         <img class=\"toplogo\" src=\"" + TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO) + "\">" + System.lineSeparator() +
                 "         <br>" + System.lineSeparator() +
                 "         <br>" + System.lineSeparator() +
                 "         <h1 class=\"pagetitle\">TAF Result Viewer</h1>" + System.lineSeparator() +

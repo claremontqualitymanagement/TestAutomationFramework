@@ -8,7 +8,7 @@ import java.io.File;
  * Created by jordam on 2017-03-31.
  */
 public class LogMessageWithFile extends LogMessage{
-    File file;
+    private File file;
 
     public LogMessageWithFile(String logMessage, File file) {
         super(logMessage);

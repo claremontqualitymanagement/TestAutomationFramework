@@ -202,6 +202,7 @@ public class HtmlSummaryReport_Test extends UnitTestClass {
 
     public static class TestClass extends TestSet{
 
+        @SuppressWarnings("EmptyMethod")
         @Test
         public void dummyTest(){}
     }

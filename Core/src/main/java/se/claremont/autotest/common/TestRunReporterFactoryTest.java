@@ -3,7 +3,6 @@ package se.claremont.autotest.common;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
-import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporterFactory;
 import se.claremont.autotest.common.testset.UnitTestClass;

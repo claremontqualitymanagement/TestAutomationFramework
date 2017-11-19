@@ -1,11 +1,13 @@
 package se.claremont.autotest.common.logging.logmessage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by jordam on 2017-03-29.
  */
+@SuppressWarnings("StringConcatenationInLoop")
 public class LogMessage {
 
     List<LogMessagePartType> logMessageParts = new ArrayList<>();
@@ -15,9 +17,7 @@ public class LogMessage {
     }
 
     public LogMessage(LogMessagePartType[] logMessageParts){
-        for(LogMessagePartType logMessagePart : logMessageParts){
-            this.logMessageParts.add(logMessagePart);
-        }
+        Collections.addAll(this.logMessageParts, logMessageParts);
     }
 
     public String toString(){

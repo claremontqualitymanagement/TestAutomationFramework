@@ -1,14 +1,10 @@
 package se.claremont.autotest.common.testrun.reportingengine;
 
-import se.claremont.autotest.common.backendserverinteraction.TafBackendServerConnection;
-import se.claremont.autotest.common.backendserverinteraction.TestlinkAdapterServerConnection;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.reporting.testrunreports.TestlinkAdapterTestRunReporter;
 import se.claremont.autotest.common.reporting.testrunreports.email.TestRunReporterEmailReport;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.Settings;
-import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;

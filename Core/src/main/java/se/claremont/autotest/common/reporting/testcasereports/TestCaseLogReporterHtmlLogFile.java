@@ -16,7 +16,7 @@ import se.claremont.autotest.common.testcase.TestCaseLog;
 import se.claremont.autotest.common.testcase.TestCaseLogReporter;
 import se.claremont.autotest.common.testcase.TestCaseLogSection;
 import se.claremont.autotest.common.testcase.TestCaseResult;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.text.SimpleDateFormat;
@@ -111,13 +111,12 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
         testCaseResult.testCaseLog.log(LogLevel.DEBUG, "Saving html reportTestRun to '" + testCaseResult.pathToHtmlLogFile + "'.");
         logger.debug( "Saving html reportTestRun to '" + testCaseResult.pathToHtmlLogFile + "'." );
         validateTestRunEndTime();
-        String html = "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
+        return  "<!DOCTYPE html>" + LF + "<html lang=\"en\">" + LF + LF +
                 htmlSectionHtmlHead() +
                 "  <body>" + LF + LF +
                 asHtmlSection() +
                 "  </body>" + LF + LF +
                 "</html>" + LF;
-        return html;
     }
 
     public String htmlSectionHtmlHead(){
@@ -153,7 +152,6 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
 
     /**
      * Produces a document addFooter for the summary reportTestRun.
-     * @return HTML section for addFooter
      */
     private void addFooter(){
         String versionInfo = "";
@@ -163,14 +161,17 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
             versionInfo += "TAF version " + version + ".</a>";
         }
         //noinspection deprecation
-        sb.append("<br><br>" +
-                "          <table class=\"addFooter\" width=\"100%\">" + LF +
-                "            <tr>" + LF +
-                "              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>" + LF +
-                "            </tr><tr>" + LF +
-                "              <td width=\"100%\" class=\"" + HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString() + "\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"" + HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase() + "\">Apache 2.0 license</a>. &copy; Claremont " + new SimpleDateFormat("yyyy").format(new Date()) + "." + versionInfo + "</td>" + LF +
-                "            </tr>" + LF +
-                "          </table>" + LF);
+        sb
+                .append("          <br>").append(LF)
+                .append("          <br>").append(LF)
+                .append("          <table class=\"addFooter\" width=\"100%\">").append(LF)
+                .append("            <tr>").append(LF)
+                .append("              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>").append(LF)
+                .append("            </tr>").append(LF)
+                .append("            <tr>").append(LF)
+                .append("              <td width=\"100%\" class=\"").append(HtmlSummaryReport.HtmlStyleNames.COPYRIGHT.toString()).append("\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"").append(HtmlSummaryReport.HtmlStyleNames.LICENSE_LINK.toString().toLowerCase()).append("\">Apache 2.0 license</a>. &copy; Claremont ").append(new SimpleDateFormat("yyyy").format(new Date())).append(".").append(versionInfo).append("</td>").append(LF)
+                .append("            </tr>").append(LF)
+                .append("          </table>").append(LF);
     }
 
 
@@ -260,29 +261,30 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private void addHtmlSectionBodyHeader(){
-        sb.append("    <div id=\"" + enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString()) + "\">" + LF +
-                "      <img src=\"" + TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO) + "\" alt=\"logo\" class=\"toplogo\">" + LF + "<br>" + LF + "<br>" + LF +
-                //"      <a href=\"https://github.com/claremontqualitymanagement/TestAutomationFramework\" target=\"_blank\"><img alt=\"logo\" id=\"logo\" src=\"https://avatars3.githubusercontent.com/u/22028977?v=3&s=400\"></a>" + LF +
-                "      <br><span class=\"pagetitle\">TAF test case results log</span>" + LF +
-                "         <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">" + helpText() +
-                "         </span>" + LF +
-                "      </span>" + LF +
-                status() + "<br>" + LF +
-                //"      <img alt=\"logo\" id=\"logo\" src=\"" + TestRun.settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "\">" + LF +
-                "      <h1>Test results for test case '" + testCaseResult.testName + "'</h1>" + LF +
-                "      <p>" + LF +
-                "        Result status: " + StringManagement.enumCapitalNameToFriendlyString(testCaseResult.resultStatus.toString()) + "<br>" + LF +
-                "        Start time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCaseResult.startTime) + "<br>" + LF +
-                "        Stop time:  " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(runEndTime) + "<br>" + LF +
-                "        Duration:   " + StringManagement.timeDurationAsString(testCaseResult.startTime, runEndTime) + LF +
-                "      </p>" + LF +
-                "      <p>" + LF +
-                "         Number of verifications performed: " + numberOfVerificationsPerformed() + LF +
-                "         <br>" + LF +
-                "         Number of non-verifying execution steps performed: " + numberOfExecitionStepsPerformed() + LF +
-                "      </p>" + LF +
-                "      <br>" + LF +
-                "    </div>" + LF + LF);
+        sb
+                .append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString())).append("\">").append(LF)
+                .append("      <img src=\"").append(TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO)).append("\" alt=\"logo\" class=\"toplogo\">").append(LF)
+                .append("      <br>").append(LF)
+                .append("      <br>").append(LF)
+                .append("      <br>").append(LF)
+                .append("      <span class=\"pagetitle\">TAF test case results log</span>").append(LF)
+                .append("      <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">").append(helpText()).append("</span>").append(LF)
+                .append(status()).append("<br>").append(LF)
+                .append("      <h1>Test results for test case '").append(testCaseResult.testName).append("'</h1>").append(LF)
+                .append("      <p>").append(LF)
+                .append("        Result status: ").append(StringManagement.enumCapitalNameToFriendlyString(testCaseResult.resultStatus.toString())).append("<br>").append(LF)
+                .append("        Start time: ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(testCaseResult.startTime)).append("<br>").append(LF)
+                .append("        Stop time:  ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(runEndTime)).append("<br>").append(LF)
+                .append("        Duration:   ").append(StringManagement.timeDurationAsString(testCaseResult.startTime, runEndTime)).append(LF)
+                .append("      </p>").append(LF)
+                .append("      <p>").append(LF)
+                .append("         Number of verifications performed: ").append(numberOfVerificationsPerformed()).append(LF)
+                .append("         <br>").append(LF)
+                .append("         Number of non-verifying execution steps performed: ").append(numberOfExecitionStepsPerformed()).append(LF)
+                .append("      </p>").append(LF)
+                .append("      <br>").append(LF)
+                .append("    </div>").append(LF)
+                .append(LF);
     }
 
     private int numberOfVerificationsPerformed() {
@@ -342,13 +344,15 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     }
 
     private void addHtmlSectionTestCaseLogEntries(){
-        sb.append("<br>" + LF +
-                "      <h2>Test case log</h2>" + LF +
-                "     <label><input type=\"checkbox\" onclick=\"showDebug()\" id=\"showDebugCheckbox\">Show verbose debugging information</label>" + LF +
-                "     <div id=\"logpostlist\">" + LF + LF +
-                testStepLogPostSections(testCaseResult.testCaseLog) + LF +
-                "     </div>" + LF +
-                "     <br><br>" + LF);
+        sb
+                .append("<br>").append(LF)
+                .append("      <h2>Test case log</h2>").append(LF)
+                .append("     <label><input type=\"checkbox\" onclick=\"showDebug()\" id=\"showDebugCheckbox\">Show verbose debugging information</label>").append(LF)
+                .append("     <div id=\"logpostlist\">").append(LF)
+                .append(LF)
+                .append(testStepLogPostSections(testCaseResult.testCaseLog)).append(LF)
+                .append("     </div>").append(LF)
+                .append("     <br><br>").append(LF);
     }
 
     private void addHtmlSectionTestCaseData(){

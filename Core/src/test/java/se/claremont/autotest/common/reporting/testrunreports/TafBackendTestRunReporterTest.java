@@ -6,7 +6,7 @@ import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testhelpers.ResourceManager;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
@@ -16,11 +16,12 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  *
  * Created by jordam on 2017-03-20.
  */
+@SuppressWarnings("unchecked")
 public class TafBackendTestRunReporterTest extends UnitTestClass {
 
     @Before
     public void testSetup(){
-        TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://anyserver:80/taf");
+        TestRun.setSettingsValue(SettingParameters.URL_TO_TAF_BACKEND, "http://anyserver:80/taf");
     }
 
     @Test

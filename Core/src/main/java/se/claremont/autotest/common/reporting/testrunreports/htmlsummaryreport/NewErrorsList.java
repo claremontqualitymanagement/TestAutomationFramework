@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 /**
  * Created by jordam on 2017-04-10.
  */
-public class NewErrorsList {
-    List<NewError> allErrorsFromTestRunPerTestCase = new ArrayList<>();
-    List<NewError> actualSharedErrors = new ArrayList<>();
-    List<NewError> nonSharedErrors = new ArrayList<>();
-    List<LogPost> potentialMatchingLogPosts = new ArrayList<>(); //All encountered log posts for all new errors
-    List<String> classesForRunTestCases;
+class NewErrorsList {
+    private List<NewError> allErrorsFromTestRunPerTestCase = new ArrayList<>();
+    private List<NewError> actualSharedErrors = new ArrayList<>();
+    private List<NewError> nonSharedErrors = new ArrayList<>();
+    private List<LogPost> potentialMatchingLogPosts = new ArrayList<>(); //All encountered log posts for all new errors
+    private List<String> classesForRunTestCases;
 
     public NewErrorsList(List<NewError> allErrorsFromTestRunPerTestCase, List<String> classesForRunTestCases){
         this.allErrorsFromTestRunPerTestCase = allErrorsFromTestRunPerTestCase;
@@ -72,7 +72,7 @@ public class NewErrorsList {
                 }
                 html.append("             </table>").append(System.lineSeparator());
                 for(TestCase testCase : newError.testCasesWhereEncountered){
-                    html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9655; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"" + testCase.pathToHtmlLogFile + "\">Log</a>)");
+                    html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9655; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"").append(testCase.pathToHtmlLogFile).append("\">Log</a>)");
                     if(testCaseHasProblemRecordsNotPartOfSharedLogRecords(testCase)){
                         html.append("<span class=\"moreerrorsasterisk\">*</span>");
                         asteriskTextShouldBePrinted = true;
@@ -131,7 +131,12 @@ public class NewErrorsList {
     }
 
     private void sortSharedErrorsWithThoseWhoHasTheMostTestCasesFirst() {
-        actualSharedErrors.stream().sorted(Comparator.comparingInt(NewError::getNumberOfTestCases).reversed());
+        actualSharedErrors
+                .stream()
+                .sorted(Comparator
+                        .comparingInt(NewError::getNumberOfTestCases)
+                        .reversed()
+                );
     }
 
     private boolean testCaseHasProblemRecordsNotPartOfSharedLogRecords(TestCase testCase) {

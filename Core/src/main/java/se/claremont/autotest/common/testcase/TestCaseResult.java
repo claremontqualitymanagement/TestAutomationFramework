@@ -2,7 +2,6 @@ package se.claremont.autotest.common.testcase;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.junit.runner.Result;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;

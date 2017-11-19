@@ -42,9 +42,7 @@ public class CliTestRunner {
     public static int runInTestMode(String[] args, Class<?>[] testClasses){
         testMode = true;
         List<String> arguments = new ArrayList<>();
-        for(String arg : args){
-            arguments.add(arg);
-        }
+        Collections.addAll(arguments, args);
         if(testClasses != null){
             logLoadedClasses();
             for(Class<?> klass : testClasses){
@@ -56,7 +54,7 @@ public class CliTestRunner {
                 }
             }
         }
-        executeRunSequence(arguments.stream().toArray(String[]::new));
+        executeRunSequence(arguments.toArray(new String[0]));
         return TestRun.getExitCode();
     }
 
@@ -241,7 +239,7 @@ public class CliTestRunner {
                 String[] parts = arg.split("=");
                 if(parts[0].trim().length() > 0 && parts.length > 1) {
                     String parameterName = parts[0].trim();
-                    for(Settings.SettingParameters parameter : Settings.SettingParameters.values()){
+                    for(SettingParameters parameter : SettingParameters.values()){
                         if(parameterName.toUpperCase().equals(parameter.toString())){
                             parameterName = parameterName.toUpperCase();
                         }
@@ -420,9 +418,7 @@ public class CliTestRunner {
                 for (Iterator iter = list(myCL); iter.hasNext();) {
                     System.out.println("\t" + iter.next());
                 }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
             myCL = myCL.getParent();

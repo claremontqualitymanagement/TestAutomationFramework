@@ -18,8 +18,7 @@ public class ResourceManager {
 
     public static File getFileFromResources(String fileName){
         ClassLoader classLoader = ResourceManager.class.getClassLoader();
-        File file = new File(classLoader.getResource(fileName).getFile());
-        return file;
+        return new File(classLoader.getResource(fileName).getFile());
     }
 
     public static Class extractFileFromResourcesAndCompileAndLoadIt(String resourceFile){
@@ -53,6 +52,7 @@ public class ResourceManager {
         }
         File root = new File("/java"); // On Windows running on C:\, this is C:\java.
         File sourceFile = new File(root, packagePath);
+        //noinspection ResultOfMethodCallIgnored
         sourceFile.getParentFile().mkdirs();
         try {
             Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));

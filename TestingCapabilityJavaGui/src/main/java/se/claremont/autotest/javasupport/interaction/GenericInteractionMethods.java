@@ -5,10 +5,9 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
-import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.objectstructure.GuiComponent;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
@@ -18,10 +17,6 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,10 +196,10 @@ public class GenericInteractionMethods {
 
     private void logDesktopScreenshot(String filePath){
         String htmlFilePath = filePath.replace("\\", "/");
-        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
+        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX))){
             if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
                 htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
-            htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
+            htmlFilePath = TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
         }
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved desktop screenshot as '" + filePath + "'.",
                 "Saved desktop screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +

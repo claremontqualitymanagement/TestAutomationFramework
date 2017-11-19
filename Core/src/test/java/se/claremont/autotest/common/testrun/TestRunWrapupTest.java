@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
-import se.claremont.autotest.common.testhelpers.ResourceManager;
-import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
 /**

@@ -22,18 +22,15 @@ public class GenericJavaObjectToHtml {
         sb.append(tab(depth)).append("<div data-role='collapsible' class='").append(object.getClass().getSimpleName().toLowerCase()).append("'>").append(System.lineSeparator());
         String objectIdentification = attemptFindElementIdentification(object, 30);
         if(objectIdentification == null){
-            sb.append(tab(depth + 1))
-                    .append("<h" + depth + ">")
+            sb.append(tab(depth + 1)).append("<h").append(depth).append(">")
                     .append("<span class='classname'>")
-                    .append(object.getClass().getSimpleName())
-                    .append("</span></h" + depth + ">")
+                    .append(object.getClass().getSimpleName()).append("</span></h").append(depth).append(">")
                     .append(System.lineSeparator());
         } else {
-            sb.append(tab(depth + 1))
-                    .append("<h" + depth + ">")
+            sb.append(tab(depth + 1)).append("<h").append(depth).append(">")
                     .append("<span class='classname'>")
                     .append(object.getClass().getSimpleName())
-                    .append(": '").append(objectIdentification).append("'</span></h" + depth + ">")
+                    .append(": '").append(objectIdentification).append("'</span></h").append(depth).append(">")
                     .append(System.lineSeparator());
         }
         sb.append(tab(depth + 1)).append("<p>").append(System.lineSeparator());
@@ -85,7 +82,7 @@ public class GenericJavaObjectToHtml {
                 + "</html>" + System.lineSeparator();
     }
 
-    private static String attemptFindElementIdentification(Object object, int nameLengthLimit){
+    private static String attemptFindElementIdentification(Object object, @SuppressWarnings("SameParameterValue") int nameLengthLimit){
         String objectName = invokeNameGettingMethodIfExist(object);
         if(objectName != null) return "name=" + truncateString(objectName, nameLengthLimit);
         objectName = attemptGetValueForFieldsNamed(object, new String[] {"name"});
@@ -128,8 +125,7 @@ public class GenericJavaObjectToHtml {
             if(method.getName().equals("toHtml") && method.getReturnType().equals(String.class)){
                 try {
                     return (String)method.invoke(object);
-                } catch (IllegalAccessException ignored) {
-                } catch (InvocationTargetException ignored) {
+                } catch (IllegalAccessException | InvocationTargetException ignored) {
                 }
             }
         }
@@ -146,8 +142,7 @@ public class GenericJavaObjectToHtml {
                             && method.getReturnType().equals(String.class)){
                 try {
                     return (String)method.invoke(object);
-                } catch (IllegalAccessException ignored) {
-                } catch (InvocationTargetException ignored) {
+                } catch (IllegalAccessException | InvocationTargetException ignored) {
                 }
             }
         }
@@ -160,9 +155,7 @@ public class GenericJavaObjectToHtml {
             if((method.getName().toLowerCase().replace("_", "").equals("id") || method.getName().toLowerCase().replace("_", "").equals("getid")) && method.getReturnType().equals(String.class)){
                 try {
                     return (String)method.invoke(object);
-                } catch (IllegalAccessException e) {
-                } catch (InvocationTargetException e) {
-                }
+                } catch (IllegalAccessException | InvocationTargetException ignored) { }
             }
         }
         return null;

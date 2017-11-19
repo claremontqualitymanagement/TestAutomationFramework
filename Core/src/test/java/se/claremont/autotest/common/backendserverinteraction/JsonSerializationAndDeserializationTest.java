@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
-import se.claremont.autotest.common.junitcustomization.TafTestRunner;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.testrunreports.TafBackendServerTestRunReporter;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
@@ -131,6 +129,7 @@ public class JsonSerializationAndDeserializationTest extends UnitTestClass{
         Assert.assertNotNull(tafBackendServerTestRunReporterObject);
     }
 
+    @SuppressWarnings("EmptyMethod")
     public static class FakeTestSet extends TestSet{
 
         public FakeTestSet(){

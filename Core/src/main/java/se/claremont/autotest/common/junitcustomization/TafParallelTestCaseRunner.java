@@ -1,9 +1,9 @@
 package se.claremont.autotest.common.junitcustomization;
 
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
-import org.junit.runner.Result;
-import org.junit.runner.notification.RunNotifier;
+
 import se.claremont.autotest.common.testcase.TestCaseRunner;
 import se.claremont.autotest.common.testset.TestSet;
 
@@ -16,17 +16,13 @@ import java.util.concurrent.*;
 
 public class TafParallelTestCaseRunner {
 
-    ExecutorService executorService;
-    ThreadPoolExecutor threadPoolExecutor;
-    List<Class<?>> testClasses = new ArrayList<>();
-    JUnitCore jUnitCore;
+    private ThreadPoolExecutor threadPoolExecutor;
+    private List<Class<?>> testClasses = new ArrayList<>();
     public static Set<TestSet> testSets = new HashSet<>();
     public static Set<String> testSetNames = new HashSet<>();
 
     public TafParallelTestCaseRunner(int threadCount, JUnitCore jUnitCore){
-        executorService = Executors.newFixedThreadPool(threadCount);
         threadPoolExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(threadCount);
-        this.jUnitCore = jUnitCore;
     }
 
     public void addTestClasses(Class<?> testClass){
@@ -35,15 +31,14 @@ public class TafParallelTestCaseRunner {
 
     public TafResult run() throws ExecutionException, InterruptedException {
         TafResult tafResult = new TafResult();
-        JUnitCore jUnitCore = new JUnitCore();
-        Set<Future<TafResult>> set = new HashSet<Future<TafResult>>();
-        RunNotifier runNotifier = new RunNotifier();
+        Set<Future<TafResult>> set = new HashSet<>();
         for(Class<?> c : testClasses){
             Method[] methodsInClass = c.getDeclaredMethods();
             for(Method method : methodsInClass){
+                if(!method.isAnnotationPresent(Test.class))continue;
                 Request testMethodRequest = Request.method(c, method.getName());
                 String testName = method.getName();
-                set.add(threadPoolExecutor.submit(new TestCaseRunner(testMethodRequest, jUnitCore, runNotifier, testName)));
+                set.add(threadPoolExecutor.submit(new TestCaseRunner(testMethodRequest)));
             }
         }
         threadPoolExecutor.shutdown();

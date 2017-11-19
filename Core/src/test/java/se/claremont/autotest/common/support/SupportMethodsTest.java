@@ -20,6 +20,7 @@ public class SupportMethodsTest extends UnitTestClass{
         Assert.assertTrue(SupportMethods.isRegexMatch("abc123", "abc.*3"));
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void testFileWriteToReportFolder(){
         LogFolder.setLogFolder(this.getClass().getName());

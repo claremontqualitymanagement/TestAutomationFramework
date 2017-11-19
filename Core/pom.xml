@@ -106,12 +106,6 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.subethamail/subethasmtp -->
-        <dependency>
-            <groupId>org.subethamail</groupId>
-            <artifactId>subethasmtp</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

@@ -72,6 +72,7 @@ public class KnownErrorsList_Test extends UnitTestClass {
 
     public static class TestClass extends TestSet{
 
+        @SuppressWarnings("EmptyMethod")
         @Test
         public void dummyTest(){}
     }

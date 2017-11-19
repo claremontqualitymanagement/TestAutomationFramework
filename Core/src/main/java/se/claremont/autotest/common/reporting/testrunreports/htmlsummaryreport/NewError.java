@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by jordam on 2017-04-10.
  */
-public class NewError {
+class NewError {
     List<TestCase> testCasesWhereEncountered = new ArrayList<>();
     List<LogPost>  sampleLogPosts = new ArrayList<>();
 

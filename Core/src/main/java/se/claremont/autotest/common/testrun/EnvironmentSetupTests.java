@@ -6,13 +6,14 @@ import se.claremont.autotest.common.testset.UnitTestClass;
 import java.awt.*;
 import java.io.File;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class EnvironmentSetupTests extends UnitTestClass{
     File reportFolder ;
     boolean reportFolderCreatedForTest = false;
 
     @Before
     public void before(){
-        reportFolder = new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        reportFolder = new File(TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER));
         reportFolderCreatedForTest = false;
     }
 
@@ -21,7 +22,7 @@ public class EnvironmentSetupTests extends UnitTestClass{
         if(reportFolderCreatedForTest) {
             reportFolder.delete();
             if(reportFolder.exists())
-                System.out.println("Could not delete the log folder '" + TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER) + "' created for the test.");
+                System.out.println("Could not delete the log folder '" + TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER) + "' created for the test.");
         }
     }
 
@@ -31,7 +32,7 @@ public class EnvironmentSetupTests extends UnitTestClass{
             reportFolder.mkdirs();
             reportFolderCreatedForTest = true;
         }
-        Assert.assertTrue("The base log folder is set to '" + TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER) + "' but this is not a directory.", reportFolder.isDirectory());
+        Assert.assertTrue("The base log folder is set to '" + TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER) + "' but this is not a directory.", reportFolder.isDirectory());
     }
 
     @Test

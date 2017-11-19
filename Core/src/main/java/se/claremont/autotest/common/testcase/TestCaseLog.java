@@ -34,7 +34,7 @@ public class TestCaseLog {
     private final static Logger logger = LoggerFactory.getLogger( TestCaseLog.class );
     private static String testCaseMethodName = null;
 
-    public TestCaseLog(){}
+    private TestCaseLog(){}
 
     @SuppressWarnings("WeakerAccess")
     public TestCaseLog(String testCaseMethodName){

@@ -2,16 +2,9 @@ package se.claremont.autotest.common.reporting.testcasereports;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.common.junitcustomization.TafTestRunner;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testhelpers.ResourceManager;
-import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestCaseHtmlReportTests extends UnitTestClass {
     @Test

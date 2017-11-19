@@ -15,6 +15,7 @@ import se.claremont.autotest.common.testset.UnitTestClass;
  *
  * Created by jordam on 2017-03-20.
  */
+@SuppressWarnings("ALL")
 public class TestRunHtmlSummaryReportTest extends UnitTestClass {
 
     @Test
@@ -527,6 +528,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         Assert.assertTrue(SupportMethods.isRegexMatch(output, regexp));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void pause(int milliseconds){
         try {
             Thread.sleep(milliseconds);

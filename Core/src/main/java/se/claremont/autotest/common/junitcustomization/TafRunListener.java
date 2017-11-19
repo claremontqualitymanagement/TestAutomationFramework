@@ -6,9 +6,6 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import se.claremont.autotest.common.testrun.TestRun;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A custom JUnit RunListener, to enable reporting and fancy output.
  *

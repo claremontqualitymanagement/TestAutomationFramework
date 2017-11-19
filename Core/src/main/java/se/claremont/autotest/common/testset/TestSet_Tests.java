@@ -88,6 +88,7 @@ public class TestSet_Tests extends UnitTestClass{
         Assert.assertTrue("Expected result status of test case to be '" + TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS.toString() + " but it was " + testSet.currentTestCase().testCaseResult.resultStatus.toString() + ".", testSet.currentTestCase().testCaseResult.resultStatus == TestCaseResult.ResultStatus.FAILED_WITH_ONLY_KNOWN_ERRORS);
     }
 
+    @SuppressWarnings("EmptyMethod")
     public static class TestClass extends TestSet{
 
         @Test

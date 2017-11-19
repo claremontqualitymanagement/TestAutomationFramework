@@ -3,7 +3,7 @@ package se.claremont.autotest.common.reporting.testrunreports.email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import javax.mail.*;
@@ -89,10 +89,10 @@ public class EmailSenderImplementation implements EmailSender{
 
     private String sendThroughGmail(){
         String returnMessage;
-        String username = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_NAME);
-        String password = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
-        this.hostName = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS);
-        this.hostServerPort = TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SERVER_PORT);
+        String username = TestRun.getSettingsValue(SettingParameters.EMAIL_ACCOUNT_USER_NAME);
+        String password = TestRun.getSettingsValue(SettingParameters.EMAIL_ACCOUNT_USER_PASSWORD);
+        this.hostName = TestRun.getSettingsValue(SettingParameters.EMAIL_SERVER_ADDRESS);
+        this.hostServerPort = TestRun.getSettingsValue(SettingParameters.EMAIL_SERVER_PORT);
 
         if(username == null || username.length() < 1) {
             return "Cannot send mail. No email account user name set in settings.";
@@ -116,7 +116,7 @@ public class EmailSenderImplementation implements EmailSender{
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(TestRun.getSettingsValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS)));
+            message.setFrom(new InternetAddress(TestRun.getSettingsValue(SettingParameters.EMAIL_SENDER_ADDRESS)));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(String.join(",", recipientAddresses)));
             message.setSubject(subjectLine);

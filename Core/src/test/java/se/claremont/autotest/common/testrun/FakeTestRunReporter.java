@@ -1,19 +1,17 @@
 package se.claremont.autotest.common.testrun;
 
-import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class FakeTestRunReporter implements TestRunReporter {
     int numberOfReportsPerformed = 0;
     int numberOfTestCaseEvaluationsPerformed = 0;
-    int numberOfTestSetEvaluationsPerformed = 0;
-    List<String> testSetNames = new ArrayList<>();
+    private int numberOfTestSetEvaluationsPerformed = 0;
+    private List<String> testSetNames = new ArrayList<>();
     List<String> testCaseNames = new ArrayList<>();
 
     public FakeTestRunReporter(){

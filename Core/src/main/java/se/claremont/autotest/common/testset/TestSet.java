@@ -59,7 +59,7 @@ public abstract class TestSet {
      */
     public TestCase currentTestCase() {
         for (TestCase testCase : currentTestCases) {
-            if (testCase.currentTestNameInternal.equals(new TestName().getMethodName())) return testCase;
+            if (testCase.testCaseMethodName.equals(new TestName().getMethodName())) return testCase;
         }
         if (currentTestCases.size() == 1) return currentTestCases.get(0);
         return null;
@@ -151,7 +151,7 @@ public abstract class TestSet {
      * Closes down test case execution.
      * Test case tear down procedure at the test set level
      */
-    protected void wrapUpTestCase() {
+    void wrapUpTestCase() {
         if (currentTestCase() == null) return;
         currentTestCase().report();
         currentTestCases.remove(currentTestCase());

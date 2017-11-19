@@ -3,7 +3,7 @@ package se.claremont.autotest.common.junitcustomization;
 import org.junit.experimental.ParallelComputer;
 import org.junit.runner.JUnitCore;
 import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class TafTestRunner {
             runListener.testRunFinished(tafResult);
             return tafResult;
         }
-        String threadMode = TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE);
+        String threadMode = TestRun.getSettingsValue(SettingParameters.PARALLEL_TEST_EXECUTION_MODE);
         if (threadMode.toLowerCase().equals("methods") || threadMode.toLowerCase().equals("true")) {
             System.out.println("Running test methods in parallel per method.");
             runListener.testRunStarted(null);
@@ -50,16 +50,14 @@ public class TafTestRunner {
                 try {
                     runListener.testRunStarted(null);
                     tafResult.addTestResult(p.run());
-                } catch (ExecutionException e) {
-                    System.out.println("Could not execute tests by using parallel execution in thread pool. Try executing with PARALLEL_TEST_EXECUTION_MODE 'none', 'classes', 'methods', 'both'. Error: " + e.toString());
-                } catch (InterruptedException e) {
+                } catch (ExecutionException | InterruptedException e) {
                     System.out.println("Could not execute tests by using parallel execution in thread pool. Try executing with PARALLEL_TEST_EXECUTION_MODE 'none', 'classes', 'methods', 'both'. Error: " + e.toString());
                 }
                 if(tafResult.getFailureCount() > 0){
                     TestRun.setExitCode(TestRun.ExitCodeTable.RUN_TEST_ERROR_MODERATE.getValue());
                 }
             } else {
-                if(threads != 1) System.out.println("WARNING: '" + TestRun.getSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', 'both', 'none', 'true', 'false', or a numeric value indicating the number of concurrent execution threads to use for execution. Resorting to default by not running tests in parallel.");
+                if(threads != 1) System.out.println("WARNING: '" + TestRun.getSettingsValue(SettingParameters.PARALLEL_TEST_EXECUTION_MODE) + "' is an unrecognized value for TestRun SettingParameter PARALLEL_TEST_EXECUTION_MODE. Managed values are 'methods', 'classes', 'both', 'none', 'true', 'false', or a numeric value indicating the number of concurrent execution threads to use for execution. Resorting to default by not running tests in parallel.");
                 System.out.println("Running test methods in sequence. No parallelism.");
                 tafResult.addTestResult(junit.run(classes.toArray(new Class[0])));
             }

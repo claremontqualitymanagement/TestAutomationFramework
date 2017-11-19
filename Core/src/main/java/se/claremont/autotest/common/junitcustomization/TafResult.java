@@ -12,7 +12,6 @@ public class TafResult {
     private int failureCount;
     private List<Failure> failures;
     private final Long startTime;
-    private String testMethodName = null;
 
     public TafResult() {
         this.count = 0;
@@ -26,27 +25,20 @@ public class TafResult {
         this.count += junitResult.getRunCount();
         this.ignoreCount += junitResult.getIgnoreCount();
         this.failureCount += junitResult.getFailureCount();
-        for(Failure failure : junitResult.getFailures()){
-            this.failures.add(failure);
-        }
-    }
-
-    public void setTestMethodName(String testMethodName){
-        this.testMethodName = testMethodName;
+        this.failures.addAll(junitResult.getFailures());
     }
 
     public void addTestResult(TafResult tafResult){
         this.count += tafResult.getRunCount();
         this.ignoreCount += tafResult.getIgnoreCount();
         this.failureCount += tafResult.getFailureCount();
-        for(Failure failure : tafResult.getFailures()){
-            this.failures.add(failure);
-        }
+        this.failures.addAll(tafResult.getFailures());
     }
 
     public int getIgnoreCount(){
         return ignoreCount;
     }
+
     public int getRunCount(){
         return count;
     }
@@ -69,13 +61,14 @@ public class TafResult {
 
     @Override
     public String toString(){
-        String returnString = "[TafResult: Tests run = " + count + ", ignored = " + ignoreCount + ", failed = " + failureCount + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("[TafResult: Tests run = ").append(count).append(", ignored = ").append(ignoreCount).append(", failed = ").append(failureCount).append("]");
         if(failureCount > 0){
-            returnString += "Failures:" + System.lineSeparator();
+            sb.append("Failures:").append(System.lineSeparator());
             for(Failure f : failures){
-                returnString += f.toString() + System.lineSeparator();
+                sb.append(f.toString()).append(System.lineSeparator());
             }
         }
-        return returnString;
+        return sb.toString();
     }
 }

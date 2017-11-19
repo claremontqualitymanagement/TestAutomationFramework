@@ -41,13 +41,11 @@ public class TestCase {
     @JsonProperty public final KnownErrorsList testCaseKnownErrorsList;
     @JsonProperty public final KnownErrorsList testSetKnownErrors;
     @JsonProperty public final UUID uid = UUID.randomUUID();
-    final String testCaseMethodName;
+    public final String testCaseMethodName;
     final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
     @JsonProperty public String pathToHtmlLogFile;
-    @Rule
-    public TestName currentTestNameInternal = new TestName();
 
     public TestCase(){
         this(null, "Nameless test case");

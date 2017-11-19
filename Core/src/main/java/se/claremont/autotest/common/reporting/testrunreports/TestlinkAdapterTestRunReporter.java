@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.backendserverinteraction.TestlinkAdapterServerConnection;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
 import se.claremont.autotest.common.testset.TestSet;
@@ -22,21 +22,21 @@ import java.util.List;
 public class TestlinkAdapterTestRunReporter implements TestRunReporter {
     @SuppressWarnings("WeakerAccess")
     @JsonProperty public List<String> testCasesJsonsList = new ArrayList<>();
-    TestlinkTestCasesFromTestRun testlinkTestCasesFromTestRun = new TestlinkTestCasesFromTestRun();
+    private TestlinkTestCasesFromTestRun testlinkTestCasesFromTestRun = new TestlinkTestCasesFromTestRun();
 
     public TestlinkAdapterTestRunReporter(){
     }
 
     public void evaluateTestCase(TestCase testCase){
         if(testCase == null)return;
-        testCase.log(LogLevel.INFO, "Logging test case results for test case '" + testCase.testName + "' to Testlink Adapter server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'.");
+        testCase.log(LogLevel.INFO, "Logging test case results for test case '" + testCase.testName + "' to Testlink Adapter server at '" + TestRun.getSettingsValue(SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'.");
         testCasesJsonsList.add(testCase.toJson());
         testlinkTestCasesFromTestRun.testCases.add(new TestlinkTestCaseMapper(testCase));
     }
 
     public void report(){
-        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(TestlinkAdapterServerConnection.defaultServerUrl)) return;
-        System.out.println(System.lineSeparator() + "Sending test run results to Testlink Adapter server at '" + TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'." + System.lineSeparator());
+        if(TestRun.getSettingsValue(SettingParameters.URL_TO_TESTLINK_ADAPTER).equals(TestlinkAdapterServerConnection.defaultServerUrl)) return;
+        System.out.println(System.lineSeparator() + "Sending test run results to Testlink Adapter server at '" + TestRun.getSettingsValue(SettingParameters.URL_TO_TESTLINK_ADAPTER) + "'." + System.lineSeparator());
         TestlinkAdapterServerConnection testlinkAdapterServerConnection = new TestlinkAdapterServerConnection();
         testlinkAdapterServerConnection.postTestRunResult(testlinkTestCasesFromTestRun.toJson());
     }
@@ -57,8 +57,8 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
         return json;
     }
 
-    public class TestlinkTestCasesFromTestRun {
-        @JsonProperty public ArrayList<TestlinkTestCaseMapper> testCases = new ArrayList<>();
+    class TestlinkTestCasesFromTestRun {
+        @JsonProperty ArrayList<TestlinkTestCaseMapper> testCases = new ArrayList<>();
 
         @SuppressWarnings("WeakerAccess")
         public String toJson(){
@@ -73,7 +73,7 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
         }
     }
 
-    public class TestlinkTestCaseMapper{
+    class TestlinkTestCaseMapper{
         @JsonProperty String testName;
         @JsonProperty String testSetName;
         @JsonProperty String notes;
@@ -88,7 +88,7 @@ public class TestlinkAdapterTestRunReporter implements TestRunReporter {
             this.executionStatus = executionStatus;
         }
 
-        public TestlinkTestCaseMapper(TestCase testCase){
+        TestlinkTestCaseMapper(TestCase testCase){
             this.testName = testCase.testName;
             this.testSetName = testCase.testSetName;
             this.notes = testCase.testCaseResult.testCaseLog.toString();

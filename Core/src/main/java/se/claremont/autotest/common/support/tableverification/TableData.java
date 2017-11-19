@@ -5,6 +5,7 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -409,9 +410,7 @@ public class TableData {
                 String[] cells = lines[i].split(cellDilimiter);
                 if(cells.length < maxNumberOfCellsPerRow){
                     List<String> cellList = new ArrayList<>();
-                    for(String cell : cells){
-                        cellList.add(cell);
-                    }
+                    Collections.addAll(cellList, cells);
                     for(int cellNumber = cells.length; cellNumber < maxNumberOfCellsPerRow; cellNumber++){
                         cellList.add("");
                     }
@@ -443,9 +442,7 @@ public class TableData {
                 String[] cells = line.split(cellDilimiter);
                 if(cells.length < maxNumberOfCellsPerRow){
                     List<String> cellList = new ArrayList<>();
-                    for(String cell : cells){
-                        cellList.add(cell);
-                    }
+                    Collections.addAll(cellList, cells);
                     for(int cellNumber = cells.length; cellNumber < maxNumberOfCellsPerRow; cellNumber++){
                         cellList.add("");
                     }

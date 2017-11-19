@@ -4,7 +4,7 @@ import org.junit.Assume;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.testrun.CliTestRunner;
-import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
 
@@ -17,7 +17,7 @@ public class TestExecutionTest extends UnitTestClass{
 
     @After
     public void teardown() throws IOException {
-        for(File directory : new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER)).listFiles(File::isDirectory)){
+        for(File directory : new File(TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER)).listFiles(File::isDirectory)){
             if(directory.getName().contains(runName)){
                 directory.delete();
                 return;
@@ -38,7 +38,7 @@ public class TestExecutionTest extends UnitTestClass{
      }
 
      private boolean summaryFileFound(){
-         for(File directory : new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER)).listFiles(File::isDirectory)){
+         for(File directory : new File(TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER)).listFiles(File::isDirectory)){
              if(directory.getName().contains(runName)){
                  for(File file : directory.listFiles()){
                      if(file.getName().equals("_summary.html")){
@@ -51,7 +51,7 @@ public class TestExecutionTest extends UnitTestClass{
      }
 
      private void checkWriteAccess(){
-         File f = new File(TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+         File f = new File(TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER));
          Assume.assumeTrue("Cannot write to base folder. Ignoring test.", f.canWrite());
      }
 }

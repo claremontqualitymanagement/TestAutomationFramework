@@ -2,7 +2,6 @@ package se.claremont.autotest.common.testrun;
 
 import org.junit.*;
 import org.junit.runners.model.InitializationError;
-import se.claremont.autotest.common.testset.UnitTestClass;
 
 public class TafTestRunner_Tests {
     long startTime;
