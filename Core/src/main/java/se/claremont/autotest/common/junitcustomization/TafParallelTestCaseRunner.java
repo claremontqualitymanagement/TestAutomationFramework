@@ -1,7 +1,6 @@
 package se.claremont.autotest.common.junitcustomization;
 
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
 
 import se.claremont.autotest.common.testcase.TestCaseRunner;

@@ -12,7 +12,6 @@ import se.claremont.autotest.common.reporting.testrunreports.htmlsummaryreport.H
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.ValuePair;
-import se.claremont.autotest.common.testcase.TestCaseLog;
 import se.claremont.autotest.common.testcase.TestCaseLogReporter;
 import se.claremont.autotest.common.testcase.TestCaseLogSection;
 import se.claremont.autotest.common.testcase.TestCaseResult;

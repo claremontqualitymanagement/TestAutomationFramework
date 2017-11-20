@@ -5,10 +5,10 @@ package se.claremont.autotest.common.scp;
  *
  * Created by magnusolsson on 2016-12-05.
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "unused"})
 public interface Scp {
 
-    @SuppressWarnings("EmptyMethod")
+    @SuppressWarnings({"EmptyMethod", "unused"})
     void doSomeScpStuff();
 
     /**
