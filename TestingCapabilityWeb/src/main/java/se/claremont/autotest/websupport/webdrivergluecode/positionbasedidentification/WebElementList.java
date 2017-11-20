@@ -8,9 +8,10 @@ import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public class WebElementList extends ElementsList{
-    WebInteractionMethods web = null;
-    ArrayList<String> identificationDescription = new ArrayList<>();
+    private WebInteractionMethods web = null;
+    final ArrayList<String> identificationDescription = new ArrayList<>();
 
     WebElementList(ArrayList<PositionBasedWebElement> webElementList, WebInteractionMethods web, ArrayList<String> previousIdentificationDescription){
         elements = webElementList;
@@ -144,7 +145,7 @@ public class WebElementList extends ElementsList{
         long startTime = System.currentTimeMillis();
         if(web == null) {
             identificationDescription.add("Could not attempt to identify the elements at the same height as the reference element since the WebInteractionMethods object was null. " + duration(startTime));
-            return new WebElementList(new ArrayList<>(), web, identificationDescription);
+            return new WebElementList(new ArrayList<>(), null, identificationDescription);
         }
         WebElementList returnList = convertElementListToWebElementList(super.atTheSameHeightAs(identifyDomElementFromText(elementText).asPositionBasedWebElement(web)), web, identificationDescription);
         returnList.identificationDescription.add("From the element set of " + elements.size() + " element(s) only the " + returnList.elements.size() + " element(s) at the same hight as element with test " + elementText + "' were kept. " + duration(startTime));
@@ -228,7 +229,7 @@ public class WebElementList extends ElementsList{
             return null;
         }
         identificationDescription.add("Returning the only element that should be left in the collection (actually returning the first element) as a DomElement. " + duration(startTime));
-        attemptLog();;
+        attemptLog();
         return ((PositionBasedWebElement)positionBasedGuiElement).asDomElement();
     }
 
@@ -273,7 +274,7 @@ public class WebElementList extends ElementsList{
         StringBuilder sb = new StringBuilder();
         sb.append("[WebElementList: ");
         for(PositionBasedGuiElement element : elements){
-            sb.append(element).toString();
+            sb.append(element.toString());
         }
         sb.append("]");
         return sb.toString();
@@ -321,7 +322,7 @@ public class WebElementList extends ElementsList{
 
     private void attemptLog(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Procedure for identifying element by position:" + System.lineSeparator());
+        sb.append("Procedure for identifying element by position:").append(System.lineSeparator());
         for(int i = 1; i < identificationDescription.size() + 1; i++){
             sb.append("  ").append(i).append("). ").append(identificationDescription.get(i-1)).append(System.lineSeparator());
         }

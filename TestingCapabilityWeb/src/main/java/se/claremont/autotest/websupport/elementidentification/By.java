@@ -18,8 +18,9 @@ import java.util.List;
 /// criteria is used to build an xpath expression when trying to identify 
 /// an element.
 /// </summary>
+@SuppressWarnings("unused")
 public class By {
-    List<SearchCondition> conditions;
+    final List<SearchCondition> conditions;
 
     private By() {
         conditions = new ArrayList<>();
@@ -90,7 +91,7 @@ public class By {
     /// <returns></returns>
     public static By exactTextMatchOfAnyOfTheStrings(String... textStrings) {
         By s = new By();
-        s.conditions.add(new SearchCondition(SearchConditionType.ExactText, textStrings));
+        s.conditions.add(new SearchCondition(SearchConditionType.ExactText, (Object[]) textStrings));
         return s;
     }
 
@@ -103,7 +104,7 @@ public class By {
     /// <returns></returns>
     public static By textContainsAnyOfTheStrings(String... textStrings) {
         By s = new By();
-        s.conditions.add(new SearchCondition(SearchConditionType.TextContains, textStrings));
+        s.conditions.add(new SearchCondition(SearchConditionType.TextContains, (Object[]) textStrings));
         return s;
     }
 
@@ -322,7 +323,7 @@ public class By {
     /// <param name="textStrings">Any number of strings</param>
     /// <returns></returns>
     public By andByTextBeingExactlyAnyOfTheStrings(String... textStrings) {
-        conditions.add(new SearchCondition(SearchConditionType.ExactText, textStrings));
+        conditions.add(new SearchCondition(SearchConditionType.ExactText, (Object[]) textStrings));
         return this;
     }
 
@@ -334,7 +335,7 @@ public class By {
     /// <param name="textStrings">Any number of strings</param>
     /// <returns></returns>
     public By andByTextContainingAnyOfTheStrings(String... textStrings) {
-        conditions.add(new SearchCondition(SearchConditionType.TextContains, textStrings));
+        conditions.add(new SearchCondition(SearchConditionType.TextContains, (Object[]) textStrings));
         return this;
     }
 

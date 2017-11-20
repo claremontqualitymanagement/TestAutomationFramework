@@ -273,6 +273,7 @@ public class WebInteractionMethods implements GuiDriver {
      *
      * @param outputFilePath The file to save craft class text to.
      */
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated()
     public void mapCurrentPageThorough(String outputFilePath){
         if(driver == null){
@@ -983,7 +984,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
         Point topLeft = webElement.getLocation();
         Point clickPoint = new Point (topLeft.getX() + webElement.getSize().width/2, topLeft.getY() + webElement.getSize().height/2);
-        Robot r = null;
+        Robot r;
         try {
             r = new Robot();
             r.mouseMove(clickPoint.getX(),clickPoint.getY());
@@ -1023,7 +1024,7 @@ public class WebInteractionMethods implements GuiDriver {
             webElement = getRuntimeElementWithoutLogging(element);
 
             if(webElement == null || !webElement.isEnabled() || !webElement.isDisplayed()){
-                try { Thread.sleep(50); } catch (InterruptedException e) { }
+                try { Thread.sleep(50); } catch (InterruptedException ignored) { }
                 continue;
             }
 
@@ -1033,7 +1034,7 @@ public class WebInteractionMethods implements GuiDriver {
                 clicked = true;
             } catch (Exception e){
                 errorMessage = e.getMessage();
-                try { Thread.sleep(50); } catch (InterruptedException e1) { }
+                try { Thread.sleep(50); } catch (InterruptedException ignored) { }
             }
         }
 
@@ -1050,6 +1051,7 @@ public class WebInteractionMethods implements GuiDriver {
             if(webElement == null){
                 errorManagementProcedures("Could not identify element " + element.LogIdentification() + " in the GUI.", null);
             }
+            //noinspection ConstantConditions
             if(!webElement.isEnabled()){
                 errorManagementProcedures("Element " + element.LogIdentification() + " is not enabled. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.", webElement);
             } else if(!webElement.isDisplayed()){
@@ -1130,6 +1132,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @deprecated Use {@link #verifyElementExistence(GuiElement)} ()} instead. Altered for terminology standardization.
      */
     @Deprecated
+    @SuppressWarnings("All")
     public void verifyObjectExistence(GuiElement guiElement){
         verifyElementExistence(guiElement);
     }
@@ -2215,7 +2218,6 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                 } catch (Exception e){
                     log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
-                    webElement = null;
                     errorManagementProcedures("This should not happen.", webElement);
                 }
             }
@@ -2400,7 +2402,7 @@ public class WebInteractionMethods implements GuiDriver {
             return;
         }
         boolean doneOk = false;
-        TableData tableData = null;
+        TableData tableData;
         while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
             try{
                 tableData = tableDataFromGuiElement(tableElement, false);
@@ -2548,6 +2550,7 @@ public class WebInteractionMethods implements GuiDriver {
         return tableData != null && tableData.tableIsEmpty();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
         DomElement domElement = (DomElement)guiElement;
         boolean found = waitForElementToAppear(guiElement);
@@ -2572,7 +2575,7 @@ public class WebInteractionMethods implements GuiDriver {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             return null;
         }
-        List<WebElement> rows = new ArrayList<>();
+        List<WebElement> rows;
         try {
             rows = tableElement.findElements(By.xpath("./tr"));
         }catch (Exception e){
@@ -2618,7 +2621,7 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                 }
             }
-            if(cells.size() == 0){;
+            if(cells.size() == 0){
                 try{
                     cells = row.findElements(By.xpath("(.//td|.//th)"));
                 } catch (Exception e){
@@ -2637,7 +2640,7 @@ public class WebInteractionMethods implements GuiDriver {
                 continue;
             }
             for(WebElement cell : cells){
-                Integer colSpan = 1;
+                Integer colSpan;
                 try{
                     colSpan = Integer.parseInt(cell.getAttribute("colspan"));
                 }catch(Exception ignored){
@@ -3146,7 +3149,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @return Returns true if animation of element stops within the timeout.
      */
     public boolean waitForElementToFinishAnimation(GuiElement guiElement){
-        DomElement domElement = null;
+        DomElement domElement;
         try{
             domElement = (DomElement)guiElement;
         }catch (Exception e){
@@ -3215,6 +3218,7 @@ public class WebInteractionMethods implements GuiDriver {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean bufferedImagesAreEqual(BufferedImage img1, BufferedImage img2) {
         if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
             for (int x = 0; x < img1.getWidth(); x++) {
@@ -3256,12 +3260,11 @@ public class WebInteractionMethods implements GuiDriver {
             img = ImageIO.read(screen);
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not read screenshot of full screenshot when trying to capture an image of " + domElement.LogIdentification() + ".");
-            return img;
+            return null;
         }
 
         //cut Image using height, width and x y coordinates parameters.
-        BufferedImage destination = img.getSubimage(xCoordinate, yCoordinate, ImageWidth, ImageHeight);
-        return destination;
+        return img.getSubimage(xCoordinate, yCoordinate, ImageWidth, ImageHeight);
     }
 
     public Integer getRuntimeElementMatchCount(DomElement domElement) {

@@ -12,11 +12,12 @@ import se.claremont.autotest.websupport.DomElement;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class WebElementIdentifier {
-    DomElement domElement;
-    WebDriver driver;
-    TestCase testCase;
-    boolean performLogging;
+    private final DomElement domElement;
+    private final WebDriver driver;
+    private final TestCase testCase;
+    private final boolean performLogging;
 
     public static WebElement getWebElement(TestCase testCase, WebDriver driver, DomElement domElement, boolean performLogging) {
         WebElementIdentifier webElementIdentifier = new WebElementIdentifier(testCase, driver, domElement, performLogging);
@@ -34,6 +35,7 @@ public class WebElementIdentifier {
     /// Identifies the runtime IWebElement object for the given DomElement describing it. 
     /// </summary>
     /// <returns>Returns the IWebElement object corresponding to the DomElement if found, othervice null.</returns>
+    @SuppressWarnings("unused")
     public WebElement getWebElement() {
         return getRuntimeElement();
     }
@@ -97,7 +99,7 @@ public class WebElementIdentifier {
 
     private WebElement getElementByCssSelector() {
         try {
-            List<WebElement> potentialMatches = driver.findElements(org.openqa.selenium.By.cssSelector(cssLocatorDescription()));
+            @SuppressWarnings("ConstantConditions") List<WebElement> potentialMatches = driver.findElements(org.openqa.selenium.By.cssSelector(cssLocatorDescription()));
             if (potentialMatches == null || potentialMatches.size() == 0) {
                 log(new LogPost(LogLevel.DEBUG, "Could not identify any match for element '" + domElement.name + "'. Used CSS identification to try to find it.", null, testCase.testName, testCase.getCurrentTestStepName(), this.getClass().getSimpleName()));
                 return null;
@@ -179,7 +181,7 @@ public class WebElementIdentifier {
         for (SearchCondition sc : domElement.by.conditions) {
             switch (sc.getType()) {
                 case ExactText:
-                    for (Object text : sc.values) {
+                    for (Object text : sc.Values()) {
                         textPattern.add((String) text);
                     }
                     xpathString = "text()='" + String.join("' or text()='", textPattern) + "'";
@@ -187,7 +189,7 @@ public class WebElementIdentifier {
                     parts.add(xpathString);
                     break;
                 case TextContains:
-                    for (Object text : sc.values) {
+                    for (Object text : sc.Values()) {
                         textPattern.add((String) text);
                     }
                     xpathString = "contains(text(),'" + String.join("') or contains(text(),'", textPattern) + "')";
@@ -195,7 +197,7 @@ public class WebElementIdentifier {
                     parts.add(xpathString);
                     break;
                 case TextRegex:
-                    parts.add("matches(text(), '" + (String) sc.value() + "')");
+                    parts.add("matches(text(), '" + sc.value() + "')");
                     break;
                 default:
                     break;
@@ -208,15 +210,15 @@ public class WebElementIdentifier {
         List<String> attributes = new ArrayList<>();
         for (SearchCondition sc : domElement.by.conditions) {
             if (sc.getType() == SearchConditionType.AttributeValue) {
-                if (((String) sc.values[0]).toLowerCase().equals("classcontains")) {
-                    String[] classes = ((String) sc.values[1]).split(" ");
+                if (((String) sc.Values()[0]).toLowerCase().equals("classcontains")) {
+                    String[] classes = ((String) sc.Values()[1]).split(" ");
                     for (String klass : classes) {
                         if (klass.trim().length() == 0) continue;
                         attributes.add("contains(@class, '" + klass.trim() + "')");
                     }
 
                 } else {
-                    attributes.add("@" + (String) sc.values[0] + "='" + (String) sc.values[1] + "'");
+                    attributes.add("@" + sc.Values()[0] + "='" + sc.Values()[1] + "'");
                 }
             }
         }
@@ -234,7 +236,7 @@ public class WebElementIdentifier {
         if (xpath == null) return null;
         for (SearchCondition sc : domElement.by.conditions) {
             if (sc.getType() == SearchConditionType.OrdinalNumber) {
-                xpath = xpath + "[" + (int) sc.value() + "]";
+                xpath = xpath + "[" + sc.value() + "]";
                 break;
             }
         }
@@ -264,7 +266,6 @@ public class WebElementIdentifier {
         if (element == null) return null;
         WebDriver driver = getDriver(element);
         if (driver == null) return null;
-        String tag = element.getTagName();
         return (String) ((JavascriptExecutor) driver).executeScript("" +
                 "gPt=function(c){" +
                 //                "   if(c.id!==''){" +

@@ -30,8 +30,7 @@ public class PositionBasedWebElement implements se.claremont.autotest.common.gui
     private WebDriver driver = null;
 
     public PositionBasedWebElement(DomElement domElement, WebInteractionMethods web){
-        WebElement webElement = web.getRuntimeElementWithoutLogging(domElement);
-        this.webElement = webElement;
+        this.webElement = web.getRuntimeElementWithoutLogging(domElement);
         this.driver = web.driver;
     }
 

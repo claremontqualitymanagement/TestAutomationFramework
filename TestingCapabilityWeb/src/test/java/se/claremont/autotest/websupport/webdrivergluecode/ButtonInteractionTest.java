@@ -13,8 +13,8 @@ import se.claremont.autotest.websupport.DomElement;
  * Created by jordam on 2017-01-18.
  */
 public class ButtonInteractionTest extends UnitTestClass {
-    TestCase testCase;
-    WebInteractionMethods web;
+    private TestCase testCase;
+    private WebInteractionMethods web;
 
     @Before
     public void setup() {

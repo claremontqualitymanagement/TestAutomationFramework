@@ -8,6 +8,7 @@ import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 import java.util.ArrayList;
 
+@SuppressWarnings({"WeakerAccess", "unused", "ConstantConditions"})
 public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
 
     public static WebElementList fromAllSubElementsOf(DomElement domElement, WebInteractionMethods web){

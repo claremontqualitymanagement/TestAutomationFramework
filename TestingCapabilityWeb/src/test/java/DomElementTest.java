@@ -1,7 +1,6 @@
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.elementidentification.By;
@@ -9,11 +8,12 @@ import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 public class DomElementTest{
 
-    public static DomElement testElement1(){
+    private static DomElement testElement1(){
         return new DomElement("dummyRecognition", DomElement.IdentificationType.BY_VISIBLE_TEXT);
     }
 
-    public DomElement testElement2 = new DomElement("dummyRecognition", DomElement.IdentificationType.BY_VISIBLE_TEXT);
+    @SuppressWarnings("CanBeFinal")
+    private DomElement testElement2 = new DomElement("dummyRecognition", DomElement.IdentificationType.BY_VISIBLE_TEXT);
 
     @Test
     public void staticMethodNameSettingTest(){

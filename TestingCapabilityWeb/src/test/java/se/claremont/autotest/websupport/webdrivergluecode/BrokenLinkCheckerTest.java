@@ -15,9 +15,9 @@ import static se.claremont.autotest.common.testcase.TestCaseResult.ResultStatus.
  * Created by jordam on 2017-03-31.
  */
 public class BrokenLinkCheckerTest extends UnitTestClass {
-    TestCase testCase;
-    TestActionsForBrokenLinkChecker testActionsForBrokenLinkChecker = new TestActionsForBrokenLinkChecker();
-    WebInteractionMethods web;
+    private TestCase testCase;
+    //TestActionsForBrokenLinkChecker testActionsForBrokenLinkChecker = new TestActionsForBrokenLinkChecker();
+    private WebInteractionMethods web;
 
     @Before
     public void setup(){

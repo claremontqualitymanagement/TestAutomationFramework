@@ -8,16 +8,17 @@ import se.claremont.autotest.common.support.SupportMethods;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@SuppressWarnings("WeakerAccess")
 public class WebPageCodeConstructorWithBy {
 
     /// <summary>
 /// Class to generate DomElement descriptions based on the elements on a web page. 
 /// Will take about 15 minutes to run, but should produce runnable code.
 /// </summary>
-    WebInteractionMethods web;
-    List<WebElement> unidentifiedElements = new ArrayList<>();
-    StringBuilder sb = new StringBuilder();
-    Map<String, WebElement> identifiedElementsByName = new HashMap<>();
+    private final WebInteractionMethods web;
+    private final List<WebElement> unidentifiedElements = new ArrayList<>();
+    private final StringBuilder sb = new StringBuilder();
+    private final Map<String, WebElement> identifiedElementsByName = new HashMap<>();
 
     /// <summary>
     /// Class to generate DomElement descriptions based on the elements on a web page. 
@@ -34,6 +35,7 @@ public class WebPageCodeConstructorWithBy {
     /// </summary>
     /// <param name="outPutFilePath"></param>
     /// <returns>Returns inteded content of file.</returns>
+    @SuppressWarnings("UnusedReturnValue")
     public String createPageObjectFromCurrentPage(String outPutFilePath, boolean quickAndSloppyMode)
     {
         long startTime = System.currentTimeMillis();
@@ -54,7 +56,7 @@ public class WebPageCodeConstructorWithBy {
                 if (element.getTagName().equals("script") || element.getTagName().equals("style")) continue;
                 unidentifiedElements.add(element);
             }
-            catch (Exception e) { } //Really short lived elements
+            catch (Exception ignored) { } //Really short lived elements
         }
         //unidentifiedElements = elements.ToList<WebElement>();
         web.getTestCase().log(LogLevel.DEBUG, "Took " + (System.currentTimeMillis() - startTime) + " milliseconds to gather all elements in HTML Body.");
@@ -62,8 +64,7 @@ public class WebPageCodeConstructorWithBy {
         sb.append("import se.claremont.autotest.websupport.DomElement;").append(System.lineSeparator());
                 sb.append("import se.claremont.autotest.websupport.elementidentification.By;").append(System.lineSeparator());
         sb.append(System.lineSeparator());
-        sb.append("//Automatically started generaton with TAF " +
-                new SimpleDateFormat("yyyy-MM-dd HH:mm").format(
+        sb.append("//Automatically started generaton with TAF ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(
                 new Date())).append(System.lineSeparator());
         sb.append("public class ").append(upperCaseInitialLetterOfEachWord(programmaticallySafeName(pageTitle + "_Page"))).append(" {").append(System.lineSeparator());
         addElementsIdentifiableWithIds();
@@ -99,7 +100,7 @@ public class WebPageCodeConstructorWithBy {
             {
                 try
                 {
-                    sb.append("   Element not identified: [tag: '" + element.getTagName() + "', outerHtml: '" + element.getAttribute("outerHTML") + "']" + System.lineSeparator()).append(System.lineSeparator());
+                    sb.append("   Element not identified: [tag: '").append(element.getTagName()).append("', outerHtml: '").append(element.getAttribute("outerHTML")).append("']").append(System.lineSeparator()).append(System.lineSeparator());
                 }
                 catch (Exception e)
                 {
@@ -107,9 +108,8 @@ public class WebPageCodeConstructorWithBy {
                 }
             }
             sb.append("*/").append(System.lineSeparator()).append(System.lineSeparator());
-            sb.append("//Stopped page class generaton at " +
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm").format(
-                            new Date())).append(System.lineSeparator());
+            sb.append("//Stopped page class generaton at ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(
+                    new Date())).append(System.lineSeparator());
             web.getTestCase().log(LogLevel.DEBUG, "Describing unidentified elements by id took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
 
         }
@@ -118,6 +118,7 @@ public class WebPageCodeConstructorWithBy {
         return sb.toString();
     }
 
+    @SuppressWarnings("unchecked")
     private String identifyName(WebElement element, int recursionLevel, String parentTagName)
     {
         String name = element.getAttribute("name");
@@ -148,10 +149,8 @@ public class WebPageCodeConstructorWithBy {
 
         JavascriptExecutor javascript = (JavascriptExecutor) web.driver;
         Map<String, Object> attributes = (Map<String, Object>)javascript.executeScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", element);
-        List<String> attributeStrings = new ArrayList<>();
         if (attributes.size() > 0)
         {
-            List<String> condition = new ArrayList<>();
             for (String attributeName : attributes.keySet())
             {
                 name += attributeName + " " + attributes.get(attributeName);
@@ -165,7 +164,8 @@ public class WebPageCodeConstructorWithBy {
         {
             for(WebElement child : element.findElements(org.openqa.selenium.By.xpath(".//"))){
             name = identifyName(child, recursionLevel + 1, parentTagName);
-            if (name != null && name.length() > 0 && !name.startsWith("NoName_")) return name + "_" + tagName(parentTagName);
+                //noinspection ConstantConditions
+                if (name != null && name.length() > 0 && !name.startsWith("NoName_")) return name + "_" + tagName(parentTagName);
         }
         }
         return "NoName_" + tagName(element.getTagName());
@@ -186,6 +186,7 @@ public class WebPageCodeConstructorWithBy {
         return elementName;
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     private void addUniqueElementsFromParent()
     {
         List<WebElement> elementsToRemove = new ArrayList<>();
@@ -200,7 +201,6 @@ public class WebPageCodeConstructorWithBy {
                     WebElement descendant = unidentifiedElements.get(i);
                     if (descendant == null)
                     {
-                        elementsToRemove.add(descendant);
                         continue;
                     }
                     String id = descendant.getAttribute("id");
@@ -209,11 +209,11 @@ public class WebPageCodeConstructorWithBy {
                     {
                         String elementName = getUnusedName(parentName + "_" + identifyName(descendant, 0, null));
                         identifiedElementsByName.put(elementName, descendant);
-                        sb.append("      public static DomElement " + elementName + " = new DomElement(By").append(System.lineSeparator());
-                        sb.append("         .id(\"" + id.replace("\"", "'") + "\")").append(System.lineSeparator());
-                        sb.append("         .andByBeingDescendantOf(" + parentName + ")").append(System.lineSeparator());
-                        sb.append("         .andByTagName(\"" + descendant.getTagName() + "\"),").append(System.lineSeparator());
-                        sb.append("         \"" + elementName + "\");").append(System.lineSeparator());
+                        sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator());
+                        sb.append("         .id(\"").append(id.replace("\"", "'")).append("\")").append(System.lineSeparator());
+                        sb.append("         .andByBeingDescendantOf(").append(parentName).append(")").append(System.lineSeparator());
+                        sb.append("         .andByTagName(\"").append(descendant.getTagName()).append("\"),").append(System.lineSeparator());
+                        sb.append("         \"").append(elementName).append("\");").append(System.lineSeparator());
                         sb.append(System.lineSeparator());
                         elementsToRemove.add(descendant);
                         continue;
@@ -224,11 +224,11 @@ public class WebPageCodeConstructorWithBy {
                     {
                         String elementNam = getUnusedName(parentName + "_" + identifyName(descendant, 0, null));
                         identifiedElementsByName.put(elementNam, descendant);
-                        sb.append("      public static DomElement " + elementNam + " = new DomElement(By" + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         .name(\"" + name.replace("\"", "'") + "\")" + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         .andByBeingDescendantOf(" + parentName + ")" + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         .andByTagName(\"" + descendant.getTagName() + "\")," + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         \"" + elementNam + "\");").append(System.lineSeparator());
+                        sb.append("      public static DomElement ").append(elementNam).append(" = new DomElement(By").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         .name(\"").append(name.replace("\"", "'")).append("\")").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         .andByBeingDescendantOf(").append(parentName).append(")").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         .andByTagName(\"").append(descendant.getTagName()).append("\"),").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         \"").append(elementNam).append("\");").append(System.lineSeparator());
                         sb.append(System.lineSeparator());
                         elementsToRemove.add(descendant);
                         continue;
@@ -239,13 +239,14 @@ public class WebPageCodeConstructorWithBy {
                     {
                         String elementName2 = getUnusedName(parentName + "_" + identifyName(descendant, 0, null));
                         identifiedElementsByName.put(elementName2, descendant);
-                        sb.append("      public static DomElement " + elementName2 + " = new DomElement(By" + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         .className(\"" + klass.replace("\"", "'") + "\")" + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         .andByBeingDescendantOf(" + parentName + ")" + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         .andByTagName(\"" + descendant.getTagName() + "\")," + System.lineSeparator()).append(System.lineSeparator());
-                        sb.append("         \"" + elementName2 + "\");").append(System.lineSeparator());
+                        sb.append("      public static DomElement ").append(elementName2).append(" = new DomElement(By").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         .className(\"").append(klass.replace("\"", "'")).append("\")").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         .andByBeingDescendantOf(").append(parentName).append(")").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         .andByTagName(\"").append(descendant.getTagName()).append("\"),").append(System.lineSeparator()).append(System.lineSeparator());
+                        sb.append("         \"").append(elementName2).append("\");").append(System.lineSeparator());
                         sb.append(System.lineSeparator());
                         elementsToRemove.add(descendant);
+                        //noinspection UnnecessaryContinue
                         continue;
                     }
                 }
@@ -253,7 +254,6 @@ public class WebPageCodeConstructorWithBy {
             catch (Exception e)
             {
                 System.out.println("Problems with parent or descendant. Error: " + e.toString());
-                continue;
             }
         }
 
@@ -286,10 +286,10 @@ public class WebPageCodeConstructorWithBy {
                 {
                     String elementName = getUnusedName(identifyName(element, 0, null));
                     identifiedElementsByName.put(elementName, element);
-                    sb.append("      public static DomElement " + elementName + " = new DomElement(By").append(System.lineSeparator());
-                    sb.append("         .name(\"" + name.replace("\"", "'") + "\")").append(System.lineSeparator());
-                    sb.append("         .andByTagName(\"" + element.getTagName() + "\"),").append(System.lineSeparator());
-                    sb.append("         \"" + elementName + "\");").append(System.lineSeparator());
+                    sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator());
+                    sb.append("         .name(\"").append(name.replace("\"", "'")).append("\")").append(System.lineSeparator());
+                    sb.append("         .andByTagName(\"").append(element.getTagName()).append("\"),").append(System.lineSeparator());
+                    sb.append("         \"").append(elementName).append("\");").append(System.lineSeparator());
                     sb.append(System.lineSeparator());
                     elementsToRemove.add(i);
                 }
@@ -298,7 +298,6 @@ public class WebPageCodeConstructorWithBy {
             {
                 System.out.println("Problem with element in names. Error: " + e.toString());
                 elementsToRemove.add(i);
-                continue;
             }
         }
         Collections.reverse(elementsToRemove);
@@ -330,9 +329,9 @@ public class WebPageCodeConstructorWithBy {
                 {
                     String elementName = getUnusedName(identifyName(element, 0, null));
                     identifiedElementsByName.put(elementName, element);
-                    sb.append("      public static DomElement " + elementName + " = new DomElement(By").append(System.lineSeparator());
-                    sb.append("         .tagName(\"" + tag + "\"),").append(System.lineSeparator());
-                    sb.append("         \"" + elementName + "\");").append(System.lineSeparator());
+                    sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator());
+                    sb.append("         .tagName(\"").append(tag).append("\"),").append(System.lineSeparator());
+                    sb.append("         \"").append(elementName).append("\");").append(System.lineSeparator());
                     sb.append(System.lineSeparator());
                     elementsToRemove.add(i);
                 }
@@ -341,7 +340,6 @@ public class WebPageCodeConstructorWithBy {
             {
                 System.out.println("Problems with element getter for tag name. Error: " + e.toString());
                 elementsToRemove.add(i);
-                continue;
             }
         }
         Collections.reverse(elementsToRemove);
@@ -373,10 +371,10 @@ public class WebPageCodeConstructorWithBy {
                 {
                     String elementName = getUnusedName(identifyName(element, 0, null));
                     identifiedElementsByName.put(elementName, element);
-                    sb.append("      public static DomElement " + elementName + " = new DomElement(By").append(System.lineSeparator());
-                    sb.append("         .className(\"" + klass.replace("\"", "'") + "\")").append(System.lineSeparator());
-                    sb.append("         .andByTagName(\"" + element.getTagName() + "\"),").append(System.lineSeparator());
-                    sb.append("         \"" + elementName + "\");").append(System.lineSeparator());
+                    sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator());
+                    sb.append("         .className(\"").append(klass.replace("\"", "'")).append("\")").append(System.lineSeparator());
+                    sb.append("         .andByTagName(\"").append(element.getTagName()).append("\"),").append(System.lineSeparator());
+                    sb.append("         \"").append(elementName).append("\");").append(System.lineSeparator());
                     sb.append(System.lineSeparator());
                     elementsToRemove.add(i);
                 }
@@ -401,6 +399,7 @@ public class WebPageCodeConstructorWithBy {
         }
     }
 
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     private void addElementsIdentifiableWithAttributes()
     {
         List<Integer> elementsToRemove = new ArrayList<>();
@@ -415,7 +414,7 @@ public class WebPageCodeConstructorWithBy {
                 List<String> attributeStrings = new ArrayList<>();
                 if (attributes.size() > 0)
                 {
-                    List<String> condition = new ArrayList<String>();
+                    List<String> condition = new ArrayList<>();
                     for (String attributeName : attributes.keySet())
                     {
                         String attributeValue = attributes.get(attributeName).toString();
@@ -430,12 +429,8 @@ public class WebPageCodeConstructorWithBy {
                 {
                     String elementName = getUnusedName(identifyName(element, 0, null));
                     identifiedElementsByName.put(elementName, element);
-                    sb.append("      public static DomElement " + elementName + " = new DomElement(By" + System.lineSeparator()
-                            + "         .tagName(\"" + element.getTagName() + "\")" + System.lineSeparator()
-                            + "         .andByAttributeValue("
-                            + String.join(")" + System.lineSeparator()
-                            + "         .andByAttributeValue(", attributeStrings) + ")," + System.lineSeparator()
-                            + "         \"" + elementName + "\");").append(System.lineSeparator());
+                    sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator()).append("         .tagName(\"").append(element.getTagName()).append("\")").append(System.lineSeparator()).append("         .andByAttributeValue(").append(String.join(")" + System.lineSeparator()
+                            + "         .andByAttributeValue(", attributeStrings)).append("),").append(System.lineSeparator()).append("         \"").append(elementName).append("\");").append(System.lineSeparator());
                     sb.append(System.lineSeparator());
                     elementsToRemove.add(i);
                 }
@@ -444,7 +439,6 @@ public class WebPageCodeConstructorWithBy {
             {
                 System.out.println("Problem getting element for attributes. Error: " + e.toString());
                 elementsToRemove.add(i);
-                continue;
             }
         }
         Collections.reverse(elementsToRemove);
@@ -482,10 +476,10 @@ public class WebPageCodeConstructorWithBy {
                 {
                     String elementName = getUnusedName(identifyName(element, 0, null));
                     identifiedElementsByName.put(elementName, element);
-                    sb.append("      public static DomElement " + elementName + " = new DomElement(By").append(System.lineSeparator());
-                    sb.append("         .id(\"" + id.replace("\"", "'") + "\")").append(System.lineSeparator());
-                    sb.append("         .andByTagName(\"" + element.getTagName() + "\"),").append(System.lineSeparator());
-                    sb.append("         \"" + elementName + "\");").append(System.lineSeparator());
+                    sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator());
+                    sb.append("         .id(\"").append(id.replace("\"", "'")).append("\")").append(System.lineSeparator());
+                    sb.append("         .andByTagName(\"").append(element.getTagName()).append("\"),").append(System.lineSeparator());
+                    sb.append("         \"").append(elementName).append("\");").append(System.lineSeparator());
                     sb.append(System.lineSeparator());
                     elementsToRemove.add(i);
                 }
@@ -494,7 +488,6 @@ public class WebPageCodeConstructorWithBy {
             {
                 System.out.println("Problem with element using ids. Error: " + e.toString());
                 elementsToRemove.add(i);
-                continue;
             }
         }
         Collections.reverse(elementsToRemove);
@@ -539,10 +532,7 @@ public class WebPageCodeConstructorWithBy {
                     }
                     String elementName = getUnusedName(identifyName(element, 0, null));
                     identifiedElementsByName.put(elementName, element);
-                    sb.append("      public static DomElement " + elementName + " = new DomElement(By" + System.lineSeparator()
-                            + exactTextString
-                            + "         .andByTagName(\"" + element.getTagName() + "\")," + System.lineSeparator()
-                            + "         \"" + elementName + "\"); ").append(System.lineSeparator());
+                    sb.append("      public static DomElement ").append(elementName).append(" = new DomElement(By").append(System.lineSeparator()).append(exactTextString).append("         .andByTagName(\"").append(element.getTagName()).append("\"),").append(System.lineSeparator()).append("         \"").append(elementName).append("\"); ").append(System.lineSeparator());
                     sb.append(System.lineSeparator());
                     elementsToRemove.add(i);
                 }
@@ -589,7 +579,7 @@ public class WebPageCodeConstructorWithBy {
             if (word == null || word.trim().length() == 0) continue;
             if (word.length() > 1)
             {
-                sb.append(word.substring(0, 1).toUpperCase() + word.substring(1));
+                sb.append(word.substring(0, 1).toUpperCase()).append(word.substring(1));
             }
             else
             {

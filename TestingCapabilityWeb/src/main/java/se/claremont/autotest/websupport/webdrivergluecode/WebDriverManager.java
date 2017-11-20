@@ -158,6 +158,7 @@ public class WebDriverManager {
                 ChromeDriverManager.getInstance().setup();
                 ChromeDriverService service =
                         new ChromeDriverService.Builder().withWhitelistedIps("127.0.0.1").withSilent(true).build();
+                //noinspection deprecation
                 driver = new ChromeDriver(service);
                 testCase.log(LogLevel.EXECUTED, "Creating a Chrome session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {

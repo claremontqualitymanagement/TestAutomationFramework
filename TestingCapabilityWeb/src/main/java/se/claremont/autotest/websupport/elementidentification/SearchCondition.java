@@ -3,9 +3,9 @@ package se.claremont.autotest.websupport.elementidentification;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchCondition {
-    SearchConditionType type;
-    Object[] values;
+class SearchCondition {
+    private final SearchConditionType type;
+    private final Object[] values;
 
     public SearchCondition(SearchConditionType type, Object... values) {
         this.type = type;

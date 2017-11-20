@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification.PositionBasedIdentificatorWeb;
 

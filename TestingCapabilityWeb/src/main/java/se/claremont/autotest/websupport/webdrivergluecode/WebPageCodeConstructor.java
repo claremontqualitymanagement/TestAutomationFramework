@@ -48,7 +48,7 @@ class WebPageCodeConstructor {
      * @param pathToOutputFile Path to the file to be written
      * @return Returns a string with a draft page class
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
     static String ConstructWebPageCode(WebDriver driver, String pathToOutputFile, boolean mapEvenBadlyIdentifiedElements){
         javascriptDriver = (JavascriptExecutor)driver;
         web = new WebInteractionMethods(new TestCase(), driver);
@@ -84,6 +84,7 @@ class WebPageCodeConstructor {
         return descriptors;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static String ConstructWebPageCodeThorough(WebDriver driver, String outputFilePath) {
         javascriptDriver = (JavascriptExecutor)driver;
         web = new WebInteractionMethods(new TestCase(), driver);
@@ -115,7 +116,7 @@ class WebPageCodeConstructor {
         sb.append(System.lineSeparator());
         String className = StringManagement.methodNameWithOnlySafeCharacters(pageTitle);
         if(className.length() > 50) className = className.substring(0,50);
-        sb.append("public class " + className.substring(0, 1).toUpperCase() + className.substring(1)).append("Page {").append(System.lineSeparator());
+        sb.append("public class ").append(className.substring(0, 1).toUpperCase()).append(className.substring(1)).append("Page {").append(System.lineSeparator());
         sb.append(System.lineSeparator());
         return sb.toString();
     }
@@ -146,6 +147,7 @@ class WebPageCodeConstructor {
         return constructors.toString();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String constructWebPageCodeByTreeTraversing(){
         addConstructorForSubElementsOf("//body");
         return constructors.toString();
@@ -243,6 +245,7 @@ class WebPageCodeConstructor {
         return null;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     private boolean hasBranschingChildren(String xpathOfParent){
         List<WebElement> children = getChildren(xpathOfParent);
         if(children.size() < 1) return false;
@@ -250,25 +253,19 @@ class WebPageCodeConstructor {
         return hasBranschingChildren(xpathOfParent + "/*[1]");
     }
 
-
-    private boolean isLeaf(String xpath){
-        return getChildren(xpath).size() == 0;
-    }
-
     private List<WebElement> getChildren(WebElement rootElement){
         String elementXpath = generateXPATH(rootElement, "");
-        List<WebElement> directChildren = driver.findElements(By.xpath(elementXpath + "/*"));
-        return directChildren;
+        return driver.findElements(By.xpath(elementXpath + "/*"));
     }
 
     private List<WebElement> getChildren(String rootElementXpath){
-        List<WebElement> directChildren = driver.findElements(By.xpath(rootElementXpath + "/*"));
-        return directChildren;
+        return driver.findElements(By.xpath(rootElementXpath + "/*"));
     }
 
+    @SuppressWarnings("unchecked")
     private Map<String, String> getAttributes(WebElement element){
         Map<String, Object> attributes = null;
-        Map<String, String> returnMap = new HashMap<String, String>();
+        Map<String, String> returnMap = new HashMap<>();
         if(element == null)return returnMap;
         try{
             attributes = (Map<String, Object>)javascriptDriver.executeScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", element) ;
@@ -363,7 +360,7 @@ class WebPageCodeConstructor {
                             recognitionString = "//" + tagName + "[@" + key1 + "='" + attributes.get(key1) + "' and @" + key2 + "='" + attributes.get(key2) + "']" ;
                             recognitionString = recognitionString.replace("\"", "\\\"");
                             if(recognitionString.length() < 200 && recognitionOnlyHasOneMatch(recognitionString, DomElement.IdentificationType.BY_X_PATH)){
-                                matchFound = true;
+                                //matchFound = true;
                                 String suggestedElementConstructorString = "\"" + recognitionString + "\", DomElement.IdentificationType.BY_ATTRIBUTE_VALUE";
                                 String suggestedElementName = StringManagement.methodNameWithOnlySafeCharacters(recognitionString.replace("=", "_")) + "_" + tagNameToElementSuffix(tagName);
                                 return new Constructor(unusedMethodName(suggestedElementName), suggestedElementConstructorString);
@@ -421,6 +418,7 @@ class WebPageCodeConstructor {
         WebElement parentElement = childElement.findElement(By.xpath(".."));
         List<WebElement> childrenElements = parentElement.findElements(By.xpath("*"));
         int count = 0;
+        //noinspection ForLoopReplaceableByForEach
         for(int i=0;i<childrenElements.size(); i++) {
             WebElement childrenElement = childrenElements.get(i);
             String childrenElementTag = childrenElement.getTagName();
@@ -501,7 +499,7 @@ class WebPageCodeConstructor {
             System.out.println("Creating element: " + System.lineSeparator() + toString());
         }
 
-        public void setName(String name){
+        void setName(String name){
             elementName = name;
         }
 

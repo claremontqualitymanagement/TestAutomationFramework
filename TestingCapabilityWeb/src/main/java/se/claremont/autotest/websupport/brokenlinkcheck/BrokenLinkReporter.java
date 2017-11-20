@@ -14,11 +14,11 @@ import java.util.List;
  * Created by jordam on 2017-04-01.
  */
 public class BrokenLinkReporter {
-    TestCase testCase;
-    WebDriver driver;
-    ArrayList<String[]> linkCheckResults = null;
-    long startTime = 0;
-    LogLevel logLevel = LogLevel.VERIFICATION_PASSED;
+    private final TestCase testCase;
+    private final WebDriver driver;
+    private ArrayList<String[]> linkCheckResults = null;
+    private long startTime = 0;
+    private LogLevel logLevel = LogLevel.VERIFICATION_PASSED;
 
     public BrokenLinkReporter(TestCase testCase, WebDriver driver){
         this.testCase = testCase;
@@ -39,13 +39,14 @@ public class BrokenLinkReporter {
         testCase.logDifferentlyToTextLogAndHtmlLog(logLevel, getReportAsText(), getReportAsHtml());
     }
 
+    @SuppressWarnings("UnnecessaryContinue")
     private void setLogLevel(){
         for(String[] linkresults : linkCheckResults){
             if(linkresults == null)continue;
             String responseCode = linkresults[1];
             if(responseCode != null && (responseCode.startsWith("2") || responseCode.startsWith("3"))){
                 continue;
-            } else if (responseCode == null || responseCode == "null"){
+            } else if (responseCode == null || responseCode.equals("null")){
                 if(logLevel != LogLevel.VERIFICATION_FAILED) logLevel = LogLevel.VERIFICATION_PROBLEM;
             } else {
                 logLevel = LogLevel.VERIFICATION_FAILED;
@@ -96,37 +97,37 @@ public class BrokenLinkReporter {
         StringBuilder htmlResults = new StringBuilder();
         htmlResults.append("<div class=\"linktestresults\">");
         htmlResults.append("<style type=\"text/css\" scoped>");
-        htmlResults.append("  linkcheckresultstable  { border: 1px solid " + UxColors.DARK_GREY + "; }");
-        htmlResults.append("  tr.linkcheckheadlines { font-weight: bold; text-align: left; }");
-        htmlResults.append("  tr.linkcheckpassed { color: " + UxColors.GREEN + "; }");
-        htmlResults.append("  tr.linkcheckproblem { color: " + UxColors.RED + "; font-weight: bold; }");
-        htmlResults.append("  tr.linkcheckfail { color: " + UxColors.RED + "; font-weight: bold; }");
-        htmlResults.append("  td.linkcheckresponsetime { color: " + UxColors.MID_GREY + "; text-align: right; }");
-        htmlResults.append("</style>");
-        htmlResults.append("Checking for broken links on current page. Current URL: '").append(driver.getCurrentUrl()).append("'<br>");
-        htmlResults.append("A total of " + linkCheckResults.size() + " links were found on page. Results listing:<br>");
-        htmlResults.append("<table class=\"linkcheckresultstable\"><tr class=\"linkcheckheadlines\"><th>Link</th><th>Response<br>code</th><th>Response<br>time (ms)</th><th>Comment</th></tr>");
+        htmlResults.append("  linkcheckresultstable  { border: 1px solid ").append(UxColors.DARK_GREY.getHtmlColorCode()).append("; }").append(System.lineSeparator());
+        htmlResults.append("  tr.linkcheckheadlines { font-weight: bold; text-align: left; }").append(System.lineSeparator());
+        htmlResults.append("  tr.linkcheckpassed { color: ").append(UxColors.GREEN.getHtmlColorCode()).append("; }").append(System.lineSeparator());
+        htmlResults.append("  tr.linkcheckproblem { color: ").append(UxColors.RED.getHtmlColorCode()).append("; font-weight: bold; }").append(System.lineSeparator());
+        htmlResults.append("  tr.linkcheckfail { color: ").append(UxColors.RED.getHtmlColorCode()).append("; font-weight: bold; }").append(System.lineSeparator());
+        htmlResults.append("  td.linkcheckresponsetime { color: ").append( UxColors.MID_GREY.getHtmlColorCode()).append("; text-align: right; }").append(System.lineSeparator());
+        htmlResults.append("</style>").append(System.lineSeparator());
+        htmlResults.append("Checking for broken links on current page. Current URL: '").append(driver.getCurrentUrl()).append("'<br>").append(System.lineSeparator());
+        htmlResults.append("A total of " + linkCheckResults.size() + " links were found on page. Results listing:<br>").append(System.lineSeparator());
+        htmlResults.append("<table class=\"linkcheckresultstable\"><tr class=\"linkcheckheadlines\"><th>Link</th><th>Response<br>code</th><th>Response<br>time (ms)</th><th>Comment</th></tr>").append(System.lineSeparator());
         for(String[] linkresults : linkCheckResults) {
             String linkUrl = linkresults[0];
             String responseCode = linkresults[1];
             String responseTime = linkresults[2];
             String comment = linkresults[3];
-            String rowClass = "linkcheckresultrow";
+            String rowClass;
             if (responseCode != null && (responseCode.startsWith("2") || responseCode.startsWith("3"))) {
                 rowClass = "linkcheckpassed";
                 if (comment == null) comment = "Ok";
-            } else if (responseCode == null || responseCode == "null") {
+            } else if (responseCode == null || responseCode.equals("null")) {
                 rowClass = "linkcheckproblem";
                 if (comment == null) comment = "Problems checking link";
             } else {
                 rowClass = "linkcheckfail";
                 if (comment == null) comment = "Link fail";
             }
-            htmlResults.append("<tr class=\"" + rowClass + "\"><td class=\"linkcheckurl\">" + linkUrl + "</td><td class=\"linkcheckresponsecode\">" + responseCode + "</td><td class=\"linkcheckresponsetime\">" + responseTime + "</td><td class=\"linkcheckcomment\">" + comment + "</td></tr>");
+            htmlResults.append("<tr class=\"" + rowClass + "\"><td class=\"linkcheckurl\">" + linkUrl + "</td><td class=\"linkcheckresponsecode\">" + responseCode + "</td><td class=\"linkcheckresponsetime\">" + responseTime + "</td><td class=\"linkcheckcomment\">" + comment + "</td></tr>").append(System.lineSeparator());
         }
-        htmlResults.append("</table>");
-        htmlResults.append("<br>Total verification time for link checks was " + (System.currentTimeMillis() - startTime) + " milliseconds.<br><br>");
-        htmlResults.append("</div>");
+        htmlResults.append("</table>").append(System.lineSeparator());
+        htmlResults.append("<br>Total verification time for link checks was " + (System.currentTimeMillis() - startTime) + " milliseconds.<br><br>").append(System.lineSeparator());
+        htmlResults.append("</div>").append(System.lineSeparator());
         return htmlResults.toString();
     }
 
@@ -141,7 +142,7 @@ public class BrokenLinkReporter {
             String comment = linkresults[3];
             if(responseCode != null && (responseCode.startsWith("2") || responseCode.startsWith("3"))){
                 if(comment == null) comment = "Ok";
-            } else if (responseCode == null || responseCode == "null"){
+            } else if (responseCode == null || responseCode.equals("null")){
                 if(comment == null) comment = "Problems checking link";
             } else {
                 if(comment == null) comment = "Link fail";
