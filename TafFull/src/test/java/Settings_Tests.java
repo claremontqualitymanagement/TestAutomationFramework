@@ -3,7 +3,6 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.testrun.CliTestRunner;
-import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.UnitTestClass;
@@ -29,23 +28,23 @@ public class Settings_Tests extends UnitTestClass {
     @Test
     public void htmlReportPrefixFromBaseFolderTest(){
         Settings s = new Settings();
-        Assert.assertNotNull(s.getValue(SettingParameters.BASE_LOG_FOLDER));
-        Assert.assertTrue(s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
-        s.setValue(SettingParameters.BASE_LOG_FOLDER, "smb://myserver.mycompany.mycountry/mypath");
-        Assert.assertTrue(s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("smb"));
+        Assert.assertNotNull(s.getValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
+        s.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "smb://myserver.mycompany.mycountry/mypath");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("smb"));
     }
 
     @Test
     public void htmlReportPrefixFromBaseFolderTest2(){
         Settings s = new Settings();
-        Assert.assertNotNull(s.getValue(SettingParameters.BASE_LOG_FOLDER));
-        Assert.assertTrue(s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
-        s.setValue(SettingParameters.BASE_LOG_FOLDER, "smb://myserver.mycompany.mycountry/mypath");
-        Assert.assertTrue(s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("smb"));
-        s.setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
-        Assert.assertTrue(s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
-        s.setValue(SettingParameters.BASE_LOG_FOLDER, "file://myserver.mycompany.mycountry/mypath");
-        Assert.assertTrue(s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
+        Assert.assertNotNull(s.getValue(Settings.SettingParameters.BASE_LOG_FOLDER));
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
+        s.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "smb://myserver.mycompany.mycountry/mypath");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("smb"));
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
+        s.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "file://myserver.mycompany.mycountry/mypath");
+        Assert.assertTrue(s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX), s.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
     }
 
     private String createTemporaryRunSettingsFileWithCurrentSettings(){
@@ -80,23 +79,23 @@ public class Settings_Tests extends UnitTestClass {
     @Test
     public void settingsInRunSettingsFileShouldOverwriteDefaultValues(){
         TestRun.reloadSettings();
-        Assert.assertTrue(TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
-        TestRun.setSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
+        Assert.assertTrue(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("file"));
+        TestRun.setSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
         String tempFilePath = createTemporaryRunSettingsFileWithCurrentSettings();
         TestRun.getSettings().clear();
         Settings settings = new Settings(tempFilePath);
         deleteTemporarySettingsFile(tempFilePath);
-        Assert.assertTrue(settings.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("http"));
     }
 
     @Test
     public void settingsInCliShouldOverwriteRunSettingsFileSettings(){
-        TestRun.setSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
+        TestRun.setSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
         String tempFilePath = createTemporaryRunSettingsFileWithCurrentSettings();
         TestRun.reloadSettings();
         CliTestRunner.runInTestMode(new String[] {"runsettingsfile=" + tempFilePath, "HTML_REPORTS_LINK_PREFIX=ftp"});
         deleteTemporarySettingsFile(tempFilePath);
-        Assert.assertTrue(TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("ftp"));
+        Assert.assertTrue(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).equals("ftp"));
     }
 
     @Test

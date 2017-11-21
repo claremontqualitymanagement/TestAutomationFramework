@@ -118,7 +118,7 @@ public class CliTestRunnerTest extends UnitTestClass {
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains(cliIsInvokedWelcomeString));
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains("http://mysite.com/logo.png"));
-        Assert.assertTrue(testOutputChannel.toString(), TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO).equals("http://mysite.com/logo.png"));
+        Assert.assertTrue(testOutputChannel.toString(), TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO).equals("http://mysite.com/logo.png"));
     }
 
     @Test
@@ -127,17 +127,17 @@ public class CliTestRunnerTest extends UnitTestClass {
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains(cliIsInvokedWelcomeString));
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains("http://mysite.com/logo.png"));
-        Assert.assertTrue(testOutputChannel.toString(), TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO).equals("http://mysite.com/logo.png"));
+        Assert.assertTrue(testOutputChannel.toString(), TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO).equals("http://mysite.com/logo.png"));
     }
 
     @Test
     public void settingsShouldBeOverruledFromCli(){
         String[] args = {"PATH_TO_LOGO=http://mysite.com/logo.png"};
-        TestRun.setSettingsValue(SettingParameters.PATH_TO_LOGO, "dummylogo.jpg");
+        TestRun.setSettingsValue(Settings.SettingParameters.PATH_TO_LOGO, "dummylogo.jpg");
         CliTestRunner.runInTestMode(args);
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains(cliIsInvokedWelcomeString));
         Assert.assertTrue(testOutputChannel.toString(), testOutputChannel.toString().contains("http://mysite.com/logo.png"));
-        Assert.assertTrue(testOutputChannel.toString(), TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO).equals("http://mysite.com/logo.png"));
+        Assert.assertTrue(testOutputChannel.toString(), TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO).equals("http://mysite.com/logo.png"));
     }
 
     @Test

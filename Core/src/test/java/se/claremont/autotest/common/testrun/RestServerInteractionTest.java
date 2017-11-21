@@ -38,7 +38,7 @@ public class RestServerInteractionTest extends UnitTestClass{
     @Test
     @Ignore
     public void testRunResultToJsonTest(){
-        TestRun.setSettingsValue(SettingParameters.URL_TO_TAF_BACKEND, "http://phonyaddress.org");
+        TestRun.setSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND, "http://phonyaddress.org");
         TestCase testCase = new TestCase(null, "My testCase name");
         testCase.report();
         boolean runReporterFound = false;

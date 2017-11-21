@@ -121,7 +121,7 @@ public class TestRun {
         }
     }
 
-    public static String getSettingsValue(SettingParameters parameter){
+    public static String getSettingsValue(Settings.SettingParameters parameter){
         return getInstance().settings.getValue(parameter);
     }
 
@@ -142,7 +142,7 @@ public class TestRun {
         getInstance().stopTime = stopTime;
     }
 
-    public static void setSettingsValue(SettingParameters parameter, String value){
+    public static void setSettingsValue(Settings.SettingParameters parameter, String value){
         getInstance().settings.setValue(parameter, value);
     }
 
@@ -151,14 +151,14 @@ public class TestRun {
     }
 
     public static String reportLinkPrefix(){
-        if(getInstance().settings.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
-                getInstance().settings.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
-        if(getInstance().settings.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
+        if(getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) == null ||
+                getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("file")) return "file";
+        if(getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("http")){
             return "http";
-        } else if (getInstance().settings.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
+        } else if (getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX).toLowerCase().equals("https")){
             return "https";
         }
-        return getInstance().settings.getValue(SettingParameters.HTML_REPORTS_LINK_PREFIX);
+        return getInstance().settings.getValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX);
     }
 
     public static void reportTestRun(){

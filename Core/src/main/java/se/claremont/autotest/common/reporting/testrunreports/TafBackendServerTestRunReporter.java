@@ -8,7 +8,6 @@ import se.claremont.autotest.common.backendserverinteraction.TafBackendServerCon
 import se.claremont.autotest.common.logging.KnownErrorsList;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testcase.TestCaseResult;
-import se.claremont.autotest.common.testrun.SettingParameters;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.reportingengine.TestRunReporter;
@@ -66,7 +65,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     }
 
     public void report(){
-        if(TestRun.getSettingsValue(SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
+        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         runStartTime = TestRun.getStartTime();
         if(TestRun.getStopTime() == null) {
             TestRun.setStopTime(new Date());
@@ -78,7 +77,7 @@ public class TafBackendServerTestRunReporter implements TestRunReporter {
     }
 
     public void evaluateTestSet(TestSet testSet){
-        if(TestRun.getSettingsValue(SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
+        if(TestRun.getSettingsValue(Settings.SettingParameters.URL_TO_TAF_BACKEND).equals(TafBackendServerConnection.defaultServerUrl)) return;
         testSetNames.add(testSet.name);
         testSetJsonsList.add(new TafBackendServerTestSet(testSet.knownErrorsList, testSet.name).toJson());
     }

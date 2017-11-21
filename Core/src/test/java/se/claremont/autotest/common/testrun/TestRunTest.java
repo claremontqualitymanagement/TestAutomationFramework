@@ -31,7 +31,7 @@ public class TestRunTest extends UnitTestClass{
     public void customSettingsValueForHtmlReportsLinkPrefixSetToHttpShouldReturnHttpLink(){
         Settings original = TestRun.getSettings();
         Settings s = new Settings();
-        s.setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "http");
         TestRun.setSettings(s);
         assertTrue("Expected 'http' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("http"));
         TestRun.setSettings(original);
@@ -41,7 +41,7 @@ public class TestRunTest extends UnitTestClass{
     public void customSettingsValueForHtmlReportsLinkPrefixSetToHttpsShouldReturnHttpsLink(){
         Settings original = TestRun.getSettings();
         Settings s = new Settings();
-        s.setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "https");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "https");
         TestRun.setSettings(s);
         assertTrue("Expected 'https' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("https"));
         TestRun.setSettings(original);
@@ -51,7 +51,7 @@ public class TestRunTest extends UnitTestClass{
     public void customSettingsValueForHtmlReportsLinkPrefixSetToFileShouldReturnFileLink(){
         Settings original = TestRun.getSettings();
         Settings s = new Settings();
-        s.setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "file");
         TestRun.setSettings(s);
         assertTrue("Expected 'file' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("file"));
         TestRun.setSettings(original);
@@ -61,7 +61,7 @@ public class TestRunTest extends UnitTestClass{
     public void customSettingsValueForHtmlReportsLinkPrefixSetToNonManagedValueShouldReturnFileLink(){
         Settings original = TestRun.getSettings();
         Settings s = new Settings();
-        s.setValue(SettingParameters.HTML_REPORTS_LINK_PREFIX, "customLinkType");
+        s.setValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX, "customLinkType");
         TestRun.setSettings(s);
 
         assertTrue("Expected 'customLinkType' but was '" + TestRun.reportLinkPrefix() + "'.", TestRun.reportLinkPrefix().equals("customLinkType"));

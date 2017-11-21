@@ -17,7 +17,7 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.SettingParameters;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -774,10 +774,10 @@ public class WebInteractionMethods implements GuiDriver {
         if(fileImage != null){
             SupportMethods.saveToFile(fileImage, filePath);
             String htmlFilePath = filePath.replace("\\", "/");
-            if(!htmlFilePath.startsWith(TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX))){
+            if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
                 if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
                     htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
-                htmlFilePath = TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
+                htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
             }
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved browser screenshot as '" + filePath + "'.",
                     "Saved browser screenshot as " + System.lineSeparator() +
@@ -2755,10 +2755,10 @@ public class WebInteractionMethods implements GuiDriver {
 
     private void logPageSourceSaving(String filePath){
         String htmlFilePath = filePath.replace("\\", "/");
-        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX))){
+        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
             if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
                 htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
-            htmlFilePath = TestRun.getSettingsValue(SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
+            htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
         }
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Page source saved as '" + filePath + "'.",
                 "Page source saved as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +

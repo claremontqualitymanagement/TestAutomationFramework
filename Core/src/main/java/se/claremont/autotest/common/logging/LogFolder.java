@@ -2,7 +2,7 @@ package se.claremont.autotest.common.logging;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.support.StringManagement;
-import se.claremont.autotest.common.testrun.SettingParameters;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.io.File;
@@ -29,13 +29,13 @@ public class LogFolder {
     public static void setLogFolder(String testSetName){
         if(testRunLogFolder == null){
             if(TestRun.getRunName() != null && TestRun.getRunName().length() > 0){
-                baseLogFolder = TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER);
+                baseLogFolder = TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER);
                 if(!(baseLogFolder.endsWith("\\") || baseLogFolder.endsWith("/"))){
                     baseLogFolder = baseLogFolder + File.separator;
                 }
                 testRunLogFolder = StringManagement.filePathToCurrentOsAdaptedFormat(baseLogFolder) + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + TestRun.getRunName() + File.separator;
             } else {
-                baseLogFolder = TestRun.getSettingsValue(SettingParameters.BASE_LOG_FOLDER);
+                baseLogFolder = TestRun.getSettingsValue(Settings.SettingParameters.BASE_LOG_FOLDER);
                 if(!(baseLogFolder.endsWith("\\") || baseLogFolder.endsWith("/"))){
                     baseLogFolder = baseLogFolder + File.separator;
                 }

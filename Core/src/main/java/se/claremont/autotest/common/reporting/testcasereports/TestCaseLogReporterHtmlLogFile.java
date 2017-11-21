@@ -15,7 +15,7 @@ import se.claremont.autotest.common.support.ValuePair;
 import se.claremont.autotest.common.testcase.TestCaseLogReporter;
 import se.claremont.autotest.common.testcase.TestCaseLogSection;
 import se.claremont.autotest.common.testcase.TestCaseResult;
-import se.claremont.autotest.common.testrun.SettingParameters;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 
 import java.text.SimpleDateFormat;
@@ -265,7 +265,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
     private void addHtmlSectionBodyHeader(){
         sb
                 .append("    <div id=\"").append(enumMemberNameToLower(HtmlLogStyleNames.HEAD.toString())).append("\">").append(LF)
-                .append("      <img src=\"").append(TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO)).append("\" alt=\"logo\" class=\"toplogo\">").append(LF)
+                .append("      <img src=\"").append(TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO)).append("\" alt=\"logo\" class=\"toplogo\">").append(LF)
                 .append("      <br>").append(LF)
                 .append("      <br>").append(LF)
                 .append("      <br>").append(LF)

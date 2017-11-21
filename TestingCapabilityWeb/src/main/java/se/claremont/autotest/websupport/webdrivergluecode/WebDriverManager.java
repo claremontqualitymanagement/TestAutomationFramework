@@ -13,7 +13,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.SettingParameters;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.filetestingsupport.FileTester;
 
@@ -182,7 +182,7 @@ public class WebDriverManager {
                 driver = new FirefoxDriver();
             } catch (Exception e) {
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized Firefox driver. " +
-                        "Expected to find Firefox driver at '" + TestRun.getSettingsValue(SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE) + "' as stated by the 'firefoxPathToBrowserExe' parameter in settings.");
+                        "Expected to find Firefox driver at '" + TestRun.getSettingsValue(Settings.SettingParameters.FIREFOX_PATH_TO_BROWSER_EXE) + "' as stated by the 'firefoxPathToBrowserExe' parameter in settings.");
                 logIdentifiedLocalBrowsersFromFileScan();
             }
             return driver;

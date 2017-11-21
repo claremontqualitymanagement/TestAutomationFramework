@@ -5,10 +5,12 @@ package se.claremont.autotest.common.logging;
  *
  * Created by jordam on 2017-01-12.
  */
+@SuppressWarnings("unused")
 public enum ConsoleLogLevel {
-    ERRORS,
 
+    ERRORS,
     VERBOSE,
     MODERATE,
     NONE
+
 }

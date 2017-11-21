@@ -131,7 +131,7 @@ public class KnownError_Test extends UnitTestClass {
         Assert.assertTrue("Known error toString() was expected to be '['Description': 'Pattern1', 'Pattern2', encountered: false]', but was '" + knownError2.toString() + "'", knownError2.toString().equals("['Description': 'Pattern1', 'Pattern2', encountered: false]"));
     }
 
-    @SuppressWarnings({"ConstantConditions", "UnusedAssignment"})
+    @SuppressWarnings({"ConstantConditions", "UnusedAssignment", "unused"})
     @Test
     public void constructorNullCheck(){
         try{

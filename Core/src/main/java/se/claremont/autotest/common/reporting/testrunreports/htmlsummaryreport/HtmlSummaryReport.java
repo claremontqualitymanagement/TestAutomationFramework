@@ -8,7 +8,7 @@ import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testcase.TestCaseResult;
-import se.claremont.autotest.common.testrun.SettingParameters;
+import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testset.TestSet;
 
@@ -282,7 +282,7 @@ public class HtmlSummaryReport {
     @SuppressWarnings("SpellCheckingInspection")
     private void addHtmlElementTitle(){
         html
-                .append("          <img class=\"toplogo\" src=\"").append(TestRun.getSettingsValue(SettingParameters.PATH_TO_LOGO)).append("\">").append(LF)
+                .append("          <img class=\"toplogo\" src=\"").append(TestRun.getSettingsValue(Settings.SettingParameters.PATH_TO_LOGO)).append("\">").append(LF)
                 .append("          <h1>Test run report</h1>").append(LF)
                 .append("          <table class=\"rundetails\">").append(LF)
                 .append("             <tr><td>Run name: </td><td>").append(TestRun.getRunName()).append("</td></tr>").append(LF)

@@ -26,7 +26,7 @@ public class Settings_Tests extends UnitTestClass{
      @Test
     public void loadDefaults(){
          @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") Settings settings = new Settings();
-         Assert.assertTrue( !settings.getValue(SettingParameters.BASE_LOG_FOLDER).isEmpty() );
+         Assert.assertTrue( !settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).isEmpty() );
      }
 
     @Test
@@ -47,10 +47,10 @@ public class Settings_Tests extends UnitTestClass{
     @Test
     public void updateFixParameter(){
         Settings settings = new Settings();
-        settings.setValue(SettingParameters.BASE_LOG_FOLDER, "dummyfolder");
-        Assert.assertTrue(settings.getValue(SettingParameters.BASE_LOG_FOLDER).equals("dummyfolder"));
-        settings.setValue(SettingParameters.BASE_LOG_FOLDER, "dummyfolder2");
-        Assert.assertTrue(settings.getValue(SettingParameters.BASE_LOG_FOLDER).equals("dummyfolder2"));
+        settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "dummyfolder");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).equals("dummyfolder"));
+        settings.setValue(Settings.SettingParameters.BASE_LOG_FOLDER, "dummyfolder2");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.BASE_LOG_FOLDER).equals("dummyfolder2"));
     }
 
     @Test
@@ -63,23 +63,23 @@ public class Settings_Tests extends UnitTestClass{
     @Test
     public void customParameterWithSameNameAsEnumParameterShouldOverwriteTheEnumValue(){
         Settings settings = new Settings();
-        settings.setValue(SettingParameters.PATH_TO_LOGO, "this value");
-        Assert.assertTrue(settings.getValue(SettingParameters.PATH_TO_LOGO).equals("this value"));
-        settings.setCustomValue(SettingParameters.PATH_TO_LOGO.friendlyName(), "that value");
-        System.out.println(SettingParameters.PATH_TO_LOGO.friendlyName());
-        Assert.assertTrue("Expected value to be 'that value', but it was '" + settings.getValue(SettingParameters.PATH_TO_LOGO) + "'.", settings.getValue(SettingParameters.PATH_TO_LOGO).equals("that value"));
+        settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "this value");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("this value"));
+        settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName(), "that value");
+        System.out.println(Settings.SettingParameters.PATH_TO_LOGO.friendlyName());
+        Assert.assertTrue("Expected value to be 'that value', but it was '" + settings.getValue(Settings.SettingParameters.PATH_TO_LOGO) + "'.", settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("that value"));
     }
 
     @Test
     public void enumParameterValuesShouldBeSetAndRetrievableWithBothEnumNameAndFriendlyName(){
         Settings settings = new Settings();
-        settings.setCustomValue(SettingParameters.PATH_TO_LOGO.friendlyName(), "MyPath");
-        Assert.assertTrue(settings.getValue(SettingParameters.PATH_TO_LOGO).equals("MyPath"));
-        Assert.assertTrue(settings.getCustomValue(SettingParameters.PATH_TO_LOGO.friendlyName()).equals("MyPath"));
-        Assert.assertTrue(settings.getCustomValue(SettingParameters.PATH_TO_LOGO.friendlyName()).equals(settings.getValue(SettingParameters.PATH_TO_LOGO)));
+        settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName(), "MyPath");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("MyPath"));
+        Assert.assertTrue(settings.getCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName()).equals("MyPath"));
+        Assert.assertTrue(settings.getCustomValue(Settings.SettingParameters.PATH_TO_LOGO.friendlyName()).equals(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO)));
 
-        settings.setCustomValue(SettingParameters.PATH_TO_LOGO.toString(), "MyNewPath");
-        Assert.assertTrue(settings.getValue(SettingParameters.PATH_TO_LOGO).equals("MyNewPath"));
+        settings.setCustomValue(Settings.SettingParameters.PATH_TO_LOGO.toString(), "MyNewPath");
+        Assert.assertTrue(settings.getValue(Settings.SettingParameters.PATH_TO_LOGO).equals("MyNewPath"));
     }
 
 }

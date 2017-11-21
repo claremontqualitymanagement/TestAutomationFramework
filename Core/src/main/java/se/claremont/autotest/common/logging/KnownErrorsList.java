@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  *
  * Created by jordam on 2016-08-25.
  */
+@SuppressWarnings("unused")
 public class KnownErrorsList {
     @JsonProperty public List<KnownError> knownErrors = new ArrayList<>();
 

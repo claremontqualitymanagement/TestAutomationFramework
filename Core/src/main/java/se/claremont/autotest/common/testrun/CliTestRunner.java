@@ -243,7 +243,7 @@ public class CliTestRunner {
                 String[] parts = arg.split("=");
                 if(parts[0].trim().length() > 0 && parts.length > 1) {
                     String parameterName = parts[0].trim();
-                    for(SettingParameters parameter : SettingParameters.values()){
+                    for(Settings.SettingParameters parameter : Settings.SettingParameters.values()){
                         if(parameterName.toUpperCase().equals(parameter.toString())){
                             parameterName = parameterName.toUpperCase();
                         }
