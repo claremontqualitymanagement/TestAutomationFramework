@@ -33,10 +33,8 @@ import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -45,7 +43,7 @@ import java.util.logging.Level;
  * Created by jordam on 2016-08-17.
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused"})
-public class WebInteractionMethods implements GuiDriver {
+public class WebInteractionMethods  {
 
     private final static Logger logger = LoggerFactory.getLogger( WebInteractionMethods.class );
 
@@ -977,7 +975,7 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public void clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
         waitForElementToAppear(guiElement);
-        WebElement webElement = getRuntimeElementWithoutLogging((DomElement)guiElement);
+        WebElement webElement = getRuntimeElementWithLogging((DomElement)guiElement);
         if(webElement == null){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + ((DomElement)guiElement).LogIdentification() + " to click blindly at.");
             return;
@@ -1012,16 +1010,26 @@ public class WebInteractionMethods implements GuiDriver {
      * @param timeoutInSeconds The number of seconds to wait and try to click
      */
     public void click(GuiElement guiElement, int timeoutInSeconds){
+        Set<String> errorMessages = new HashSet<>();
         DomElement element    = (DomElement) guiElement;
         long startTime        = System.currentTimeMillis();
+        boolean hasBeenEnabled = false;
+        boolean hasBeenDisplayed = false;
+        boolean hasBeenIdentified = false;
         boolean clicked       = false;
-        String errorMessage   = null;
         WebElement webElement = null;
 
         log(LogLevel.DEBUG, "Attempting to click on " + element.LogIdentification() + ".");
 
         while (!clicked && (System.currentTimeMillis() - startTime) <= timeoutInSeconds *1000){
             webElement = getRuntimeElementWithoutLogging(element);
+
+            if(webElement != null)
+                hasBeenIdentified = true;
+            if(webElement.isEnabled())
+                hasBeenEnabled = true;
+            if(webElement.isDisplayed())
+                hasBeenDisplayed = true;
 
             if(webElement == null || !webElement.isEnabled() || !webElement.isDisplayed()){
                 try { Thread.sleep(50); } catch (InterruptedException ignored) { }
@@ -1030,32 +1038,41 @@ public class WebInteractionMethods implements GuiDriver {
 
             try{
                 //noinspection ConstantConditions
+                webElement = getRuntimeElementWithLogging(element);
                 webElement.click();
                 clicked = true;
             } catch (Exception e){
-                errorMessage = e.getMessage();
-                try { Thread.sleep(50); } catch (InterruptedException ignored) { }
+                errorMessages.add(e.getMessage());
+                try { Thread.sleep(50); } catch (InterruptedException e2) { errorMessages.add(e2.getMessage()); }
             }
         }
 
         if(clicked){
             log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification() + " element after " + String.valueOf(System.currentTimeMillis() - startTime) + " milliseconds.");
-        } else if(errorMessage != null){
-            if(errorMessage.contains("Other element would receive the click")){
-                log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");
-            } else {
-                testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR, "Could not click on element " + element.LogIdentification() + ". " + errorMessage, "Could not click och element " + element.LogIdentification() + ".<br>Error:<br><br>" + errorMessage);
+        } else if(errorMessages.size() > 0){
+            for(String errorMessage : errorMessages){
+                if(errorMessages.contains("Other element would receive the click")) {
+                    log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");
+                    errorManagementProcedures("Could not click element " + element.LogIdentification() + ".", webElement);
+                    return;
+                }
             }
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR,
+                    "Could not click on element " + element.LogIdentification() +
+                            ". Error(s):" + System.lineSeparator() + String.join(System.lineSeparator(), errorMessages),
+                    "Could not click och element " + element.LogIdentification() + ".<br>Error:<br><br>" +
+                            String.join("<br> * ", errorMessages));
             errorManagementProcedures("Could not click element " + element.LogIdentification() + ".", webElement);
         } else {
             if(webElement == null){
                 errorManagementProcedures("Could not identify element " + element.LogIdentification() + " in the GUI.", null);
             }
             //noinspection ConstantConditions
-            if(!webElement.isEnabled()){
-                errorManagementProcedures("Element " + element.LogIdentification() + " is not enabled. Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.", webElement);
-            } else if(!webElement.isDisplayed()){
-                log(LogLevel.DEBUG, "Element " + element.LogIdentification() + " is not currently visible.");
+            if(!hasBeenEnabled || !hasBeenDisplayed){
+                errorManagementProcedures("Element " + element.LogIdentification() + " was identified. " +
+                        "It is" + String.valueOf(hasBeenEnabled).toLowerCase().replace("true", "").replace("false", " not") + " enabled. " +
+                        "It is" + String.valueOf(hasBeenDisplayed).toLowerCase().replace("true", "").replace("false", " not") + " displayed. " +
+                        "Seems unnatural to click it. If you still want this element to be clicked the clickEvenIfDisabled() method instead.", webElement);
             }
             errorManagementProcedures("Could not successfully click on the " + element.LogIdentification() + " element.", webElement);
         }
@@ -2782,8 +2799,8 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public WebElement getRuntimeElementWithoutLogging(DomElement element){
         if(element == null) return null;
-        List<WebElement> relevantWebElements = gatherRelevantElements(element);
-        return mostRelevantElement(relevantWebElements, element);
+        List<WebElement> relevantWebElements = gatherRelevantElements(element, false);
+        return mostRelevantElement(relevantWebElements, element, false);
     }
 
     /**
@@ -2795,8 +2812,8 @@ public class WebInteractionMethods implements GuiDriver {
      */
     public WebElement getRuntimeElementWithoutLogging(DomElement parent, DomElement descendantToReturn){
         if(parent == null || descendantToReturn == null) return null;
-        List<WebElement> relevantWebElements = gatherRelevantElements(parent, descendantToReturn);
-        return mostRelevantElement(relevantWebElements, descendantToReturn);
+        List<WebElement> relevantWebElements = gatherRelevantElements(parent, descendantToReturn, false);
+        return mostRelevantElement(relevantWebElements, descendantToReturn, false);
     }
 
     /**
@@ -2805,15 +2822,17 @@ public class WebInteractionMethods implements GuiDriver {
      * @param element The DomElement to find
      * @return Returns a list of relevant matches for DomElement
      */
-    private List<WebElement> gatherRelevantElements(DomElement element){
+    private List<WebElement> gatherRelevantElements(DomElement element, boolean performLogging){
         if(driver == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            if(performLogging)
+                log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
 
         List<WebElement> webElements = new ArrayList<>();
         if(element == null) {
-            log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
+            if(performLogging)
+                log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
             return webElements;
         }
         if(element.by != null){
@@ -2845,7 +2864,8 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                 } else if(element.identificationType == DomElement.IdentificationType.BY_ATTRIBUTE_VALUE){
                     if(!recognitionString.contains("=")){
-                        log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
+                        if(performLogging)
+                            log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
                                 "for example 'href=http://myserver.com/mylink' or possibly 'href=\"http://myserver.com/mylink\"'." + System.lineSeparator() +
                                 "For element " + element.name + " the recognition string was '" + recognitionString + ".");
                         continue;
@@ -2859,13 +2879,15 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                     webElements.addAll(driver.findElements(By.xpath("//*[@" + attributeName + "='" + attributeValue +"']")));
                 } else {
-                    log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
+                    if(performLogging)
+                        log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + element.LogIdentification() + ", but the IdentificationType '" + element.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
                     saveDesktopScreenshot();
                     saveHtmlContentOfCurrentPage();
                 }
             }
         }catch (Exception e){
-            log(LogLevel.DEBUG, "Tried to identify " + element.LogIdentification() + ", but something went wrong. " + e.getMessage());
+            if(performLogging)
+                log(LogLevel.DEBUG, "Tried to identify " + element.LogIdentification() + ", but something went wrong. " + e.getMessage());
         }
         return webElements;
     }
@@ -2877,21 +2899,24 @@ public class WebInteractionMethods implements GuiDriver {
      * @param descendantToFind The DomElement to find amoing the descendants of parentDomElement.
      * @return Returns a list of relevant matches for DomElement
      */
-    private List<WebElement> gatherRelevantElements(DomElement parentDomElement, DomElement descendantToFind){
+    private List<WebElement> gatherRelevantElements(DomElement parentDomElement, DomElement descendantToFind, boolean performLogging){
         if(driver == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
+            if(performLogging)
+                log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
         if(parentDomElement == null) return null;
         WebElement parent = getRuntimeElementWithoutLogging(parentDomElement);
         if(parent == null){
-            log(LogLevel.EXECUTION_PROBLEM, "Cannot find parent element " + parentDomElement.LogIdentification() + " so cannot find the DomElement " + descendantToFind.LogIdentification() + " among its descendants.");
+            if(performLogging)
+                log(LogLevel.EXECUTION_PROBLEM, "Cannot find parent element " + parentDomElement.LogIdentification() + " so cannot find the DomElement " + descendantToFind.LogIdentification() + " among its descendants.");
             return null;
         }
 
         List<WebElement> webElements = new ArrayList<>();
         if(descendantToFind == null) {
-            log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
+            if(performLogging)
+                log(LogLevel.DEBUG, "Trying to get relevant WebElements for DomElement that is null.");
             return webElements;
         }
         try {
@@ -2915,7 +2940,8 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                 } else if(descendantToFind.identificationType == DomElement.IdentificationType.BY_ATTRIBUTE_VALUE){
                     if(!recognitionString.contains("=")){
-                        log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
+                        if(performLogging)
+                            log(LogLevel.EXECUTION_PROBLEM, "Identifying elements by attribute value needs attribute value stated as 'attribute_name=attribute_value', " +
                                 "for example 'href=http://myserver.com/mylink' or possibly 'href=\"http://myserver.com/mylink\"'." + System.lineSeparator() +
                                 "For element " + descendantToFind.name + " the recognition string was '" + recognitionString + ".");
                         continue;
@@ -2929,13 +2955,15 @@ public class WebInteractionMethods implements GuiDriver {
                     }
                     webElements.addAll(driver.findElements(By.xpath("//*[@" + attributeName + "='" + attributeValue +"']")));
                 } else {
-                    log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + descendantToFind.LogIdentification() + ", but the IdentificationType '" + descendantToFind.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
+                    if(performLogging)
+                        log(LogLevel.FRAMEWORK_ERROR, "Tried to identify " + descendantToFind.LogIdentification() + ", but the IdentificationType '" + descendantToFind.identificationType.toString() + "' was not supported in getRuntimeElementWithoutLogging() method.");
                     saveDesktopScreenshot();
                     saveHtmlContentOfCurrentPage();
                 }
             }
         }catch (Exception e){
-            log(LogLevel.DEBUG, "Tried to identify " + descendantToFind.LogIdentification() + ", but something went wrong. " + e.getMessage());
+            if(performLogging)
+                log(LogLevel.DEBUG, "Tried to identify " + descendantToFind.LogIdentification() + ", but something went wrong. " + e.getMessage());
         }
         return webElements;
     }
@@ -2947,7 +2975,7 @@ public class WebInteractionMethods implements GuiDriver {
      * @param element The element (only for logging purposes)
      * @return Returns a webElement, or null if none are found.
      */
-    private WebElement mostRelevantElement(List<WebElement> webElements, DomElement element){
+    private WebElement mostRelevantElement(List<WebElement> webElements, DomElement element, boolean performLogging){
         if (webElements.size() == 0) return null;
 
         //More than one match - trying to find best, most relevant match
@@ -2955,10 +2983,12 @@ public class WebInteractionMethods implements GuiDriver {
 
         if(element.ordinalNumber != null){
             if(webElements.size() <= element.ordinalNumber){
-                log(LogLevel.DEBUG, debugString + "Using WebElement #" + element.ordinalNumber + ", given by the DomElement object. ");
+                if(performLogging)
+                    log(LogLevel.DEBUG, debugString + "Using WebElement #" + element.ordinalNumber + ", given by the DomElement object. ");
                 return webElements.get(element.ordinalNumber + 1);
             } else {
-                log(LogLevel.DEBUG, debugString + "The ordinal number given by the DomElement object was supposed to be " +
+                if(performLogging)
+                    log(LogLevel.DEBUG, debugString + "The ordinal number given by the DomElement object was supposed to be " +
                         element.ordinalNumber + ", so it could not be matched.");
                 return null;
             }
@@ -3027,6 +3057,13 @@ public class WebInteractionMethods implements GuiDriver {
             log(LogLevel.DEBUG, "Identified element " + element.LogIdentification() + " after " + (System.currentTimeMillis() - startTickCount) + " ms.");
         }
         return returnElement;
+    }
+
+    WebElement getRuntimeElementWithLogging(DomElement element){
+        if(element == null) return null;
+        List<WebElement> relevantWebElements = gatherRelevantElements(element, true);
+        return mostRelevantElement(relevantWebElements, element, true);
+
     }
 
     /**
@@ -3269,7 +3306,7 @@ public class WebInteractionMethods implements GuiDriver {
 
     public Integer getRuntimeElementMatchCount(DomElement domElement) {
         if(domElement == null) return null;
-        List<WebElement> relevantWebElements = gatherRelevantElements(domElement);
+        List<WebElement> relevantWebElements = gatherRelevantElements(domElement, false);
         return relevantWebElements.size();
     }
 
