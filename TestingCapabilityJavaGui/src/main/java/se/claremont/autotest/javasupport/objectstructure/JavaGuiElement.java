@@ -1,5 +1,6 @@
 package se.claremont.autotest.javasupport.objectstructure;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.SupportMethods;
@@ -8,9 +9,14 @@ import se.claremont.autotest.javasupport.applicationundertest.applicationstarter
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
+import se.claremont.autotest.javasupport.interaction.elementidentification.By;
+import se.claremont.autotest.javasupport.interaction.elementidentification.SearchCondition;
+import se.claremont.autotest.javasupport.interaction.elementidentification.SearchConditionType;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,6 +31,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     IdType idType = IdType.UNKNOWN;
     String className;
     JavaWindow window = null;
+    By by;
     List<String> recognitionDescription = new ArrayList<>();
     TestCase testCase;
     Object cachedElement = null;
@@ -46,6 +53,11 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         ELEMENT_TEXT,
         POSITION_BASED,
         UNKNOWN
+    }
+
+    public JavaGuiElement(By by, String name){
+        this.by = by;
+        this.name = name;
     }
 
     public JavaGuiElement(Object object) {
@@ -151,15 +163,22 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     public Object getRuntimeComponent(){
         long startTime = System.currentTimeMillis();
         recognitionDescription.clear();
-        recognitionDescription.add("Attempting to identify runtime object for " + getName() + " by " + idType.toString().toLowerCase() + " and with the recognition string '" + recognitionString + "'.");
         List<Object> windowComponents = getWindowComponents();
-        ArrayList<Object> matchingComponents = new ArrayList<>();
-        if(idType == IdType.ELEMENT_NAME){
-            matchingComponents.addAll(returnElementByName(windowComponents));
-        } else if(idType == JavaGuiElement.IdType.ELEMENT_TEXT) {
-            matchingComponents.addAll(returnElementByText(windowComponents));
+        List<Object> matchingComponents = new ArrayList<>();
+        if(by != null){
+            windowComponents = filterByAncestorElementIfApplicable(windowComponents);
+            recognitionDescription.add("Attempting to identify runtime object for " + getName() + " by By statement:" + System.lineSeparator() + by.toString());
+            matchingComponents.addAll(attemptToIdentifyElementByByStatement(windowComponents));
+            matchingComponents = filterObjectByOrdinalNumber(matchingComponents);
         } else {
-            recognitionDescription.add("Identification mechanism for element recognition type '" + idType.toString() + "' is not yet implemented.");
+            recognitionDescription.add("Attempting to identify runtime object for " + getName() + " by " + idType.toString().toLowerCase() + " and with the recognition string '" + recognitionString + "'.");
+            if(idType == IdType.ELEMENT_NAME){
+                matchingComponents.addAll(returnElementByName(windowComponents));
+            } else if(idType == JavaGuiElement.IdType.ELEMENT_TEXT) {
+                matchingComponents.addAll(returnElementByText(windowComponents));
+            } else {
+                recognitionDescription.add("Identification mechanism for element recognition type '" + idType.toString() + "' is not yet implemented.");
+            }
         }
         if(matchingComponents.size() == 0){
             recognitionDescription.add("Could not identify any matching runtime object for " + getName() + ". Time for identification: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
@@ -177,6 +196,169 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             cachedElement = matchingComponents.get(0);
             return matchingComponents.get(0);
         }
+    }
+
+    private List<Object> filterObjectByOrdinalNumber(List<Object> objects){
+        List<Object> returnObjects = new ArrayList<>(objects);
+        for(SearchCondition searchCondition : by.searchConditions){
+            if(searchCondition.searchConditionType == SearchConditionType.ORDINAL_NUMBER){
+                returnObjects.clear();
+                Integer ordinalNumber = Integer.valueOf((int)searchCondition.objects[0]);
+                if(ordinalNumber == null){
+                    recognitionDescription.add("Wrong format of ordinal number encountered. Was '" + searchCondition.objects[0] + "'.");
+                } else if(ordinalNumber > objects.size()){
+                    recognitionDescription.add("Attempting to get element number " + ordinalNumber + " but there are only " + objects.size() + " element(s) to choose from. Returning last match.");
+                    returnObjects.add(objects.get((int)searchCondition.objects[objects.size()]));
+                } else if (ordinalNumber < 0) {
+                    recognitionDescription.add("Ordinal number should not be negative. Was " + ordinalNumber + ". Returning first match.");
+                    returnObjects.add(objects.get(0));
+                } else {
+                    recognitionDescription.add("Out of the " + objects.size() + " elements that are left, the " + ordinalNumber + " is chosen. Removing the other ones.");
+                    returnObjects.add(objects.get(ordinalNumber));
+                }
+                break;
+            }
+        }
+        return returnObjects;
+    }
+
+    private List<Object> filterByAncestorElementIfApplicable(List<Object> objects) {
+        List<Object> returnObjects = new ArrayList<>(objects);
+        for(SearchCondition searchCondition : by.searchConditions){
+            if(searchCondition.searchConditionType == SearchConditionType.BEING_DESCENDANT_OF){
+                JavaGuiElement ancestor = (JavaGuiElement)searchCondition.objects[0];
+                returnObjects = ancestor.getDescendants();
+                if(returnObjects == null){
+                    recognitionDescription.add("Could not get descendants from element '" + ancestor.name + "'.");
+                    returnObjects = new ArrayList<>();
+                } else {
+                    recognitionDescription.add("Removed " + (objects.size() - returnObjects.size()) + " elements that waa not descendants of element '" + ancestor.name + "'.");
+                }
+                break;
+            }
+        }
+        return returnObjects;
+    }
+
+    private List<Object> getDescendants() {
+        Object element = getRuntimeElementCacheable();
+        MethodInvoker methodInvoker = new MethodInvoker();
+        List<Object> componentList = new ArrayList<>();
+        if(!methodInvoker.objectHasAnyOfTheMethods(element, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(element, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)){
+            return componentList;
+        }
+
+        Integer windowComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        if(windowComponentCount == null)return componentList;
+        Object[] returnList = (Object[]) methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+        if(returnList != null && returnList.length > 0){
+            for(Object object : returnList){
+                componentList.add(object);
+                componentList.addAll(addSubComponents(methodInvoker, object));
+            }
+            return componentList;
+        }
+        for(int i = 0; i < windowComponentCount; i++){
+            Object component = methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            if(component == null) continue;
+            componentList.add(component);
+            componentList.addAll(addSubComponents(methodInvoker, component));
+        }
+        return componentList;
+    }
+
+    private List<Object> addSubComponents(MethodInvoker methodInvoker, Object component){
+        List<Object> componentList = new ArrayList<>();
+        if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
+        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        for(int i = 0; i<numberOfSubItems; i++){
+            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            componentList.add(o);
+            componentList.addAll(addSubComponents(methodInvoker, o));
+        }
+        return componentList;
+    }
+
+
+    private Collection<Object> attemptToIdentifyElementByByStatement(List<Object> componentList) {
+        ArrayList<Object> returnElements = new ArrayList<>(componentList);
+        recognitionDescription.add("Identifying " + componentList.size() + " elements in window.");
+        ArrayList<Object> removeElements = new ArrayList<>();
+        GenericInteractionMethods jim = new GenericInteractionMethods(null);
+        for(SearchCondition searchCondition : by.searchConditions){
+            switch (searchCondition.searchConditionType){
+                case CLASS:
+                    for(Object o : componentList){
+                        if(!o.getClass().getSimpleName().equals((String)searchCondition.objects[0])){
+                            removeElements.add(o);
+                        }
+                    }
+                    recognitionDescription.add("Removing " + removeElements.size() + " elements not being of class '" + (String)searchCondition.objects[0] + "'.");
+                    returnElements.removeAll(removeElements);
+                    removeElements.clear();
+                    break;
+                case NAME:
+                    for(Object o : componentList){
+                        String name = jim.getName(0);
+                        if(name == null || name.equals((String)searchCondition.objects[0])){
+                            removeElements.add(o);
+                        }
+                    }
+                    recognitionDescription.add("Removing " + removeElements.size() + " elements not being named '" + (String)searchCondition.objects[0] + "'.");
+                    returnElements.removeAll(removeElements);
+                    removeElements.clear();
+                    break;
+                case EXACT_TEXT:
+                    for(Object o : componentList){
+                        boolean toBeRemoved = true;
+                        for(Object acceptedText : searchCondition.objects){
+                            String elementText = jim.getText(o);
+                            if(elementText != null && elementText.equals((String)acceptedText)){
+                                toBeRemoved = false;
+                                break;
+                            }
+                        }
+                        if(toBeRemoved)
+                            removeElements.add(o);
+                    }
+                    recognitionDescription.add("Removing " + removeElements.size() + " elements not having any of the exact texts '" + String.join("', '", ((String[])searchCondition.objects)) + "'.");
+                    returnElements.removeAll(removeElements);
+                    removeElements.clear();
+                    break;
+                case TEXT_CONTAINS:
+                    for(Object o : componentList){
+                        boolean toBeRemoved = true;
+                        for(Object acceptedText : searchCondition.objects){
+                            String elementText = jim.getText(o);
+                            if(elementText != null && elementText.contains((String)acceptedText)){
+                                toBeRemoved = false;
+                                break;
+                            }
+                        }
+                        if(toBeRemoved)
+                            removeElements.add(o);
+                    }
+                    recognitionDescription.add("Removing " + removeElements.size() + " elements not containing any of the exact texts '" + String.join("', '", ((String[])searchCondition.objects)) + "'.");
+                    returnElements.removeAll(removeElements);
+                    removeElements.clear();
+                    break;
+                case TEXT_REGEX_MATCH:
+                    for(Object o : componentList){
+                        String elementText = jim.getText(o);
+                        if(elementText == null || !elementText.matches((String)searchCondition.objects[0])){
+                            removeElements.add(o);
+                        }
+                    }
+                    recognitionDescription.add("Removing " + removeElements.size() + " elements not matching pattern '" + (String[])searchCondition.objects[0] + "'.");
+                    returnElements.removeAll(removeElements);
+                    removeElements.clear();
+                    break;
+                default:
+                    recognitionDescription.add("No By statement implementation for SearchCondition " + searchCondition.toString() + ". Ignoring this.");
+                    break;
+            }
+        }
+        return returnElements;
     }
 
     public Object getRuntimeElementCacheable(){

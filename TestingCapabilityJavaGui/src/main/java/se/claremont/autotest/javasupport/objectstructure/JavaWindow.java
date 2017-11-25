@@ -122,6 +122,8 @@ public class JavaWindow {
         return componentList;
     }
 
+
+
     /**
      * Prints the currently identified components to standard out.
      */
