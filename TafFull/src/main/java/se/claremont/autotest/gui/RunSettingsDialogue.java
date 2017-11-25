@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class RunSettingsDialogue {
 
-    JFrame window = new JFrame();
+    JDialog window = new JDialog();
     private Font appFont;
 
     public RunSettingsDialogue(){

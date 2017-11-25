@@ -4,6 +4,8 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import se.claremont.autotest.common.testrun.DiagnosticsRun;
+import se.claremont.autotest.common.testrun.Settings;
+import se.claremont.autotest.common.testrun.TestRun;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,9 +23,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class RunTestTabPanel extends JPanel {
+public class RunTestTabPanel extends JPanel{
 
     private JLabel runNameLabel = new JLabel("Test run name");
     private JTextField runNameText = new JTextField();
@@ -145,6 +148,7 @@ public class RunTestTabPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new RunSettingsDialogue();
+                updateCliCommandText();
             }
         });
 
@@ -269,7 +273,7 @@ public class RunTestTabPanel extends JPanel {
     }
 
 
-    private void updateCliCommandText() {
+    void updateCliCommandText() {
         String path = Gui.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String decodedPath = "TafFull.jar";
         try {
@@ -277,7 +281,29 @@ public class RunTestTabPanel extends JPanel {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        cliCommandText.setText("java -jar " + decodedPath + " runName=" + runNameText.getText() + " " + getExecutionModePart());
+        cliCommandText.setText(("java -jar " + decodedPath +
+                " runName=" + runNameText.getText() +
+                getExecutionModePart() +
+                runSettingsChangesFromDefault()).trim());
+    }
+
+    private String runSettingsChangesFromDefault(){
+        java.util.List<String> cliAdditions = new ArrayList<>();
+        for(String parameterName : TestRun.getSettings().keySet()){
+            if(!Main.defaultSettings.containsKey(parameterName) || !Main.defaultSettings.get(parameterName).equals(TestRun.getCustomSettingsValue(parameterName)))
+                cliAdditions.add(parameterEnumNameFromParameterFriendlyName(parameterName) + "=" + TestRun.getCustomSettingsValue(parameterName));
+        }
+        if(cliAdditions.size() == 0) return "";
+        return " " + String.join(" ", cliAdditions);
+    }
+
+    private String parameterEnumNameFromParameterFriendlyName(String friendlyName){
+        String returnString = friendlyName;
+        for(Settings.SettingParameters parameterName : Settings.SettingParameters.values()){
+            if(parameterName.friendlyName().equals(friendlyName))
+                return parameterName.toString();
+        }
+        return returnString;
     }
 
     private void showHelp() {
@@ -307,13 +333,13 @@ public class RunTestTabPanel extends JPanel {
             case "Sequential execution":
                 return "";
             case "Test classes in parallel":
-                return "PARALLEL_TEST_EXECUTION_MODE=classes ";
+                return " PARALLEL_TEST_EXECUTION_MODE=classes";
             case "Test methods in parallel":
-                return "PARALLEL_TEST_EXECUTION_MODE=methods ";
+                return " PARALLEL_TEST_EXECUTION_MODE=methods";
             case "2 parallel threads":
-                return "PARALLEL_TEST_EXECUTION_MODE=2 ";
+                return " PARALLEL_TEST_EXECUTION_MODE=2";
             case "3 parallel threads":
-                return "PARALLEL_TEST_EXECUTION_MODE=3 ";
+                return " PARALLEL_TEST_EXECUTION_MODE=3";
             default:
                 return "";
         }
