@@ -10,10 +10,12 @@ import java.awt.event.WindowEvent;
 public class TestsRunningDialogue {
 
     RunTestTabPanel parent;
+    private Font appFont;
+    JFrame progressWindow = new JFrame("Test run progress");
 
     public TestsRunningDialogue(RunTestTabPanel parent, Font appFont){
         this.parent = parent;
-        JFrame progressWindow = new JFrame("Test run progress");
+        this.appFont = appFont;
         progressWindow.setName("DiagnosticTestProgressWindow");
         progressWindow.setTitle("TAF - Test run progress");
         progressWindow.addWindowListener(new WindowAdapter() {
@@ -21,7 +23,6 @@ public class TestsRunningDialogue {
             public void windowOpened(WindowEvent e) {
                 super.windowOpened(e);
                 runTests();
-                progressWindow.dispose();
             }
         });
         JLabel progressText = new JLabel("Running tests...");
@@ -35,7 +36,9 @@ public class TestsRunningDialogue {
     }
 
     private void runTests() {
-        CliTestRunner.executeRunSequence(parent.cliArguments().trim().split(" "));
+        int exitCode = CliTestRunner.runInTestMode(parent.cliArguments().trim().split(" "));
+        progressWindow.dispose();
+        new RunResultsDialogue(parent.applicationWindow, exitCode, parent.pathToHtmlTestRunSummaryReport, appFont);
     }
 
 }

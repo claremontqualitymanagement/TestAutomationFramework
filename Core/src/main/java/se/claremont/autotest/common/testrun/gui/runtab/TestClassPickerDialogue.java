@@ -33,20 +33,26 @@ public class TestClassPickerDialogue {
         headline.setName("HeadlineLabel");
         headline.setFont(appFont);
         DefaultListModel listModel = new DefaultListModel();
-        try {
-            Object[] classes = getLoadedClassesAndClassesInClassPath().toArray();
-            for(Object o : classes){
-                listModel.addElement(o);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         JList testClasses = new JList(listModel);
         testClasses.setName("TestClassesList");
         testClasses.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         testClasses.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         testClasses.setVisibleRowCount(-1);
         testClasses.setFont(appFont);
+        try {
+            Object[] classes = getLoadedClassesAndClassesInClassPath().toArray();
+            if(classes.length == 0){
+                classes = new String[] {" < no classes with tests identified > "};
+                testClasses.setFont(new Font(appFont.getFontName(), Font.ITALIC, appFont.getSize()));
+                testClasses.setForeground(Color.gray);
+                testClasses.setEnabled(false);
+            }
+            for(Object o : classes){
+                listModel.addElement(o);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         JScrollPane listScroller = new JScrollPane(testClasses);
         listScroller.setName("TestClassesListPanel");
         //listScroller.setPreferredSize(new Dimension(250, 80));

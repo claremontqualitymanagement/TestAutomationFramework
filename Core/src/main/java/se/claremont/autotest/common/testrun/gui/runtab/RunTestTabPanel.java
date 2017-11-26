@@ -1,11 +1,6 @@
 package se.claremont.autotest.common.testrun.gui.runtab;
 
-import org.junit.Test;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-import se.claremont.autotest.common.testrun.CliTestRunner;
-import se.claremont.autotest.common.testrun.DiagnosticsRun;
+import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.testrun.gui.Gui;
@@ -22,15 +17,10 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class RunTestTabPanel extends JPanel {
 
@@ -61,15 +51,18 @@ public class RunTestTabPanel extends JPanel {
     private JButton pickTestsButton = new JButton("Pick test classes...");
     private JButton startButton = new JButton("Start test run");
     private JButton closeButton = new JButton("Exit");
+    private JButton resetSettings = new JButton("Reset");
 
     private JLabel cliCommandLabel = new JLabel("Corresponding CLI command:");
     private JTextArea cliCommandText = new JTextArea();
     private JButton cliToClipboardButton = new JButton("CLI to clipboard");
     private JLabel logoImage;
 
-    private JFrame applicationWindow;
+    JFrame applicationWindow;
     private Font appFont;
     private Dimension labelSize;
+
+    String pathToHtmlTestRunSummaryReport;
 
     public RunTestTabPanel(JFrame parentFrame)  {
 
@@ -96,6 +89,7 @@ public class RunTestTabPanel extends JPanel {
         preparePickTestClassesButton();
         prepareStartButton();
         prepareCloseButton();
+        prepareResetButton();
 
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
@@ -119,6 +113,7 @@ public class RunTestTabPanel extends JPanel {
                                         .addComponent(runDiagnosticsButton)
                                         .addComponent(setRunParametersButton)
                                         .addComponent(pickTestsButton)
+                                        .addComponent(resetSettings)
                                         .addComponent(startButton)
                                         .addComponent(closeButton)
                                 )
@@ -145,10 +140,27 @@ public class RunTestTabPanel extends JPanel {
                                 .addComponent(runDiagnosticsButton)
                                 .addComponent(setRunParametersButton)
                                 .addComponent(pickTestsButton)
+                                .addComponent(resetSettings)
                                 .addComponent(startButton)
                                 .addComponent(closeButton)
                         )
         );
+    }
+
+    private void prepareResetButton() {
+        resetSettings.setFont(appFont);
+        resetSettings.setName("ResetSettingsButton");
+        resetSettings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chosenTestClasses.clear();
+                executionModeSpinner.setValue(spinnerOptions[0]);
+                runNameText.setText(new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()));
+                TestRun.getSettings().clear();
+                TestRun.getSettings().putAll(Gui.defaultSettings);
+                updateCliCommandText("");
+            }
+        });
     }
 
     private void prepareCloseButton() {
@@ -162,12 +174,15 @@ public class RunTestTabPanel extends JPanel {
         });
     }
 
+
+
     private void prepareStartButton() {
         startButton.setFont(appFont);
         startButton.setName("StartTestsButton");
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                pathToHtmlTestRunSummaryReport = LogFolder.testRunLogFolder + "_summary.html";
                 new TestsRunningDialogue(getThis(), appFont);
             }
         });
