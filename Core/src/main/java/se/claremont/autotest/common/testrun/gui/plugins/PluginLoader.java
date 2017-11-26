@@ -1,10 +1,7 @@
-package se.claremont.autotest.common.testrun.gui;
+package se.claremont.autotest.common.testrun.gui.plugins;
 
 import javax.swing.*;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PluginLoader {
 

@@ -1,4 +1,4 @@
-package se.claremont.autotest.common.testrun.gui;
+package se.claremont.autotest.common.testrun.gui.runtab;
 
 import se.claremont.autotest.common.testrun.TestRun;
 
@@ -28,15 +28,20 @@ public class RunSettingsDialogue {
             }
         });
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        window.setTitle("TAF - Run settings");
+        window.setName("RunSettingsWindow");
         setFontSize();
         Container pane = window.getContentPane();
+        pane.setName("RunSettingsContentPanel");
         int numberOfParameters = TestRun.getSettings().size();
         pane.setLayout(new GridLayout(numberOfParameters + 2, 2));
         for(String key : TestRun.getSettings().keySet()){
             JLabel parameterName = new JLabel(key);
+            parameterName.setName(key.replace(" ", "") + "Label");
             parameterName.setFont(appFont);
             pane.add(parameterName);
             JTextField parameterValue = new JTextField(TestRun.getSettings().get(key));
+            parameterValue.setName(key.replace(" ", "") + "Value");
             parameterValue.setFont(appFont);
             parameterValue.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -53,7 +58,9 @@ public class RunSettingsDialogue {
             });
             pane.add(parameterValue);
         }
+
         JButton addValueButton = new JButton("Add parameter");
+        addValueButton.setName("AddParameterButton");
         addValueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,36 +68,33 @@ public class RunSettingsDialogue {
             }
         });
         addValueButton.setFont(appFont);
-        /*
-        JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                window.dispose();
-            }
-        });
-        closeButton.setFont(appFont);
-        */
         pane.add(addValueButton);
-        //pane.add(closeButton);
-        window.pack();
 
+        window.pack();
         window.setVisible(true);
     }
 
     private void setNewValue(){
         JFrame newParameterDialogue = new JFrame();
+        newParameterDialogue.setName("NewTestRunParameterWindow");
+        newParameterDialogue.setTitle("TAF - Add run parameter");
         newParameterDialogue.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Container pane = newParameterDialogue.getContentPane();
+        pane.setName("NewTestRunParameterContentPanel");
         JLabel parameterNameLabel = new JLabel("Parameter name");
+        parameterNameLabel.setName("ParameterNameLabel");
         parameterNameLabel.setFont(appFont);
         JTextField parameterNameText = new JTextField();
+        parameterNameText.setName("ParameterNameTextField");
         parameterNameText.setFont(appFont);
         JLabel parameterValueLabel = new JLabel("Parameter value");
+        parameterValueLabel.setName("ParameterValueLabel");
         parameterValueLabel.setFont(appFont);
         JTextField parameterValueText = new JTextField();
+        parameterValueText.setName("ParameterValueTextField");
         parameterValueText.setFont(appFont);
         JButton saveButton = new JButton("Save");
+        saveButton.setName("SaveButton");
         saveButton.setFont(appFont);
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -102,6 +106,7 @@ public class RunSettingsDialogue {
             }
         });
         JButton cancelButton = new JButton("Cancel");
+        cancelButton.setName("CancelButton");
         cancelButton.setFont(appFont);
         cancelButton.addActionListener(new ActionListener() {
             @Override

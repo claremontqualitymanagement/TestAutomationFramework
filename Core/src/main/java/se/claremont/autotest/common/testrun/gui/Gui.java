@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.testrun.gui;
 
 import se.claremont.autotest.common.testrun.TestRun;
+import se.claremont.autotest.common.testrun.gui.plugins.PluginLoader;
+import se.claremont.autotest.common.testrun.gui.runtab.RunTestTabPanel;
 
 import javax.swing.*;
 import java.awt.*;
