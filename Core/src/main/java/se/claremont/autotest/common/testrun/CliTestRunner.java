@@ -8,7 +8,7 @@ import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtml
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
-import se.claremont.autotest.common.testrun.gui.Gui;
+import se.claremont.autotest.common.gui.Gui;
 
 import java.awt.*;
 import java.util.*;

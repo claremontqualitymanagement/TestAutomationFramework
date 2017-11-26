@@ -1,9 +1,9 @@
-package se.claremont.autotest.common.testrun.gui.runtab;
+package se.claremont.autotest.common.gui.runtab;
 
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.gui.Gui;
+import se.claremont.autotest.common.gui.Gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

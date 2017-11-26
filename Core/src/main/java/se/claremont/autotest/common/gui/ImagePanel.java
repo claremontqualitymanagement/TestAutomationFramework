@@ -1,4 +1,4 @@
-package se.claremont.autotest.common.testrun.gui;
+package se.claremont.autotest.common.gui;
 
 import javax.swing.*;
 import java.awt.*;

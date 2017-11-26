@@ -1,4 +1,4 @@
-package se.claremont.autotest.common.testrun.gui.runtab;
+package se.claremont.autotest.common.gui.runtab;
 
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;

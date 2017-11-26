@@ -1,8 +1,9 @@
-package se.claremont.autotest.common.testrun.gui;
+package se.claremont.autotest.common.gui;
 
+import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testrun.gui.plugins.PluginLoader;
-import se.claremont.autotest.common.testrun.gui.runtab.RunTestTabPanel;
+import se.claremont.autotest.common.gui.plugins.PluginLoader;
+import se.claremont.autotest.common.gui.runtab.RunTestTabPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,9 +23,9 @@ public class Gui extends JFrame{
         tabs.addTab("Run tests", new RunTestTabPanel(this));
         tabs.addTab("Create tests", new CreateTestTabPanel());
         PluginLoader pluginLoader = new PluginLoader();
-        HashMap<String, JPanel> panels = pluginLoader.getAccessibleGuiPluginTabs();
-        for(String pluginTabName : panels.keySet()){
-            tabs.addTab(pluginTabName, panels.get(pluginTabName));
+        java.util.List<IGuiTab> panels = pluginLoader.getAccessibleGuiPluginTabs();
+        for(IGuiTab pluginTab : panels){
+            tabs.addTab(pluginTab.getName(), pluginTab.getPanel());
         }
         pane.add(tabs);
         this.setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
