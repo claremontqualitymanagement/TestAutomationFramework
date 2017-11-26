@@ -126,7 +126,7 @@ public class TestClassPickerDialogue {
             for (URL url : roots) {
                 File root = new File(url.getPath());
                 for (File file : root.listFiles()) {
-                    if (file.isDirectory())continue;
+                    if (file.isDirectory())continue; //Todo: Should this maybe only return classes extending TestSet? Maybe a checkbox for that?
                     if(file.getName().endsWith(".class") || file.getName().endsWith(".java")){
                         classNamesForLoadedClasses.add(file.getName());
                     }
