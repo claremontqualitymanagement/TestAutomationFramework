@@ -449,16 +449,16 @@ public class RunTestTabPanel extends JPanel {
 
     private void showHelp() {
         JFrame helpFrame = new JFrame();
+        Container pane = helpFrame.getContentPane();
+        GroupLayout groupLayout = new GroupLayout(pane);
+        pane.setLayout(groupLayout);
         JTextArea textArea = new JTextArea();
         textArea.setFont(appFont);
         String helpText = null;
-        helpText = "This is the current version of the help text. " + System.lineSeparator() +
-                System.lineSeparator() +
-                "To use TAF without gui, use the switch 'nogui'.";
+        helpText = "This is the current version of the help text. ";
         textArea.setText(helpText);
         textArea.setLineWrap(true);
-        JPanel helpPanel = new JPanel();
-        helpPanel.add(textArea);
+        pane.add(textArea);
         JButton closeButton = new JButton("Close");
         closeButton.setFont(appFont);
         closeButton.addActionListener(new ActionListener() {
@@ -467,9 +467,24 @@ public class RunTestTabPanel extends JPanel {
                 helpFrame.dispose();
             }
         });
-        helpPanel.add(closeButton);
-        helpFrame.add(helpPanel);
+        pane.add(closeButton);
+
+        groupLayout.setHorizontalGroup(
+                groupLayout.createSequentialGroup()
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(textArea)
+                                .addComponent(closeButton)
+                        )
+        );
+        groupLayout.setVerticalGroup(
+                groupLayout.createSequentialGroup()
+                        .addComponent(textArea)
+                        .addComponent(closeButton)
+        );
+
         helpFrame.pack();
+        helpFrame.setSize(new Dimension(1 * Toolkit.getDefaultToolkit().getScreenSize().width/3, 2 * Toolkit.getDefaultToolkit().getScreenSize().height /3));
+        //helpFrame.pack();
         helpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         helpFrame.setVisible(true);
     }
