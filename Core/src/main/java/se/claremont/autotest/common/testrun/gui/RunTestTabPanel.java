@@ -1,8 +1,10 @@
-package se.claremont.autotest.gui;
+package se.claremont.autotest.common.testrun.gui;
 
+import jdk.nashorn.internal.scripts.JD;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+import se.claremont.autotest.common.testrun.CliTestRunner;
 import se.claremont.autotest.common.testrun.DiagnosticsRun;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -18,26 +20,46 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-public class RunTestTabPanel extends JPanel{
+public class RunTestTabPanel extends JPanel {
 
     private JLabel runNameLabel = new JLabel("Test run name");
     private JTextField runNameText = new JTextField();
+    private List<String> chosenTestClasses = new ArrayList<>();
 
     private JLabel executionModeLabel = new JLabel("Execution mode");
     private JSpinner executionModeSpinner = new JSpinner();
-    String[] spinnerOptions = {"Sequential execution", "Test classes in parallel", "Test methods in parallel", "2 parallel threads", "3 parallel threads"};
+    String[] spinnerOptions = {
+            "Sequential execution",
+            "Test classes in parallel",
+            "Test methods in parallel",
+            "2 parallel threads",
+            "3 parallel threads",
+            "4 parallel threads",
+            "5 parallel threads",
+            "6 parallel threads",
+            "7 parallel threads",
+            "8 parallel threads",
+            "9 parallel threads",
+            "10 parallel threads"
+    };
 
     private JButton showHelpTextButton = new JButton("Help");
     private JButton runDiagnosticsButton = new JButton("Run diagnostics tests");
     private JButton setRunParametersButton = new JButton("Set run parameters...");
+    private JButton pickTestsButton = new JButton("Pick test classes...");
     private JButton startButton = new JButton("Start test run");
     private JButton closeButton = new JButton("Exit");
 
@@ -49,7 +71,7 @@ public class RunTestTabPanel extends JPanel{
     private Font appFont;
 
 
-    public RunTestTabPanel(JFrame parentFrame) {
+    public RunTestTabPanel(JFrame parentFrame)  {
         applicationWindow = parentFrame;
 
         GroupLayout groupLayout = new GroupLayout(this);
@@ -71,18 +93,18 @@ public class RunTestTabPanel extends JPanel{
         runNameLabel.setSize(cliCommandLabel.getSize().width, cliCommandLabel.getHeight());
         runNameText.setFont(appFont);
         runNameText.setText(new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()));
-        updateCliCommandText();
+        updateCliCommandText("");
         runNameText.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
-                updateCliCommandText();
+                updateCliCommandText("");
             }
 
             public void removeUpdate(DocumentEvent e) {
-                updateCliCommandText();
+                updateCliCommandText("");
             }
 
             public void insertUpdate(DocumentEvent e) {
-                updateCliCommandText();
+                updateCliCommandText("");
             }
         });
 
@@ -90,11 +112,12 @@ public class RunTestTabPanel extends JPanel{
         executionModeSpinner.setFont(appFont);
         SpinnerListModel spinnerListModel = new SpinnerListModel(spinnerOptions);
         executionModeSpinner.setModel(spinnerListModel);
+        ((JSpinner.DefaultEditor) executionModeSpinner.getEditor()).getTextField().setBackground(Color.white);
         ((JSpinner.DefaultEditor) executionModeSpinner.getEditor()).getTextField().setEditable(false);
         executionModeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                updateCliCommandText();
+                updateCliCommandText("");
             }
         });
 
@@ -128,18 +151,22 @@ public class RunTestTabPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 DiagnosticsRun diagnosticsRun = new DiagnosticsRun(new JUnitCore());
                 JFrame progressWindow = new JFrame("Test run progress");
-                JPanel progressPanel = new JPanel();
-                JLabel progressText = new JLabel("Running tests...");
+                progressWindow.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+                        super.windowOpened(e);
+                        diagnosticsRun.run();
+                        Result result = diagnosticsRun.getResult();
+                        progressWindow.dispose();
+                        showResult(result);
+                    }
+                });
+                JLabel progressText = new JLabel("Running " + diagnosticsRun.getTestCount() + " identified tests...");
                 progressText.setFont(appFont);
-                progressPanel.add(progressText);
-                progressWindow.add(progressPanel);
+                progressWindow.getContentPane().add(progressText);
                 progressWindow.pack();
                 progressWindow.setSize(400, 300);
-                progressWindow.show();
-                diagnosticsRun.run();
-                Result result = diagnosticsRun.getResult();
-                progressWindow.dispose();
-                showResult(result);
+                progressWindow.setVisible(true);
             }
         });
 
@@ -147,12 +174,40 @@ public class RunTestTabPanel extends JPanel{
         setRunParametersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new RunSettingsDialogue();
-                updateCliCommandText();
+                new RunSettingsDialogue(getThis());
+                updateCliCommandText("");
+            }
+        });
+
+        pickTestsButton.setFont(appFont);
+        pickTestsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pickTestClasses();
             }
         });
 
         startButton.setFont(appFont);
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame progressWindow = new JFrame("Test run progress");
+                progressWindow.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+                        super.windowOpened(e);
+                        runTests();
+                        progressWindow.dispose();
+                    }
+                });
+                JLabel progressText = new JLabel("Running tests...");
+                progressText.setFont(appFont);
+                progressWindow.getContentPane().add(progressText);
+                progressWindow.pack();
+                progressWindow.setSize(400, 300);
+                progressWindow.setVisible(true);
+            }
+        });
         closeButton.setFont(appFont);
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -161,8 +216,8 @@ public class RunTestTabPanel extends JPanel{
             }
         });
 
-        int minimumLabelWidth = applicationWindow.getWidth()/4;
-        int minimumLabelHeight = applicationWindow.getHeight()/20;
+        int minimumLabelWidth = applicationWindow.getWidth() / 4;
+        int minimumLabelHeight = applicationWindow.getHeight() / 20;
 
         Dimension labelSize = new Dimension(minimumLabelWidth, minimumLabelHeight);
 
@@ -191,6 +246,7 @@ public class RunTestTabPanel extends JPanel{
                                         .addComponent(cliToClipboardButton)
                                         .addComponent(runDiagnosticsButton)
                                         .addComponent(setRunParametersButton)
+                                        .addComponent(pickTestsButton)
                                         .addComponent(startButton)
                                         .addComponent(closeButton)
                                 )
@@ -216,10 +272,80 @@ public class RunTestTabPanel extends JPanel{
                                 .addComponent(cliToClipboardButton)
                                 .addComponent(runDiagnosticsButton)
                                 .addComponent(setRunParametersButton)
+                                .addComponent(pickTestsButton)
                                 .addComponent(startButton)
                                 .addComponent(closeButton)
                         )
         );
+    }
+
+    private void pickTestClasses() {
+        JFrame classPickerWindow = new JFrame();
+        JLabel headline = new JLabel("Pick your test classes");
+        headline.setFont(appFont);
+        classPickerWindow.setLayout(new GridLayout(4, 1));
+        classPickerWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        classPickerWindow.setTitle("TAF - Test class picker dialogue");
+        Container pane = classPickerWindow.getContentPane();
+        DefaultListModel listModel = new DefaultListModel();
+        try {
+            Object[] classes = getLoadedClassesAndClassesInClassPath().toArray();
+            for(Object o : classes){
+                listModel.addElement(o);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JList testClasses = new JList(listModel);
+        testClasses.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        testClasses.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        testClasses.setVisibleRowCount(-1);
+        testClasses.setFont(appFont);
+        JScrollPane listScroller = new JScrollPane(testClasses);
+        //listScroller.setPreferredSize(new Dimension(250, 80));
+        JButton closeButton = new JButton("Cancel");
+        closeButton.setFont(appFont);
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                classPickerWindow.dispose();
+            }
+        });
+        JButton saveButton = new JButton("Save");
+        saveButton.setFont(appFont);
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> selectedOptions = new ArrayList<>();;
+                List<Object> selections = testClasses.getSelectedValuesList();
+                for(Object o : selections){
+                    chosenTestClasses.add((String)o);
+                }
+                updateCliCommandText("");
+                classPickerWindow.dispose();
+            }
+        });
+        pane.add(headline);
+        pane.add(listScroller);
+        pane.add(closeButton);
+        pane.add(saveButton);
+        int width = listScroller.getWidth();
+        int height = listScroller.getHeight();
+        if(height > Toolkit.getDefaultToolkit().getScreenSize().height){
+            height = 9* Toolkit.getDefaultToolkit().getScreenSize().height/10;
+            listScroller.createVerticalScrollBar();
+        }
+        if(width > Toolkit.getDefaultToolkit().getScreenSize().width){
+            width = 9* Toolkit.getDefaultToolkit().getScreenSize().width /10;
+            listScroller.createHorizontalScrollBar();
+        }
+        listScroller.setSize(width, height);
+        classPickerWindow.pack();
+        classPickerWindow.setVisible(true);
+    }
+
+    private void runTests() {
+        CliTestRunner.executeRunSequence(cliArguments().trim().split(" "));
     }
 
     public JFormattedTextField getTextField(JSpinner spinner) {
@@ -230,6 +356,9 @@ public class RunTestTabPanel extends JPanel{
         appFont = new Font("serif", Font.PLAIN, Toolkit.getDefaultToolkit().getScreenSize().height / 50);
     }
 
+    private RunTestTabPanel getThis() {
+        return this;
+    }
 
     private void showResult(Result result) {
         JDialog resultFrame = new JDialog(applicationWindow, "Test results", true);
@@ -260,6 +389,7 @@ public class RunTestTabPanel extends JPanel{
             resultPanel.add(new JLabel(failure.getMessage()));
         }
         JButton closeButton = new JButton("Close");
+        closeButton.setFont(appFont);
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -269,11 +399,25 @@ public class RunTestTabPanel extends JPanel{
         resultPanel.add(closeButton);
         resultFrame.add(resultPanel);
         resultFrame.pack();
-        resultFrame.show();
+        resultFrame.setVisible(true);
     }
 
 
-    void updateCliCommandText() {
+    void updateCliCommandText(String additions) {
+        cliCommandText.setText((javaJarPath() +
+                cliArguments() +
+                additions +
+                String.join(" ", chosenTestClasses)
+        ).trim());
+    }
+
+    private String cliArguments(){
+        return " runName=" + runNameText.getText() +
+                getExecutionModePart() +
+                runSettingsChangesFromDefault();
+    }
+
+    private String javaJarPath(){
         String path = Gui.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String decodedPath = "TafFull.jar";
         try {
@@ -281,26 +425,23 @@ public class RunTestTabPanel extends JPanel{
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        cliCommandText.setText(("java -jar " + decodedPath +
-                " runName=" + runNameText.getText() +
-                getExecutionModePart() +
-                runSettingsChangesFromDefault()).trim());
+        return "java -jar " + decodedPath;
     }
 
-    private String runSettingsChangesFromDefault(){
+    private String runSettingsChangesFromDefault() {
         java.util.List<String> cliAdditions = new ArrayList<>();
-        for(String parameterName : TestRun.getSettings().keySet()){
-            if(!Main.defaultSettings.containsKey(parameterName) || !Main.defaultSettings.get(parameterName).equals(TestRun.getCustomSettingsValue(parameterName)))
+        for (String parameterName : TestRun.getSettings().keySet()) {
+            if (!Gui.defaultSettings.containsKey(parameterName) || !Gui.defaultSettings.get(parameterName).equals(TestRun.getCustomSettingsValue(parameterName)))
                 cliAdditions.add(parameterEnumNameFromParameterFriendlyName(parameterName) + "=" + TestRun.getCustomSettingsValue(parameterName));
         }
-        if(cliAdditions.size() == 0) return "";
+        if (cliAdditions.size() == 0) return "";
         return " " + String.join(" ", cliAdditions);
     }
 
-    private String parameterEnumNameFromParameterFriendlyName(String friendlyName){
+    private String parameterEnumNameFromParameterFriendlyName(String friendlyName) {
         String returnString = friendlyName;
-        for(Settings.SettingParameters parameterName : Settings.SettingParameters.values()){
-            if(parameterName.friendlyName().equals(friendlyName))
+        for (Settings.SettingParameters parameterName : Settings.SettingParameters.values()) {
+            if (parameterName.friendlyName().equals(friendlyName))
                 return parameterName.toString();
         }
         return returnString;
@@ -309,12 +450,17 @@ public class RunTestTabPanel extends JPanel{
     private void showHelp() {
         JFrame helpFrame = new JFrame();
         JTextArea textArea = new JTextArea();
-        String helpText = "This is the current version of the help text.";
+        textArea.setFont(appFont);
+        String helpText = null;
+        helpText = "This is the current version of the help text. " + System.lineSeparator() +
+                System.lineSeparator() +
+                "To use TAF without gui, use the switch 'nogui'.";
         textArea.setText(helpText);
         textArea.setLineWrap(true);
         JPanel helpPanel = new JPanel();
         helpPanel.add(textArea);
         JButton closeButton = new JButton("Close");
+        closeButton.setFont(appFont);
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -325,7 +471,69 @@ public class RunTestTabPanel extends JPanel{
         helpFrame.add(helpPanel);
         helpFrame.pack();
         helpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        helpFrame.show();
+        helpFrame.setVisible(true);
+    }
+
+
+    private List<Class> getClassesFromClassLoader(){
+        Field f = null;
+        try {
+            f = ClassLoader.class.getDeclaredField("classes");
+            f.setAccessible(true);
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            return (Vector<Class>) f.get(classLoader);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<Class>();
+    }
+
+    private Set<String> getLoadedClassesAndClassesInClassPath() throws IOException {
+        java.util.List<String> jarFilesInClassPath = new ArrayList<>();
+        jarFilesInClassPath.add(theFileNameOfCurrentExecutingFile());
+        Set<String> classNamesForLoadedClasses = new HashSet<String>();
+        for(Class c : getClassesFromClassLoader()){
+            classNamesForLoadedClasses.add(c.getName());
+        }
+        try {
+            List<URL> roots = Collections.list(ClassLoader.getSystemClassLoader().getResources(""));
+            for (URL url : roots) {
+                File root = new File(url.getPath());
+                for (File file : root.listFiles()) {
+                    if (file.isDirectory())continue;
+                    if(file.getName().endsWith(".class") || file.getName().endsWith(".java")){
+                        classNamesForLoadedClasses.add(file.getName());
+                    }
+                    if(file.getName().endsWith(".jar")){
+                        jarFilesInClassPath.add(file.getName());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(String fileName : jarFilesInClassPath){
+            if(fileName.endsWith("jar")){
+                ZipInputStream zip = new ZipInputStream(new FileInputStream(fileName));
+                for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                    if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                        String className = entry.getName().replace('/', '.'); // including ".class"
+                        classNamesForLoadedClasses.add(className.substring(0, className.length() - ".class".length()));
+                    }
+                }
+            }
+        }
+        return classNamesForLoadedClasses;
+    }
+
+    private String theFileNameOfCurrentExecutingFile() {
+        return new java.io.File(RunTestTabPanel.class.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath())
+                .getName();
     }
 
     private String getExecutionModePart() {
@@ -340,6 +548,20 @@ public class RunTestTabPanel extends JPanel{
                 return " PARALLEL_TEST_EXECUTION_MODE=2";
             case "3 parallel threads":
                 return " PARALLEL_TEST_EXECUTION_MODE=3";
+            case "4 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=4";
+            case "5 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=5";
+            case "6 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=6";
+            case "7 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=7";
+            case "8 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=8";
+            case "9 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=9";
+            case "10 parallel threads":
+                return " PARALLEL_TEST_EXECUTION_MODE=10";
             default:
                 return "";
         }

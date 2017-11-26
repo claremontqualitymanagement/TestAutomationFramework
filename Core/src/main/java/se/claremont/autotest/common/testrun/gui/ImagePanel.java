@@ -1,11 +1,8 @@
-package se.claremont.autotest.gui;
+package se.claremont.autotest.common.testrun.gui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class ImagePanel extends JLabel {
 

@@ -8,8 +8,11 @@ import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtml
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.Utils;
 import se.claremont.autotest.common.support.api.Taf;
+import se.claremont.autotest.common.testrun.gui.Gui;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * CLI runner class for the test automation framework.
@@ -27,7 +30,12 @@ public class CliTestRunner {
      * @param args arguments
      */
     public static void main(String [] args) {
-        executeRunSequence(args);
+        if(shouldShowGui(args)){
+            Gui gui = new Gui();
+            gui.activate();
+        } else {
+            executeRunSequence(args);
+        }
     }
 
     /**
@@ -84,7 +92,7 @@ public class CliTestRunner {
         return runInTestMode(args, new Class<?>[]{testClass});
     }
 
-    private static void executeRunSequence(String[] args){
+    public static void executeRunSequence(String[] args){
         System.out.println(System.lineSeparator() + "Executing TAF (TestAutomationFramework) from CLI." + System.lineSeparator());
         remainingArguments = stringArrayToList(args);
         printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
@@ -102,6 +110,16 @@ public class CliTestRunner {
         exitWithExitCode();
     }
 
+    private static boolean shouldShowGui(String[] args){
+        if(!Desktop.isDesktopSupported()) return false;
+        for(String arg : args){
+            if(arg.trim().equalsIgnoreCase("nogui")){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static final String LF = SupportMethods.LF;
 
     @SuppressWarnings("SpellCheckingInspection")
@@ -112,6 +130,9 @@ public class CliTestRunner {
                 LF + LF +
                 "This syntax is explained below. If no arguments are given a short help text pointing to this help text is displayed." +
                 LF + LF +
+                "Run without GUI" + LF +
+                "-----------------------------" + LF +
+                "To run this program without GUI, use the 'nogui' switch." + LF + LF +
                 "Tell what test classes to run" + LF +
                 "-----------------------------" + LF +
                 "Any program argument not falling into the categories below will be interpreted as a name of a class containing JUnit tests." + LF +
@@ -412,6 +433,15 @@ public class CliTestRunner {
     private static List<String> stringArrayToList(String[] args){
         List<String> returnList = new ArrayList<>();
         Collections.addAll(returnList, args);
+        int position = -1;
+        for(int i = 0 ; i < returnList.size(); i++){
+            if(returnList.get(i).equalsIgnoreCase("nogui")){
+                position = i;
+            }
+        }
+        if(position != -1){
+            returnList.remove(position);
+        }
         return returnList;
     }
 

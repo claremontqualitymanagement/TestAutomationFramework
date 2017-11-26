@@ -1,4 +1,4 @@
-package se.claremont.autotest.gui;
+package se.claremont.autotest.common.testrun.gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

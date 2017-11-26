@@ -1,16 +1,18 @@
-package se.claremont.autotest.gui;
+package se.claremont.autotest.common.testrun.gui;
 
-import javax.imageio.ImageIO;
+import se.claremont.autotest.common.testrun.TestRun;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.HashMap;
 
 public class Gui extends JFrame{
 
     private Font appFont;
+    public static HashMap<String, String> defaultSettings;
 
-    Gui() {
+    public Gui() {
+        defaultSettings = new HashMap<>(TestRun.getSettings());
         Container pane = this.getContentPane();
         setFontSize();
         JTabbedPane tabs = new JTabbedPane();

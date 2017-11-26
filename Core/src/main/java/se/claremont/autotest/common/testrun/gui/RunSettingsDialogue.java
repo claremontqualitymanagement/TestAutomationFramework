@@ -1,4 +1,4 @@
-package se.claremont.autotest.gui;
+package se.claremont.autotest.common.testrun.gui;
 
 import se.claremont.autotest.common.testrun.TestRun;
 
@@ -13,12 +13,20 @@ public class RunSettingsDialogue {
 
     JDialog window = new JDialog();
     private Font appFont;
+    RunTestTabPanel mainWindow;
 
-    public RunSettingsDialogue(){
+    public RunSettingsDialogue(RunTestTabPanel mainWindow){
+        this.mainWindow = mainWindow;
         createWindow();
     }
 
     private void createWindow(){
+        window.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                mainWindow.updateCliCommandText("");
+            }
+        });
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setFontSize();
         Container pane = window.getContentPane();
@@ -53,6 +61,7 @@ public class RunSettingsDialogue {
             }
         });
         addValueButton.setFont(appFont);
+        /*
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -61,8 +70,9 @@ public class RunSettingsDialogue {
             }
         });
         closeButton.setFont(appFont);
+        */
         pane.add(addValueButton);
-        pane.add(closeButton);
+        //pane.add(closeButton);
         window.pack();
 
         window.setVisible(true);
