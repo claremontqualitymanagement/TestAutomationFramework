@@ -112,12 +112,8 @@ public class CliTestRunner {
 
     private static boolean shouldShowGui(String[] args){
         if(!Desktop.isDesktopSupported()) return false;
-        for(String arg : args){
-            if(arg.trim().equalsIgnoreCase("nogui")){
-                return false;
-            }
-        }
-        return true;
+        if(args.length == 0) return true;
+        return false;
     }
 
     private static final String LF = SupportMethods.LF;
@@ -130,9 +126,6 @@ public class CliTestRunner {
                 LF + LF +
                 "This syntax is explained below. If no arguments are given a short help text pointing to this help text is displayed." +
                 LF + LF +
-                "Run without GUI" + LF +
-                "-----------------------------" + LF +
-                "To run this program without GUI, use the 'nogui' switch." + LF + LF +
                 "Tell what test classes to run" + LF +
                 "-----------------------------" + LF +
                 "Any program argument not falling into the categories below will be interpreted as a name of a class containing JUnit tests." + LF +
