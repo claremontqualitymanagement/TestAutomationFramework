@@ -19,7 +19,11 @@ public class Gui extends JFrame{
         tabs.setFont(appFont);
         tabs.addTab("Run tests", new RunTestTabPanel(this));
         tabs.addTab("Create tests", new CreateTestTabPanel());
-
+        PluginLoader pluginLoader = new PluginLoader();
+        HashMap<String, JPanel> panels = pluginLoader.getAccessibleGuiPluginTabs();
+        for(String pluginTabName : panels.keySet()){
+            tabs.addTab(pluginTabName, panels.get(pluginTabName));
+        }
         pane.add(tabs);
         this.setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
         this.setTitle("TAF - Test Automation Framework");

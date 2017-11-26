@@ -1,6 +1,6 @@
 package se.claremont.autotest.common.testrun.gui;
 
-import jdk.nashorn.internal.scripts.JD;
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -24,7 +24,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
@@ -283,7 +285,8 @@ public class RunTestTabPanel extends JPanel {
         JFrame classPickerWindow = new JFrame();
         JLabel headline = new JLabel("Pick your test classes");
         headline.setFont(appFont);
-        classPickerWindow.setLayout(new GridLayout(4, 1));
+        GroupLayout groupLayout = new GroupLayout(classPickerWindow.getContentPane());
+        classPickerWindow.setLayout(groupLayout);
         classPickerWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         classPickerWindow.setTitle("TAF - Test class picker dialogue");
         Container pane = classPickerWindow.getContentPane();
@@ -340,6 +343,20 @@ public class RunTestTabPanel extends JPanel {
             listScroller.createHorizontalScrollBar();
         }
         listScroller.setSize(width, height);
+        groupLayout.setHorizontalGroup(
+                groupLayout.createSequentialGroup()
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(listScroller)
+                                .addComponent(saveButton)
+                                .addComponent(closeButton)
+                        )
+        );
+        groupLayout.setVerticalGroup(
+                groupLayout.createSequentialGroup()
+                        .addComponent(listScroller)
+                        .addComponent(saveButton)
+                        .addComponent(closeButton)
+        );
         classPickerWindow.pack();
         classPickerWindow.setVisible(true);
     }
@@ -406,15 +423,14 @@ public class RunTestTabPanel extends JPanel {
     void updateCliCommandText(String additions) {
         cliCommandText.setText((javaJarPath() +
                 cliArguments() +
-                additions +
-                String.join(" ", chosenTestClasses)
+                additions
         ).trim());
     }
 
     private String cliArguments(){
         return " runName=" + runNameText.getText() +
                 getExecutionModePart() +
-                runSettingsChangesFromDefault();
+                runSettingsChangesFromDefault() + " " + String.join(" ", chosenTestClasses);
     }
 
     private String javaJarPath(){
@@ -531,16 +547,39 @@ public class RunTestTabPanel extends JPanel {
         }
         for(String fileName : jarFilesInClassPath){
             if(fileName.endsWith("jar")){
-                ZipInputStream zip = new ZipInputStream(new FileInputStream(fileName));
-                for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-                    if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                        String className = entry.getName().replace('/', '.'); // including ".class"
-                        classNamesForLoadedClasses.add(className.substring(0, className.length() - ".class".length()));
+                try{
+                    ZipInputStream zip = new ZipInputStream(new FileInputStream(fileName));
+                    for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                        if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                            String className = entry.getName().replace('/', '.'); // including ".class"
+                            classNamesForLoadedClasses.add(className.substring(0, className.length() - ".class".length()));
+                        }
                     }
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
                 }
             }
         }
-        return classNamesForLoadedClasses;
+        Set<String> classNamesForLoadedClassesWithJUnitTests = new HashSet<>();
+        for(String className : classNamesForLoadedClasses){
+            Method[] methods;
+            try {
+                Class c = ClassLoader.getSystemClassLoader().loadClass(className);
+                methods = c.getMethods();
+            } catch (NoClassDefFoundError e) {
+                continue;
+            } catch (ClassNotFoundException e) {
+                continue;
+            }
+            if(methods == null) continue;
+            for(Method method : methods){
+                if(method.isAnnotationPresent(Test.class)){
+                    classNamesForLoadedClassesWithJUnitTests.add(className);
+                    break;
+                }
+            }
+        }
+        return classNamesForLoadedClassesWithJUnitTests;
     }
 
     private String theFileNameOfCurrentExecutingFile() {
@@ -548,7 +587,7 @@ public class RunTestTabPanel extends JPanel {
                 .getCodeSource()
                 .getLocation()
                 .getPath())
-                .getName();
+                .getAbsolutePath();
     }
 
     private String getExecutionModePart() {
