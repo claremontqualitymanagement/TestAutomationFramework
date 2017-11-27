@@ -259,9 +259,11 @@ public class RunTestTabPanel extends JPanel {
     }
 
     private void prepareExecutionMode() {
+
         executionModeLabel.setFont(appFont);
         executionModeLabel.setSize(labelSize);
         executionModeLabel.setName("ExecutionModeLabel");
+
         executionModeSpinner.setFont(appFont);
         executionModeSpinner.setName("ExecutionModeSpinner");
         SpinnerListModel spinnerListModel = new SpinnerListModel(spinnerOptions);
@@ -273,20 +275,22 @@ public class RunTestTabPanel extends JPanel {
         executionModeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                TestRun.setSettingsValue(Settings.SettingParameters.PARALLEL_TEST_EXECUTION_MODE, getExecutionModePart());
                 updateCliCommandText("");
             }
         });
     }
 
     private void prepareRunName() {
+
         runNameLabel.setFont(appFont);
         runNameLabel.setName("RunNameLabel");
         runNameLabel.setSize(labelSize);
-        //runNameLabel.setSize(cliCommandLabel.getSize().width, cliCommandLabel.getHeight());
+
         runNameText.setFont(appFont);
         runNameText.setName("RunNameTextField");
         runNameText.setText(new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()));
-        updateCliCommandText("");
+
         runNameText.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 updateCliCommandText("");
@@ -300,6 +304,8 @@ public class RunTestTabPanel extends JPanel {
                 updateCliCommandText("");
             }
         });
+
+        updateCliCommandText("");
     }
 
     private void prepareLogoImage() {
@@ -308,6 +314,7 @@ public class RunTestTabPanel extends JPanel {
             image = ImageIO.read(getClass().getClassLoader().getResource("logo.png"));
         } catch (IOException ignored) {
         }
+
         logoImage = new JLabel(new ImageIcon(image));
         logoImage.setName("LogoImage");
     }
@@ -329,7 +336,6 @@ public class RunTestTabPanel extends JPanel {
 
     String cliArguments(){
         return " runName=" + runNameText.getText() +
-                getExecutionModePart() +
                 runSettingsChangesFromDefault() + " " + String.join(" ", chosenTestClasses);
     }
 
@@ -368,27 +374,27 @@ public class RunTestTabPanel extends JPanel {
             case "Sequential execution":
                 return "";
             case "Test classes in parallel":
-                return " PARALLEL_TEST_EXECUTION_MODE=classes";
+                return "classes";
             case "Test methods in parallel":
-                return " PARALLEL_TEST_EXECUTION_MODE=methods";
+                return "methods";
             case "2 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=2";
+                return "2";
             case "3 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=3";
+                return "3";
             case "4 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=4";
+                return "4";
             case "5 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=5";
+                return "5";
             case "6 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=6";
+                return "6";
             case "7 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=7";
+                return "7";
             case "8 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=8";
+                return "8";
             case "9 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=9";
+                return "9";
             case "10 parallel threads":
-                return " PARALLEL_TEST_EXECUTION_MODE=10";
+                return "10";
             default:
                 return "";
         }

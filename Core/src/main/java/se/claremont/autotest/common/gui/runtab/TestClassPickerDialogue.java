@@ -153,6 +153,9 @@ public class TestClassPickerDialogue {
                 }
             }
         }
+
+        //Filtering classes from above. Only keeping the ones with JUnit tests
+
         Set<String> classNamesForLoadedClassesWithJUnitTests = new HashSet<>();
         for(String className : classNamesForLoadedClasses){
             Method[] methods;
