@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.zip.ZipInputStream;
 public class TestClassPickerDialogue {
 
     JFrame classPickerWindow;
+    Set<Class> identifiedClasses = new HashSet<>();
 
     public TestClassPickerDialogue(Font appFont, RunTestTabPanel parent) {
         classPickerWindow = new JFrame();
@@ -53,9 +55,55 @@ public class TestClassPickerDialogue {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         JScrollPane listScroller = new JScrollPane(testClasses);
         listScroller.setName("TestClassesListPanel");
-        //listScroller.setPreferredSize(new Dimension(250, 80));
+        int width = listScroller.getWidth();
+        int height = listScroller.getHeight();
+        if(height > Toolkit.getDefaultToolkit().getScreenSize().height){
+            height = 9* Toolkit.getDefaultToolkit().getScreenSize().height/10;
+            listScroller.createVerticalScrollBar();
+        }
+        if(width > Toolkit.getDefaultToolkit().getScreenSize().width){
+            width = 9* Toolkit.getDefaultToolkit().getScreenSize().width /10;
+            listScroller.createHorizontalScrollBar();
+        }
+        listScroller.setSize(width, height);
+
+        JCheckBox showAllClassesWithTestsCheckbox = new JCheckBox("Show all classes with tests, not only TestSets");
+        showAllClassesWithTestsCheckbox.setFont(appFont);
+        showAllClassesWithTestsCheckbox.setName("ShowAllTestsCheckbox");
+        showAllClassesWithTestsCheckbox.setSelected(false);
+        showAllClassesWithTestsCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        JButton fileChooserButton = new JButton("Pick file...");
+        fileChooserButton.setName("AddFileButton");
+        fileChooserButton.setFont(appFont);
+        fileChooserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser window = new JFileChooser();
+                window.setName("FilePickerWindow");
+                window.setDialogTitle("TAF - File picker");
+                window.setFont(appFont);
+                try {
+                    window.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+                } catch (URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+                int returnVal = window.showOpenDialog(getTestClassPickerDialogue());
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = window.getSelectedFile();
+                    listModel.addElement(file.getName()); //Todo: Should extract classes and add to classes list. Also should enable list and remove placeholder text if previously empty.
+                }
+            }
+        });
+
         JButton closeButton = new JButton("Cancel");
         closeButton.setName("CloseButton");
         closeButton.setFont(appFont);
@@ -65,6 +113,7 @@ public class TestClassPickerDialogue {
                 classPickerWindow.dispose();
             }
         });
+
         JButton saveButton = new JButton("Save");
         saveButton.setName("SaveButton");
         saveButton.setFont(appFont);
@@ -80,38 +129,44 @@ public class TestClassPickerDialogue {
                 classPickerWindow.dispose();
             }
         });
+
         pane.add(headline);
         pane.add(listScroller);
         pane.add(closeButton);
         pane.add(saveButton);
-        int width = listScroller.getWidth();
-        int height = listScroller.getHeight();
-        if(height > Toolkit.getDefaultToolkit().getScreenSize().height){
-            height = 9* Toolkit.getDefaultToolkit().getScreenSize().height/10;
-            listScroller.createVerticalScrollBar();
-        }
-        if(width > Toolkit.getDefaultToolkit().getScreenSize().width){
-            width = 9* Toolkit.getDefaultToolkit().getScreenSize().width /10;
-            listScroller.createHorizontalScrollBar();
-        }
-        listScroller.setSize(width, height);
+
+
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(listScroller)
+                                .addComponent(showAllClassesWithTestsCheckbox)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(fileChooserButton)
+                                        .addComponent(saveButton)
+                                        .addComponent(closeButton)
+                                )
+                        )
+        );
+
+        groupLayout.setVerticalGroup(
+                groupLayout.createSequentialGroup()
+                        .addComponent(listScroller)
+                        .addComponent(showAllClassesWithTestsCheckbox)
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(fileChooserButton)
                                 .addComponent(saveButton)
                                 .addComponent(closeButton)
                         )
         );
-        groupLayout.setVerticalGroup(
-                groupLayout.createSequentialGroup()
-                        .addComponent(listScroller)
-                        .addComponent(saveButton)
-                        .addComponent(closeButton)
-        );
+
         classPickerWindow.pack();
         classPickerWindow.setVisible(true);
 
+    }
+
+    private Component getTestClassPickerDialogue() {
+        return this.classPickerWindow;
     }
 
     private Set<String> getLoadedClassesAndClassesInClassPath() throws IOException {
