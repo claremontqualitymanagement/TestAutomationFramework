@@ -1,21 +1,23 @@
 package se.claremont.autotest.common.gui.runtab;
 
+import se.claremont.autotest.common.gui.guistyle.AppFont;
+import se.claremont.autotest.common.gui.guistyle.TafFrame;
+import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.testrun.CliTestRunner;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class TestsRunningDialogue {
 
     RunTestTabPanel parent;
-    private Font appFont;
-    JFrame progressWindow = new JFrame("Test run progress");
+    TafFrame progressWindow = new TafFrame("Test run progress");
 
-    public TestsRunningDialogue(RunTestTabPanel parent, Font appFont){
+    public TestsRunningDialogue(RunTestTabPanel parent){
+
         this.parent = parent;
-        this.appFont = appFont;
+
         progressWindow.setName("DiagnosticTestProgressWindow");
         progressWindow.setTitle("TAF - Test run progress");
         progressWindow.addWindowListener(new WindowAdapter() {
@@ -25,9 +27,9 @@ public class TestsRunningDialogue {
                 runTests();
             }
         });
-        JLabel progressText = new JLabel("Running tests...");
-        progressText.setName("ProgressText");
-        progressText.setFont(appFont);
+
+        TafLabel progressText = new TafLabel("Running tests...");
+
         progressWindow.getContentPane().add(progressText);
         progressWindow.pack();
         progressWindow.setSize(400, 300);
@@ -38,7 +40,7 @@ public class TestsRunningDialogue {
     private void runTests() {
         int exitCode = CliTestRunner.runInTestMode(parent.cliArguments().trim().split(" "));
         progressWindow.dispose();
-        new RunResultsDialogue(parent.applicationWindow, exitCode, parent.pathToHtmlTestRunSummaryReport, appFont);
+        new RunResultsDialogue(parent.applicationWindow, exitCode, parent.pathToHtmlTestRunSummaryReport);
     }
 
 }

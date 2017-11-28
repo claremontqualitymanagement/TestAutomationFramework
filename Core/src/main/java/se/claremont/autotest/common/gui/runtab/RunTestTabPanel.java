@@ -1,5 +1,7 @@
 package se.claremont.autotest.common.gui.runtab;
 
+import se.claremont.autotest.common.gui.guistyle.*;
+import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -22,13 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-public class RunTestTabPanel extends JPanel {
+public class RunTestTabPanel implements IGuiTab {
 
-    private JLabel runNameLabel = new JLabel("Test run name");
+    private TafLabel runNameLabel = new TafLabel("Test run name");
     private JTextField runNameText = new JTextField();
     static List<String> chosenTestClasses = new ArrayList<>();
 
-    private JLabel executionModeLabel = new JLabel("Execution mode");
+    private TafLabel executionModeLabel = new TafLabel("Execution mode");
     private JSpinner executionModeSpinner = new JSpinner();
     String[] spinnerOptions = {
             "Sequential execution",
@@ -45,46 +47,39 @@ public class RunTestTabPanel extends JPanel {
             "10 parallel threads"
     };
 
-    private JButton showHelpTextButton = new JButton("Help");
-    private JButton runDiagnosticsButton = new JButton("Run diagnostics tests");
-    private JButton setRunParametersButton = new JButton("Set run parameters...");
-    private JButton pickTestsButton = new JButton("Pick test classes...");
-    private JButton startButton = new JButton("Start test run");
-    private JButton closeButton = new JButton("Exit");
-    private JButton resetSettings = new JButton("Reset");
+    private TafButton showHelpTextButton = new TafButton("Help");
+    private TafButton setRunParametersButton = new TafButton("Set run parameters...");
+    private TafButton pickTestsButton = new TafButton("Pick test classes...");
+    private TafButton startButton = new TafButton("Start test run");
+    private TafButton closeButton = new TafButton("Exit");
+    private TafButton resetSettings = new TafButton("Reset");
 
-    private JLabel cliCommandLabel = new JLabel("Corresponding CLI command:");
+    private TafLabel cliCommandLabel = new TafLabel("Corresponding CLI command:");
     private JTextArea cliCommandText = new JTextArea();
-    private JButton cliToClipboardButton = new JButton("CLI to clipboard");
+    private TafButton cliToClipboardButton = new TafButton("CLI to clipboard");
     private JLabel logoImage;
 
-    JFrame applicationWindow;
-    private Font appFont;
-    private Dimension labelSize;
-
+    TafFrame applicationWindow;
+    private TafPanel tabPanel;
     String pathToHtmlTestRunSummaryReport;
 
-    public RunTestTabPanel(JFrame parentFrame)  {
+    public RunTestTabPanel(TafFrame parentFrame)  {
 
         applicationWindow = parentFrame;
         applicationWindow.setName("TafGuiMainWindow");
-        this.setName("RunTestTabPanel");
         int minimumLabelWidth = applicationWindow.getWidth() / 4;
         int minimumLabelHeight = applicationWindow.getHeight() / 20;
-        labelSize = new Dimension(minimumLabelWidth, minimumLabelHeight);
-
-        GroupLayout groupLayout = new GroupLayout(this);
-        this.setLayout(groupLayout);
+        tabPanel = new TafPanel("RunTestTab");
+        GroupLayout groupLayout = new GroupLayout(tabPanel);
+        tabPanel.setLayout(groupLayout);
         groupLayout.setAutoCreateGaps(true);
 
-        setFontSize();
         prepareLogoImage();
         prepareRunName();
         prepareExecutionMode();
         prepareCliCommand();
         prepareHelpButton();
         prepareCliToClipboardButton();
-        prepareDiagnosticsRunButton();
         prepareRunSettingsButton();
         preparePickTestClassesButton();
         prepareStartButton();
@@ -110,7 +105,6 @@ public class RunTestTabPanel extends JPanel {
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(showHelpTextButton)
                                         .addComponent(cliToClipboardButton)
-                                        .addComponent(runDiagnosticsButton)
                                         .addComponent(setRunParametersButton)
                                         .addComponent(pickTestsButton)
                                         .addComponent(resetSettings)
@@ -137,7 +131,6 @@ public class RunTestTabPanel extends JPanel {
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(showHelpTextButton)
                                 .addComponent(cliToClipboardButton)
-                                .addComponent(runDiagnosticsButton)
                                 .addComponent(setRunParametersButton)
                                 .addComponent(pickTestsButton)
                                 .addComponent(resetSettings)
@@ -145,11 +138,14 @@ public class RunTestTabPanel extends JPanel {
                                 .addComponent(closeButton)
                         )
         );
+
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
+
+        tabPanel.setVisible(true);
     }
 
     private void prepareResetButton() {
-        resetSettings.setFont(appFont);
-        resetSettings.setName("ResetSettingsButton");
         resetSettings.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -164,8 +160,6 @@ public class RunTestTabPanel extends JPanel {
     }
 
     private void prepareCloseButton() {
-        closeButton.setFont(appFont);
-        closeButton.setName("ExitTafButton");
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -177,31 +171,25 @@ public class RunTestTabPanel extends JPanel {
 
 
     private void prepareStartButton() {
-        startButton.setFont(appFont);
-        startButton.setName("StartTestsButton");
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 pathToHtmlTestRunSummaryReport = LogFolder.testRunLogFolder + "_summary.html";
-                new TestsRunningDialogue(getThis(), appFont);
+                new TestsRunningDialogue(getThis());
             }
         });
     }
 
     private void preparePickTestClassesButton() {
-        pickTestsButton.setFont(appFont);
-        pickTestsButton.setName("PickTestsButton");
         pickTestsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TestClassPickerDialogue window = new TestClassPickerDialogue(appFont, getThis());
+                TestClassPickerDialogue window = new TestClassPickerDialogue(getThis());
             }
         });
     }
 
     private void prepareRunSettingsButton() {
-        setRunParametersButton.setFont(appFont);
-        setRunParametersButton.setName("SetRunParametersButton");
         setRunParametersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -211,20 +199,7 @@ public class RunTestTabPanel extends JPanel {
         });
     }
 
-    private void prepareDiagnosticsRunButton() {
-        runDiagnosticsButton.setFont(appFont);
-        runDiagnosticsButton.setName("RunDiagnosticsButton");
-        runDiagnosticsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new DiagnosticsRunWaitDialogue(applicationWindow, appFont);
-            }
-        });
-    }
-
     private void prepareCliToClipboardButton() {
-        cliToClipboardButton.setFont(appFont);
-        cliToClipboardButton.setName("CliToClipBoardButton");
         cliToClipboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -236,41 +211,36 @@ public class RunTestTabPanel extends JPanel {
     }
 
     private void prepareHelpButton() {
-        showHelpTextButton.setFont(appFont);
-        showHelpTextButton.setName("HelpButton");
         showHelpTextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new HelpDialogue(appFont);
+                new HelpDialogue();
             }
         });
     }
 
     private void prepareCliCommand() {
-        cliCommandLabel.setFont(appFont);
-        cliCommandLabel.setSize(labelSize);
-        cliCommandLabel.setName("CliCommandLabel");
         cliCommandLabel.setForeground(Color.gray);
-        cliCommandText.setFont(appFont);
+        cliCommandText.setFont(AppFont.getInstance());
         cliCommandText.setName("CliCommandText");
         cliCommandText.setForeground(Color.gray);
         cliCommandText.setLineWrap(true);
-        cliCommandText.setBackground(cliCommandLabel.getBackground());
+        cliCommandText.setBackground(Gui.colorTheme.backgroundColor);
     }
 
     private void prepareExecutionMode() {
 
-        executionModeLabel.setFont(appFont);
-        executionModeLabel.setSize(labelSize);
-        executionModeLabel.setName("ExecutionModeLabel");
+        executionModeLabel.setFont(AppFont.getInstance());
 
-        executionModeSpinner.setFont(appFont);
+        executionModeSpinner.setFont(AppFont.getInstance());
+        executionModeSpinner.setForeground(Gui.colorTheme.textColor);
         executionModeSpinner.setName("ExecutionModeSpinner");
         SpinnerListModel spinnerListModel = new SpinnerListModel(spinnerOptions);
         executionModeSpinner.setModel(spinnerListModel);
         JFormattedTextField spinnerTextArea = ((JSpinner.DefaultEditor) executionModeSpinner.getEditor()).getTextField();
         spinnerTextArea.setName("ExecutionModeSpinnerTextArea");
         spinnerTextArea.setBackground(Color.white);
+        spinnerTextArea.setForeground(Gui.colorTheme.textColor);
         spinnerTextArea.setEditable(false);
         executionModeSpinner.addChangeListener(new ChangeListener() {
             @Override
@@ -283,12 +253,11 @@ public class RunTestTabPanel extends JPanel {
 
     private void prepareRunName() {
 
-        runNameLabel.setFont(appFont);
-        runNameLabel.setName("RunNameLabel");
-        runNameLabel.setSize(labelSize);
+        runNameLabel.setFont(AppFont.getInstance());
 
-        runNameText.setFont(appFont);
+        runNameText.setFont(AppFont.getInstance());
         runNameText.setName("RunNameTextField");
+        runNameText.setForeground(Gui.colorTheme.textColor);
         runNameText.setText(new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()));
 
         runNameText.getDocument().addDocumentListener(new DocumentListener() {
@@ -319,10 +288,6 @@ public class RunTestTabPanel extends JPanel {
         logoImage.setName("LogoImage");
     }
 
-    private void setFontSize() {
-        appFont = new Font("serif", Font.PLAIN, Toolkit.getDefaultToolkit().getScreenSize().height / 50);
-    }
-
     private RunTestTabPanel getThis() {
         return this;
     }
@@ -340,10 +305,12 @@ public class RunTestTabPanel extends JPanel {
     }
 
     private String javaJarPath(){
-        String path = Gui.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String path = Gui.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         String decodedPath = "TafFull.jar";
         try {
             decodedPath = URLDecoder.decode(path, "UTF-8");
+            if(!decodedPath.startsWith("//") && decodedPath.startsWith("/")) decodedPath = decodedPath.substring(1);
+            if(decodedPath.endsWith("/classes/")) decodedPath = "TafFull.jar"; //Being run without Jar-file. Printing for prettyness.
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -398,5 +365,15 @@ public class RunTestTabPanel extends JPanel {
             default:
                 return "";
         }
+    }
+
+    @Override
+    public JPanel getPanel() {
+        return tabPanel;
+    }
+
+    @Override
+    public String getName() {
+        return "Run tests";
     }
 }

@@ -72,7 +72,7 @@ public class TestRun {
     }
 
     //For testing purposes
-    static void setSettings(Settings settings) {
+    public static void setSettings(Settings settings) {
         getInstance().settings = settings;
     }
 

@@ -1,21 +1,27 @@
 package se.claremont.autotest.common.gui;
 
+import se.claremont.autotest.common.gui.guistyle.AppFont;
+import se.claremont.autotest.common.gui.guistyle.TafLabel;
+import se.claremont.autotest.common.gui.guistyle.TafPanel;
+import se.claremont.autotest.common.gui.plugins.IGuiTab;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class CreateTestTabPanel extends JPanel{
+public class CreateTestTabPanel implements IGuiTab{
 
-    private Font appFont;
+    private TafPanel tabPanel;
 
     public CreateTestTabPanel(){
-        GroupLayout groupLayout = new GroupLayout(this);
-        this.setLayout(new GridLayout(2, 1));
-        groupLayout.setAutoCreateGaps(true);
 
-        setFontSize();
+        tabPanel = new TafPanel("CreateTestPanel");
+        GroupLayout groupLayout = new GroupLayout(tabPanel);
+        tabPanel.setLayout(new GridLayout(2, 1));
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
 
         BufferedImage image = null;
         try {
@@ -25,15 +31,21 @@ public class CreateTestTabPanel extends JPanel{
         }
         //ImagePanel imagePanel = new ImagePanel(image);
         JLabel logoImage = new JLabel(new ImageIcon(image));
-        this.add(logoImage);
-        JLabel headline = new JLabel("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
-        headline.setFont(appFont);
-        this.add(headline);
-        this.setVisible(true);
+
+        tabPanel.add(logoImage);
+        TafLabel headline = new TafLabel("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
+        headline.setName("TabText");
+        tabPanel.add(headline);
+        tabPanel.setVisible(true);
     }
 
-    private void setFontSize() {
-        appFont = new Font("serif", Font.PLAIN, Toolkit.getDefaultToolkit().getScreenSize().height / 50);
+    @Override
+    public JPanel getPanel() {
+        return tabPanel;
     }
 
+    @Override
+    public String getName() {
+        return "Create test";
+    }
 }

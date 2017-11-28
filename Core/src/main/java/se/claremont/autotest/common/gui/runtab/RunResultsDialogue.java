@@ -1,5 +1,10 @@
 package se.claremont.autotest.common.gui.runtab;
 
+import se.claremont.autotest.common.gui.guistyle.TafButton;
+import se.claremont.autotest.common.gui.guistyle.TafCloseButton;
+import se.claremont.autotest.common.gui.guistyle.TafDialog;
+import se.claremont.autotest.common.gui.guistyle.TafLabel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,42 +12,38 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class RunResultsDialogue {
 
     private String pathToSummaryReport;
 
-    public RunResultsDialogue(JFrame parent, int exitCode, String pathToSummaryReport, Font appFont){
+    public RunResultsDialogue(JFrame parent, int exitCode, String pathToSummaryReport){
         this.pathToSummaryReport = pathToSummaryReport;
+
         final URI link = getLink();
 
-        JDialog resultWindow = new JDialog(parent, "TAF - Run results", true);
+        TafDialog resultWindow = new TafDialog(parent, "TAF - Run results", true);
         resultWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         resultWindow.setName("RunResultWindow");
 
         Container pane = resultWindow.getContentPane();
         pane.setName("RunResultPanel");
-        pane.setLayout(new GridLayout(5,1));
+        pane.setLayout(new GridLayout(5,1, 50, 50));
 
-        JLabel headline = new JLabel("Test run results overview");
-        headline.setFont(appFont);
-        headline.setName("Headline");
-
-        JLabel resultsLabel = new JLabel("Test run exit code: ");
-        resultsLabel.setFont(appFont);
-        resultsLabel.setName("ExitCodeLabel");
-
-        JLabel resultsText = new JLabel(String.valueOf(exitCode));
-        resultsText.setFont(appFont);
+        TafLabel resultsText = new TafLabel(String.valueOf(exitCode));
         resultsText.setName("TestRunExitCode");
 
-        JButton linkButton = new JButton("Summary report");
+        TafButton linkButton = new TafButton("Summary report");
         linkButton.setName("LinkButton");
-        linkButton.setFont(appFont);
+        if(pathToSummaryReport.equals("null_summary.html") || !Files.exists(Paths.get(pathToSummaryReport))){
+            linkButton.setEnabled(false);
+        }
         linkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(link == null){
+                if(link != null){
                     try {
                         Desktop.getDesktop().browse(link);
                     } catch (IOException e1) {
@@ -52,20 +53,12 @@ public class RunResultsDialogue {
             }
         });
 
-        JButton closeButton = new JButton("Close");
-        closeButton.setName("CloseButton");
-        closeButton.setFont(appFont);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resultWindow.dispose();
-            }
-        });
-        pane.add(headline);
-        pane.add(resultsLabel);
+
+        pane.add(new TafLabel("Test run results overview"));
+        pane.add(new TafLabel("Test run exit code: "));
         pane.add(resultsText);
         pane.add(linkButton);
-        pane.add(closeButton);
+        pane.add(new TafCloseButton(resultWindow));
         resultWindow.pack();
         resultWindow.setVisible(true);
     }
@@ -73,7 +66,7 @@ public class RunResultsDialogue {
     private URI getLink(){
         URI link = null;
         try {
-            link = new URI(pathToSummaryReport);
+            link = new URI("file://"  + pathToSummaryReport.replace("\\", "/"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

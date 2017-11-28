@@ -1,12 +1,13 @@
-package se.claremont.autotest.common.gui;
+package se.claremont.autotest.common.gui.guistyle;
+
+import se.claremont.autotest.common.support.StringManagement;
+import se.claremont.autotest.common.support.SupportMethods;
 
 import javax.swing.*;
 
-public class TafButton extends JButton {
+public class TafButton extends TafButtonType {
 
     public TafButton(String label){
-        this.setText(label);
-        this.setFont(Style.AppFont.getInstance());
-        this.setName(label.replace(" ", "") + "Button");
+        super(label);
     }
 }

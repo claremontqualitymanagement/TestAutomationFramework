@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.gui.runtab;
 
 import org.junit.Test;
+import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.testset.TestSet;
 
 import javax.swing.*;
@@ -21,42 +23,42 @@ import java.util.zip.ZipInputStream;
 
 public class TestClassPickerDialogue {
 
-    JFrame classPickerWindow;
+    TafFrame classPickerWindow;
     Set<Class> identifiedClasses = new HashSet<>();
     private JCheckBox showAllClassesWithTestsCheckbox = new JCheckBox("Show all classes with tests, not only TestSets");
     private DefaultListModel listModel = new DefaultListModel();
     private JList testClasses = new JList(listModel);
     private JScrollPane listScroller = new JScrollPane(testClasses);
-    private Font appFont;
 
-    public TestClassPickerDialogue(Font appFont, RunTestTabPanel parent) {
-        this.appFont = appFont;
-        classPickerWindow = new JFrame();
+    public TestClassPickerDialogue(RunTestTabPanel parent) {
+
+        classPickerWindow = new TafFrame();
         classPickerWindow.setName("ClassPickerWindow");
         classPickerWindow.setTitle("TAF - Test class picker");
-
         GroupLayout groupLayout = new GroupLayout(classPickerWindow.getContentPane());
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
         classPickerWindow.setLayout(groupLayout);
         classPickerWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Container pane = classPickerWindow.getContentPane();
         pane.setName("TestClassPickerContentPanel");
 
-        JLabel headline = new JLabel("Pick your test classes");
-        headline.setName("HeadlineLabel");
-        headline.setFont(appFont);
+        TafLabel headline = new TafLabel("Pick your test classes");
 
         testClasses.setName("TestClassesList");
         testClasses.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         testClasses.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         testClasses.setVisibleRowCount(-1);
-        testClasses.setFont(appFont);
+        testClasses.setFont(AppFont.getInstance());
         reloadTestClassList();
 
         listScroller.setName("TestClassesListPanel");
 
-        showAllClassesWithTestsCheckbox.setFont(appFont);
+        showAllClassesWithTestsCheckbox.setFont(AppFont.getInstance());
         showAllClassesWithTestsCheckbox.setName("ShowAllTestsCheckbox");
+        showAllClassesWithTestsCheckbox.setBackground(Gui.colorTheme.backgroundColor);
+        showAllClassesWithTestsCheckbox.setForeground(Gui.colorTheme.textColor);
         showAllClassesWithTestsCheckbox.setSelected(false);
         showAllClassesWithTestsCheckbox.addActionListener(new ActionListener() {
             @Override
@@ -65,16 +67,14 @@ public class TestClassPickerDialogue {
             }
         });
 
-        JButton fileChooserButton = new JButton("Pick file...");
-        fileChooserButton.setName("AddFileButton");
-        fileChooserButton.setFont(appFont);
+        TafButton fileChooserButton = new TafButton("Pick file...");
         fileChooserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser window = new JFileChooser();
                 window.setName("FilePickerWindow");
                 window.setDialogTitle("TAF - File picker");
-                window.setFont(appFont);
+                window.setFont(AppFont.getInstance());
                 try {
                     window.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
                 } catch (URISyntaxException e1) {
@@ -89,19 +89,9 @@ public class TestClassPickerDialogue {
             }
         });
 
-        JButton closeButton = new JButton("Cancel");
-        closeButton.setName("CloseButton");
-        closeButton.setFont(appFont);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                classPickerWindow.dispose();
-            }
-        });
+        TafCloseButton closeButton = new TafCloseButton(classPickerWindow);
 
-        JButton saveButton = new JButton("Save");
-        saveButton.setName("SaveButton");
-        saveButton.setFont(appFont);
+        TafButton saveButton = new TafButton("Save");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -155,16 +145,18 @@ public class TestClassPickerDialogue {
         Object[] classes = getTestClassesList().toArray();
         listModel.clear();
         testClasses.setForeground(Color.black);
+        testClasses.setFont(AppFont.getInstance());
         testClasses.setEnabled(true);
         if (classes.length == 0) {
             classes = new String[]{" < no classes with tests identified > "};
-            testClasses.setFont(new Font(appFont.getFontName(), Font.ITALIC, appFont.getSize()));
+            testClasses.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
             testClasses.setForeground(Color.gray);
             testClasses.setEnabled(false);
         }
         for (Object o : classes) {
             listModel.addElement(o);
         }
+
         int width = listScroller.getWidth();
         int height = listScroller.getHeight();
         if (height > Toolkit.getDefaultToolkit().getScreenSize().height) {

@@ -2,6 +2,7 @@ package se.claremont.autotest.common.gui.runtab;
 
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+import se.claremont.autotest.common.gui.guistyle.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,59 +11,53 @@ import java.awt.event.ActionListener;
 
 public class DiagnosticsRunResultsDialogue {
 
-    public DiagnosticsRunResultsDialogue(JFrame applicationWindow, Font appFont, Result result) {
-        JDialog resultFrame = new JDialog(applicationWindow, "Test results", true);
+    public DiagnosticsRunResultsDialogue(JFrame applicationWindow, Result result) {
+
+        TafDialog resultFrame = new TafDialog(applicationWindow, "Test results", true);
         resultFrame.setName("DiagnosticsRunResultsWindow");
         resultFrame.setTitle("TAF - Diagnostic run results");
         resultFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JPanel resultPanel = new JPanel();
-        resultPanel.setName("DiagnosticsRunResultsPanel");
-        resultPanel.setFont(appFont);
-        resultPanel.setLayout(new GridLayout(result.getFailureCount() + 2, 2));
-        JLabel timeLabel = new JLabel("Execution time: ");
-        timeLabel.setName("ExecutionDurationLabel");
-        timeLabel.setFont(appFont);
-        JLabel timeText = new JLabel(String.valueOf(result.getRunTime()) + " milliseconds");
-        timeText.setName("ExecutionDurationText");
-        timeText.setFont(appFont);
+
+        TafPanel resultPanel = new TafPanel("DiagnosticsRunResultsPanel");
+        resultPanel.setLayout(new GridLayout(result.getFailureCount() + 2, 2, 50, 50));
+
+        TafLabel timeLabel = new TafLabel("Execution time: ");
         resultPanel.add(timeLabel);
+
+        TafLabel timeText = new TafLabel(String.valueOf(result.getRunTime()) + " milliseconds");
+        timeText.setName("ExecutionDurationText");
         resultPanel.add(timeText);
-        JLabel testCaseCountLabel = new JLabel("Test case count: ");
-        testCaseCountLabel.setName("TestCaseCountLabel");
-        testCaseCountLabel.setFont(appFont);
+
+        TafLabel testCaseCountLabel = new TafLabel("Test case count: ");
         resultPanel.add(testCaseCountLabel);
-        JLabel testCaseCountText = new JLabel(String.valueOf(result.getRunCount()));
+
+        TafLabel testCaseCountText = new TafLabel(String.valueOf(result.getRunCount()));
         testCaseCountText.setName("TestCaseCountTextField");
-        testCaseCountText.setFont(appFont);
         resultPanel.add(testCaseCountText);
-        JLabel failedCountLabel = new JLabel("Failed test case count: ");
-        failedCountLabel.setName("FailedTestCaseCountLabel");
-        failedCountLabel.setFont(appFont);
+
+        TafLabel failedCountLabel = new TafLabel("Failed test case count: ");
         resultPanel.add(failedCountLabel);
-        JLabel failedTestCountText = new JLabel(String.valueOf(result.getFailureCount()));
+
+        TafLabel failedTestCountText = new TafLabel(String.valueOf(result.getFailureCount()));
         failedTestCountText.setName("FailedTestCaseCountText");
-        failedTestCountText.setFont(appFont);
         resultPanel.add(failedTestCountText);
+
         int failureCounter = 0;
         for (Failure failure : result.getFailures()) {
             failureCounter++;
-            JLabel failureLabel = new JLabel("Failure" + failureCounter);
+            TafLabel failureLabel = new TafLabel("Failure" + failureCounter);
             failedCountLabel.setName("FailureLabel" + failureCounter);
             resultPanel.add(failedCountLabel);
-            JLabel failureText = new JLabel(failure.getMessage());
+            TafLabel failureText = new TafLabel(failure.getMessage());
             failureText.setName("FailureText" + failureCounter);
             resultPanel.add(failureText);
         }
-        JButton closeButton = new JButton("Close");
-        closeButton.setName("CloseButton");
-        closeButton.setFont(appFont);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resultFrame.dispose();
-            }
-        });
+
+        TafCloseButton closeButton = new TafCloseButton(resultFrame);
         resultPanel.add(closeButton);
+
+        resultFrame.getRootPane().setDefaultButton(closeButton);
+        closeButton.requestFocus();
         resultFrame.add(resultPanel);
         resultFrame.pack();
         resultFrame.setVisible(true);
