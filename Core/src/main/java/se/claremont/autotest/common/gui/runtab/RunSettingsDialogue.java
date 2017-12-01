@@ -150,7 +150,7 @@ public class RunSettingsDialogue {
         groupLayout.setAutoCreateGaps(true);
 
         groupLayout.setHorizontalGroup(
-                groupLayout.createParallelGroup()
+                groupLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(runSettingsPanel)
                         .addComponent(addValueButton)
                         .addGroup(groupLayout.createSequentialGroup()

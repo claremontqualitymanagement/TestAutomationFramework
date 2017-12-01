@@ -2,6 +2,7 @@ package se.claremont.autotest.common.gui.guistyle;
 
 import se.claremont.autotest.common.reporting.UxColors;
 
+import javax.swing.*;
 import java.awt.*;
 
 public abstract class TafGuiColor {

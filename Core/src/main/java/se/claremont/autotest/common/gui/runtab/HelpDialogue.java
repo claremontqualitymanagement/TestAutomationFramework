@@ -45,7 +45,7 @@ public class HelpDialogue {
 
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
-                        .addGroup(groupLayout.createParallelGroup()
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                 .addComponent(textPane)
                                 .addComponent(closeButton)
                         )

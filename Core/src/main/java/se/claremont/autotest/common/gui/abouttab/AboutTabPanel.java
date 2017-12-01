@@ -11,6 +11,7 @@ import se.claremont.autotest.common.testrun.TestRun;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -82,7 +83,7 @@ public class AboutTabPanel implements IGuiTab {
         colorThemeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                //UIManager.setLookAndFeel();
+                //UIManager.setLookAndFeel(new MetalLookAndFeel());
                 switch (colorThemeSpinner.getValue().toString()){
                     case "TAF original":
                         Gui.colorTheme = new TafGuiColorOriginal();

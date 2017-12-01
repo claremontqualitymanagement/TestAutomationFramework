@@ -2998,7 +2998,8 @@ public class WebInteractionMethods  {
 
         List<WebElement> visibleElementsList = new ArrayList<>();
         for(WebElement webElement : webElements){
-            if(webElement.isDisplayed()) visibleElementsList.add(webElement);
+            if(webElement.isDisplayed())
+                visibleElementsList.add(webElement);
         }
 
         if(visibleElementsList.size() == 0){
