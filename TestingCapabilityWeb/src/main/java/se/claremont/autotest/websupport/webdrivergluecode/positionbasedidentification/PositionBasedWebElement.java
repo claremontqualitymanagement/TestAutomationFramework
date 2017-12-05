@@ -17,7 +17,7 @@ import java.util.List;
  * Created by jordam on 2016-10-02.
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class PositionBasedWebElement implements se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement {
+public class PositionBasedWebElement implements PositionBasedGuiElement {
     private Integer left = null;
     private Integer right = null;
     private Integer top = null;

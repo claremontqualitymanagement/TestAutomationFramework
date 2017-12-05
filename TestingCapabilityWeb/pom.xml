@@ -64,6 +64,10 @@
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>Core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

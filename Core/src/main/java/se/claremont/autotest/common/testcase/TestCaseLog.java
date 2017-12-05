@@ -102,7 +102,8 @@ public class TestCaseLog {
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+            //if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+            if(isAnnotadedAsJUnitTest(stackTraceElements[i])){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
                 break;
@@ -119,7 +120,8 @@ public class TestCaseLog {
         String testStep = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+            //if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+            if(isAnnotadedAsJUnitTest(stackTraceElements[i])){
 
                 testStep = stackTraceElements[i-1].getMethodName();
                 //testStepClassName = stackTraceElements[i-1].getClassName();
@@ -280,7 +282,7 @@ public class TestCaseLog {
                 "If you want to add this error as a known error you should enter the line below to your test case:<br><pre>     currentTestCase.addKnownError(\"-- Your description of this error --\", \".*" + pureTextMessage + ".*\");</pre>");
     }
 
-    private boolean isAnnotadedAsJUnitTest(StackTraceElement ste){
+    private static boolean isAnnotadedAsJUnitTest(StackTraceElement ste){
         try{
             Method m = getMethod(ste);
             if(m == null) return false;
@@ -291,7 +293,6 @@ public class TestCaseLog {
     }
 
     private static Method getMethod(final StackTraceElement ste) throws ClassNotFoundException{
-        final Thread t = Thread.currentThread();
         final String methodName = ste.getMethodName();
         final String className = ste.getClassName();
         Class<?> kls = Class.forName(className);

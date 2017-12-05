@@ -208,10 +208,14 @@ public class TestClassPickerDialogue {
                         try {
                             String className = entry.getName().replace("/", ".").replace("\\", ".");
                             className = className.substring(0, className.length() - ".class".length() );
-                            Class klass = ClassLoader.getSystemClassLoader().loadClass(className);
+                            Class<?> klass = ClassLoader.getSystemClassLoader().loadClass(className);
+                            //Class<?> klass = Class.forName(className);
                             identifiedClasses.add(klass);
                         }catch (NoClassDefFoundError ignored ){
-                        }catch (Exception ignored) {}
+                            System.out.println(ignored.toString());
+                        }catch (Exception ignored) {
+                            System.out.println(ignored.toString());
+                        }
                     }
                 }
             } catch (Exception e) {
