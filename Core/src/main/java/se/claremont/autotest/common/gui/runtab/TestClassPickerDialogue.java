@@ -6,6 +6,7 @@ import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.testset.TestSet;
 
 import javax.swing.*;
+import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,15 +109,10 @@ public class TestClassPickerDialogue {
             }
         });
 
-        pane.add(headline);
-        pane.add(listScroller);
-        pane.add(closeButton);
-        pane.add(saveButton);
-
-
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(headline)
                                 .addComponent(listScroller)
                                 .addComponent(showAllClassesWithTestsCheckbox)
                                 .addGroup(groupLayout.createSequentialGroup()
@@ -129,6 +125,7 @@ public class TestClassPickerDialogue {
 
         groupLayout.setVerticalGroup(
                 groupLayout.createSequentialGroup()
+                        .addComponent(headline)
                         .addComponent(listScroller)
                         .addComponent(showAllClassesWithTestsCheckbox)
                         .addGroup(groupLayout.createParallelGroup()
@@ -139,6 +136,16 @@ public class TestClassPickerDialogue {
         );
 
         classPickerWindow.pack();
+
+        if(classPickerWindow.getHeight() < Toolkit.getDefaultToolkit().getScreenSize().height /2)
+            classPickerWindow.setSize(classPickerWindow.getWidth(), Toolkit.getDefaultToolkit().getScreenSize().height/2);
+        if(classPickerWindow.getWidth() < Toolkit.getDefaultToolkit().getScreenSize().width /2)
+            classPickerWindow.setSize(Toolkit.getDefaultToolkit().getScreenSize().width /2, classPickerWindow.getHeight());
+        if(classPickerWindow.getHeight() >= Toolkit.getDefaultToolkit().getScreenSize().height)
+            classPickerWindow.setSize(classPickerWindow.getWidth(), Toolkit.getDefaultToolkit().getScreenSize().height * 4/5);
+        if(classPickerWindow.getWidth() >= Toolkit.getDefaultToolkit().getScreenSize().width)
+            classPickerWindow.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 4/5, classPickerWindow.getHeight());
+
         classPickerWindow.setVisible(true);
 
     }
