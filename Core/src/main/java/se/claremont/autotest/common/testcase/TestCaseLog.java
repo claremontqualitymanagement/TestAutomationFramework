@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.claremont.autotest.common.logging.ConsoleLogLevel;
@@ -15,6 +16,7 @@ import se.claremont.autotest.common.logging.logmessage.TextLogMessagePart;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testrun.TestRun;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -45,23 +47,6 @@ public class TestCaseLog {
         TestCaseLog.testCaseMethodName = testCaseMethodName;
         maxNumberOfCharactersInLogLevelNames = getMaxNumberOfCharactersInLogLevelNames();
         this.testCaseName = testCaseName;
-    }
-
-    /**
-     * Calculates the number of characters in the log level name with the longest name of all log levels.
-     * Used to fill in space characters to even the text based mono type font style log.
-     *
-     * @return Returns the maximum number of characters in the names of all log levels
-     */
-    private int getMaxNumberOfCharactersInLogLevelNames(){
-        int max = 0;
-        for(LogLevel levelName : LogLevel.values()){
-            int current = levelName.toString().length();
-            if(current > max){
-                max = current;
-            }
-        }
-        return max;
     }
 
     /**
@@ -130,11 +115,12 @@ public class TestCaseLog {
         addKnownErrorSuggestionIfApplicable(logLevel, message);
     }
 
-    public static String getCurrentTestStepName(String testCaseName){
+    public static String getCurrentTestStepName(){
         String testStep = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
             if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+
                 testStep = stackTraceElements[i-1].getMethodName();
                 //testStepClassName = stackTraceElements[i-1].getClassName();
             }
@@ -166,7 +152,8 @@ public class TestCaseLog {
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+//            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+            if(isAnnotadedAsJUnitTest(stackTraceElements[i])){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
             }
@@ -191,7 +178,8 @@ public class TestCaseLog {
         String testStepClassName = "Framework actions";
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for(int i= 0; i < stackTraceElements.length; i++){
-            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+//            if(stackTraceElements[i].getMethodName().equals(testCaseMethodName)){
+            if(isAnnotadedAsJUnitTest(stackTraceElements[i])){
                 testStep = stackTraceElements[i-1].getMethodName();
                 testStepClassName = stackTraceElements[i-1].getClassName();
             }
@@ -202,33 +190,6 @@ public class TestCaseLog {
         addKnownErrorSuggestionIfApplicable(logLevel, pureTextMessage);
     }
 
-    private void outputLogPost(LogPost logPost){
-        if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.NONE))return;
-        if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
-            //ColoredPrinter cp = new ColoredPrinter.Builder(1, false).attribute(Ansi.Attribute.BOLD).foreground(Ansi.FColor.BLUE).build();
-            //cp.print(logPost.toString());
-            System.out.println(logPost.toString());
-            return;
-        } else if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.MODERATE) &&
-                (logPost.logLevel.equals(LogLevel.DEBUG) ||
-                 logPost.logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO) ||
-                 logPost.logLevel.equals(LogLevel.INFO))
-                ){
-            return;
-        }
-        System.out.println(logPost.toString());
-    }
-
-    private void addKnownErrorSuggestionIfApplicable(LogLevel logLevel, String pureTextMessage){
-        if(logLevel.equals(LogLevel.DEBUG) ||
-                logLevel.equals(LogLevel.EXECUTED) ||
-                logLevel.equals(LogLevel.VERIFICATION_PASSED) ||
-                logLevel.equals(LogLevel.INFO) ||
-                logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO)) return;
-        logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
-                "If you want to add this error as a known error you should enter the line below to your test case:" + System.lineSeparator() + System.lineSeparator() + "      currentTestCase.addKnownError(\"<Your description of this error>\", \".*" + pureTextMessage + ".*\");" + System.lineSeparator(),
-                "If you want to add this error as a known error you should enter the line below to your test case:<br><pre>     currentTestCase.addKnownError(\"-- Your description of this error --\", \".*" + pureTextMessage + ".*\");</pre>");
-    }
     /**
      * Method to get the testCaseLog posts considered as non-successful from the testCaseLog
      *
@@ -274,5 +235,72 @@ public class TestCaseLog {
         return logSectionsList;
     }
 
+    /**
+     * Calculates the number of characters in the log level name with the longest name of all log levels.
+     * Used to fill in space characters to even the text based mono type font style log.
+     *
+     * @return Returns the maximum number of characters in the names of all log levels
+     */
+    private int getMaxNumberOfCharactersInLogLevelNames(){
+        int max = 0;
+        for(LogLevel levelName : LogLevel.values()){
+            int current = levelName.toString().length();
+            if(current > max){
+                max = current;
+            }
+        }
+        return max;
+    }
+
+    private void outputLogPost(LogPost logPost){
+        if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.NONE))return;
+        if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.ERRORS) && logPost.isFail()){
+            //ColoredPrinter cp = new ColoredPrinter.Builder(1, false).attribute(Ansi.Attribute.BOLD).foreground(Ansi.FColor.BLUE).build();
+            //cp.print(logPost.toString());
+            System.out.println(logPost.toString());
+            return;
+        } else if(TestRun.getConsoleLogLevel().equals(ConsoleLogLevel.MODERATE) &&
+                (logPost.logLevel.equals(LogLevel.DEBUG) ||
+                        logPost.logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO) ||
+                        logPost.logLevel.equals(LogLevel.INFO))
+                ){
+            return;
+        }
+        System.out.println(logPost.toString());
+    }
+
+    private void addKnownErrorSuggestionIfApplicable(LogLevel logLevel, String pureTextMessage){
+        if(logLevel.equals(LogLevel.DEBUG) ||
+                logLevel.equals(LogLevel.EXECUTED) ||
+                logLevel.equals(LogLevel.VERIFICATION_PASSED) ||
+                logLevel.equals(LogLevel.INFO) ||
+                logLevel.equals(LogLevel.DEVIATION_EXTRA_INFO)) return;
+        logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO,
+                "If you want to add this error as a known error you should enter the line below to your test case:" + System.lineSeparator() + System.lineSeparator() + "      currentTestCase.addKnownError(\"<Your description of this error>\", \".*" + pureTextMessage + ".*\");" + System.lineSeparator(),
+                "If you want to add this error as a known error you should enter the line below to your test case:<br><pre>     currentTestCase.addKnownError(\"-- Your description of this error --\", \".*" + pureTextMessage + ".*\");</pre>");
+    }
+
+    private boolean isAnnotadedAsJUnitTest(StackTraceElement ste){
+        try{
+            return (getMethod(ste).isAnnotationPresent(Test.class));
+        }catch (Exception ignored){ }
+        return false;
+    }
+
+    private static Method getMethod(final StackTraceElement ste) throws ClassNotFoundException{
+        final Thread t = Thread.currentThread();
+        final String methodName = ste.getMethodName();
+        final String className = ste.getClassName();
+        Class<?> kls = Class.forName(className);
+        do{
+            for(final Method candidate : kls.getDeclaredMethods()){
+                if(candidate.getName().equals(methodName)){
+                    return candidate;
+                }
+            }
+            kls = kls.getSuperclass();
+        } while(kls != null);
+        return null;
+    }
 
 }

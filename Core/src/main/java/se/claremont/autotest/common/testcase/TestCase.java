@@ -241,7 +241,7 @@ public class TestCase {
     }
 
     public String getCurrentTestStepName(){
-        return TestCaseLog.getCurrentTestStepName(testName);
+        return TestCaseLog.getCurrentTestStepName();
     }
 
     @SuppressWarnings("unused")

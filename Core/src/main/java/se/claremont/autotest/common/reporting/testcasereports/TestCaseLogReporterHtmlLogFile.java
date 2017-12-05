@@ -270,7 +270,7 @@ public class TestCaseLogReporterHtmlLogFile implements TestCaseLogReporter {
                 .append("      <br>").append(LF)
                 .append("      <br>").append(LF)
                 .append("      <span class=\"pagetitle\">TAF test case results log</span>").append(LF)
-                .append("      <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">").append(helpText()).append("</span>").append(LF)
+                .append("      <span class=\"pagetitle\" id=\"help\">(?)<span id=\"helpText\">").append(helpText()).append("</span></span>").append(LF)
                 .append(status()).append("<br>").append(LF)
                 .append("      <h1>Test results for test case '").append(testCaseResult.testName).append("'</h1>").append(LF)
                 .append("      <p>").append(LF)

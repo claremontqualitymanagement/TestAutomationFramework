@@ -8,7 +8,7 @@ import se.claremont.autotest.common.support.SupportMethods;
  * Created by jordam on 2017-01-28.
  */
 @SuppressWarnings("WeakerAccess")
-class DataCell {
+class   DataCell {
     final String correspontingHeadline;
     final String dataContent;
     DataCellEvaluationStatus dataCellEvaluationStatus = DataCellEvaluationStatus.UNEVALUATED;
