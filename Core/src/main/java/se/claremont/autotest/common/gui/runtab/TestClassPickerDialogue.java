@@ -14,8 +14,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -191,8 +193,25 @@ public class TestClassPickerDialogue {
             e.printStackTrace();
         }
     }
+    private static void addURLToSystemClassLoader(URL url){
+        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
+
+        try {
+            Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+            method.setAccessible(true);
+            method.invoke(systemClassLoader, new Object[]{url});
+        } catch (Throwable t) {
+            System.out.println("Error when adding url to system ClassLoader ");
+        }
+    }
 
     private void addClassesFromFileToIdentifiedClassesList(String filePath){
+        try {
+            addURLToSystemClassLoader(new File(filePath).toURI().toURL());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         File file = new File(filePath);
         if (file.isDirectory()) return;
         if (file.getName().endsWith(".class") || file.getName().endsWith(".java")) {
@@ -208,7 +227,8 @@ public class TestClassPickerDialogue {
                         try {
                             String className = entry.getName().replace("/", ".").replace("\\", ".");
                             className = className.substring(0, className.length() - ".class".length() );
-                            Class<?> klass = ClassLoader.getSystemClassLoader().loadClass(className);
+                            Class klass = Class.forName (className, true, Thread.currentThread().getContextClassLoader());
+                            //Class<?> klass = ClassLoader.getSystemClassLoader().loadClass(className);
                             //Class<?> klass = Class.forName(className);
                             identifiedClasses.add(klass);
                         }catch (NoClassDefFoundError ignored ){
