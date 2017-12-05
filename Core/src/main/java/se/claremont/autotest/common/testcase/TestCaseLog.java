@@ -282,7 +282,10 @@ public class TestCaseLog {
 
     private boolean isAnnotadedAsJUnitTest(StackTraceElement ste){
         try{
-            return (getMethod(ste).isAnnotationPresent(Test.class));
+            Method m = getMethod(ste);
+            if(m == null) return false;
+            m.setAccessible(true);
+            return (m.isAnnotationPresent(Test.class));
         }catch (Exception ignored){ }
         return false;
     }
@@ -294,6 +297,7 @@ public class TestCaseLog {
         Class<?> kls = Class.forName(className);
         do{
             for(final Method candidate : kls.getDeclaredMethods()){
+                candidate.setAccessible(true);
                 if(candidate.getName().equals(methodName)){
                     return candidate;
                 }
