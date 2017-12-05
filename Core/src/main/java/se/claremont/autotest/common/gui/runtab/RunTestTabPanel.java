@@ -28,6 +28,7 @@ public class RunTestTabPanel implements IGuiTab {
 
     private TafLabel runNameLabel = new TafLabel("Test run name");
     private JTextField runNameText = new JTextField();
+    private String disregardedDefaultRunNameString = " <optional specific test run name> ";
     static List<String> chosenTestClasses = new ArrayList<>();
 
     private TafLabel executionModeLabel = new TafLabel("Execution mode");
@@ -251,19 +252,39 @@ public class RunTestTabPanel implements IGuiTab {
         });
     }
 
-    private void prepareRunName() {
-
-        runNameLabel.setFont(AppFont.getInstance());
-
+    private void initiateRunNameFieldWhenActivated(){
+        runNameText.setText("");
         runNameText.setFont(AppFont.getInstance());
-        runNameText.setName("RunNameTextField");
         runNameText.setForeground(Gui.colorTheme.textColor);
-        runNameText.setText(new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()));
+    }
 
-        runNameText.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                updateCliCommandText("");
+    private class TafFocusListener implements FocusListener{
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            initiateRunNameFieldWhenActivated();
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            if(runNameText.getText().equals("")){
+                initiateRunNameTextFieldToDefault();
             }
+        }
+    }
+
+    private void initiateRunNameTextFieldToDefault(){
+        runNameText.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
+        runNameText.setName("RunNameTextField");
+        runNameText.setForeground(Gui.colorTheme.disabledColor);
+        runNameText.setText(disregardedDefaultRunNameString);
+    }
+
+    private void prepareRunName() {
+        initiateRunNameTextFieldToDefault();
+        runNameText.addFocusListener(new TafFocusListener());
+        runNameText.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) { updateCliCommandText(""); }
 
             public void removeUpdate(DocumentEvent e) {
                 updateCliCommandText("");
@@ -300,8 +321,11 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     String cliArguments(){
-        return " runName=" + runNameText.getText() +
-                runSettingsChangesFromDefault() + " " + String.join(" ", chosenTestClasses);
+        String args = " " + runSettingsChangesFromDefault() + " " + String.join(" ", chosenTestClasses);
+        if(!runNameText.getText().equals(disregardedDefaultRunNameString)){
+            args += " runName=" + runNameText.getText();
+        }
+        return args;
     }
 
     private String javaJarPath(){

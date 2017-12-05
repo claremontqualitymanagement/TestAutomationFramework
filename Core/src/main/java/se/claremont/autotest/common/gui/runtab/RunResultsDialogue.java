@@ -1,9 +1,7 @@
 package se.claremont.autotest.common.gui.runtab;
 
-import se.claremont.autotest.common.gui.guistyle.TafButton;
-import se.claremont.autotest.common.gui.guistyle.TafCloseButton;
-import se.claremont.autotest.common.gui.guistyle.TafDialog;
-import se.claremont.autotest.common.gui.guistyle.TafLabel;
+import se.claremont.autotest.common.gui.guistyle.*;
+import se.claremont.autotest.common.support.ColoredConsolePrinter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +17,7 @@ public class RunResultsDialogue {
 
     private String pathToSummaryReport;
 
-    public RunResultsDialogue(JFrame parent, int exitCode, String pathToSummaryReport){
+    public RunResultsDialogue(JFrame parent, int exitCode, String pathToSummaryReport, String testOutput){
         this.pathToSummaryReport = pathToSummaryReport;
 
         final URI link = getLink();
@@ -30,10 +28,27 @@ public class RunResultsDialogue {
 
         Container pane = resultWindow.getContentPane();
         pane.setName("RunResultPanel");
-        pane.setLayout(new GridLayout(5,1, 50, 50));
+        GroupLayout groupLayout = new GroupLayout(pane);
+        pane.setLayout(groupLayout);
+        //pane.setLayout(new GridLayout(5,1, 50, 50));
 
+        TafLabel headline = new TafLabel("Test run results overview");
+
+        TafLabel exitCodeLabel = new TafLabel("Test run exit code: ");
         TafLabel resultsText = new TafLabel(String.valueOf(exitCode));
         resultsText.setName("TestRunExitCode");
+
+        JTextArea testOutputTextArea = new JTextArea();
+        testOutputTextArea.setText(ColoredConsolePrinter.removeFormattingFromString(testOutput));
+        testOutputTextArea.setFont(new Font("monospaced", Font.PLAIN, AppFont.getInstance().getSize() * 2/3));
+        testOutputTextArea.setForeground(TafGuiColor.textColor);
+        testOutputTextArea.setEditable(false);
+        testOutputTextArea.setLineWrap(false);
+        testOutputTextArea.setName("TestOutputTextArea");
+        JScrollPane testOutputScrollPane = new JScrollPane(testOutputTextArea);
+        testOutputScrollPane.createHorizontalScrollBar();
+        testOutputScrollPane.createVerticalScrollBar();
+        testOutputScrollPane.setName("TestOutputScrollPane");
 
         TafButton linkButton = new TafButton("Summary report");
         linkButton.setName("LinkButton");
@@ -53,13 +68,47 @@ public class RunResultsDialogue {
             }
         });
 
+        TafCloseButton closeButton = new TafCloseButton(resultWindow);
 
-        pane.add(new TafLabel("Test run results overview"));
-        pane.add(new TafLabel("Test run exit code: "));
-        pane.add(resultsText);
-        pane.add(linkButton);
-        pane.add(new TafCloseButton(resultWindow));
+        groupLayout.setHorizontalGroup(
+                groupLayout.createSequentialGroup()
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(headline)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(exitCodeLabel)
+                                        .addComponent(resultsText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                )
+                                .addComponent(testOutputScrollPane)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(linkButton)
+                                        .addComponent(closeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                )
+                        )
+        );
+        groupLayout.setVerticalGroup(
+                groupLayout.createSequentialGroup()
+                        .addComponent(headline)
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(exitCodeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(resultsText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        )
+                        .addComponent(testOutputScrollPane)
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(linkButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(closeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        )
+        );
+
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
+
         resultWindow.pack();
+        if(resultWindow.getHeight() >= Toolkit.getDefaultToolkit().getScreenSize().height){
+            resultWindow.setSize(resultWindow.getWidth(), Toolkit.getDefaultToolkit().getScreenSize().height * 4/5);
+        }
+        if(resultWindow.getWidth() >= Toolkit.getDefaultToolkit().getScreenSize().width){
+            resultWindow.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 4/5, resultWindow.getHeight() * 4/5);
+        }
         resultWindow.setVisible(true);
     }
 
