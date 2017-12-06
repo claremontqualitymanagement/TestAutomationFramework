@@ -1,9 +1,6 @@
 package se.claremont.autotest.common.gui.createtesttab;
 
-import se.claremont.autotest.common.gui.guistyle.AppFont;
-import se.claremont.autotest.common.gui.guistyle.TafButton;
-import se.claremont.autotest.common.gui.guistyle.TafLabel;
-import se.claremont.autotest.common.gui.guistyle.TafPanel;
+import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 
 import javax.imageio.ImageIO;
@@ -17,17 +14,18 @@ import java.io.IOException;
 public class CreateTestTabPanel implements IGuiTab{
 
     private TafPanel tabPanel;
-    private TafButton declareApplicationButton = new TafButton("Declare application");
+    private TafCloseButton closeButton;
 
-    public CreateTestTabPanel(){
-
+    public CreateTestTabPanel(TafFrame parentFrame){
+        closeButton = new TafCloseButton(parentFrame);
         tabPanel = new TafPanel("CreateTestPanel");
         GroupLayout groupLayout = new GroupLayout(tabPanel);
         tabPanel.setLayout(new GridLayout(2, 1));
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
 
-        TafLabel headline = new TafLabel("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
+        JTextArea headline = new JTextArea("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
+        headline.setLineWrap(true);
         headline.setName("TabText");
 
         BufferedImage image = null;
@@ -38,15 +36,9 @@ public class CreateTestTabPanel implements IGuiTab{
         }
         //ImagePanel imagePanel = new ImagePanel(image);
         JLabel logoImage = new JLabel(new ImageIcon(image));
-        declareApplicationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DeclareApplicationDialog declareApplicationDialog = new DeclareApplicationDialog();
-            }
-        });
         tabPanel.add(logoImage);
         tabPanel.add(headline);
-        tabPanel.add(declareApplicationButton);
+        tabPanel.add(closeButton);
         tabPanel.setVisible(true);
     }
 

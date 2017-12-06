@@ -35,7 +35,7 @@ public class Gui extends TafFrame{
         PluginLoader pluginLoader = new PluginLoader();
         java.util.List<IGuiTab> panels = new ArrayList<>();
         panels.add(new RunTestTabPanel(this));
-        panels.add(new CreateTestTabPanel());
+        panels.add(new CreateTestTabPanel(this));
         panels.addAll(pluginLoader.getAccessibleGuiPluginTabs());
         panels.add(new AboutTabPanel(this));
         for(IGuiTab pluginTab : panels){
