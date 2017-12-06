@@ -48,26 +48,33 @@ public class RunSettingsDialogue {
 
         for (String key : TestRun.getSettings().keySet()) {
             runSettingsPanel.add(new TafLabel(key));
-            JTextField parameterValue = new JTextField(TestRun.getSettings().get(key));
+            TafTextField parameterValue = new TafTextField(" <" + key + "> ");
             parameterValue.setName(key.replace(" ", "") + "Value");
-            parameterValue.setFont(AppFont.getInstance());
-            parameterValue.setForeground(Gui.colorTheme.textColor);
+            //parameterValue.setFont(AppFont.getInstance());
+            //parameterValue.setForeground(Gui.colorTheme.textColor);
+            if(TestRun.getSettings().get(key) != null && TestRun.getSettings().get(key).length() != 0){
+                parameterValue.setText(TestRun.getSettings().get(key));
+            }
             parameterValue.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                    if(!parameterValue.isChangedFromDefault()) return;
                     TestRun.setCustomSettingsValue(key, parameterValue.getText());
                     mainWindow.updateCliCommandText("");
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                    if(!parameterValue.isChangedFromDefault()) return;
                     TestRun.setCustomSettingsValue(key, parameterValue.getText());
                     mainWindow.updateCliCommandText("");
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                    if(!parameterValue.isChangedFromDefault()) return;
                     TestRun.setCustomSettingsValue(key, parameterValue.getText());
                     mainWindow.updateCliCommandText("");
                 }
             });
+
             runSettingsPanel.add(parameterValue);
         }
 
