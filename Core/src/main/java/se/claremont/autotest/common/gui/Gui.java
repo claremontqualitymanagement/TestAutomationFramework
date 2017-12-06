@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.gui;
 
 import se.claremont.autotest.common.gui.abouttab.AboutTabPanel;
+import se.claremont.autotest.common.gui.createtesttab.CreateTestTabPanel;
 import se.claremont.autotest.common.gui.guistyle.TafFrame;
 import se.claremont.autotest.common.gui.guistyle.TafGuiColor;
 import se.claremont.autotest.common.gui.guistyle.TafGuiColorOriginal;
