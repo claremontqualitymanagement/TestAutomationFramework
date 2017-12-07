@@ -1,15 +1,16 @@
 package se.claremont.autotest.common.gui.runtab;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.testset.TestSet;
 
 import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,11 +28,9 @@ import java.util.zip.ZipInputStream;
 public class TestClassPickerDialogue {
 
     TafFrame classPickerWindow;
-    Set<Class> identifiedClasses = new HashSet<>();
     private JCheckBox showAllClassesWithTestsCheckbox = new JCheckBox("Show all classes with tests, not only TestSets");
-    private DefaultListModel listModel = new DefaultListModel();
-    private JList testClasses = new JList(listModel);
-    private JScrollPane listScroller = new JScrollPane(testClasses);
+    private ClassesList testClasses = new ClassesList();
+    private JScrollPane listClassesListPane;// = new JScrollPane(testClasses);
 
     public TestClassPickerDialogue(RunTestTabPanel parent) {
 
@@ -49,14 +48,7 @@ public class TestClassPickerDialogue {
 
         TafLabel headline = new TafLabel("Pick your test classes");
 
-        testClasses.setName("TestClassesList");
-        testClasses.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        testClasses.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        testClasses.setVisibleRowCount(-1);
-        testClasses.setFont(AppFont.getInstance());
-        reloadTestClassList();
-
-        listScroller.setName("TestClassesListPanel");
+        listClassesListPane.setName("TestClassesListPanel");
 
         showAllClassesWithTestsCheckbox.setFont(AppFont.getInstance());
         showAllClassesWithTestsCheckbox.setName("ShowAllTestsCheckbox");
@@ -66,7 +58,8 @@ public class TestClassPickerDialogue {
         showAllClassesWithTestsCheckbox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                reloadTestClassList();
+                testClasses.updateClassList();
+                testClasses.reloadTestClassList();
             }
         });
 
@@ -86,8 +79,7 @@ public class TestClassPickerDialogue {
                 int returnVal = window.showOpenDialog(getTestClassPickerDialogue());
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = window.getSelectedFile();
-                    addClassesFromFileToIdentifiedClassesList(file.getPath());
-                    reloadTestClassList();
+                    testClasses.addClassesFromFileToIdentifiedClassesList(file.getPath());
                 }
             }
         });
@@ -113,7 +105,7 @@ public class TestClassPickerDialogue {
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(headline)
-                                .addComponent(listScroller)
+                                .addComponent(listClassesListPane)
                                 .addComponent(showAllClassesWithTestsCheckbox)
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(fileChooserButton)
@@ -126,7 +118,7 @@ public class TestClassPickerDialogue {
         groupLayout.setVerticalGroup(
                 groupLayout.createSequentialGroup()
                         .addComponent(headline)
-                        .addComponent(listScroller)
+                        .addComponent(listClassesListPane)
                         .addComponent(showAllClassesWithTestsCheckbox)
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(fileChooserButton)
@@ -150,154 +142,214 @@ public class TestClassPickerDialogue {
 
     }
 
-    private void reloadTestClassList() {
-        Object[] classes = getTestClassesList().toArray();
-        listModel.clear();
-        testClasses.setForeground(Color.black);
-        testClasses.setFont(AppFont.getInstance());
-        testClasses.setEnabled(true);
-        if (classes.length == 0) {
-            classes = new String[]{" < no classes with tests identified > "};
-            testClasses.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
-            testClasses.setForeground(Color.gray);
-            testClasses.setEnabled(false);
-        }
-        for (Object o : classes) {
-            listModel.addElement(o);
-        }
-
-        int width = listScroller.getWidth();
-        int height = listScroller.getHeight();
-        if (height > Toolkit.getDefaultToolkit().getScreenSize().height) {
-            height = 9 * Toolkit.getDefaultToolkit().getScreenSize().height / 10;
-            listScroller.createVerticalScrollBar();
-        }
-        if (width > Toolkit.getDefaultToolkit().getScreenSize().width) {
-            width = 9 * Toolkit.getDefaultToolkit().getScreenSize().width / 10;
-            listScroller.createHorizontalScrollBar();
-        }
-        listScroller.setSize(width, height);
-    }
-
     private Component getTestClassPickerDialogue() {
         return this.classPickerWindow;
     }
 
-    private void updateClassList(){
-        addClassesFromFileToIdentifiedClassesList(theFileNameOfCurrentExecutingFile());
-        for (Class c : getClassesFromClassLoader()) {
-            identifiedClasses.add(c);
+
+
+
+    private class ClassesList extends JList{
+
+        private HashMap<String, List<String>> classes = new HashMap<>();
+        private DefaultListModel listModel;
+        Set<Class> identifiedClasses = new HashSet<>();
+
+        public ClassesList(){
+            this(new DefaultListModel());
         }
-        try {
-            List<URL> roots = Collections.list(ClassLoader.getSystemClassLoader().getResources(""));
-            for (URL url : roots) {
-                File root = new File(url.getPath());
-                for (File file : root.listFiles()) {
-                    addClassesFromFileToIdentifiedClassesList(file.getPath());
+
+        private ClassesList(DefaultListModel listModel){
+            super(listModel);
+            this.listModel = listModel;
+            setName("TestClassesList");
+            setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+            setLayoutOrientation(JList.HORIZONTAL_WRAP);
+            setVisibleRowCount(-1);
+            setFont(AppFont.getInstance());
+            reloadTestClassList();
+            ToolTipManager.sharedInstance().registerComponent(this);
+        }
+
+        public String getToolTipText(MouseEvent event){
+            Point p = event.getPoint();
+            int location = locationToIndex(p);
+            String className = (String) getModel().getElementAt(location);
+            return "<html><div style=\"font-size: " + AppFont.getInstance().getSize() + "\">Identified runnable test methods:</div><ul><li style=\"font-size: " + AppFont.getInstance().getSize() * 3/4 + "\">" + String.join("</li><li style=\"font-size: " + AppFont.getInstance().getSize() * 3/4 + "\">", classes.get(className)) + "</li></ul></html>";
+        }
+
+        public void reloadTestClassList() {
+            listModel.clear();
+            setForeground(Color.black);
+            setFont(AppFont.getInstance());
+            setEnabled(true);
+            if (classes.size() == 0) {
+                List<String> tooltipText = new ArrayList<>();
+                tooltipText.add(" - Select a file with tests to populate this list. - ");
+                classes.put(" < no classes with tests identified > ", tooltipText);
+                setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
+                setForeground(Color.gray);
+                setEnabled(false);
+            } else {
+                if(classes.containsKey(" < no classes with tests identified > "))
+                    classes.remove(" < no classes with tests identified > ");
+            }
+            for (String className : classes.keySet()) {
+                listModel.addElement(className);
+            }
+
+            if(listClassesListPane == null) listClassesListPane = new JScrollPane(this);
+            int width = listClassesListPane.getWidth();
+            int height = listClassesListPane.getHeight();
+            if (height > Toolkit.getDefaultToolkit().getScreenSize().height) {
+                height = 9 * Toolkit.getDefaultToolkit().getScreenSize().height / 10;
+                listClassesListPane.createVerticalScrollBar();
+            }
+            if (width > Toolkit.getDefaultToolkit().getScreenSize().width) {
+                width = 9 * Toolkit.getDefaultToolkit().getScreenSize().width / 10;
+                listClassesListPane.createHorizontalScrollBar();
+            }
+            listClassesListPane.setSize(width, height);
+        }
+
+        private void updateClassList(){
+            //addClassesFromFileToIdentifiedClassesList(theFileNameOfCurrentExecutingFile());
+            //for (Class c : getClassesFromClassLoader()) {
+            //    identifiedClasses.add(c);
+            //}
+            try {
+                List<URL> roots = Collections.list(ClassLoader.getSystemClassLoader().getResources(""));
+                for (URL url : roots) {
+                    File root = new File(url.getPath());
+                    for (File file : root.listFiles()) {
+                        addClassesFromFileToIdentifiedClassesList(file.getPath());
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
-    private static void addURLToSystemClassLoader(URL url){
-        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
 
-        try {
-            Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
-            method.setAccessible(true);
-            method.invoke(systemClassLoader, new Object[]{url});
-        } catch (Throwable t) {
-            System.out.println("Error when adding url to system ClassLoader ");
-        }
-    }
+        private void addURLToSystemClassLoader(URL url){
+            URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
 
-    private void addClassesFromFileToIdentifiedClassesList(String filePath){
-        try {
-            addURLToSystemClassLoader(new File(filePath).toURI().toURL());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        File file = new File(filePath);
-        if (file.isDirectory()) return;
-        if (file.getName().endsWith(".class") || file.getName().endsWith(".java")) {
             try {
-                identifiedClasses.add(ClassLoader.getSystemClassLoader().loadClass(file.getAbsolutePath()));
-            } catch (Exception ignored) {
+                Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+                method.setAccessible(true);
+                method.invoke(systemClassLoader, new Object[]{url});
+            } catch (Throwable t) {
+                System.out.println("Error when adding url to system ClassLoader ");
             }
-        } else if (filePath.endsWith("jar")) {
+        }
+
+        public void addClassesFromFileToIdentifiedClassesList(String filePath){
             try {
-                ZipInputStream zip = new ZipInputStream(new FileInputStream(filePath));
-                for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-                    if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                        try {
-                            String className = entry.getName().replace("/", ".").replace("\\", ".");
-                            className = className.substring(0, className.length() - ".class".length() );
-                            Class klass = Class.forName (className, true, Thread.currentThread().getContextClassLoader());
-                            //Class<?> klass = ClassLoader.getSystemClassLoader().loadClass(className);
-                            //Class<?> klass = Class.forName(className);
-                            identifiedClasses.add(klass);
-                        }catch (NoClassDefFoundError ignored ){
-                            System.out.println(ignored.toString());
-                        }catch (Exception ignored) {
-                            System.out.println(ignored.toString());
+                addURLToSystemClassLoader(new File(filePath).toURI().toURL());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            File file = new File(filePath);
+            if (file.isDirectory()) return;
+            if (file.getName().endsWith(".class") || file.getName().endsWith(".java")) {
+                try {
+                    identifiedClasses.add(ClassLoader.getSystemClassLoader().loadClass(file.getAbsolutePath()));
+                } catch (Exception ignored) {
+                }
+            } else if (filePath.endsWith("jar")) {
+                try {
+                    ZipInputStream zip = new ZipInputStream(new FileInputStream(filePath));
+                    for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                        if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                            try {
+                                String className = entry.getName().replace("/", ".").replace("\\", ".");
+                                className = className.substring(0, className.length() - ".class".length() );
+                                Class klass;
+                                try{
+                                    klass = Class.forName (className, true, Thread.currentThread().getContextClassLoader());
+                                }catch (Throwable e){
+                                    System.out.println(e);
+                                    klass = Class.forName (className, false, Thread.currentThread().getContextClassLoader());
+                                }
+                                identifiedClasses.add(klass);
+                            }catch (NoClassDefFoundError ignored ){
+                            }catch (ClassNotFoundException ignored){
+                            }catch (Throwable ignored) {
+                                System.out.println(ignored.toString());
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
+            testClasses.getTestClassesList();
+            testClasses.reloadTestClassList();
         }
-    }
 
-    private Set<String> getTestClassesList(){
-        if(identifiedClasses.size() == 0) updateClassList();
-        Set<String> returnList = new HashSet<>();
-        for(Class c : identifiedClasses){
-            if (!showAllClassesWithTestsCheckbox.isSelected()){
-                 if(!TestSet.class.isAssignableFrom(c)) continue;
-                returnList.add(c.getName());
-            } else {
-                Method[] methods = null;
-                try {
-                    methods = c.getMethods();
-                } catch (NoClassDefFoundError e) {
-                    continue;
+        private List<String> getTestMethodsOfClass(Class<?> c){
+            List<String> methodNames = new ArrayList<>();
+            Method[] methods = null;
+            try {
+                methods = c.getMethods();
+            } catch (NoClassDefFoundError ignored) { }
+            if (methods == null) return methodNames;
+            for (Method method : methods) {
+                if (method.isAnnotationPresent(Test.class) && !method.isAnnotationPresent(Ignore.class)) {
+                    //returnList.add(c.getName());
+                    methodNames.add(method.getName());
                 }
-                if (methods == null) continue;
-                for (Method method : methods) {
-                    if (method.isAnnotationPresent(Test.class)) {
-                        returnList.add(c.getName());
-                        break;
+            }
+            return methodNames;
+        }
+
+        private void getTestClassesList(){
+            if(identifiedClasses.size() == 0) updateClassList();
+            //Set<String> returnList = new HashSet<>();
+            for(Class c : identifiedClasses){
+                String className = null;
+                List<String> methodNames = new ArrayList<>();
+                if (!showAllClassesWithTestsCheckbox.isSelected()){
+                    if(!TestSet.class.isAssignableFrom(c)) continue;
+                    className = c.getName();
+                    methodNames = getTestMethodsOfClass(c);
+                    //returnList.add(c.getName());
+                } else {
+                    methodNames = getTestMethodsOfClass(c);
+                    if(methodNames.size() > 0){
+                        className = c.getName();
                     }
                 }
+                if(className != null)
+                    classes.put(className, methodNames);
             }
         }
-        return returnList;
-    }
 
-    private String theFileNameOfCurrentExecutingFile() {
-        return new java.io.File(RunTestTabPanel.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath())
-                .getAbsolutePath();
-    }
-
-    private List<Class> getClassesFromClassLoader() {
-        Field f = null;
-        try {
-            f = ClassLoader.class.getDeclaredField("classes");
-            f.setAccessible(true);
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            return (Vector<Class>) f.get(classLoader);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        private String theFileNameOfCurrentExecutingFile() {
+            return new java.io.File(RunTestTabPanel.class.getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath())
+                    .getAbsolutePath();
         }
-        return new ArrayList<Class>();
+
+        private List<Class> getClassesFromClassLoader() {
+            Field f = null;
+            try {
+                f = ClassLoader.class.getDeclaredField("classes");
+                f.setAccessible(true);
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                return (Vector<Class>) f.get(classLoader);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return new ArrayList<Class>();
+        }
+
     }
+
+
 
 }
