@@ -3,6 +3,7 @@ package se.claremont.autotest.javasupport.gui;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.runtab.TestClassPickerDialogue;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,14 +16,12 @@ import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DeclareApplicationDialog {
 
-    TafFrame window = new TafFrame();
+    TafFrame dialog = new TafFrame();
     TafLabel headline = new TafLabel("Application declaration for testing");
     TafLabel pathToJarFileLabel = new TafLabel("Path to jar:");
     LocalTextField pathToJarFileTextField = new LocalTextField(" <Path to jar> ");
@@ -30,7 +29,7 @@ public class DeclareApplicationDialog {
     TafLabel workingFolderLabel = new TafLabel("Working folder:");
     LocalTextField workingFolderTextField = new LocalTextField("<Working folder>");
     TafLabel mainClassLabel = new TafLabel("Main class:");
-    JComboBox comboBox;
+    JComboBox mainClassComboBox;
     DefaultComboBoxModel model;
     String comboBoxDefaultText = "<Main class>";
     LocalTextField mainClassTextField = new LocalTextField("<Main class>");
@@ -41,6 +40,8 @@ public class DeclareApplicationDialog {
     TafButton saveButton = new TafButton("Save");
     TafButton cancelButton = new TafButton("Cancel");
     TafButton tryButton = new TafButton("Try");
+    TafButton saveSutToFile = new TafButton("Save to file");
+    TafButton loadSutFromFile = new TafButton("Load from file");
     //Todo: List of classpaths needed
 
     public DeclareApplicationDialog(){
@@ -48,22 +49,22 @@ public class DeclareApplicationDialog {
         java.util.List<String> originalArgs = JavaSupportTab.applicationStartMechanism.arguments;
         String originalMain = JavaSupportTab.applicationStartMechanism.mainClass;
 
-        GroupLayout groupLayout = new GroupLayout(window.getContentPane());
-        window.getContentPane().setLayout(groupLayout);
-        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        GroupLayout groupLayout = new GroupLayout(dialog.getContentPane());
+        dialog.getContentPane().setLayout(groupLayout);
+        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         model = new DefaultComboBoxModel(new String[] {comboBoxDefaultText});
 
-        comboBox = new JComboBox(model);
-        comboBox.setEditable(true);
-        comboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.disabledColor);
-        comboBox.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
-        comboBox.addActionListener(new ActionListener() {
+        mainClassComboBox = new JComboBox(model);
+        mainClassComboBox.setEditable(true);
+        mainClassComboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.disabledColor);
+        mainClassComboBox.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
+        mainClassComboBox.addActionListener(new ActionListener() {
             private int selectedIndex = -1;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = comboBox.getSelectedIndex();
+                int index = mainClassComboBox.getSelectedIndex();
                 if(index >= 0) {
                     selectedIndex = index;
                 }
@@ -71,19 +72,21 @@ public class DeclareApplicationDialog {
                     Object newValue = model.getSelectedItem();
                     model.removeElementAt(selectedIndex);
                     model.addElement(newValue);
-                    comboBox.setSelectedItem(newValue);
+                    mainClassComboBox.setSelectedItem(newValue);
                     selectedIndex = model.getIndexOf(newValue);
                 }
-                if(comboBox.getItemAt(selectedIndex) != null && !comboBox.getItemAt(selectedIndex).equals(comboBoxDefaultText)){
-                    comboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.textColor);
-                    comboBox.setFont(AppFont.getInstance());
+                if(mainClassComboBox.getItemAt(selectedIndex) != null && !mainClassComboBox.getItemAt(selectedIndex).equals(comboBoxDefaultText)){
+                    //JavaSupportTab.applicationStartMechanism.mainClass = mainClassComboBox.getItemAt(selectedIndex).toString();
+                    updateCliSuggestionAndSaveToFileButtonStatus();
+                    mainClassComboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.textColor);
+                    mainClassComboBox.setFont(AppFont.getInstance());
                 } else {
-                    comboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.disabledColor);
-                    comboBox.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
+                    mainClassComboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.disabledColor);
+                    mainClassComboBox.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
                 }
             }
         });
-        comboBox.setSelectedIndex(0);
+        mainClassComboBox.setSelectedIndex(0);
 
         if(JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile != null && JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile.length() > 0)
             pathToJarFileTextField.setText(JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile);
@@ -94,22 +97,67 @@ public class DeclareApplicationDialog {
         if(JavaSupportTab.applicationStartMechanism.arguments != null && JavaSupportTab.applicationStartMechanism.arguments.size() > 0)
             runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationStartMechanism.arguments));
 
+        loadSutFromFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser window = new JFileChooser();
+                window.setName("FilePickerWindow");
+                window.setDialogTitle("TAF - File picker");
+                window.setFont(AppFont.getInstance());
+                try {
+                    window.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+                } catch (URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+                int returnVal = window.showOpenDialog(dialog);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = window.getSelectedFile();
+                    JavaSupportTab.applicationStartMechanism = ApplicationStartMechanism.readFromJsonFile(file.getPath());
+                    pathToJarFileTextField.setText(JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile.substring(7));
+                    mainClassComboBox.setModel(new DefaultComboBoxModel(new String[]{JavaSupportTab.applicationStartMechanism.mainClass}));
+                    runtimeArgumentsTextField.setText(String.join(" ",JavaSupportTab.applicationStartMechanism.arguments));
+                    updateCliSuggestionAndSaveToFileButtonStatus();
+                }
+            }
+        });
+
+        saveSutToFile.setEnabled(false);
+        saveSutToFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser window = new JFileChooser();
+                window.setName("FileSaveWindow");
+                window.setDialogTitle("TAF - File save dialog");
+                window.setFont(AppFont.getInstance());
+                try {
+                    window.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+                } catch (URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+                int returnVal = window.showSaveDialog(dialog);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = window.getSelectedFile();
+                    JavaSupportTab.applicationStartMechanism.saveToJsonFile(file.getPath());
+                }
+            }
+        });
+
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JavaSupportTab.applicationStartMechanism.mainClass = originalMain;
                 JavaSupportTab.applicationStartMechanism.arguments = originalArgs;
                 JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile = originalPath;
-                window.setVisible(false);
-                window.dispose();
+                dialog.setVisible(false);
+                dialog.dispose();
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.setVisible(false);
-                window.dispose();
+                dialog.setVisible(false);
+                dialog.dispose();
             }
         });
 
@@ -132,7 +180,7 @@ public class DeclareApplicationDialog {
                 } catch (URISyntaxException e1) {
                     e1.printStackTrace();
                 }
-                int returnVal = fileChooser.showOpenDialog(window);
+                int returnVal = fileChooser.showOpenDialog(dialog);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     pathToJarFileTextField.setText(file.getAbsolutePath());
@@ -152,7 +200,7 @@ public class DeclareApplicationDialog {
         cliCommand.setLineWrap(true);
         cliCommand.setBackground(Gui.colorTheme.backgroundColor);
 
-        updateCli();
+        updateCliSuggestionAndSaveToFileButtonStatus();
 
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
@@ -169,11 +217,15 @@ public class DeclareApplicationDialog {
                                 )
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(mainClassLabel)
-                                        .addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(mainClassComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 )
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(runtimeArgumentsLabel)
                                         .addComponent(runtimeArgumentsTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                )
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(loadSutFromFile)
+                                        .addComponent(saveSutToFile)
                                 )
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(cliLabel)
@@ -200,17 +252,20 @@ public class DeclareApplicationDialog {
                         )
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(mainClassLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(mainClassComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         )
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(runtimeArgumentsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(runtimeArgumentsTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         )
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(loadSutFromFile)
+                                .addComponent(saveSutToFile)
+                        )
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(cliLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cliCommand)
                         )
-                        .addComponent(cliCommand)
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                 .addComponent(tryButton)
                                 .addComponent(cancelButton)
@@ -220,9 +275,9 @@ public class DeclareApplicationDialog {
 
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
-        window.pack();
-        window.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 3/5, Toolkit.getDefaultToolkit().getScreenSize().height * 3/5);
-        window.setVisible(true);
+        dialog.pack();
+        dialog.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 3/5, Toolkit.getDefaultToolkit().getScreenSize().height * 3/5);
+        dialog.setVisible(true);
     }
 
     private void updateMainClassComboboxModel() {
@@ -256,11 +311,11 @@ public class DeclareApplicationDialog {
             System.out.println(e.getMessage());
         }
         if(model.getSize() == 0) model.addElement(comboBoxDefaultText);
-        comboBox.setModel(model);
-        comboBox.setSelectedIndex(0);
+        mainClassComboBox.setModel(model);
+        mainClassComboBox.setSelectedIndex(0);
     }
 
-    private void updateCli(){
+    private void updateCliSuggestionAndSaveToFileButtonStatus(){
         String cli = "";
         String pathToExe = pathToJarFileTextField.getText();
         if(!pathToExe.equals(pathToJarFileTextField.disregardedDefaultRunNameString) && pathToExe.length() != 0){
@@ -268,10 +323,13 @@ public class DeclareApplicationDialog {
             cli += "java -jar " + pathToExe;
         }
 
-        String comboboxChoice = comboBox.getItemAt(comboBox.getSelectedIndex()).toString();
-        if(!comboboxChoice.equals(mainClassTextField.disregardedDefaultRunNameString) && comboboxChoice.length() != 0){
-            JavaSupportTab.applicationStartMechanism.mainClass = comboboxChoice;
-            cli += " " + comboboxChoice;
+        String comboboxChoice;
+        if(mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()) != null){
+            comboboxChoice = mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()).toString();
+            if(!comboboxChoice.equals(mainClassTextField.disregardedDefaultRunNameString) && comboboxChoice.length() != 0){
+                JavaSupportTab.applicationStartMechanism.mainClass = comboboxChoice;
+                cli += " " + comboboxChoice;
+            }
         }
 
         if(!workingFolderTextField.getText().equals(workingFolderTextField.disregardedDefaultRunNameString) && workingFolderTextField.getText().length() != 0){
@@ -285,6 +343,11 @@ public class DeclareApplicationDialog {
             }
             cli += " " + runtimeArgumentsTextField.getText();
         }
+        if(pathToJarFileTextField.getText() != null &&
+                pathToJarFileTextField.getText().length() > 0 &&
+                mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()).toString().length() > 0 &&
+                !mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()).toString().equals(comboBoxDefaultText))
+            saveSutToFile.setEnabled(true);
         cliCommand.setText(cli);
     }
 
@@ -293,12 +356,12 @@ public class DeclareApplicationDialog {
         public LocalTextField(String initialText){
             super(initialText);
             getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) { updateCli(); }
+                public void changedUpdate(DocumentEvent e) { updateCliSuggestionAndSaveToFileButtonStatus(); }
 
-                public void removeUpdate(DocumentEvent e) { updateCli(); }
+                public void removeUpdate(DocumentEvent e) { updateCliSuggestionAndSaveToFileButtonStatus(); }
 
                 public void insertUpdate(DocumentEvent e) {
-                    updateCli();
+                    updateCliSuggestionAndSaveToFileButtonStatus();
                 }
             });
 
