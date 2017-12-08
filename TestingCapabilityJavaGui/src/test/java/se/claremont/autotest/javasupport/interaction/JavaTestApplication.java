@@ -1,5 +1,6 @@
 package se.claremont.autotest.javasupport.interaction;
 
+import se.claremont.autotest.javasupport.interaction.elementidentification.By;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
@@ -19,7 +20,7 @@ public class JavaTestApplication {
         return new JavaGuiElement("panel0_panel", "panel0", JavaGuiElement.IdType.ELEMENT_NAME);
     }
 
-    public static JavaGuiElement textField() {
+    public static JavaGuiElement textField(){
         return new JavaGuiElement("textField_jtextfield", "Text field", JavaGuiElement.IdType.ELEMENT_NAME);
     }
 

@@ -53,4 +53,10 @@ public class ApplicationStartMechanism {
         }
         return new ApplicationStartMechanism(new TestCase());
     }
+
+    String toClassFile(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("");
+        return sb.toString();
+    }
 }

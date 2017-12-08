@@ -18,12 +18,13 @@ public class JavaSupportTab implements IGuiTab{
     JPanel panel;
     private TafButton declareApplicationButton = new TafButton("Declare application");
     private TafButton tryStartSutButton = new TafButton("Try start");
+    private TafButton recordScriptButton = new TafButton("Record script");
 
-    static ApplicationStartMechanism applicationStartMechanism;
+    static ApplicationUnderTest applicationUnderTest;
 
     public JavaSupportTab(){
         TestCase testCase = new TestCase();
-        applicationStartMechanism = new ApplicationStartMechanism(testCase);
+        applicationUnderTest = new ApplicationUnderTest(testCase, new ApplicationStartMechanism(testCase));
         panel = new JPanel();
         setFontSize();
 
@@ -41,14 +42,21 @@ public class JavaSupportTab implements IGuiTab{
         tryStartSutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                applicationStartMechanism.run();
+                applicationUnderTest.startMechanism.run();
+            }
+        });
+
+        recordScriptButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RecordingWindow recordingWindow = new RecordingWindow(TempMain.tempFrame);
             }
         });
 
         panel.add(text);
         panel.add(declareApplicationButton);
         panel.add(tryStartSutButton);
-
+        panel.add(recordScriptButton);
         panel.setVisible(true);
     }
 

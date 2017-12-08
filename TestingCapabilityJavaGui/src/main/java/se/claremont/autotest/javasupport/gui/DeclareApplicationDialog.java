@@ -45,9 +45,9 @@ public class DeclareApplicationDialog {
     //Todo: List of classpaths needed
 
     public DeclareApplicationDialog(){
-        String originalPath = JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile;
-        java.util.List<String> originalArgs = JavaSupportTab.applicationStartMechanism.arguments;
-        String originalMain = JavaSupportTab.applicationStartMechanism.mainClass;
+        String originalPath = JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile;
+        java.util.List<String> originalArgs = JavaSupportTab.applicationUnderTest.startMechanism.arguments;
+        String originalMain = JavaSupportTab.applicationUnderTest.startMechanism.mainClass;
 
         GroupLayout groupLayout = new GroupLayout(dialog.getContentPane());
         dialog.getContentPane().setLayout(groupLayout);
@@ -88,14 +88,15 @@ public class DeclareApplicationDialog {
         });
         mainClassComboBox.setSelectedIndex(0);
 
-        if(JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile != null && JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile.length() > 0)
-            pathToJarFileTextField.setText(JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile);
+        if(JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile != null &&
+                JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile.length() > 0)
+            pathToJarFileTextField.setText(JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile);
 
-        if(JavaSupportTab.applicationStartMechanism.mainClass != null && JavaSupportTab.applicationStartMechanism.mainClass.length() > 0)
-            mainClassTextField.setText(JavaSupportTab.applicationStartMechanism.mainClass);
+        if(JavaSupportTab.applicationUnderTest.startMechanism.mainClass != null && JavaSupportTab.applicationUnderTest.startMechanism.mainClass.length() > 0)
+            mainClassTextField.setText(JavaSupportTab.applicationUnderTest.startMechanism.mainClass);
 
-        if(JavaSupportTab.applicationStartMechanism.arguments != null && JavaSupportTab.applicationStartMechanism.arguments.size() > 0)
-            runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationStartMechanism.arguments));
+        if(JavaSupportTab.applicationUnderTest.startMechanism.arguments != null && JavaSupportTab.applicationUnderTest.startMechanism.arguments.size() > 0)
+            runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));
 
         loadSutFromFile.addActionListener(new ActionListener() {
             @Override
@@ -112,10 +113,10 @@ public class DeclareApplicationDialog {
                 int returnVal = window.showOpenDialog(dialog);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = window.getSelectedFile();
-                    JavaSupportTab.applicationStartMechanism = ApplicationStartMechanism.readFromJsonFile(file.getPath());
-                    pathToJarFileTextField.setText(JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile.substring(7));
-                    mainClassComboBox.setModel(new DefaultComboBoxModel(new String[]{JavaSupportTab.applicationStartMechanism.mainClass}));
-                    runtimeArgumentsTextField.setText(String.join(" ",JavaSupportTab.applicationStartMechanism.arguments));
+                    JavaSupportTab.applicationUnderTest.startMechanism = ApplicationStartMechanism.readFromJsonFile(file.getPath());
+                    pathToJarFileTextField.setText(JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile.substring(7));
+                    mainClassComboBox.setModel(new DefaultComboBoxModel(new String[]{JavaSupportTab.applicationUnderTest.startMechanism.mainClass}));
+                    runtimeArgumentsTextField.setText(String.join(" ",JavaSupportTab.applicationUnderTest.startMechanism.arguments));
                     updateCliSuggestionAndSaveToFileButtonStatus();
                 }
             }
@@ -137,7 +138,7 @@ public class DeclareApplicationDialog {
                 int returnVal = window.showSaveDialog(dialog);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = window.getSelectedFile();
-                    JavaSupportTab.applicationStartMechanism.saveToJsonFile(file.getPath());
+                    JavaSupportTab.applicationUnderTest.startMechanism.saveToJsonFile(file.getPath());
                 }
             }
         });
@@ -145,9 +146,9 @@ public class DeclareApplicationDialog {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JavaSupportTab.applicationStartMechanism.mainClass = originalMain;
-                JavaSupportTab.applicationStartMechanism.arguments = originalArgs;
-                JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile = originalPath;
+                JavaSupportTab.applicationUnderTest.startMechanism.mainClass = originalMain;
+                JavaSupportTab.applicationUnderTest.startMechanism.arguments = originalArgs;
+                JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile = originalPath;
                 dialog.setVisible(false);
                 dialog.dispose();
             }
@@ -164,7 +165,7 @@ public class DeclareApplicationDialog {
         tryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JavaSupportTab.applicationStartMechanism.run();
+                JavaSupportTab.applicationUnderTest.startMechanism.run();
             }
         });
 
@@ -319,7 +320,7 @@ public class DeclareApplicationDialog {
         String cli = "";
         String pathToExe = pathToJarFileTextField.getText();
         if(!pathToExe.equals(pathToJarFileTextField.disregardedDefaultRunNameString) && pathToExe.length() != 0){
-            JavaSupportTab.applicationStartMechanism.startUrlOrPathToJarFile = "file://" + pathToJarFileTextField.getText();
+            JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile = "file://" + pathToJarFileTextField.getText();
             cli += "java -jar " + pathToExe;
         }
 
@@ -327,7 +328,7 @@ public class DeclareApplicationDialog {
         if(mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()) != null){
             comboboxChoice = mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()).toString();
             if(!comboboxChoice.equals(mainClassTextField.disregardedDefaultRunNameString) && comboboxChoice.length() != 0){
-                JavaSupportTab.applicationStartMechanism.mainClass = comboboxChoice;
+                JavaSupportTab.applicationUnderTest.startMechanism.mainClass = comboboxChoice;
                 cli += " " + comboboxChoice;
             }
         }
@@ -337,9 +338,9 @@ public class DeclareApplicationDialog {
         }
 
         if(!runtimeArgumentsTextField.getText().equals(runtimeArgumentsTextField.disregardedDefaultRunNameString) && runtimeArgumentsTextField.getText().length() != 0) {
-            JavaSupportTab.applicationStartMechanism.arguments.clear();
+            JavaSupportTab.applicationUnderTest.startMechanism.arguments.clear();
             for(String arg : runtimeArgumentsTextField.getText().split(" ")){
-                JavaSupportTab.applicationStartMechanism.arguments.add(arg);
+                JavaSupportTab.applicationUnderTest.startMechanism.arguments.add(arg);
             }
             cli += " " + runtimeArgumentsTextField.getText();
         }
