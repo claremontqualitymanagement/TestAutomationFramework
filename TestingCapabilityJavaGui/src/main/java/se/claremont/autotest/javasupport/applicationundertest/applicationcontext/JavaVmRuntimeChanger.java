@@ -2,6 +2,7 @@ package se.claremont.autotest.javasupport.applicationundertest.applicationcontex
 
 import javax.management.ObjectName;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.management.HotSpotDiagnosticMXBean;
 import com.sun.management.VMOption;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
-    TestCase testCase;
+    @JsonIgnore TestCase testCase;
 
     public JavaVmRuntimeChanger(TestCase testCase) {
         this.testCase = testCase;

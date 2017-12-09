@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -35,6 +36,18 @@ public class DeclareApplicationDialog {
     LocalTextField mainClassTextField = new LocalTextField("<Main class>");
     TafLabel runtimeArgumentsLabel = new TafLabel("Runtime arguments:");
     LocalTextField runtimeArgumentsTextField = new LocalTextField("<Runtime arguments>");
+    TafLabel loadedLibrariesLabel = new TafLabel("Loaded extra libraries");
+    TafTextField loadedLibrariesTextField = new TafTextField(" < Loaded external libraries > ");
+    TafButton loadedLibrariesAddButton = new TafButton("Add");
+    TafLabel environmentVariablesLabel = new TafLabel("Environment variables");
+    TafTextField environmentVariablesText = new TafTextField(" < modified environment variables > ");
+    TafButton environmentVariablesAddButton = new TafButton("Add");
+    TafLabel systemParametersLabel = new TafLabel("Modified system parameters");
+    TafTextField systemParametersTextField = new TafTextField(" < System parameters > ");
+    TafButton systemParametersAddButton = new TafButton("Add");
+    TafLabel jvmArgumentLabel = new TafLabel("JVM arguments");
+    TafTextField jvmArgumentTextField = new TafTextField(" < JVM arguments > ");
+    TafButton jvmArgumentAddButton = new TafButton("Add");
     TafLabel cliLabel = new TafLabel("Corresponding CLI command:");
     JTextArea cliCommand = new JTextArea();
     TafButton saveButton = new TafButton("Save");
@@ -97,6 +110,70 @@ public class DeclareApplicationDialog {
 
         if(JavaSupportTab.applicationUnderTest.startMechanism.arguments != null && JavaSupportTab.applicationUnderTest.startMechanism.arguments.size() > 0)
             runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));
+
+        loadedLibrariesTextField.setEditable(false);
+        loadedLibrariesAddButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser window = new JFileChooser();
+                window.setName("FilePickerWindow");
+                window.setDialogTitle("TAF - File picker");
+                window.setFont(AppFont.getInstance());
+                try {
+                    window.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+                } catch (URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+                int returnVal = window.showOpenDialog(dialog);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = window.getSelectedFile();
+                    if(file.isDirectory()){
+                        JavaSupportTab.applicationUnderTest.loadAllLibrariesInFolder(file.getPath());
+                        ArrayList<String> subFiles = new ArrayList<>();
+                        for(File subFile : file.listFiles()){
+                            if(!subFile.isDirectory()) subFiles.add(subFile.getAbsolutePath());
+                        }
+                        if(loadedLibrariesTextField.getText().equals(loadedLibrariesTextField.disregardedDefaultRunNameString)){
+                            loadedLibrariesTextField.setText(String.join(", ", subFiles));
+                        }else {
+                            loadedLibrariesTextField.setText(loadedLibrariesTextField.getText() + ", " + String.join(", ", subFiles));
+                        }
+                    } else {
+                        JavaSupportTab.applicationUnderTest.loadLibrary(file.getPath());
+                        if(loadedLibrariesTextField.getText().equals(loadedLibrariesTextField.disregardedDefaultRunNameString)){
+                            loadedLibrariesTextField.setText(String.join(", ", file.getName()));
+                        }else {
+                            loadedLibrariesTextField.setText(loadedLibrariesTextField.getText() + ", " + file.getAbsolutePath());
+                        }
+                    }
+                    updateCliSuggestionAndSaveToFileButtonStatus();
+                }
+
+            }
+        });
+        systemParametersTextField.setEditable(false);
+        systemParametersAddButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
+            }
+        });
+
+        environmentVariablesText.setEditable(false);
+        environmentVariablesAddButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
+
+            }
+        });
+        jvmArgumentTextField.setEditable(false);
+        jvmArgumentAddButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
+            }
+        });
 
         loadSutFromFile.addActionListener(new ActionListener() {
             @Override
@@ -165,7 +242,7 @@ public class DeclareApplicationDialog {
         tryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JavaSupportTab.applicationUnderTest.startMechanism.run();
+                JavaSupportTab.applicationUnderTest.start();
             }
         });
 
@@ -225,6 +302,26 @@ public class DeclareApplicationDialog {
                                         .addComponent(runtimeArgumentsTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 )
                                 .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(loadedLibrariesLabel)
+                                        .addComponent(loadedLibrariesTextField)
+                                        .addComponent(loadedLibrariesAddButton)
+                                )
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(systemParametersLabel)
+                                        .addComponent(systemParametersTextField)
+                                        .addComponent(systemParametersAddButton)
+                                )
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(environmentVariablesLabel)
+                                        .addComponent(environmentVariablesText)
+                                        .addComponent(environmentVariablesAddButton)
+                                )
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(jvmArgumentLabel)
+                                        .addComponent(jvmArgumentTextField)
+                                        .addComponent(jvmArgumentAddButton)
+                                )
+                                .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(loadSutFromFile)
                                         .addComponent(saveSutToFile)
                                 )
@@ -258,6 +355,26 @@ public class DeclareApplicationDialog {
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(runtimeArgumentsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(runtimeArgumentsTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        )
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(loadedLibrariesLabel)
+                                .addComponent(loadedLibrariesTextField)
+                                .addComponent(loadedLibrariesAddButton)
+                        )
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(systemParametersLabel)
+                                .addComponent(systemParametersTextField)
+                                .addComponent(systemParametersAddButton)
+                        )
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(environmentVariablesLabel)
+                                .addComponent(environmentVariablesText)
+                                .addComponent(environmentVariablesAddButton)
+                        )
+                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(jvmArgumentLabel)
+                                .addComponent(jvmArgumentTextField)
+                                .addComponent(jvmArgumentAddButton)
                         )
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(loadSutFromFile)
@@ -335,6 +452,9 @@ public class DeclareApplicationDialog {
 
         if(!workingFolderTextField.getText().equals(workingFolderTextField.disregardedDefaultRunNameString) && workingFolderTextField.getText().length() != 0){
             cli += " -cp " + workingFolderTextField.getText() + File.separator + "*";
+            if(!loadedLibrariesTextField.getText().equals(loadedLibrariesTextField.disregardedDefaultRunNameString)){
+                cli += "/" + loadedLibrariesTextField.getText().replace(", ", "/");
+            }
         }
 
         if(!runtimeArgumentsTextField.getText().equals(runtimeArgumentsTextField.disregardedDefaultRunNameString) && runtimeArgumentsTextField.getText().length() != 0) {

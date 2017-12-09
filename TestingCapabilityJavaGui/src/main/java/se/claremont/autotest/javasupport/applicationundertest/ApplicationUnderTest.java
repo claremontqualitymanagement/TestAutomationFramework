@@ -1,5 +1,7 @@
 package se.claremont.autotest.javasupport.applicationundertest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationcontext.ApplicationContextManager;
@@ -11,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ApplicationUnderTest {
-    public ApplicationContextManager context;
-    public ApplicationStartMechanism startMechanism;
-    TestCase testCase;
+    @JsonProperty public ApplicationContextManager context;
+    @JsonProperty public ApplicationStartMechanism startMechanism;
+    @JsonIgnore TestCase testCase;
+    @JsonIgnore static ArrayList<Window> windowsStartedBeforeStartingSut = new ArrayList<>();
 
     public ApplicationUnderTest(TestCase testCase, ApplicationStartMechanism startMechanism){
         context = new ApplicationContextManager(testCase);
@@ -65,6 +68,7 @@ public class ApplicationUnderTest {
     }
 
     public void start(){
+        windowsStartedBeforeStartingSut.addAll(getWindows());
         startMechanism.run();
     }
 
@@ -94,6 +98,14 @@ public class ApplicationUnderTest {
         ArrayList<Window> windows = new ArrayList<>();
         Window [] swingWindows = Window.getOwnerlessWindows ();
         Collections.addAll(windows, swingWindows);
+        return windows;
+    }
+
+    public static ArrayList<Window> getWindowsForSUT(){
+        ArrayList<Window> windows = new ArrayList<>();
+        Window [] swingWindows = Window.getOwnerlessWindows ();
+        Collections.addAll(windows, swingWindows);
+        windows.removeAll(windowsStartedBeforeStartingSut);
         return windows;
     }
 

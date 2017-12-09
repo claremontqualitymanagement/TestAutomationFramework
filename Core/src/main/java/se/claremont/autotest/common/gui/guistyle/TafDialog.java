@@ -5,6 +5,7 @@ import se.claremont.autotest.common.gui.abouttab.AboutTabPanel;
 import se.claremont.autotest.common.support.StringManagement;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 

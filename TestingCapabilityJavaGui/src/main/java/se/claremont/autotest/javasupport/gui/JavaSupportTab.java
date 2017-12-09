@@ -42,7 +42,7 @@ public class JavaSupportTab implements IGuiTab{
         tryStartSutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                applicationUnderTest.startMechanism.run();
+                applicationUnderTest.start();
             }
         });
 
