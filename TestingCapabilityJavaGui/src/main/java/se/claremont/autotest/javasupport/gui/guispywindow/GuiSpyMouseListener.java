@@ -39,7 +39,7 @@ public class GuiSpyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        textComponent.setText(componentDeclarationString(e.getComponent()));
+        textComponent.setText(componentDeclarationString(e.getComponent()).replace(" ", "&nbsp;"));
         updatePropertiesPanel(e.getComponent());
     }
 
@@ -55,36 +55,77 @@ public class GuiSpyMouseListener implements MouseListener {
         return false;
     }
 
+    GridBagConstraints constraints = new GridBagConstraints();
+
     private void updatePropertiesPanel(Component c){
         int propertiesCount = 4;
+        GridBagLayout gridBag = new GridBagLayout();
+        elementPropertiesPanel.setLayout(gridBag);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         elementPropertiesPanel.removeAll();
 
-        elementPropertiesPanel.add(new TafLabel("Class"));
-        elementPropertiesPanel.add(new TafLabel(c.getClass().getName()));
+        addPropertyName("Class");
+        addPropertyValueAsLabel(c.getClass().getName());
+        propertiesPanelRowCount++;
 
         String text = null;
         MethodInvoker m = new MethodInvoker();
         try{
             text = (String)m.invokeTheFirstEncounteredMethod(c, MethodDeclarations.textGettingMethodsInAttemptOrder);
         }catch (Exception ignored){}
-        elementPropertiesPanel.add(new TafLabel("Text"));
+        addPropertyName("Text");
         TafTextField textProperty = new TafTextField(" < No text identified > ");
         if(text != null){
             textProperty.setText(text);
         }
-        elementPropertiesPanel.add(textProperty);
+        setGridBagConstraintsForPropertyValue();
+        elementPropertiesPanel.add(textProperty, constraints);
+        propertiesPanelRowCount++;
 
-        elementPropertiesPanel.add(new TafLabel("Enabled"));
-        elementPropertiesPanel.add(new TafLabel(String.valueOf(c.isEnabled())));
+        addPropertyName("Enabled");
+        addPropertyValueAsLabel(String.valueOf(c.isEnabled()));
+        propertiesPanelRowCount++;
 
-        elementPropertiesPanel.add(new TafLabel("Name"));
         TafTextField name = new TafTextField(" < No element name set > ");
         if(c.getName() != null && c.getName().length() > 0) name.setText(c.getName());
-        elementPropertiesPanel.add(name);
+        addPropertyName("Name");
+        setGridBagConstraintsForPropertyValue();
+        elementPropertiesPanel.add(name, constraints);
+        propertiesPanelRowCount++;
 
-        elementPropertiesPanel.setLayout(new GridLayout(propertiesCount, 2));
         elementPropertiesPanel.revalidate();
         elementPropertiesPanel.repaint();
+
+        //elementPropertiesPanel.setLayout(new GridLayout(propertiesCount, 2));
+    }
+
+    private int propertiesPanelRowCount = 0;
+
+    private void setGridBagConstraintsForPropertyValue(){
+        constraints.gridx = 1;
+        constraints.gridy = propertiesPanelRowCount;
+        constraints.weightx = 1;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+    }
+
+    private void addPropertyName(String name){
+        constraints.gridx = 0;
+        constraints.gridy = propertiesPanelRowCount;
+        constraints.weightx = 0;
+        constraints.ipadx = 50;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        elementPropertiesPanel.add(new TafLabel(name), constraints);
+    }
+
+    private void addPropertyValueAsLabel(String value){
+        constraints.gridx = 1;
+        constraints.gridy = propertiesPanelRowCount;
+        constraints.weightx = 1;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        elementPropertiesPanel.add(new TafLabel(value), constraints);
     }
 
     private String componentDeclarationString(Component c) {

@@ -38,6 +38,7 @@ public class GuiSpyingWindow {
                 currentElementText.setFont(AppFont.getInstance());
                 currentElementText.setForeground(TafGuiColor.textColor);
                 currentElementPanel.setLayout(new GridLayout(1, 1));
+                headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
 
                 TafLabel programaticDescriptionLabel = new TafLabel("Programatic element description");
                 programaticDescriptionScrollPanel = new JScrollPane(currentElementText);
