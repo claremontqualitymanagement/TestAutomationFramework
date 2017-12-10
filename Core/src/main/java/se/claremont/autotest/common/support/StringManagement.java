@@ -136,7 +136,7 @@ public class StringManagement {
             if(word.length() > 0){
                 stringBuilder.append(word.trim().substring(0,1).toUpperCase());
                 if(word.length() > 1){
-                    stringBuilder.append(word.trim().substring(1).toLowerCase());
+                    stringBuilder.append(word.trim().substring(1));
                 }
             }
         }

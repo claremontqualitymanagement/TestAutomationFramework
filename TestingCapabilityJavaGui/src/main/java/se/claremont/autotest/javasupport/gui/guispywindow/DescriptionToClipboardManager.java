@@ -11,11 +11,9 @@ import java.awt.event.KeyListener;
 public class DescriptionToClipboardManager implements KeyListener {
 
     JLabel hintText;
-    JTextComponent currentElementTextcomponent;
 
-    DescriptionToClipboardManager(JLabel hintText, JTextComponent currentElementText){
+    DescriptionToClipboardManager(JLabel hintText){
         this.hintText = hintText;
-        this.currentElementTextcomponent = currentElementText;
     }
 
     @Override
@@ -26,11 +24,7 @@ public class DescriptionToClipboardManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if ((e.getKeyCode() == KeyEvent.VK_I) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            Color initialColor = hintText.getForeground();
-            hintText.setForeground(Color.YELLOW);
-            hintText.revalidate();
-            hintText.repaint();
-            StringSelection stringSelection = new StringSelection(currentElementTextcomponent.getText());
+            StringSelection stringSelection = new StringSelection(GuiSpyingWindow.elementProgramaticDescriptionFormattedForClipboard);
             Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
             clpbrd.setContents(stringSelection, null);
             System.out.println("Copied text to clipboard.");
@@ -39,9 +33,6 @@ public class DescriptionToClipboardManager implements KeyListener {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            hintText.setForeground(initialColor);
-            hintText.revalidate();
-            hintText.repaint();
         }
     }
 

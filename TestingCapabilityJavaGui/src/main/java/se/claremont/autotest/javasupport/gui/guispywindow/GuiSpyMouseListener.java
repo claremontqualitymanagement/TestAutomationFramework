@@ -39,7 +39,7 @@ public class GuiSpyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        textComponent.setText(componentDeclarationString(e.getComponent()).replace(" ", "&nbsp;"));
+        textComponent.setText(componentDeclarationString(e.getComponent()));
         updatePropertiesPanel(e.getComponent());
     }
 
@@ -131,11 +131,11 @@ public class GuiSpyMouseListener implements MouseListener {
     private String componentDeclarationString(Component c) {
         if (c == null) return null;
         String elementName = "Noname";
-        StringBuilder sb = new StringBuilder();
+        StringBuilder htmlDescriptionForGui = new StringBuilder();
 
-        sb.append("      ").append(".byClassName(\"").append(c.getClass().getSimpleName()).append("\")<br>");
+        htmlDescriptionForGui.append("      ").append(".byClassName(\"").append(c.getClass().getSimpleName()).append("\")<br>");
         if (c.getName() != null && c.getName().length() > 0) {
-            sb.append("      .andByName(\"").append(c.getName()).append("\")<br>");
+            htmlDescriptionForGui.append("      .andByName(\"").append(c.getName()).append("\")<br>");
             elementName = c.getName();
         }
         String text = null;
@@ -144,9 +144,10 @@ public class GuiSpyMouseListener implements MouseListener {
         } catch (Exception ignored) {
         }
         if (text != null && text.length() > 0) {
-            sb.append("      .andByExactText(\"").append(text).append("\")<br>");
+            htmlDescriptionForGui.append("      .andByExactText(\"").append(text).append("\")<br>");
         }
-        return "<html><body><div style=\"white-space: pre; font-size: " + (AppFont.getInstance().getSize() * 2 / 3) + "; color:darkgrey; \">   public static JavaGuiElement " + elementName + " = new JavaGuiElement(By<br>" + sb.toString() + "   );</div></body></html>";
+        GuiSpyingWindow.elementProgramaticDescriptionFormattedForClipboard = "   public static JavaGuiElement " + elementName + " = new JavaGuiElement(By" + System.lineSeparator() + htmlDescriptionForGui.toString().replace("<br>", System.lineSeparator()) + "   );" + System.lineSeparator();
+        return ("<html><body><div style=\"white-space: pre; font-size: " + (AppFont.getInstance().getSize() * 2 / 3) + "; color:darkgrey; \">   public static JavaGuiElement " + elementName + " = new JavaGuiElement(By<br>" + htmlDescriptionForGui.toString() + "   );</div></body></html>").replace(" ", "&nbsp;");
     }
 
 }

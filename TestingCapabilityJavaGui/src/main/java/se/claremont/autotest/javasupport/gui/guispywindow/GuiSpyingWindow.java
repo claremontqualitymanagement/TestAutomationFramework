@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 public class GuiSpyingWindow {
 
     private TafFrame frame;
+    static String elementProgramaticDescriptionFormattedForClipboard = "";
     private GroupLayout groupLayout;
     private final TafLabel headline = new TafLabel("GUI Spy");
     private final TafLabel hintText = new TafLabel("Press Ctrl+i to copy description to clipbard.");
@@ -83,7 +84,7 @@ public class GuiSpyingWindow {
                 keyBoardEventCatcher.setOpacity(0);
                 keyBoardEventCatcher.setVisible(true);
                 keyBoardEventCatcher.getRootPane().setOpaque(false);
-                keyBoardEventCatcher.addKeyListener(new DescriptionToClipboardManager(hintText, currentElementText));
+                keyBoardEventCatcher.addKeyListener(new DescriptionToClipboardManager(hintText));
 
                 for (Window window : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
                     JavaWindow javaWindow = new JavaWindow(window);
