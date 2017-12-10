@@ -1,7 +1,6 @@
 package se.claremont.autotest.javasupport.gui;
 
 import se.claremont.autotest.common.gui.guistyle.TafButton;
-import se.claremont.autotest.common.gui.guistyle.TafCloseButton;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
@@ -17,7 +16,8 @@ public class JavaSupportTab implements IGuiTab{
     private Font appFont;
     JPanel panel;
     private TafButton declareApplicationButton = new TafButton("Declare application");
-    private TafButton tryStartSutButton = new TafButton("Try start");
+    private TafButton tryStartSutButton = new TafButton("Start application");
+    private TafButton guiSpyButton = new TafButton("GUI Spy");
     private TafButton recordScriptButton = new TafButton("Record script");
 
     static ApplicationUnderTest applicationUnderTest;
@@ -46,16 +46,24 @@ public class JavaSupportTab implements IGuiTab{
             }
         });
 
+        guiSpyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiSpyingWindow guiSpyingWindow = new GuiSpyingWindow();
+            }
+        });
+
         recordScriptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RecordingWindow recordingWindow = new RecordingWindow(TempMain.tempFrame);
+                RecordWindow recordWindow = new RecordWindow();
             }
         });
 
         panel.add(text);
         panel.add(declareApplicationButton);
         panel.add(tryStartSutButton);
+        panel.add(guiSpyButton);
         panel.add(recordScriptButton);
         panel.setVisible(true);
     }

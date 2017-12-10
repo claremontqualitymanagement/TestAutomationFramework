@@ -4,34 +4,31 @@ import se.claremont.autotest.common.gui.guistyle.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.HashMap;
+import java.awt.event.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RecordingWindow extends TafFrame {
+public class GuiSpyingWindow {
 
-    HashMap<String, String> identifiedElementsAndTheirProgramaticRepresentation = new HashMap<>();
-    JFrame parentWindow;
-    GroupLayout groupLayout = new GroupLayout(this.getContentPane());
-    TafLabel headline = new TafLabel("Rich Java GUI recording");
-    TafButton recordButton = new TafButton("Record script");
-    TafButton stopRecordingButton = new TafButton("Stop recording");
+    TafFrame frame;
+    GroupLayout groupLayout;
+    TafLabel headline = new TafLabel("GUI Spy");
     TafLabel currentElementLabel = new TafLabel("Current element:");
     TafPanel currentElementPanel = new TafPanel("CurrentElementPanel");
     JTextPane currentElementText = new JTextPane();
     JScrollPane programaticDescriptionScrollPanel;
     TafPanel programaticDescriptionPanel = new TafPanel("ProgramaticDescriptionPanel");
-    TafCloseButton closeButton = new TafCloseButton(this);
+    TafButton closeButton = new TafButton("Close");
+    MousePosition position = new MousePosition();
+    Thread positionTracker = new Thread(position);
 
-    public RecordingWindow(JFrame parentWindow) {
+
+    public GuiSpyingWindow() {
+        frame = new TafFrame();
+        groupLayout = new GroupLayout(this.frame.getContentPane());
         groupLayout.setAutoCreateContainerGaps(true);
         groupLayout.setAutoCreateGaps(true);
-        this.setLayout(groupLayout);
-        this.parentWindow = parentWindow;
+        this.frame.setLayout(groupLayout);
         currentElementText.setFont(AppFont.getInstance());
         currentElementText.setName("CurrentElementText");
         currentElementText.setContentType("text/html");
@@ -43,20 +40,13 @@ public class RecordingWindow extends TafFrame {
 
         programaticDescriptionPanel.setLayout(new GridLayout(2, 1));
         programaticDescriptionScrollPanel = new JScrollPane(programaticDescriptionPanel);
-        recordButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stopRecordingButton.setEnabled(true);
-                trackElement();
-            }
-        });
 
-        stopRecordingButton.setEnabled(false);
-        stopRecordingButton.addActionListener(new ActionListener() {
+        closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stopRecordingButton.setEnabled(false);
-                stopRecording();
+                position.stopTrack();
+                positionTracker.destroy();
+                frame.dispose();
             }
         });
 
@@ -67,11 +57,7 @@ public class RecordingWindow extends TafFrame {
                                 .addComponent(currentElementLabel)
                                 .addComponent(currentElementPanel)
                                 .addComponent(programaticDescriptionScrollPanel)
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(recordButton)
-                                        .addComponent(stopRecordingButton)
-                                        .addComponent(closeButton)
-                                )
+                                .addComponent(closeButton)
                         )
         );
         groupLayout.setVerticalGroup(
@@ -80,41 +66,71 @@ public class RecordingWindow extends TafFrame {
                         .addComponent(currentElementLabel)
                         .addComponent(currentElementPanel)
                         .addComponent(programaticDescriptionScrollPanel)
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(recordButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(stopRecordingButton
-                                )
-                                .addComponent(closeButton)
-                        )
+                        .addComponent(closeButton)
         );
 
-        this.pack();
-        this.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 3, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
-        this.setVisible(true);
+        this.frame.pack();
+        this.frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 3, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
+        this.frame.setVisible(true);
+        this.frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                trackElement();
+            }
 
-    }
+            @Override
+            public void windowClosing(WindowEvent e) {
 
-    private void stopRecording() {
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+        positionTracker.start();
     }
 
     private class MousePosition implements Runnable {
+        PointerInfo pointerInfo;
 
         @Override
         public void run() {
-
+            pointerInfo = MouseInfo.getPointerInfo();
         }
 
         public Point getMousePosition() {
-            return MouseInfo.getPointerInfo().getLocation();
+            if(pointerInfo == null)return null;
+            return pointerInfo.getLocation();
+        }
+
+        public void stopTrack(){
+            pointerInfo = null;
         }
     }
 
     private void trackElement() {
-        stopRecordingButton.setEnabled(true);
         Set<String> touchedComponents = new HashSet<>();
-        recordButton.setEnabled(false);
-        MousePosition position = new MousePosition();
-        new Thread(position).start();
         long timer = System.currentTimeMillis();
         while (System.currentTimeMillis() - timer < 10000) {
 
@@ -162,8 +178,6 @@ public class RecordingWindow extends TafFrame {
                 }
             }
         }
-        stopRecordingButton.setEnabled(false);
-        recordButton.setEnabled(true);
     }
 
     private void updateComponentDescriptionPanel(Component component) {
@@ -193,11 +207,6 @@ public class RecordingWindow extends TafFrame {
 
         programaticDescriptionPanel.removeAll();
         programaticDescriptionPanel.add(new TafLabel("Programatic description"));
-        //JTextField programaticDescription = new JTextField(componentDeclarationString(component));
-        //programaticDescription.setFont(AppFont.getInstance());
-        //programaticDescription.setForeground(TafGuiColor.textColor);
-        //programaticDescriptionPanel.add(programaticDescription);
-        //programaticDescription.setEditable(false);
         currentElementText.setText(componentDeclarationString(component).replace(" ", "&nbsp;"));
         programaticDescriptionPanel.add(currentElementText);
         programaticDescriptionPanel.revalidate();
@@ -209,8 +218,8 @@ public class RecordingWindow extends TafFrame {
         currentElementPanel.revalidate();
         currentElementPanel.repaint();
         currentElementPanel.setVisible(true);
-        this.revalidate();
-        this.repaint();
+        this.frame.revalidate();
+        this.frame.repaint();
     }
 
     private String componentDeclarationString(Component c) {
@@ -249,6 +258,7 @@ public class RecordingWindow extends TafFrame {
                 }
             }
         }
+        positionTracker.interrupt();
         System.out.println(returnElement.toString());
         return returnElement;
     }
