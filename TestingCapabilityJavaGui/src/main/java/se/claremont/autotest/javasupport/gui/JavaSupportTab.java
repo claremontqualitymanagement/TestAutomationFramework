@@ -5,6 +5,7 @@ import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
+import se.claremont.autotest.javasupport.gui.guispywindow.GuiSpyingWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +21,7 @@ public class JavaSupportTab implements IGuiTab{
     private TafButton guiSpyButton = new TafButton("GUI Spy");
     private TafButton recordScriptButton = new TafButton("Record script");
 
-    static ApplicationUnderTest applicationUnderTest;
+    public static ApplicationUnderTest applicationUnderTest;
 
     public JavaSupportTab(){
         TestCase testCase = new TestCase();
