@@ -1,9 +1,10 @@
-package se.claremont.autotest.javasupport.gui;
+package se.claremont.autotest.javasupport.gui.applicationdeclarationwindow;
 
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.runtab.TestClassPickerDialogue;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
+import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

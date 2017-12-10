@@ -10,10 +10,8 @@ import java.awt.event.KeyListener;
 
 public class DescriptionToClipboardManager implements KeyListener {
 
-    JLabel hintText;
 
-    DescriptionToClipboardManager(JLabel hintText){
-        this.hintText = hintText;
+    DescriptionToClipboardManager(){
     }
 
     @Override
@@ -28,10 +26,16 @@ public class DescriptionToClipboardManager implements KeyListener {
             Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
             clpbrd.setContents(stringSelection, null);
             System.out.println("Copied text to clipboard.");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+        } else if((e.getKeyCode() == KeyEvent.VK_D) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)){
+            StringSelection stringSelection = new StringSelection(GuiSpyingWindow.currentElementParametersForClipboard);
+            Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clpbrd.setContents(stringSelection, null);
+            System.out.println("Copied text to clipboard.");
+        } else if((e.getKeyCode() == KeyEvent.VK_K) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)){
+            if(GuiSpyingWindow.executionIsPaused){
+                GuiSpyingWindow.executionIsPaused = false;
+            } else {
+                GuiSpyingWindow.executionIsPaused = true;
             }
         }
     }

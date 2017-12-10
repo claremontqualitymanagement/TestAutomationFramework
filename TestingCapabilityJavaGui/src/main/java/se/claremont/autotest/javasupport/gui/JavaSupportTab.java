@@ -5,6 +5,8 @@ import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
+import se.claremont.autotest.javasupport.gui.applicationdeclarationwindow.DeclareApplicationDialog;
+import se.claremont.autotest.javasupport.gui.guirecordingwindow.RecordWindow;
 import se.claremont.autotest.javasupport.gui.guispywindow.GuiSpyingWindow;
 
 import javax.swing.*;

@@ -39,12 +39,14 @@ public class GuiSpyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        if(GuiSpyingWindow.executionIsPaused) return;
         textComponent.setText(componentDeclarationString(e.getComponent()));
         updatePropertiesPanel(e.getComponent());
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        if(GuiSpyingWindow.executionIsPaused) return;
         textComponent.setText("");
     }
 
@@ -59,12 +61,15 @@ public class GuiSpyMouseListener implements MouseListener {
 
     private void updatePropertiesPanel(Component c){
         int propertiesCount = 4;
+        StringBuilder parameterTextForClipbard = new StringBuilder();
+
         GridBagLayout gridBag = new GridBagLayout();
         elementPropertiesPanel.setLayout(gridBag);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         elementPropertiesPanel.removeAll();
 
         addPropertyName("Class");
+        parameterTextForClipbard.append("Class=").append(c.getClass().getName()).append(System.lineSeparator());
         addPropertyValueAsLabel(c.getClass().getName());
         propertiesPanelRowCount++;
 
@@ -79,20 +84,24 @@ public class GuiSpyMouseListener implements MouseListener {
             textProperty.setText(text);
         }
         setGridBagConstraintsForPropertyValue();
+        parameterTextForClipbard.append("Text=").append(text).append(System.lineSeparator());
         elementPropertiesPanel.add(textProperty, constraints);
         propertiesPanelRowCount++;
 
         addPropertyName("Enabled");
         addPropertyValueAsLabel(String.valueOf(c.isEnabled()));
+        parameterTextForClipbard.append("Enabled=").append(String.valueOf(c.isEnabled())).append(System.lineSeparator());
         propertiesPanelRowCount++;
 
         TafTextField name = new TafTextField(" < No element name set > ");
         if(c.getName() != null && c.getName().length() > 0) name.setText(c.getName());
         addPropertyName("Name");
         setGridBagConstraintsForPropertyValue();
+        parameterTextForClipbard.append("Name=").append(c.getName()).append(System.lineSeparator());
         elementPropertiesPanel.add(name, constraints);
         propertiesPanelRowCount++;
 
+        GuiSpyingWindow.currentElementParametersForClipboard = parameterTextForClipbard.toString();
         elementPropertiesPanel.revalidate();
         elementPropertiesPanel.repaint();
 

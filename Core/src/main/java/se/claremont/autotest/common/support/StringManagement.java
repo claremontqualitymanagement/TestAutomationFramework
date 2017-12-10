@@ -101,6 +101,7 @@ public class StringManagement {
                 replace("Ö", "O"));
 
 
+        if(returnString.length() == 0) return "";
         if(Character.isDigit(returnString.charAt(0))){
             returnString.insert(0, "_");
         } //Method names cannot start with digits

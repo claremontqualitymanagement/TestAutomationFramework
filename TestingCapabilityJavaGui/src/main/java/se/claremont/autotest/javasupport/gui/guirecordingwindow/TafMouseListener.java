@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.gui;
+package se.claremont.autotest.javasupport.gui.guirecordingwindow;
 
 import javax.swing.text.JTextComponent;
 import java.awt.*;

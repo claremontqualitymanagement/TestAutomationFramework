@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.gui;
+package se.claremont.autotest.javasupport.gui.applicationdeclarationwindow;
 
 import se.claremont.autotest.common.gui.guistyle.*;
 

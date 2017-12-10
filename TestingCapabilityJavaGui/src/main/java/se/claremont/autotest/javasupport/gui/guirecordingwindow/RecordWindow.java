@@ -1,12 +1,11 @@
-package se.claremont.autotest.javasupport.gui;
+package se.claremont.autotest.javasupport.gui.guirecordingwindow;
 
 import se.claremont.autotest.common.gui.guistyle.*;
+import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class RecordWindow{
     TafFrame frame;
@@ -27,6 +26,7 @@ public class RecordWindow{
         groupLayout.setAutoCreateGaps(true);
         this.frame.setLayout(groupLayout);
 
+        headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() *3/2));
         scriptScrollPane = new JScrollPane(scriptTextPane);
         closeButton = new TafButton("Close");
         closeButton.addActionListener(new ActionListener() {
