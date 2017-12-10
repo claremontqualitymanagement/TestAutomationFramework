@@ -16,6 +16,7 @@ public class GuiSpyMouseListener implements MouseListener {
 
     private final JTextComponent textComponent;
     private final JPanel elementPropertiesPanel;
+    static Component currentComponent;
 
     GuiSpyMouseListener(JTextComponent updateComponent, JPanel elementPropertiesPanel){
         this.textComponent = updateComponent;
@@ -40,13 +41,15 @@ public class GuiSpyMouseListener implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         if(GuiSpyingWindow.executionIsPaused) return;
-        textComponent.setText(componentDeclarationString(e.getComponent()));
-        updatePropertiesPanel(e.getComponent());
+        currentComponent = e.getComponent();
+        textComponent.setText(componentDeclarationString(currentComponent));
+        updatePropertiesPanel(currentComponent);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if(GuiSpyingWindow.executionIsPaused) return;
+        currentComponent = null;
         textComponent.setText("");
     }
 

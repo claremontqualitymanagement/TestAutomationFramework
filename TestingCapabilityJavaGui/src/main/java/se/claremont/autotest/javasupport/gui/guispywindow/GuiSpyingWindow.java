@@ -1,6 +1,8 @@
 package se.claremont.autotest.javasupport.gui.guispywindow;
 
 import se.claremont.autotest.common.gui.guistyle.*;
+import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.autotest.javasupport.gui.Helper;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
@@ -19,6 +21,7 @@ public class GuiSpyingWindow {
     private final TafLabel hintText = new TafLabel("Press Ctrl+i to copy programatic description to clipbard.");
     private final TafLabel hintText2 = new TafLabel("Press Ctrl+d to copy parameters to clipbard.");
     private final TafLabel hintText3 = new TafLabel("Press Ctrl+k to pause and un-pause.");
+    private final TafLabel hintText4 = new TafLabel("Press Ctrl+j for super detailed info");
     private final TafLabel blank = new TafLabel(" ");
     private final TafLabel currentElementLabel = new TafLabel("Current element:");
     private final TafPanel currentElementPanel = new TafPanel("CurrentElementPanel");
@@ -48,6 +51,7 @@ public class GuiSpyingWindow {
                 hintText.setFont(hintsFont);
                 hintText2.setFont(hintsFont);
                 hintText3.setFont(hintsFont);
+                hintText4.setFont(hintsFont);
 
 
                 TafLabel programaticDescriptionLabel = new TafLabel("Programatic element description");
@@ -67,6 +71,7 @@ public class GuiSpyingWindow {
                                         .addComponent(hintText)
                                         .addComponent(hintText2)
                                         .addComponent(hintText3)
+                                        .addComponent(hintText4)
                                         .addComponent(blank)
                                         .addComponent(currentElementLabel)
                                         .addComponent(currentElementPanel)
@@ -82,6 +87,7 @@ public class GuiSpyingWindow {
                                 .addComponent(hintText)
                                 .addComponent(hintText2)
                                 .addComponent(hintText3)
+                                .addComponent(hintText4)
                                 .addComponent(blank)
                                 .addComponent(currentElementLabel)
                                 .addComponent(currentElementPanel)
@@ -101,7 +107,7 @@ public class GuiSpyingWindow {
                 keyBoardEventCatcher.setOpacity(0);
                 keyBoardEventCatcher.setVisible(true);
                 keyBoardEventCatcher.getRootPane().setOpaque(false);
-                keyBoardEventCatcher.addKeyListener(new DescriptionToClipboardManager());
+                keyBoardEventCatcher.addKeyListener(new GuiSpyKeyboardListener());
 
                 for (Window window : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
                     JavaWindow javaWindow = new JavaWindow(window);
