@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class Helper {
+public class ObjectToHtmlHelper {
 
     static Set<Class<?>> primitiveClassesSet = new HashSet<>(Arrays.asList(
             String.class,

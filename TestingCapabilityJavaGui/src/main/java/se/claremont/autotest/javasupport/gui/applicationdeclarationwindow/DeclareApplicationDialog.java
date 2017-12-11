@@ -25,9 +25,15 @@ public class DeclareApplicationDialog {
 
     TafFrame dialog = new TafFrame();
     TafLabel headline = new TafLabel("Application declaration for testing");
+    TafLabel blankSpace = new TafLabel(" ");
+    TafPanel parametersPanel = new TafPanel("ParametersPanel");
+    TafPanel startApplicationPanel = new TafPanel("StartApplicationPanel");
+    TafLabel startApplicationLabel = new TafLabel("Application start parameters");
+    TafPanel advancedParametersPanel = new TafPanel("AdvancedParametersPanel");
+    TafLabel advancedParameterLabel = new TafLabel("Advanced");
     TafLabel pathToJarFileLabel = new TafLabel("Path to jar:");
     LocalTextField pathToJarFileTextField = new LocalTextField(" <Path to jar> ");
-    TafButton selectExeFileButton = new TafButton("Select");
+    TafButton selectJarFileButton = new TafButton("Select");
     TafLabel workingFolderLabel = new TafLabel("Working folder:");
     LocalTextField workingFolderTextField = new LocalTextField("<Working folder>");
     TafLabel mainClassLabel = new TafLabel("Main class:");
@@ -56,16 +62,19 @@ public class DeclareApplicationDialog {
     TafButton tryButton = new TafButton("Try");
     TafButton saveSutToFile = new TafButton("Save to file");
     TafButton loadSutFromFile = new TafButton("Load from file");
+
+    GridBagLayout gridBagLayout = new GridBagLayout();
+    GridBagConstraints constraints = new GridBagConstraints();
+    GroupLayout groupLayout = new GroupLayout(dialog.getContentPane());
     //Todo: List of classpaths needed
 
     public DeclareApplicationDialog(){
         String originalPath = JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile;
         java.util.List<String> originalArgs = JavaSupportTab.applicationUnderTest.startMechanism.arguments;
         String originalMain = JavaSupportTab.applicationUnderTest.startMechanism.mainClass;
-
-        GroupLayout groupLayout = new GroupLayout(dialog.getContentPane());
-        dialog.getContentPane().setLayout(groupLayout);
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
 
         model = new DefaultComboBoxModel(new String[] {comboBoxDefaultText});
 
@@ -247,7 +256,7 @@ public class DeclareApplicationDialog {
             }
         });
 
-        selectExeFileButton.addActionListener(new ActionListener() {
+        selectJarFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -281,47 +290,220 @@ public class DeclareApplicationDialog {
 
         updateCliSuggestionAndSaveToFileButtonStatus();
 
+        setParameterPanelLayout();
+        setWindowLayout();
+
+        dialog.pack();
+        dialog.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 3/5, Toolkit.getDefaultToolkit().getScreenSize().height * 3/5);
+        dialog.setVisible(true);
+    }
+
+    private void setParameterPanelLayout() {
+        startApplicationPanel.setLayout(gridBagLayout);
+        constraints.ipadx = AppFont.getInstance().getSize();
+
+        startApplicationLabel.setFont(new Font(AppFont.getInstance().getName(), Font.BOLD, AppFont.getInstance().getSize()));
+        startApplicationPanel.setBorder(BorderFactory.createLineBorder(TafGuiColor.textColor));
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 3;
+        constraints.weightx = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        startApplicationPanel.add(startApplicationLabel, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        startApplicationPanel.add(pathToJarFileLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.weightx = 0.5;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.CENTER;
+        startApplicationPanel.add(pathToJarFileTextField, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        startApplicationPanel.add(selectJarFileButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        startApplicationPanel.add(mainClassLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.weightx = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        startApplicationPanel.add(mainClassComboBox, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        startApplicationPanel.add(runtimeArgumentsLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.weightx = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        startApplicationPanel.add(runtimeArgumentsTextField, constraints);
+
+        advancedParametersPanel.setLayout(new GridBagLayout());
+        advancedParametersPanel.setBorder(BorderFactory.createLineBorder(TafGuiColor.textColor));
+        advancedParameterLabel.setFont(new Font(AppFont.getInstance().getName(), Font.BOLD, AppFont.getInstance().getSize()));
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 0;
+        constraints.gridwidth = 3;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        advancedParametersPanel.add(advancedParameterLabel, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        advancedParametersPanel.add(workingFolderLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.weightx = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        advancedParametersPanel.add(workingFolderTextField, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        advancedParametersPanel.add(loadedLibrariesLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.CENTER;
+        advancedParametersPanel.add(loadedLibrariesTextField, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 2;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        advancedParametersPanel.add(loadedLibrariesAddButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        advancedParametersPanel.add(systemParametersLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.CENTER;
+        advancedParametersPanel.add(systemParametersTextField, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 3;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        advancedParametersPanel.add(systemParametersAddButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        advancedParametersPanel.add(environmentVariablesLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 4;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.CENTER;
+        advancedParametersPanel.add(environmentVariablesText, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 4;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        advancedParametersPanel.add(environmentVariablesAddButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        constraints.weightx = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        advancedParametersPanel.add(jvmArgumentLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 5;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.CENTER;
+        advancedParametersPanel.add(jvmArgumentTextField, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 5;
+        constraints.weightx = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        advancedParametersPanel.add(jvmArgumentAddButton, constraints);
+
+    }
+
+    private void setWindowLayout() {
+        dialog.getContentPane().setLayout(groupLayout);
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(headline)
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(pathToJarFileLabel)
-                                        .addComponent(pathToJarFileTextField)
-                                        .addComponent(selectExeFileButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(workingFolderLabel)
-                                        .addComponent(workingFolderTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(mainClassLabel)
-                                        .addComponent(mainClassComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(runtimeArgumentsLabel)
-                                        .addComponent(runtimeArgumentsTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(loadedLibrariesLabel)
-                                        .addComponent(loadedLibrariesTextField)
-                                        .addComponent(loadedLibrariesAddButton)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(systemParametersLabel)
-                                        .addComponent(systemParametersTextField)
-                                        .addComponent(systemParametersAddButton)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(environmentVariablesLabel)
-                                        .addComponent(environmentVariablesText)
-                                        .addComponent(environmentVariablesAddButton)
-                                )
-                                .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(jvmArgumentLabel)
-                                        .addComponent(jvmArgumentTextField)
-                                        .addComponent(jvmArgumentAddButton)
-                                )
+                                .addComponent(blankSpace)
+                                .addComponent(startApplicationPanel)
+                                .addComponent(advancedParametersPanel)
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(loadSutFromFile)
                                         .addComponent(saveSutToFile)
@@ -340,43 +522,9 @@ public class DeclareApplicationDialog {
         groupLayout.setVerticalGroup(
                 groupLayout.createSequentialGroup()
                         .addComponent(headline)
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(pathToJarFileLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(pathToJarFileTextField)
-                                .addComponent(selectExeFileButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(workingFolderLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(workingFolderTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(mainClassLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(mainClassComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(runtimeArgumentsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(runtimeArgumentsTextField, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(loadedLibrariesLabel)
-                                .addComponent(loadedLibrariesTextField)
-                                .addComponent(loadedLibrariesAddButton)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(systemParametersLabel)
-                                .addComponent(systemParametersTextField)
-                                .addComponent(systemParametersAddButton)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(environmentVariablesLabel)
-                                .addComponent(environmentVariablesText)
-                                .addComponent(environmentVariablesAddButton)
-                        )
-                        .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(jvmArgumentLabel)
-                                .addComponent(jvmArgumentTextField)
-                                .addComponent(jvmArgumentAddButton)
-                        )
+                        .addComponent(blankSpace)
+                        .addComponent(startApplicationPanel)
+                        .addComponent(advancedParametersPanel)
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(loadSutFromFile)
                                 .addComponent(saveSutToFile)
@@ -394,9 +542,6 @@ public class DeclareApplicationDialog {
 
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
-        dialog.pack();
-        dialog.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 3/5, Toolkit.getDefaultToolkit().getScreenSize().height * 3/5);
-        dialog.setVisible(true);
     }
 
     private void updateMainClassComboboxModel() {

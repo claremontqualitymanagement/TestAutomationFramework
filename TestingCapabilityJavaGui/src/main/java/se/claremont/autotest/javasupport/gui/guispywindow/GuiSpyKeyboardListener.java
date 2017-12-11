@@ -2,7 +2,7 @@ package se.claremont.autotest.javasupport.gui.guispywindow;
 
 import com.sun.jndi.toolkit.url.Uri;
 import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.javasupport.gui.Helper;
+import se.claremont.autotest.javasupport.gui.ObjectToHtmlHelper;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 
 import javax.swing.*;
@@ -52,7 +52,7 @@ public class GuiSpyKeyboardListener implements KeyListener {
         } else if((e.getKeyCode() == KeyEvent.VK_J) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)){
             Component component = GuiSpyMouseListener.currentComponent;
             if(component == null) return;
-            String html = Helper.toHtmlPage(component);
+            String html = ObjectToHtmlHelper.toHtmlPage(component);
             SupportMethods.saveToFile(html, "C:\\temp\\object.html");
             try {
                 Desktop.getDesktop().browse(new File("C:\\temp\\object.html").toURI());
