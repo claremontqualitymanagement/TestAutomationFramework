@@ -35,6 +35,10 @@ public class AboutTabPanel implements IGuiTab {
             "Inverted"
     };
 
+    public AboutTabPanel(){
+        this(null);
+    }
+
     public AboutTabPanel(TafFrame mainApplication) {
         this.mainApplication = mainApplication;
         panel = new TafPanel("AboutTab");
@@ -71,14 +75,6 @@ public class AboutTabPanel implements IGuiTab {
         prepareDiagnosticsRunButton();
         prepareColorThemeSpinner();
 
-        TafCloseButton closeButton = new TafCloseButton(mainApplication);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
         versionLabel.setText("");
         if (TafVersionGetter.tafVersion() != null)
             versionLabel.setText("TAF version: " + TafVersionGetter.tafVersion());
@@ -97,7 +93,6 @@ public class AboutTabPanel implements IGuiTab {
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(showHelpTextButton)
                                         .addComponent(runDiagnosticsButton)
-                                        .addComponent(closeButton)
                                 )
                         )
         );
@@ -108,7 +103,6 @@ public class AboutTabPanel implements IGuiTab {
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(showHelpTextButton)
                                 .addComponent(runDiagnosticsButton)
-                                .addComponent(closeButton)
                         )
         );
 

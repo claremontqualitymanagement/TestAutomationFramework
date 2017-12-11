@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.gui.createtesttab;
 
+import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 
@@ -16,17 +17,19 @@ public class CreateTestTabPanel implements IGuiTab{
     private TafPanel tabPanel;
     private TafCloseButton closeButton;
 
-    public CreateTestTabPanel(TafFrame parentFrame){
-        closeButton = new TafCloseButton(parentFrame);
+    public CreateTestTabPanel(){
+        TafHeadline headline = new TafHeadline("Create test");
+        closeButton = new TafCloseButton(Gui.applicationWindow);
         tabPanel = new TafPanel("CreateTestPanel");
         GroupLayout groupLayout = new GroupLayout(tabPanel);
         tabPanel.setLayout(new GridLayout(2, 1));
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
 
-        JTextArea headline = new JTextArea("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
-        headline.setLineWrap(true);
-        headline.setName("TabText");
+        JTextArea textArea = new JTextArea("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
+        textArea.setLineWrap(true);
+        textArea.setFont(AppFont.getInstance());
+        textArea.setName("TabText");
 
         BufferedImage image = null;
         try {
@@ -36,9 +39,11 @@ public class CreateTestTabPanel implements IGuiTab{
         }
         //ImagePanel imagePanel = new ImagePanel(image);
         JLabel logoImage = new JLabel(new ImageIcon(image));
-        tabPanel.add(logoImage);
+        tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.Y_AXIS));
+        //tabPanel.add(logoImage);
         tabPanel.add(headline);
-        tabPanel.add(closeButton);
+        tabPanel.add(textArea);
+        //tabPanel.add(closeButton);
         tabPanel.setVisible(true);
     }
 
@@ -51,4 +56,5 @@ public class CreateTestTabPanel implements IGuiTab{
     public String getName() {
         return "Create test";
     }
+
 }

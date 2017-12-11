@@ -27,7 +27,7 @@ public class RunSettingsDialogue {
 
     private void createWindow() {
         HashMap<String, String> runSettingsWhenOpened = new HashMap<>(Gui.defaultSettings);
-        window = new TafDialog(mainWindow.applicationWindow, "RunSettingsWindow", false);
+        window = new TafDialog(Gui.applicationWindow, "RunSettingsWindow", false);
         window.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -91,7 +91,7 @@ public class RunSettingsDialogue {
                 } catch (URISyntaxException e1) {
                     e1.printStackTrace();
                 }
-                int returnVal = filePickerWindow.showOpenDialog(mainWindow.applicationWindow);
+                int returnVal = filePickerWindow.showOpenDialog(Gui.applicationWindow);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = filePickerWindow.getSelectedFile();
                     Settings settings = new Settings(file.getAbsolutePath());
@@ -116,7 +116,7 @@ public class RunSettingsDialogue {
                 } catch (URISyntaxException e1) {
                     e1.printStackTrace();
                 }
-                int returnVal = filePickerWindow.showSaveDialog(mainWindow.applicationWindow);
+                int returnVal = filePickerWindow.showSaveDialog(Gui.applicationWindow);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = filePickerWindow.getSelectedFile();
                     TestRun.getSettings().writeSettingsParametersToFile(file.getAbsolutePath());

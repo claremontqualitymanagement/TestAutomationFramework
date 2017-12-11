@@ -15,8 +15,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Gui extends TafFrame{
+public class Gui{
 
+    public static TafFrame applicationWindow = new TafFrame("TAF - Application");
     private Font appFont;
     public static HashMap<String, String> defaultSettings;
     public static TafGuiColor colorTheme;
@@ -24,32 +25,35 @@ public class Gui extends TafFrame{
     public Gui() {
         defaultSettings = new HashMap<>(TestRun.getSettings());
         colorTheme = new TafGuiColorOriginal();
-        Container pane = this.getContentPane();
+        Container pane = applicationWindow.getContentPane();
         pane.setBackground(Gui.colorTheme.backgroundColor);
-        this.getRootPane().setBackground(Gui.colorTheme.backgroundColor);
+        applicationWindow.getRootPane().setBackground(Gui.colorTheme.backgroundColor);
         setFontSize();
         JTabbedPane tabs = new JTabbedPane();
         tabs.setBackground(Gui.colorTheme.backgroundColor);
         tabs.setFont(appFont);
         tabs.setForeground(Gui.colorTheme.textColor);
         PluginLoader pluginLoader = new PluginLoader();
-        java.util.List<IGuiTab> panels = new ArrayList<>();
-        panels.add(new RunTestTabPanel(this));
-        panels.add(new CreateTestTabPanel(this));
-        panels.addAll(pluginLoader.getAccessibleGuiPluginTabs());
-        panels.add(new AboutTabPanel(this));
-        for(IGuiTab pluginTab : panels){
-            tabs.addTab(pluginTab.getName(), pluginTab.getPanel());
+        //java.util.List<JPanel> panels = new ArrayList<>();
+        RunTestTabPanel runTestTabPanel = new RunTestTabPanel();
+        tabs.addTab(runTestTabPanel.getName(), runTestTabPanel.getPanel());
+        CreateTestTabPanel createTestTabPanel = new CreateTestTabPanel();
+        tabs.addTab(createTestTabPanel.getName(), createTestTabPanel.getPanel());
+        for(IGuiTab tab : pluginLoader.identifyGuiTabs()){
+            tabs.addTab(tab.getName(), tab.getPanel());
+            //tabs.setTitleAt(tabs.getTabCount()-1, tab.getName());
         }
+        AboutTabPanel aboutTabPanel = new AboutTabPanel();
+        tabs.add(aboutTabPanel.getName(), aboutTabPanel.getPanel());
         pane.add(tabs);
-        this.setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
-        this.setTitle("TAF - Test Automation Framework");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        applicationWindow.setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
+        applicationWindow.setTitle("TAF - Test Automation Framework");
+        applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 
     public void activate() {
-        this.setVisible(true);
+        applicationWindow.setVisible(true);
     }
 
     private void setFontSize() {

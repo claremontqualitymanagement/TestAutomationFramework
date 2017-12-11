@@ -1,5 +1,6 @@
 package se.claremont.autotest.common.gui.runtab;
 
+import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.TafFrame;
 import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.testrun.CliTestRunner;
@@ -48,7 +49,7 @@ public class TestsRunningDialogue {
         String testOutput = testOutputChannel.toString();
         System.setOut(originalOutputChannel);
         progressWindow.dispose();
-        new RunResultsDialogue(parent.applicationWindow, exitCode, parent.pathToHtmlTestRunSummaryReport, testOutput);
+        new RunResultsDialogue(Gui.applicationWindow, exitCode, parent.pathToHtmlTestRunSummaryReport, testOutput);
     }
 
 }

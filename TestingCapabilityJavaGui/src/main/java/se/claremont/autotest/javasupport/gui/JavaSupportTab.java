@@ -1,5 +1,6 @@
 package se.claremont.autotest.javasupport.gui;
 
+import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.testcase.TestCase;
@@ -27,6 +28,10 @@ public class JavaSupportTab implements IGuiTab{
 
     public static ApplicationUnderTest applicationUnderTest;
 
+    public JavaSupportTab(){
+        this(Gui.applicationWindow);
+    }
+
     public JavaSupportTab(JFrame parentWindow){
         this.parentWindow = parentWindow;
         TestCase testCase = new TestCase();
@@ -36,13 +41,14 @@ public class JavaSupportTab implements IGuiTab{
         panel.setLayout(groupLayout);
         setFontSize();
 
-        TafLabel text = new TafLabel("Java support tab");
+        TafHeadline text = new TafHeadline("Java support tab");
         explanationText.setText("Testing a java application is a bit tricky since the JVM (Java Virtual Machine) " +
                 "that runs the pre-compiled program is a closed box." + System.lineSeparator() + "In TAF we mitigate " +
                 "that by starting the application from the test code, but in a child classloader. This makes the " +
                 "application accessible for TAF, without compromising the context for the system under test.");
         explanationText.setLineWrap(true);
-        explanationText.setSize(parentWindow.getWidth() * 9/10, parentWindow.getHeight() /2);
+        if(parentWindow != null)
+            explanationText.setSize(parentWindow.getWidth() * 9/10, parentWindow.getHeight() /2);
         JScrollPane explanationtextScrollPane = new JScrollPane(explanationText);
         explanationtextScrollPane.setName("ExplanationTextScrollBar");
 
@@ -104,8 +110,10 @@ public class JavaSupportTab implements IGuiTab{
     }
 
     public JPanel getPanel(){
+        if(panel == null) return new JavaSupportTab().panel;
         return panel;
     }
+
 
     public String getName(){
         return "Java";

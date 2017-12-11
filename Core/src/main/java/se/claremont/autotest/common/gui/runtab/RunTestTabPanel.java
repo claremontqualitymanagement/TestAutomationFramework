@@ -60,16 +60,14 @@ public class RunTestTabPanel implements IGuiTab {
     private TafButton cliToClipboardButton = new TafButton("CLI to clipboard");
     private JLabel logoImage;
 
-    TafFrame applicationWindow;
+    //TafFrame applicationWindow;
     private TafPanel tabPanel;
     String pathToHtmlTestRunSummaryReport;
 
-    public RunTestTabPanel(TafFrame parentFrame)  {
 
-        applicationWindow = parentFrame;
-        applicationWindow.setName("TafGuiMainWindow");
-        int minimumLabelWidth = applicationWindow.getWidth() / 4;
-        int minimumLabelHeight = applicationWindow.getHeight() / 20;
+    public RunTestTabPanel()  {
+        int minimumLabelWidth = Gui.applicationWindow.getWidth() / 4;
+        int minimumLabelHeight = Gui.applicationWindow.getHeight() / 20;
         tabPanel = new TafPanel("RunTestTab");
         GroupLayout groupLayout = new GroupLayout(tabPanel);
         tabPanel.setLayout(groupLayout);
@@ -400,4 +398,5 @@ public class RunTestTabPanel implements IGuiTab {
     public String getName() {
         return "Run tests";
     }
+
 }
