@@ -13,7 +13,7 @@ public class RecordWindow{
     TafButton closeButton;
     TafLabel headline = new TafLabel("Rich Java GUI recording");
     TafLabel scriptLabel = new TafLabel("Script");
-    TafTextPane scriptTextPane = new TafTextPane("ScriptTextPane");
+    TafHtmlTextPane scriptTextPane = new TafHtmlTextPane("ScriptTextPane");
     JScrollPane scriptScrollPane;
     MousePosition position = new MousePosition();
     Thread positionTracker = new Thread(position);

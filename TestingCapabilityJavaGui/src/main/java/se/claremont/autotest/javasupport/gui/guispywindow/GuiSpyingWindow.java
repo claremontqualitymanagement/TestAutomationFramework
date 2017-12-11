@@ -1,8 +1,6 @@
 package se.claremont.autotest.javasupport.gui.guispywindow;
 
 import se.claremont.autotest.common.gui.guistyle.*;
-import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.javasupport.gui.Helper;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 

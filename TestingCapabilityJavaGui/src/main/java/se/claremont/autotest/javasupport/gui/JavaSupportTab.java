@@ -1,6 +1,6 @@
 package se.claremont.autotest.javasupport.gui;
 
-import se.claremont.autotest.common.gui.guistyle.TafButton;
+import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
@@ -17,7 +17,9 @@ import java.awt.event.ActionListener;
 public class JavaSupportTab implements IGuiTab{
 
     private Font appFont;
-    JPanel panel;
+    JFrame parentWindow;
+    TafPanel panel;
+    private TafTextArea explanationText = new TafTextArea("ExplanationText");
     private TafButton declareApplicationButton = new TafButton("Declare application");
     private TafButton tryStartSutButton = new TafButton("Start application");
     private TafButton guiSpyButton = new TafButton("GUI Spy");
@@ -25,15 +27,24 @@ public class JavaSupportTab implements IGuiTab{
 
     public static ApplicationUnderTest applicationUnderTest;
 
-    public JavaSupportTab(){
+    public JavaSupportTab(JFrame parentWindow){
+        this.parentWindow = parentWindow;
         TestCase testCase = new TestCase();
         applicationUnderTest = new ApplicationUnderTest(testCase, new ApplicationStartMechanism(testCase));
-        panel = new JPanel();
+        panel = new TafPanel("JavaSupportTabPanal");
+        GroupLayout groupLayout = new GroupLayout(panel);
+        panel.setLayout(groupLayout);
         setFontSize();
 
-        JLabel text = new JLabel("Java support tab");
-        text.setFont(appFont);
-        text.setName("MainText");
+        TafLabel text = new TafLabel("Java support tab");
+        explanationText.setText("Testing a java application is a bit tricky since the JVM (Java Virtual Machine) " +
+                "that runs the pre-compiled program is a closed box." + System.lineSeparator() + "In TAF we mitigate " +
+                "that by starting the application from the test code, but in a child classloader. This makes the " +
+                "application accessible for TAF, without compromising the context for the system under test.");
+        explanationText.setLineWrap(true);
+        explanationText.setSize(parentWindow.getWidth() * 9/10, parentWindow.getHeight() /2);
+        JScrollPane explanationtextScrollPane = new JScrollPane(explanationText);
+        explanationtextScrollPane.setName("ExplanationTextScrollBar");
 
         declareApplicationButton.addActionListener(new ActionListener() {
             @Override
@@ -63,11 +74,32 @@ public class JavaSupportTab implements IGuiTab{
             }
         });
 
-        panel.add(text);
-        panel.add(declareApplicationButton);
-        panel.add(tryStartSutButton);
-        panel.add(guiSpyButton);
-        panel.add(recordScriptButton);
+        groupLayout.setHorizontalGroup(
+                groupLayout.createSequentialGroup()
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(text)
+                                .addComponent(explanationtextScrollPane)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(declareApplicationButton)
+                                        .addComponent(tryStartSutButton)
+                                        .addComponent(guiSpyButton)
+                                        .addComponent(recordScriptButton)
+                                )
+                        )
+        );
+        groupLayout.setVerticalGroup(
+                groupLayout.createSequentialGroup()
+                        .addComponent(text)
+                        .addComponent(explanationtextScrollPane)
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(declareApplicationButton)
+                                .addComponent(tryStartSutButton)
+                                .addComponent(guiSpyButton)
+                                .addComponent(recordScriptButton)
+                        )
+        );
+        groupLayout.setAutoCreateContainerGaps(true);
+        groupLayout.setAutoCreateGaps(true);
         panel.setVisible(true);
     }
 
