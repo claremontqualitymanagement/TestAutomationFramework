@@ -31,6 +31,8 @@ public class ApplicationStartMechanism {
             as.startJar(new URL(startUrlOrPathToJarFile), mainClass, arguments.toArray(new String[0]));
         } catch (MalformedURLException e) {
             System.out.println("Could not start program '" + startUrlOrPathToJarFile + "', with start class '" + mainClass + "' and arguments '" + String.join("', '", arguments) + "'. Error:" + e.toString());
+        } catch (SecurityException e){
+            System.out.println("SUT application exited.");
         }
     }
 

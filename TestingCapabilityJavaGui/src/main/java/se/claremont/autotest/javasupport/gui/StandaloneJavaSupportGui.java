@@ -5,7 +5,7 @@ import se.claremont.autotest.common.gui.guistyle.TafFrame;
 import javax.swing.*;
 import java.awt.*;
 
-public class JavaStandaloneGui {
+public class StandaloneJavaSupportGui {
 
     static TafFrame window = new TafFrame();
 

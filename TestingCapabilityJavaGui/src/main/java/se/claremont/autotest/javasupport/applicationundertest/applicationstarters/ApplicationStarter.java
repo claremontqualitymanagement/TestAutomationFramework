@@ -101,7 +101,7 @@ public class ApplicationStarter extends ApplicationStartMechanism{
         invokeMainMethodOfMainClassWithArguments();
     }
 
-    public void startJar(URL url, String mainClass, String[] args){
+    public void startJar(URL url, String mainClass, String[] args) throws SecurityException{
         log(LogLevel.DEBUG, "Starting jar file '" + url.toString() + "' from jar with main class '" + mainClass + "'.");
         classLoader = new JarClassLoader(url);
         this.url = url;

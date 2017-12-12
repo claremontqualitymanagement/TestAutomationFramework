@@ -238,9 +238,6 @@
                 <version>${selenium.version}</version>
             </dependency>
 
-
-
-
             <!-- Network shares access -->
             <dependency>
                 <groupId>jcifs</groupId>

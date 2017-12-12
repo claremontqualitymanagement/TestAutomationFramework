@@ -19,7 +19,6 @@ public class PluginLoader {
             "se.claremont.autotest.websupport.gui.WebSupportTabPanel"
     };
 
-
     public static List<IGuiTab> identifyGuiTabs() {
         ClassLoader myCL = Thread.currentThread().getContextClassLoader();
         while (myCL != null) {
@@ -41,25 +40,25 @@ public class PluginLoader {
     }
 
     private static void addKnownPotentialTabClasses() {
-        for(String pluginGuiClassName : possibleGuiPluginClasses){
+        for (String pluginGuiClassName : possibleGuiPluginClasses) {
             System.out.println("Attempting to load plugin '" + pluginGuiClassName + "'.");
             IGuiTab panel = tryGetTab(pluginGuiClassName);
-            if(panel == null) continue;
+            if (panel == null) continue;
             System.out.println("Loaded panel '" + panel.getName() + "'.");
             panels.add(panel);
         }
     }
 
-    private static IGuiTab tryGetTab(String pluginClassName){
+    private static IGuiTab tryGetTab(String pluginClassName) {
         Class panel = null;
         try {
             panel = PluginLoader.class.getClassLoader().loadClass(pluginClassName);
         } catch (ClassNotFoundException e) {
             System.out.println(e.toString());
         }
-        if(panel == null) return null;
+        if (panel == null) return null;
         try {
-            if(IGuiTab.class.isAssignableFrom(panel)){
+            if (IGuiTab.class.isAssignableFrom(panel)) {
                 IGuiTab returnPanel = (IGuiTab) panel.newInstance();
                 return returnPanel;
             }
@@ -71,7 +70,7 @@ public class PluginLoader {
         return null;
     }
 
-    private static void loadPanelObjectFromTabClasses(){
+    private static void loadPanelObjectFromTabClasses() {
         for (Class<?> klass : classesDerivedFromIGuiTabInterface) {
             try {
                 IGuiTab tab = (IGuiTab) klass.newInstance();
@@ -98,7 +97,7 @@ public class PluginLoader {
         return classes.iterator();
     }
 
-    private static void addToTabClassesIfApplicable(Class<?> klass){
+    private static void addToTabClassesIfApplicable(Class<?> klass) {
         String className = klass.getName();
         if (IGuiTab.class.isAssignableFrom(klass) && !className.equals(IGuiTab.class.getName())) {
             if (className.equals(RunTestTabPanel.class.getName()) ||

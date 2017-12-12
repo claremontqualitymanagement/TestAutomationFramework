@@ -3,6 +3,7 @@ package se.claremont.autotest.common.gui.createtesttab;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
+import se.claremont.autotest.common.gui.teststructure.TestStepListPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class CreateTestTabPanel implements IGuiTab{
 
@@ -39,10 +41,13 @@ public class CreateTestTabPanel implements IGuiTab{
         }
         //ImagePanel imagePanel = new ImagePanel(image);
         JLabel logoImage = new JLabel(new ImageIcon(image));
+
+        TestStepListPanel testStepListPanel = new TestStepListPanel(new LinkedList<>(), new LinkedList<>());
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.Y_AXIS));
         //tabPanel.add(logoImage);
         tabPanel.add(headline);
         tabPanel.add(textArea);
+        tabPanel.add(testStepListPanel);
         //tabPanel.add(closeButton);
         tabPanel.setVisible(true);
     }

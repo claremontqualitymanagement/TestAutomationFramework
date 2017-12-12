@@ -4,7 +4,7 @@ import se.claremont.autotest.common.gui.guistyle.TafFrame;
 
 import javax.swing.*;
 
-public class StandaloneRestGui {
+public class StandaloneRestSupportGui {
 
     public static void main (String[] args){
         TafFrame frame = new TafFrame("RestWindow");

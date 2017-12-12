@@ -4,7 +4,7 @@ import se.claremont.autotest.common.gui.guistyle.TafFrame;
 
 import javax.swing.*;
 
-public class WebTempFrame {
+public class StandaloneWebSupportGui {
 
     public static void main(String[] args){
         TafFrame frame = new TafFrame("WebFrame");

@@ -5,10 +5,14 @@ import se.claremont.autotest.common.gui.guistyle.TafHeadline;
 import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.gui.guistyle.TafPanel;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
+import se.claremont.autotest.common.gui.teststructure.TestStep;
+import se.claremont.autotest.common.gui.teststructure.TestStepListPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
 
 public class RestSupportTabPanel implements IGuiTab {
 
@@ -27,6 +31,13 @@ public class RestSupportTabPanel implements IGuiTab {
             }
         });
 
+        List<TestStep> selectedTestSteps = new LinkedList<>();
+        selectedTestSteps.add(new RestTestStep("PUT request", "PUT request to http://testserver.se/endpoint"));
+        selectedTestSteps.add(new RestTestStep("POST request", "POST request to http://testserver.se/endpoint with data 'khdsfksdhf'"));
+        List<TestStep> additionalAvaliableTestSteps = new LinkedList<>();
+        additionalAvaliableTestSteps.add(new RestTestStep("GET request", "GET request to http://testserver.se/endpoint"));
+        TestStepListPanel testStepListPanel = new TestStepListPanel(selectedTestSteps, additionalAvaliableTestSteps);
+
         GroupLayout groupLayout = new GroupLayout(tafPanel);
         tafPanel.setLayout(groupLayout);
         groupLayout.setAutoCreateGaps(true);
@@ -36,6 +47,7 @@ public class RestSupportTabPanel implements IGuiTab {
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(headline)
                                 .addComponent(text)
+                                .addComponent(testStepListPanel)
                                 .addComponent(createRequestButton)
                         )
         );
@@ -43,6 +55,7 @@ public class RestSupportTabPanel implements IGuiTab {
                 groupLayout.createSequentialGroup()
                         .addComponent(headline)
                         .addComponent(text)
+                        .addComponent(testStepListPanel)
                         .addComponent(createRequestButton)
         );
 
