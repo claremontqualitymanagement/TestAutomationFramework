@@ -2,6 +2,7 @@ package se.claremont.autotest.javasupport.applicationundertest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationcontext.ApplicationContextManager;
@@ -9,6 +10,8 @@ import se.claremont.autotest.javasupport.applicationundertest.applicationstarter
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -22,6 +25,17 @@ public class ApplicationUnderTest {
         context = new ApplicationContextManager(testCase);
         this.startMechanism = startMechanism;
         this.testCase = testCase;
+    }
+
+    public ApplicationUnderTest(ApplicationUnderTest aut){
+        this.testCase = aut.testCase;
+        this.context.jvmSettings.appliedSetting = new ArrayList<>(aut.context.jvmSettings.appliedSetting);
+        this.context.loadedLibraries.appliedFiles = new ArrayList<>(aut.context.loadedLibraries.appliedFiles);
+        this.context.properties.appliedProperties = new ArrayList<>(aut.context.properties.appliedProperties);
+        this.context.environmentVariables.appliedVariableChanges = new ArrayList<>(aut.context.environmentVariables.appliedVariableChanges);
+        this.startMechanism.mainClass = aut.startMechanism.mainClass;
+        this.startMechanism.startUrlOrPathToJarFile = aut.startMechanism.startUrlOrPathToJarFile;
+        this.startMechanism.arguments = aut.startMechanism.arguments;
     }
 
     public ApplicationUnderTest(ApplicationStartMechanism startMechanism, ApplicationContextManager context){
@@ -167,6 +181,26 @@ public class ApplicationUnderTest {
         }
     }
 
+    public String saveToJsonFile(String filePath){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(filePath), this);
+        } catch (IOException e) {
+            return e.toString();
+        }
+        return "ok";
+    }
+
+    public static ApplicationUnderTest readFromJsonFile(String filePath){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(new File(filePath), ApplicationUnderTest.class);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        TestCase testCase = new TestCase();
+        return new ApplicationUnderTest(testCase, new ApplicationStartMechanism(testCase));
+    }
 
     private void log(LogLevel logLevel, String message){
         if(testCase == null){

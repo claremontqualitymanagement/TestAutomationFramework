@@ -3,6 +3,7 @@ package se.claremont.autotest.javasupport.gui.applicationdeclarationwindow;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.runtab.TestClassPickerDialogue;
+import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 
@@ -69,9 +70,7 @@ public class DeclareApplicationDialog {
     //Todo: List of classpaths needed
 
     public DeclareApplicationDialog(){
-        String originalPath = JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile;
-        java.util.List<String> originalArgs = JavaSupportTab.applicationUnderTest.startMechanism.arguments;
-        String originalMain = JavaSupportTab.applicationUnderTest.startMechanism.mainClass;
+        ApplicationUnderTest unmodifiedAut = new ApplicationUnderTest(JavaSupportTab.applicationUnderTest);
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
@@ -200,10 +199,18 @@ public class DeclareApplicationDialog {
                 int returnVal = window.showOpenDialog(dialog);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = window.getSelectedFile();
-                    JavaSupportTab.applicationUnderTest.startMechanism = ApplicationStartMechanism.readFromJsonFile(file.getPath());
+                    JavaSupportTab.applicationUnderTest = ApplicationUnderTest.readFromJsonFile(file.getPath());
                     pathToJarFileTextField.setText(JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile.substring(7));
                     mainClassComboBox.setModel(new DefaultComboBoxModel(new String[]{JavaSupportTab.applicationUnderTest.startMechanism.mainClass}));
-                    runtimeArgumentsTextField.setText(String.join(" ",JavaSupportTab.applicationUnderTest.startMechanism.arguments));
+                    runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));
+                    if(JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting.size() > 0){
+                        jvmArgumentTextField.setText("-X" + String.join(" -X", JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting));
+                    }
+                    environmentVariablesText.setText(String.join(" ", JavaSupportTab.applicationUnderTest.context.environmentVariables.appliedVariableChanges));
+                    if(JavaSupportTab.applicationUnderTest.context.properties.appliedProperties.size() > 0){
+                        systemParametersTextField.setText("-D" + String.join(" -D", JavaSupportTab.applicationUnderTest.context.properties.appliedProperties));
+                    }
+                    loadedLibrariesTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.context.loadedLibraries.appliedFiles));
                     updateCliSuggestionAndSaveToFileButtonStatus();
                 }
             }
@@ -225,7 +232,7 @@ public class DeclareApplicationDialog {
                 int returnVal = window.showSaveDialog(dialog);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = window.getSelectedFile();
-                    JavaSupportTab.applicationUnderTest.startMechanism.saveToJsonFile(file.getPath());
+                    JavaSupportTab.applicationUnderTest.saveToJsonFile(file.getPath());
                 }
             }
         });
@@ -233,9 +240,7 @@ public class DeclareApplicationDialog {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JavaSupportTab.applicationUnderTest.startMechanism.mainClass = originalMain;
-                JavaSupportTab.applicationUnderTest.startMechanism.arguments = originalArgs;
-                JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile = originalPath;
+                JavaSupportTab.applicationUnderTest = new ApplicationUnderTest(unmodifiedAut);
                 dialog.setVisible(false);
                 dialog.dispose();
             }

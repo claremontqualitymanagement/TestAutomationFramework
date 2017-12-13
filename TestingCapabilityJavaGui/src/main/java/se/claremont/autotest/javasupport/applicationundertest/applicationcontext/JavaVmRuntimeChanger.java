@@ -3,6 +3,7 @@ package se.claremont.autotest.javasupport.applicationundertest.applicationcontex
 import javax.management.ObjectName;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.management.HotSpotDiagnosticMXBean;
 import com.sun.management.VMOption;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -13,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
-    @JsonIgnore TestCase testCase;
+    @JsonIgnore private final TestCase testCase;
+    @JsonProperty public List<String> appliedSetting = new ArrayList<>();
 
     public JavaVmRuntimeChanger(TestCase testCase) {
         this.testCase = testCase;
@@ -104,6 +106,7 @@ public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
             return;
         }
         log(LogLevel.EXECUTED, "VM Option '" + name + "' successfully set to '" + value + "'.");
+        appliedSetting.add(name + "=" + value);
     }
 
     public ObjectName getObjectName() {

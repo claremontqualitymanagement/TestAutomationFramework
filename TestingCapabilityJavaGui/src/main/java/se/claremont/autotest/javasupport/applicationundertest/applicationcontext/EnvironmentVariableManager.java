@@ -1,5 +1,7 @@
 package se.claremont.autotest.javasupport.applicationundertest.applicationcontext;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 
@@ -7,7 +9,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class EnvironmentVariableManager {
-    TestCase testCase;
+    @JsonIgnore private TestCase testCase;
+    @JsonProperty
+    public List<String> appliedVariableChanges = new ArrayList<>();
 
     public EnvironmentVariableManager(TestCase testCase){
         this.testCase = testCase;
@@ -36,6 +40,7 @@ public class EnvironmentVariableManager {
         env.put(variableName, variableValue);
         boolean success = setEnv(env);
         if(success) log(LogLevel.EXECUTED, "Environment variable '" + variableName + "' set to '" + variableValue + "'.");
+        appliedVariableChanges.add(variableName + "=" + variableValue);
     }
 
     public List<String> currentEnvironmentVariables(){

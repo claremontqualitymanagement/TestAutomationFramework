@@ -1,12 +1,13 @@
 package se.claremont.autotest.javasupport.applicationundertest.applicationcontext;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.testcase.TestCase;
 
 public class ApplicationContextManager {
-    public LibraryLoader loadedLibraries;
-    public EnvironmentVariableManager environmentVariables;
-    public JavaVmRuntimeChanger jvmSettings;
-    public PropertiesManager properties;
+    @JsonProperty public LibraryLoader loadedLibraries;
+    @JsonProperty public EnvironmentVariableManager environmentVariables;
+    @JsonProperty public JavaVmRuntimeChanger jvmSettings;
+    @JsonProperty public PropertiesManager properties;
 
     public ApplicationContextManager(TestCase testCase){
         loadedLibraries = new LibraryLoader(testCase);

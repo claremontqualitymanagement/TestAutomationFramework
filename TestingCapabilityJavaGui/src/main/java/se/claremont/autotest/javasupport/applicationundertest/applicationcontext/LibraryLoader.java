@@ -1,5 +1,7 @@
 package se.claremont.autotest.javasupport.applicationundertest.applicationcontext;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 
@@ -13,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryLoader {
-    private URLClassLoader tafClassLoader;
-    TestCase testCase;
+    @JsonIgnore private URLClassLoader tafClassLoader;
+    @JsonProperty
+    public List<String> appliedFiles = new ArrayList<>();
+    @JsonIgnore private final TestCase testCase;
 
     public LibraryLoader(TestCase testCase){
         this.testCase = testCase;
@@ -85,6 +89,7 @@ public class LibraryLoader {
         }
         try {
             System.load(path);
+            appliedFiles.add(path);
             log(LogLevel.EXECUTED, "Successfully loaded code library '" + path + "'.");
         } catch (UnsatisfiedLinkError e) {
             log(LogLevel.EXECUTION_PROBLEM, "Native code library failed to load. Error: " + System.lineSeparator() + e.toString());
@@ -105,6 +110,7 @@ public class LibraryLoader {
             try {
                 System.load(fileName);
                 log(LogLevel.EXECUTED, "Successfully loaded code library '" + path + "'.");
+                appliedFiles.add(path + File.pathSeparator + "*");
             } catch (UnsatisfiedLinkError e) {
                 log(LogLevel.EXECUTION_PROBLEM, "Native code library failed to load. Error: " + System.lineSeparator() + e.toString());
             }
@@ -119,6 +125,7 @@ public class LibraryLoader {
         }
         try {
             System.load(path);
+            appliedFiles.add(path);
             log(LogLevel.EXECUTED, "Successfully loaded code library '" + path + "'.");
         } catch (UnsatisfiedLinkError e) {
             log(LogLevel.EXECUTION_PROBLEM, "Native code library failed to load." + System.lineSeparator() + e.toString());
@@ -129,6 +136,7 @@ public class LibraryLoader {
         try {
             testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
             addURL(new File(filePath).toURL());
+            appliedFiles.add(filePath);
         } catch (Exception e) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + filePath + "' to classpath. Error: " + e.getMessage());
         }
@@ -140,6 +148,7 @@ public class LibraryLoader {
             try {
                 testCase.log(LogLevel.EXECUTED, "Simulating adding file '" + fileName + "' to classpath by loading it in ClassLoader.");
                 addURL(new File(fileName).toURL());
+                appliedFiles.add(folderPath + File.pathSeparator + "*");
             } catch (Exception e) {
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + fileName + "' to classpath. Error: " + e.getMessage());
             }
