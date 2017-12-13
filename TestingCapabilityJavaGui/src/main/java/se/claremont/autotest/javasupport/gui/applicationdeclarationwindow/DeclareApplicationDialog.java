@@ -202,15 +202,15 @@ public class DeclareApplicationDialog {
                     JavaSupportTab.applicationUnderTest = ApplicationUnderTest.readFromJsonFile(file.getPath());
                     pathToJarFileTextField.setText(JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile.substring(7));
                     mainClassComboBox.setModel(new DefaultComboBoxModel(new String[]{JavaSupportTab.applicationUnderTest.startMechanism.mainClass}));
-                    runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));
+                    runtimeArgumentsTextField.setText(String.join(", ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));
                     if(JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting.size() > 0){
-                        jvmArgumentTextField.setText("-X" + String.join(" -X", JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting));
+                        jvmArgumentTextField.setText(String.join(", ", JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting));
                     }
                     environmentVariablesText.setText(String.join(" ", JavaSupportTab.applicationUnderTest.context.environmentVariables.appliedVariableChanges));
                     if(JavaSupportTab.applicationUnderTest.context.properties.appliedProperties.size() > 0){
-                        systemParametersTextField.setText("-D" + String.join(" -D", JavaSupportTab.applicationUnderTest.context.properties.appliedProperties));
+                        systemParametersTextField.setText(String.join(", ", JavaSupportTab.applicationUnderTest.context.properties.appliedProperties));
                     }
-                    loadedLibrariesTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.context.loadedLibraries.appliedFiles));
+                    loadedLibrariesTextField.setText(String.join(", ", JavaSupportTab.applicationUnderTest.context.loadedLibraries.appliedFiles));
                     updateCliSuggestionAndSaveToFileButtonStatus();
                 }
             }
@@ -586,10 +586,18 @@ public class DeclareApplicationDialog {
 
     private void updateCliSuggestionAndSaveToFileButtonStatus(){
         String cli = "";
-        String pathToExe = pathToJarFileTextField.getText();
-        if(!pathToExe.equals(pathToJarFileTextField.disregardedDefaultRunNameString) && pathToExe.length() != 0){
+        String pathToJar = pathToJarFileTextField.getText();
+        if(!pathToJar.equals(pathToJarFileTextField.disregardedDefaultRunNameString) && pathToJar.length() != 0){
+            cli = "java ";
+            if(JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting.size() > 0){
+                cli += "-X" + String.join(" -X", JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting) + " ";
+            }
             JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile = "file://" + pathToJarFileTextField.getText();
-            cli += "java -jar " + pathToExe;
+            cli += "-jar " + pathToJar + " ";
+        }
+
+        if(JavaSupportTab.applicationUnderTest.context.properties.appliedProperties.size() > 0){
+            cli += "-D" + String.join(" -D", JavaSupportTab.applicationUnderTest.context.properties.appliedProperties) + " ";
         }
 
         String comboboxChoice;
@@ -602,7 +610,7 @@ public class DeclareApplicationDialog {
         }
 
         if(!workingFolderTextField.getText().equals(workingFolderTextField.disregardedDefaultRunNameString) && workingFolderTextField.getText().length() != 0){
-            cli += " -cp " + workingFolderTextField.getText() + File.separator + "*";
+            cli += " -cp " + workingFolderTextField.getText() + File.pathSeparator + "*";
             if(!loadedLibrariesTextField.getText().equals(loadedLibrariesTextField.disregardedDefaultRunNameString)){
                 cli += "/" + loadedLibrariesTextField.getText().replace(", ", "/");
             }

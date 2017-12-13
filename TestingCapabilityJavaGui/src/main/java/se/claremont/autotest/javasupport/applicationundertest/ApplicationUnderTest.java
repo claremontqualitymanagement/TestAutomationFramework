@@ -29,6 +29,8 @@ public class ApplicationUnderTest {
 
     public ApplicationUnderTest(ApplicationUnderTest aut){
         this.testCase = aut.testCase;
+        context = new ApplicationContextManager(testCase);
+        startMechanism = new ApplicationStartMechanism(testCase);
         this.context.jvmSettings.appliedSetting = new ArrayList<>(aut.context.jvmSettings.appliedSetting);
         this.context.loadedLibraries.appliedFiles = new ArrayList<>(aut.context.loadedLibraries.appliedFiles);
         this.context.properties.appliedProperties = new ArrayList<>(aut.context.properties.appliedProperties);

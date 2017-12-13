@@ -13,6 +13,8 @@ public class TafDialog extends JDialog {
 
     public TafDialog(JFrame parentFrame, String title, boolean modal){
         super(parentFrame, title, modal);
+        setIconImage(new ImageIcon(ClassLoader.getSystemResource(
+                "icon.png")).getImage());
         if(!title.startsWith("TAF - "))
             this.setTitle("TAF - " + title);
         String usableName = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.firstUpperLetterTrailingLowerLetter(title));

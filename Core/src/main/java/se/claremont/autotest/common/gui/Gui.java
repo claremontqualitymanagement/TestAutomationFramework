@@ -6,12 +6,15 @@ import se.claremont.autotest.common.gui.guistyle.TafFrame;
 import se.claremont.autotest.common.gui.guistyle.TafGuiColor;
 import se.claremont.autotest.common.gui.guistyle.TafGuiColorOriginal;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
+import se.claremont.autotest.common.gui.userpreferences.Preferences;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.common.gui.plugins.PluginLoader;
 import se.claremont.autotest.common.gui.runtab.RunTestTabPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,11 +22,50 @@ public class Gui{
 
     public static TafFrame applicationWindow = new TafFrame("TAF - Application");
     private Font appFont;
+    public static Preferences preferences = new Preferences();
     public static HashMap<String, String> defaultSettings;
     public static TafGuiColor colorTheme;
 
     public Gui() {
         defaultSettings = new HashMap<>(TestRun.getSettings());
+        preferences.loadFromFile(getPreferencesFile());
+        applicationWindow.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("Saving user preferences.");
+                preferences.saveToFile(getPreferencesFile());
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
         colorTheme = new TafGuiColorOriginal();
         Container pane = applicationWindow.getContentPane();
         pane.setBackground(Gui.colorTheme.backgroundColor);
@@ -49,6 +91,10 @@ public class Gui{
         applicationWindow.setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
         applicationWindow.setTitle("TAF - Test Automation Framework");
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private String getPreferencesFile() {
+        return "C:\\temp\\tafuser.prefs";
     }
 
 

@@ -12,6 +12,8 @@ public class TafFrame extends JFrame {
 
     public TafFrame(String title){
         this.setTitle(title);
+        setIconImage(new ImageIcon(ClassLoader.getSystemResource(
+                "icon.png")).getImage());
         String usableName = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.firstUpperLetterTrailingLowerLetter(title));
         if(!usableName.toLowerCase().endsWith("frame"))
             usableName += "Frame";
@@ -27,6 +29,8 @@ public class TafFrame extends JFrame {
     public TafFrame(){
         this.setTitle("TAF");
         this.setName("TafFrame");
+        setIconImage(new ImageIcon(ClassLoader.getSystemResource(
+                "icon.png")).getImage());
         this.setForeground(Gui.colorTheme.textColor);
         this.setBackground(Gui.colorTheme.backgroundColor);
         this.getContentPane().setBackground(Gui.colorTheme.backgroundColor);

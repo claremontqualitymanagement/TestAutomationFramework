@@ -18,7 +18,7 @@ public class HelpDialogue {
 
     public HelpDialogue(){
 
-        TafFrame helpFrame = new TafFrame();
+        TafFrame helpFrame = new TafFrame("TAF - Help");
         helpFrame.setName("HelpDialogueWindow");
         helpFrame.setTitle("TAF - Help");
 
