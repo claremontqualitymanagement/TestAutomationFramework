@@ -7,6 +7,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationcontext.ApplicationContextManager;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
+import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationThreadRunner;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,13 @@ public class ApplicationUnderTest {
     @JsonProperty public ApplicationStartMechanism startMechanism;
     @JsonIgnore TestCase testCase;
     @JsonIgnore static ArrayList<Window> windowsStartedBeforeStartingSut = new ArrayList<>();
+
+    private ApplicationUnderTest(){ //For JSON parsing to work
+        TestCase testCase = new TestCase();
+        context = new ApplicationContextManager(testCase);
+        this.startMechanism = new ApplicationStartMechanism(testCase);
+        this.testCase = testCase;
+    }
 
     public ApplicationUnderTest(TestCase testCase, ApplicationStartMechanism startMechanism){
         context = new ApplicationContextManager(testCase);
@@ -45,53 +53,66 @@ public class ApplicationUnderTest {
         this.startMechanism = startMechanism;
     }
 
+    @JsonIgnore
     public void setProgramArguments(String[] args){
         for(String arg : args){
             startMechanism.arguments.add(arg);
         }
     }
 
+    @JsonIgnore
     public void addProgramArgument(String arg){
         startMechanism.arguments.add(arg);
     }
 
+    @JsonIgnore
     public void setMainClass(String mainClassName){
         startMechanism.mainClass = mainClassName;
     }
 
+    @JsonIgnore
     public void loadLibrary(String path){
         context.loadedLibraries.loadLibrary(path);
     }
 
+    @JsonIgnore
     public void loadAllLibrariesInFolder(String path){
         context.loadedLibraries.loadAllDllsInFolder(path);
     }
 
+    @JsonIgnore
     public void setEnvironmentVariableValue(String variableName, String variableValue){
         context.environmentVariables.setEnvironmentVariable(variableName, variableValue);
     }
 
+    @JsonIgnore
     public void setSystemPropertyValue(String name, String value){
         context.properties.setProperty(name, value);
     }
 
+    @JsonIgnore
     public void attemptToAddJVMSetting(String name, String value){
         context.jvmSettings.setVMOption(name, value);
     }
 
+    @JsonIgnore
     public void setMainJarOrUrl(String jarFilePathOrUrl){
         startMechanism.startUrlOrPathToJarFile = jarFilePathOrUrl;
     }
 
+    @JsonIgnore
     public void start(){
         windowsStartedBeforeStartingSut.addAll(getWindows());
-        startMechanism.run();
+        Thread t = ApplicationThreadRunner.start(startMechanism);
+
     }
 
+    @JsonIgnore
     public void stop(){
         closeAllWindows();
     }
 
+    @JsonIgnore
     public Object getWindow(){
         ArrayList<Window> windows = getWindows();
         log(LogLevel.DEBUG, "Found " + windows.size()+ " windows in JVM.");
@@ -110,6 +131,7 @@ public class ApplicationUnderTest {
         return null;
     }
 
+    @JsonIgnore
     public static ArrayList<Window> getWindows(){
         ArrayList<Window> windows = new ArrayList<>();
         Window [] swingWindows = Window.getOwnerlessWindows ();
@@ -117,6 +139,7 @@ public class ApplicationUnderTest {
         return windows;
     }
 
+    @JsonIgnore
     public static ArrayList<Window> getWindowsForSUT(){
         ArrayList<Window> windows = new ArrayList<>();
         Window [] swingWindows = Window.getOwnerlessWindows ();
@@ -125,12 +148,14 @@ public class ApplicationUnderTest {
         return windows;
     }
 
+    @JsonIgnore
     public static void closeAllWindows(){
         for(Window window : getWindows()){
             closeSubWindows(window);
         }
     }
 
+    @JsonIgnore
     private static void closeSubWindows(Window window){
         Window[] subWindows = window.getOwnedWindows();
         for(Window w : subWindows){
@@ -139,6 +164,7 @@ public class ApplicationUnderTest {
         window.dispose();
     }
 
+    @JsonIgnore
     public Object getWindow(int windowCount){
         ArrayList<Window> windows = getWindows();
         log(LogLevel.DEBUG, "Found " + windows.size()+ " windows in JVM.");
@@ -153,10 +179,12 @@ public class ApplicationUnderTest {
         return windows.get(windowCount);
     }
 
+    @JsonIgnore
     public void logCurrentWindows(){
         logCurrentWindows(testCase);
     }
 
+    @JsonIgnore
     public static void logCurrentWindows(TestCase testCase) {
         StringBuilder logMessage = new StringBuilder("Current active windows:" + System.lineSeparator());
         for(Window w : getWindows()){
@@ -183,6 +211,7 @@ public class ApplicationUnderTest {
         }
     }
 
+    @JsonIgnore
     public String saveToJsonFile(String filePath){
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -193,6 +222,7 @@ public class ApplicationUnderTest {
         return "ok";
     }
 
+    @JsonIgnore
     public static ApplicationUnderTest readFromJsonFile(String filePath){
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -204,6 +234,7 @@ public class ApplicationUnderTest {
         return new ApplicationUnderTest(testCase, new ApplicationStartMechanism(testCase));
     }
 
+    @JsonIgnore
     private void log(LogLevel logLevel, String message){
         if(testCase == null){
             System.out.println(message);

@@ -12,6 +12,9 @@ public class PropertiesManager {
     @JsonProperty
     public List<String> appliedProperties = new ArrayList<>();
 
+    private PropertiesManager(){ //For JSON parsing
+        this.testCase = new TestCase();
+    }
 
     public PropertiesManager(TestCase testCase){
         this.testCase = testCase;
@@ -23,11 +26,13 @@ public class PropertiesManager {
      * @param propertyName Name of variable to set (the rest of the parameter after '-D' at the command prompt.
      * @param propertyValue The environment value to set.
      */
+    @JsonIgnore
     public void setProperty(String propertyName, String propertyValue){
         System.setProperty(propertyName, propertyValue);
         appliedProperties.add(propertyName + "=" + propertyValue);
     }
 
+    @JsonIgnore
     public String getPropertyValue(String propertyName){
         return System.getProperty(propertyName);
     }

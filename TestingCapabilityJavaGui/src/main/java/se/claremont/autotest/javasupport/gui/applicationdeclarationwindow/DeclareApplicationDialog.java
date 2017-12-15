@@ -1,5 +1,6 @@
 package se.claremont.autotest.javasupport.gui.applicationdeclarationwindow;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.runtab.TestClassPickerDialogue;
@@ -13,6 +14,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
@@ -77,6 +80,42 @@ public class DeclareApplicationDialog {
 
         model = new DefaultComboBoxModel(new String[] {comboBoxDefaultText});
 
+        dialog.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //Gui.preferences.add("LastJavaSutApplicationDescription", new ObjectMapper().JavaSupportTab.applicationUnderTest);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
         mainClassComboBox = new JComboBox(model);
         mainClassComboBox.setEditable(true);
         mainClassComboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.disabledColor);
@@ -199,7 +238,7 @@ public class DeclareApplicationDialog {
                 int returnVal = window.showOpenDialog(dialog);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = window.getSelectedFile();
-                    JavaSupportTab.applicationUnderTest = ApplicationUnderTest.readFromJsonFile(file.getPath());
+                    JavaSupportTab.applicationUnderTest = new ApplicationUnderTest(ApplicationUnderTest.readFromJsonFile(file.getPath()));
                     pathToJarFileTextField.setText(JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile.substring(7));
                     mainClassComboBox.setModel(new DefaultComboBoxModel(new String[]{JavaSupportTab.applicationUnderTest.startMechanism.mainClass}));
                     runtimeArgumentsTextField.setText(String.join(", ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));

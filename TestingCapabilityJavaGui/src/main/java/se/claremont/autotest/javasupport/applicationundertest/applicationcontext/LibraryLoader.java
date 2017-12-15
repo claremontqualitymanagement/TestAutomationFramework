@@ -18,13 +18,19 @@ public class LibraryLoader {
     @JsonIgnore private URLClassLoader tafClassLoader;
     @JsonProperty
     public List<String> appliedFiles = new ArrayList<>();
-    @JsonIgnore private final TestCase testCase;
+    @JsonIgnore private TestCase testCase;
+
+    private LibraryLoader(){//For JSON parsing to work
+        this.testCase = new TestCase();
+        tafClassLoader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
+    }
 
     public LibraryLoader(TestCase testCase){
         this.testCase = testCase;
         tafClassLoader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
     }
 
+    @JsonIgnore
     public void loadLibrary(String path){
         if(path == null){
             log(LogLevel.EXECUTION_PROBLEM, "Cannot load null library.");
@@ -52,6 +58,7 @@ public class LibraryLoader {
         log(LogLevel.EXECUTION_PROBLEM, "File at path '" + path + "' is neighter a jar file or a DLL. No attempts to load the file.");
     }
 
+    @JsonIgnore
     public void loadAllLibrariesInFolder(String path){
         if(path == null){
             log(LogLevel.EXECUTION_PROBLEM, "Cannot load libraries from null folder.");
@@ -82,6 +89,7 @@ public class LibraryLoader {
      *
      * @param path The file path to the DLL file
      */
+    @JsonIgnore
     public void loadDll(java.lang.String path){
         if(path == null || path.length() == 0 || !path.toLowerCase().endsWith(".dll")){
             log(LogLevel.EXECUTION_PROBLEM, "The file '" + path + "' does not seem to be a DLL file. Loading of this file aborted. If you still want to load this file use the tryLoadLibrary() method.");
@@ -104,6 +112,7 @@ public class LibraryLoader {
      *
      * @param path The path to the folder to add all DLLs in.
      */
+    @JsonIgnore
     public void loadAllDllsInFolder(java.lang.String path){
         for(String fileName : fileNamesInFolder(path)){
             if(path == null || path.length() == 0 || !path.toLowerCase().endsWith(".dll") || Files.isDirectory(Paths.get(fileName)))continue;
@@ -117,6 +126,7 @@ public class LibraryLoader {
         }
     }
 
+    @JsonIgnore
     public void tryLoadLibrary(java.lang.String path){
         //if(path.contains("WFAPILink.dll"))return;
         if(path == null || path.length() == 0 || Files.isDirectory(Paths.get(path))){
@@ -132,6 +142,7 @@ public class LibraryLoader {
         }
     }
 
+    @JsonIgnore
     public void addJarFileToClassPath(String filePath){
         try {
             testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
@@ -142,6 +153,7 @@ public class LibraryLoader {
         }
     }
 
+    @JsonIgnore
     public void addFolderToClassPath(String folderPath){
         for(String fileName : fileNamesInFolder(folderPath)){
             if(Files.isDirectory(Paths.get(fileName)) || !fileName.toLowerCase().endsWith(".jar")) continue;
@@ -156,7 +168,7 @@ public class LibraryLoader {
     }
 
 
-
+    @JsonIgnore
     private List<String> fileNamesInFolder(String foldername){
         List<String> filenames = new ArrayList<>();
         File folder = new File(foldername);
@@ -200,6 +212,7 @@ public class LibraryLoader {
 
 
     @SuppressWarnings("unchecked")
+    @JsonIgnore
     private void addURL(URL url) throws Exception {
         URLClassLoader classLoader
                 = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -210,6 +223,7 @@ public class LibraryLoader {
         method.invoke(classLoader, url);
     }
 
+    @JsonIgnore
     private void log(LogLevel logLevel, String message){
         if(testCase == null){
             System.out.println(logLevel.toString() + ": " + message);

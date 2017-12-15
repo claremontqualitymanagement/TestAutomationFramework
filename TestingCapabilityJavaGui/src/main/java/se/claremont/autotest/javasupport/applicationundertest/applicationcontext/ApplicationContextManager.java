@@ -9,6 +9,14 @@ public class ApplicationContextManager {
     @JsonProperty public JavaVmRuntimeChanger jvmSettings;
     @JsonProperty public PropertiesManager properties;
 
+    private ApplicationContextManager(){//For JSON parsing to work
+        TestCase testCase = new TestCase();
+        loadedLibraries = new LibraryLoader(testCase);
+        environmentVariables = new EnvironmentVariableManager(testCase);
+        jvmSettings = new JavaVmRuntimeChanger(testCase);
+        properties = new PropertiesManager(testCase);
+    }
+
     public ApplicationContextManager(TestCase testCase){
         loadedLibraries = new LibraryLoader(testCase);
         environmentVariables = new EnvironmentVariableManager(testCase);

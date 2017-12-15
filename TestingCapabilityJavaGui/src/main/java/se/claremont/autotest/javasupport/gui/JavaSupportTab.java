@@ -33,9 +33,13 @@ public class JavaSupportTab implements IGuiTab{
     }
 
     public JavaSupportTab(JFrame parentWindow){
-        this.parentWindow = parentWindow;
+
         TestCase testCase = new TestCase();
         applicationUnderTest = new ApplicationUnderTest(testCase, new ApplicationStartMechanism(testCase));
+        if(Gui.preferences.get("LastJavaSutApplicationDescription") != null)
+            applicationUnderTest = (ApplicationUnderTest)Gui.preferences.get("LastJavaSutApplicationDescription");
+
+        this.parentWindow = parentWindow;
         panel = new TafPanel("JavaSupportTabPanal");
         GroupLayout groupLayout = new GroupLayout(panel);
         panel.setLayout(groupLayout);

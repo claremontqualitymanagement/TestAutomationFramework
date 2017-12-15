@@ -4,19 +4,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.EnvironmentSetupTests;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 public class EnvironmentVariableManager {
     @JsonIgnore private TestCase testCase;
-    @JsonProperty
-    public List<String> appliedVariableChanges = new ArrayList<>();
+    @JsonProperty public List<String> appliedVariableChanges = new ArrayList<>();
+
+    private EnvironmentVariableManager(){//For JSON parsing to work
+        this.testCase = new TestCase();
+    }
 
     public EnvironmentVariableManager(TestCase testCase){
         this.testCase = testCase;
     }
 
+    @JsonIgnore
     public void setEnvironmentVariables(Map<String, String> variables){
         ProcessBuilder pb = new ProcessBuilder();
         Map<String, String> env = pb.environment();
@@ -34,6 +39,7 @@ public class EnvironmentVariableManager {
         }
     }
 
+    @JsonIgnore
     public void setEnvironmentVariable(String variableName, String variableValue){
         ProcessBuilder pb = new ProcessBuilder();
         Map<String, String> env = pb.environment();
@@ -43,6 +49,7 @@ public class EnvironmentVariableManager {
         appliedVariableChanges.add(variableName + "=" + variableValue);
     }
 
+    @JsonIgnore
     public List<String> currentEnvironmentVariables(){
         ProcessBuilder pb = new ProcessBuilder();
         List<String> variables = new ArrayList<>();
@@ -53,6 +60,7 @@ public class EnvironmentVariableManager {
         return variables;
     }
 
+    @JsonIgnore
     protected boolean setEnv(Map<String, String> newenv)
     {
         boolean success = false;
@@ -94,6 +102,7 @@ public class EnvironmentVariableManager {
         return success;
     }
 
+    @JsonIgnore
     private void log(LogLevel logLevel, String message){
         if(testCase == null){
             System.out.println(logLevel.toString() + ": " + message);

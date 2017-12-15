@@ -41,4 +41,9 @@ public class Preferences {
         }
     }
 
+    public static String getPreferencesFile(){
+        return "C:\\Temp\\taf.preferences";
+
+    }
+
 }

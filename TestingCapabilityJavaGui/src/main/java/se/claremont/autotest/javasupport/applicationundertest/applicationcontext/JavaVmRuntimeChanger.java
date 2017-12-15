@@ -1,7 +1,5 @@
 package se.claremont.autotest.javasupport.applicationundertest.applicationcontext;
 
-import javax.management.ObjectName;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.management.HotSpotDiagnosticMXBean;
@@ -9,20 +7,29 @@ import com.sun.management.VMOption;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 
+import javax.management.ObjectName;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
-    @JsonIgnore private final TestCase testCase;
-    @JsonProperty public List<String> appliedSetting = new ArrayList<>();
+    @JsonIgnore
+    private TestCase testCase;
+    @JsonProperty
+    public List<String> appliedSetting = new ArrayList<>();
+
+    private JavaVmRuntimeChanger() {//For JSON parsing to work
+        this.testCase = new TestCase();
+    }
 
     public JavaVmRuntimeChanger(TestCase testCase) {
         this.testCase = testCase;
     }
 
+    @JsonIgnore
     public native void dumpHeap(String outputFile, boolean live) throws IOException;
 
+    @JsonIgnore
     public List<VMOption> getDiagnosticOptions() {
         List<Flag> allFlags = Flag.getAllFlags();
         List<VMOption> result = new ArrayList<VMOption>();
@@ -34,6 +41,7 @@ public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
         return result;
     }
 
+    @JsonIgnore
     public VMOption getVMOption(String name) {
         if (name == null) {
             log(LogLevel.EXECUTION_PROBLEM, "Cannot get JVM option for null.");
@@ -53,9 +61,10 @@ public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
      * (usually with -X option) can be manipulated or added programatically.
      * This method attempts to do that.
      *
-     * @param name The name of the parameter to attempt to set.
+     * @param name  The name of the parameter to attempt to set.
      * @param value The settings value to try to apply.
      */
+    @JsonIgnore
     public void setVMOption(String name, String value) {
         if (name == null || name.length() == 0) {
             log(LogLevel.EXECUTION_PROBLEM, "JVM option name cannot be null or empty when setting option value.");
@@ -85,8 +94,8 @@ public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
                 Flag.setLongValue(name, l);
             } catch (NumberFormatException e) {
                 log(LogLevel.EXECUTION_PROBLEM, "Cannot set VM Option '" + name + "' to '" + value + "'. Invalid value:" +
-                                " VM Option \"" + name + "\"" +
-                                " expects numeric value. Error: " + e.toString());
+                        " VM Option \"" + name + "\"" +
+                        " expects numeric value. Error: " + e.toString());
                 return;
             }
         } else if (v instanceof Boolean) {
@@ -109,12 +118,14 @@ public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
         appliedSetting.add(name + "=" + value);
     }
 
+    @JsonIgnore
     public ObjectName getObjectName() {
         return Util.newObjectName("com.sun.management:type=HotSpotDiagnostic");
     }
 
-    private void log(LogLevel logLevel, String message){
-        if(testCase == null){
+    @JsonIgnore
+    private void log(LogLevel logLevel, String message) {
+        if (testCase == null) {
             System.out.println(logLevel.toString() + ": " + message);
         } else {
             testCase.log(logLevel, message);
