@@ -16,6 +16,12 @@ public abstract class TestStep {
     @JsonProperty private String description;
     @JsonProperty private String name;
     @JsonIgnore private TafTextField component = new TafTextField(" < initial default name > ");
+    @JsonProperty
+    public String actionName;
+    @JsonProperty
+    public String elementName;
+    @JsonProperty
+    public Object data;
 
     public TestStep(){}
 
@@ -33,6 +39,12 @@ public abstract class TestStep {
         component.setText(name);
         this.name = name;
     }
+
+    public abstract void setActionName(String actionName);
+
+    public abstract void setElementName(String elementName);
+
+    public abstract void setAssociatedData(Object data);
 
     public String getName(){
         return name;

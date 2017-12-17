@@ -1,6 +1,5 @@
 package se.claremont.autotest.javasupport.gui.teststeps;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
@@ -17,6 +16,21 @@ public class JavaClictTestStep extends TestStep {
 
     public void prepareExecution(StepRunner stepRunner){
         this.stepRunner = stepRunner;
+    }
+
+    @Override
+    public void setActionName(String actionName) {
+        this.actionName = "Click";
+    }
+
+    @Override
+    public void setElementName(String elementName) {
+        this.elementName = javaGuiElement.getName();
+    }
+
+    @Override
+    public void setAssociatedData(Object data) {
+
     }
 
     @Override

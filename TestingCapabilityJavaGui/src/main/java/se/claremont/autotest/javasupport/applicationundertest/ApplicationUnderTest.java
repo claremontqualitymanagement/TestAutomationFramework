@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ApplicationUnderTest {
+    @JsonProperty public String friendlyName;
     @JsonProperty public ApplicationContextManager context;
     @JsonProperty public ApplicationStartMechanism startMechanism;
     @JsonIgnore TestCase testCase;
@@ -51,6 +52,10 @@ public class ApplicationUnderTest {
     public ApplicationUnderTest(ApplicationStartMechanism startMechanism, ApplicationContextManager context){
         this.context = context;
         this.startMechanism = startMechanism;
+    }
+
+    public void setName(String name){
+        this.friendlyName = name;
     }
 
     @JsonIgnore

@@ -43,7 +43,7 @@ public class CreateTestTabPanel implements IGuiTab{
         //ImagePanel imagePanel = new ImagePanel(image);
         JLabel logoImage = new JLabel(new ImageIcon(image));
 
-        TestStepListPanel testStepListPanel = new TestStepListPanel(new LinkedList<>(), new LinkedList<>());
+        TestStepListPanel testStepListPanel = new TestStepListPanel(new LinkedList<>(), Gui.availableTestSteps);
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.Y_AXIS));
         //tabPanel.add(logoImage);
         tabPanel.add(headline);

@@ -7,6 +7,8 @@ import se.claremont.autotest.common.gui.runtab.TestClassPickerDialogue;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
+import se.claremont.autotest.javasupport.gui.teststeps.JavaStartApplicationTestStep;
+import se.claremont.autotest.javasupport.gui.teststeps.JavaTestStep;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -30,9 +32,8 @@ public class DeclareApplicationDialog {
     TafPanel parametersPanel = new TafPanel("ParametersPanel");
     TafPanel startApplicationPanel = new TafPanel("StartApplicationPanel");
     TafLabel startApplicationLabel = new TafLabel("Application start parameters");
-    TafCheckbox showAdvancedCheckbox = new TafCheckbox("Show advanced options");
-    TafPanel advancedParametersPanel = new TafPanel("AdvancedParametersPanel");
-    TafLabel advancedParameterLabel = new TafLabel("Advanced");
+    TafLabel applicationFriendlyNameLabel = new TafLabel("Friendly name");
+    TafTextField applicationFriendlyNameText = new TafTextField(" < Friendly name > ");
     TafLabel pathToJarFileLabel = new TafLabel("Path to jar:");
     LocalTextField pathToJarFileTextField = new LocalTextField(" <Path to jar> ");
     TafButton selectJarFileButton = new TafButton("Select");
@@ -45,6 +46,9 @@ public class DeclareApplicationDialog {
     LocalTextField mainClassTextField = new LocalTextField("<Main class>");
     TafLabel runtimeArgumentsLabel = new TafLabel("Runtime arguments:");
     LocalTextField runtimeArgumentsTextField = new LocalTextField("<Runtime arguments>");
+    TafCheckbox showAdvancedCheckbox = new TafCheckbox("Show advanced options");
+    TafPanel advancedParametersPanel = new TafPanel("AdvancedParametersPanel");
+    TafLabel advancedParameterLabel = new TafLabel("Advanced");
     TafLabel loadedLibrariesLabel = new TafLabel("Loaded extra libraries");
     TafTextField loadedLibrariesTextField = new TafTextField(" < Loaded external libraries > ");
     TafButton loadedLibrariesAddButton = new TafButton("Add");
@@ -76,6 +80,37 @@ public class DeclareApplicationDialog {
 
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
 
+        saveButton.setEnabled(false);
+
+        applicationFriendlyNameText.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(applicationFriendlyNameText.isChangedFromDefault() && applicationFriendlyNameText.getText().length() > 0){
+                    saveButton.setEnabled(true);
+                } else {
+                    saveButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(applicationFriendlyNameText.isChangedFromDefault() && applicationFriendlyNameText.getText().length() > 0){
+                    saveButton.setEnabled(true);
+                } else {
+                    saveButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if(applicationFriendlyNameText.isChangedFromDefault() && applicationFriendlyNameText.getText().length() > 0){
+                    saveButton.setEnabled(true);
+                } else {
+                    saveButton.setEnabled(false);
+                }
+            }
+        });
+
         selectJarFileButton.setMnemonic('e');
         selectJarFileButton.addActionListener(new ActionListener() {
             @Override
@@ -103,7 +138,26 @@ public class DeclareApplicationDialog {
             }
         });
 
+        applicationFriendlyNameLabel.setLabelFor(applicationFriendlyNameText);
+        applicationFriendlyNameText.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(applicationFriendlyNameText.isChangedFromDefault())
+                    JavaSupportTab.applicationUnderTest.setName(applicationFriendlyNameText.getText());
+            }
 
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(applicationFriendlyNameText.isChangedFromDefault())
+                    JavaSupportTab.applicationUnderTest.setName(applicationFriendlyNameText.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if(applicationFriendlyNameText.isChangedFromDefault())
+                    JavaSupportTab.applicationUnderTest.setName(applicationFriendlyNameText.getText());
+            }
+        });
 
         model = new DefaultComboBoxModel(new String[] {comboBoxDefaultText});
         mainClassComboBox = new JComboBox(model);
@@ -221,11 +275,10 @@ public class DeclareApplicationDialog {
         environmentVariablesAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
-
+                AddEnvironmentVariableWindow addEnvironmentVariableWindow = new AddEnvironmentVariableWindow(environmentVariablesText);
+                updateCliSuggestionAndSaveToFileButtonStatus();
             }
         });
-        environmentVariablesAddButton.setEnabled(false);
 
         jvmArgumentTextField.setEditable(false);
         jvmArgumentAddButton.addActionListener(new ActionListener() {
@@ -305,6 +358,7 @@ public class DeclareApplicationDialog {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Gui.availableTestSteps.add(new JavaStartApplicationTestStep(JavaSupportTab.applicationUnderTest));
                 dialog.setVisible(false);
                 dialog.dispose();
             }
@@ -542,6 +596,10 @@ public class DeclareApplicationDialog {
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(headline)
                                 .addComponent(blankSpace)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                    .addComponent(applicationFriendlyNameLabel)
+                                    .addComponent(applicationFriendlyNameText)
+                                )
                                 .addComponent(startApplicationPanel)
                                 .addComponent(showAdvancedCheckbox)
                                 .addComponent(advancedParametersPanel)
@@ -564,6 +622,10 @@ public class DeclareApplicationDialog {
                 groupLayout.createSequentialGroup()
                         .addComponent(headline)
                         .addComponent(blankSpace)
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(applicationFriendlyNameLabel)
+                                .addComponent(applicationFriendlyNameText)
+                        )
                         .addComponent(startApplicationPanel)
                         .addComponent(showAdvancedCheckbox)
                         .addComponent(advancedParametersPanel)
@@ -644,6 +706,20 @@ public class DeclareApplicationDialog {
             if(!comboboxChoice.equals(mainClassTextField.disregardedDefaultRunNameString) && comboboxChoice.length() != 0){
                 JavaSupportTab.applicationUnderTest.startMechanism.mainClass = comboboxChoice;
                 cli += " " + comboboxChoice;
+            }
+        }
+
+        if(environmentVariablesText.isChangedFromDefault()){
+            if(environmentVariablesText.getText().contains(", ")){
+                for(String pair : environmentVariablesText.getText().split(", ")){
+                    if(!pair.contains("="))continue;
+                    JavaSupportTab.applicationUnderTest.context.environmentVariables.setEnvironmentVariable(pair.split("=")[0], pair.substring(pair.indexOf("=")));
+                }
+            } else {
+                if(environmentVariablesText.getText().contains("="))
+                    JavaSupportTab.applicationUnderTest.context.environmentVariables.setEnvironmentVariable(
+                            environmentVariablesText.getText().split("=")[0],
+                            environmentVariablesText.getText().substring(environmentVariablesText.getText().indexOf("=")));
             }
         }
 
