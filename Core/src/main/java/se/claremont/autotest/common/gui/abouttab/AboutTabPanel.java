@@ -178,6 +178,7 @@ public class AboutTabPanel implements IGuiTab {
     }
 
     private void prepareDiagnosticsRunButton() {
+        runDiagnosticsButton.setMnemonic('d');
         runDiagnosticsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -187,6 +188,7 @@ public class AboutTabPanel implements IGuiTab {
     }
 
     private void prepareHelpButton() {
+        showHelpTextButton.setMnemonic('h');
         showHelpTextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

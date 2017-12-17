@@ -39,6 +39,7 @@ public class TestStepListPanel extends TafPanel {
 
         if(selectedTestSteps.size() == 0){
             TafButton addTestStepButton = new TafButton("Select first test step");
+            addTestStepButton.setMnemonic('S');
             addTestStepButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

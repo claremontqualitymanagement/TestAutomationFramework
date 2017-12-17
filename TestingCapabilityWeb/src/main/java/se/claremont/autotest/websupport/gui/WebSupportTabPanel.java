@@ -23,6 +23,7 @@ public class WebSupportTabPanel implements IGuiTab{
     public WebSupportTabPanel(){
         panel = new TafPanel("WebSupportTabPanel");
 
+        startTestButton.setMnemonic('s');
         startTestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

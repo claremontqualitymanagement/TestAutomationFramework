@@ -143,6 +143,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilitySmartImageGui</artifactId>
+                <version>${capability.smart.image.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
                 <artifactId>TechnologiesSupport</artifactId>
                 <version>${capability.support.version}</version>
             </dependency>

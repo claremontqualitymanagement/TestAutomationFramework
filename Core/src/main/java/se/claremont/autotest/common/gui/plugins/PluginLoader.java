@@ -16,7 +16,8 @@ public class PluginLoader {
     static String[] possibleGuiPluginClasses = {
             "se.claremont.autotest.javasupport.gui.JavaSupportTab",
             "se.claremont.autotest.restsupport.gui.RestSupportTabPanel",
-            "se.claremont.autotest.websupport.gui.WebSupportTabPanel"
+            "se.claremont.autotest.websupport.gui.WebSupportTabPanel",
+            "se.claremont.autotest.eyeautomatesupport.gui.SmartImageRecognitionSupportTabPanel"
     };
 
     public static List<IGuiTab> identifyGuiTabs() {
