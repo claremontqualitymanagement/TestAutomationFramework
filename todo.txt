@@ -9,4 +9,8 @@ Implement tab for EyeAutomate
 Tabbed panel for Declare Java Application. One tab for Java Web Start.
 Implement test step list with drag-n-drop
 Make REST work
+Closing SUT should not close TAF
 Implement page object structure for element, for view
+Buttons for short-keys for GuiSpy
+Get waiting symbol working
+Bug fix GuiSpy

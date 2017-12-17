@@ -50,6 +50,7 @@ public class TestClassPickerDialogue {
 
         listClassesListPane.setName("TestClassesListPanel");
 
+        showAllClassesWithTestsCheckbox.setMnemonic('h');
         showAllClassesWithTestsCheckbox.setFont(AppFont.getInstance());
         showAllClassesWithTestsCheckbox.setName("ShowAllTestsCheckbox");
         showAllClassesWithTestsCheckbox.setBackground(Gui.colorTheme.backgroundColor);
@@ -64,6 +65,7 @@ public class TestClassPickerDialogue {
         });
 
         TafButton fileChooserButton = new TafButton("Pick file...");
+        fileChooserButton.setMnemonic('p');
         fileChooserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,8 +87,10 @@ public class TestClassPickerDialogue {
         });
 
         TafCloseButton closeButton = new TafCloseButton(classPickerWindow);
+        closeButton.setMnemonic('c');
 
         TafButton saveButton = new TafButton("Save");
+        saveButton.setMnemonic('s');
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

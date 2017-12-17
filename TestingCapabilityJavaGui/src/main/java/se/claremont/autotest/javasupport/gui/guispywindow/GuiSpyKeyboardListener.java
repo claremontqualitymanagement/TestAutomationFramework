@@ -16,8 +16,10 @@ import java.net.URI;
 
 public class GuiSpyKeyboardListener implements KeyListener {
 
+    JFrame parentWindow;
 
-    GuiSpyKeyboardListener(){
+    GuiSpyKeyboardListener(JFrame parentWindow){
+        this.parentWindow = parentWindow;
     }
 
     @Override
@@ -59,6 +61,8 @@ public class GuiSpyKeyboardListener implements KeyListener {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+        } else if((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiers() & KeyEvent.ALT_MASK) != 0)){
+            parentWindow.dispose();
         }
     }
 

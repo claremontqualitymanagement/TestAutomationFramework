@@ -54,6 +54,7 @@ public class DiagnosticsRunResultsDialogue {
         }
 
         TafCloseButton closeButton = new TafCloseButton(resultFrame);
+        closeButton.setMnemonic('c');
         resultPanel.add(closeButton);
 
         resultFrame.getRootPane().setDefaultButton(closeButton);

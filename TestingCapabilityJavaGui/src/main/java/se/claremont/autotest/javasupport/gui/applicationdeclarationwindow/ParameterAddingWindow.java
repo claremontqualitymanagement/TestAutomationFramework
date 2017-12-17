@@ -19,7 +19,11 @@ public class ParameterAddingWindow{
 
     public ParameterAddingWindow(JFrame parentWindow, String title){
         thisDialog = new TafDialog(parentWindow, title, true);
+
         cancelButton = new TafCloseButton(thisDialog);
+        cancelButton.setMnemonic('C');
+
+        saveButton.setMnemonic('S');
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

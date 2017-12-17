@@ -2,6 +2,9 @@ package se.claremont.autotest.javasupport.gui.guirecordingwindow;
 
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
+import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
+import se.claremont.autotest.javasupport.interaction.MethodInvoker;
+import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +18,6 @@ public class RecordWindow{
     TafLabel scriptLabel = new TafLabel("Script");
     TafHtmlTextPane scriptTextPane = new TafHtmlTextPane("ScriptTextPane");
     JScrollPane scriptScrollPane;
-    MousePosition position = new MousePosition();
-    Thread positionTracker = new Thread(position);
-    boolean performRecording = true;
 
     public RecordWindow(){
         this.frame = new TafFrame("TAF - Script recorder");
@@ -28,11 +28,12 @@ public class RecordWindow{
 
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() *3/2));
         scriptScrollPane = new JScrollPane(scriptTextPane);
+
         closeButton = new TafButton("Close");
+        closeButton.setMnemonic('c');
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                performRecording = false;
                 frame.dispose();
             }
         });
@@ -65,13 +66,11 @@ public class RecordWindow{
 
             @Override
             public void windowClosing(WindowEvent e) {
-
+                stopRecording();
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                positionTracker.destroy();
-                performRecording = false;
             }
 
             @Override
@@ -95,32 +94,39 @@ public class RecordWindow{
         });
     }
 
-    private class MousePosition implements Runnable {
-        PointerInfo pointerInfo;
-
-        @Override
-        public void run() {
-            pointerInfo = MouseInfo.getPointerInfo();
-        }
-
-        public Point getMousePosition() {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(pointerInfo == null)return null;
-            return pointerInfo.getLocation();
-        }
-
-        public void stopTrack(){
-            pointerInfo = null;
+    private void stopRecording() {
+        for (Window w : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
+            if (!w.isShowing()) continue;
+            removeListener(w);
         }
     }
 
+    private void removeListener(Component component){
+        MethodInvoker m = new MethodInvoker();
+        System.out.println("Removing mouse listener from '" + component.getClass().getName() + " " + component.getName() + "'.");
+        for(MouseListener ml : component.getMouseListeners()){
+            if(ml.getClass().equals(RecordingMouseListener.class)){
+                component.removeMouseListener(ml);
+            }
+        }
+        Component[] subComponents = (Component[])m.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+        if(subComponents == null) return;
+        for(Component c : subComponents){
+            removeListener(c);
+        }
+    }
 
     private void startRecording() {
-        positionTracker.start();
+        for (Window w : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
+            if (!w.isShowing()) continue;
+            JavaWindow jw = new JavaWindow(w);
+            for(Object o : jw.getComponents()){
+                Component c = (Component)o;
+                if(o.getClass().getSimpleName().endsWith("Panel"))continue;
+                ((Component) o).addMouseListener(new RecordingMouseListener(scriptTextPane));
+            }
+        }
+        /*
         while (performRecording) {
             for (Window w : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
                 if (!w.isShowing()) continue;
@@ -137,6 +143,7 @@ public class RecordWindow{
 
             }
         }
+        */
     }
 
     private static boolean componentsAreTheSame(Component component1, Component component2){
@@ -148,22 +155,4 @@ public class RecordWindow{
         return true;
     }
 
-    private Component identifyComponent(Component w, Point mousePosition) {
-        int x = w.getLocationOnScreen().x;
-        int y = w.getLocationOnScreen().y;
-        Component c = w.getComponentAt(mousePosition.x - x, mousePosition.y - y);
-        Component returnElement = c;
-        while (c != null) {
-            c = c.getComponentAt(mousePosition.x - c.getLocationOnScreen().x, mousePosition.y - c.getLocationOnScreen().y);
-            if (c != null) {
-                if (c.equals(returnElement)) {
-                    c = null;
-                } else {
-                    returnElement = c;
-                }
-            }
-        }
-        System.out.println(returnElement.toString());
-        return returnElement;
-    }
 }

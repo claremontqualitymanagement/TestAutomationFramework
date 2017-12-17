@@ -27,7 +27,7 @@ import java.util.List;
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class GenericInteractionMethods {
-    TestCase testCase;
+    public TestCase testCase;
     public int standardTimeout = 5;
     MethodInvoker methodInvoker;
     ApplicationUnderTest app;

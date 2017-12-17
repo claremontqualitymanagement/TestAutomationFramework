@@ -47,18 +47,25 @@ public class Gui{
         PluginLoader pluginLoader = new PluginLoader();
         //java.util.List<JPanel> panels = new ArrayList<>();
         RunTestTabPanel runTestTabPanel = new RunTestTabPanel();
-        tabs.addTab(runTestTabPanel.getName(), runTestTabPanel.getPanel());
+        tabs.addTab("1. " + runTestTabPanel.getName(), runTestTabPanel.getPanel());
         CreateTestTabPanel createTestTabPanel = new CreateTestTabPanel();
-        tabs.addTab(createTestTabPanel.getName(), createTestTabPanel.getPanel());
+        tabs.addTab("2. " + createTestTabPanel.getName(), createTestTabPanel.getPanel());
+        int i = 3;
         for(IGuiTab tab : pluginLoader.identifyGuiTabs()){
-            tabs.addTab(tab.getName(), tab.getPanel());
+            tabs.addTab(i + ". " + tab.getName(), tab.getPanel());
+            i++;
             //tabs.setTitleAt(tabs.getTabCount()-1, tab.getName());
         }
         AboutTabPanel aboutTabPanel = new AboutTabPanel();
-        tabs.add(aboutTabPanel.getName(), aboutTabPanel.getPanel());
+        tabs.add(i + ". " + aboutTabPanel.getName(), aboutTabPanel.getPanel());
         TafLabel helpTextAboutJarFunctionality = new TafLabel("");
         if(isStartedFromJar()){
             helpTextAboutJarFunctionality.setText("If you start TAF from the compiled jar file addintional tabs with functinality from technology specific plugins are displayed.");
+        }
+
+        for(int tabCounter = 0; tabCounter < tabs.getTabCount(); tabCounter++){
+            if(tabs.getComponentAt(tabCounter) == null) continue;
+            tabs.setMnemonicAt(tabCounter, String.valueOf(tabCounter + 1).charAt(0));
         }
         pane.add(tabs);
 

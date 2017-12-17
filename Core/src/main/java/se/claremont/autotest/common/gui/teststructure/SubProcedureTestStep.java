@@ -26,7 +26,7 @@ public class SubProcedureTestStep extends TestStep {
 
     @Override
     public TestStepResult execute() {
-        TestStepResult testStepResult = new TestStepResult(this);
+        TestStepResult testStepResult = new TestStepResult(this, TestStepResult.Result.NOT_RUN);
         for(TestStep testStep : testSteps){
             testStepResult.merge(testStep.execute());
         }

@@ -68,7 +68,7 @@ public class RunTestTabPanel implements IGuiTab {
     public RunTestTabPanel()  {
         int minimumLabelWidth = Gui.applicationWindow.getWidth() / 4;
         int minimumLabelHeight = Gui.applicationWindow.getHeight() / 20;
-        tabPanel = new TafPanel("RunTestTab");
+        tabPanel = new TafPanel("UseRunTestTab");
         GroupLayout groupLayout = new GroupLayout(tabPanel);
         tabPanel.setLayout(groupLayout);
         groupLayout.setAutoCreateGaps(true);
@@ -145,6 +145,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void prepareResetButton() {
+        resetSettings.setMnemonic('r');
         resetSettings.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -159,6 +160,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void prepareCloseButton() {
+        closeButton.setMnemonic('e');
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,6 +172,7 @@ public class RunTestTabPanel implements IGuiTab {
 
 
     private void prepareStartButton() {
+        startButton.setMnemonic('s');
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -180,6 +183,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void preparePickTestClassesButton() {
+        pickTestsButton.setMnemonic('t');
         pickTestsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -189,6 +193,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void prepareRunSettingsButton() {
+        setRunParametersButton.setMnemonic('p');
         setRunParametersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -199,6 +204,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void prepareCliToClipboardButton() {
+        cliToClipboardButton.setMnemonic('c');
         cliToClipboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -210,6 +216,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void prepareHelpButton() {
+        showHelpTextButton.setMnemonic('h');
         showHelpTextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -220,9 +227,11 @@ public class RunTestTabPanel implements IGuiTab {
 
     private void prepareCliCommand() {
         cliCommandLabel.setForeground(Color.gray);
+        cliCommandLabel.setLabelFor(cliCommandText);
         cliCommandText.setFont(AppFont.getInstance());
         cliCommandText.setName("CliCommandText");
         cliCommandText.setForeground(Color.gray);
+        cliCommandText.setEditable(false);
         cliCommandText.setLineWrap(true);
         cliCommandText.setBackground(Gui.colorTheme.backgroundColor);
     }
@@ -230,6 +239,7 @@ public class RunTestTabPanel implements IGuiTab {
     private void prepareExecutionMode() {
 
         executionModeLabel.setFont(AppFont.getInstance());
+        executionModeLabel.setLabelFor(executionModeSpinner);
 
         executionModeSpinner.setFont(AppFont.getInstance());
         executionModeSpinner.setForeground(Gui.colorTheme.textColor);
@@ -272,6 +282,7 @@ public class RunTestTabPanel implements IGuiTab {
     }
 
     private void initiateRunNameTextFieldToDefault(){
+        runNameLabel.setLabelFor(runNameText);
         runNameText.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
         runNameText.setName("RunNameTextField");
         runNameText.setForeground(Gui.colorTheme.disabledColor);
@@ -280,6 +291,7 @@ public class RunTestTabPanel implements IGuiTab {
 
     private void prepareRunName() {
         initiateRunNameTextFieldToDefault();
+        runNameLabel.setLabelFor(runNameText);
         runNameText.addFocusListener(new TafFocusListener());
         runNameText.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) { updateCliCommandText(""); }

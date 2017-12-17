@@ -30,57 +30,42 @@ public class GuiSpyingWindow {
     static boolean executionIsPaused = false;
 
     public GuiSpyingWindow() {
-        SwingUtilities.invokeLater(new Runnable() {
+        frame = new TafFrame("TAF - GUI Spy");
+
+        groupLayout = new GroupLayout(frame.getContentPane());
+        groupLayout.setAutoCreateContainerGaps(true);
+        groupLayout.setAutoCreateGaps(true);
+        frame.setLayout(groupLayout);
+
+        currentElementText.setFont(AppFont.getInstance());
+        currentElementText.setName("CurrentElementText");
+        currentElementText.setContentType("text/html");
+        currentElementText.setFont(AppFont.getInstance());
+        currentElementText.setForeground(TafGuiColor.textColor);
+
+        currentElementPanel.setLayout(new GridLayout(1, 1));
+        headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
+        Font hintsFont = new Font(AppFont.getInstance().getName(), Font.ITALIC, AppFont.getInstance().getSize() * 3/4);
+        hintText.setFont(hintsFont);
+        hintText2.setFont(hintsFont);
+        hintText3.setFont(hintsFont);
+        hintText4.setFont(hintsFont);
+
+
+        TafLabel programaticDescriptionLabel = new TafLabel("Programatic element description");
+        programaticDescriptionScrollPanel = new JScrollPane(currentElementText);
+
+        closeButton.setMnemonic('C');
+        closeButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
-                frame = new TafFrame();
-                groupLayout = new GroupLayout(frame.getContentPane());
-                groupLayout.setAutoCreateContainerGaps(true);
-                groupLayout.setAutoCreateGaps(true);
-                frame.setLayout(groupLayout);
-                currentElementText.setFont(AppFont.getInstance());
-                currentElementText.setName("CurrentElementText");
-                currentElementText.setContentType("text/html");
-                currentElementText.setFont(AppFont.getInstance());
-                currentElementText.setForeground(TafGuiColor.textColor);
-                currentElementPanel.setLayout(new GridLayout(1, 1));
-                headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
-                Font hintsFont = new Font(AppFont.getInstance().getName(), Font.ITALIC, AppFont.getInstance().getSize() * 3/4);
-                hintText.setFont(hintsFont);
-                hintText2.setFont(hintsFont);
-                hintText3.setFont(hintsFont);
-                hintText4.setFont(hintsFont);
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
 
-
-                TafLabel programaticDescriptionLabel = new TafLabel("Programatic element description");
-                programaticDescriptionScrollPanel = new JScrollPane(currentElementText);
-
-                closeButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        frame.dispose();
-                    }
-                });
-
-                groupLayout.setHorizontalGroup(
-                        groupLayout.createSequentialGroup()
-                                .addGroup(groupLayout.createParallelGroup()
-                                        .addComponent(headline)
-                                        .addComponent(hintText)
-                                        .addComponent(hintText2)
-                                        .addComponent(hintText3)
-                                        .addComponent(hintText4)
-                                        .addComponent(blank)
-                                        .addComponent(currentElementLabel)
-                                        .addComponent(currentElementPanel)
-                                        .addComponent(blank)
-                                        .addComponent(programaticDescriptionLabel)
-                                        .addComponent(programaticDescriptionScrollPanel)
-                                        .addComponent(closeButton)
-                                )
-                );
-                groupLayout.setVerticalGroup(
-                        groupLayout.createSequentialGroup()
+        groupLayout.setHorizontalGroup(
+                groupLayout.createSequentialGroup()
+                        .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(headline)
                                 .addComponent(hintText)
                                 .addComponent(hintText2)
@@ -93,29 +78,43 @@ public class GuiSpyingWindow {
                                 .addComponent(programaticDescriptionLabel)
                                 .addComponent(programaticDescriptionScrollPanel)
                                 .addComponent(closeButton)
-                );
+                        )
+        );
+        groupLayout.setVerticalGroup(
+                groupLayout.createSequentialGroup()
+                        .addComponent(headline)
+                        .addComponent(hintText)
+                        .addComponent(hintText2)
+                        .addComponent(hintText3)
+                        .addComponent(hintText4)
+                        .addComponent(blank)
+                        .addComponent(currentElementLabel)
+                        .addComponent(currentElementPanel)
+                        .addComponent(blank)
+                        .addComponent(programaticDescriptionLabel)
+                        .addComponent(programaticDescriptionScrollPanel)
+                        .addComponent(closeButton)
+        );
 
-                frame.pack();
-                frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height * 2/ 3);
-                frame.setVisible(true);
+        frame.pack();
+        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height * 2/ 3);
+        frame.setVisible(true);
 
-                JFrame keyBoardEventCatcher = new JFrame();
-                keyBoardEventCatcher.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
-                keyBoardEventCatcher.setUndecorated(true);
-                keyBoardEventCatcher.setOpacity(0);
-                keyBoardEventCatcher.setVisible(true);
-                keyBoardEventCatcher.getRootPane().setOpaque(false);
-                keyBoardEventCatcher.addKeyListener(new GuiSpyKeyboardListener());
+        JFrame keyBoardEventCatcher = new JFrame();
+        keyBoardEventCatcher.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+        keyBoardEventCatcher.setUndecorated(true);
+        keyBoardEventCatcher.setOpacity(0);
+        keyBoardEventCatcher.setVisible(true);
+        keyBoardEventCatcher.getRootPane().setOpaque(false);
+        keyBoardEventCatcher.addKeyListener(new GuiSpyKeyboardListener(frame));
 
-                for (Window window : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
-                    JavaWindow javaWindow = new JavaWindow(window);
-                    for(Object object  :javaWindow.getComponents()){
-                        Component component = (Component) object;
-                        component.addMouseListener(new GuiSpyMouseListener(currentElementText, currentElementPanel));
-                    }
-                }
+        for (Window window : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
+            JavaWindow javaWindow = new JavaWindow(window);
+            for(Object object  :javaWindow.getComponents()){
+                Component component = (Component) object;
+                component.addMouseListener(new GuiSpyMouseListener(currentElementText, currentElementPanel));
             }
-        });
+        }
     }
 
 }

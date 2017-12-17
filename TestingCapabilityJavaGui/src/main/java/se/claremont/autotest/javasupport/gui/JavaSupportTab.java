@@ -56,6 +56,7 @@ public class JavaSupportTab implements IGuiTab{
         JScrollPane explanationtextScrollPane = new JScrollPane(explanationText);
         explanationtextScrollPane.setName("ExplanationTextScrollBar");
 
+        declareApplicationButton.setMnemonic('d');
         declareApplicationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,6 +64,7 @@ public class JavaSupportTab implements IGuiTab{
             }
         });
 
+        tryStartSutButton.setMnemonic('s');
         tryStartSutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,6 +72,7 @@ public class JavaSupportTab implements IGuiTab{
             }
         });
 
+        guiSpyButton.setMnemonic('g');
         guiSpyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,6 +80,7 @@ public class JavaSupportTab implements IGuiTab{
             }
         });
 
+        recordScriptButton.setMnemonic('r');
         recordScriptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

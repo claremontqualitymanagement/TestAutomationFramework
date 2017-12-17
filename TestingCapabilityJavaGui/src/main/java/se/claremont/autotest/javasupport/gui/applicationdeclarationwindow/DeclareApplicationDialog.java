@@ -12,10 +12,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
@@ -33,6 +30,7 @@ public class DeclareApplicationDialog {
     TafPanel parametersPanel = new TafPanel("ParametersPanel");
     TafPanel startApplicationPanel = new TafPanel("StartApplicationPanel");
     TafLabel startApplicationLabel = new TafLabel("Application start parameters");
+    TafCheckbox showAdvancedCheckbox = new TafCheckbox("Show advanced options");
     TafPanel advancedParametersPanel = new TafPanel("AdvancedParametersPanel");
     TafLabel advancedParameterLabel = new TafLabel("Advanced");
     TafLabel pathToJarFileLabel = new TafLabel("Path to jar:");
@@ -78,44 +76,36 @@ public class DeclareApplicationDialog {
 
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
 
-        model = new DefaultComboBoxModel(new String[] {comboBoxDefaultText});
-
-        dialog.addWindowListener(new WindowListener() {
+        selectJarFileButton.setMnemonic('e');
+        selectJarFileButton.addActionListener(new ActionListener() {
             @Override
-            public void windowOpened(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                //Gui.preferences.add("LastJavaSutApplicationDescription", new ObjectMapper().JavaSupportTab.applicationUnderTest);
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setName("FilePickerWindow");
+                fileChooser.setDialogTitle("TAF - File picker");
+                fileChooser.setFont(AppFont.getInstance());
+                try {
+                    fileChooser.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+                } catch (URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+                int returnVal = fileChooser.showOpenDialog(dialog);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    pathToJarFileTextField.setText(file.getAbsolutePath());
+                    if(!file.isDirectory()){
+                        if(workingFolderTextField.getText().equals(workingFolderTextField.disregardedDefaultRunNameString)){
+                            workingFolderTextField.setText(file.getParent());
+                        }
+                    }
+                }
+                updateMainClassComboboxModel();
             }
         });
+
+
+
+        model = new DefaultComboBoxModel(new String[] {comboBoxDefaultText});
         mainClassComboBox = new JComboBox(model);
         mainClassComboBox.setEditable(true);
         mainClassComboBox.getEditor().getEditorComponent().setForeground(Gui.colorTheme.disabledColor);
@@ -158,6 +148,19 @@ public class DeclareApplicationDialog {
 
         if(JavaSupportTab.applicationUnderTest.startMechanism.arguments != null && JavaSupportTab.applicationUnderTest.startMechanism.arguments.size() > 0)
             runtimeArgumentsTextField.setText(String.join(" ", JavaSupportTab.applicationUnderTest.startMechanism.arguments));
+
+        showAdvancedCheckbox.setSelected(false);
+        showAdvancedCheckbox.setMnemonic('h');
+        showAdvancedCheckbox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if(showAdvancedCheckbox.isSelected()){
+                    advancedParametersPanel.setVisible(true);
+                } else {
+                    advancedParametersPanel.setVisible(false);
+                }
+            }
+        });
+        advancedParametersPanel.setVisible(false);
 
         loadedLibrariesTextField.setEditable(false);
         loadedLibrariesAddButton.addActionListener(new ActionListener() {
@@ -223,6 +226,7 @@ public class DeclareApplicationDialog {
             }
         });
 
+        loadSutFromFile.setMnemonic('L');
         loadSutFromFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -256,6 +260,7 @@ public class DeclareApplicationDialog {
         });
 
         saveSutToFile.setEnabled(false);
+        saveSutToFile.setMnemonic('f');
         saveSutToFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -276,6 +281,7 @@ public class DeclareApplicationDialog {
             }
         });
 
+        cancelButton.setMnemonic('c');
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -285,6 +291,7 @@ public class DeclareApplicationDialog {
             }
         });
 
+        saveButton.setMnemonic('S');
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -293,6 +300,7 @@ public class DeclareApplicationDialog {
             }
         });
 
+        tryButton.setMnemonic('T');
         tryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -300,31 +308,6 @@ public class DeclareApplicationDialog {
             }
         });
 
-        selectJarFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setName("FilePickerWindow");
-                fileChooser.setDialogTitle("TAF - File picker");
-                fileChooser.setFont(AppFont.getInstance());
-                try {
-                    fileChooser.setCurrentDirectory(new File(TestClassPickerDialogue.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
-                } catch (URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
-                int returnVal = fileChooser.showOpenDialog(dialog);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fileChooser.getSelectedFile();
-                    pathToJarFileTextField.setText(file.getAbsolutePath());
-                    if(!file.isDirectory()){
-                        if(workingFolderTextField.getText().equals(workingFolderTextField.disregardedDefaultRunNameString)){
-                            workingFolderTextField.setText(file.getParent());
-                        }
-                    }
-                }
-                updateMainClassComboboxModel();
-            }
-        });
 
         cliCommand.setForeground(TafGuiColor.disabledColor);
         cliCommand.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
@@ -547,6 +530,7 @@ public class DeclareApplicationDialog {
                                 .addComponent(headline)
                                 .addComponent(blankSpace)
                                 .addComponent(startApplicationPanel)
+                                .addComponent(showAdvancedCheckbox)
                                 .addComponent(advancedParametersPanel)
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(loadSutFromFile)
@@ -568,6 +552,7 @@ public class DeclareApplicationDialog {
                         .addComponent(headline)
                         .addComponent(blankSpace)
                         .addComponent(startApplicationPanel)
+                        .addComponent(showAdvancedCheckbox)
                         .addComponent(advancedParametersPanel)
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(loadSutFromFile)

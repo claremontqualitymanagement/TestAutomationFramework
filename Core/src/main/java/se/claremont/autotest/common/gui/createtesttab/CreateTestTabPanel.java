@@ -22,7 +22,7 @@ public class CreateTestTabPanel implements IGuiTab{
     public CreateTestTabPanel(){
         TafHeadline headline = new TafHeadline("Create test");
         closeButton = new TafCloseButton(Gui.applicationWindow);
-        tabPanel = new TafPanel("CreateTestPanel");
+        tabPanel = new TafPanel("TestCreationPanel");
         GroupLayout groupLayout = new GroupLayout(tabPanel);
         tabPanel.setLayout(new GridLayout(2, 1));
         groupLayout.setAutoCreateGaps(true);

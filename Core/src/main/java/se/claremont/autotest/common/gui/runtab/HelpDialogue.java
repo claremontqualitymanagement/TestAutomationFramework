@@ -58,6 +58,7 @@ public class HelpDialogue {
 
         helpFrame.pack();
         helpFrame.getRootPane().setDefaultButton(closeButton);
+        closeButton.setMnemonic('c');
         closeButton.requestFocus();
         helpFrame.setSize(new Dimension(1 * Toolkit.getDefaultToolkit().getScreenSize().width/3, 2 * Toolkit.getDefaultToolkit().getScreenSize().height /3));
         helpFrame.setVisible(true);

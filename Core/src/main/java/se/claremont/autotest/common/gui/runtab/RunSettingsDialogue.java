@@ -79,6 +79,7 @@ public class RunSettingsDialogue {
         }
 
         TafButton loadSettingsFromFile = new TafButton("Load settings");
+        loadSettingsFromFile.setMnemonic('l');
         loadSettingsFromFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,6 +105,7 @@ public class RunSettingsDialogue {
         });
 
         TafButton saveSettingsToFile = new TafButton("Save settings");
+        saveSettingsToFile.setMnemonic('v');
         saveSettingsToFile .addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,6 +128,7 @@ public class RunSettingsDialogue {
         });
 
         TafButton addValueButton = new TafButton("Add parameter");
+        addValueButton.setMnemonic('a');
         addValueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,6 +137,7 @@ public class RunSettingsDialogue {
         });
 
         TafButton cancelButton = new TafButton("Cancel");
+        cancelButton.setMnemonic('c');
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,6 +149,7 @@ public class RunSettingsDialogue {
         });
 
         TafButton saveButton = new TafButton("Save");
+        saveButton.setMnemonic('s');
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

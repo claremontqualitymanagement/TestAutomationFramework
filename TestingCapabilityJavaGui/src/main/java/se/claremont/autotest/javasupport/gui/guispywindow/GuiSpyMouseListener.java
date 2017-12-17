@@ -25,7 +25,8 @@ public class GuiSpyMouseListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        //currentComponent = e.getComponent();
+        //System.out.println("java.click(new JavaGuiElement(By.Name(\"" + currentComponent.getName() + "\"), \"" + currentComponent.getName() + e.getComponent().getClass().getSimpleName() + "\");");
     }
 
     @Override
@@ -43,6 +44,8 @@ public class GuiSpyMouseListener implements MouseListener {
         if(GuiSpyingWindow.executionIsPaused) return;
         currentComponent = e.getComponent();
         textComponent.setText(componentDeclarationString(currentComponent));
+        textComponent.revalidate();
+        textComponent.repaint();
         updatePropertiesPanel(currentComponent);
     }
 

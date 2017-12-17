@@ -51,6 +51,7 @@ public class RunResultsDialogue {
         testOutputScrollPane.setName("TestOutputScrollPane");
 
         TafButton linkButton = new TafButton("Summary report");
+        linkButton.setMnemonic('s');
         linkButton.setName("LinkButton");
         if(pathToSummaryReport.equals("null_summary.html") || !Files.exists(Paths.get(pathToSummaryReport))){
             linkButton.setEnabled(false);
@@ -69,6 +70,7 @@ public class RunResultsDialogue {
         });
 
         TafCloseButton closeButton = new TafCloseButton(resultWindow);
+        closeButton.setMnemonic('c');
 
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()

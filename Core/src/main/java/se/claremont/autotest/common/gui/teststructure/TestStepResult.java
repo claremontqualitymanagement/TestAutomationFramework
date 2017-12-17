@@ -14,8 +14,9 @@ public class TestStepResult {
 
     public TestStepResult(){}
 
-    public TestStepResult(TestStep testStep){
+    public TestStepResult(TestStep testStep, Result result){
         this.testStep = testStep;
+        this.result = result;
     }
 
     public void merge(TestStepResult testStepResult){
