@@ -1,6 +1,5 @@
 Replace method for converting string to file name with propper IO library method call
 Tags for test cases and test steps
-Make sure SUT works for Java Tab
 Implement Java recorder
 Implement web recorder
 Tabbed panel for Declare Java Application. One tab for Java Web Start.
@@ -8,6 +7,5 @@ Implement test step list with drag-n-drop
 Make REST work
 Closing SUT should not close TAF
 Implement page object structure for element, for view
-Buttons for short-keys for GuiSpy
 Get waiting symbol working
 

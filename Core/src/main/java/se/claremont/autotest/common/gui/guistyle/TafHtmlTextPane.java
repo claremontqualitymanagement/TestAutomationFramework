@@ -13,7 +13,11 @@ public class TafHtmlTextPane extends JTextPane {
     }
 
     public void append(String htmlText){
-        this.setText(this.getText().substring(0, this.getText().length() - "</body></html>".length()) + htmlText + "</body></html>");
+        String originalText = getText().substring(getText().indexOf("<body>") + 6);
+        originalText = originalText.substring(0, originalText.lastIndexOf("</body>"));
+        this.setText("<html><body>" + originalText + htmlText + "</body></html>");
+        this.revalidate();
+        this.repaint();
     }
 
     public void appendLine(String htmlText){

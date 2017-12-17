@@ -20,7 +20,8 @@ public class RecordingMouseListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         if (e.getComponent() == null) return;
         Component actualComponent = e.getComponent();
-        String text = "java.click(new JavaGuiElement(By.byName(\"" + actualComponent.getName() + "\");<br>" + System.lineSeparator();
+        if(actualComponent == null)return;
+        String text = "<pre>java.click(new JavaGuiElement(By.byName(\"" + actualComponent.getName() + "\");</pre><br>" + System.lineSeparator();
         scriptArea.append(text);
         System.out.println(scriptArea.getText());
         scriptArea.revalidate();
