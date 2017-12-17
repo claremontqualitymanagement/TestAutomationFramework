@@ -67,12 +67,12 @@ public class DeclareApplicationDialog {
 
     GridBagLayout gridBagLayout = new GridBagLayout();
     GridBagConstraints constraints = new GridBagConstraints();
-    GroupLayout groupLayout = new GroupLayout(dialog.getContentPane());
     //Todo: List of classpaths needed
 
     public DeclareApplicationDialog(){
         ApplicationUnderTest unmodifiedAut = new ApplicationUnderTest(JavaSupportTab.applicationUnderTest);
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dialog.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));
 
@@ -155,8 +155,14 @@ public class DeclareApplicationDialog {
             public void itemStateChanged(ItemEvent e) {
                 if(showAdvancedCheckbox.isSelected()){
                     advancedParametersPanel.setVisible(true);
+                    dialog.pack();
+                    dialog.revalidate();
+                    dialog.repaint();
                 } else {
                     advancedParametersPanel.setVisible(false);
+                    dialog.pack();
+                    dialog.revalidate();
+                    dialog.repaint();
                 }
             }
         });
@@ -192,7 +198,7 @@ public class DeclareApplicationDialog {
                     } else {
                         JavaSupportTab.applicationUnderTest.loadLibrary(file.getPath());
                         if(loadedLibrariesTextField.getText().equals(loadedLibrariesTextField.disregardedDefaultRunNameString)){
-                            loadedLibrariesTextField.setText(String.join(", ", file.getName()));
+                            loadedLibrariesTextField.setText(String.join(", ", loadedLibrariesTextField.getText().split(", ")) + file.getAbsolutePath());
                         }else {
                             loadedLibrariesTextField.setText(loadedLibrariesTextField.getText() + ", " + file.getAbsolutePath());
                         }
@@ -206,7 +212,8 @@ public class DeclareApplicationDialog {
         systemParametersAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
+                AddSystemProperty propertyAddingWindow = new AddSystemProperty(systemParametersTextField);
+                updateCliSuggestionAndSaveToFileButtonStatus();
             }
         });
 
@@ -218,6 +225,8 @@ public class DeclareApplicationDialog {
 
             }
         });
+        environmentVariablesAddButton.setEnabled(false);
+
         jvmArgumentTextField.setEditable(false);
         jvmArgumentAddButton.addActionListener(new ActionListener() {
             @Override
@@ -225,6 +234,7 @@ public class DeclareApplicationDialog {
                 ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
             }
         });
+        jvmArgumentAddButton.setEnabled(false);
 
         loadSutFromFile.setMnemonic('L');
         loadSutFromFile.addActionListener(new ActionListener() {
@@ -321,7 +331,7 @@ public class DeclareApplicationDialog {
         setWindowLayout();
 
         dialog.pack();
-        dialog.setSize(Toolkit.getDefaultToolkit().getScreenSize().width * 3/5, Toolkit.getDefaultToolkit().getScreenSize().height * 3/5);
+        //dialog.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width * 3/5, dialog.getHeight()));
         dialog.setVisible(true);
     }
 
@@ -523,7 +533,10 @@ public class DeclareApplicationDialog {
     }
 
     private void setWindowLayout() {
-        dialog.getContentPane().setLayout(groupLayout);
+        TafPanel contentPanelSubstitute = new TafPanel("DeclareSutMainPanel");
+        //JScrollPane scrollPane = new JScrollPane(contentPanelSubstitute);
+        GroupLayout groupLayout = new GroupLayout(contentPanelSubstitute);
+        contentPanelSubstitute.setLayout(groupLayout);
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup()
@@ -571,6 +584,7 @@ public class DeclareApplicationDialog {
 
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
+        dialog.getContentPane().add(contentPanelSubstitute);
     }
 
     private void updateMainClassComboboxModel() {
@@ -633,6 +647,22 @@ public class DeclareApplicationDialog {
             }
         }
 
+        if(systemParametersTextField.isChangedFromDefault()){
+            if(systemParametersTextField.getText().contains(", ")){
+                cli += " -D" + String.join(" -D" + systemParametersTextField.getText().split(", "));
+                for(String pair : systemParametersTextField.getText().split(", ")){
+                    if(!pair.contains("="))continue;
+                    JavaSupportTab.applicationUnderTest.context.properties.setProperty(pair.split("=")[0], pair.substring(pair.indexOf("=")));
+                }
+            } else {
+                cli += " -D" + systemParametersTextField.getText();
+                if(systemParametersTextField.getText().contains("="))
+                    JavaSupportTab.applicationUnderTest.context.properties.setProperty(
+                            systemParametersTextField.getText().split("=")[0],
+                            systemParametersTextField.getText().substring(systemParametersTextField.getText().indexOf("=")));
+            }
+        }
+
         if(!workingFolderTextField.getText().equals(workingFolderTextField.disregardedDefaultRunNameString) && workingFolderTextField.getText().length() != 0){
             cli += " -cp " + workingFolderTextField.getText() + File.pathSeparator + "*";
             if(!loadedLibrariesTextField.getText().equals(loadedLibrariesTextField.disregardedDefaultRunNameString)){
@@ -647,12 +677,17 @@ public class DeclareApplicationDialog {
             }
             cli += " " + runtimeArgumentsTextField.getText();
         }
+
         if(pathToJarFileTextField.getText() != null &&
                 pathToJarFileTextField.getText().length() > 0 &&
                 mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()).toString().length() > 0 &&
                 !mainClassComboBox.getItemAt(mainClassComboBox.getSelectedIndex()).toString().equals(comboBoxDefaultText))
             saveSutToFile.setEnabled(true);
+
         cliCommand.setText(cli);
+        dialog.pack();
+        dialog.revalidate();
+        dialog.repaint();
     }
 
     private class LocalTextField extends TafTextField{

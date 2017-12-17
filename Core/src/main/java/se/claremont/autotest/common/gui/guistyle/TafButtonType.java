@@ -13,22 +13,6 @@ class TafButtonType extends JButton{
         this.setFont(AppFont.getInstance());
         this.setForeground(Gui.colorTheme.textColor);
         this.setName("TafButton");
-        /*
-        JButton b = this;
-        this.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                ButtonModel model = (ButtonModel)e.getSource();
-                if(model.isEnabled()){
-                    b.setForeground(TafGuiColor.textColor);
-                }
-                if(!model.isEnabled()){
-                    b.setForeground(TafGuiColor.disabledColor);
-                    b.setBackground(TafGuiColor.backgroundColor);
-                }
-            }
-        });
-        */
     }
 
     public TafButtonType(String label){
@@ -36,21 +20,15 @@ class TafButtonType extends JButton{
         this.setFont(AppFont.getInstance());
         this.setForeground(TafGuiColor.textColor);
         this.setName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(StringManagement.methodNameWithOnlySafeCharacters(label)) + "Button");
-        /*
-        JButton b = this;
-        this.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                ButtonModel model = (ButtonModel)e.getSource();
-                if(model.isEnabled()){
-                    b.setForeground(TafGuiColor.textColor);
-                }
-                if(!model.isEnabled()){
-                    b.setForeground(TafGuiColor.disabledColor);
-                }
-            }
-        });
-        */
+    }
+
+    public TafButtonType(String label, Icon icon){
+        super(label, icon);
+        this.setText(label);
+        this.setIcon(icon);
+        this.setFont(AppFont.getInstance());
+        this.setForeground(TafGuiColor.textColor);
+        this.setName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(StringManagement.methodNameWithOnlySafeCharacters(label)) + "Button");
     }
 
 }
