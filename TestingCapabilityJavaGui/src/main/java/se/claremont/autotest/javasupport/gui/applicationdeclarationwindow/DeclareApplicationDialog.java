@@ -1,14 +1,11 @@
 package se.claremont.autotest.javasupport.gui.applicationdeclarationwindow;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.runtab.TestClassPickerDialogue;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
-import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 import se.claremont.autotest.javasupport.gui.teststeps.JavaStartApplicationTestStep;
-import se.claremont.autotest.javasupport.gui.teststeps.JavaTestStep;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -32,7 +29,7 @@ public class DeclareApplicationDialog {
     TafPanel parametersPanel = new TafPanel("ParametersPanel");
     TafPanel startApplicationPanel = new TafPanel("StartApplicationPanel");
     TafLabel startApplicationLabel = new TafLabel("Application start parameters");
-    TafLabel applicationFriendlyNameLabel = new TafLabel("Friendly name");
+    TafLabel applicationFriendlyNameLabel = new TafLabel("Friendly name*");
     TafTextField applicationFriendlyNameText = new TafTextField(" < Friendly name > ");
     TafLabel pathToJarFileLabel = new TafLabel("Path to jar:");
     LocalTextField pathToJarFileTextField = new LocalTextField(" <Path to jar> ");
@@ -266,7 +263,7 @@ public class DeclareApplicationDialog {
         systemParametersAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddSystemProperty propertyAddingWindow = new AddSystemProperty(systemParametersTextField);
+                AddSystemPropertyWindow propertyAddingWindow = new AddSystemPropertyWindow(systemParametersTextField, dialog);
                 updateCliSuggestionAndSaveToFileButtonStatus();
             }
         });
@@ -275,7 +272,7 @@ public class DeclareApplicationDialog {
         environmentVariablesAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddEnvironmentVariableWindow addEnvironmentVariableWindow = new AddEnvironmentVariableWindow(environmentVariablesText);
+                AddEnvironmentVariableWindow addEnvironmentVariableWindow = new AddEnvironmentVariableWindow(environmentVariablesText, dialog);
                 updateCliSuggestionAndSaveToFileButtonStatus();
             }
         });
@@ -284,10 +281,20 @@ public class DeclareApplicationDialog {
         jvmArgumentAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ParameterAddingWindow parameterAddingWindow = new ParameterAddingWindow(dialog, "TAF - Adding parameter");
+                AddJVMSettingWindow addJVMSettingWindow = new AddJVMSettingWindow(jvmArgumentTextField, dialog);
+                if(jvmArgumentTextField.isChangedFromDefault()){
+                    if(jvmArgumentTextField.getText().contains(", ")){
+                        for(String pair : jvmArgumentTextField.getText().split(", ")){
+                            if(!pair.contains("="))continue;
+                            JavaSupportTab.applicationUnderTest.context.jvmSettings.setVMOption(
+                                    pair.split("=")[0],
+                                    pair.substring(pair.indexOf("=")));
+                        }
+                    }
+                }
+                updateCliSuggestionAndSaveToFileButtonStatus();
             }
         });
-        jvmArgumentAddButton.setEnabled(false);
 
         loadSutFromFile.setMnemonic('L');
         loadSutFromFile.addActionListener(new ActionListener() {
@@ -355,6 +362,7 @@ public class DeclareApplicationDialog {
         });
 
         saveButton.setMnemonic('S');
+        saveButton.setToolTipText("Needs a set friendly name for saving.");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -687,14 +695,31 @@ public class DeclareApplicationDialog {
     private void updateCliSuggestionAndSaveToFileButtonStatus(){
         String cli = "";
         String pathToJar = pathToJarFileTextField.getText();
-        if(!pathToJar.equals(pathToJarFileTextField.disregardedDefaultRunNameString) && pathToJar.length() != 0){
+        if(pathToJarFileTextField.isChangedFromDefault() ||
+                mainClassTextField.isChangedFromDefault() ||
+                runtimeArgumentsTextField.isChangedFromDefault() ||
+                systemParametersTextField.isChangedFromDefault() ||
+                environmentVariablesText.isChangedFromDefault() ||
+                jvmArgumentTextField.isChangedFromDefault() ||
+                loadedLibrariesTextField.isChangedFromDefault())
             cli = "java ";
-            if(JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting.size() > 0){
-                cli += "-X" + String.join(" -X", JavaSupportTab.applicationUnderTest.context.jvmSettings.appliedSetting) + " ";
+
+
+        if(jvmArgumentTextField.isChangedFromDefault()){
+            if(jvmArgumentTextField.getText().contains(", ")){
+                for(String pair : jvmArgumentTextField.getText().split(", ")){
+                    cli += "-X" + pair;
+                }
+            } else {
+                cli += "-X" + jvmArgumentTextField.getText();
             }
+        }
+
+        if(pathToJarFileTextField.isChangedFromDefault()){
             JavaSupportTab.applicationUnderTest.startMechanism.startUrlOrPathToJarFile = "file://" + pathToJarFileTextField.getText();
             cli += "-jar " + pathToJar + " ";
         }
+
 
         if(JavaSupportTab.applicationUnderTest.context.properties.appliedProperties.size() > 0){
             cli += "-D" + String.join(" -D", JavaSupportTab.applicationUnderTest.context.properties.appliedProperties) + " ";

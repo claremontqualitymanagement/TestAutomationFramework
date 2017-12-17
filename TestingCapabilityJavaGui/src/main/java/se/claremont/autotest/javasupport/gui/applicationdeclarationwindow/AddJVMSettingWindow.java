@@ -9,27 +9,29 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AddSystemProperty {
-    TafFrame frame = new TafFrame("AddSystemPropertyFrame");
+public class AddJVMSettingWindow {
+    TafDialog frame;
     TafTextField textComponentToUpdate;
-    TafTextField propertyNameText = new TafTextField(" < property name > ");
-    TafTextField propertyValueText = new TafTextField(" < property value > ");
-    TafButton saveButton = new TafButton("Save");
+    TafTextField propertyNameText = new TafTextField(" < JVM property name > ");
+    TafTextField propertyValueText = new TafTextField(" < JVM property value > ");
+    TafButton saveButton = new TafButton("Apply");
 
-    public AddSystemProperty(TafTextField component){
+    public AddJVMSettingWindow(TafTextField textComponentToUpdate, JFrame parentWindow){
 
-        this.textComponentToUpdate = component;
+        frame = new TafDialog(parentWindow, "TAF - Add JVM property", true);
+
+        this.textComponentToUpdate = textComponentToUpdate;
 
         frame.getContentPane().setLayout(new BorderLayout());
 
-        TafHeadline headline = new TafHeadline("Add system property");
+        TafHeadline headline = new TafHeadline("Add JVM property");
 
-        TafLabel warningText = new TafLabel("Warning: System properties are global. Once applied it affects all java applications in JVM - including TAF.");
+        TafLabel warningText = new TafLabel("Warning: JVM properties are global. Only a few actually can be edited at runtime, but once applied it affects all java applications in JVM - including TAF.");
 
         TafPanel propertiesPanel = new TafPanel("PropertiesPanel");
         propertiesPanel.setLayout(new GridLayout(3, 2));
 
-        TafLabel propertyNameLabel = new TafLabel("Property name");
+        TafLabel propertyNameLabel = new TafLabel("JVM property name");
         propertyNameLabel.setLabelFor(propertyNameText);
         propertyNameText.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -50,7 +52,7 @@ public class AddSystemProperty {
         propertiesPanel.add(propertyNameLabel);
         propertiesPanel.add(propertyNameText);
 
-        TafLabel propertyValueLabel = new TafLabel("Property value");
+        TafLabel propertyValueLabel = new TafLabel("JVM property value");
         propertyValueText.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
