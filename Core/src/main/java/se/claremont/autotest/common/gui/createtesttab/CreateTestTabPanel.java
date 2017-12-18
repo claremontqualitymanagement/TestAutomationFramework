@@ -74,11 +74,12 @@ public class CreateTestTabPanel implements IGuiTab{
                 tabPanel.repaint();
             }
         });
+        JScrollPane testStepScrollPane = new JScrollPane(availableTestStepListTextArea);
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.Y_AXIS));
         //tabPanel.add(logoImage);
         tabPanel.add(headline);
         tabPanel.add(textArea);
-        tabPanel.add(availableTestStepListTextArea);
+        tabPanel.add(testStepScrollPane);
         //tabPanel.add(testStepListPanel);
         //tabPanel.add(closeButton);
         tabPanel.setVisible(true);

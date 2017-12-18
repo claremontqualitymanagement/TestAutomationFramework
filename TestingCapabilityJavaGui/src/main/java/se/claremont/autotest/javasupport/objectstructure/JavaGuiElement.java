@@ -65,9 +65,10 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         try {
             String elementName = (String) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, object, MethodDeclarations.componentNameGetterMethodsInAttemptOrder);
             String objectName = elementName;
-            if (objectName == null || objectName.length() == 0) objectName = "NoNamedObject";
-            name = object.getClass().toString().replace(".", "_").replace(" ", "") + "_" + objectName.replace(" ", "");
             String text = (String) MethodInvoker.invokeTheFirstEncounteredMethod(null, object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+            if(objectName == null || objectName.length() == 0) objectName = text;
+            if (objectName == null || objectName.length() == 0) objectName = "NoNamedObject";
+            name = objectName.replace(" ", "") + object.getClass().getSimpleName().replace(".", "_");
             if (elementName != null) {
                 recognitionString = elementName;
                 idType = IdType.ELEMENT_NAME;
