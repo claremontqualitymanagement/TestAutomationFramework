@@ -1,7 +1,10 @@
 package se.claremont.autotest.javasupport.gui.guirecordingwindow;
 
+import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.TafFrame;
 import se.claremont.autotest.common.gui.guistyle.TafHtmlTextPane;
+import se.claremont.autotest.javasupport.gui.teststeps.JavaClictTestStep;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,13 +24,11 @@ public class RecordingMouseListener implements MouseListener {
         if (e.getComponent() == null) return;
         Component actualComponent = e.getComponent();
         if(actualComponent == null)return;
-        String text = "<pre>java.click(new JavaGuiElement(By.byName(\"" + actualComponent.getName() + "\");</pre><br>" + System.lineSeparator();
+        String text = "<pre>java.click(new JavaGuiElement(By.byName(\"" + actualComponent.getName() + "\")));</pre><br>" + System.lineSeparator();
         scriptArea.append(text);
-        System.out.println(scriptArea.getText());
         scriptArea.revalidate();
         scriptArea.repaint();
-        returnText = text;
-        System.out.println(text);
+        Gui.availableTestSteps.add(new JavaClictTestStep(new JavaGuiElement(actualComponent)));
     }
 
     @Override

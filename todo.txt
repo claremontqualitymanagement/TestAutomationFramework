@@ -8,4 +8,4 @@ Make REST work
 Closing SUT should not close TAF
 Implement page object structure for element, for view
 Get waiting symbol working
-
+Java element identifier for element constructors needs to be implemented

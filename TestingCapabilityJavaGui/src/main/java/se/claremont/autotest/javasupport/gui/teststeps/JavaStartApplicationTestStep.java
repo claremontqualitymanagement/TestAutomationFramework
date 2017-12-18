@@ -9,9 +9,12 @@ public class JavaStartApplicationTestStep extends JavaTestStep {
 
     public JavaStartApplicationTestStep(ApplicationUnderTest applicationUnderTest){
         this.applicationUnderTest = applicationUnderTest;
-        setActionName("Start application");
+        setName("Start " + applicationUnderTest.friendlyName);
+        setActionName("Start");
         setElementName(applicationUnderTest.friendlyName);
-        setAssociatedData(null);
+        setAssociatedData(applicationUnderTest.startMechanism.startUrlOrPathToJarFile + " " +
+                applicationUnderTest.startMechanism.mainClass + " " +
+                String.join(" ", applicationUnderTest.startMechanism.arguments));
     }
 
     @Override

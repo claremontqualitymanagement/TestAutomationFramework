@@ -1,3 +1,5 @@
+package se.claremont.autotest.common.parallelism;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;

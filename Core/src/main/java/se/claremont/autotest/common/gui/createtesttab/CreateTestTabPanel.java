@@ -3,6 +3,8 @@ package se.claremont.autotest.common.gui.createtesttab;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
+import se.claremont.autotest.common.gui.teststructure.TestStep;
+import se.claremont.autotest.common.gui.teststructure.TestStepList;
 import se.claremont.autotest.common.gui.teststructure.TestStepListPanel;
 
 import javax.imageio.ImageIO;
@@ -43,12 +45,41 @@ public class CreateTestTabPanel implements IGuiTab{
         //ImagePanel imagePanel = new ImagePanel(image);
         JLabel logoImage = new JLabel(new ImageIcon(image));
 
-        TestStepListPanel testStepListPanel = new TestStepListPanel(new LinkedList<>(), Gui.availableTestSteps);
+        //TestStepListPanel testStepListPanel = new TestStepListPanel(new LinkedList<>(), Gui.availableTestSteps);
+        TafTextArea availableTestStepListTextArea = new TafTextArea("AvailableTestStepListTextArea");
+        Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
+            @Override
+            public void isAdded(TestStep testStep) {
+                StringBuilder text = new StringBuilder();
+                for(TestStep ts : Gui.availableTestSteps.getTestSteps()){
+                    text.append(ts.getName()).append(System.lineSeparator());
+                }
+                availableTestStepListTextArea.setText(text.toString());
+                availableTestStepListTextArea.revalidate();
+                availableTestStepListTextArea.repaint();
+                tabPanel.revalidate();
+                tabPanel.repaint();
+            }
+
+            @Override
+            public void isRemoved(TestStep testStep) {
+                StringBuilder text = new StringBuilder();
+                for(TestStep ts : Gui.availableTestSteps.getTestSteps()){
+                    text.append(ts.getName()).append(System.lineSeparator());
+                }
+                availableTestStepListTextArea.setText(text.toString());
+                availableTestStepListTextArea.revalidate();
+                availableTestStepListTextArea.repaint();
+                tabPanel.revalidate();
+                tabPanel.repaint();
+            }
+        });
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.Y_AXIS));
         //tabPanel.add(logoImage);
         tabPanel.add(headline);
         tabPanel.add(textArea);
-        tabPanel.add(testStepListPanel);
+        tabPanel.add(availableTestStepListTextArea);
+        //tabPanel.add(testStepListPanel);
         //tabPanel.add(closeButton);
         tabPanel.setVisible(true);
     }

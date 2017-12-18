@@ -112,7 +112,7 @@ public class CliTestRunner {
 
     private static boolean shouldShowGui(String[] args){
         if(!Desktop.isDesktopSupported()) return false;
-        if(args.length == 0) return true;
+        if(args == null || args.length == 0) return true;
         return false;
     }
 

@@ -1,11 +1,12 @@
-package se.claremont.autotest.common.testset;
+package se.claremont.autotest.common.parallelism;
 
 import org.junit.Assert;
 import org.junit.Test;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testset.TestSet;
 
-public class ParallelExecution extends TestSet{
+public class ParallelExecution extends TestSet {
 
     private void failingNonTestPrivateMethodBeingCallable(){
         System.out.println("Private non-test method executed");

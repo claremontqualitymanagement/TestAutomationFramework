@@ -124,6 +124,7 @@ public class RecordWindow{
                 Component c = (Component)o;
                 if(o.getClass().getSimpleName().endsWith("Panel"))continue;
                 ((Component) o).addMouseListener(new RecordingMouseListener(scriptTextPane));
+                ((Component) o).addFocusListener(new RecordingKeyboardListener(scriptTextPane));
             }
         }
         /*

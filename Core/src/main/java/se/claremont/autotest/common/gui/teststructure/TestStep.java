@@ -40,11 +40,17 @@ public abstract class TestStep {
         this.name = name;
     }
 
-    public abstract void setActionName(String actionName);
+    public void setActionName(String actionName){
+        this.actionName = actionName;
+    }
 
-    public abstract void setElementName(String elementName);
+    public void setElementName(String elementName){
+        this.elementName = elementName;
+    }
 
-    public abstract void setAssociatedData(Object data);
+    public void setAssociatedData(Object data){
+        this.data = data;
+    }
 
     public String getName(){
         return name;

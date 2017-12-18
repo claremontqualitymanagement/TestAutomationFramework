@@ -1,3 +1,5 @@
+package se.claremont.autotest.common.parallelism;
+
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
