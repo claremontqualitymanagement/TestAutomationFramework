@@ -211,4 +211,21 @@ public class JavaWindow {
         }
     }
 
+    public int getElementMatchCount(JavaGuiElement javaGuiElement) {
+        int matchesCount = 0;
+        for(Object subElement : getComponents()){
+            if(javaGuiElement.by.isMatch(subElement))
+                matchesCount++;
+        }
+        return matchesCount;
+    }
+
+    public List<Object> getMatchingComponents(JavaGuiElement javaGuiElement) {
+        List<Object> matches = new ArrayList<>();
+        for(Object subElement : getComponents()){
+            if(javaGuiElement.by.isMatch(subElement))
+                matches.add(subElement);
+        }
+        return matches;
+    }
 }

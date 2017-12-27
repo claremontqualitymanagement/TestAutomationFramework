@@ -1,4 +1,4 @@
-package se.claremont.autotest.javasupport.gui.guirecordingwindow;
+package se.claremont.autotest.javasupport.gui.guirecordingwindow.guimap;
 
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 

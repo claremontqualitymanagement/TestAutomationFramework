@@ -1,6 +1,21 @@
 package se.claremont.autotest.javasupport.interaction.elementidentification;
 
 public enum  SearchConditionType {
-    CLASS,
-    EXACT_TEXT, TEXT_CONTAINS, TEXT_REGEX_MATCH, BEING_DESCENDANT_OF, ORDINAL_NUMBER, NAME
+    CLASS("andByClass"),
+    EXACT_TEXT("andByExactText"),
+    TEXT_CONTAINS("andByTextContains"),
+    TEXT_REGEX_MATCH("andByTextAsRegex"),
+    BEING_DESCENDANT_OF("andByBeingDescendantOf"),
+    ORDINAL_NUMBER("andByOrdinalNumber"),
+    NAME("andByName");
+
+    private String methodName;
+
+    public String getMethodName(){
+        return methodName;
+    }
+
+    private SearchConditionType(String methodName){
+        this.methodName = methodName;
+    }
 }

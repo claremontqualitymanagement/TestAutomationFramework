@@ -31,7 +31,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     IdType idType = IdType.UNKNOWN;
     String className;
     JavaWindow window = null;
-    By by;
+    public By by;
     List<String> recognitionDescription = new ArrayList<>();
     TestCase testCase;
     Object cachedElement = null;

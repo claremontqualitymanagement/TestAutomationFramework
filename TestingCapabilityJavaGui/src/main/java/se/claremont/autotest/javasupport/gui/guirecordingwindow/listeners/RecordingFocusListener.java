@@ -1,7 +1,8 @@
-package se.claremont.autotest.javasupport.gui.guirecordingwindow;
+package se.claremont.autotest.javasupport.gui.guirecordingwindow.listeners;
 
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.TafHtmlTextPane;
+import se.claremont.autotest.javasupport.gui.guirecordingwindow.RecordWindow;
 import se.claremont.autotest.javasupport.gui.teststeps.JavaWriteTestStep;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -14,7 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
-public class RecordingKeyboardListener implements FocusListener {
+public class RecordingFocusListener implements FocusListener {
     Component lastComponentInteractedUpon = null;
     java.util.List<Integer> keyCodesUsedUponComponent = new LinkedList<>();
     String keysPressedUponComponent = "";
@@ -23,7 +24,7 @@ public class RecordingKeyboardListener implements FocusListener {
     JavaGuiElement actualComponent;
     String initialText = null;
 
-    public RecordingKeyboardListener(TafHtmlTextPane scriptArea) {
+    public RecordingFocusListener(TafHtmlTextPane scriptArea) {
         this.scriptArea = scriptArea;
     }
 
@@ -40,14 +41,28 @@ public class RecordingKeyboardListener implements FocusListener {
     @Override
     public void focusLost(FocusEvent e) {
         Object actualText = (String)MethodInvoker.invokeTheFirstEncounteredMethodFromListOfMethodNames(e.getComponent(), MethodDeclarations.textGettingMethodsInAttemptOrder);
-        if(actualText == null || (initialText != null && initialText.equals(actualText))) return;
+        if(actualText == null || (initialText != null && initialText.equals(actualText))) {
+            if(RecordWindow.keysPressedSinceLastWriteCommand.size() > 0)
+                RecordingKeyBoardListener.addIdentifiedTypeCommandIfApplicable();
+            return;
+        }
         Gui.availableTestSteps.add(new JavaWriteTestStep(new JavaGuiElement(e.getComponent()), keysPressedUponComponent));
+        RecordingKeyBoardListener.addIdentifiedTypeCommandIfApplicable();
         if (e.getComponent() == null) return;
         String text = "<pre>java.write(new JavaGuiElement(By.byName(\"" + actualComponent.getName() + "\")), \"" + keysPressedUponComponent + "\");</pre><br>" + System.lineSeparator();
         scriptArea.append(text);
         scriptArea.revalidate();
         scriptArea.repaint();
         e.getComponent().removeKeyListener(recorder);
+    }
+
+    public static boolean isApplied(Component c) {
+        for(FocusListener focusListener : c.getFocusListeners()){
+            if(focusListener.getClass().equals(RecordingFocusListener.class)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

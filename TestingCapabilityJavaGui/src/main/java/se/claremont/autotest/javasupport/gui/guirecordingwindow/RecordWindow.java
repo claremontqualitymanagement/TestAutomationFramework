@@ -1,7 +1,12 @@
 package se.claremont.autotest.javasupport.gui.guirecordingwindow;
 
 import se.claremont.autotest.common.gui.guistyle.*;
+import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.gui.JavaSupportTab;
+import se.claremont.autotest.javasupport.gui.guirecordingwindow.listeners.NewWindowsListener;
+import se.claremont.autotest.javasupport.gui.guirecordingwindow.listeners.RecordingFocusListener;
+import se.claremont.autotest.javasupport.gui.guirecordingwindow.listeners.RecordingKeyBoardListener;
+import se.claremont.autotest.javasupport.gui.guirecordingwindow.listeners.RecordingMouseListener;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
@@ -9,14 +14,19 @@ import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class RecordWindow{
     TafFrame frame;
     GroupLayout groupLayout;
+    TafButton recordingOptionsButton = new TafButton("Options");
     TafButton closeButton;
     TafLabel headline = new TafLabel("Rich Java GUI recording");
     TafLabel scriptLabel = new TafLabel("Script");
     TafHtmlTextPane scriptTextPane = new TafHtmlTextPane("ScriptTextPane");
+    public static java.util.List<RecordingKeyBoardListener.KeyPress> keysPressedSinceLastWriteCommand = new ArrayList<>();
+    public static Component activeComponent;
     JScrollPane scriptScrollPane;
 
     public RecordWindow(){
@@ -28,6 +38,51 @@ public class RecordWindow{
 
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() *3/2));
         scriptScrollPane = new JScrollPane(scriptTextPane);
+
+        recordingOptionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RecordingOptionsWindow recordingOptionsWindow = new RecordingOptionsWindow(frame);
+                recordingOptionsWindow.dialog.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        stopRecording();
+                        startRecording();
+                    }
+
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowIconified(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowActivated(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {
+
+                    }
+                });
+            }
+        });
+
 
         closeButton = new TafButton("Close");
         closeButton.setMnemonic('c');
@@ -44,7 +99,10 @@ public class RecordWindow{
                                 .addComponent(headline)
                                 .addComponent(scriptLabel)
                                 .addComponent(scriptScrollPane)
-                                .addComponent(closeButton)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                    .addComponent(recordingOptionsButton)
+                                    .addComponent(closeButton)
+                                )
                         )
         );
         groupLayout.setVerticalGroup(
@@ -52,7 +110,10 @@ public class RecordWindow{
                         .addComponent(headline)
                         .addComponent(scriptLabel)
                         .addComponent(scriptScrollPane)
-                        .addComponent(closeButton)
+                        .addGroup(groupLayout.createParallelGroup()
+                            .addComponent(recordingOptionsButton)
+                            .addComponent(closeButton)
+                        )
         );
 
         this.frame.pack();
@@ -95,56 +156,13 @@ public class RecordWindow{
     }
 
     private void stopRecording() {
-        for (Window w : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
-            if (!w.isShowing()) continue;
-            removeListener(w);
-        }
+        RecordingListenersManager.stopRecording();
     }
 
-    private void removeListener(Component component){
-        MethodInvoker m = new MethodInvoker();
-        System.out.println("Removing mouse listener from '" + component.getClass().getName() + " " + component.getName() + "'.");
-        for(MouseListener ml : component.getMouseListeners()){
-            if(ml.getClass().equals(RecordingMouseListener.class)){
-                component.removeMouseListener(ml);
-            }
-        }
-        Component[] subComponents = (Component[])m.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
-        if(subComponents == null) return;
-        for(Component c : subComponents){
-            removeListener(c);
-        }
-    }
 
     private void startRecording() {
-        for (Window w : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
-            if (!w.isShowing()) continue;
-            JavaWindow jw = new JavaWindow(w);
-            for(Object o : jw.getComponents()){
-                Component c = (Component)o;
-                if(o.getClass().getSimpleName().endsWith("Panel"))continue;
-                ((Component) o).addMouseListener(new RecordingMouseListener(scriptTextPane));
-                ((Component) o).addFocusListener(new RecordingKeyboardListener(scriptTextPane));
-            }
-        }
-        /*
-        while (performRecording) {
-            for (Window w : JavaSupportTab.applicationUnderTest.getWindowsForSUT()) {
-                if (!w.isShowing()) continue;
-                try {
-                    Component component = identifyComponent(((JFrame) w).getContentPane(), position.getMousePosition());
-                    if (component == null){
-                        Thread.sleep(10);
-                        continue;
-                    }
-                    if(!TafMouseListener.isApplied(component))
-                        component.addMouseListener(new TafMouseListener(scriptTextPane));
-                } catch (Exception ignored) {
-                }
-
-            }
-        }
-        */
+        RecordingListenersManager.setScriptArea(scriptTextPane);
+        RecordingListenersManager.startRecording();
     }
 
     private static boolean componentsAreTheSame(Component component1, Component component2){
