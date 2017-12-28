@@ -11,6 +11,26 @@ import java.awt.event.WindowListener;
 
 public class TafDialog extends JDialog {
 
+    public TafDialog(JDialog parentDialog, String title, boolean modal){
+        super(parentDialog, title, modal);
+        setIconImage(new ImageIcon(ClassLoader.getSystemResource(
+                "icon.png")).getImage());
+        if(!title.startsWith("TAF - "))
+            this.setTitle("TAF - " + title);
+        String usableName = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.firstUpperLetterTrailingLowerLetter(title));
+        this.getContentPane().setBackground(Gui.colorTheme.backgroundColor);
+        this.getContentPane().setForeground(Gui.colorTheme.textColor);
+        this.getRootPane().setBackground(Gui.colorTheme.backgroundColor);
+        this.getRootPane().setForeground(Gui.colorTheme.textColor);
+        if(!usableName.toLowerCase().endsWith("dialog"))
+            usableName += "Dialog";
+        this.setName(usableName);
+        this.setBackground(Gui.colorTheme.backgroundColor);
+        this.setForeground(Gui.colorTheme.textColor);
+        AboutTabPanel.openDialogs.add(this);
+        addListenerForWhenClosed();
+    }
+
     public TafDialog(JFrame parentFrame, String title, boolean modal){
         super(parentFrame, title, modal);
         setIconImage(new ImageIcon(ClassLoader.getSystemResource(
