@@ -7,7 +7,8 @@ import java.util.List;
 
 public class SubProcedureTestStep extends TestStep {
 
-    @JsonProperty List<TestStep> testSteps = new LinkedList<>();
+    @JsonProperty
+    public List<TestStep> testSteps = new LinkedList<>();
 
     public SubProcedureTestStep(){}
 

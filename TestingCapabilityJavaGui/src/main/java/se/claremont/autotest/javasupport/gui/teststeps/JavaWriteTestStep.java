@@ -5,7 +5,7 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
-public class JavaWriteTestStep extends TestStep {
+public class JavaWriteTestStep extends JavaTestStep {
 
     JavaGuiElement javaGuiElement;
     String textToWrite;
@@ -25,11 +25,6 @@ public class JavaWriteTestStep extends TestStep {
         this.stepRunner = stepRunner;
     }
 
-
-    @Override
-    public String getTestStepTypeShortName() {
-        return "Java";
-    }
 
     @Override
     public TestStepResult execute() {

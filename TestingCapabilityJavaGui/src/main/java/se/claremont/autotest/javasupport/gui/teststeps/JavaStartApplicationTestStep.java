@@ -3,6 +3,8 @@ package se.claremont.autotest.javasupport.gui.teststeps;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 
+import java.io.Serializable;
+
 public class JavaStartApplicationTestStep extends JavaTestStep {
 
     ApplicationUnderTest applicationUnderTest;

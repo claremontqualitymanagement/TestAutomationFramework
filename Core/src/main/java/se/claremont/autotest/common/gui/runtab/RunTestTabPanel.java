@@ -27,8 +27,8 @@ import java.util.List;
 public class RunTestTabPanel implements IGuiTab {
 
     private TafLabel runNameLabel = new TafLabel("Test run name");
-    private TafTextField runNameText = new TafTextField("RunNameTextField");
-    private String disregardedDefaultRunNameString = " <optional specific test run name> ";
+    private TafTextField runNameText = new TafTextField(" < Optional test run name > ");
+    //private String disregardedDefaultRunNameString = " <optional specific test run name> ";
     static List<String> chosenTestClasses = new ArrayList<>();
 
     private TafLabel executionModeLabel = new TafLabel("Execution mode");
@@ -283,10 +283,8 @@ public class RunTestTabPanel implements IGuiTab {
 
     private void initiateRunNameTextFieldToDefault(){
         runNameLabel.setLabelFor(runNameText);
-        runNameText.setFont(new Font(AppFont.getInstance().getFontName(), Font.ITALIC, AppFont.getInstance().getSize()));
         runNameText.setName("RunNameTextField");
         runNameText.setForeground(Gui.colorTheme.disabledColor);
-        runNameText.setText(disregardedDefaultRunNameString);
     }
 
     private void prepareRunName() {
@@ -332,7 +330,7 @@ public class RunTestTabPanel implements IGuiTab {
 
     String cliArguments(){
         String args = " " + runSettingsChangesFromDefault() + " " + String.join(" ", chosenTestClasses);
-        if(!runNameText.getText().equals(disregardedDefaultRunNameString)){
+        if(runNameText.isChangedFromDefault()){
             args += " runName=" + runNameText.getText();
         }
         return args;

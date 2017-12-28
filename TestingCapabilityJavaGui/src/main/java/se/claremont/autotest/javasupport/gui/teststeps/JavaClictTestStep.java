@@ -7,7 +7,7 @@ import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 import java.util.stream.StreamSupport;
 
-public class JavaClictTestStep extends TestStep {
+public class JavaClictTestStep extends JavaTestStep {
 
     StepRunner stepRunner;
     JavaGuiElement javaGuiElement;

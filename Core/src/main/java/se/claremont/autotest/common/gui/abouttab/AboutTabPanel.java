@@ -42,12 +42,14 @@ public class AboutTabPanel implements IGuiTab {
     public AboutTabPanel(TafFrame mainApplication) {
         this.mainApplication = mainApplication;
         panel = new TafPanel("AboutTab");
+        panel.setBackground(TafGuiColor.backgroundColor);
         GroupLayout groupLayout = new GroupLayout(panel);
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
         panel.setLayout(groupLayout);
 
         textPane.setEditable(false);
+        textPane.setBackground(TafGuiColor.backgroundColor);
         textPane.addHyperlinkListener(new HyperlinkListener() {
             public void hyperlinkUpdate(HyperlinkEvent e) {
                 if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {

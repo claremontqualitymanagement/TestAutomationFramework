@@ -1,9 +1,11 @@
 package se.claremont.autotest.restsupport.gui;
 
 import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.common.gui.createtesttab.TestStepListManager;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
+import se.claremont.autotest.common.gui.teststructure.TestStepList;
 import se.claremont.autotest.common.gui.teststructure.TestStepListPanel;
 import se.claremont.autotest.common.testrun.CliTestRunner;
 
@@ -37,12 +39,18 @@ public class RestSupportTabPanel implements IGuiTab {
             }
         });
 
-        List<TestStep> selectedTestSteps = new LinkedList<>();
-        selectedTestSteps.add(new RestTestStep("PUT request", "PUT request to http://testserver.se/endpoint"));
-        selectedTestSteps.add(new RestTestStep("POST request", "POST request to http://testserver.se/endpoint with data 'khdsfksdhf'"));
-        List<TestStep> additionalAvaliableTestSteps = new LinkedList<>();
-        additionalAvaliableTestSteps.add(new RestTestStep("GET request", "GET request to http://testserver.se/endpoint"));
-        TestStepListPanel testStepListPanel = new TestStepListPanel(selectedTestSteps, additionalAvaliableTestSteps);
+        TestStepListManager restTestSteps = new TestStepListManager("REST");
+        Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
+            @Override
+            public void isAdded(TestStep testStep) {
+                restTestSteps.update();
+            }
+
+            @Override
+            public void isRemoved(TestStep testStep) {
+                restTestSteps.update();
+            }
+        });
 
         GroupLayout groupLayout = new GroupLayout(tafPanel);
         tafPanel.setLayout(groupLayout);
@@ -53,7 +61,7 @@ public class RestSupportTabPanel implements IGuiTab {
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(headline)
                                 .addComponent(text)
-                                .addComponent(testStepListPanel)
+                                .addComponent(restTestSteps)
                                 .addComponent(createRequestButton)
                         )
         );
@@ -61,7 +69,7 @@ public class RestSupportTabPanel implements IGuiTab {
                 groupLayout.createSequentialGroup()
                         .addComponent(headline)
                         .addComponent(text)
-                        .addComponent(testStepListPanel)
+                        .addComponent(restTestSteps)
                         .addComponent(createRequestButton)
         );
 

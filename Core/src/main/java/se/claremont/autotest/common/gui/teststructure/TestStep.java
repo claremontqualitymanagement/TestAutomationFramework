@@ -10,8 +10,9 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.io.Serializable;
 
-public abstract class TestStep {
+public abstract class TestStep implements Serializable {
     @JsonIgnore private TafPanel panel;
     @JsonProperty private String description;
     @JsonProperty private String name;
@@ -91,5 +92,10 @@ public abstract class TestStep {
 
     private void updateName() {
         this.name = component.getText();
+    }
+
+    @Override
+    public String toString(){
+        return getTestStepTypeShortName() + " " + name;
     }
 }

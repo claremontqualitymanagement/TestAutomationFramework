@@ -1,8 +1,11 @@
 package se.claremont.autotest.javasupport.gui;
 
 import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.common.gui.createtesttab.TestStepListManager;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
+import se.claremont.autotest.common.gui.teststructure.TestStep;
+import se.claremont.autotest.common.gui.teststructure.TestStepList;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
@@ -21,6 +24,7 @@ public class JavaSupportTab implements IGuiTab{
     JFrame parentWindow;
     TafPanel panel;
     private TafTextArea explanationText = new TafTextArea("ExplanationText");
+    private TestStepListManager testStepListManager = new TestStepListManager(".*Java.*");
     private TafButton declareApplicationButton = new TafButton("Declare application");
     private TafButton tryStartSutButton = new TafButton("Start application");
     private TafButton guiSpyButton = new TafButton("GUI Spy");
@@ -55,6 +59,19 @@ public class JavaSupportTab implements IGuiTab{
             explanationText.setSize(parentWindow.getWidth() * 9/10, parentWindow.getHeight() /2);
         JScrollPane explanationtextScrollPane = new JScrollPane(explanationText);
         explanationtextScrollPane.setName("ExplanationTextScrollBar");
+
+        Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
+            @Override
+            public void isAdded(TestStep testStep) {
+                testStepListManager.update();
+            }
+
+            @Override
+            public void isRemoved(TestStep testStep) {
+                testStepListManager.update();
+            }
+        });
+
 
         declareApplicationButton.setMnemonic('d');
         declareApplicationButton.addActionListener(new ActionListener() {
@@ -93,6 +110,7 @@ public class JavaSupportTab implements IGuiTab{
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(text)
                                 .addComponent(explanationtextScrollPane)
+                                .addComponent(testStepListManager)
                                 .addGroup(groupLayout.createSequentialGroup()
                                         .addComponent(declareApplicationButton)
                                         .addComponent(tryStartSutButton)
@@ -105,6 +123,7 @@ public class JavaSupportTab implements IGuiTab{
                 groupLayout.createSequentialGroup()
                         .addComponent(text)
                         .addComponent(explanationtextScrollPane)
+                        .addComponent(testStepListManager)
                         .addGroup(groupLayout.createParallelGroup()
                                 .addComponent(declareApplicationButton)
                                 .addComponent(tryStartSutButton)

@@ -14,12 +14,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class CreateTestTabPanel implements IGuiTab{
 
     private TafPanel tabPanel;
     private TafCloseButton closeButton;
+    public static java.util.List<TestStep> testCaseTestSteps = new ArrayList<>();
 
     public CreateTestTabPanel(){
         TafHeadline headline = new TafHeadline("Create test");
@@ -45,40 +47,25 @@ public class CreateTestTabPanel implements IGuiTab{
         JLabel logoImage = new JLabel(new ImageIcon(image));
 
         //TestStepListPanel testStepListPanel = new TestStepListPanel(new LinkedList<>(), Gui.availableTestSteps);
-        TafTextArea availableTestStepListTextArea = new TafTextArea("AvailableTestStepListTextArea");
+        //TafTextArea availableTestStepListTextArea = new TafTextArea("AvailableTestStepListTextArea");
+        TestStepListManager testStepListManager = new TestStepListManager(null);
         Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
             @Override
             public void isAdded(TestStep testStep) {
-                StringBuilder text = new StringBuilder();
-                for(TestStep ts : Gui.availableTestSteps.getTestSteps()){
-                    text.append(ts.getName()).append(System.lineSeparator());
-                }
-                availableTestStepListTextArea.setText(text.toString());
-                availableTestStepListTextArea.revalidate();
-                availableTestStepListTextArea.repaint();
-                tabPanel.revalidate();
-                tabPanel.repaint();
+                testStepListManager.update();
             }
 
             @Override
             public void isRemoved(TestStep testStep) {
-                StringBuilder text = new StringBuilder();
-                for(TestStep ts : Gui.availableTestSteps.getTestSteps()){
-                    text.append(ts.getName()).append(System.lineSeparator());
-                }
-                availableTestStepListTextArea.setText(text.toString());
-                availableTestStepListTextArea.revalidate();
-                availableTestStepListTextArea.repaint();
-                tabPanel.revalidate();
-                tabPanel.repaint();
+                testStepListManager.update();
             }
         });
-        JScrollPane testStepScrollPane = new JScrollPane(availableTestStepListTextArea);
+        //JScrollPane testStepScrollPane = new JScrollPane(availableTestStepListTextArea);
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.Y_AXIS));
         //tabPanel.add(logoImage);
         tabPanel.add(headline);
         tabPanel.add(textArea);
-        tabPanel.add(testStepScrollPane);
+        tabPanel.add(testStepListManager);
         //tabPanel.add(testStepListPanel);
         //tabPanel.add(closeButton);
         tabPanel.setVisible(true);

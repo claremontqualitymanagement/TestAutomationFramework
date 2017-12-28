@@ -6,18 +6,13 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
-public class JavaTextTypedTestStep extends TestStep {
+public class JavaTextTypedTestStep extends JavaTestStep {
 
     public JavaTextTypedTestStep(String text, JavaGuiElement javaGuiElement){
         setActionName("Type");
         setDescription("Typing text '" + text + "' to element '" + javaGuiElement.getName() + "'.");
         setElementName(javaGuiElement.getName());
         setAssociatedData(text);
-    }
-
-    @Override
-    public String getTestStepTypeShortName() {
-        return "Java";
     }
 
     @Override

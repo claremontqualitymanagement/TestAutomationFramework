@@ -234,14 +234,18 @@ public class CreateRequestWindow {
             public void actionPerformed(ActionEvent e) {
                 String description;
                 if(sendDataTextArea.getText() != null && sendDataTextArea.getText().length() > 0){
-                    description = "REST " + sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString() + " request to " +
+                    description = sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString() + " request to " +
                             endPointUrlTextField.getText() + " with data: '" + sendDataTextArea.getText() + "'.";
                 } else {
-                    description = "REST " + sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString() + " request to " +
+                    description = sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString() + " request to " +
                             endPointUrlTextField.getText() + ".";
                 }
                 RestTestStep testStep = new RestTestStep(sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString() + " to " + endPointUrlTextField.getText(),
                         description);
+                for(HeaderPair headerPair : headerValues){
+                    testStep.addHeaderValue(headerPair.name, headerPair.value);
+                }
+                testStep.setMediaType(requestMediaContentComboBox.getItemAt(requestMediaContentComboBox.getSelectedIndex()).toString());
                 testStep.actionName = sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString();
                 testStep.elementName = endPointUrlTextField.getText();
                 testStep.data = sendDataTextArea.getText();
@@ -436,6 +440,7 @@ public class CreateRequestWindow {
             responseTextPane.setText(response.body);
         responseTextPane.setWrapStyleWord(false);
         responseTextPane.setLineWrap(false);
+        responseTextPane.setBackground(new TafTextField("dummy").getBackground());
 
         JScrollPane scrollPane = new JScrollPane(responseTextPane);
 
