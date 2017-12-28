@@ -54,6 +54,10 @@ public class ApplicationUnderTest {
         this.startMechanism = startMechanism;
     }
 
+    public void reAssignTestCase(TestCase testCase){
+        this.testCase = testCase;
+    }
+
     public void setName(String name){
         this.friendlyName = name;
     }

@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.gui.teststructure;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import se.claremont.autotest.common.testcase.TestCase;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,15 @@ public class SubProcedureTestStep extends TestStep {
 
     public SubProcedureTestStep(String name, String description) {
         super(name, description);
+    }
+
+    @Override
+    public String asCode() {
+        StringBuilder sb = new StringBuilder();
+        for(TestStep testStep : testSteps){
+            sb.append(testStep.asCode()).append(System.lineSeparator());
+        }
+        return sb.toString();
     }
 
     @Override
@@ -42,10 +52,14 @@ public class SubProcedureTestStep extends TestStep {
 
     @Override
     public TestStepResult execute() {
+        TestCaseManager.startTestStep();
+        TestCaseManager.setToBePartOfSubProcedureTestStep();
         TestStepResult testStepResult = new TestStepResult(this, TestStepResult.Result.NOT_RUN);
         for(TestStep testStep : testSteps){
             testStepResult.merge(testStep.execute());
         }
+        TestCaseManager.wrapUpTestCase();
+        TestCaseManager.setNotToBePartOfSubProcedureTestStep();
         return testStepResult;
     }
 }

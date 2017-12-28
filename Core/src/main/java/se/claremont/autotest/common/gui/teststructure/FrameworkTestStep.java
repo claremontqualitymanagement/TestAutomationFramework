@@ -9,6 +9,11 @@ public class FrameworkTestStep extends TestStep {
     }
 
     @Override
+    public String asCode() {
+        return null;
+    }
+
+    @Override
     public void setActionName(String actionName) {
 
     }

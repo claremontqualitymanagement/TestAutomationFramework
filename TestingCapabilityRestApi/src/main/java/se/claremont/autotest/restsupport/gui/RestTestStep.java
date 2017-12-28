@@ -1,8 +1,8 @@
 package se.claremont.autotest.restsupport.gui;
 
+import se.claremont.autotest.common.gui.teststructure.TestCaseManager;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
-import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.restsupport.*;
 
 import java.util.ArrayList;
@@ -28,6 +28,14 @@ public class RestTestStep extends TestStep{
         super(name, description);
     }
 
+    @Override
+    public String asCode() {
+        TestCaseManager.testSetCode.makeSureRequiredImportIsAdded("import se.claremont.autotest.restsupport.*;");
+        TestCaseManager.testSetCode.makeSureClassVariableIsDeclared("RestSupport rest;");
+        TestCaseManager.testSetCode.makeSureBeginTestSectionDeclarationExist("rest = new RestSupport(currentTestCase());");
+        return "RestResponse response = rest.responseFromGetRequest(\"" + elementName + "\");";
+    }
+
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
@@ -47,7 +55,8 @@ public class RestTestStep extends TestStep{
 
     @Override
     public TestStepResult execute() {
-        RestSupport restSupport = new RestSupport(new TestCase());
+        TestCaseManager.startTestStep();
+        RestSupport restSupport = new RestSupport(TestCaseManager.getTestCase());
         RestRequest restRequest = null;
         RestResponse response = null;
         try {
@@ -84,8 +93,10 @@ public class RestTestStep extends TestStep{
                     break;
             }
         } catch (Exception ex) {
+            TestCaseManager.wrapUpTestCase();
             return new TestStepResult(this, TestStepResult.Result.FAIL);
         }
+        TestCaseManager.wrapUpTestCase();
         return new TestStepResult(this, TestStepResult.Result.PASS);
     }
 

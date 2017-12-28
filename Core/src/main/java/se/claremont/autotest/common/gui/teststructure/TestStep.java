@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.gui.guistyle.TafPanel;
 import se.claremont.autotest.common.gui.guistyle.TafTextField;
+import se.claremont.autotest.common.testcase.TestCase;
 
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
@@ -23,6 +24,7 @@ public abstract class TestStep implements Serializable {
     public String elementName;
     @JsonProperty
     public Object data;
+    @JsonIgnore TestCase testCase;
 
     public TestStep(){}
 
@@ -39,6 +41,16 @@ public abstract class TestStep implements Serializable {
     public void setName(String name){
         component.setText(name);
         this.name = name;
+    }
+
+    public abstract String asCode();
+
+    public void assignTestCase(TestCase testCase){
+        this.testCase = testCase;
+    }
+
+    public TestCase getTestCase() {
+        return testCase;
     }
 
     public void setActionName(String actionName){

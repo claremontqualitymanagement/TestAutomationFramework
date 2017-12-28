@@ -3,6 +3,7 @@ package se.claremont.autotest.common.gui.createtesttab;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.teststructure.SubProcedureTestStep;
+import se.claremont.autotest.common.gui.teststructure.TestCaseManager;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 
@@ -59,6 +60,18 @@ public final class TestStepListManager extends JPanel{
             }
         });
         generateCodeButton.setEnabled(false);
+        generateCodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SubProcedureTestStep trialRunTestAction = new SubProcedureTestStep("Test run", "Test run from TAF GUI");
+                for(int i = 0; i < testCaseTestStepList.getModel().getSize(); i++){
+                    TestStep testStep = testCaseTestStepList.getModel().getElementAt(i);
+                    trialRunTestAction.addTestStep(testStep);
+                }
+                TestCaseManager.testSetCode.addTestCodeFromTestSteps(trialRunTestAction);
+                System.out.println(TestCaseManager.testSetCode.asCode());
+            }
+        });
 
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()

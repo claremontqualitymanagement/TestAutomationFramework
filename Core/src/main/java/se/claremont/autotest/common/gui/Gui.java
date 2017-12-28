@@ -16,10 +16,6 @@ import se.claremont.autotest.common.gui.runtab.RunTestTabPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Gui{
@@ -107,6 +103,5 @@ public class Gui{
     private void setFontSize() {
         appFont = new Font("serif", Font.PLAIN, Toolkit.getDefaultToolkit().getScreenSize().height / 50);
     }
-
 
 }

@@ -20,7 +20,7 @@ public class RestSupportTabPanel implements IGuiTab {
 
     TafPanel tafPanel = null;
     TafHeadline headline = new TafHeadline("REST");
-    TafLabel text = new TafLabel("REST support is yet code based. Use the IDE and create a RestSupport object.");
+    TafLabel text = new TafLabel("REST testing should not be done through the TAF GUI. Use the IDE and create a RestSupport object. Among other benefits this will unlock the verification mechanisms.");
     TafButton createRequestButton = new TafButton("Create request");
 
     public RestSupportTabPanel(){
