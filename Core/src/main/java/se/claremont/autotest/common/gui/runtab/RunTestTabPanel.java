@@ -27,7 +27,7 @@ import java.util.List;
 public class RunTestTabPanel implements IGuiTab {
 
     private TafLabel runNameLabel = new TafLabel("Test run name");
-    private JTextField runNameText = new JTextField();
+    private TafTextField runNameText = new TafTextField("RunNameTextField");
     private String disregardedDefaultRunNameString = " <optional specific test run name> ";
     static List<String> chosenTestClasses = new ArrayList<>();
 

@@ -29,12 +29,20 @@ public class TafCloseButton extends TafButtonType {
 
     public TafCloseButton(JDialog frame){
         this.setText("Close");
-        String frameName = frame.getName();
-        if(frameName == null || frameName.length() == 0)
-            frameName = frame.getTitle();
-        if(frameName == null || frameName.length() == 0)
-            frameName = frame.getClass().getSimpleName();
+
+        String frameName = null;
+
+        if(frame != null) {
+            frameName = frame.getName();
+
+            if (frameName == null || frameName.length() == 0)
+                frameName = frame.getTitle();
+
+            if (frameName == null || frameName.length() == 0)
+                frameName = frame.getClass().getSimpleName();
+        }
         this.setName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(StringManagement.methodNameWithOnlySafeCharacters(frameName)) + "CloseButton");
+
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

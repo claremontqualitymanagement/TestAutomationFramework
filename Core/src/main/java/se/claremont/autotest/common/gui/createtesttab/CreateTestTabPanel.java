@@ -31,10 +31,9 @@ public class CreateTestTabPanel implements IGuiTab{
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
 
-        JTextArea textArea = new JTextArea("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
+        TafTextArea textArea = new TafTextArea("TabText");
+        textArea.setText("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
         textArea.setLineWrap(true);
-        textArea.setFont(AppFont.getInstance());
-        textArea.setName("TabText");
 
         BufferedImage image = null;
         try {

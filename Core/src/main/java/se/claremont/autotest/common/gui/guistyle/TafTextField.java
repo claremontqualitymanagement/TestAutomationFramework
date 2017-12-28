@@ -59,6 +59,12 @@ public class TafTextField extends JTextField {
         }
     }
 
+    @Override
+    public void setToolTipText(String tooltip){
+        super.setToolTipText(Helper.tooltipStypeInfoHead + tooltip + Helper.tooltipStypeInfoTail);
+    }
+
+
     public boolean isChangedFromDefault(){
         return !getText().equals(disregardedDefaultRunNameString);
     }

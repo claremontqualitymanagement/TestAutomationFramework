@@ -23,7 +23,7 @@ public class GuiSpyingWindow {
     private final TafLabel blank = new TafLabel(" ");
     private final TafLabel currentElementLabel = new TafLabel("Current element:");
     private final TafPanel currentElementPanel = new TafPanel("CurrentElementPanel");
-    private final JTextPane currentElementText = new JTextPane();
+    private final TafHtmlTextPane currentElementText = new TafHtmlTextPane("CurrentElementTextPanel");
     private JScrollPane programaticDescriptionScrollPanel;
     private final TafPanel programaticDescriptionPanel = new TafPanel("ProgramaticDescriptionPanel");
     private final TafButton closeButton = new TafButton("Close");
@@ -36,12 +36,6 @@ public class GuiSpyingWindow {
         groupLayout.setAutoCreateContainerGaps(true);
         groupLayout.setAutoCreateGaps(true);
         frame.setLayout(groupLayout);
-
-        currentElementText.setFont(AppFont.getInstance());
-        currentElementText.setName("CurrentElementText");
-        currentElementText.setContentType("text/html");
-        currentElementText.setFont(AppFont.getInstance());
-        currentElementText.setForeground(TafGuiColor.textColor);
 
         currentElementPanel.setLayout(new GridLayout(1, 1));
         headline.setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() * 3/2));

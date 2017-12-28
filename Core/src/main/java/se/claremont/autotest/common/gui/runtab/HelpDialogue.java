@@ -1,10 +1,7 @@
 package se.claremont.autotest.common.gui.runtab;
 
 import se.claremont.autotest.common.gui.Gui;
-import se.claremont.autotest.common.gui.guistyle.AppFont;
-import se.claremont.autotest.common.gui.guistyle.TafCloseButton;
-import se.claremont.autotest.common.gui.guistyle.TafFrame;
-import se.claremont.autotest.common.gui.guistyle.TafGuiColor;
+import se.claremont.autotest.common.gui.guistyle.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,12 +25,8 @@ public class HelpDialogue {
         GroupLayout groupLayout = new GroupLayout(pane);
         pane.setLayout(groupLayout);
 
-        JTextPane textPane = new JTextPane();
-        textPane.setContentType("text/html");
-        textPane.setName("HelpDialogueTextArea");
+        TafHtmlTextPane textPane = new TafHtmlTextPane("HelpDialogueTextArea");
         textPane.setEditable(false);
-        textPane.setFont(AppFont.getInstance());
-        textPane.setForeground(Gui.colorTheme.textColor);
         textPane.setText(createHtmlPage());
         pane.add(textPane);
 

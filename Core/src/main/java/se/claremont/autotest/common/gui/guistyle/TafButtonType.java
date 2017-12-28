@@ -31,4 +31,9 @@ class TafButtonType extends JButton{
         this.setName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(StringManagement.methodNameWithOnlySafeCharacters(label)) + "Button");
     }
 
+    @Override
+    public void setToolTipText(String tooltip){
+        super.setToolTipText(Helper.tooltipStypeInfoHead + tooltip + Helper.tooltipStypeInfoTail);
+    }
+
 }

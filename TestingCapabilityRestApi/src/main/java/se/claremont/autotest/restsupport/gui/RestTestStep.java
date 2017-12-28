@@ -13,17 +13,14 @@ public class RestTestStep extends TestStep{
         super(name, description);
     }
 
-    @Override
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
 
-    @Override
     public void setElementName(String elementName) {
         this.elementName = elementName;
     }
 
-    @Override
     public void setAssociatedData(Object data) {
         this.data = data;
     }

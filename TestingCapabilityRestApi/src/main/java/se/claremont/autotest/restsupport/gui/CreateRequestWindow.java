@@ -3,7 +3,6 @@ package se.claremont.autotest.restsupport.gui;
 import se.claremont.autotest.common.gui.guistyle.*;
 
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,31 +10,31 @@ import java.awt.event.ActionListener;
 public class CreateRequestWindow {
 
     private String[] sendMethodTypes = new String[]{"GET", "PUT", "POST", "DELETE"};
-    TafFrame window = new TafFrame("TAF - Create REST request");
+    TafDialog window;
     TafHeadline headline = new TafHeadline("Create REST request");
     TafLabel endPointUrlLabel = new TafLabel("End-point URL");
     TafTextField endPointUrlTextField = new TafTextField(" < End-point URL >");
     TafLabel sendMethodLabel = new TafLabel("Send method");
-    JComboBox sendMethodCombobox = new JComboBox(sendMethodTypes);
+    TafComboBox sendMethodCombobox = new TafComboBox("SendMethodComboBox", sendMethodTypes);
     TafPanel sendDataPanel = new TafPanel("SendDataPanel");
     TafLabel sendDataLabel = new TafLabel("Data");
     TafTextArea sendDataTextArea = new TafTextArea("SendDataTextArea");
     JScrollPane sendDataScrollPane = new JScrollPane(sendDataTextArea);
-    TafLabel mediaContentLabel = new TafLabel("Media content type");
-    String[] presetMediaTypeSuggestions = new String[]{"text/html"};
-    JComboBox mediaContentComboBox = new JComboBox(presetMediaTypeSuggestions);
+    TafLabel requestMediaContentLabel = new TafLabel("Request content type");
+    String[] presetMediaTypeSuggestions = new String[]{"text/html", "application/json", "application/xml"};
+    TafComboBox requestMediaContentComboBox = new TafComboBox("RequestMediaContentCombobox", presetMediaTypeSuggestions);
+    TafLabel responseAcceptMediaContentLabel = new TafLabel("Response accept content type");
+    TafComboBox responseMediaContentComboBox = new TafComboBox("ResponseAcceptMediaContentComboBox", presetMediaTypeSuggestions);
     TafButton addHeaderValueButton = new TafButton("Add http header value");
     TafButton tryRequestButton = new TafButton("Try request");
     TafButton saveRequestButton = new TafButton("Save");
-    TafCloseButton closeButton = new TafCloseButton(window);
+    TafCloseButton closeButton;
 
-    public CreateRequestWindow(){
+    public CreateRequestWindow(TafFrame applicationFrame){
+        window = new TafDialog(applicationFrame, "TAF - Create REST request", true);
+        closeButton = new TafCloseButton(window);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        sendMethodCombobox.setEditable(false);
-        sendMethodCombobox.setFont(AppFont.getInstance());
-        sendMethodCombobox.setForeground(TafGuiColor.textColor);
-        sendMethodCombobox.setBackground(TafGuiColor.backgroundColor);
-        sendMethodCombobox.getEditor().getEditorComponent().setBackground(TafGuiColor.backgroundColor);
+        sendMethodCombobox.setEditable(true);
         sendMethodCombobox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,11 +49,17 @@ public class CreateRequestWindow {
             sendDataTextArea.setEnabled(false);
         }
 
-        mediaContentComboBox.setEditable(true);
-        mediaContentComboBox.setSelectedIndex(0);
-        mediaContentComboBox.setFont(AppFont.getInstance());
-        mediaContentComboBox.setForeground(TafGuiColor.textColor);
-        mediaContentComboBox.setBackground(TafGuiColor.backgroundColor);
+        String requestContentTypeHelp = "Tells the server how to interprete the request we are sending.";
+        requestMediaContentComboBox.setEditable(true);
+        requestMediaContentComboBox.setSelectedIndex(1);
+        requestMediaContentComboBox.setToolTipText(requestContentTypeHelp);
+        requestMediaContentLabel.setToolTipText(requestContentTypeHelp);
+
+        String responseAcceptHelp = "Tells the server in what data format we expect the response to be in.";
+        responseMediaContentComboBox.setEditable(true);
+        responseMediaContentComboBox.setSelectedIndex(0);
+        responseMediaContentComboBox.setToolTipText(responseAcceptHelp);
+        responseAcceptMediaContentLabel.setToolTipText(responseAcceptHelp);
 
         sendDataPanel.setSize(Toolkit.getDefaultToolkit().getScreenSize().width/3, Toolkit.getDefaultToolkit().getScreenSize().height /3);
         sendDataPanel.add(sendDataLabel);
@@ -75,8 +80,12 @@ public class CreateRequestWindow {
                                     .addComponent(endPointUrlTextField)
                                 )
                                 .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(mediaContentLabel)
-                                        .addComponent(mediaContentComboBox)
+                                        .addComponent(requestMediaContentLabel)
+                                        .addComponent(requestMediaContentComboBox)
+                                )
+                                .addGroup(groupLayout.createSequentialGroup()
+                                        .addComponent(responseAcceptMediaContentLabel)
+                                        .addComponent(responseMediaContentComboBox)
                                 )
                                 .addComponent(sendDataPanel)
                                 .addGroup(groupLayout.createSequentialGroup()
@@ -99,8 +108,12 @@ public class CreateRequestWindow {
                                 .addComponent(endPointUrlTextField)
                         )
                         .addGroup(groupLayout.createParallelGroup()
-                                .addComponent(mediaContentLabel)
-                                .addComponent(mediaContentComboBox)
+                                .addComponent(requestMediaContentLabel)
+                                .addComponent(requestMediaContentComboBox)
+                        )
+                        .addGroup(groupLayout.createParallelGroup()
+                                .addComponent(responseAcceptMediaContentLabel)
+                                .addComponent(responseMediaContentComboBox)
                         )
                         .addComponent(sendDataPanel)
                         .addGroup(groupLayout.createParallelGroup()

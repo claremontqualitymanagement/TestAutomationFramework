@@ -26,7 +26,7 @@ public class AboutTabPanel implements IGuiTab {
     private TafButton showHelpTextButton = new TafButton("Help");
     private TafLabel versionLabel = new TafLabel("TafVersionText");
     private TafFrame mainApplication;
-    private JTextPane textPane = new JTextPane();
+    private TafHtmlTextPane textPane = new TafHtmlTextPane("AboutTextPane");
     private TafLabel colorThemeLabel = new TafLabel("Execution mode");
     public static java.util.List<JFrame> openFrames = new ArrayList<>();
     private JSpinner colorThemeSpinner = new JSpinner();
@@ -47,11 +47,6 @@ public class AboutTabPanel implements IGuiTab {
         groupLayout.setAutoCreateContainerGaps(true);
         panel.setLayout(groupLayout);
 
-        textPane.setName("AboutTextPane");
-        textPane.setContentType("text/html");
-        textPane.setForeground(Gui.colorTheme.textColor);
-        textPane.setBackground(Gui.colorTheme.backgroundColor);
-        textPane.setFont(AppFont.getInstance());
         textPane.setEditable(false);
         textPane.addHyperlinkListener(new HyperlinkListener() {
             public void hyperlinkUpdate(HyperlinkEvent e) {

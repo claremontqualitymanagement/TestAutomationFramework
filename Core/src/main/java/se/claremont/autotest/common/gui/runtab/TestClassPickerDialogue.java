@@ -28,7 +28,7 @@ import java.util.zip.ZipInputStream;
 public class TestClassPickerDialogue {
 
     TafFrame classPickerWindow;
-    private JCheckBox showAllClassesWithTestsCheckbox = new JCheckBox("Show all classes with tests, not only TestSets");
+    private TafCheckbox showAllClassesWithTestsCheckbox = new TafCheckbox("Show all classes with tests, not only TestSets");
     private ClassesList testClasses = new ClassesList();
     private JScrollPane listClassesListPane;// = new JScrollPane(testClasses);
 
@@ -51,10 +51,6 @@ public class TestClassPickerDialogue {
         listClassesListPane.setName("TestClassesListPanel");
 
         showAllClassesWithTestsCheckbox.setMnemonic('h');
-        showAllClassesWithTestsCheckbox.setFont(AppFont.getInstance());
-        showAllClassesWithTestsCheckbox.setName("ShowAllTestsCheckbox");
-        showAllClassesWithTestsCheckbox.setBackground(Gui.colorTheme.backgroundColor);
-        showAllClassesWithTestsCheckbox.setForeground(Gui.colorTheme.textColor);
         showAllClassesWithTestsCheckbox.setSelected(false);
         showAllClassesWithTestsCheckbox.addActionListener(new ActionListener() {
             @Override

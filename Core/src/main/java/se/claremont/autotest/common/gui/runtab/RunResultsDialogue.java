@@ -38,13 +38,12 @@ public class RunResultsDialogue {
         TafLabel resultsText = new TafLabel(String.valueOf(exitCode));
         resultsText.setName("TestRunExitCode");
 
-        JTextArea testOutputTextArea = new JTextArea();
+        TafTextArea testOutputTextArea = new TafTextArea("TestOutputTextArea");
         testOutputTextArea.setText(ColoredConsolePrinter.removeFormattingFromString(testOutput));
         testOutputTextArea.setFont(new Font("monospaced", Font.PLAIN, AppFont.getInstance().getSize() * 2/3));
         testOutputTextArea.setForeground(TafGuiColor.textColor);
         testOutputTextArea.setEditable(false);
         testOutputTextArea.setLineWrap(false);
-        testOutputTextArea.setName("TestOutputTextArea");
         JScrollPane testOutputScrollPane = new JScrollPane(testOutputTextArea);
         testOutputScrollPane.createHorizontalScrollBar();
         testOutputScrollPane.createVerticalScrollBar();

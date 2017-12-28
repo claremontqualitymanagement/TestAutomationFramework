@@ -205,17 +205,11 @@ public class RunSettingsDialogue {
 
         TafLabel parameterNameLabel = new TafLabel("Parameter name");
 
-        JTextField parameterNameText = new JTextField();
-        parameterNameText.setName("ParameterNameTextField");
-        parameterNameText.setForeground(Gui.colorTheme.textColor);
-        parameterNameText.setFont(AppFont.getInstance());
+        TafTextField parameterNameText = new TafTextField(" < parameter name >");
 
         TafLabel parameterValueLabel = new TafLabel("Parameter value");
 
-        JTextField parameterValueText = new JTextField();
-        parameterValueText.setForeground(Gui.colorTheme.textColor);
-        parameterValueText.setName("ParameterValueTextField");
-        parameterValueText.setFont(AppFont.getInstance());
+        TafTextField parameterValueText = new TafTextField(" < parameter value >");
 
         TafButton saveButton = new TafButton("Save");
         saveButton.addActionListener(new ActionListener() {

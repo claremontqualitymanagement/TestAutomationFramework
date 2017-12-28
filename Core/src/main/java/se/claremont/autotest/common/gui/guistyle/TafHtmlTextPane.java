@@ -23,4 +23,10 @@ public class TafHtmlTextPane extends JTextPane {
     public void appendLine(String htmlText){
         this.append(htmlText + "<br>" + System.lineSeparator());
     }
+
+    @Override
+    public void setToolTipText(String tooltip){
+        super.setToolTipText(Helper.tooltipStypeInfoHead + tooltip + Helper.tooltipStypeInfoTail);
+    }
+
 }

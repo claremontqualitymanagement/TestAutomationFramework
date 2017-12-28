@@ -8,4 +8,5 @@ public class TafHeadline extends TafLabel {
         super(label);
         setFont(new Font(AppFont.getInstance().getName(), AppFont.getInstance().getStyle(), AppFont.getInstance().getSize() *3/2));
     }
+
 }

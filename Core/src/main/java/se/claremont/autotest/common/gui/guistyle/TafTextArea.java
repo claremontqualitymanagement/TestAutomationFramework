@@ -14,4 +14,10 @@ public class TafTextArea extends JTextArea {
         this.setLineWrap(true);
         this.setFont(AppFont.getInstance());
     }
+
+    @Override
+    public void setToolTipText(String tooltip){
+        super.setToolTipText(Helper.tooltipStypeInfoHead + tooltip + Helper.tooltipStypeInfoTail);
+    }
+
 }

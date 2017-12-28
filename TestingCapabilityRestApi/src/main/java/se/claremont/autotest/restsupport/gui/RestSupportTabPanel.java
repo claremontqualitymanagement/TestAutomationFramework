@@ -1,14 +1,14 @@
 package se.claremont.autotest.restsupport.gui;
 
-import se.claremont.autotest.common.gui.guistyle.TafButton;
-import se.claremont.autotest.common.gui.guistyle.TafHeadline;
-import se.claremont.autotest.common.gui.guistyle.TafLabel;
-import se.claremont.autotest.common.gui.guistyle.TafPanel;
+import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepListPanel;
+import se.claremont.autotest.common.testrun.CliTestRunner;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -27,7 +27,13 @@ public class RestSupportTabPanel implements IGuiTab {
         createRequestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CreateRequestWindow();
+                TafFrame applicationFrame = null;
+                if(StandaloneRestSupportGui.frame != null){
+                    applicationFrame = StandaloneRestSupportGui.frame;
+                } else {
+                    applicationFrame = Gui.applicationWindow;
+                }
+                new CreateRequestWindow(applicationFrame);
             }
         });
 

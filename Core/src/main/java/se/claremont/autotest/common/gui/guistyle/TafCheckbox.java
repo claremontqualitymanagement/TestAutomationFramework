@@ -13,4 +13,10 @@ public class TafCheckbox extends JCheckBox {
         setForeground(TafGuiColor.textColor);
         setBackground(TafGuiColor.backgroundColor);
     }
+
+    @Override
+    public void setToolTipText(String tooltip){
+        super.setToolTipText(Helper.tooltipStypeInfoHead + tooltip + Helper.tooltipStypeInfoTail);
+    }
+
 }
