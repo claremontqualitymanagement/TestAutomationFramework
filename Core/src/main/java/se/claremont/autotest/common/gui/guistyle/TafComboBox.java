@@ -9,7 +9,7 @@ public class TafComboBox extends JComboBox {
         setName(name);
         setFont(AppFont.getInstance());
         getEditor().getEditorComponent().setForeground(TafGuiColor.textColor);
-        getEditor().getEditorComponent().setBackground(TafGuiColor.backgroundColor);
+        getEditor().getEditorComponent().setBackground(new TafTextField("dummy").getBackground());
     }
 
     @Override

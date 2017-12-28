@@ -99,6 +99,8 @@ public class CreateRequestWindow {
         sendDataTextArea.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 3, Toolkit.getDefaultToolkit().getScreenSize().height / 3);
         sendDataTextArea.setLineWrap(true);
         sendDataTextArea.setWrapStyleWord(true);
+        sendDataTextArea.setBackground(new TafTextField("dummy").getBackground());
+
 
         String requestContentTypeHelp = "Tells the server how to interprete the request we are sending.";
         requestMediaContentComboBox.setEditable(true);
