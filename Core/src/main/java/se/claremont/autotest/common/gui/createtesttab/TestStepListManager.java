@@ -127,6 +127,15 @@ public final class TestStepListManager extends JPanel{
         this.repaint();
     }
 
+    public void updateByFilterUpdate(String pattern){
+        if(pattern == null || pattern.length() == 0) {
+            testStepTypeFilterAsRegex = null;
+        } else {
+            testStepTypeFilterAsRegex = ".*" + pattern + ".*";
+        }
+        update();
+    }
+
     class TestStepList extends JList<TestStep>{
         private TransferHandler handler;
         private boolean isRunnable;
@@ -190,7 +199,8 @@ public final class TestStepListManager extends JPanel{
         int iterator = 0;
         for(int i = 0; i < Gui.availableTestSteps.getTestSteps().size(); i++){
             TestStep testStep = Gui.availableTestSteps.getTestSteps().get(i);
-            if(testStepTypeFilterAsRegex == null || testStep.getTestStepTypeShortName().matches(testStepTypeFilterAsRegex)){
+            String testStepInfoString = testStep.toString();
+            if(testStepTypeFilterAsRegex == null || testStepInfoString.matches(testStepTypeFilterAsRegex)){
                 availableTestStepsListModel.add(iterator, testStep);
                 iterator++;
             }

@@ -39,7 +39,7 @@ public class RestSupportTabPanel implements IGuiTab {
             }
         });
 
-        TestStepListManager restTestSteps = new TestStepListManager("REST");
+        TestStepListManager restTestSteps = new TestStepListManager("^REST.*");
         Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
             @Override
             public void isAdded(TestStep testStep) {

@@ -24,7 +24,7 @@ public class JavaSupportTab implements IGuiTab{
     JFrame parentWindow;
     TafPanel panel;
     private TafTextArea explanationText = new TafTextArea("ExplanationText");
-    private TestStepListManager testStepListManager = new TestStepListManager(".*Java.*");
+    private TestStepListManager testStepListManager = new TestStepListManager("^Java.*");
     private TafButton declareApplicationButton = new TafButton("Declare application");
     private TafButton tryStartSutButton = new TafButton("Start application");
     private TafButton guiSpyButton = new TafButton("GUI Spy");
