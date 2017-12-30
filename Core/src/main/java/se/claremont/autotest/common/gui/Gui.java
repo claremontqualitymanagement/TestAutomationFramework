@@ -7,7 +7,7 @@ import se.claremont.autotest.common.gui.guistyle.TafGuiColor;
 import se.claremont.autotest.common.gui.guistyle.TafGuiColorOriginal;
 import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
-import se.claremont.autotest.common.gui.teststructure.AvailableTestSteps;
+import se.claremont.autotest.common.gui.teststructure.TestStepList;
 import se.claremont.autotest.common.gui.userpreferences.Preferences;
 import se.claremont.autotest.common.gui.userpreferences.SavePreferencesOnCloseWindowsListener;
 import se.claremont.autotest.common.testrun.TestRun;
@@ -25,7 +25,7 @@ public class Gui{
     public static Preferences preferences = new Preferences();
     public static HashMap<String, String> defaultSettings;
     public static TafGuiColor colorTheme;
-    public static AvailableTestSteps availableTestSteps = new AvailableTestSteps();
+    public static TestStepList availableTestSteps = new TestStepList();
     JTabbedPane tabs = new JTabbedPane();
 
     public Gui() {

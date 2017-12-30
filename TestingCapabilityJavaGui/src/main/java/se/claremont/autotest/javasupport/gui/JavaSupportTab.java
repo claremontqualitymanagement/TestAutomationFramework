@@ -24,7 +24,7 @@ public class JavaSupportTab implements IGuiTab{
     JFrame parentWindow;
     TafPanel panel;
     private TafTextArea explanationText = new TafTextArea("ExplanationText");
-    private TestStepListManager testStepListManager = new TestStepListManager("^Java.*");
+    private TestStepListManager testStepListManager = new TestStepListManager("^Java.*", getCurrentApplicationFrame());
     private TafButton declareApplicationButton = new TafButton("Declare application");
     private TafButton tryStartSutButton = new TafButton("Start application");
     private TafButton guiSpyButton = new TafButton("GUI Spy");
@@ -141,6 +141,15 @@ public class JavaSupportTab implements IGuiTab{
         return panel;
     }
 
+    private TafFrame getCurrentApplicationFrame(){
+        TafFrame applicationFrame = null;
+        if(StandaloneJavaSupportGui.window != null){
+            applicationFrame = StandaloneJavaSupportGui.window;
+        } else {
+            applicationFrame = Gui.applicationWindow;
+        }
+        return applicationFrame;
+    }
 
     public String getName(){
         return "Java";

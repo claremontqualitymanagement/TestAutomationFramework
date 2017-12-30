@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TestStepList {
-    private List<TestStep> testSteps = new LinkedList<>();
+    private List<TestStep> testSteps = new ArrayList<>();
     private List<TestStepListChangeListener> changeListeners = new ArrayList<>();
 
     public TestStepList(){

@@ -27,6 +27,18 @@ public class SubProcedureTestStep extends TestStep {
     }
 
     @Override
+    public TestStep clone() {
+        SubProcedureTestStep newSub = new SubProcedureTestStep(getName(), getDescription());
+        newSub.setActionName(actionName);
+        newSub.setElementName(elementName);
+        newSub.setAssociatedData(data);
+        for(TestStep testStep : testSteps){
+            newSub.addTestStep(testStep.clone());
+        }
+        return newSub;
+    }
+
+    @Override
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }

@@ -14,6 +14,15 @@ public class FrameworkTestStep extends TestStep {
     }
 
     @Override
+    public TestStep clone() {
+        FrameworkTestStep clonedStep = new FrameworkTestStep(getName(), getDescription());
+        clonedStep.setActionName(actionName);
+        clonedStep.setElementName(elementName);
+        clonedStep.setAssociatedData(data);
+        return clonedStep;
+    }
+
+    @Override
     public void setActionName(String actionName) {
 
     }

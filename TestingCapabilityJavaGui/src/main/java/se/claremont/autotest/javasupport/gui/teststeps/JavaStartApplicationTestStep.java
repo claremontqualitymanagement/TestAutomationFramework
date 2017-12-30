@@ -12,6 +12,14 @@ public class JavaStartApplicationTestStep extends JavaTestStep {
 
     ApplicationUnderTest applicationUnderTest;
 
+    public JavaStartApplicationTestStep(){
+        super();
+    }
+
+    public JavaStartApplicationTestStep(String name, String description){
+        super(name, description);
+    }
+
     public JavaStartApplicationTestStep(ApplicationUnderTest applicationUnderTest){
         this.applicationUnderTest = applicationUnderTest;
         setName("Start " + applicationUnderTest.friendlyName);
@@ -21,6 +29,17 @@ public class JavaStartApplicationTestStep extends JavaTestStep {
                 applicationUnderTest.startMechanism.mainClass + " " +
                 String.join(" ", applicationUnderTest.startMechanism.arguments));
     }
+
+    @Override
+    public JavaStartApplicationTestStep clone() {
+        JavaStartApplicationTestStep clonedStep = new JavaStartApplicationTestStep(getName(), getDescription());
+        clonedStep.setActionName(actionName);
+        clonedStep.setElementName(elementName);
+        clonedStep.setAssociatedData(data);
+        clonedStep.applicationUnderTest = applicationUnderTest;
+        return clonedStep;
+    }
+
 
     @Override
     public String asCode(){

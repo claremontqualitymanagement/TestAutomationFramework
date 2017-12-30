@@ -1,5 +1,6 @@
 package se.claremont.autotest.restsupport.gui;
 
+import se.claremont.autotest.common.gui.teststructure.SubProcedureTestStep;
 import se.claremont.autotest.common.gui.teststructure.TestCaseManager;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
@@ -34,6 +35,20 @@ public class RestTestStep extends TestStep{
         TestCaseManager.testSetCode.makeSureClassVariableIsDeclared("RestSupport rest;");
         TestCaseManager.testSetCode.makeSureBeginTestSectionDeclarationExist("rest = new RestSupport(currentTestCase());");
         return "RestResponse response = rest.responseFromGetRequest(\"" + elementName + "\");";
+    }
+
+    @Override
+    public TestStep clone() {
+        RestTestStep clonedStep = new RestTestStep(getName(), getDescription());
+        clonedStep.setActionName(actionName);
+        clonedStep.setElementName(elementName);
+        clonedStep.setAssociatedData(data);
+        for(HeaderValue headerValue : headerValues){
+            clonedStep.addHeaderValue(headerValue.name, headerValue.value);
+        }
+        clonedStep.mediaType = mediaType;
+        return clonedStep;
+
     }
 
     public void setActionName(String actionName) {

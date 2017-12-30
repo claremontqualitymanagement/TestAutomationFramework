@@ -13,6 +13,14 @@ public class JavaClictTestStep extends JavaTestStep {
 
     JavaGuiElement javaGuiElement;
 
+    public JavaClictTestStep(){
+        super();
+    }
+
+    public JavaClictTestStep(String name, String description){
+        super(name, description);
+    }
+
     public JavaClictTestStep(JavaGuiElement javaGuiElement){
         this.javaGuiElement = javaGuiElement;
         setName("Click " + javaGuiElement.getName());
@@ -20,6 +28,17 @@ public class JavaClictTestStep extends JavaTestStep {
         setElementName(javaGuiElement.getName());
         setAssociatedData(null);
         setDescription("Clicking the JavaGuiElement named '" + javaGuiElement.getName() + "'.");
+    }
+
+    @Override
+    public JavaClictTestStep clone(){
+        JavaClictTestStep clonedStep = new JavaClictTestStep(getName(), getDescription());
+        clonedStep.setActionName(actionName);
+        clonedStep.setElementName(elementName);
+        clonedStep.setAssociatedData(data);
+        clonedStep.javaGuiElement = javaGuiElement;
+        return clonedStep;
+
     }
 
     @Override

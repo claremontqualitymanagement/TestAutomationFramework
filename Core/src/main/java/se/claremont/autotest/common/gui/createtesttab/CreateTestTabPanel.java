@@ -39,7 +39,7 @@ public class CreateTestTabPanel implements IGuiTab {
         textArea.setWrapStyleWord(true);
         JScrollPane testAreaScrollPane = new JScrollPane(textArea);
 
-        TestStepListManager testStepListManager = new TestStepListManager(null);
+        TestStepListManager testStepListManager = new TestStepListManager(null, Gui.applicationWindow);
 
         searchLabel.setLabelFor(searchField);
         searchField.getDocument().addDocumentListener(new DocumentListener() {

@@ -45,6 +45,8 @@ public abstract class TestStep implements Serializable {
 
     public abstract String asCode();
 
+    public abstract TestStep clone();
+
     public void assignTestCase(TestCase testCase){
         this.testCase = testCase;
     }

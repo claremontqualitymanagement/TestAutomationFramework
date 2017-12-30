@@ -29,17 +29,11 @@ public class RestSupportTabPanel implements IGuiTab {
         createRequestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TafFrame applicationFrame = null;
-                if(StandaloneRestSupportGui.frame != null){
-                    applicationFrame = StandaloneRestSupportGui.frame;
-                } else {
-                    applicationFrame = Gui.applicationWindow;
-                }
-                new CreateRequestWindow(applicationFrame);
+                new CreateRequestWindow(getCurrentApplicationFrame());
             }
         });
 
-        TestStepListManager restTestSteps = new TestStepListManager("^REST.*");
+        TestStepListManager restTestSteps = new TestStepListManager("^REST.*", getCurrentApplicationFrame());
         Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
             @Override
             public void isAdded(TestStep testStep) {
@@ -79,6 +73,16 @@ public class RestSupportTabPanel implements IGuiTab {
     public JPanel getPanel() {
         if(tafPanel == null) return new RestSupportTabPanel().tafPanel;
         return tafPanel;
+    }
+
+    private TafFrame getCurrentApplicationFrame(){
+        TafFrame applicationFrame = null;
+        if(StandaloneRestSupportGui.frame != null){
+            applicationFrame = StandaloneRestSupportGui.frame;
+        } else {
+            applicationFrame = Gui.applicationWindow;
+        }
+        return applicationFrame;
     }
 
     @Override

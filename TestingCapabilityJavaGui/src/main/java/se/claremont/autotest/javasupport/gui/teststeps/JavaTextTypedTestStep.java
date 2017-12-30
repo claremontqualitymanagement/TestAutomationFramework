@@ -10,15 +10,27 @@ import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 public class JavaTextTypedTestStep extends JavaTestStep {
 
     JavaGuiElement javaGuiElement;
-    String text;
+
+    public JavaTextTypedTestStep(String name, String description){
+        super(name, description);
+    }
 
     public JavaTextTypedTestStep(String text, JavaGuiElement javaGuiElement){
         setActionName("Type");
         setDescription("Typing text '" + text + "' to element '" + javaGuiElement.getName() + "'.");
         setElementName(javaGuiElement.getName());
         setAssociatedData(text);
-        this.text = text;
         this.javaGuiElement = javaGuiElement;
+    }
+
+    @Override
+    public JavaTextTypedTestStep clone() {
+        JavaTextTypedTestStep clonedStep = new JavaTextTypedTestStep(getName(), getDescription());
+        clonedStep.setActionName(actionName);
+        clonedStep.setElementName(elementName);
+        clonedStep.setAssociatedData(data);
+        clonedStep.javaGuiElement = javaGuiElement;
+        return clonedStep;
     }
 
     @Override
@@ -26,7 +38,7 @@ public class JavaTextTypedTestStep extends JavaTestStep {
         TestCaseManager.testSetCode.makeSureRequiredImportIsAdded("import se.claremont.autotest.javasupport.interaction.*;");
         TestCaseManager.testSetCode.makeSureClassVariableIsDeclared("GenericInteractionMethods java;");
         TestCaseManager.testSetCode.makeSureBeginTestSectionDeclarationExist("java = new GenericInteractionMethods(currentTestCase());");
-        return "java.write(" + text + ", " + javaGuiElement.getName() + ");";
+        return "java.write(" + data + ", " + javaGuiElement.getName() + ");";
     }
 
     @Override
@@ -35,7 +47,7 @@ public class JavaTextTypedTestStep extends JavaTestStep {
         TestStepResult testStepResult;
         GenericInteractionMethods java = new GenericInteractionMethods(TestCaseManager.getTestCase());
         try{
-            java.write(javaGuiElement, text);
+            java.write(javaGuiElement, (String)data);
             testStepResult = new TestStepResult(this, TestStepResult.Result.PASS);
         }catch (Exception e){
             testStepResult = new TestStepResult(this, TestStepResult.Result.FAIL);
