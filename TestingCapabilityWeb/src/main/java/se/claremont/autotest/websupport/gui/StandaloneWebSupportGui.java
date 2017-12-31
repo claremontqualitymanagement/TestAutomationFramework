@@ -6,8 +6,10 @@ import javax.swing.*;
 
 public class StandaloneWebSupportGui {
 
+    static TafFrame frame = null;
+
     public static void main(String[] args){
-        TafFrame frame = new TafFrame("WebFrame");
+        frame = new TafFrame("WebFrame");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.getContentPane().add(new WebSupportTabPanel().panel);
         frame.pack();

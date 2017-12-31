@@ -12,7 +12,7 @@ public class RecorderWindow {
         recorderRESTServer.start();
         WebInteractionMethods web = new WebInteractionMethods(new TestCase());
         web.navigate("http://" + HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port + "/tafwebrecorder/instructions");
-        web.executeJavascript(Javascripts.domElementToString + "\n" + Javascripts.postHttpRequest + "\n" + Javascripts.registerDocumentClickListener);
+        web.executeJavascript(Javascripts.postHttpRequest + "\n" + Javascripts.registerDocumentClickListener);
     }
 
 }

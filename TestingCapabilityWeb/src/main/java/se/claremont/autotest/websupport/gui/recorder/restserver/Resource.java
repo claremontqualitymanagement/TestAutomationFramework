@@ -1,5 +1,8 @@
 package se.claremont.autotest.websupport.gui.recorder.restserver;
 
+import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.websupport.gui.teststeps.WebClickTestStep;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -58,5 +61,6 @@ public class Resource {
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                 "/tafwebrecorder/v1/click with content: '" + data.toString() + "'.");
+        Gui.availableTestSteps.add(new WebClickTestStep("Click on '" + data + "'.", "Click on DomElement with text '" + data + "'."));
     }
 }

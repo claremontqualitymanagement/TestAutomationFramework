@@ -9,9 +9,7 @@ public class Javascripts {
             "        e = e || window.event;\n" +
             "        var target = e.target || e.srcElement,\n" +
             "        text = target.textContent || target.innerText;\n" +
-            "        post('http://" + HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port + "/tafwebrecorder/v1/click', " +
-            "           text, " +
-            "           'post'); \n" +
+            "        post('http://" + HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port + "/tafwebrecorder/v1/click', text, 'post'); \n" +
             "        }, false);";
 
     static String domElementToString = "function domElementToString(target){\n" +
@@ -20,25 +18,16 @@ public class Javascripts {
             "        var className = target.getAttribute('class');\n" +
             "        return {text: \"' + text + '\", tag: \"' + tagName + '\", class: \"' + className + '\"};";
 
-    static String postHttpRequest = "function post(path, params, method) {\n" +
-            "    method = method || \"post\"; // Set method to post by default if not specified.\n" +
-            "\n" +
-            "    var form = document.createElement(\"form\");\n" +
-            "    form.setAttribute(\"method\", method);\n" +
-            "    form.setAttribute(\"action\", path);\n" +
-            "\n" +
-            "    for(var key in params) {\n" +
-            "        if(params.hasOwnProperty(key)) {\n" +
-            "            var hiddenField = document.createElement(\"input\");\n" +
-            "            hiddenField.setAttribute(\"type\", \"hidden\");\n" +
-            "            hiddenField.setAttribute(\"name\", key);\n" +
-            "            hiddenField.setAttribute(\"value\", params[key]);\n" +
-            "\n" +
-            "            form.appendChild(hiddenField);\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    document.body.appendChild(form);\n" +
-            "    form.submit();\n" +
-            "}";
+    static String postHttpRequest = "function post(path, param) {\n" +
+            "        var form = document.createElement(\"form\");\n" +
+            "        form.setAttribute(\"method\", \"post\");\n" +
+            "        form.setAttribute(\"action\", path);\n" +
+            "        form.setAttribute(\"target\", \"_blank\");\n" +
+            "        var hiddenField = document.createElement(\"input\");\n" +
+            "        hiddenField.setAttribute(\"name\", \"search\");\n" +
+            "        hiddenField.setAttribute(\"value\", JSON.stringify(param) );\n" +
+            "        hiddenField.setAttribute(\"type\", \"hidden\");\n" +
+            "        form.appendChild(hiddenField);\n" +
+            "        document.body.appendChild(form);\n" +
+            "        form.submit();}";
 }
