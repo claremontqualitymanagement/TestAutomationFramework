@@ -13,6 +13,13 @@
     <version>${capability.web.version}</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityWeb</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <capability.jetty.version>9.4.2.v20170220</capability.jetty.version>
+        <capability.glassfish.version>2.23.2</capability.glassfish.version>
+        <capability.hk2.version>2.5.0-b36</capability.hk2.version>
+        <jackson.version>2.6.3</jackson.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -67,6 +74,29 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
+        </dependency>
+        <!-- Jetty (Light weight web server) -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${capability.jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-continuation</artifactId>
+            <version>${capability.jetty.version}</version>
+        </dependency>
+
+        <!-- Jersey HTTP manager -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${capability.glassfish.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey</groupId>
+            <artifactId>jax-rs-ri</artifactId>
+            <version>2.0-rc1</version>
         </dependency>
     </dependencies>
 
