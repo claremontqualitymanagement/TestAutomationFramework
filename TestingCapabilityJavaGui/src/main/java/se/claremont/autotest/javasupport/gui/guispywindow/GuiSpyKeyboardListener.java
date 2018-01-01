@@ -1,9 +1,7 @@
 package se.claremont.autotest.javasupport.gui.guispywindow;
 
-import com.sun.jndi.toolkit.url.Uri;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.javasupport.gui.ObjectToHtmlHelper;
-import se.claremont.autotest.javasupport.gui.JavaSupportTab;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
-import java.net.URI;
 
 public class GuiSpyKeyboardListener implements KeyListener {
 

@@ -1,10 +1,7 @@
 package se.claremont.autotest.javasupport.gui.guirecordingwindow;
 
-import com.oracle.jrockit.jfr.management.FlightRecordingMBean;
-import com.sun.javaws.ui.ApplicationIconGenerator;
 import se.claremont.autotest.common.gui.guistyle.*;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
-import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

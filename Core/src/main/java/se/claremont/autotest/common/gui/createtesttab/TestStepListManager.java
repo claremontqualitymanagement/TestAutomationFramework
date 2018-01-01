@@ -83,6 +83,7 @@ public final class TestStepListManager extends JPanel {
                 }
                 TestCaseManager.testSetCode.addTestCodeFromTestSteps(trialRunTestAction);
                 System.out.println(TestCaseManager.testSetCode.asCode());
+                TestCaseManager.testSetCode.displayInFrame();
             }
         });
         chosenTestStepsButtonPanel.add(trialRunButton);
