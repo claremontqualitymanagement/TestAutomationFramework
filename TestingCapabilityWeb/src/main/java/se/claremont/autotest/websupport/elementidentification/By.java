@@ -22,8 +22,12 @@ import java.util.List;
 public class By {
     final List<SearchCondition> conditions;
 
-    private By() {
+    By() {
         conditions = new ArrayList<>();
+    }
+
+    public int getConditionCount(){
+        return conditions.size();
     }
 
     /// <summary>

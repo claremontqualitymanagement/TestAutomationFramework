@@ -1,15 +1,21 @@
 package se.claremont.autotest.websupport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.websupport.elementidentification.By;
 import se.claremont.autotest.websupport.elementidentification.WebElementIdentifier;
 import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification.PositionBasedWebElement;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -26,7 +32,7 @@ import java.util.List;
 public class DomElement implements GuiElement {
 
     @SuppressWarnings("WeakerAccess")
-    public final String name;
+    public String name;
     public By by;
     public List<String> recognitionStrings;
     public IdentificationType identificationType;
@@ -45,6 +51,29 @@ public class DomElement implements GuiElement {
         this.name = identifyElementName();
         this.page = callingMethodUsingConstructor.getClassName();
         this.by = by;
+    }
+
+    public DomElement(String json){
+        ObjectMapper om = new ObjectMapper();
+        json = json.substring("webElement=".length());
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = om.readTree(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(jsonNode == null){
+            name = "NullElement";
+            return;
+        }
+        by = By.tagName(jsonNode.get("tagName").asText());
+        if(jsonNode.get("id").asText() != null && jsonNode.get("id").asText().length() > 0) by.andById(jsonNode.get("id").asText());
+        if(jsonNode.get("text").asText() != null && jsonNode.get("text").asText().length() > 0) by.andByExactText(jsonNode.get("text").asText());
+        if(jsonNode.get("className").asText() != null && jsonNode.get("className").asText().length() > 0) by.andByClass(jsonNode.get("className").asText());
+        if(by.getConditionCount() == 0) by.andByXPath(jsonNode.get("xpath").asText());
+        name = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(by.toString()));
+        if(name.length() == 0) name = "UnNamedElement";
+        if(name.length() > 40) name = name.substring(0, 40);
     }
 
     /**

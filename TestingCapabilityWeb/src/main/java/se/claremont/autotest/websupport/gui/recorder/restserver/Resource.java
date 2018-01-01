@@ -1,6 +1,7 @@
 package se.claremont.autotest.websupport.gui.recorder.restserver;
 
 import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.gui.teststeps.WebClickTestStep;
 
 import javax.ws.rs.GET;
@@ -8,6 +9,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * The different end-points of the HTTP server
@@ -57,10 +60,11 @@ public class Resource {
      */
     @POST
     @Path("v1/click")
-    public void postTestRun(String data) {
+    public void postTestRun(String data){
+        data = data.replace("%20", " ");
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
-                "/tafwebrecorder/v1/click with content: '" + data.toString() + "'.");
-        Gui.availableTestSteps.add(new WebClickTestStep("Click on '" + data + "'.", "Click on DomElement with text '" + data + "'."));
+                "/tafwebrecorder/v1/click with content: '" + URLDecoder.decode(data) + "'.");
+        Gui.availableTestSteps.add(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
     }
 }

@@ -2,8 +2,11 @@ package se.claremont.autotest.websupport.gui.teststeps;
 
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
+import se.claremont.autotest.websupport.DomElement;
 
 public class WebClickTestStep extends TestStep {
+
+    DomElement domElement;
 
     public WebClickTestStep(){
         super();
@@ -13,6 +16,11 @@ public class WebClickTestStep extends TestStep {
 
     public WebClickTestStep(String name, String description){
         super(name, description);
+    }
+
+    public WebClickTestStep(DomElement domElement){
+        super("Click on " + domElement.name, "A click on the DomElement named '" + domElement.name + "'.");
+        this.domElement = domElement;
     }
 
     @Override
