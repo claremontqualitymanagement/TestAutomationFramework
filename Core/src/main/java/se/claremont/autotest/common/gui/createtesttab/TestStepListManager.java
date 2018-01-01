@@ -54,6 +54,46 @@ public final class TestStepListManager extends JPanel {
         testCaseTestStepListScrollPanel = new JScrollPane(createTestCaseTestStepsList(h));
         avalableTestStepsListScrollPanel = new JScrollPane(createAvailableTestStepsList(h));
 
+        TafPanel chosenTestStepsButtonPanel = new TafPanel("ChosenTestStepsButtonPanel");
+
+        trialRunButton.setEnabled(false);
+        trialRunButton.setToolTipText("Attempts to run the defined test steps in the left panel");
+        trialRunButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SubProcedureTestStep trialRunTestAction = new SubProcedureTestStep("Test run", "Test run from TAF GUI");
+                for (int i = 0; i < testCaseTestStepList.getModel().getSize(); i++) {
+                    TestStep testStep = testCaseTestStepList.getModel().getElementAt(i);
+                    trialRunTestAction.addTestStep(testStep);
+                }
+                TestStepResult trialRunResult = trialRunTestAction.execute();
+                System.out.println(trialRunResult.getResult().getFriendlyName());
+            }
+        });
+
+        generateCodeButton.setEnabled(false);
+        generateCodeButton.setToolTipText("Generates the initial code corresponding to the test steps in the left panel.");
+        generateCodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SubProcedureTestStep trialRunTestAction = new SubProcedureTestStep("Test run", "Test run from TAF GUI");
+                for (int i = 0; i < testCaseTestStepList.getModel().getSize(); i++) {
+                    TestStep testStep = testCaseTestStepList.getModel().getElementAt(i);
+                    trialRunTestAction.addTestStep(testStep);
+                }
+                TestCaseManager.testSetCode.addTestCodeFromTestSteps(trialRunTestAction);
+                System.out.println(TestCaseManager.testSetCode.asCode());
+            }
+        });
+        chosenTestStepsButtonPanel.add(trialRunButton);
+        chosenTestStepsButtonPanel.add(generateCodeButton);
+
+        TafPanel avaliableTestStepsButtonPanel = new TafPanel("AvaliableTestStepsButtonPanel");
+        avaliableTestStepsButtonPanel.add(mergeTestStepsButton);
+        avaliableTestStepsButtonPanel.add(splitSubTestStepButton);
+        avaliableTestStepsButtonPanel.add(cloneTestStepButton);
+        avaliableTestStepsButtonPanel.add(removeSelectedTestStepsButton);
+
         mergeTestStepsButton.setEnabled(false);
         mergeTestStepsButton.setToolTipText("Merge test steps to reusable test action.");
         mergeTestStepsButton.addActionListener(new ActionListener() {
@@ -103,35 +143,6 @@ public final class TestStepListManager extends JPanel {
             }
         });
 
-        trialRunButton.setEnabled(false);
-        trialRunButton.setToolTipText("Attempts to run the defined test steps in the left panel");
-        trialRunButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SubProcedureTestStep trialRunTestAction = new SubProcedureTestStep("Test run", "Test run from TAF GUI");
-                for (int i = 0; i < testCaseTestStepList.getModel().getSize(); i++) {
-                    TestStep testStep = testCaseTestStepList.getModel().getElementAt(i);
-                    trialRunTestAction.addTestStep(testStep);
-                }
-                TestStepResult trialRunResult = trialRunTestAction.execute();
-                System.out.println(trialRunResult.getResult().getFriendlyName());
-            }
-        });
-
-        generateCodeButton.setEnabled(false);
-        generateCodeButton.setToolTipText("Generates the initial code corresponding to the test steps in the left panel.");
-        generateCodeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SubProcedureTestStep trialRunTestAction = new SubProcedureTestStep("Test run", "Test run from TAF GUI");
-                for (int i = 0; i < testCaseTestStepList.getModel().getSize(); i++) {
-                    TestStep testStep = testCaseTestStepList.getModel().getElementAt(i);
-                    trialRunTestAction.addTestStep(testStep);
-                }
-                TestCaseManager.testSetCode.addTestCodeFromTestSteps(trialRunTestAction);
-                System.out.println(TestCaseManager.testSetCode.asCode());
-            }
-        });
 
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
@@ -148,12 +159,8 @@ public final class TestStepListManager extends JPanel {
                                         )
                                 )
                                 .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(mergeTestStepsButton)
-                                        .addComponent(splitSubTestStepButton)
-                                        .addComponent(cloneTestStepButton)
-                                        .addComponent(removeSelectedTestStepsButton)
-                                        .addComponent(trialRunButton)
-                                        .addComponent(generateCodeButton)
+                                        .addComponent(chosenTestStepsButtonPanel)
+                                        .addComponent(avaliableTestStepsButtonPanel)
                                 )
                         )
         );
@@ -169,12 +176,8 @@ public final class TestStepListManager extends JPanel {
                                 .addComponent(avalableTestStepsListScrollPanel)
                         )
                         .addGroup(groupLayout.createParallelGroup()
-                                .addComponent(mergeTestStepsButton)
-                                .addComponent(splitSubTestStepButton)
-                                .addComponent(cloneTestStepButton)
-                                .addComponent(removeSelectedTestStepsButton)
-                                .addComponent(trialRunButton)
-                                .addComponent(generateCodeButton)
+                                .addComponent(chosenTestStepsButtonPanel)
+                                .addComponent(avaliableTestStepsButtonPanel)
                         )
         );
 

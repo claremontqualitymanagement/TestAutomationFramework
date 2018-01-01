@@ -67,6 +67,10 @@ public abstract class TestStep implements Serializable {
         this.data = data;
     }
 
+    public Object getAssociatedData(){
+        return data;
+    }
+
     public String getName(){
         return name;
     }

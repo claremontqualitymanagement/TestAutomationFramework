@@ -67,13 +67,24 @@ public class DomElement implements GuiElement {
             return;
         }
         by = By.tagName(jsonNode.get("tagName").asText());
-        if(jsonNode.get("id").asText() != null && jsonNode.get("id").asText().length() > 0) by.andById(jsonNode.get("id").asText());
-        if(jsonNode.get("text").asText() != null && jsonNode.get("text").asText().length() > 0) by.andByExactText(jsonNode.get("text").asText());
-        if(jsonNode.get("className").asText() != null && jsonNode.get("className").asText().length() > 0) by.andByClass(jsonNode.get("className").asText());
+        if(jsonNode.get("id").asText() != null && jsonNode.get("id").asText().length() > 0) {
+            by.andById(jsonNode.get("id").asText());
+            name = jsonNode.get("id").asText();
+        }
+        if(jsonNode.get("text").asText() != null && jsonNode.get("text").asText().length() > 0) {
+            by.andByExactText(jsonNode.get("text").asText());
+            if(name == null || name.length() == 0)
+                name = StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(jsonNode.get("text").asText());
+        }
+        if(jsonNode.get("className").asText() != null && jsonNode.get("className").asText().length() > 0) {
+            by.andByClass(jsonNode.get("className").asText());
+            if(name == null || name.length() == 0)
+                name = StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(jsonNode.get("className").asText());
+        }
         if(by.getConditionCount() == 0) by.andByXPath(jsonNode.get("xpath").asText());
-        name = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(by.toString()));
         if(name.length() == 0) name = "UnNamedElement";
-        if(name.length() > 40) name = name.substring(0, 40);
+        if(name.length() > 30) name = name.substring(0, 30);
+        name = StringManagement.safeVariableName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(name + jsonNode.get("tagName").asText()));
     }
 
     /**

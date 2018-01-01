@@ -28,6 +28,15 @@ public class StringManagement {
 
     }
 
+    public static String safeVariableName(String instring){
+        StringBuilder returnString = new StringBuilder();
+        for (int i = 0; i < instring.length(); i++) {
+            if (Character.isLetter(instring.charAt(i)) || Character.isDigit(instring.charAt(i))) returnString.append(instring.charAt(i));
+        }
+        if(returnString.length() > 0 && Character.isDigit(returnString.charAt(0))) return "_" + returnString.toString();
+        return returnString.toString();
+    }
+
     /**
      * Method naming should only consist of method name safe characters, and be formatted according to method naming conventions in java, and according to coding guidelines.
      *

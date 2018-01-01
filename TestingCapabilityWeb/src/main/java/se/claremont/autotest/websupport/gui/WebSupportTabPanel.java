@@ -21,7 +21,6 @@ public class WebSupportTabPanel implements IGuiTab{
     TafHeadline headline = new TafHeadline("Web support");
     TafLabel text = new TafLabel("Web is supported through code, for now.");
     TafButton recordButton = new TafButton("Record");
-    TafButton startTestButton = new TafButton("Start test");
 
     public WebSupportTabPanel(){
         panel = new TafPanel("WebSupportTabPanel");
@@ -53,29 +52,6 @@ public class WebSupportTabPanel implements IGuiTab{
             }
         });
 
-        startTestButton.setMnemonic('s');
-        startTestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                TestCase testCase = new TestCase();
-                List<Object> clickedElements = new ArrayList<>();
-                try{
-                    WebInteractionMethods web = new WebInteractionMethods(testCase);
-                    web.navigate("http://www.google.com");
-
-                    Object o = web.executeJavascript(
-                            "document.addEventListener(\"click\", function(event) { return event.target; }" +
-                            ", false);");
-                        System.out.println("Clicked " + o);
-                        clickedElements.add(o);
-                }catch (Throwable t){
-                    System.out.println(t);
-                } finally {
-                    //
-                }
-            }
-        });
-
         GroupLayout groupLayout = new GroupLayout(panel);
         panel.setLayout(groupLayout);
 
@@ -88,7 +64,6 @@ public class WebSupportTabPanel implements IGuiTab{
                                 .addComponent(text)
                                 .addComponent(testStepListManager)
                                 .addComponent(recordButton)
-                                .addComponent(startTestButton)
                         )
         );
         groupLayout.setVerticalGroup(
@@ -97,7 +72,6 @@ public class WebSupportTabPanel implements IGuiTab{
                         .addComponent(text)
                         .addComponent(testStepListManager)
                         .addComponent(recordButton)
-                        .addComponent(startTestButton)
         );
 
     }

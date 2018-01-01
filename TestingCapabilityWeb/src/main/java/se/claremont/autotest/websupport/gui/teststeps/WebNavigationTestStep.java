@@ -4,27 +4,22 @@ import se.claremont.autotest.common.gui.teststructure.TestCaseManager;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
-import se.claremont.autotest.websupport.DomElement;
 
-public class WebClickTestStep extends TestStep {
+public class WebNavigationTestStep extends TestStep {
 
-    DomElement domElement;
-
-    public WebClickTestStep(){
+    public WebNavigationTestStep(){
         super();
-        setName("Click on element");
-        setDescription("Click on element");
     }
 
-    public WebClickTestStep(String name, String description){
+    public WebNavigationTestStep(String name, String description){
         super(name, description);
     }
 
-    public WebClickTestStep(DomElement domElement){
-        super("Click on " + domElement.name, "A click on the DomElement named '" + domElement.name + "'.");
-        this.domElement = domElement;
-        this.actionName = "Click";
-        this.setElementName(domElement.name);
+    public WebNavigationTestStep(String newUrl){
+        super("Navigation to '" + newUrl + "'", "Navigation performed to new URL '" + newUrl + "'.");
+        setActionName("Navigate");
+        setElementName("browser");
+        setAssociatedData(newUrl);
     }
 
     @Override
@@ -32,15 +27,15 @@ public class WebClickTestStep extends TestStep {
         TestCaseManager.testSetCode.makeSureRequiredImportIsAdded("import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;");
         TestCaseManager.testSetCode.makeSureBeginTestSectionDeclarationExist("web = new WebInteractionsMethod(currentTestCase());");
         TestCaseManager.testSetCode.makeSureClassVariableIsDeclared("WebInteractionMethods web;");
-        return "web.click(new DomElement(By." + domElement.by.toString() + ");";
+        return "   web.navigate(\"" + getAssociatedData().toString() + "\");";
     }
 
     @Override
     public TestStep clone() {
-        WebClickTestStep clonedStep = new WebClickTestStep(this.getName(), this.getDescription());
-        clonedStep.setActionName(this.actionName);
-        clonedStep.setElementName(this.elementName);
-        clonedStep.domElement = this.domElement;
+        WebNavigationTestStep clonedStep = new WebNavigationTestStep(getName(), getDescription());
+        clonedStep.setActionName(actionName);
+        clonedStep.setElementName(elementName);
+        clonedStep.setAssociatedData(getAssociatedData());
         return clonedStep;
     }
 
@@ -53,7 +48,7 @@ public class WebClickTestStep extends TestStep {
     public TestStepResult execute() {
         TestStepResult testStepResult = new TestStepResult(this, TestStepResult.Result.NOT_RUN);
         try {
-            ReplayManager.WebDriverSingleton.getInstance().click(domElement);
+            ReplayManager.WebDriverSingleton.getInstance().navigate((String) getAssociatedData());
         }catch (Throwable e){
             testStepResult.updateResultStatus(TestStepResult.Result.FAIL);
             return testStepResult;
