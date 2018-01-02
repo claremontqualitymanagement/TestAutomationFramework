@@ -10,6 +10,7 @@ import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdenti
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
+import se.claremont.autotest.javasupport.interaction.elementidentification.By;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 import java.util.ArrayList;
@@ -41,20 +42,20 @@ public class PositionBasedTests extends UnitTestClass{
         Assert.assertNotNull(objects);
         ArrayList<PositionBasedGuiElement> elementsList = new ArrayList<>();
         for(Object object : objects){
-            JavaGuiElement j = new JavaGuiElement(object);
-            if(j.getIdType() == JavaGuiElement.IdType.UNKNOWN){
-                j.setIdType(JavaGuiElement.IdType.POSITION_BASED);
-            }
-            elementsList.add(new JavaGuiElement(object));
+           elementsList.add(new JavaGuiElement(object));
         }
         ElementsList allElementsInPanel = PositionBasedIdentificator.fromAllTheElements(elementsList);
         MethodInvoker m = new MethodInvoker(tempTestCase);
         Assert.assertNotNull(allElementsInPanel);
-        Object textField = allElementsInPanel.atTheSameHeightAs(JavaTestApplication.textField(), 20, 20).theObjectMostToTheRight();
+        //Object textField = allElementsInPanel.atTheSameHeightAs(JavaTestApplication.textField(), 20, 20).theObjectMostToTheRight();
+        JavaGuiElement textField = new JavaGuiElement(PositionBasedIdentificator
+                .fromAllTheElements(elementsList)
+                .atTheSameHeightAs(JavaTestApplication.textField(), 20, 20)
+                .theObjectMostToTheRight());
         Assert.assertNotNull(textField);
         tempTestCase.log(LogLevel.INFO, textField.getClass().toString());
-        tempTestCase.log(LogLevel.INFO, java.getText(((JavaGuiElement)textField).getRuntimeComponent()));
-        Assert.assertTrue(java.getText(((JavaGuiElement)textField).getRuntimeComponent()).equals("Checkbox Swing"));
+        tempTestCase.log(LogLevel.INFO, java.getText(textField));
+        Assert.assertTrue(java.getText(textField).equals("Checkbox Swing"));
         JavaTestApplicationRunner.hideWindow();
     }
 

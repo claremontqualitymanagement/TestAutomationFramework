@@ -1,5 +1,8 @@
 package se.claremont.autotest.javasupport.interaction.elementidentification;
 
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
@@ -25,9 +28,15 @@ public class By {
         return by;
     }
 
-    public static By ByOrdinalNumber(int ordinalNumber) {
+    public static By byOrdinalNumber(int ordinalNumber) {
         By by = new By();
         by.searchConditions.add(new SearchCondition(SearchConditionType.ORDINAL_NUMBER, ordinalNumber));
+        return by;
+    }
+
+    public static By byRelativePosition(ElementsList staticPositionBasedIdentificatorReferenceToElementList){
+        By by = new By();
+        by.searchConditions.add(new SearchCondition(SearchConditionType.POSITION_BASED, staticPositionBasedIdentificatorReferenceToElementList));
         return by;
     }
 
@@ -248,6 +257,17 @@ public class By {
         }
 
         return match;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[By:").append(System.lineSeparator());
+        for(SearchCondition sc : searchConditions){
+            sb.append("   ").append(sc.toString()).append(System.lineSeparator());
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
 

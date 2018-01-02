@@ -17,31 +17,31 @@ public class JavaTestApplication {
     }
 
     public static JavaGuiElement panel0() {
-        return new JavaGuiElement("panel0_panel", "panel0", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("panel0"), "panel0_panel");
     }
 
     public static JavaGuiElement textField(){
-        return new JavaGuiElement("textField_jtextfield", "Text field", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("Text field"), "textField_jtextfield");
     }
 
     public static JavaGuiElement textfield2() {
-        return new JavaGuiElement("textfield2_textfield", "Textfield2", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("Textfield2"), "textfield2_textfield");
     }
 
     public static JavaGuiElement okbutton() {
-        return new JavaGuiElement("okbutton_jbutton", "OkButton", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("OkButton"), "okbutton_jbutton");
     }
 
     public static JavaGuiElement checkboxAwt() {
-        return new JavaGuiElement("checkboxAwt_checkbox", "Checkbox awt", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("Checkbox awt"), "checkboxAwt_checkbox");
     }
 
     public static JavaGuiElement checkboxSwing() {
-        return new JavaGuiElement("checkboxSwing_jcheckbox", "Checkbox swing", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("Checkbox swing"), "checkboxSwing_jcheckbox");
     }
 
     public static JavaGuiElement cancel() {
-        return new JavaGuiElement("cancel_button", "Cancel", JavaGuiElement.IdType.ELEMENT_NAME);
+        return new JavaGuiElement(By.byName("Cancel"), "cancel_button");
     }
 
 }

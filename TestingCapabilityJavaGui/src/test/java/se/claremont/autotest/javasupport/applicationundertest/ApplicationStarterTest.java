@@ -7,6 +7,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
+import se.claremont.autotest.javasupport.interaction.elementidentification.By;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 import java.awt.*;
@@ -92,7 +93,7 @@ public class ApplicationStarterTest extends TestSet {
             Frame app = (Frame) as.getWindow();
             Assert.assertTrue(app != null);
             GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase());
-            JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+            JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
             Object c = button.getRuntimeComponent();
             Assert.assertNotNull(c);
             currentTestCase().log(LogLevel.INFO, "Button text: '" + java.getText(button) + "'.");
@@ -114,7 +115,7 @@ public class ApplicationStarterTest extends TestSet {
             ApplicationStarter as = new ApplicationStarter(currentTestCase());
             as.startJar(tempFolder + "JavaApp.jar");
             GenericInteractionMethods java = new GenericInteractionMethods(currentTestCase());
-            JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+            JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
             Object c = button.getRuntimeComponent();
             Assert.assertNotNull(c);
             Assert.assertTrue(c.toString().contains("Ok"));

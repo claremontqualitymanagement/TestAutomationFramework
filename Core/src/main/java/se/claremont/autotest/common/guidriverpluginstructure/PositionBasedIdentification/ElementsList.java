@@ -128,7 +128,7 @@ public class ElementsList {
         return new ElementsList(returnElements);
     }
 
-    public Object theObjectMostToTheRight(){
+    public PositionBasedGuiElement theObjectMostToTheRight(){
         PositionBasedGuiElement returnElement = null;
         int mostRight = Integer.MIN_VALUE;
         for(PositionBasedGuiElement element : this.elements){
@@ -142,7 +142,7 @@ public class ElementsList {
         return returnElement;
     }
 
-    public Object theObjectMostToTheBottom(){
+    public PositionBasedGuiElement theObjectMostToTheBottom(){
         PositionBasedGuiElement returnElement = null;
         int mostExtreme = Integer.MIN_VALUE;
         for(PositionBasedGuiElement element : this.elements){
@@ -156,7 +156,7 @@ public class ElementsList {
         return returnElement;
     }
 
-    public Object theObjectMostToTheTop(){
+    public PositionBasedGuiElement theObjectMostToTheTop(){
         PositionBasedGuiElement returnElement = null;
         int mostExtreme = Integer.MAX_VALUE;
         for(PositionBasedGuiElement element : this.elements){
@@ -170,7 +170,7 @@ public class ElementsList {
         return returnElement;
     }
 
-    public Object theObjectMostToTheLeft(){
+    public PositionBasedGuiElement theObjectMostToTheLeft(){
         PositionBasedGuiElement returnElement = null;
         int mostExtreme = Integer.MAX_VALUE;
         for(PositionBasedGuiElement element : this.elements){
@@ -184,7 +184,7 @@ public class ElementsList {
         return returnElement;
     }
 
-    public Object theOnlyElementThatShouldBeLeft(){
+    public PositionBasedGuiElement theOnlyElementThatShouldBeLeft(){
         if(elements.size() > 0) return elements.get(0);
         return null;
     }
@@ -198,11 +198,11 @@ public class ElementsList {
         return returnString.toString();
     }
 
-    public Object elementImmediatelyToTheRightOf(PositionBasedGuiElement element){
+    public PositionBasedGuiElement elementImmediatelyToTheRightOf(PositionBasedGuiElement element){
         return atTheSameHeightAs(element).keepElementsToTheRightOf(element).theObjectMostToTheLeft();
     }
 
-    public Object elementImmediatelyToTheLeftOf(PositionBasedGuiElement element){
+    public PositionBasedGuiElement elementImmediatelyToTheLeftOf(PositionBasedGuiElement element){
         return atTheSameHeightAs(element).keepElementsToTheLeftOf(element).theObjectMostToTheRight();
     }
 }

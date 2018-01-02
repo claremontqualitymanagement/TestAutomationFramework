@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
+import se.claremont.autotest.javasupport.interaction.elementidentification.By;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
 /**
@@ -24,7 +25,7 @@ public class MethodInvokerTest extends UnitTestClass {
     public void invokeMethodOnComponent(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Assert.assertTrue(MethodInvoker.invokeMethod(tempTestCase, button.getRuntimeComponent(), "getName()").equals("OkButton"));
     }
 

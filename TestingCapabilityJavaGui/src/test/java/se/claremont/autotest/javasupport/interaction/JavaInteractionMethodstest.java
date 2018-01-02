@@ -6,6 +6,7 @@ import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.UnitTestClass;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
+import se.claremont.autotest.javasupport.interaction.elementidentification.By;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
@@ -21,11 +22,14 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class JavaInteractionMethodstest extends UnitTestClass {
 
-    @Before     public void testSetup() {
+    @Before
+    public void testSetup() {
         JavaTestApplicationRunner.tryStart();
+        JavaTestApplicationRunner.showWindow();
     }
 
-    @After     public void tearDown() { JavaTestApplicationRunner.hideWindow(); }
+    @After
+    public void tearDown() { JavaTestApplicationRunner.hideWindow(); }
 
     private boolean logPostIsFoundInLog(LogLevel logLevel, String partOfMessage, TestCase testCase){
         for(LogPost lp : testCase.testCaseResult.testCaseLog.logPosts){
@@ -52,7 +56,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void javaMethodsTestJButtonIdentificationByExactElementText(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Object c = button.getRuntimeComponent();
         Assert.assertNotNull(c);
         Assert.assertTrue(c.toString().contains("Ok"));
@@ -62,7 +66,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void javaMethodsTestJButtonIdentificationByExactElementName(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "OkButton", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Object c = button.getRuntimeComponent();
         Assert.assertNotNull(c);
         Assert.assertTrue(c.toString().contains("Ok"));
@@ -72,17 +76,17 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void javaMethodsTestButtonIdentificationByExactElementText(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("CancelButton", "Cancel", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Object c = button.getRuntimeComponent();
         Assert.assertNotNull(c);
-        Assert.assertTrue(c.toString().contains("Cancel"));
+        Assert.assertTrue(c.toString(), c.toString().contains("Ok"));
     }
 
     @Test
     public void javaMethodsTestButtonIdentificationByExactElementName(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("CancelButton", "Cancel", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Cancel"), "CancelButton");
         Object c = button.getRuntimeComponent();
         Assert.assertNotNull(c);
         Assert.assertTrue(c.toString().contains("Cancel"));
@@ -92,37 +96,18 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void javaMethodsTestJButtonIdentificationByPartialElementText(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "O", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byTextContaining("O"), "OkButton");
         Object c = button.getRuntimeComponent();
         Assert.assertNotNull(c);
         Assert.assertTrue(c.toString().contains("Ok"));
     }
 
-    @Test
-    public void javaMethodsTestJButtonIdentificationByPartialElementName(){
-        TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
-        GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "OkButt", JavaGuiElement.IdType.ELEMENT_NAME);
-        Object c = button.getRuntimeComponent();
-        Assert.assertNotNull(c);
-        Assert.assertTrue(c.toString().contains("Ok"));
-    }
 
     @Test
     public void javaMethodsTestButtonIdentificationByPartialElementText(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("CancelButton", "Canc", JavaGuiElement.IdType.ELEMENT_TEXT);
-        Object c = button.getRuntimeComponent();
-        Assert.assertNotNull(c);
-        Assert.assertTrue(c.toString().contains("Cancel"));
-    }
-
-    @Test
-    public void javaMethodsTestButtonIdentificationByPartialElementName(){
-        TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
-        GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("CancelButton", "Canc", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement button = new JavaGuiElement(By.byTextContaining("Canc"), "CancelButton");
         Object c = button.getRuntimeComponent();
         Assert.assertNotNull(c);
         Assert.assertTrue(c.toString().contains("Cancel"));
@@ -134,7 +119,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("CancelButton", "Canc", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byTextContaining("Canc"), "CancelButton");
         java.click(button);
         java.wait(10000);
         JavaTestApplicationRunner.hideWindow();
@@ -145,7 +130,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void getTextFromComponentWithGetLabelMethod(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("CancelButton", "Canc", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byTextContaining("Canc"), "CancelButton");
         Assert.assertTrue(java.getText(button).equals("Cancel"));
     }
 
@@ -153,7 +138,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void getTextFromComponentWithGetTextMethod(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Assert.assertTrue(java.getText(button).equals("Ok"));
     }
 
@@ -161,7 +146,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void writeTextToTextField(){
         TestCase testCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(testCase);
-        JavaGuiElement textField = new JavaGuiElement("TestTextTield", "Textfield2", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement textField = new JavaGuiElement(By.byName("Textfield2"), "TestTextTield");
         java.write(textField, "Yippie");
         Assert.assertTrue(java.getText(textField).equals("Yippie"));
     }
@@ -170,7 +155,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyCorrectExactMatchOfElementText(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         java.verifyElementTextIsExactly(button, "Ok");
         boolean found = false;
         for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
@@ -185,7 +170,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyCorrectContainsMatchOfElementText(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         java.verifyElementTextContains(button, "O");
         boolean found = false;
         for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
@@ -200,7 +185,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyCorrectRegexMatchOfElementText(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         java.verifyElementTextIsRegexMatch(button, ".*k.*");
         boolean found = false;
         for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
@@ -215,7 +200,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyFailedExactMatchOfElementText(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         java.verifyElementTextIsExactly(button, "Nok");
         boolean found = false;
         for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
@@ -230,7 +215,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyFailedContainsMatchOfElementText(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         java.verifyElementTextContains(button, "Nok");
         boolean found = false;
         for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
@@ -245,7 +230,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyFailedRegexMatchOfElementText(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         java.verifyElementTextIsRegexMatch(button, "No.*k");
         boolean found = false;
         for(LogPost logPost : tempTestCase.testCaseResult.testCaseLog.logPosts){
@@ -262,7 +247,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Assert.assertTrue(java.isDisplayedWithinTimeout(button, java.standardTimeout));
         JavaTestApplicationRunner.hideWindow();
     }
@@ -271,7 +256,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyExistPositiveShouldReturnTrue(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Assert.assertTrue(java.exists(button));
     }
 
@@ -279,7 +264,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyIsDisplayedNegativeExistanceShouldReturnFalse(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Does not exist", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("OkNotExisting"), "OkButton");
         Assert.assertFalse(java.isDisplayedWithinTimeout(button, java.standardTimeout));
     }
 
@@ -287,7 +272,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyIsDisplayedExistsButNotDisplayedShouldReturnFalse(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Does not exist", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Does not exist"), "OkButton");
         MethodInvoker.invokeMethod(tempTestCase, button.getRuntimeComponent(), "hide()");
         Assert.assertFalse(java.isDisplayedWithinTimeout(button, java.standardTimeout));
     }
@@ -296,7 +281,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void verifyExistNegative(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Does not exist", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Does not exist"), "OkButton");
         Assert.assertFalse(java.exists(button));
     }
 
@@ -306,7 +291,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         JavaTestApplicationRunner.showWindow();
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement button = new JavaGuiElement("OkButton", "Ok", JavaGuiElement.IdType.ELEMENT_TEXT);
+        JavaGuiElement button = new JavaGuiElement(By.byExactText("Ok"), "OkButton");
         Assert.assertTrue(JavaTestApplicationRunner.javaApp.okButton.isShowing());
         java.click(button);
         java.wait(2000);
@@ -318,7 +303,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void dropDownSelectionShouldWork(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement dropDown = new JavaGuiElement("Pet dropdown", "Pet dropDown", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement dropDown = new JavaGuiElement(By.byName("Pet dropDown"), "Pet dropdown");
         java.getDropDownSelectedOption(dropDown);
         java.selectInDropdown(dropDown, "Bird");
         java.getDropDownSelectedOptions(dropDown);
@@ -328,7 +313,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void dropDownSelectionDoesNotExistShouldPrintAvalableOptions(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement dropDown = new JavaGuiElement("Pet dropdown", "Pet dropDown", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement dropDown = new JavaGuiElement(By.byName("Pet dropDown"), "Pet dropdown");
         java.selectInDropdown(dropDown, "Boat");
         Assert.assertTrue(logPostIsFoundInLog(LogLevel.EXECUTION_PROBLEM, "Could not select 'Boat' in dropdown Pet dropdown'. Identified available choices were", tempTestCase));
         Assert.assertTrue(logPostIsFoundInLog(LogLevel.EXECUTION_PROBLEM, "'Dog'", tempTestCase));
@@ -338,7 +323,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void checkboxAwtSettingTest(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement checkbox = new JavaGuiElement("Checkbox awt", "Checkbox awt", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement checkbox = new JavaGuiElement(By.byName("Checkbox awt"), "Checkbox awt");
         java.setCheckboxToChecked(checkbox);
         Assert.assertTrue(java.checkboxIsChecked(checkbox, 3));
     }
@@ -347,7 +332,12 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void checkboxSwingSettingTest(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement checkbox = new JavaGuiElement("Checkbox swing", "Checkbox swing", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement checkbox = new JavaGuiElement(By.byName("Checkbox swing"), "Checkbox Swing");
+        JavaWindow j = new JavaWindow(".*");
+        for(Object o : j.getComponents()){
+            JavaGuiElement jge = new JavaGuiElement(o);
+            System.out.println(jge.toString());
+        }
         java.setCheckboxToChecked(checkbox);
         Assert.assertTrue(java.checkboxIsChecked(checkbox, 3));
     }
@@ -356,7 +346,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void checkboxAwtUnSettingTest(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement checkbox = new JavaGuiElement("Checkbox awt", "Checkbox awt", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement checkbox = new JavaGuiElement(By.byName("Checkbox awt"), "Checkbox awt");
         java.setCheckboxToUnChecked(checkbox);
         Assert.assertFalse(java.checkboxIsChecked(checkbox, 3));
     }
@@ -365,7 +355,7 @@ public class JavaInteractionMethodstest extends UnitTestClass {
     public void checkboxSwingUnSettingTest(){
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
-        JavaGuiElement checkbox = new JavaGuiElement("Checkbox swing", "Checkbox swing", JavaGuiElement.IdType.ELEMENT_NAME);
+        JavaGuiElement checkbox = new JavaGuiElement(By.byName("Checkbox swing"), "Checkbox swing");
         java.setCheckboxToUnChecked(checkbox);
         Assert.assertFalse(java.checkboxIsChecked(checkbox, 3));
     }

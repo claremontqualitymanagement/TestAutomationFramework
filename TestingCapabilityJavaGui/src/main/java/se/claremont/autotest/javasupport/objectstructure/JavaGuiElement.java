@@ -1,12 +1,11 @@
 package se.claremont.autotest.javasupport.objectstructure;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -17,7 +16,6 @@ import se.claremont.autotest.javasupport.interaction.elementidentification.Searc
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,32 +26,21 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     String name;
-    String recognitionString;
-    IdType idType = IdType.UNKNOWN;
-    String className;
     JavaWindow window = null;
     public By by;
     List<String> recognitionDescription = new ArrayList<>();
     TestCase testCase;
     Object cachedElement = null;
 
-    public IdType getIdType() {
-        return idType;
+    public JavaGuiElement(JavaWindow window, By by, String name, TestCase testCase){
+        this.window = window;
+        this.name = name;
+        this.by = by;
+        this.testCase = testCase;
     }
 
-    public void setIdType(IdType idType) {
-        this.idType = idType;
-    }
-
-
-    /**
-     * Element identification mechanism used to identify the element
-     */
-    public enum IdType{
-        ELEMENT_NAME,
-        ELEMENT_TEXT,
-        POSITION_BASED,
-        UNKNOWN
+    public JavaGuiElement(JavaWindow window, By by, String name){
+        this(window, by, name, null);
     }
 
     public JavaGuiElement(By by, String name){
@@ -62,7 +49,34 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     }
 
     public JavaGuiElement(Object object) {
+        this(object, null);
+    }
+
+    public JavaGuiElement(PositionBasedGuiElement positionBasedGuiElement){
+        if(positionBasedGuiElement.runtimeElement() == null) return;
+        cachedElement = positionBasedGuiElement.runtimeElement();
+        name = "NoNamed" + cachedElement.getClass().getSimpleName();
+    }
+
+    public JavaGuiElement(Object object, TestCase testCase) {
+        this.testCase = testCase;
         if(object == null)return;
+        if(By.class.isAssignableFrom(object.getClass())){
+                this.by = (By)object;
+                return;
+        }else if(PositionBasedGuiElement.class.isAssignableFrom(object.getClass())){
+            cachedElement = ((PositionBasedGuiElement)object).runtimeElement();
+            name = "NoNamed" + ((PositionBasedGuiElement)object).getTypeName() + "Element";
+            return;
+        } else if(JavaGuiElement.class.isAssignableFrom(object.getClass())){
+            JavaGuiElement element = ((JavaGuiElement)object);
+            this.by = element.by;
+            this.name = element.name;
+            this.cachedElement = element.cachedElement;
+            this.testCase = element.testCase;
+            this.window = element.window;
+            this.recognitionDescription = element.recognitionDescription;
+        }
         String nameSuggestion = "";
         try {
             by = By.byClass(object.getClass().getName());
@@ -82,71 +96,10 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             if(name.length() == 0)
                 name = "NoNameElement";
             cachedElement = object;
-            className = object.getClass().toString();
         }catch (Exception e){
             log(LogLevel.DEBUG, "Could not create JavaGuiElement from Object. Error: "+ e.toString());
             log(LogLevel.DEBUG, "Possible methods of object are:" + System.lineSeparator() + String.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(object)));
         }
-    }
-
-    public JavaGuiElement(Object object, TestCase testCase) {
-        this.testCase = testCase;
-        if(object == null)return;
-        String elementName = (String) MethodInvoker.invokeMethod(testCase, object, "getName");
-        name = object.getClass().toString().replace(".", "_") + "_" + elementName;
-        if(elementName != null){
-            recognitionString = elementName;
-            idType = IdType.ELEMENT_NAME;
-        } else {
-            recognitionString = (String) MethodInvoker.invokeMethod(testCase, object, "getText");
-            idType = IdType.ELEMENT_TEXT;
-        }
-        className = object.getClass().toString();
-    }
-
-    public JavaGuiElement(String name, String recognitionString){
-        this.name  = name;
-        this.idType = IdType.ELEMENT_TEXT;
-        this.recognitionString = recognitionString;
-        this.className = null;
-    }
-
-    public JavaGuiElement(String name, String recognitionString, IdType idType, String className){
-        this.name = name;
-        this.recognitionString = recognitionString;
-        this.idType = idType;
-        this.className = className;
-    }
-
-    public JavaGuiElement(String name, String recognitionString, IdType idType){
-        this.name = name;
-        this.recognitionString = recognitionString;
-        this.idType = idType;
-        this.className = null;
-    }
-
-    public JavaGuiElement(JavaWindow window, String name, String recognitionString){
-        this.name  = name;
-        this.idType = IdType.ELEMENT_TEXT;
-        this.recognitionString = recognitionString;
-        this.className = null;
-        this.window = window;
-    }
-
-    public JavaGuiElement(JavaWindow window, String name, String recognitionString, IdType idType, String className){
-        this.name = name;
-        this.recognitionString = recognitionString;
-        this.idType = idType;
-        this.className = className;
-        this.window = window;
-    }
-
-    public JavaGuiElement(JavaWindow window, String name, String recognitionString, IdType idType){
-        this.name = name;
-        this.recognitionString = recognitionString;
-        this.idType = idType;
-        this.className = null;
-        this.window = window;
     }
 
     /**
@@ -164,24 +117,20 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
      * @return Returns the actual runtime element to interact with.
      */
     public Object getRuntimeComponent(){
+        if(cachedElement != null)return cachedElement;
         long startTime = System.currentTimeMillis();
         recognitionDescription.clear();
         List<Object> windowComponents = getWindowComponents();
         List<Object> matchingComponents = new ArrayList<>();
         if(by != null){
+            Object positionBasedElement = getElementFromRelativePositionReferenceIfApplicable();
+            if(positionBasedElement != null){
+                windowComponents.add(positionBasedElement);
+            }
             windowComponents = filterByAncestorElementIfApplicable(windowComponents);
             recognitionDescription.add("Attempting to identify runtime object for " + getName() + " by By statement:" + System.lineSeparator() + by.toString());
             matchingComponents.addAll(attemptToIdentifyElementByByStatement(windowComponents));
             matchingComponents = filterObjectByOrdinalNumber(matchingComponents);
-        } else {
-            recognitionDescription.add("Attempting to identify runtime object for " + getName() + " by " + idType.toString().toLowerCase() + " and with the recognition string '" + recognitionString + "'.");
-            if(idType == IdType.ELEMENT_NAME){
-                matchingComponents.addAll(returnElementByName(windowComponents));
-            } else if(idType == JavaGuiElement.IdType.ELEMENT_TEXT) {
-                matchingComponents.addAll(returnElementByText(windowComponents));
-            } else {
-                recognitionDescription.add("Identification mechanism for element recognition type '" + idType.toString() + "' is not yet implemented.");
-            }
         }
         if(matchingComponents.size() == 0){
             recognitionDescription.add("Could not identify any matching runtime object for " + getName() + ". Time for identification: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
@@ -282,6 +231,23 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return componentList;
     }
 
+    private ArrayList<? extends PositionBasedGuiElement> getElementFromRelativePositionReferenceIfApplicable(){
+        for(SearchCondition sc : by.searchConditions){
+            if(sc.searchConditionType == null || sc.objects == null || sc.objects[0] == null) continue;
+            if(!sc.searchConditionType.equals(SearchConditionType.POSITION_BASED))continue;
+            if(ElementsList.class.isAssignableFrom(sc.objects[0].getClass())){
+                ElementsList elementsList = (ElementsList)sc.objects[0];
+                return elementsList.elements;
+            } else {
+                JavaGuiElement positionBasedGuiElement = (JavaGuiElement) sc.objects[0];
+                ArrayList<PositionBasedGuiElement> tempList = new ArrayList<>();
+                tempList.add(positionBasedGuiElement);
+                return tempList;
+            }
+        }
+        return null;
+    }
+
 
     private Collection<Object> attemptToIdentifyElementByByStatement(List<Object> componentList) {
         ArrayList<Object> returnElements = new ArrayList<>(componentList);
@@ -300,10 +266,11 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     returnElements.removeAll(removeElements);
                     removeElements.clear();
                     break;
+
                 case NAME:
                     for(Object o : componentList){
-                        String name = jim.getName(0);
-                        if(name == null || name.equals((String)searchCondition.objects[0])){
+                        String name = jim.getName(o);
+                        if(name == null || !name.equals((String)searchCondition.objects[0])){
                             removeElements.add(o);
                         }
                     }
@@ -311,6 +278,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     returnElements.removeAll(removeElements);
                     removeElements.clear();
                     break;
+
                 case EXACT_TEXT:
                     for(Object o : componentList){
                         boolean toBeRemoved = true;
@@ -328,6 +296,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     returnElements.removeAll(removeElements);
                     removeElements.clear();
                     break;
+
                 case TEXT_CONTAINS:
                     for(Object o : componentList){
                         boolean toBeRemoved = true;
@@ -345,6 +314,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     returnElements.removeAll(removeElements);
                     removeElements.clear();
                     break;
+
                 case TEXT_REGEX_MATCH:
                     for(Object o : componentList){
                         String elementText = jim.getText(o);
@@ -356,6 +326,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     returnElements.removeAll(removeElements);
                     removeElements.clear();
                     break;
+
                 default:
                     recognitionDescription.add("No By statement implementation for SearchCondition " + searchCondition.toString() + ". Ignoring this.");
                     break;
@@ -533,7 +504,6 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
      */
     @Override
     public String getTypeName() {
-        if(className != null) return className;
         Object element = getRuntimeElementCacheable();
         if(element == null) return null;
         if(element != null) return element.getClass().toString();
@@ -599,10 +569,16 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     private ArrayList<Object> getElementByRegexMatchOfText(List<Object> componentList) {
         ArrayList<Object> returnElements = new ArrayList<>();
         GenericInteractionMethods jim = new GenericInteractionMethods(null);
+        String regexPattern = null;
+        for(SearchCondition sc : by.searchConditions){
+            if(sc.searchConditionType.equals(SearchConditionType.TEXT_REGEX_MATCH)){
+                regexPattern = sc.objects.toString();
+            }
+        }
+        if(regexPattern == null) return returnElements;
         for(Object c : componentList){
-            if(className != null && !c.getClass().toString().equals(className)) continue;
-            if(SupportMethods.isRegexMatch(jim.getText(c), recognitionString)) {
-                recognitionDescription.add("Found regular expression match for text '" + jim.getText(c) + "' in element of class '" + c.getClass().toString() + "' with expected regular expression pattern '" + recognitionString + "'. Adding this object to possible matches list.");
+            if(SupportMethods.isRegexMatch(jim.getText(c), regexPattern)) {
+                recognitionDescription.add("Found regular expression match for text '" + jim.getText(c) + "' in element of class '" + c.getClass().toString() + "' with expected regular expression pattern '" + regexPattern + "'. Adding this object to possible matches list.");
                 returnElements.add(c);
             }
         }
@@ -611,10 +587,16 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     private ArrayList<Object> getElementByExactMatchOfText(List<Object> componentList){
         ArrayList<Object> returnElements = new ArrayList<>();
+        String expectedText = null;
+        for(SearchCondition sc : by.searchConditions){
+            if(sc.searchConditionType.equals(SearchConditionType.TEXT_REGEX_MATCH)){
+                expectedText = sc.objects.toString();
+            }
+        }
+        if(expectedText == null) return returnElements;
         GenericInteractionMethods jim = new GenericInteractionMethods(null);
         for(Object c : componentList){
-            if(className != null && !c.getClass().toString().equals(className)) continue;
-            if(jim.getText(c) != null && jim.getText(c).equals(recognitionString)) {
+            if(jim.getText(c) != null && jim.getText(c).equals(expectedText)) {
                 recognitionDescription.add("Found exact text match in element of class '" + c.getClass().toString() + "'. Adding this object to possible matches list.");
                 returnElements.add(c);
             }
@@ -623,51 +605,24 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     }
 
     private ArrayList<Object> getElementByContainsMatchOfText(List<Object> componentList){
-        GenericInteractionMethods jim = new GenericInteractionMethods(null);
         ArrayList<Object> returnElements = new ArrayList<>();
+        String expectedText = null;
+        for(SearchCondition sc : by.searchConditions){
+            if(sc.searchConditionType.equals(SearchConditionType.TEXT_REGEX_MATCH)){
+                expectedText = sc.objects.toString();
+            }
+        }
+        if(expectedText == null) return returnElements;
+        GenericInteractionMethods jim = new GenericInteractionMethods(null);
         for(Object c : componentList){
-            if(className != null && !c.getClass().toString().equals(className)) continue;
-            if(jim.getText(c) != null && jim.getText(c).contains(recognitionString)){
-                recognitionDescription.add("Found partial match for text '" + recognitionString + "' in object with text '" + jim.getText(c) + "' of class '" + c.getClass().toString() + "'. Adding this object to possible matches list.");
+            if(jim.getText(c) != null && jim.getText(c).contains(expectedText)){
+                recognitionDescription.add("Found partial match for text '" + expectedText + "' in object with text '" + jim.getText(c) + "' of class '" + c.getClass().toString() + "'. Adding this object to possible matches list.");
                 returnElements.add(c);
             }
         }
         return returnElements;
     }
 
-    private ArrayList<Object> returnElementByName(List<Object> componentList){
-        ArrayList<Object> returnElements = new ArrayList<>();
-        GenericInteractionMethods jim = new GenericInteractionMethods(null);
-        for(Object c : componentList){
-            if(className != null && !c.getClass().toString().equals(className)) continue;
-            if(jim.getName(c) != null && jim.getName(c).equals(recognitionString)){
-                recognitionDescription.add("Adding element of class '" + c.getClass().toString() + "' with exact match of name '" + jim.getName(c) + "' as a possible match.");
-                returnElements.add(c);
-            }
-        }
-        if(returnElements.size() > 0) return returnElements;
-        recognitionDescription.add("Found no exact match for recognition string '" + recognitionString + "' for any object.");
-        for(Object c : componentList){
-            if(className != null && !c.getClass().toString().equals(className)) continue;
-            if(jim.getName(c) != null && jim.getName(c).contains(recognitionString)){
-                recognitionDescription.add("Adding element of class '" + c.getClass().toString() + "' with name '" + jim.getName(c) + "' that contains the expected recognition string '" + recognitionString + "' as a possible match.");
-                returnElements.add(c);
-            }
-        }
-        if(returnElements.size() > 0) return returnElements;
-        recognitionDescription.add("Found no partial match for recognition string '" + recognitionString + "' either, for any object.");
-
-        for(Object c : componentList){
-            if(className != null && !c.getClass().toString().equals(className)) continue;
-            if(SupportMethods.isRegexMatch(jim.getName(c), recognitionString)){
-                recognitionDescription.add("Adding element of class '" + c.getClass().toString() + "' with name '" + jim.getName(c) + "' that is a regular expression match for the recognition string pattern '" + recognitionString + "' as a possible match.");
-                returnElements.add(c);
-            }
-        }
-        if(returnElements.size() > 0) return returnElements;
-        recognitionDescription.add("No object matching the recognition string '" + recognitionString + "' was found.");
-        return returnElements;
-    }
 
     private void log(LogLevel logLevel, String message){
         if(testCase == null) {
@@ -684,21 +639,6 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             description += "name: null";
         } else {
             description += "name: '" + name + "'";
-        }
-        if(recognitionString == null){
-            description += ", recognitionString: null";
-        }else{
-            description += ", recognitionString: '" + recognitionString + "'";
-        }
-        if(idType == null){
-            description += ", idType: null";
-        } else {
-            description += ", idType: '" + idType.toString() + "'";
-        }
-        if(className == null){
-            description += ", class name: null";
-        }else{
-            description += ", class name: '" + className + "'";
         }
         if(by == null){
             description += ", by: null";

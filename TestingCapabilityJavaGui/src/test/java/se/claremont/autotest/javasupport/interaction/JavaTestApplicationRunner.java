@@ -31,7 +31,7 @@ public class JavaTestApplicationRunner {
         Assume.assumeTrue("Cannot start GUI interface since there is no desktop.", Desktop.isDesktopSupported());
         try{
             //noinspection deprecation
-            javaApp.show();
+            javaApp.setVisible(true);
         }catch (Exception e){
             Assume.assumeTrue("Cannot start GUI interface since there is no desktop available. Error: " + System.lineSeparator() + e.toString(), false);
         }
