@@ -56,7 +56,6 @@ public class Resource {
      * API endpoint for posting test run results from TAF to be read into Testlink. The response is status information.
      *
      * @param data The JSON from the TAF test run execution TestRunResults object.
-     * @return Returns a report from the information transfer. If errors are encountered more information is displayed.
      */
     @POST
     @Path("v1/click")

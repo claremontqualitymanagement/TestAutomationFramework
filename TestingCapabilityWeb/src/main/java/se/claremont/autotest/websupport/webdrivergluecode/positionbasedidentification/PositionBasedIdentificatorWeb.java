@@ -1,5 +1,6 @@
 package se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification;
 
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.logging.GenericJavaObjectToHtml;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -51,7 +52,7 @@ public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
         PositionBasedWebElement relativeElement = new PositionBasedWebElement(text, web);
         if(relativeElement == null) return null;
         DomElement relativeElementAsDomElement = relativeElement.asDomElement();
-        return fromAllElementsInTheSameContainerObjectAsElementWithText(text, web).
+        return (DomElement)fromAllElementsInTheSameContainerObjectAsElementWithText(text, web).
                 atTheSameHeightAs(relativeElementAsDomElement, web, 10, 10).
                 keepElementsToTheRightOf(relativeElementAsDomElement, web).
                 theObjectMostToTheLeft();
@@ -62,7 +63,7 @@ public class PositionBasedIdentificatorWeb extends PositionBasedIdentificator {
         PositionBasedWebElement relativeElement = new PositionBasedWebElement(text, web);
         if(relativeElement == null) return null;
         DomElement relativeElementAsDomElement = relativeElement.asDomElement();
-        return fromAllElementsInTheSameContainerObjectAsElementWithText(text, web).
+        return (DomElement)fromAllElementsInTheSameContainerObjectAsElementWithText(text, web).
                 atTheSameHeightAs(relativeElementAsDomElement, web, 10, 10).
                 keepElementsToTheRightOf(relativeElementAsDomElement, web).
                 keepOnlyVisibleElements().

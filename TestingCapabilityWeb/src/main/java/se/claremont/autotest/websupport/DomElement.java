@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.websupport.elementidentification.By;
 import se.claremont.autotest.websupport.elementidentification.WebElementIdentifier;

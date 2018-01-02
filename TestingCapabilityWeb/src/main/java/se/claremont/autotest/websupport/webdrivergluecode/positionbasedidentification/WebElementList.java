@@ -164,7 +164,7 @@ public class WebElementList extends ElementsList{
     }
 
     @Override
-    public DomElement theObjectMostToTheRight(){
+    public PositionBasedGuiElement theObjectMostToTheRight(){
         long startTime = System.currentTimeMillis();
         PositionBasedGuiElement positionBasedGuiElement = (PositionBasedGuiElement)super.theObjectMostToTheRight();
         if(positionBasedGuiElement == null) {
@@ -174,11 +174,11 @@ public class WebElementList extends ElementsList{
         }
         identificationDescription.add("Returning the element most to the right as a DomElement. " + duration(startTime));
         attemptLog();
-        return ((PositionBasedWebElement)positionBasedGuiElement).asDomElement();
+        return positionBasedGuiElement;
     }
 
     @Override
-    public DomElement theObjectMostToTheLeft(){
+    public PositionBasedGuiElement theObjectMostToTheLeft(){
         long startTime = System.currentTimeMillis();
         PositionBasedGuiElement positionBasedGuiElement = (PositionBasedGuiElement)super.theObjectMostToTheLeft();
         if(positionBasedGuiElement == null) {
@@ -188,11 +188,11 @@ public class WebElementList extends ElementsList{
         }
         identificationDescription.add("Returning the element most to the left as a DomElement. " + duration(startTime));
         attemptLog();
-        return ((PositionBasedWebElement)positionBasedGuiElement).asDomElement();
+        return positionBasedGuiElement;
     }
 
     @Override
-    public DomElement theObjectMostToTheTop(){
+    public PositionBasedGuiElement theObjectMostToTheTop(){
         long startTime = System.currentTimeMillis();
         PositionBasedGuiElement positionBasedGuiElement = (PositionBasedGuiElement)super.theObjectMostToTheTop();
         if(positionBasedGuiElement == null) {
@@ -202,11 +202,11 @@ public class WebElementList extends ElementsList{
         }
         identificationDescription.add("Returning the element most to the top as a DomElement. " + duration(startTime));
         attemptLog();
-        return ((PositionBasedWebElement)positionBasedGuiElement).asDomElement();
+        return positionBasedGuiElement;
     }
 
     @Override
-    public DomElement theObjectMostToTheBottom(){
+    public PositionBasedGuiElement theObjectMostToTheBottom(){
         long startTime = System.currentTimeMillis();
         PositionBasedGuiElement positionBasedGuiElement = (PositionBasedGuiElement)super.theObjectMostToTheBottom();
         if(positionBasedGuiElement == null) {
@@ -216,11 +216,11 @@ public class WebElementList extends ElementsList{
         }
         identificationDescription.add("Returning the element most to the bottom as a DomElement. " + duration(startTime));
         attemptLog();
-        return ((PositionBasedWebElement)positionBasedGuiElement).asDomElement();
+        return positionBasedGuiElement;
     }
 
     @Override
-    public DomElement theOnlyElementThatShouldBeLeft(){
+    public PositionBasedGuiElement theOnlyElementThatShouldBeLeft(){
         long startTime = System.currentTimeMillis();
         PositionBasedGuiElement positionBasedGuiElement = (PositionBasedGuiElement)super.theOnlyElementThatShouldBeLeft();
         if(positionBasedGuiElement == null){
@@ -230,7 +230,7 @@ public class WebElementList extends ElementsList{
         }
         identificationDescription.add("Returning the only element that should be left in the collection (actually returning the first element) as a DomElement. " + duration(startTime));
         attemptLog();
-        return ((PositionBasedWebElement)positionBasedGuiElement).asDomElement();
+        return positionBasedGuiElement;
     }
 
     public DomElement elementImmediatelyToTheRightOf(DomElement domElement, WebInteractionMethods web){

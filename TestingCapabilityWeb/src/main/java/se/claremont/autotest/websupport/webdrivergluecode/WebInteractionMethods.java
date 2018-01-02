@@ -853,6 +853,7 @@ public class WebInteractionMethods  {
      * Checks for existence of given element. Actually waits for existence of the element during the timeout time
      *
      * @param guiElement The element to check existence of
+     * @param timeOutInSeconds The time to wait for object to exist.
      * @return Return true if element is found within timeout period
      */
     public boolean existsWithTimeout(GuiElement guiElement, int timeOutInSeconds){
