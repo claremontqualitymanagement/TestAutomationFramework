@@ -38,7 +38,6 @@ public class PositionBasedTests extends UnitTestClass{
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
         List<Object> objects = java.allSubElementsOf(JavaTestApplication.panel0());
-        //System.out.println(String.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(JavaTestApplication.okbutton().getRuntimeComponent())));
         Assert.assertNotNull(objects);
         ArrayList<PositionBasedGuiElement> elementsList = new ArrayList<>();
         for(Object object : objects){

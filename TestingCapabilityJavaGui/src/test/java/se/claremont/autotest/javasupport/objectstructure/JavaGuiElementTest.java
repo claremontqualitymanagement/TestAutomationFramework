@@ -31,10 +31,10 @@ public class JavaGuiElementTest extends UnitTestClass{
     @Test
     public void getSubElements(){
         List<JavaGuiElement> elementList = JavaTestApplication.panel0().getSubElements();
-        Assert.assertTrue(JavaTestApplication.panel0().getSubElements().size() > 5);
+        Assert.assertTrue(elementList.size() > 5);
         boolean foundCancelButton = false;
         for(JavaGuiElement element: elementList){
-            if(element.toString().contains("Button_Cancel")){
+            if(element.toString().contains("CancelButton")){
                 System.out.println(element.toString());
                 foundCancelButton = true;
             }
@@ -47,7 +47,7 @@ public class JavaGuiElementTest extends UnitTestClass{
         List<JavaGuiElement> elementList = JavaTestApplication.okbutton().getAllElementsInSameContainer();
         boolean foundCancelButton = false;
         for(JavaGuiElement element: elementList){
-            if(element.toString().contains("Button_Cancel")){
+            if(element.toString().contains("CancelButton")){
                 System.out.println(element.toString());
                 foundCancelButton = true;
             }

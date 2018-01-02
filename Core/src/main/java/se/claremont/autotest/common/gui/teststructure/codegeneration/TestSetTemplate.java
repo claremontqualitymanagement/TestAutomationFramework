@@ -76,6 +76,7 @@ public class TestSetTemplate {
         JScrollPane scrollPane = new JScrollPane(textArea);
         TafPanel buttonPanel = new TafPanel("ButtonPanel");
         textArea.setText(asCode());
+        textArea.setFont(new Font("monospaced", Font.PLAIN, AppFont.getInstance().getSize()));
         textArea.setBackground(Color.white);
 
         saveButton.addActionListener(new ActionListener() {

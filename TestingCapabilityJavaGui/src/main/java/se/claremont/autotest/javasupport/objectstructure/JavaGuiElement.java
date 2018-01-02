@@ -3,6 +3,7 @@ package se.claremont.autotest.javasupport.objectstructure;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
@@ -62,23 +63,24 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     public JavaGuiElement(Object object) {
         if(object == null)return;
+        String nameSuggestion = "";
         try {
+            by = By.byClass(object.getClass().getName());
             String elementName = (String) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, object, MethodDeclarations.componentNameGetterMethodsInAttemptOrder);
-            String objectName = elementName;
-            String text = (String) MethodInvoker.invokeTheFirstEncounteredMethod(null, object, MethodDeclarations.textGettingMethodsInAttemptOrder);
-            if(objectName == null || objectName.length() == 0) objectName = text;
-            if (objectName == null || objectName.length() == 0) objectName = "NoNamedObject";
-            name = objectName.replace(" ", "") + object.getClass().getSimpleName().replace(".", "_");
-            if (elementName != null) {
-                recognitionString = elementName;
-                idType = IdType.ELEMENT_NAME;
-            } else if (text != null && text.length() > 0){
-                recognitionString = text;
-                idType = IdType.ELEMENT_TEXT;
-            } else {
-                idType = IdType.UNKNOWN;
-                log(LogLevel.DEBUG, "Warning: Could not find any recognition characteristics for element [" + object.toString() + "].");
+            if(elementName != null && elementName.length() > 0){
+                nameSuggestion = elementName;
+                by.andByName(elementName);
             }
+            String text = (String) MethodInvoker.invokeTheFirstEncounteredMethod(null, object, MethodDeclarations.textGettingMethodsInAttemptOrder);
+            if(text != null && text.length() > 0){
+                if(nameSuggestion == ""){
+                    nameSuggestion = text;
+                }
+                by.andByExactText(text);
+            }
+            name = StringManagement.safeVariableName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(nameSuggestion + object.getClass().getSimpleName()));
+            if(name.length() == 0)
+                name = "NoNameElement";
             cachedElement = object;
             className = object.getClass().toString();
         }catch (Exception e){
@@ -697,6 +699,11 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             description += ", class name: null";
         }else{
             description += ", class name: '" + className + "'";
+        }
+        if(by == null){
+            description += ", by: null";
+        }else {
+            description += ", by: " + by.toString();
         }
         description += "', cached object stored: " + String.valueOf(cachedElement != null) + "]";
         return description;
