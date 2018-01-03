@@ -10,7 +10,7 @@ import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 public class RecorderWindow {
 
-    WebInteractionMethods web;
+    static WebInteractionMethods web;
 
     public RecorderWindow() {
         HttpServer recorderRESTServer = new HttpServer();
@@ -21,9 +21,10 @@ public class RecorderWindow {
         new Thread(new UrlNavigationListener(web.driver)).start();
     }
 
-    private void invokeJavascriptBasedListeners() {
+    public static void invokeJavascriptBasedListeners() {
         web.executeJavascript(
                 //Javascripts.elementChangeListener +
+                        Javascripts.domChangeListener +
                         Javascripts.elementXpathExtractor +
                         Javascripts.postHttpRequest +
                         Javascripts.registerDocumentClickListener +
@@ -46,12 +47,14 @@ public class RecorderWindow {
         @Override
         public void run() {
             while (true) {
-                if (!driver.getCurrentUrl().equals(lastUrl)) {
-                    System.out.println("New url detected: '" + driver.getCurrentUrl());
-                    lastUrl = driver.getCurrentUrl();
-                    Gui.availableTestSteps.add(new WebNavigationTestStep(lastUrl));
-                    invokeJavascriptBasedListeners();
-                }
+                try{
+                    if (!driver.getCurrentUrl().equals(lastUrl)) {
+                        System.out.println("New url detected: '" + driver.getCurrentUrl());
+                        lastUrl = driver.getCurrentUrl();
+                        Gui.availableTestSteps.add(new WebNavigationTestStep(lastUrl));
+                        invokeJavascriptBasedListeners();
+                    }
+                }catch (Exception ignored){} //Sometimes getCurrentUrl fails during page transitions
                 try {
                     Thread.sleep(checkIntervalInMilliseconds);
                 } catch (InterruptedException e) {

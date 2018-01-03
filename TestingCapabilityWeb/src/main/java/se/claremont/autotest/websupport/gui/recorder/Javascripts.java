@@ -5,7 +5,8 @@ import se.claremont.autotest.websupport.gui.recorder.restserver.Settings;
 
 public class Javascripts {
 
-    static String registerDocumentClickListener = "document.addEventListener('click', function(e) {\n" +
+    static String registerDocumentClickListener =
+            "document.addEventListener('click', function(e) {\n" +
             "        e = e || window.event;\n" +
             "        var target = e.target || e.srcElement,\n" +
             "        text = target.textContent || target.innerText;\n" +
@@ -18,122 +19,31 @@ public class Javascripts {
             "        post('http://" + HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port + "/tafwebrecorder/v1/click', {webElement: JSON.stringify(elementDescription)} ); \n" +
             "     }, false);\n\n";
 
-/*
-    static String elementChangeListener = "(function (window) {\n" +
-            "    var last = +new Date();\n" +
-            "    var delay = 100; // default delay\n" +
-            "\n" +
-            "    // Manage event queue\n" +
-            "    var stack = [];\n" +
-            "\n" +
-            "    function callback() {\n" +
-            "        var now = +new Date();\n" +
-            "        if (now - last > delay) {\n" +
-            "            for (var i = 0; i < stack.length; i++) {\n" +
-            "                stack[i]();\n" +
-            "            }\n" +
-            "            last = now;\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    // Public interface\n" +
-            "    var onDomChange = function (fn, newdelay) {\n" +
-            "        if (newdelay) delay = newdelay;\n" +
-            "        stack.push(fn);\n" +
-            "    };\n" +
-            "\n" +
-            "    // Naive approach for compatibility\n" +
-            "    function naive() {\n" +
-            "\n" +
-            "        var last = document.getElementsByTagName('*');\n" +
-            "        var lastlen = last.length;\n" +
-            "        var timer = setTimeout(function check() {\n" +
-            "\n" +
-            "            // get current state of the document\n" +
-            "            var current = document.getElementsByTagName('*');\n" +
-            "            var len = current.length;\n" +
-            "\n" +
-            "            // if the length is different\n" +
-            "            // it's fairly obvious\n" +
-            "            if (len != lastlen) {\n" +
-            "                // just make sure the loop finishes early\n" +
-            "                last = [];\n" +
-            "            }\n" +
-            "\n" +
-            "            // go check every element in order\n" +
-            "            for (var i = 0; i < len; i++) {\n" +
-            "                if (current[i] !== last[i]) {\n" +
-            "                    callback();\n" +
-            "                    last = current;\n" +
-            "                    lastlen = len;\n" +
-            "                    break;\n" +
-            "                }\n" +
-            "            }\n" +
-            "\n" +
-            "            // over, and over, and over again\n" +
-            "            setTimeout(check, delay);\n" +
-            "\n" +
-            "        }, delay);\n" +
-            "    }\n" +
-            "\n" +
-            "    //\n" +
-            "    //  Check for mutation events support\n" +
-            "    //\n" +
-            "\n" +
-            "    var support = {};\n" +
-            "\n" +
-            "    var el = document.documentElement;\n" +
-            "    var remain = 3;\n" +
-            "\n" +
-            "    // callback for the tests\n" +
-            "    function decide() {\n" +
-            "        if (support.DOMNodeInserted) {\n" +
-            "            window.addEventListener(\"DOMContentLoaded\", function () {\n" +
-            "                if (support.DOMSubtreeModified) { // for FF 3+, Chrome\n" +
-            "                    el.addEventListener('DOMSubtreeModified', callback, false);\n" +
-            "                } else { // for FF 2, Safari, Opera 9.6+\n" +
-            "                    el.addEventListener('DOMNodeInserted', callback, false);\n" +
-            "                    el.addEventListener('DOMNodeRemoved', callback, false);\n" +
-            "                }\n" +
-            "            }, false);\n" +
-            "        } else if (document.onpropertychange) { // for IE 5.5+\n" +
-            "            document.onpropertychange = callback;\n" +
-            "        } else { // fallback\n" +
-            "            naive();\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    // checks a particular event\n" +
-            "    function test(event) {\n" +
-            "        el.addEventListener(event, function fn() {\n" +
-            "            support[event] = true;\n" +
-            "            el.removeEventListener(event, fn, false);\n" +
-            "            if (--remain === 0) decide();\n" +
-            "        }, false);\n" +
-            "    }\n" +
-            "\n" +
-            "    // attach test events\n" +
-            "    if (window.addEventListener) {\n" +
-            "        test('DOMSubtreeModified');\n" +
-            "        test('DOMNodeInserted');\n" +
-            "        test('DOMNodeRemoved');\n" +
-            "    } else {\n" +
-            "        decide();\n" +
-            "    }\n" +
-            "\n" +
-            "    // do the dummy test\n" +
-            "    var dummy = document.createElement(\"div\");\n" +
-            "    el.appendChild(dummy);\n" +
-            "    el.removeChild(dummy);\n" +
-            "\n" +
-            "    // expose\n" +
-            "    window.onDomChange = onDomChange;\n" +
-            "})(window);\n\n" +
-            "onDomChange(function(){ \n" +
-            "    alert(\"The Times They Are a-Changin'\");\n" +
-            "});\n\n";
 
-    */
+    static String domChangeListener =
+            "var observer = new MutationObserver(function(mutations) {\n" +
+            "        mutations.forEach(function(mutation) {\n" +
+            "            var mutationDescription = { };\n" +
+            "            mutationDescription.type = mutation.type;\n" +
+            "            mutationDescription.targetTagName = mutation.target.tagName;\n" +
+            "            mutationDescription.targetClassName = mutation.target.getAttribute(\"class\");\n" +
+            "            mutationDescription.targetId = mutation.target.id;\n" +
+            "            mutationDescription.targetXpath = createXPathFromElement(mutation.target);\n" +
+            "            mutationDescription.attributeName = mutation.attributeName;\n" +
+            "            mutationDescription.oldValue = mutation.oldValue;\n" +
+            "            mutationDescription.newValue = mutation.target.getAttribute(mutation.attributeName);\n" +
+            "            mutationDescription.addedNodes = mutation.addedNodes;\n" +
+            "            mutationDescription.removedNodes = mutation.removedNodes;\n" +
+            "            post('http://" + HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port + "/tafwebrecorder/v1/domchange', {mutation: JSON.stringify(mutationDescription)} ); \n" +
+            "            console.log(mutation.type);\n" +
+            "        });\n" +
+            "});\n\n" +
+            "observer.observe(document.body, {\n" +
+            "        subtree: true,\n" +
+            "        attributes: true,\n" +
+            "        attributeOldValue: true,\n" +
+            "        characterDataOldValue : true\n" +
+            "});\n\n";;
 
     static String textChangedElementListener =
             "function onInvocation(text){\n"+
@@ -223,19 +133,5 @@ public class Javascripts {
             "    form.submit();\n" +
             "}\n\n";
 
-    /*
-    static String postHttpRequest = "function post(path, param) {\n" +
-            "        var form = document.createElement(\"form\");\n" +
-            "        form.setAttribute(\"method\", \"post\");\n" +
-            "        form.setAttribute(\"action\", path);\n" +
-            "        form.setAttribute(\"target\", \"_blank\");\n" +
-            "        var hiddenField = document.createElement(\"input\");\n" +
-            "        hiddenField.setAttribute(\"name\", \"search\");\n" +
-            "        hiddenField.setAttribute(\"value\", JSON.stringify(param) );\n" +
-            "        hiddenField.setAttribute(\"type\", \"hidden\");\n" +
-            "        form.appendChild(hiddenField);\n" +
-            "        document.body.appendChild(form);\n" +
-            "        form.submit();}";
-*/
 }
 

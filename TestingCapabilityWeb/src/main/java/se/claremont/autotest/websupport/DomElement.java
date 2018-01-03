@@ -61,7 +61,7 @@ public class DomElement implements GuiElement {
         try {
             jsonNode = om.readTree(json);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
         if(jsonNode == null){
             name = "NullElement";

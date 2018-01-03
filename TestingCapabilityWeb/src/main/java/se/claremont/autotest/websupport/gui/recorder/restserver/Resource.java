@@ -1,7 +1,12 @@
 package se.claremont.autotest.websupport.gui.recorder.restserver;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.gui.Gui;
 import se.claremont.autotest.websupport.DomElement;
+import se.claremont.autotest.websupport.elementidentification.By;
+import se.claremont.autotest.websupport.gui.recorder.RecorderWindow;
+import se.claremont.autotest.websupport.gui.teststeps.WebAttributeChangeTestStep;
 import se.claremont.autotest.websupport.gui.teststeps.WebClickTestStep;
 
 import javax.ws.rs.GET;
@@ -9,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -52,18 +58,59 @@ public class Resource {
                 "</html>";
     }
 
-    /**
-     * API endpoint for posting test run results from TAF to be read into Testlink. The response is status information.
-     *
-     * @param data The JSON from the TAF test run execution TestRunResults object.
-     */
     @POST
     @Path("v1/click")
-    public void postTestRun(String data){
+    public void clickPerformed(String data){
         data = data.replace("%20", " ");
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                 "/tafwebrecorder/v1/click with content: '" + URLDecoder.decode(data) + "'.");
         Gui.availableTestSteps.add(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
+    }
+
+    @POST
+    @Path("v1/domchange")
+    public void domChanged(String data){
+        data = URLDecoder.decode(data.substring("mutation=".length()).replace("%20", " "));
+        System.out.println("Received POST request to http://" +
+                HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
+                "/tafwebrecorder/v1/domchange with content: '" + data + "'.");
+        RecorderWindow.invokeJavascriptBasedListeners();
+        ObjectMapper om = new ObjectMapper();
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = om.readTree(data);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        if(jsonNode == null){
+            return;
+        }
+        String elementJSON = "webElement={\"tagName\": \"" + valueForAttributeInJson(jsonNode, "targetTagName") + "\", ";
+        elementJSON += "\"className\": \"" + valueForAttributeInJson(jsonNode, "targetClassName") + "\", ";
+        elementJSON += "\"xpath\": \"" + valueForAttributeInJson(jsonNode, "targetXpath") + "\",  ";
+        elementJSON += "\"text\": \"\", ";
+        elementJSON += "\"id\": \"" + valueForAttributeInJson(jsonNode, "tergetId") + "\"}";
+        DomElement element = null;
+        try{
+            element = new DomElement(elementJSON);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        if(valueForAttributeInJson(jsonNode, "type").contains("attributes")){
+            WebAttributeChangeTestStep testStep = new WebAttributeChangeTestStep(
+                    element,
+                    valueForAttributeInJson(jsonNode, "attributeName"),
+                    valueForAttributeInJson(jsonNode, "oldValue"),
+                    valueForAttributeInJson(jsonNode, "newValue"));
+            Gui.availableTestSteps.add(testStep);
+        }
+    }
+
+    private static String valueForAttributeInJson(JsonNode jsonNode, String attributeName){
+        try{
+            return jsonNode.get(attributeName).asText().replace("\"", "\\" + "\"");
+        }catch (Throwable ignored){}
+        return "";
     }
 }
