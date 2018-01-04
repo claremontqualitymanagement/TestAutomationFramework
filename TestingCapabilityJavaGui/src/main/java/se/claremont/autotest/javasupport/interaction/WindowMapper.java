@@ -4,11 +4,12 @@ import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WindowMapper {
-    List<Object> unidentifiedComponents = new ArrayList<>();
+    List<Component> unidentifiedComponents = new ArrayList<>();
     List<Object> identifiedComponents = new ArrayList<>();
     StringBuilder sb = new StringBuilder();
     GenericInteractionMethods gim = new GenericInteractionMethods(null);

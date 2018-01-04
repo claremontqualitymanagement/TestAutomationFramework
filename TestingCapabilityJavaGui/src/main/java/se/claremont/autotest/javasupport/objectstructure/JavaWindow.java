@@ -7,8 +7,11 @@ import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,15 +23,23 @@ import java.util.List;
 public class JavaWindow {
     MethodInvoker methodInvoker = new MethodInvoker();
     String titleAsRegularExpression;
+    String name;
+    ArrayList<Window> nonShownWindows = new ArrayList<>();
 
     public JavaWindow(String titleAsRegularExpression){
         this.titleAsRegularExpression = titleAsRegularExpression;
+        name = titleAsRegularExpression;
     }
 
     public JavaWindow(Window window){
         if(window != null){
             titleAsRegularExpression = (String) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.titleGetterMethodsInAttemptOrder);
+            name = titleAsRegularExpression;
         }
+    }
+
+    public String getName(){
+        return name;
     }
 
     /**
@@ -63,17 +74,43 @@ public class JavaWindow {
      */
     public Object getWindow(){
         Window[] windows = Window.getOwnerlessWindows();
+        nonShownWindows.clear();
         if(windows.length == 0) return null;
-        ArrayList<Window> nonShownWindows = new ArrayList<>();
         for(Window w : windows){
             String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(w, MethodDeclarations.titleGetterMethodsInAttemptOrder);
             if(SupportMethods.isRegexMatch(title, this.titleAsRegularExpression)){
                 if(w.isShowing())
                     return w;
                 nonShownWindows.add(w);
+            } else {
+                Window subWindow = checkSubWindowsRecursive(w, true);
+                if(subWindow != null) return subWindow;
             }
         }
-        if(nonShownWindows.size() > 0) return nonShownWindows.get(0);
+        for(Window window : nonShownWindows){
+            String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.titleGetterMethodsInAttemptOrder);
+            if(SupportMethods.isRegexMatch(title, this.titleAsRegularExpression)){
+                return window;
+            } else {
+                Window subWindow = checkSubWindowsRecursive(window, false);
+                if(subWindow != null) return subWindow;
+            }
+        }
+        return null;
+    }
+
+    private Window checkSubWindowsRecursive(Window parent, boolean saveSupressedWindows){
+        if(parent == null) return null;
+        for(Window w : parent.getOwnedWindows()){
+            String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(w, MethodDeclarations.titleGetterMethodsInAttemptOrder);
+            if(SupportMethods.isRegexMatch(title, this.titleAsRegularExpression)){
+                if(w.isShowing())
+                    return w;
+                if(saveSupressedWindows) nonShownWindows.add(w);
+            } else {
+                return checkSubWindowsRecursive(w, saveSupressedWindows);
+            }
+        }
         return null;
     }
 
@@ -91,20 +128,31 @@ public class JavaWindow {
         return javaGuiElements;
     }
 
+    public static List<Component> getAllComponents(final Container c) {
+        Component[] comps = c.getComponents();
+        List<Component> compList = new ArrayList<Component>();
+        for (Component comp : comps) {
+            compList.add(comp);
+            if (comp instanceof Container)
+                compList.addAll(getAllComponents((Container) comp));
+        }
+        return compList;
+    }
+
+
+    public List<Component> getComponents() {
+        Container container = (Container)getWindow();
+        return getAllComponents(container);
+    }
     /**
      * Returns all components found at runtime in the window.
      *
      * @return Returns a list of all subcomponents of the window.
      */
+    /*
     public List<Object> getComponents(){
-        Object window = getWindow();
+    Object window = getWindow();
         List<Object> componentList = new ArrayList<>();
-        if(!methodInvoker.objectHasAnyOfTheMethods(window, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(window, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)){
-            return componentList;
-        }
-
-        Integer windowComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
-        if(windowComponentCount == null)return componentList;
         Object[] returnList = (Object[]) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
         if(returnList != null && returnList.length > 0){
             for(Object object : returnList){
@@ -113,6 +161,11 @@ public class JavaWindow {
             }
             return componentList;
         }
+        if(!methodInvoker.objectHasAnyOfTheMethods(window, MethodDeclarations.subComponentCountMethodsInAttemptOrder) && !methodInvoker.objectHasAnyOfTheMethods(window, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)){
+            return componentList;
+        }
+        Integer windowComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        if(windowComponentCount == null)return componentList;
         for(int i = 0; i < windowComponentCount; i++){
             Object component = methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
             if(component == null) continue;
@@ -122,7 +175,7 @@ public class JavaWindow {
         return componentList;
     }
 
-
+*/
 
     /**
      * Prints the currently identified components to standard out.
@@ -165,7 +218,7 @@ public class JavaWindow {
         String title = javaWindow.getTitle();
         sb.append("public class ").append(StringManagement.methodNameWithOnlySafeCharacters(title)).append(" {").append(System.lineSeparator());
         sb.append(System.lineSeparator());
-        List<Object> objects = getComponents();
+        List<Component> objects = getComponents();
         for(Object o : objects){
             String name = i.getName(o);
             String text = i.getText(o);
@@ -193,12 +246,29 @@ public class JavaWindow {
 
     private List<Object> addSubComponents(Object component){
         List<Object> componentList = new ArrayList<>();
+        if(methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder)){
+            Component[] componentCollection = (Component[])methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+            if(componentCollection != null && componentCollection.length > 0){
+                for(Component c : componentCollection){
+                    componentList.add(c);
+                    componentList.addAll(addSubComponents(c));
+                }
+                return componentList;
+            }
+        }
         if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
-        int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
-        for(int i = 0; i<numberOfSubItems; i++){
-            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
-            componentList.add(o);
-            componentList.addAll(addSubComponents(o));
+        Integer numberOfSubItems = null;
+        try {
+            numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
+        }catch (Exception ignored){}
+        if(numberOfSubItems != null){
+            for(int i = 0; i<numberOfSubItems; i++){
+                Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+                componentList.add(o);
+                componentList.addAll(addSubComponents(o));
+            }
+        } else {
+
         }
         return componentList;
     }

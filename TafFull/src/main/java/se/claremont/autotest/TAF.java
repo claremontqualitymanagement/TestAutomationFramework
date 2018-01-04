@@ -6,7 +6,13 @@ import se.claremont.autotest.common.gui.teststructure.SubProcedureTestStep;
 import se.claremont.autotest.common.testrun.CliTestRunner;
 import se.claremont.autotest.restsupport.gui.RestTestStep;
 
-public class TAF {
+public class TAF implements Runnable{
+
+    String[] args;
+
+    public TAF(String[] args){
+        this.args = args;
+    }
 
     public static void main(String[] args){
 
@@ -22,6 +28,17 @@ public class TAF {
 
         Gui.availableTestSteps.add(testStep1);
         Gui.availableTestSteps.add(testStep2);
+        Thread t = new Thread(new TAF(args));
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            System.out.println("Closed TAF,");
+        }
+    }
+
+    @Override
+    public void run() {
         CliTestRunner.main(args);
     }
 }

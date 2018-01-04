@@ -151,7 +151,7 @@ public class RunTestTabPanel implements IGuiTab {
             public void actionPerformed(ActionEvent e) {
                 chosenTestClasses.clear();
                 executionModeSpinner.setValue(spinnerOptions[0]);
-                runNameText.setText(new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()));
+                runNameText.setText(runNameText.disregardedDefaultRunNameString);
                 TestRun.getSettings().clear();
                 TestRun.getSettings().putAll(Gui.defaultSettings);
                 updateCliCommandText("");
@@ -220,6 +220,7 @@ public class RunTestTabPanel implements IGuiTab {
         showHelpTextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //System.out.println("Event: Action command: '" + e.getActionCommand() + "', modifiers " + e.getModifiers() + ", param string: '" + e.paramString() + "'");
                 new HelpDialogue();
             }
         });

@@ -106,6 +106,8 @@ public class StringManagement {
                 replace(System.lineSeparator(), "_").
                 replace("^", "_").
                 replace(":", "").
+                replace("<", "").
+                replace(">", "").
                 replace("__", "_").
                 replace("Ö", "O"));
 

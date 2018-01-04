@@ -19,14 +19,12 @@ public class RunSettingsDialogue {
 
     TafDialog window;
     RunTestTabPanel mainWindow;
+    HashMap<String, String> runSettingsWhenOpened = new HashMap<>(Gui.defaultSettings);
+    Container pane;
+    TafPanel runSettingsPanel = new TafPanel("SettingsValuesPanel");
 
     public RunSettingsDialogue(RunTestTabPanel mainWindow) {
         this.mainWindow = mainWindow;
-        createWindow();
-    }
-
-    private void createWindow() {
-        HashMap<String, String> runSettingsWhenOpened = new HashMap<>(Gui.defaultSettings);
         window = new TafDialog(Gui.applicationWindow, "RunSettingsWindow", false);
         window.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -36,48 +34,11 @@ public class RunSettingsDialogue {
         });
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setTitle("TAF - Run settings");
-
-        int numberOfParameters = TestRun.getSettings().size();
-        Container pane = window.getContentPane();
+        pane = window.getContentPane();
         pane.setName("RunSettingsContentPanel");
         GroupLayout groupLayout = new GroupLayout(pane);
         pane.setLayout(groupLayout);
-
-        TafPanel runSettingsPanel = new TafPanel("SettingsValuesPanel");
-        runSettingsPanel.setLayout(new GridLayout(numberOfParameters, 2, 20, 5));
-
-        for (String key : TestRun.getSettings().keySet()) {
-            runSettingsPanel.add(new TafLabel(key));
-            TafTextField parameterValue = new TafTextField(" <" + key + "> ");
-            parameterValue.setName(key.replace(" ", "") + "Value");
-            //parameterValue.setFont(AppFont.getInstance());
-            //parameterValue.setForeground(Gui.colorTheme.textColor);
-            if(TestRun.getSettings().get(key) != null && TestRun.getSettings().get(key).length() != 0){
-                parameterValue.setText(TestRun.getSettings().get(key));
-            }
-            parameterValue.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                    if(!parameterValue.isChangedFromDefault()) return;
-                    TestRun.setCustomSettingsValue(key, parameterValue.getText());
-                    mainWindow.updateCliCommandText("");
-                }
-
-                public void removeUpdate(DocumentEvent e) {
-                    if(!parameterValue.isChangedFromDefault()) return;
-                    TestRun.setCustomSettingsValue(key, parameterValue.getText());
-                    mainWindow.updateCliCommandText("");
-                }
-
-                public void insertUpdate(DocumentEvent e) {
-                    if(!parameterValue.isChangedFromDefault()) return;
-                    TestRun.setCustomSettingsValue(key, parameterValue.getText());
-                    mainWindow.updateCliCommandText("");
-                }
-            });
-
-            runSettingsPanel.add(parameterValue);
-        }
-
+        createParametersPanel();
         TafButton loadSettingsFromFile = new TafButton("Load settings");
         loadSettingsFromFile.setMnemonic('l');
         loadSettingsFromFile.addActionListener(new ActionListener() {
@@ -97,8 +58,10 @@ public class RunSettingsDialogue {
                     File file = filePickerWindow.getSelectedFile();
                     Settings settings = new Settings(file.getAbsolutePath());
                     TestRun.setSettings(settings);
-                    window.setVisible(false);
-                    createWindow();
+                    runSettingsPanel.removeAll();
+                    createParametersPanel();
+                    window.revalidate();
+                    window.repaint();
                 }
 
             }
@@ -194,6 +157,44 @@ public class RunSettingsDialogue {
         window.setVisible(true);
     }
 
+    private void createParametersPanel() {
+        int numberOfParameters = TestRun.getSettings().size();
+        runSettingsPanel.setLayout(new GridLayout(numberOfParameters, 2, 20, 5));
+
+        for (String key : TestRun.getSettings().keySet()) {
+            runSettingsPanel.add(new TafLabel(key));
+            TafTextField parameterValue = new TafTextField(" <" + key + "> ");
+            parameterValue.setName(key.replace(" ", "") + "Value");
+            //parameterValue.setFont(AppFont.getInstance());
+            //parameterValue.setForeground(Gui.colorTheme.textColor);
+            if(TestRun.getSettings().get(key) != null && TestRun.getSettings().get(key).length() != 0){
+                parameterValue.setText(TestRun.getSettings().get(key));
+            }
+            parameterValue.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                    if(!parameterValue.isChangedFromDefault()) return;
+                    TestRun.setCustomSettingsValue(key, parameterValue.getText());
+                    mainWindow.updateCliCommandText("");
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                    if(!parameterValue.isChangedFromDefault()) return;
+                    TestRun.setCustomSettingsValue(key, parameterValue.getText());
+                    mainWindow.updateCliCommandText("");
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                    if(!parameterValue.isChangedFromDefault()) return;
+                    TestRun.setCustomSettingsValue(key, parameterValue.getText());
+                    mainWindow.updateCliCommandText("");
+                }
+            });
+
+            runSettingsPanel.add(parameterValue);
+        }
+
+    }
+
     private void setNewValue() {
 
         TafFrame newParameterDialogue = new TafFrame("TAF - Add run parameter");
@@ -205,21 +206,55 @@ public class RunSettingsDialogue {
 
         TafLabel parameterNameLabel = new TafLabel("Parameter name");
 
+        TafButton saveButton = new TafButton("Save");
+        saveButton.setEnabled(false);
+
         TafTextField parameterNameText = new TafTextField(" < parameter name >");
+        parameterNameText.setName("ParameterNameField");
+        parameterNameText.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(parameterNameText.isChangedFromDefault() && parameterNameText.getText().length() > 0){
+                    saveButton.setEnabled(true);
+                } else {
+                    saveButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(parameterNameText.isChangedFromDefault() && parameterNameText.getText().length() > 0){
+                    saveButton.setEnabled(true);
+                } else {
+                    saveButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if(parameterNameText.isChangedFromDefault() && parameterNameText.getText().length() > 0){
+                    saveButton.setEnabled(true);
+                } else {
+                    saveButton.setEnabled(false);
+                }
+            }
+        });
 
         TafLabel parameterValueLabel = new TafLabel("Parameter value");
 
         TafTextField parameterValueText = new TafTextField(" < parameter value >");
+        parameterValueText.setName("ParameterValueField");
 
-        TafButton saveButton = new TafButton("Save");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TestRun.setCustomSettingsValue(parameterNameText.getText(), parameterValueText.getText());
-                window.getContentPane().removeAll();
+                runSettingsPanel.removeAll();
                 mainWindow.updateCliCommandText("");
-                createWindow();
+                createParametersPanel();
                 newParameterDialogue.dispose();
+                window.revalidate();
+                window.repaint();
             }
         });
 

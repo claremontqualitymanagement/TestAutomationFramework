@@ -30,7 +30,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     public By by;
     List<String> recognitionDescription = new ArrayList<>();
     TestCase testCase;
-    Object cachedElement = null;
+    Component cachedElement = null;
 
     public JavaGuiElement(JavaWindow window, By by, String name, TestCase testCase){
         this.window = window;
@@ -54,7 +54,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     public JavaGuiElement(PositionBasedGuiElement positionBasedGuiElement){
         if(positionBasedGuiElement.runtimeElement() == null) return;
-        cachedElement = positionBasedGuiElement.runtimeElement();
+        cachedElement = (Component)positionBasedGuiElement.runtimeElement();
         name = "NoNamed" + cachedElement.getClass().getSimpleName();
     }
 
@@ -65,7 +65,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                 this.by = (By)object;
                 return;
         }else if(PositionBasedGuiElement.class.isAssignableFrom(object.getClass())){
-            cachedElement = ((PositionBasedGuiElement)object).runtimeElement();
+            cachedElement = (Component)((PositionBasedGuiElement)object).runtimeElement();
             name = "NoNamed" + ((PositionBasedGuiElement)object).getTypeName() + "Element";
             return;
         } else if(JavaGuiElement.class.isAssignableFrom(object.getClass())){
@@ -95,7 +95,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             name = StringManagement.safeVariableName(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(nameSuggestion + object.getClass().getSimpleName()));
             if(name.length() == 0)
                 name = "NoNameElement";
-            cachedElement = object;
+            cachedElement = (Component)object;
         }catch (Exception e){
             log(LogLevel.DEBUG, "Could not create JavaGuiElement from Object. Error: "+ e.toString());
             log(LogLevel.DEBUG, "Possible methods of object are:" + System.lineSeparator() + String.join(System.lineSeparator(), MethodInvoker.getAvailableMethods(object)));
@@ -116,16 +116,16 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
      *
      * @return Returns the actual runtime element to interact with.
      */
-    public Object getRuntimeComponent(){
+    public Component getRuntimeComponent(){
         if(cachedElement != null)return cachedElement;
         long startTime = System.currentTimeMillis();
         recognitionDescription.clear();
-        List<Object> windowComponents = getWindowComponents();
-        List<Object> matchingComponents = new ArrayList<>();
+        List<Component> windowComponents = getWindowComponents();
+        List<Component> matchingComponents = new ArrayList<>();
         if(by != null){
             Object positionBasedElement = getElementFromRelativePositionReferenceIfApplicable();
             if(positionBasedElement != null){
-                windowComponents.add(positionBasedElement);
+                windowComponents.add((Component)positionBasedElement);
             }
             windowComponents = filterByAncestorElementIfApplicable(windowComponents);
             recognitionDescription.add("Attempting to identify runtime object for " + getName() + " by By statement:" + System.lineSeparator() + by.toString());
@@ -150,8 +150,8 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         }
     }
 
-    private List<Object> filterObjectByOrdinalNumber(List<Object> objects){
-        List<Object> returnObjects = new ArrayList<>(objects);
+    private List<Component> filterObjectByOrdinalNumber(List<Component> objects){
+        List<Component> returnObjects = new ArrayList<>(objects);
         for(SearchCondition searchCondition : by.searchConditions){
             if(searchCondition.searchConditionType == SearchConditionType.ORDINAL_NUMBER){
                 returnObjects.clear();
@@ -174,8 +174,8 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return returnObjects;
     }
 
-    private List<Object> filterByAncestorElementIfApplicable(List<Object> objects) {
-        List<Object> returnObjects = new ArrayList<>(objects);
+    private List<Component> filterByAncestorElementIfApplicable(List<Component> objects) {
+        List<Component> returnObjects = new ArrayList<>(objects);
         for(SearchCondition searchCondition : by.searchConditions){
             if(searchCondition.searchConditionType == SearchConditionType.BEING_DESCENDANT_OF){
                 JavaGuiElement ancestor = (JavaGuiElement)searchCondition.objects[0];
@@ -192,26 +192,26 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return returnObjects;
     }
 
-    private List<Object> getDescendants() {
+    private List<Component> getDescendants() {
         Object element = getRuntimeElementCacheable();
         MethodInvoker methodInvoker = new MethodInvoker();
-        List<Object> componentList = new ArrayList<>();
+        List<Component> componentList = new ArrayList<>();
         if(!methodInvoker.objectHasAnyOfTheMethods(element, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(element, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)){
             return componentList;
         }
 
         Integer windowComponentCount = (Integer) methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
         if(windowComponentCount == null)return componentList;
-        Object[] returnList = (Object[]) methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
+        Component[] returnList = (Component[]) methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subAllComponentsGettersMethodsInAttemptOrder);
         if(returnList != null && returnList.length > 0){
-            for(Object object : returnList){
+            for(Component object : returnList){
                 componentList.add(object);
                 componentList.addAll(addSubComponents(methodInvoker, object));
             }
             return componentList;
         }
         for(int i = 0; i < windowComponentCount; i++){
-            Object component = methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            Component component = (Component)methodInvoker.invokeTheFirstEncounteredMethod(element, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
             if(component == null) continue;
             componentList.add(component);
             componentList.addAll(addSubComponents(methodInvoker, component));
@@ -219,12 +219,12 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return componentList;
     }
 
-    private List<Object> addSubComponents(MethodInvoker methodInvoker, Object component){
-        List<Object> componentList = new ArrayList<>();
+    private List<Component> addSubComponents(MethodInvoker methodInvoker, Component component){
+        List<Component> componentList = new ArrayList<>();
         if(!methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder) || !methodInvoker.objectHasAnyOfTheMethods(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder)) return componentList;
         int numberOfSubItems = (int) methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentCountMethodsInAttemptOrder);
         for(int i = 0; i<numberOfSubItems; i++){
-            Object o = methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
+            Component o = (Component)methodInvoker.invokeTheFirstEncounteredMethod(component, MethodDeclarations.subComponentGetterMethodsInAttemptOrder, i);
             componentList.add(o);
             componentList.addAll(addSubComponents(methodInvoker, o));
         }
@@ -249,8 +249,8 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     }
 
 
-    private Collection<Object> attemptToIdentifyElementByByStatement(List<Object> componentList) {
-        ArrayList<Object> returnElements = new ArrayList<>(componentList);
+    private Collection<Component> attemptToIdentifyElementByByStatement(List<Component> componentList) {
+        ArrayList<Component> returnElements = new ArrayList<>(componentList);
         recognitionDescription.add("Identifying " + componentList.size() + " elements in window.");
         ArrayList<Object> removeElements = new ArrayList<>();
         GenericInteractionMethods jim = new GenericInteractionMethods(null);
@@ -380,7 +380,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     nonDisplayedWindows.add(w);
                 } else {
                     JavaWindow javaWindow = new JavaWindow(w);
-                    List<Object> objectList = javaWindow.getComponents();
+                    List<Component> objectList = javaWindow.getComponents();
                     for(Object o : objectList){
                         if(o.equals(thisElement)) return w;
                     }
@@ -389,7 +389,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
             if(objects.size() == 0 && nonDisplayedWindows.size() > 0){
                 for(Window w : nonDisplayedWindows){
                     JavaWindow javaWindow = new JavaWindow(nonDisplayedWindows.get(0));
-                    List<Object> objectList = javaWindow.getComponents();
+                    List<Component> objectList = javaWindow.getComponents();
                     for(Object o : objectList){
                         if(o.equals(thisElement)) return w;
                     }
@@ -524,8 +524,8 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return list;
     }
 
-    private List<Object> getWindowComponents() {
-        List<Object> objects = new ArrayList<>();
+    private List<Component> getWindowComponents() {
+        List<Component> objects = new ArrayList<>();
         if(window != null){
             objects = window.getComponents();
             recognitionDescription.add("Identified " + objects.size() + " objects in the window.");
@@ -540,7 +540,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
                     recognitionDescription.add("Identified running java window with title '" + javaWindow.getTitle() + "' but it was suppressed from displaying. No elements added.");
                 } else {
                     JavaWindow javaWindow = new JavaWindow(w);
-                    List<Object> objectList = javaWindow.getComponents();
+                    List<Component> objectList = javaWindow.getComponents();
                     recognitionDescription.add("Identified java window with title '" + javaWindow.getTitle() + "' and " + objectList.size() + " objects.");
                     objects.addAll(objectList);
                 }
