@@ -16,7 +16,7 @@ public class RecordingOptionsWindow {
 
     TafDialog dialog;
     public static boolean recordTafWindows = false;
-    private static String initialPath = new File(".").getAbsolutePath().substring(0, new File(".").getAbsolutePath().length() -1) + "scripts";
+    private static String initialPath = new File(".").getAbsolutePath().substring(0, new File(".").getAbsolutePath().length() -1) + "capturemanagers";
     public static boolean recordKeyStrokesOutsideOfWindows = true;
     public static String pathToScriptsRoot = initialPath;
 

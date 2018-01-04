@@ -22,7 +22,7 @@ public class SmartImageRecognitionSupportTabPanel implements IGuiTab {
     TafLabel textParagraph2 = new TafLabel("The algorithms compensate for resolution, " +
             "color depth and normal font deviations.");
     TafLabel textParagraph3 = new TafLabel("Smart image recognition is supported through code, or from " +
-            "EyeAutomate scripts, for now.");
+            "EyeAutomate capturemanagers, for now.");
 
     public SmartImageRecognitionSupportTabPanel() {
         panel = new TafPanel("SmartImageRecognitionSupportTabPanel");

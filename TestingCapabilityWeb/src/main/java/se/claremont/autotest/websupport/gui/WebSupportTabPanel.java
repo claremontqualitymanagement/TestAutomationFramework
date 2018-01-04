@@ -21,15 +21,22 @@ public class WebSupportTabPanel implements IGuiTab{
     TafHeadline headline = new TafHeadline("Web support");
     TafLabel text = new TafLabel("Web is supported through code, for now.");
     TafButton recordButton = new TafButton("Record");
+    TafFrame parentWindow;
 
     public WebSupportTabPanel(){
+        if(StandaloneWebSupportGui.frame == null){
+            parentWindow = Gui.applicationWindow;
+        } else {
+            parentWindow = StandaloneWebSupportGui.frame;
+        }
+
         panel = new TafPanel("WebSupportTabPanel");
 
         recordButton.setMnemonic('r');
         recordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RecorderWindow recorderWindow = new RecorderWindow();
+                RecorderWindow recorderWindow = new RecorderWindow(parentWindow);
             }
         });
         TafFrame application;

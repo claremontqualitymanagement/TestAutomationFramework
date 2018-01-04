@@ -1,4 +1,4 @@
-package se.claremont.autotest.websupport.gui.recorder.restserver;
+package se.claremont.autotest.websupport.gui.recorder.captureinfrastructure.restserver;
 
 import java.io.IOException;
 import java.net.ServerSocket;

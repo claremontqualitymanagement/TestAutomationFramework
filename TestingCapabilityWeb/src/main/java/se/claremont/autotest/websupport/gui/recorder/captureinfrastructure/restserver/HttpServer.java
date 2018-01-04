@@ -1,4 +1,4 @@
-package se.claremont.autotest.websupport.gui.recorder.restserver;
+package se.claremont.autotest.websupport.gui.recorder.captureinfrastructure.restserver;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -26,7 +26,7 @@ public class HttpServer {
      */
     public void start(){
         System.out.println(System.lineSeparator() + "Starting TAF recording listener REST Server." + System.lineSeparator());
-        config.packages("se.claremont.autotest.websupport.gui.recorder.restserver");
+        config.packages("se.claremont.autotest.websupport.gui.recorder.captureinfrastructure.restserver");
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));
         server = new Server(Settings.port);
         ServletContextHandler context = new ServletContextHandler(server, "/*");
@@ -34,7 +34,7 @@ public class HttpServer {
         try {
             server.start();
         }catch (Exception e){
-            System.out.println(System.lineSeparator() + e.toString());
+            System.out.println(System.lineSeparator() + e.getMessage());
         }
         if(isStarted()){
             System.out.println(System.lineSeparator() + "TAF Recording listener REST server started.");

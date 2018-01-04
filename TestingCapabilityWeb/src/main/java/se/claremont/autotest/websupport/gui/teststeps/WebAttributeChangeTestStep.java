@@ -42,7 +42,7 @@ public class WebAttributeChangeTestStep extends TestStep {
 
     @Override
     public TestStep clone() {
-        WebClickTestStep clonedStep = new WebClickTestStep(this.getName(), this.getDescription());
+        WebAttributeChangeTestStep clonedStep = new WebAttributeChangeTestStep(this.getName(), this.getDescription());
         clonedStep.setActionName(this.actionName);
         clonedStep.setElementName(this.elementName);
         clonedStep.domElement = this.domElement;

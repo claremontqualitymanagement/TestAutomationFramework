@@ -1,13 +1,15 @@
-package se.claremont.autotest.websupport.gui.recorder.restserver;
+package se.claremont.autotest.websupport.gui.recorder.captureinfrastructure.restserver;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.gui.Gui;
+import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.elementidentification.By;
 import se.claremont.autotest.websupport.gui.recorder.RecorderWindow;
 import se.claremont.autotest.websupport.gui.teststeps.WebAttributeChangeTestStep;
 import se.claremont.autotest.websupport.gui.teststeps.WebClickTestStep;
+import se.claremont.autotest.websupport.gui.teststeps.WebInputTestStep;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,7 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
@@ -69,13 +70,48 @@ public class Resource {
     }
 
     @POST
+    @Path("v1/checkbox")
+    public void checkboxChangePerformed(String data){
+        data = data.replace("%20", " ");
+        System.out.println("Received POST request to http://" +
+                HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
+                "/tafwebrecorder/v1/checkbox with content: '" + URLDecoder.decode(data) + "'.");
+        Gui.availableTestSteps.add(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
+    }
+
+    @POST
+    @Path("v1/input")
+    public void inputPerformed(String data){
+        try{
+            data = URLDecoder.decode(data.substring("webElement=".length()).replace("%20", " "));
+            System.out.println("Received POST request to http://" +
+                    HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
+                    "/tafwebrecorder/v1/input with content: '" + data + "'.");
+            DomElement domElement = new DomElement(data);
+            ObjectMapper om = new ObjectMapper();
+            JsonNode jsonNode = null;
+            try {
+                jsonNode = om.readTree(data);
+            } catch (IOException e) {
+                System.out.println(e.toString());
+            }
+            String text = "";
+            if(jsonNode.get("text").asText() != null && jsonNode.get("text").asText().length() > 0) {
+                text = jsonNode.get("text").asText();
+            }
+            Gui.availableTestSteps.add(new WebInputTestStep(domElement, text));
+        }catch (Throwable ignored){
+            System.out.println(ignored.getMessage());
+        }
+    }
+
+    @POST
     @Path("v1/domchange")
     public void domChanged(String data){
         data = URLDecoder.decode(data.substring("mutation=".length()).replace("%20", " "));
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                 "/tafwebrecorder/v1/domchange with content: '" + data + "'.");
-        RecorderWindow.invokeJavascriptBasedListeners();
         ObjectMapper om = new ObjectMapper();
         JsonNode jsonNode = null;
         try {
@@ -86,6 +122,7 @@ public class Resource {
         if(jsonNode == null){
             return;
         }
+        if(!valueForAttributeInJson(jsonNode, "targetTagName").toLowerCase().equals("input")) return;
         String elementJSON = "webElement={\"tagName\": \"" + valueForAttributeInJson(jsonNode, "targetTagName") + "\", ";
         elementJSON += "\"className\": \"" + valueForAttributeInJson(jsonNode, "targetClassName") + "\", ";
         elementJSON += "\"xpath\": \"" + valueForAttributeInJson(jsonNode, "targetXpath") + "\",  ";

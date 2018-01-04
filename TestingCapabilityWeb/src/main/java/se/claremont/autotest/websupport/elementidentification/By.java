@@ -2,6 +2,7 @@ package se.claremont.autotest.websupport.elementidentification;
 
 import org.openqa.selenium.WebElement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 /// an element.
 /// </summary>
 @SuppressWarnings("unused")
-public class By {
+public class By implements Serializable{
     final List<SearchCondition> conditions;
 
     By() {

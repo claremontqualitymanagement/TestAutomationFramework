@@ -6,22 +6,24 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebClickTestStep extends TestStep {
+public class WebInputTestStep extends TestStep {
+    DomElement domElement;
 
-    public WebClickTestStep(){
+    public WebInputTestStep(){
         super();
-        setName("Click on element");
-        setDescription("Click on element");
+        setName("Input on element");
+        setDescription("Input on element");
     }
 
-    public WebClickTestStep(String name, String description){
+    public WebInputTestStep(String name, String description){
         super(name, description);
     }
 
-    public WebClickTestStep(DomElement domElement){
-        super("Click on " + domElement.name, "A click on the DomElement named '" + domElement.name + "'.");
-        this.setRunTimeElement(domElement);
-        this.actionName = "Click";
+    public WebInputTestStep(DomElement domElement, String text){
+        super("Text entered to " + domElement.name, "The text '" + text + "' was entered to the DomElement named '" + domElement.name + "'.");
+        this.domElement = domElement;
+        this.actionName = "Write";
+        this.setAssociatedData(text);
         this.setElementName(domElement.name);
     }
 
@@ -30,15 +32,16 @@ public class WebClickTestStep extends TestStep {
         TestCaseManager.testSetCode.makeSureRequiredImportIsAdded("import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;");
         TestCaseManager.testSetCode.makeSureBeginTestSectionDeclarationExist("web = new WebInteractionsMethod(currentTestCase());");
         TestCaseManager.testSetCode.makeSureClassVariableIsDeclared("WebInteractionMethods web;");
-        return "web.click(new DomElement(By." + ((DomElement)getRunTimeElement()).by.toString() + ");";
+        return "web.write(new DomElement(By." + domElement.by.toString() + ", \"" + getAssociatedData().toString().replace("\"", "\\" + "\"") + "\");";
     }
 
     @Override
     public TestStep clone() {
-        WebClickTestStep clonedStep = new WebClickTestStep(this.getName(), this.getDescription());
+        WebInputTestStep clonedStep = new WebInputTestStep(this.getName(), this.getDescription());
         clonedStep.setActionName(this.actionName);
         clonedStep.setElementName(this.elementName);
-        clonedStep.setRunTimeElement(this.getRunTimeElement());
+        clonedStep.setAssociatedData(this.getAssociatedData());
+        clonedStep.domElement = this.domElement;
         return clonedStep;
     }
 
@@ -51,7 +54,7 @@ public class WebClickTestStep extends TestStep {
     public TestStepResult execute() {
         TestStepResult testStepResult = new TestStepResult(this, TestStepResult.Result.NOT_RUN);
         try {
-            ReplayManager.WebDriverSingleton.getInstance().click((DomElement)getRunTimeElement());
+            ReplayManager.WebDriverSingleton.getInstance().write(domElement, getAssociatedData().toString());
         }catch (Throwable e){
             testStepResult.updateResultStatus(TestStepResult.Result.FAIL);
             return testStepResult;

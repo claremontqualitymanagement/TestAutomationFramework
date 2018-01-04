@@ -34,7 +34,7 @@ public class CreateTestTabPanel implements IGuiTab {
         groupLayout.setAutoCreateContainerGaps(true);
 
         TafTextArea textArea = new TafTextArea("TabText");
-        textArea.setText("Hey, you are aware recorded scripts only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
+        textArea.setText("Hey, you are aware recorded capturemanagers only work for demo purposes? They don't count for normal deviations in execution flow or data. Hence they only should be used for templates for proper test cases.");
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane testAreaScrollPane = new JScrollPane(textArea);

@@ -17,6 +17,7 @@ public abstract class TestStep implements Serializable {
     @JsonIgnore private TafPanel panel;
     @JsonProperty private String description;
     @JsonProperty private String name;
+    private Object runTimeElement;
     @JsonIgnore private TafTextField component = new TafTextField(" < initial default name > ");
     @JsonProperty
     public String actionName;
@@ -115,5 +116,13 @@ public abstract class TestStep implements Serializable {
     @Override
     public String toString(){
         return getTestStepTypeShortName() + " " + name;
+    }
+
+    public Object getRunTimeElement() {
+        return runTimeElement;
+    }
+
+    public void setRunTimeElement(Object runTimeElement) {
+        this.runTimeElement = runTimeElement;
     }
 }

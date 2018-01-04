@@ -6,39 +6,45 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebClickTestStep extends TestStep {
+public class WebCheckboxChangeTestStep extends TestStep {
+    DomElement domElement;
 
-    public WebClickTestStep(){
+    public WebCheckboxChangeTestStep(){
         super();
-        setName("Click on element");
-        setDescription("Click on element");
+        setName("Input on element");
+        setDescription("Input on element");
     }
 
-    public WebClickTestStep(String name, String description){
+    public WebCheckboxChangeTestStep(String name, String description){
         super(name, description);
     }
 
-    public WebClickTestStep(DomElement domElement){
-        super("Click on " + domElement.name, "A click on the DomElement named '" + domElement.name + "'.");
-        this.setRunTimeElement(domElement);
-        this.actionName = "Click";
+    public WebCheckboxChangeTestStep(DomElement domElement, boolean checked){
+        super("Checkbox " + domElement.name +
+                String.valueOf(checked).toLowerCase().replace("true", " checked").replace("false", " unchecked"),
+                "The checkbox '" + domElement.name + "' was " + String.valueOf(checked).toLowerCase().replace("true", "checked").replace("false", "unchecked") + ".");
+        this.domElement = domElement;
+        this.actionName = "Checked";
+        this.setAssociatedData(checked);
         this.setElementName(domElement.name);
     }
+
 
     @Override
     public String asCode() {
         TestCaseManager.testSetCode.makeSureRequiredImportIsAdded("import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;");
         TestCaseManager.testSetCode.makeSureBeginTestSectionDeclarationExist("web = new WebInteractionsMethod(currentTestCase());");
         TestCaseManager.testSetCode.makeSureClassVariableIsDeclared("WebInteractionMethods web;");
-        return "web.click(new DomElement(By." + ((DomElement)getRunTimeElement()).by.toString() + ");";
+        return "web.select(new DomElement(By." + domElement.by.toString() + ", \"" + getAssociatedData().toString().replace("\"", "\\" + "\"") + "\");";
     }
 
     @Override
     public TestStep clone() {
-        WebClickTestStep clonedStep = new WebClickTestStep(this.getName(), this.getDescription());
+        WebCheckboxChangeTestStep clonedStep = new WebCheckboxChangeTestStep(this.getName(), this.getDescription());
         clonedStep.setActionName(this.actionName);
         clonedStep.setElementName(this.elementName);
-        clonedStep.setRunTimeElement(this.getRunTimeElement());
+        clonedStep.setAssociatedData(this.getAssociatedData());
+        clonedStep.domElement = this.domElement;
         return clonedStep;
     }
 
@@ -51,7 +57,7 @@ public class WebClickTestStep extends TestStep {
     public TestStepResult execute() {
         TestStepResult testStepResult = new TestStepResult(this, TestStepResult.Result.NOT_RUN);
         try {
-            ReplayManager.WebDriverSingleton.getInstance().click((DomElement)getRunTimeElement());
+            ReplayManager.WebDriverSingleton.getInstance().write(domElement, getAssociatedData().toString());
         }catch (Throwable e){
             testStepResult.updateResultStatus(TestStepResult.Result.FAIL);
             return testStepResult;

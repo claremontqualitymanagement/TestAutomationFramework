@@ -1,9 +1,10 @@
 package se.claremont.autotest.websupport.elementidentification;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class SearchCondition {
+class SearchCondition implements Serializable{
     private final SearchConditionType type;
     private final Object[] values;
 

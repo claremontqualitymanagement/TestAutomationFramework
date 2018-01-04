@@ -17,6 +17,7 @@ import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 import se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentification.PositionBasedWebElement;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.List;
  * Created by jordam on 2016-08-17.
  */
 @SuppressWarnings("unused")
-public class DomElement implements GuiElement {
+public class DomElement implements GuiElement, Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public String name;
