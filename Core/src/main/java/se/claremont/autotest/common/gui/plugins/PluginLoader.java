@@ -42,10 +42,10 @@ public class PluginLoader {
 
     private static void addKnownPotentialTabClasses() {
         for (String pluginGuiClassName : possibleGuiPluginClasses) {
-            System.out.println("Attempting to load plugin '" + pluginGuiClassName + "'.");
+            //System.out.println("Attempting to load plugin '" + pluginGuiClassName + "'.");
             IGuiTab panel = tryGetTab(pluginGuiClassName);
             if (panel == null) continue;
-            System.out.println("Loaded panel '" + panel.getName() + "'.");
+            //System.out.println("Loaded panel '" + panel.getName() + "'.");
             panels.add(panel);
         }
     }
@@ -104,10 +104,10 @@ public class PluginLoader {
             if (className.equals(RunTestTabPanel.class.getName()) ||
                     className.equals(AboutTabPanel.class.getName()) ||
                     className.equals(CreateTestTabPanel.class.getName())) {
-                System.out.println("Class '" + className + "' is identified as TAF GUI tab but not loaded as plugin since it is loaded with special attention to order.");
+                //System.out.println("Class '" + className + "' is identified as TAF GUI tab but not loaded as plugin since it is loaded with special attention to order.");
                 return;
             }
-            System.out.println("Identified class '" + className + "' as TAF GUI plugin tab. Loading it.");
+            //System.out.println("Identified class '" + className + "' as TAF GUI plugin tab. Loading it.");
             classesDerivedFromIGuiTabInterface.add(klass);
         }
 

@@ -21,7 +21,6 @@ public class TafTextField extends JTextField {
         } else {
             setName("TextField");
         }
-        System.out.println(getName());
         prepareField();
     }
 

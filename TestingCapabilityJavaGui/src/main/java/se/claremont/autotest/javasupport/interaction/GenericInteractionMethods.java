@@ -120,7 +120,7 @@ public class GenericInteractionMethods {
     /**
      * Writes currently active window to the test case log
      */
-    public void logCurrentActiveWindows() {
+    public void debug_LogCurrentActiveWindows() {
         if (app == null) {
             log(LogLevel.EXECUTION_PROBLEM, "You need to use the method setApplicationUnderTest() in the GenericInteractionMethods class in order to use the logCurrentActiveWindows() method.");
             return;
@@ -225,9 +225,11 @@ public class GenericInteractionMethods {
         Component component = javaGuiElement.getRuntimeComponent();
         if(component == null){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot identify element '" + guiComponent.getName() + "' to retrieve selected value(s) from.");
+            javaGuiElement.logIdentification(LogLevel.INFO, testCase);
             takeScreenshot();
             return null;
         }
+        javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
         List<String> returnValues = new ArrayList<>();
         if(JSpinner.class.isAssignableFrom(component.getClass())){
             JSpinner spinner = (JSpinner)component;
@@ -310,12 +312,13 @@ public class GenericInteractionMethods {
         }
         if (c == null) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + guiElement.getName() + " since it could not be identified.");
-            log(LogLevel.INFO, "Identification procedure of " + guiElement.getName() + ":" + guiElement.getRecognitionDescription());
+            ((JavaGuiElement)guiElement).logIdentification(LogLevel.INFO, testCase);
             takeScreenshot();
             if (testCase != null)
                 testCase.report();
             return;
         }
+        ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
         if (JButton.class.isAssignableFrom(c.getClass())) {
             JButton button = (JButton) c;
 
@@ -527,11 +530,14 @@ public class GenericInteractionMethods {
     public void selectInDropdown(GuiComponent guiElement, String selection) {
         Object component = guiElement.getRuntimeComponent();
         if (component == null) {
-            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return;
         } else {
             bringWindowOfElementToFront(guiElement);
-            log(LogLevel.DEBUG, "Identified element " + guiElement.getName() + " by:" + guiElement.getRecognitionDescription());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG,
+                    "Identified element " + guiElement.getName() + " by: " + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Identified element " + guiElement.getName() + " by:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
         }
         Integer optionCount = (Integer) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getItemCountOfComboBoxOptions);
         if (optionCount == null) {
@@ -603,10 +609,11 @@ public class GenericInteractionMethods {
         List<String> selections = new ArrayList<>();
         Object component = guiElement.getRuntimeComponent();
         if (component == null) {
-            log(LogLevel.EXECUTION_PROBLEM, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return selections;
         } else {
-            log(LogLevel.DEBUG, "Identified element " + guiElement.getName() + " by:" + guiElement.getRecognitionDescription());
+            ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
         }
         Object[] selectedObjects = (Object[]) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getAllSelectedObjectsInComboBox);
         if (selectedObjects == null) {
@@ -698,10 +705,11 @@ public class GenericInteractionMethods {
         }
         Object component = guiElement.getRuntimeComponent();
         if (component == null) {
-            log(LogLevel.INFO, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return null;
         } else {
-            log(LogLevel.DEBUG, "Identified element " + guiElement.getName() + " by:" + guiElement.getRecognitionDescription());
+            ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
         }
         String text = getText(component);
         if(text == null) {
@@ -726,10 +734,12 @@ public class GenericInteractionMethods {
      */
     public boolean exists(GuiComponent guiElement) {
         if (guiElement.getRuntimeComponent() != null) {
-            log(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified and it was, by the procedure:" + guiElement.getRecognitionDescription());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified and it was, by the procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Checked if element " + guiElement.getName() + " could be identified and it was, by the procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return true;
         } else {
-            log(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified and it was not. Identification attempts by the procedure:" + guiElement.getRecognitionDescription());
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified and it was not. Identification attempts by the procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Checked if element " + guiElement.getName() + " could be identified and it was not. Identification attempts by the procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return false;
         }
     }
@@ -749,12 +759,13 @@ public class GenericInteractionMethods {
         }
         while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000) {
             if (guiElement.getRuntimeComponent() != null) {
-                log(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified within a " + timeoutInSeconds + " second timeout, and it was identified after " + (System.currentTimeMillis() - startTime) + " milliseconds by the identification procedure: " + guiElement.getRecognitionDescription());
+                ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
                 return true;
             }
             wait(50);
         }
-        log(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified within a " + timeoutInSeconds + " second timeout, and it did not. Identification attempts procedure: " + guiElement.getRecognitionDescription());
+        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Checked if element " + guiElement.getName() + " could be identified within a " + timeoutInSeconds + " second timeout, and it did not. Identification attempts procedure: " + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                "Checked if element " + guiElement.getName() + " could be identified within a " + timeoutInSeconds + " second timeout, and it did not. Identification attempts procedure: " + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
         return false;
     }
 
@@ -831,7 +842,7 @@ public class GenericInteractionMethods {
      * @return Returns true if element is identified, it exists, and it is visible.
      */
     public boolean isDisplayed(GuiComponent guiElement) {
-        Boolean displayed = (Boolean) methodInvoker.invokeTheFirstEncounteredMethod(guiElement, MethodDeclarations.componentIsVisibleMethodsInAttemptOrder);
+        Boolean displayed = (Boolean) methodInvoker.invokeTheFirstEncounteredMethod(guiElement.getRuntimeComponent(), MethodDeclarations.componentIsVisibleMethodsInAttemptOrder);
         if (displayed == null) {
             log(LogLevel.FRAMEWORK_ERROR, "No applicable method seemed to be found for checking if " + guiElement.getName() + " was displayed.");
             return false;
@@ -1236,10 +1247,14 @@ public class GenericInteractionMethods {
      * @param textToWrite The text to enter to the component.
      */
     private void performWrite(GuiComponent guiElement, String textToWrite, boolean performCheckAfterwards) {
+        if(guiElement == null) {
+            log(LogLevel.INFO, "Attempting to write text '" + textToWrite + "' to null element.");
+            return;
+        }
         Object component = guiElement.getRuntimeComponent();
         if (component == null) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to component " + guiElement.getName() + " since it could not be identified.");
-            log(LogLevel.INFO, "Identification procedure for " + guiElement.getName() + ":" + guiElement.getRecognitionDescription());
+            ((JavaGuiElement)guiElement).logIdentification(LogLevel.INFO, testCase);
             takeScreenshot();
             return;
         }

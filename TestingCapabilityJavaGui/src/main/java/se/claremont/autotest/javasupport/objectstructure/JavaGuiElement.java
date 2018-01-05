@@ -340,6 +340,12 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return getRuntimeComponent();
     }
 
+    public void logIdentification(LogLevel logLevel, TestCase testCase){
+        testCase.logDifferentlyToTextLogAndHtmlLog(logLevel,
+                "Identification procedure for " + name + ":" + getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                "Identification procedure for " + name + ":" + getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
+    }
+
     @SuppressWarnings("StringConcatenationInLoop")
     public String getRecognitionDescription(){
         int counter = 1;

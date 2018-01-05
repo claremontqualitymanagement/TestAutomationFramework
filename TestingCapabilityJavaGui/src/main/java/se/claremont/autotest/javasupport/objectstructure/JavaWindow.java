@@ -31,11 +31,23 @@ public class JavaWindow {
         name = titleAsRegularExpression;
     }
 
+    public JavaWindow(String titleAsRegularExpression, String name){
+        this.name = name;
+        this.titleAsRegularExpression = titleAsRegularExpression;
+    }
+
     public JavaWindow(Window window){
         if(window != null){
             titleAsRegularExpression = (String) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.titleGetterMethodsInAttemptOrder);
             name = titleAsRegularExpression;
         }
+    }
+
+    public JavaWindow(Window window, String name){
+        if(window != null){
+            titleAsRegularExpression = (String) methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.titleGetterMethodsInAttemptOrder);
+        }
+        this.name = name;
     }
 
     public String getName(){
