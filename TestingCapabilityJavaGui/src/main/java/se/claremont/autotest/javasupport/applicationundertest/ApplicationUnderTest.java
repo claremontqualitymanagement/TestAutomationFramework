@@ -8,6 +8,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.applicationundertest.applicationcontext.ApplicationContextManager;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationThreadRunner;
+import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ApplicationUnderTest {
     @JsonProperty public String friendlyName;
@@ -123,7 +126,7 @@ public class ApplicationUnderTest {
 
     @JsonIgnore
     public Object getWindow(){
-        ArrayList<Window> windows = getWindows();
+        Set<Window> windows = getWindows();
         log(LogLevel.DEBUG, "Found " + windows.size()+ " windows in JVM.");
         if(windows.size() == 0) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not find any windows.");
@@ -131,20 +134,42 @@ public class ApplicationUnderTest {
         }
         if(windows.size() == 1) {
             log(LogLevel.DEBUG, "Found one window.");
-            return windows.get(0);
+            return windows.toArray()[0];
         }
         if(windows.size()> 1){
             log(LogLevel.INFO, "Found more than one window. Returning the first one. Consider using the enumerator method implementation for specific window.");
-            return windows.get(0);
+            return windows.toArray()[0];
         }
         return null;
     }
 
     @JsonIgnore
-    public static ArrayList<Window> getWindows(){
+    public static Set<Window> getWindows(){
+        Set<Window> windows = new HashSet<>();
+        Collections.addAll(windows, Window.getWindows());
+        Collections.addAll(windows, Window.getOwnerlessWindows());
+        ArrayList<Window> subWindows = new ArrayList<>();
+        for(Window window : windows){
+            for(Window subWindow : getSubWindowsRevursive(window)){
+                subWindows.add(subWindow);
+            }
+        }
+        for(Window subWindow : subWindows){
+            windows.add(subWindow);
+        }
+        for(Frame frame : Frame.getFrames()){
+            windows.add(frame);
+            windows.addAll(getSubWindowsRevursive(frame));
+        }
+        return windows;
+    }
+
+    private static ArrayList<Window> getSubWindowsRevursive(Window window){
         ArrayList<Window> windows = new ArrayList<>();
-        Window [] swingWindows = Window.getOwnerlessWindows ();
-        Collections.addAll(windows, swingWindows);
+        Collections.addAll(windows, window.getOwnedWindows());
+        for(Window subWindow : windows){
+            Collections.addAll(getSubWindowsRevursive(subWindow));
+        }
         return windows;
     }
 
@@ -175,7 +200,7 @@ public class ApplicationUnderTest {
 
     @JsonIgnore
     public Object getWindow(int windowCount){
-        ArrayList<Window> windows = getWindows();
+        Set<Window> windows = getWindows();
         log(LogLevel.DEBUG, "Found " + windows.size()+ " windows in JVM.");
         if(windows.size() < windowCount) {
             log(LogLevel.EXECUTION_PROBLEM, "Only found " + windows.size()+ " open windows, and request was for window " + windowCount + ".");
@@ -183,9 +208,9 @@ public class ApplicationUnderTest {
         }
         if(windows.size() == 1) {
             log(LogLevel.DEBUG, "Found one window returning this although window count " + windowCount + " was requested.");
-            return windows.get(0);
+            return windows.toArray()[0];
         }
-        return windows.get(windowCount);
+        return windows.toArray()[windowCount];
     }
 
     @JsonIgnore

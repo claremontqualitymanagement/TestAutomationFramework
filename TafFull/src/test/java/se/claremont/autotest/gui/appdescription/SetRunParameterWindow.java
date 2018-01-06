@@ -1,6 +1,7 @@
 package se.claremont.autotest.gui.appdescription;
 
 import se.claremont.autotest.javasupport.interaction.elementidentification.By;
+import se.claremont.autotest.javasupport.objectstructure.GuiComponent;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
@@ -14,7 +15,7 @@ public class SetRunParameterWindow {
 
     public static JavaGuiElement canceledParameterName = new JavaGuiElement(runParametersWindow,
             By.byExactText("TestParameterValue"),
-            "CencelAddedParameterValueTextField");
+            "CenceledAddedParameterValueTextField");
 
     public static JavaGuiElement savedParameterName = new JavaGuiElement(runParametersWindow,
             By.byExactText("TestParameterName"),
@@ -31,6 +32,10 @@ public class SetRunParameterWindow {
     public static JavaGuiElement saveParametersButton = new JavaGuiElement(runParametersWindow,
             By.byExactText("Save"),
             "SaveParametersButton");
+
+    public static GuiComponent canceledParameterValue = new JavaGuiElement(runParametersWindow,
+            By.byExactText("TestParameterValue"),
+            "CanceledParameterValueTestField");
 
     public static class AddParameterWindow {
 

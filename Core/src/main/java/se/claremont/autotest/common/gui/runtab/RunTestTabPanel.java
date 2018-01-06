@@ -164,7 +164,7 @@ public class RunTestTabPanel implements IGuiTab {
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                Gui.applicationWindow.dispose();
             }
         });
     }

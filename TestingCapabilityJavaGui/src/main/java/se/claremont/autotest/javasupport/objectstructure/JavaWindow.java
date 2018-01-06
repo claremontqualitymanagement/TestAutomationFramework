@@ -2,16 +2,17 @@ package se.claremont.autotest.javasupport.objectstructure;
 
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
-import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
+import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class JavaWindow {
     String titleAsRegularExpression;
     String name;
     ArrayList<Window> nonShownWindows = new ArrayList<>();
+    boolean renderingCompleted = false;
 
     public JavaWindow(String titleAsRegularExpression){
         this.titleAsRegularExpression = titleAsRegularExpression;
@@ -79,33 +81,108 @@ public class JavaWindow {
         return (String) methodInvoker.invokeTheFirstEncounteredMethod(getWindow(), MethodDeclarations.titleGetterMethodsInAttemptOrder);
     }
 
+    private void setDefaultCloseOperationToDisposeIfExitOnClose(Window w){
+        Integer defaultCloseOperation = (Integer)MethodInvoker.invokeMethod(null, w, "getDefaultCloseOperation()");
+        if(defaultCloseOperation != null && defaultCloseOperation == JFrame.EXIT_ON_CLOSE){
+            MethodInvoker.invokeMethod(new TestCase(), w, "setDefaultCloseOperation(int)", JFrame.DISPOSE_ON_CLOSE);
+        }
+    }
+
+    class TafWindowRenderingCompletedListener implements WindowListener{
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+            renderingCompleted = true;
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            renderingCompleted = false;
+        }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+            renderingCompleted = true;
+        }
+
+        @Override
+        public void windowIconified(WindowEvent e) {
+        }
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowActivated(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+
+        }
+    }
+
+    public boolean isRenderingCompleted(){
+        return renderingCompleted;
+    }
+
+    private void makeSureListenerForFullyRenderedWindowExist(Window w){
+        for(WindowListener windowListener : w.getWindowListeners()){
+            if(windowListener.getClass().equals(TafWindowRenderingCompletedListener.class)) return;
+        }
+        w.addWindowListener(new TafWindowRenderingCompletedListener());
+
+    }
+
     /**
      * Identifies and returns the runtime interaction object of this window.
      *
      * @return The interaction runtime instance of this window if possible to identify, otherwise null.
      */
     public Object getWindow(){
-        Window[] windows = Window.getOwnerlessWindows();
+        Set<Window> windows = ApplicationUnderTest.getWindows();
         nonShownWindows.clear();
-        if(windows.length == 0) return null;
+        if(windows.size() == 0) return null;
         for(Window w : windows){
+            setDefaultCloseOperationToDisposeIfExitOnClose(w);
             String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(w, MethodDeclarations.titleGetterMethodsInAttemptOrder);
             if(SupportMethods.isRegexMatch(title, this.titleAsRegularExpression)){
-                if(w.isShowing())
-                    return w;
+                if(w.isVisible() && w.isShowing()){
+                    if(JFrame.class.isAssignableFrom(w.getClass())){
+                        if(((JFrame)w).isVisible()){
+                            makeSureListenerForFullyRenderedWindowExist(w);
+                            return w;
+                        }
+                    } else {
+                        makeSureListenerForFullyRenderedWindowExist(w);
+                        return w;
+                    }
+                }
                 nonShownWindows.add(w);
             } else {
                 Window subWindow = checkSubWindowsRecursive(w, true);
-                if(subWindow != null) return subWindow;
+                if(subWindow != null && subWindow.isShowing() && subWindow.isVisible()) {
+                    makeSureListenerForFullyRenderedWindowExist(subWindow);
+                    return subWindow;
+                } else if(subWindow != null){
+                    nonShownWindows.add(subWindow);
+                }
             }
         }
         for(Window window : nonShownWindows){
             String title = (String)methodInvoker.invokeTheFirstEncounteredMethod(window, MethodDeclarations.titleGetterMethodsInAttemptOrder);
             if(SupportMethods.isRegexMatch(title, this.titleAsRegularExpression)){
+                makeSureListenerForFullyRenderedWindowExist(window);
                 return window;
             } else {
                 Window subWindow = checkSubWindowsRecursive(window, false);
-                if(subWindow != null) return subWindow;
+                if(subWindow != null) {
+                    makeSureListenerForFullyRenderedWindowExist(subWindow);
+                    return subWindow;
+                }
             }
         }
         return null;
@@ -141,6 +218,7 @@ public class JavaWindow {
     }
 
     public static List<Component> getAllComponents(final Container c) {
+        if(c == null) return new ArrayList<Component>();
         Component[] comps = c.getComponents();
         List<Component> compList = new ArrayList<Component>();
         for (Component comp : comps) {
@@ -309,5 +387,11 @@ public class JavaWindow {
                 matches.add(subElement);
         }
         return matches;
+    }
+
+    public boolean isShown() {
+        Object w = getWindow();
+        if(w == null) return false;
+        return ((Window)w).isShowing();
     }
 }

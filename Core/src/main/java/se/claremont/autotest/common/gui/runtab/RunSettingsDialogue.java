@@ -11,13 +11,14 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
 public class RunSettingsDialogue {
 
-    TafDialog window;
+    final TafDialog window;
     RunTestTabPanel mainWindow;
     HashMap<String, String> runSettingsWhenOpened = new HashMap<>(Gui.defaultSettings);
     Container pane;
@@ -197,7 +198,7 @@ public class RunSettingsDialogue {
 
     private void setNewValue() {
 
-        TafFrame newParameterDialogue = new TafFrame("TAF - Add run parameter");
+        final TafFrame newParameterDialogue = new TafFrame("TAF - Add run parameter");
         newParameterDialogue.setName("NewTestRunParameterWindow");
         newParameterDialogue.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -252,6 +253,8 @@ public class RunSettingsDialogue {
                 runSettingsPanel.removeAll();
                 mainWindow.updateCliCommandText("");
                 createParametersPanel();
+                newParameterDialogue.dispatchEvent(new WindowEvent(newParameterDialogue, WindowEvent.WINDOW_CLOSING));
+                newParameterDialogue.setVisible(false);
                 newParameterDialogue.dispose();
                 window.revalidate();
                 window.repaint();

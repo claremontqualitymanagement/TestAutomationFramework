@@ -42,8 +42,9 @@ public class TafActions {
         java.verifyElementTextContains(MainWindow.RunTabPanel.cliTextArea, "runName=MyTestRunName");
         java.click(MainWindow.RunTabPanel.resetButton);
         java.verifyText(String.join(", ", java.getSelected(MainWindow.RunTabPanel.executionModeSpinner)), "Sequential execution");
-        java.click(MainWindow.RunTabPanel.executionModeSpinner);
-        java.type(MainWindow.RunTabPanel.executionModeSpinner, KeyEvent.VK_UP);
+//        java.click(MainWindow.RunTabPanel.executionModeSpinner);
+//        java.type(MainWindow.RunTabPanel.executionModeSpinner, KeyEvent.VK_UP);
+        java.setSelected(MainWindow.RunTabPanel.executionModeSpinner, new String[] {"Test classes in parallel"});
         java.verifyText(String.join(", ", java.getSelected(MainWindow.RunTabPanel.executionModeSpinner)), "Test classes in parallel");
         java.verifyElementTextContains(MainWindow.RunTabPanel.cliTextArea, "PARALLEL_TEST_EXECUTION_MODE=classes");
         java.click(MainWindow.RunTabPanel.resetButton);
@@ -51,22 +52,16 @@ public class TafActions {
 
     public void startParametersTest(){
         resetRunTab();
+        testCase.addTestCaseData("CliText", java.getText(MainWindow.RunTabPanel.cliTextArea));
         java.click(MainWindow.RunTabPanel.setRunParametersButton); // Open set runting settings window
         java.verifyWindowIsDisplayed(SetRunParameterWindow.runParametersWindow);
 
-        java.click(SetRunParameterWindow.addParameterButton); //Add a parameter, but cancel it
-        java.type(SetRunParameterWindow.AddParameterWindow.parameterNameField, "TestParameterName");
-        java.tabToNext();
-        java.type(SetRunParameterWindow.AddParameterWindow.parameterValueField, "TestParameterValue");
-        java.click(SetRunParameterWindow.AddParameterWindow.cancelButton);
+        addTestRunParameter("TestParameterName", "TestParameterValue", false);
         java.verifyElementDoesNotExist(SetRunParameterWindow.canceledParameterName);
+        java.verifyElementDoesNotExist(SetRunParameterWindow.canceledParameterValue);
         java.verifyElementTextIsExactly(MainWindow.RunTabPanel.cliTextArea, testCase.valueForFirstMatchForTestCaseDataParameter("CliText"));
 
-        java.click(SetRunParameterWindow.addParameterButton); //Add a parameter, and save it to list
-        java.type(SetRunParameterWindow.AddParameterWindow.parameterNameField, "TestParameterName");
-        java.tabToNext();
-        java.type(SetRunParameterWindow.AddParameterWindow.parameterValueField, "TestParameterValue");
-        java.click(SetRunParameterWindow.AddParameterWindow.saveButton);
+        addTestRunParameter("TestParameterName", "TestParameterValue", true);
         java.verifyObjectExistence(SetRunParameterWindow.savedParameterName);
         java.verifyObjectExistence(SetRunParameterWindow.savedParameterValue);
 
@@ -83,18 +78,28 @@ public class TafActions {
         java.click(cancelButtonInLoadDialog);
         */
 
-        java.click(SetRunParameterWindow.addParameterButton); //Add a parameter, and save it to list
-        java.type(SetRunParameterWindow.AddParameterWindow.parameterNameField, "TestParameterName");
-        java.tabToNext();
-        java.type(SetRunParameterWindow.AddParameterWindow.parameterValueField, "TestParameterValue");
-        java.click(SetRunParameterWindow.AddParameterWindow.saveButton);
+        addTestRunParameter("TestParameterName", "TestParameterValue", true);
         java.verifyObjectExistence(SetRunParameterWindow.savedParameterName);
         java.verifyObjectExistence(SetRunParameterWindow.savedParameterValue);
 
         //Save new parameter
         java.click(SetRunParameterWindow.saveParametersButton);
         java.verifyElementTextContains(MainWindow.RunTabPanel.cliTextArea, "TestParameterName=TestParameterValue");
+    }
 
+    public void addTestRunParameter(String parameterName, String parameterValue, boolean saveParameter){
+        java.click(SetRunParameterWindow.addParameterButton); //Add a parameter, and save it to list
+        java.type(SetRunParameterWindow.AddParameterWindow.parameterNameField, parameterName);
+        java.tabToNext();
+        java.type(SetRunParameterWindow.AddParameterWindow.parameterValueField, parameterValue);
+        java.tabToNext();
+        java.wait(200);
+        if(saveParameter){
+            java.click(SetRunParameterWindow.AddParameterWindow.saveButton);
+        } else{
+            java.click(SetRunParameterWindow.AddParameterWindow.cancelButton);
+        }
+        java.verifyWindowIsNotDisplayed(SetRunParameterWindow.AddParameterWindow.addParameterWindow);
     }
 
     public void cliButtonTest(){
@@ -136,11 +141,47 @@ public class TafActions {
         java.click(HelpWindow.helpWindowCloseButton);
     }
 
-    public void startApplication() throws InterruptedException {
+    public void startApplication() {
         Assume.assumeTrue("Desktop not supported. Cannot execute test.", Desktop.isDesktopSupported());
-        Thread.sleep(4000);
-        TAF.main(null);
-        MainWindow.mainWindow.waitForWindowToAppear(5);
+        if(!MainWindow.mainWindow.isShown()) {
+            TAF.main(null);
+            MainWindow.mainWindow.waitForWindowToAppear(5);
+        }
     }
 
+    public void startTestRunTest() {
+        java.click(MainWindow.RunTabPanel.startTestRunButton);
+        java.verifyWindowIsDisplayed(MainWindow.TestRunResultsWindow.testRunResultsWindow);
+        ///java.wait(1000);
+        java.verifyObjectIsDisplayed(MainWindow.TestRunResultsWindow.summaryReportButton);
+        java.verifyElementTextContains(MainWindow.TestRunResultsWindow.logOutputArea, "Test run finished.");
+        java.click(MainWindow.TestRunResultsWindow.closeButton);
+        java.verifyWindowIsNotDisplayed(MainWindow.TestRunResultsWindow.testRunResultsWindow);
+    }
+
+
+
+    public void closeApplication() {
+        testCase.log(LogLevel.INFO, "This is where the application should have been closed if it wasn't for the System.exit()");
+        java.click(MainWindow.RunTabPanel.exitButton);
+        java.closeAllWindows();
+        /*
+        SecurityManager securityManager = System.getSecurityManager();
+        System.setSecurityManager(new TafSecurityManager());
+        java.click(MainWindow.RunTabPanel.exitButton);
+        System.setSecurityManager(securityManager);
+        */
+    }
+
+    private void blockSystemExit(){
+        System.setSecurityManager(new TafSecurityManager());
+    }
+
+    class TafSecurityManager extends SecurityManager {
+
+        @Override
+        public void checkExit(int status) {
+            testCase.log(LogLevel.EXECUTED, "Application should have exited with exit code " + status + " here.");
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package se.claremont.autotest.javasupport.interaction;
 
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.Spinner;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -215,15 +216,21 @@ public class GenericInteractionMethods {
                         "</a>");
     }
 
-    public List<String> getSelected(GuiComponent guiComponent){
-        if(guiComponent == null) {
+    public List<String> getSelected(GuiComponent guiComponent) {
+        long startTime = System.currentTimeMillis();
+        if (guiComponent == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Attempting to get selected value from a null component.");
             takeScreenshot();
             return null;
         }
-        JavaGuiElement javaGuiElement = (JavaGuiElement)guiComponent;
+        JavaGuiElement javaGuiElement = (JavaGuiElement) guiComponent;
+        javaGuiElement.clearCache();
         Component component = javaGuiElement.getRuntimeComponent();
-        if(component == null){
+        while (component == null && System.currentTimeMillis() - startTime < standardTimeout * 1000){
+            wait(50);
+            component = javaGuiElement.getRuntimeComponent();
+        }
+        if (component == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot identify element '" + guiComponent.getName() + "' to retrieve selected value(s) from.");
             javaGuiElement.logIdentification(LogLevel.INFO, testCase);
             takeScreenshot();
@@ -231,14 +238,14 @@ public class GenericInteractionMethods {
         }
         javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
         List<String> returnValues = new ArrayList<>();
-        if(JSpinner.class.isAssignableFrom(component.getClass())){
-            JSpinner spinner = (JSpinner)component;
+        if (JSpinner.class.isAssignableFrom(component.getClass())) {
+            JSpinner spinner = (JSpinner) component;
             returnValues.add(spinner.getModel().getValue().toString());
             testCase.log(LogLevel.DEBUG, "Identified '" + String.join("', '", returnValues) + "' as selected for JSpinner '" + guiComponent.getName() + "'.");
             return returnValues;
-        } else if(JComboBox.class.isAssignableFrom(component.getClass())){
-            JComboBox comboBox = (JComboBox)component;
-            for(Object selection : comboBox.getSelectedObjects()){
+        } else if (JComboBox.class.isAssignableFrom(component.getClass())) {
+            JComboBox comboBox = (JComboBox) component;
+            for (Object selection : comboBox.getSelectedObjects()) {
                 returnValues.add(selection.toString());
             }
             testCase.log(LogLevel.DEBUG, "Identified '" + String.join("', '", returnValues) + "' as selected for JComboBoc '" + guiComponent.getName() + "'.");
@@ -298,67 +305,108 @@ public class GenericInteractionMethods {
         ((Window) window).toFront();
     }
 
-    /**
-     * Performs a left mouse button click upon the given element.
-     *
-     * @param guiElement The element to click.
-     */
     public void click(GuiComponent guiElement) {
         long startTime = System.currentTimeMillis();
-        Object c = guiElement.getRuntimeComponent();
-        while (c == null && System.currentTimeMillis() - startTime < standardTimeout * 1000){
+        JavaGuiElement javaGuiElement = (JavaGuiElement)guiElement;
+        javaGuiElement.clearCache();
+        Component component = javaGuiElement.getRuntimeComponent();
+        javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
+        while (component == null && System.currentTimeMillis() - startTime < standardTimeout * 1000) {
             wait(50);
-            c = guiElement.getRuntimeComponent();
+            component = javaGuiElement.getRuntimeComponent();
         }
-        if (c == null) {
+        if (component == null) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + guiElement.getName() + " since it could not be identified.");
-            ((JavaGuiElement)guiElement).logIdentification(LogLevel.INFO, testCase);
+            ((JavaGuiElement) guiElement).logIdentification(LogLevel.INFO, testCase);
             takeScreenshot();
             if (testCase != null)
                 testCase.report();
             return;
         }
-        ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
-        if (JButton.class.isAssignableFrom(c.getClass())) {
-            JButton button = (JButton) c;
+        try {
+            while (!component.isEnabled() && System.currentTimeMillis() - startTime < standardTimeout * 1000) {
+                wait(50);
+            }
+            if (!component.isEnabled()) {
+                log(LogLevel.DEBUG, "Element '" + guiElement.getName() + "' was identified but it never became enabled within the timeout of " + standardTimeout + " seconds.");
+            }
+        } catch (Exception ignored) {
+        }
+        if (JButton.class.isAssignableFrom(component.getClass())) {
+            JButton button = (JButton) component;
+
+            if (!button.isEnabled())
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Button '" + guiElement.getName() + "' is not enabled. Attempting to click it anyway.");
+
+            for (ActionListener al : button.getActionListeners()) {
+                al.actionPerformed(new ActionEvent(button, 16, "ACTION_PERFORMED"));
+            }
+            testCase.log(LogLevel.EXECUTED, "Clicked the " + guiElement.getName() + " component.");
+            return;
+
+        } else if (Button.class.isAssignableFrom(component.getClass())) {
+
+            Button button = (Button) component;
 
             while (!button.isEnabled() && System.currentTimeMillis() - startTime < standardTimeout * 1000) {
-                try {
-                    Thread.sleep(40);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                wait(50);
             }
 
             if (!button.isEnabled())
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Button '" + guiElement.getName() + "' is not enabled. Attempting to click it anyway.");
 
-            button.doClick();
+            for (ActionListener al : button.getActionListeners()) {
+                al.actionPerformed(new ActionEvent(button, 16, "ACTION_PERFORMED"));
+            }
+
             testCase.log(LogLevel.EXECUTED, "Clicked the " + guiElement.getName() + " component.");
             return;
-
-        } else if (Button.class.isAssignableFrom(c.getClass())) {
-
-            Button component = (Button) c;
-
-            while (!component.isEnabled() && System.currentTimeMillis() - startTime < standardTimeout * 1000) {
-                try {
-                    Thread.sleep(40);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (!component.isEnabled())
+        /*} else if (Component.class.isAssignableFrom(c.getClass())) {
+            Component component = (Component) c;
+            if (!component.isEnabled()) {
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Button '" + guiElement.getName() + "' is not enabled. Attempting to click it anyway.");
+            } else {
+                for (ActionListener listener : component.getListeners(ActionListener.class)) {
+                    listener.actionPerformed(new ActionEvent(c, 16, "ACTION_PERFORMED"));
+                }
+            }*/
+        }
+        bringWindowOfElementToFront(guiElement);
+        Point clickPoint = getClickablePoint(guiElement);
+        if (clickPoint == null) return;
+        Robot r = null;
+        try {
+            r = new Robot();
+            r.mouseMove(clickPoint.x, clickPoint.y);
+            r.mousePress(InputEvent.BUTTON1_MASK);
+            r.mouseRelease(InputEvent.BUTTON1_MASK);
+            log(LogLevel.EXECUTED, "Clicked the " + guiElement.getName() + " component.");
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
 
-            for (ActionListener al : component.getActionListeners()) {
-                al.actionPerformed(new ActionEvent(c, 16, "ACTION_PERFORMED"));
-            }
-
-            testCase.log(LogLevel.EXECUTED, "Clicked the " + guiElement.getName() + " component.");
+    /**
+     * Performs a left mouse button click upon the given element.
+     *
+     * @param guiElement The element to click.
+     */
+    public void clickByRawMouseAction(GuiComponent guiElement) {
+        long startTime = System.currentTimeMillis();
+        Object c = guiElement.getRuntimeComponent();
+        while (c == null && System.currentTimeMillis() - startTime < standardTimeout * 1000) {
+            wait(50);
+            c = guiElement.getRuntimeComponent();
+        }
+        if (c == null) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not click on element " + guiElement.getName() + " since it could not be identified.");
+            ((JavaGuiElement) guiElement).logIdentification(LogLevel.INFO, testCase);
+            takeScreenshot();
+            if (testCase != null)
+                testCase.report();
             return;
         }
+        ((JavaGuiElement) guiElement).logIdentification(LogLevel.DEBUG, testCase);
         bringWindowOfElementToFront(guiElement);
         Point clickPoint = getClickablePoint(guiElement);
         if (clickPoint == null) return;
@@ -613,7 +661,7 @@ public class GenericInteractionMethods {
                     "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return selections;
         } else {
-            ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
+            ((JavaGuiElement) guiElement).logIdentification(LogLevel.DEBUG, testCase);
         }
         Object[] selectedObjects = (Object[]) MethodInvoker.invokeTheFirstEncounteredMethod(testCase, component, MethodDeclarations.getAllSelectedObjectsInComboBox);
         if (selectedObjects == null) {
@@ -691,6 +739,9 @@ public class GenericInteractionMethods {
         }
     }
 
+    public String getText(GuiComponent guiElement){
+        return getText(guiElement, standardTimeout * 1000);
+    }
 
     /**
      * Returns the runtime text of the element.
@@ -698,24 +749,31 @@ public class GenericInteractionMethods {
      * @param guiElement The element to get the text of.
      * @return Returns the current text of the runtime element
      */
-    public String getText(GuiComponent guiElement) {
-        if(guiElement == null){
+    public String getText(GuiComponent guiElement, int timeoutInMilliseconds) {
+        long startTime = System.currentTimeMillis();
+        if (guiElement == null) {
             testCase.log(LogLevel.DEBUG, "Attempting to retrieve current text from null element.");
             return null;
         }
-        Object component = guiElement.getRuntimeComponent();
+        JavaGuiElement javaGuiElement = (JavaGuiElement)guiElement;
+        javaGuiElement.clearCache();
+        Component component = javaGuiElement.getRuntimeComponent();
+        while (component == null && System.currentTimeMillis() - startTime < standardTimeout  * 1000 ){
+            wait(50);
+            component = javaGuiElement.getRuntimeComponent();
+        }
         if (component == null) {
-            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
-                    "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + guiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + javaGuiElement.getRecognitionDescription().replace(System.lineSeparator(), ", "),
+                    "Could not identify " + guiElement.getName() + ". Tried by identification procedure:" + javaGuiElement.getRecognitionDescription().replace(System.lineSeparator(), "<br>"));
             return null;
         } else {
-            ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
+            javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
         }
         String text = getText(component);
-        if(text == null) {
+        if (text == null) {
             List<String> selections = getSelected(guiElement);
-            if(selections.size() > 0){
-                text = "'" + String.join("', '", selections ) + "'";
+            if (selections.size() > 0) {
+                text = "'" + String.join("', '", selections) + "'";
             }
         }
         if (text == null) {
@@ -759,7 +817,7 @@ public class GenericInteractionMethods {
         }
         while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000) {
             if (guiElement.getRuntimeComponent() != null) {
-                ((JavaGuiElement)guiElement).logIdentification(LogLevel.DEBUG, testCase);
+                ((JavaGuiElement) guiElement).logIdentification(LogLevel.DEBUG, testCase);
                 return true;
             }
             wait(50);
@@ -1128,11 +1186,11 @@ public class GenericInteractionMethods {
             testCase.log(logLevel, message);
     }
 
-    public void type(String text){
+    public void type(String text) {
         type(null, text);
     }
 
-    public void tabToNext(){
+    public void tabToNext() {
         try {
             Robot robot = new Robot();
             robot.keyPress(KeyEvent.VK_TAB);
@@ -1142,7 +1200,7 @@ public class GenericInteractionMethods {
         }
     }
 
-    private void setFocus(GuiComponent guiComponent){
+    private void setFocus(GuiComponent guiComponent) {
         Component c = null;
         if (guiComponent == null) return;
         Object o = ((JavaGuiElement) guiComponent).getRuntimeComponent();
@@ -1156,12 +1214,12 @@ public class GenericInteractionMethods {
         }
     }
 
-    public void type(int javaAwtEventKeyEvent){
+    public void type(int javaAwtEventKeyEvent) {
         type(null, javaAwtEventKeyEvent);
     }
 
-    public void type(GuiComponent guiComponent, int javaAwtEventKeyEvent){
-        if(guiComponent != null){
+    public void type(GuiComponent guiComponent, int javaAwtEventKeyEvent) {
+        if (guiComponent != null) {
             bringWindowOfElementToFront(guiComponent);
             setFocus(guiComponent);
         }
@@ -1169,7 +1227,7 @@ public class GenericInteractionMethods {
             Robot robot = new Robot();
             robot.keyPress(javaAwtEventKeyEvent);
             robot.keyRelease(javaAwtEventKeyEvent);
-            if(guiComponent != null){
+            if (guiComponent != null) {
                 testCase.log(LogLevel.EXECUTED, "Pressed the " + KeyEvent.getKeyText(javaAwtEventKeyEvent) + " key on element " + guiComponent.getName() + ".");
             } else {
                 testCase.log(LogLevel.EXECUTED, "Pressed the " + KeyEvent.getKeyText(javaAwtEventKeyEvent) + " key.");
@@ -1180,7 +1238,7 @@ public class GenericInteractionMethods {
     }
 
     public void type(GuiComponent guiComponent, String text) {
-        if(guiComponent!=null) bringWindowOfElementToFront(guiComponent);
+        if (guiComponent != null) bringWindowOfElementToFront(guiComponent);
         setFocus(guiComponent);
         if (guiComponent == null) {
             testCase.log(LogLevel.DEBUG, "null component for typing text '" + text + "'. Typing anyway.");
@@ -1232,7 +1290,7 @@ public class GenericInteractionMethods {
             log(LogLevel.EXECUTED, "Typed '" + text + "' to component " + guiComponent.getName() + ". Text after write is '" + actualText + "'.");
             return;
         } else {
-            if(actualText != null && guiComponent != null){
+            if (actualText != null && guiComponent != null) {
                 log(LogLevel.EXECUTION_PROBLEM, "Tried typing the text '" + text + "' to " + guiComponent.getName() + "' but the resulting text is '" + actualText + ". If this still is correct you could use the write method not performing checks afterwards.");
             } else {
                 log(LogLevel.EXECUTION_PROBLEM, "Could not retrieve the text from element after type.");
@@ -1247,14 +1305,14 @@ public class GenericInteractionMethods {
      * @param textToWrite The text to enter to the component.
      */
     private void performWrite(GuiComponent guiElement, String textToWrite, boolean performCheckAfterwards) {
-        if(guiElement == null) {
+        if (guiElement == null) {
             log(LogLevel.INFO, "Attempting to write text '" + textToWrite + "' to null element.");
             return;
         }
         Object component = guiElement.getRuntimeComponent();
         if (component == null) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not write '" + textToWrite + "' to component " + guiElement.getName() + " since it could not be identified.");
-            ((JavaGuiElement)guiElement).logIdentification(LogLevel.INFO, testCase);
+            ((JavaGuiElement) guiElement).logIdentification(LogLevel.INFO, testCase);
             takeScreenshot();
             return;
         }
@@ -1322,16 +1380,15 @@ public class GenericInteractionMethods {
 
     public void verifyWindowIsDisplayed(JavaWindow javaWindow, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
-        Object window = javaWindow.getWindow();
-        while (window == null && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000) {
+        boolean isShown = javaWindow.isShown();
+        while (!isShown && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000) {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-
             }
-            window = javaWindow.getWindow();
+            isShown = javaWindow.isShown();
         }
-        if (window == null) {
+        if (!isShown) {
             List<String> existingWindowTitles = new ArrayList<>();
             for (Window w : ApplicationUnderTest.getWindows()) {
                 existingWindowTitles.add(new JavaWindow(w).getTitle());
@@ -1357,10 +1414,88 @@ public class GenericInteractionMethods {
     }
 
     public void verifyText(String actualText, String expectedTest) {
-        if((actualText == null && expectedTest == null) || actualText.equals(expectedTest)){
+        if ((actualText == null && expectedTest == null) || actualText.equals(expectedTest)) {
             testCase.log(LogLevel.VERIFICATION_PASSED, "Text verification passed for text '" + expectedTest + "'.");
-        }else {
+        } else {
             testCase.log(LogLevel.VERIFICATION_FAILED, "Expected the text to be '" + expectedTest + "' but it was '" + actualText + "'.");
         }
+    }
+
+    public void verifyWindowIsNotDisplayed(JavaWindow window) {
+        verifyWindowIsNotDisplayed(window, standardTimeout);
+    }
+
+    public void verifyWindowIsNotDisplayed(JavaWindow window, int timeoutInSecondsForWindowToDisappear) {
+        long startTime = System.currentTimeMillis();
+        boolean windowIsShown = window.isShown();
+        while (windowIsShown && System.currentTimeMillis() - startTime < timeoutInSecondsForWindowToDisappear * 1000) {
+            wait(50);
+            windowIsShown = window.isShown();
+        }
+        if (windowIsShown) {
+            log(LogLevel.VERIFICATION_FAILED, "Expected window '" + window.getName() + "' to be non-displayed, but it never became non existing within the timeout of " + timeoutInSecondsForWindowToDisappear + " seconds.");
+            takeScreenshot();
+        } else {
+            log(LogLevel.VERIFICATION_PASSED, "Window '" + window.getName() + "' found to be non-displayed as expected.");
+        }
+    }
+
+    public void closeAllWindows() {
+        List<String> windowNames = new ArrayList<>();
+        for(Window w : Window.getWindows()){
+            windowNames.addAll(closeSubWindows(w));
+            w.dispose();
+        }
+        if(windowNames.size() > 0){
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Closing window(s) '" + String.join("', '", windowNames) + "'.",
+                    "Closing window(s):<br>" + String.join("<br>", windowNames));
+        } else {
+            testCase.log(LogLevel.INFO, "Attempted to close all Java windows, but none found.");
+        }
+    }
+
+    private List<String> closeSubWindows(Window window){
+        List<String> windowNames = new ArrayList<>();
+        for(Window subWindow : window.getOwnedWindows()){
+            windowNames.addAll(closeSubWindows(subWindow));
+        }
+        windowNames.add(new JavaWindow(window).getName());
+        window.dispose();
+        return windowNames;
+    }
+
+    public void setSelected(GuiComponent guiComponent, String... strings) {
+        long startTime = System.currentTimeMillis();
+        JavaGuiElement javaGuiElement = (JavaGuiElement)guiComponent;
+        Component component = javaGuiElement.getRuntimeComponent();
+        while (component == null && System.currentTimeMillis() < standardTimeout * 1000){
+            wait(50);
+            component = javaGuiElement.getRuntimeComponent();
+        }
+        if(component == null){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not identify the element '" + javaGuiElement.getName() + "' to select '" + String.join("', '", strings) + "' in.");
+            javaGuiElement.logIdentification(LogLevel.INFO, testCase);
+            takeScreenshot();
+            haltFurtherExecution();
+        } else {
+            javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
+        }
+        while(!component.isEnabled() && System.currentTimeMillis() - startTime < standardTimeout * 1000){
+            wait(50);
+        }
+        if(!component.isEnabled()) testCase.log(LogLevel.EXECUTION_PROBLEM, "Component '" + javaGuiElement.getName() + "' never got enabled within the timeout.");
+        if(JSpinner.class.isAssignableFrom(component.getClass())){
+            JSpinner spinner = (JSpinner)component;
+            for(String value : strings){
+                spinner.setValue(value);
+            }
+        } else {
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "No setSelcted() mechanism implemented for elements of class '" + component.getClass() + "'." + System.lineSeparator()
+                    + "Element: " + component.toString());
+        }
+    }
+
+    public void haltFurtherExecution() {
+        testCase.report();
     }
 }

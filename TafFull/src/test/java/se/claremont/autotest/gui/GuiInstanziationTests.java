@@ -1,30 +1,13 @@
 package se.claremont.autotest.gui;
 
-import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import se.claremont.autotest.TAF;
-import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
-import se.claremont.autotest.common.logging.LogLevel;
-import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
-import se.claremont.autotest.gui.appdescription.HelpWindow;
-import se.claremont.autotest.gui.appdescription.MainWindow;
-import se.claremont.autotest.gui.appdescription.SetRunParameterWindow;
-import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
-import se.claremont.autotest.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
-import se.claremont.autotest.javasupport.interaction.elementidentification.By;
-import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
-import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 public class GuiInstanziationTests extends TestSet {
 
@@ -40,13 +23,45 @@ public class GuiInstanziationTests extends TestSet {
     }
 
     @Test
-    public void startNoArgumentsSmokeTest() throws InterruptedException {
+    public void startNoArgumentsSmokeTest(){
+        taf.startApplication();
+        //taf.testApplicationExit(); //Don't do this. it exits the system.
+        taf.closeApplication();
+    }
+
+    @Test
+    public void runPanelSmokeTest(){
         taf.startApplication();
         taf.runPanelTests();
+        taf.closeApplication();
+    }
+
+    @Test
+    public void helpDialogSmokeTest(){
+        taf.startApplication();
         taf.testHelpButton();
+        taf.closeApplication();
+    }
+
+    @Test
+    public void copyCliToClipboardButtonSmokeTest(){
+        taf.startApplication();
         taf.cliButtonTest();
+        taf.closeApplication();
+    }
+
+    @Test
+    public void runSettingsDialogueSmokeTest(){
+        taf.startApplication();
         taf.startParametersTest();
-        //taf.testApplicationExit(); //Don't do this. it exits the system.
+        taf.closeApplication();
+    }
+
+    @Test
+    public void startTestRunSmokeTest(){
+        taf.startApplication();
+        taf.startTestRunTest();
+        taf.closeApplication();
     }
 
 }

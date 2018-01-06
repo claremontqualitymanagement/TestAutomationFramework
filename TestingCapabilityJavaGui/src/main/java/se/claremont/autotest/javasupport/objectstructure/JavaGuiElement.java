@@ -6,6 +6,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -17,6 +18,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A GUI component in any Java client application.
@@ -357,6 +359,9 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return recognitionString;
     }
 
+    public void clearCache(){
+        this.cachedElement = null;
+    }
     /**
      * Return the JavaWindow this element resides in.
      *
@@ -532,12 +537,12 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     private List<Component> getWindowComponents() {
         List<Component> objects = new ArrayList<>();
-        if(window != null){
+        if(window != null && window.isShown() ){
             objects = window.getComponents();
             recognitionDescription.add("Identified " + objects.size() + " objects in the window.");
         } else {
             recognitionDescription.add("No window was given for object. Trying to identify java windows.");
-            Window[] windows = Window.getOwnerlessWindows ();
+            Set<Window> windows = ApplicationUnderTest.getWindows();
             List<Window> nonDisplayedWindows = new ArrayList<>();
             for(Window w : windows){
                 if(!w.isShowing()) {
