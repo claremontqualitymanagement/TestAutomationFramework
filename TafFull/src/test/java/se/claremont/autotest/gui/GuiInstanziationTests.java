@@ -2,9 +2,9 @@ package se.claremont.autotest.gui;
 
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.autotest.gui.appdescription.MainWindow;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 
 import java.awt.*;
@@ -30,38 +30,23 @@ public class GuiInstanziationTests extends TestSet {
     }
 
     @Test
-    public void runPanelSmokeTest(){
+    public void smokeTest(){
         taf.startApplication();
-        taf.runPanelTests();
-        taf.closeApplication();
-    }
-
-    @Test
-    public void helpDialogSmokeTest(){
-        taf.startApplication();
-        taf.testHelpButton();
-        taf.closeApplication();
-    }
-
-    @Test
-    public void copyCliToClipboardButtonSmokeTest(){
-        taf.startApplication();
+        taf.runPanelInteractionTests();
+        taf.runPanelHelpButtonTest();
         taf.cliButtonTest();
-        taf.closeApplication();
-    }
-
-    @Test
-    public void runSettingsDialogueSmokeTest(){
-        taf.startApplication();
-        taf.startParametersTest();
-        taf.closeApplication();
-    }
-
-    @Test
-    public void startTestRunSmokeTest(){
-        taf.startApplication();
+        taf.startParametersWindowInteractionTest();
+        taf.chooseTestsWindowTests();
         taf.startTestRunTest();
+        java.activateTab(MainWindow.mainWindow, "Create");
+        java.activateTab(MainWindow.mainWindow, "REST");
+        java.activateTab(MainWindow.mainWindow, "Web");
+        java.activateTab(MainWindow.mainWindow, "Java");
+        java.activateTab(MainWindow.mainWindow, "Smart");
+        taf.aboutTabHelpWindowTests();
+        taf.diagnosticTestRunTests();
         taf.closeApplication();
     }
+
 
 }

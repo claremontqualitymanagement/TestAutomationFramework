@@ -4,9 +4,7 @@ import org.junit.Assume;
 import se.claremont.autotest.TAF;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.gui.appdescription.HelpWindow;
-import se.claremont.autotest.gui.appdescription.MainWindow;
-import se.claremont.autotest.gui.appdescription.SetRunParameterWindow;
+import se.claremont.autotest.gui.appdescription.*;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 
@@ -14,7 +12,6 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class TafActions {
@@ -35,8 +32,12 @@ public class TafActions {
         java.click(MainWindow.RunTabPanel.resetButton);
     }
 
-    public void runPanelTests() {
-        MainWindow.mainWindow.waitForWindowToAppear(5);
+    public void runPanelInteractionTests() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Run tests");
         java.type(MainWindow.RunTabPanel.runNameText, "MyTestRunName");
         java.tabToNext();
         java.verifyElementTextContains(MainWindow.RunTabPanel.cliTextArea, "runName=MyTestRunName");
@@ -50,7 +51,12 @@ public class TafActions {
         java.click(MainWindow.RunTabPanel.resetButton);
     }
 
-    public void startParametersTest(){
+    public void startParametersWindowInteractionTest(){
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Run tests");
         resetRunTab();
         testCase.addTestCaseData("CliText", java.getText(MainWindow.RunTabPanel.cliTextArea));
         java.click(MainWindow.RunTabPanel.setRunParametersButton); // Open set runting settings window
@@ -103,6 +109,11 @@ public class TafActions {
     }
 
     public void cliButtonTest(){
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Run tests");
         resetRunTab();
         String initialText = java.getText(MainWindow.RunTabPanel.cliTextArea);
         testCase.log(LogLevel.INFO, "Initial text of CLI text area: '" + initialText + "'.");
@@ -134,7 +145,12 @@ public class TafActions {
         }
     }
 
-    public void testHelpButton(){
+    public void runPanelHelpButtonTest(){
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Run tests");
         resetRunTab();
         java.click(MainWindow.RunTabPanel.helpButton);
         java.verifyWindowIsDisplayed(HelpWindow.helpWindow);
@@ -147,9 +163,19 @@ public class TafActions {
             TAF.main(null);
             MainWindow.mainWindow.waitForWindowToAppear(5);
         }
+        if(!MainWindow.mainWindow.isShown()){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not start TAF");
+            java.haltFurtherExecution();
+        }
     }
 
     public void startTestRunTest() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Run tests");
+        java.click(MainWindow.RunTabPanel.resetButton);
         java.click(MainWindow.RunTabPanel.startTestRunButton);
         java.verifyWindowIsDisplayed(MainWindow.TestRunResultsWindow.testRunResultsWindow);
         ///java.wait(1000);
@@ -175,6 +201,47 @@ public class TafActions {
 
     private void blockSystemExit(){
         System.setSecurityManager(new TafSecurityManager());
+    }
+
+    public void chooseTestsWindowTests() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Run tests");
+        resetRunTab();
+        java.click(MainWindow.RunTabPanel.pickTestsButton);
+        java.verifyWindowIsDisplayed(MainWindow.PickTestsWindow.window);
+        java.verifyCheckboxStatus(MainWindow.PickTestsWindow.individualTestsCheckbox, false);
+        java.click(MainWindow.PickTestsWindow.closeButton);
+        java.verifyWindowIsNotDisplayed(MainWindow.PickTestsWindow.window);
+    }
+
+    public void diagnosticTestRunTests(){
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "About");
+        java.click(MainWindow.AboutPanel.runDiagnosticTestsButton);
+        java.verifyWindowIsDisplayed(DiagnosticTestsRunningWindow.window);
+        java.verifyWindowIsNotDisplayed(DiagnosticTestsRunningWindow.window, 60);
+        java.verifyWindowIsDisplayed(DiagnosticTestResultsWindow.window);
+        java.verifyElementTextIsExactly(DiagnosticTestResultsWindow.failedTestsCountText, "0");
+        java.click(DiagnosticTestResultsWindow.closeButton);
+        java.verifyWindowIsNotDisplayed(DiagnosticTestResultsWindow.window);
+    }
+
+    public void aboutTabHelpWindowTests() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "About");
+        java.click(MainWindow.AboutPanel.helpButton);
+        java.verifyWindowIsDisplayed(HelpWindow.helpWindow);
+        java.click(HelpWindow.helpWindowCloseButton);
+        java.verifyWindowIsNotDisplayed(HelpWindow.helpWindow);
     }
 
     class TafSecurityManager extends SecurityManager {

@@ -1,6 +1,5 @@
 package se.claremont.autotest.gui.appdescription;
 
-import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.javasupport.interaction.elementidentification.By;
 import se.claremont.autotest.javasupport.objectstructure.GuiComponent;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
@@ -59,8 +58,11 @@ public class MainWindow {
 
         public static JavaGuiElement exitButton = new JavaGuiElement(mainWindow,
                 By.byExactText("Exit"),
-                "ExitButton"); //Should not be used since it produces System exit.
+                "ExitButton");
 
+        public static GuiComponent pickTestsButton = new JavaGuiElement(mainWindow,
+                By.byExactText("Pick test classes..."),
+                "PickTestsButton");
     }
 
     public static class TestRunResultsWindow{
@@ -78,5 +80,26 @@ public class MainWindow {
         public static JavaGuiElement logOutputArea = new JavaGuiElement(testRunResultsWindow,
                 By.byClass("TafTextArea"),
                 "LogOutputArea");
+    }
+
+    public static class PickTestsWindow {
+
+        public static JavaWindow window = new JavaWindow("^TAF.*Test class picker.*", "TAF Test run results window");
+
+        public static JavaGuiElement individualTestsCheckbox = new JavaGuiElement(window,
+                By.byTextContaining("Show all classes"),
+                "ShowAllTestsCheckbox");
+
+        public static JavaGuiElement closeButton = new JavaGuiElement(window,
+                By.byExactText("Close"),
+                "CloseButton");
+    }
+
+    public static class AboutPanel {
+
+        public static JavaGuiElement helpButton = new JavaGuiElement(mainWindow, By.byExactText("Help"), "HelpButton");
+
+        public static JavaGuiElement runDiagnosticTestsButton = new JavaGuiElement(mainWindow, By.byTextContaining("diagnostic"), "RunDiagnosticTestsButton");
+
     }
 }

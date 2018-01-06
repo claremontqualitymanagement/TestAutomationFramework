@@ -1379,6 +1379,11 @@ public class GenericInteractionMethods {
     }
 
     public void verifyWindowIsDisplayed(JavaWindow javaWindow, int timeoutInSeconds) {
+        if(javaWindow == null){
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot verify existence of null window.");
+            takeScreenshot();
+            return;
+        }
         long startTime = System.currentTimeMillis();
         boolean isShown = javaWindow.isShown();
         while (!isShown && System.currentTimeMillis() - startTime < timeoutInSeconds * 1000) {
@@ -1487,8 +1492,10 @@ public class GenericInteractionMethods {
         if(JSpinner.class.isAssignableFrom(component.getClass())){
             JSpinner spinner = (JSpinner)component;
             for(String value : strings){
+                testCase.log(LogLevel.DEBUG, "Set value '" + value + "' to element '" + javaGuiElement.getName() + "'.");
                 spinner.setValue(value);
             }
+            testCase.log(LogLevel.EXECUTED, "Set value(s) '" + String.join("', '", strings) + "' to element '" + javaGuiElement.getName() + "'.");
         } else {
             testCase.log(LogLevel.FRAMEWORK_ERROR, "No setSelcted() mechanism implemented for elements of class '" + component.getClass() + "'." + System.lineSeparator()
                     + "Element: " + component.toString());
@@ -1497,5 +1504,58 @@ public class GenericInteractionMethods {
 
     public void haltFurtherExecution() {
         testCase.report();
+    }
+
+    public void verifyCheckboxSelectionStatus(JavaGuiElement guiElement, boolean expectedToBeSelected) {
+        long startTime = System.currentTimeMillis();
+        if(guiElement == null){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot verify if null element is selected.");
+            takeScreenshot();
+            return;
+        }
+        JavaGuiElement javaGuiElement = (JavaGuiElement)guiElement;
+        javaGuiElement.clearCache();
+        Component component = javaGuiElement.getRuntimeComponent();
+        while (component == null && System.currentTimeMillis() - startTime < standardTimeout * 1000){
+            wait(50);
+            component = javaGuiElement.getRuntimeComponent();
+        }
+        if(component == null){
+            javaGuiElement.logIdentification(LogLevel.VERIFICATION_PROBLEM, testCase);
+            takeScreenshot();
+            return;
+        }
+        javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
+        if(Checkbox.class.isAssignableFrom(component.getClass())){
+            Checkbox checkbox = (Checkbox)component;
+            if(checkbox.getState() == expectedToBeSelected){
+                testCase.log(LogLevel.VERIFICATION_PASSED, "Checkbox '" + javaGuiElement.getName() + "' passed status check.");
+            } else {
+                testCase.log(LogLevel.VERIFICATION_FAILED, "Checkbox '" + javaGuiElement.getName() + "' failed status check.");
+                takeScreenshot();
+            }
+        }else{
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "Method verifyCheckboxSelectionStatus() not yet implemented for class '" + component.getClass().getName() + "'.");
+        }
+
+    }
+
+    public void activateTab(JavaWindow window, String tabText) {
+        List<String> identifiedTabNames = new ArrayList<>();
+        for(Component component : window.getComponents()){
+            if(!JTabbedPane.class.isAssignableFrom(component.getClass()))continue;
+            JTabbedPane panel = (JTabbedPane) component;
+            for(int i = 0; i < panel.getTabCount(); i++){
+                identifiedTabNames.add(panel.getTitleAt(i));
+                if(panel.getTitleAt(i).contains(tabText)){
+                    panel.setSelectedIndex(i);
+                    testCase.log(LogLevel.EXECUTED, "Activated tab '" + panel.getTitleAt(i) + "' in window '" + window.getName() + "'.");
+                    return;
+                }
+            }
+        }
+        testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not activate tab with tab text '" + tabText + "' in window '" + window.getName() + "'. Identified tabs: '" + String.join("', '", identifiedTabNames) + "'.");
+        takeScreenshot();
+        haltFurtherExecution();
     }
 }
