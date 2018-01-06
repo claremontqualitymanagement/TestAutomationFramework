@@ -296,7 +296,9 @@ public class JavaWindow {
      * @param outputFile The file to write the window element descriptors to.
      */
     public void mapWindowToDescriptionClass(String outputFile){
-        waitForWindowToAppear(15);
+        System.out.println("Attempting to map window " + getName() + ".");
+        Object w = waitForWindowToAppear(15);
+        System.out.println("Found window " + w.toString() + ". Mapping...");
         createElementDefinitions(getWindow(), outputFile);
     }
 

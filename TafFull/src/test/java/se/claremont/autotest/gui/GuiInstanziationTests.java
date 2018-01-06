@@ -40,6 +40,7 @@ public class GuiInstanziationTests extends TestSet {
         taf.startTestRunTest();
         java.activateTab(MainWindow.mainWindow, "Create");
         java.activateTab(MainWindow.mainWindow, "REST");
+        taf.createRestRequestTest();
         java.activateTab(MainWindow.mainWindow, "Web");
         java.activateTab(MainWindow.mainWindow, "Java");
         java.activateTab(MainWindow.mainWindow, "Smart");

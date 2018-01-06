@@ -169,6 +169,22 @@ public class TafActions {
         }
     }
 
+    public void createRestRequestTest(){
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "REST");
+        java.verifyObjectExistence(MainWindow.RestPanel.createStepButton);
+        //java.click(MainWindow.RestPanel.createStepButton);
+        //java.closeWindow(CreateRestRequestWindow.window);
+        //java.wait(1000);
+        //java.verifyWindowIsDisplayed(CreateRestRequestWindow.window);
+        //CreateRestRequestWindow.window.mapWindowToDescriptionClass("C:\\temp\\rest.txt");
+        //java.click(CreateRestRequestWindow.cancelButton);
+        java.verifyWindowIsNotDisplayed(CreateRestRequestWindow.window);
+    }
+
     public void startTestRunTest() {
         java.verifyWindowIsDisplayed(MainWindow.mainWindow);
         if(!MainWindow.mainWindow.isShown()){

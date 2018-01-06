@@ -5,24 +5,23 @@ import se.claremont.autotest.common.gui.abouttab.AboutTabPanel;
 import se.claremont.autotest.common.support.StringManagement;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class TafDialog extends JDialog {
 
-    public TafDialog(JDialog parentDialog, String title, boolean modal){
+    public TafDialog(JDialog parentDialog, String title, boolean modal) {
         super(parentDialog, title, modal);
         setIconImage(new ImageIcon(ClassLoader.getSystemResource(
                 "icon.png")).getImage());
-        if(!title.startsWith("TAF - "))
+        if (!title.startsWith("TAF - "))
             this.setTitle("TAF - " + title);
         String usableName = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.firstUpperLetterTrailingLowerLetter(title));
         this.getContentPane().setBackground(Gui.colorTheme.backgroundColor);
         this.getContentPane().setForeground(Gui.colorTheme.textColor);
         this.getRootPane().setBackground(Gui.colorTheme.backgroundColor);
         this.getRootPane().setForeground(Gui.colorTheme.textColor);
-        if(!usableName.toLowerCase().endsWith("dialog"))
+        if (!usableName.toLowerCase().endsWith("dialog"))
             usableName += "Dialog";
         this.setName(usableName);
         this.setBackground(Gui.colorTheme.backgroundColor);
@@ -31,18 +30,19 @@ public class TafDialog extends JDialog {
         addListenerForWhenClosed();
     }
 
-    public TafDialog(JFrame parentFrame, String title, boolean modal){
+    public TafDialog(JFrame parentFrame, String title, boolean modal) {
         super(parentFrame, title, modal);
         setIconImage(new ImageIcon(ClassLoader.getSystemResource(
                 "icon.png")).getImage());
-        if(!title.startsWith("TAF - "))
+        if (!title.startsWith("TAF - "))
             this.setTitle("TAF - " + title);
         String usableName = StringManagement.methodNameWithOnlySafeCharacters(StringManagement.firstUpperLetterTrailingLowerLetter(title));
         this.getContentPane().setBackground(Gui.colorTheme.backgroundColor);
         this.getContentPane().setForeground(Gui.colorTheme.textColor);
         this.getRootPane().setBackground(Gui.colorTheme.backgroundColor);
         this.getRootPane().setForeground(Gui.colorTheme.textColor);
-        if(!usableName.toLowerCase().endsWith("dialog"))
+        this.setLocationRelativeTo(parentFrame);
+        if (!usableName.toLowerCase().endsWith("dialog"))
             usableName += "Dialog";
         this.setName(usableName);
         this.setBackground(Gui.colorTheme.backgroundColor);
@@ -51,7 +51,7 @@ public class TafDialog extends JDialog {
         addListenerForWhenClosed();
     }
 
-    public TafDialog(){
+    public TafDialog() {
         this.setTitle("TAF");
         this.setName("TafFrame");
         this.getContentPane().setBackground(Gui.colorTheme.backgroundColor);
@@ -64,7 +64,11 @@ public class TafDialog extends JDialog {
         addListenerForWhenClosed();
     }
 
-    private void addListenerForWhenClosed(){
+    private TafDialog getThis(){
+        return this;
+    }
+
+    private void addListenerForWhenClosed() {
         this.addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -74,6 +78,9 @@ public class TafDialog extends JDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 AboutTabPanel.openDialogs.remove(this);
+                getThis().setVisible(true);
+                getThis().dispose();
+
             }
 
             @Override

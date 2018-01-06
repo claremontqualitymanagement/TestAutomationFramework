@@ -16,10 +16,7 @@ import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -1538,6 +1535,25 @@ public class GenericInteractionMethods {
             testCase.log(LogLevel.FRAMEWORK_ERROR, "Method verifyCheckboxSelectionStatus() not yet implemented for class '" + component.getClass().getName() + "'.");
         }
 
+    }
+
+    public void closeWindow(JavaWindow window){
+        if(window == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Was instructed to close null window. Cannot do that.");
+            takeScreenshot();
+            return;
+        }
+        Object object = window.getWindow();
+        if(object == null){
+            testCase.log(LogLevel.INFO, "Attempted to close window '" + window.getName() + "', but it could not be found.");
+            return;
+        }
+        Window w = (Window)object;
+        w.dispatchEvent(new WindowEvent(w, WindowEvent.WINDOW_CLOSING));;
+        if(w != null){
+            w.setVisible(false);
+            w.dispose();
+        }
     }
 
     public void activateTab(JavaWindow window, String tabText) {

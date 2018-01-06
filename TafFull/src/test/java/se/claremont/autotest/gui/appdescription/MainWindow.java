@@ -102,4 +102,29 @@ public class MainWindow {
         public static JavaGuiElement runDiagnosticTestsButton = new JavaGuiElement(mainWindow, By.byTextContaining("diagnostic"), "RunDiagnosticTestsButton");
 
     }
+
+    public static class TestStepPanel{
+
+        public static JavaGuiElement tryRunButton = new JavaGuiElement(mainWindow, By.byExactText("Try run"), "TryRunButton");
+
+        public static JavaGuiElement mergeStepButton = new JavaGuiElement(mainWindow, By.byExactText("Merge"), "TryRunButton");
+
+        public static JavaGuiElement cloneStepButton = new JavaGuiElement(mainWindow, By.byExactText("Clone"), "CloneStepButton");
+
+        public static JavaGuiElement generateCodeButton = new JavaGuiElement(mainWindow, By.byExactText("Generate code"), "GenerateCodeButton");
+
+        public static JavaGuiElement splitTestStepButton = new JavaGuiElement(mainWindow, By.byExactText("Split"), "SplitTestStepButton");
+
+        public static JavaGuiElement removeTestStepButton = new JavaGuiElement(mainWindow, By.byExactText("Remove"), "RemoveTestStepButton");
+
+
+    }
+
+    public static class RestPanel{
+
+        public static JavaGuiElement createStepButton = new JavaGuiElement(mainWindow, By.byExactText("Create request"), "CreateRequestButton");
+
+        public static TestStepPanel testStepPanel = new TestStepPanel();
+
+    }
 }

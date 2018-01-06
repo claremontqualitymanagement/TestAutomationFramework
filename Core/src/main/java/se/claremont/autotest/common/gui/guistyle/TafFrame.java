@@ -5,6 +5,7 @@ import se.claremont.autotest.common.gui.abouttab.AboutTabPanel;
 import se.claremont.autotest.common.support.StringManagement;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -39,6 +40,10 @@ public class TafFrame extends JFrame {
         addListenerForWhenClosed();
     }
 
+    private TafFrame getThis(){
+        return this;
+    }
+
     private void addListenerForWhenClosed(){
         this.addWindowListener(new WindowListener() {
             @Override
@@ -49,6 +54,8 @@ public class TafFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 AboutTabPanel.openFrames.remove(this);
+                getThis().setVisible(true);
+                getThis().dispose();
             }
 
             @Override
