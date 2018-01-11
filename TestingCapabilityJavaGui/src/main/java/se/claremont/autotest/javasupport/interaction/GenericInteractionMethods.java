@@ -1400,7 +1400,7 @@ public class GenericInteractionMethods {
                     "'" + String.join("'" + System.lineSeparator() + "'" + existingWindowTitles) + "'");
             takeScreenshot();
         } else {
-            testCase.log(LogLevel.VERIFICATION_PASSED, "Verified the existance of windos '" + javaWindow.getName() + ".");
+            testCase.log(LogLevel.VERIFICATION_PASSED, "Verified the existance of window '" + javaWindow.getName() + ".");
         }
     }
 
@@ -1573,5 +1573,98 @@ public class GenericInteractionMethods {
         testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not activate tab with tab text '" + tabText + "' in window '" + window.getName() + "'. Identified tabs: '" + String.join("', '", identifiedTabNames) + "'.");
         takeScreenshot();
         haltFurtherExecution();
+    }
+
+    public void trackMousePosition(int timeoutInSeconds){
+        long startTime = System.currentTimeMillis();
+        Point lastPosition = MouseInfo.getPointerInfo().getLocation();
+        while (System.currentTimeMillis() - startTime < timeoutInSeconds *1000 ){
+            Point newPoint = MouseInfo.getPointerInfo().getLocation();
+            if(newPoint.x != lastPosition.x || newPoint.y != lastPosition.y){
+                System.out.println("Current mouse position: " + MouseInfo.getPointerInfo().getLocation().x + "x" +
+                        MouseInfo.getPointerInfo().getLocation().y);
+                lastPosition = newPoint;
+            }
+            wait(50);
+        }
+    }
+
+    /**
+     * Moves the mouse to the given element. Does not work with DPI scaling.
+     *
+     * @param guiElement
+     */
+    public void hover(GuiComponent guiElement) {
+        long startTime = System.currentTimeMillis();
+        Object c = guiElement.getRuntimeComponent();
+        while (c == null && System.currentTimeMillis() - startTime < standardTimeout * 1000) {
+            wait(50);
+            c = guiElement.getRuntimeComponent();
+        }
+        if (c == null) {
+            log(LogLevel.EXECUTION_PROBLEM, "Could not move mouse to element " + guiElement.getName() + " since it could not be identified.");
+            ((JavaGuiElement) guiElement).logIdentification(LogLevel.INFO, testCase);
+            takeScreenshot();
+            if (testCase != null)
+                testCase.report();
+            return;
+        }
+
+        ((JavaGuiElement) guiElement).logIdentification(LogLevel.DEBUG, testCase);
+        bringWindowOfElementToFront(guiElement);
+        Point clickPoint = getClickablePoint(guiElement);
+        if (clickPoint == null) return;
+        Robot r = null;
+        try {
+            r = new Robot();
+            r.mouseMove(clickPoint.x, clickPoint.y);
+            log(LogLevel.EXECUTED, "Moved mouse to the " + guiElement.getName() + " component at point " + clickPoint.x + "x" + clickPoint.y + ".");
+            wait(50);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void verifyElementEnabledStatus(GuiComponent guiComponent, boolean expectedToBeEndabled){
+        long startTime = System.currentTimeMillis();
+        if(guiComponent == null){
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot verify enabled status of null element");
+            takeScreenshot();
+            return;
+        }
+        JavaGuiElement javaGuiElement = (JavaGuiElement)guiComponent;
+        Component c = javaGuiElement.getRuntimeComponent();
+        while (c == null && System.currentTimeMillis() - startTime < standardTimeout * 1000){
+            wait(50);
+            c = javaGuiElement.getRuntimeComponent();
+        }
+        if(c == null){
+            testCase.log(LogLevel.VERIFICATION_PROBLEM, "Cannot verify enabled status of element '" + javaGuiElement.getName() + "'. It cannot be identified.");
+            javaGuiElement.logIdentification(LogLevel.INFO, testCase);
+            takeScreenshot();
+            return;
+        } else {
+            javaGuiElement.logIdentification(LogLevel.DEBUG, testCase);
+        }
+        boolean isEnabled = c.isEnabled();
+        while (isEnabled != expectedToBeEndabled && System.currentTimeMillis() - startTime < standardTimeout * 1000){
+            wait(50);
+            isEnabled = c.isEnabled();
+        }
+        if(isEnabled == expectedToBeEndabled){
+            testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + javaGuiElement.getName() + "' was " + String.valueOf(expectedToBeEndabled).toLowerCase().replace("true", "").replace("false", "not ") + "enabled. As expected.");
+        } else {
+            testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + javaGuiElement.getName() + "' never became " +
+                    String.valueOf(expectedToBeEndabled).toLowerCase().replace("true", "enabled").replace("false", "disabled") + " within the timeout of " + standardTimeout + " seconds.");
+        }
+
+    }
+
+    public void verifyElementIsEnabled(GuiComponent guiComponent){
+        verifyElementEnabledStatus(guiComponent, true);
+    }
+
+    public void verifyElementIsDisabled(GuiComponent guiComponent) {
+        verifyElementEnabledStatus(guiComponent, false);
     }
 }

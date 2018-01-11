@@ -7,11 +7,14 @@ import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTe
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
+import se.claremont.autotest.javasupport.interaction.WindowMapper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -299,7 +302,14 @@ public class JavaWindow {
         System.out.println("Attempting to map window " + getName() + ".");
         Object w = waitForWindowToAppear(15);
         System.out.println("Found window " + w.toString() + ". Mapping...");
-        createElementDefinitions(getWindow(), outputFile);
+        WindowMapper.Map(this, outputFile);
+        if(!Desktop.isDesktopSupported())return;
+        try {
+            Desktop.getDesktop().open(new File(outputFile));
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        //createElementDefinitions(getWindow(), outputFile);
     }
 
     private void createElementDefinitions(Object window, String path){

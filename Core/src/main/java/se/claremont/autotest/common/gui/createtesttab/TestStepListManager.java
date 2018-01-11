@@ -113,9 +113,9 @@ public final class TestStepListManager extends JPanel {
                 TestStep testStep = (TestStep)availableTestStepsList.getSelectedValuesList().get(0);
                 SubProcedureTestStep sub = (SubProcedureTestStep)testStep;
                 for(TestStep step : sub.testSteps){
-                    Gui.availableTestSteps.add(step);
+                    Gui.addTestStepToListOfAvailableTestSteps(step);
                 }
-                Gui.availableTestSteps.remove(availableTestStepsList.getSelectedValue());
+                Gui.removeTestStepFromListOfAvailableTestSteps(availableTestStepsList.getSelectedValue());
             }
         });
 
@@ -124,11 +124,11 @@ public final class TestStepListManager extends JPanel {
         cloneTestStepButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(TestStep testStep : Gui.availableTestSteps.getTestSteps()){
+                for(TestStep testStep : Gui.getAvailableTestSteps()){
                     System.out.println(testStep);
                 }
                 TestStep testStep = availableTestStepsList.getSelectedValue();
-                if(testStep != null) Gui.availableTestSteps.add(testStep.clone());
+                if(testStep != null) Gui.addTestStepToListOfAvailableTestSteps(testStep.clone());
             }
         });
 
@@ -138,7 +138,7 @@ public final class TestStepListManager extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for(TestStep testStep : availableTestStepsList.getSelectedValuesList()){
-                    Gui.availableTestSteps.remove(testStep);
+                    Gui.removeTestStepFromListOfAvailableTestSteps(testStep);
                 }
                 update();
             }
@@ -189,7 +189,7 @@ public final class TestStepListManager extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 
-    private void mergeSelectedSteps() {
+    private synchronized void mergeSelectedSteps() {
         TafDialog mergeDialog = new TafDialog(applicationFrame, "TAF - Merge test steps to test action", true);
 
         TafLabel testStepNameLabel = new TafLabel("Test step name:");
@@ -217,10 +217,10 @@ public final class TestStepListManager extends JPanel {
                 }
                 if (!keepOriginalTestStepsInList.isSelected()) {
                     for (TestStep testStep : availableTestStepsList.getSelectedValuesList()) {
-                        Gui.availableTestSteps.remove(testStep);
+                        Gui.removeTestStepFromListOfAvailableTestSteps(testStep);
                     }
                 }
-                Gui.availableTestSteps.add(newTestStep);
+                Gui.addTestStepToListOfAvailableTestSteps(newTestStep);
                 mergeDialog.setVisible(false);
                 mergeDialog.dispose();
             }
@@ -265,14 +265,14 @@ public final class TestStepListManager extends JPanel {
         mergeDialog.setVisible(true);
     }
 
-    public void update() {
+    public synchronized void update() {
         testCaseTestStepListScrollPanel = new JScrollPane(createTestCaseTestStepsList(h));
         avalableTestStepsListScrollPanel = new JScrollPane(createAvailableTestStepsList(h));
         this.revalidate();
         this.repaint();
     }
 
-    public void updateByFilterUpdate(String pattern) {
+    public synchronized void updateByFilterUpdate(String pattern) {
         if (pattern == null || pattern.length() == 0) {
             testStepTypeFilterAsRegex = null;
         } else {
@@ -357,11 +357,11 @@ public final class TestStepListManager extends JPanel {
         }
     }
 
-    private JList<TestStep> createAvailableTestStepsList(TransferHandler handler) {
+    private synchronized JList<TestStep> createAvailableTestStepsList(TransferHandler handler) {
         availableTestStepsListModel.clear();
         int iterator = 0;
-        for (int i = 0; i < Gui.availableTestSteps.getTestSteps().size(); i++) {
-            TestStep testStep = Gui.availableTestSteps.getTestSteps().get(i);
+        for (int i = 0; i < Gui.getAvailableTestSteps().size(); i++) {
+            TestStep testStep = Gui.getAvailableTestSteps().get(i);
             String testStepInfoString = testStep.toString();
             if (testStepTypeFilterAsRegex == null || testStepInfoString.matches(testStepTypeFilterAsRegex)) {
                 availableTestStepsListModel.add(iterator, testStep);
@@ -399,7 +399,7 @@ public final class TestStepListManager extends JPanel {
         return availableTestStepsList;
     }
 
-    private JList<TestStep> createTestCaseTestStepsList(TransferHandler handler) {
+    private synchronized JList<TestStep> createTestCaseTestStepsList(TransferHandler handler) {
         testCaseTestStepListModel.clear();
         for (int i = 0; i < CreateTestTabPanel.testCaseTestSteps.size(); i++) {
             TestStep testStep = CreateTestTabPanel.testCaseTestSteps.get(i);

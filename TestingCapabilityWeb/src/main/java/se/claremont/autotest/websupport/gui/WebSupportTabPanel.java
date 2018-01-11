@@ -47,7 +47,7 @@ public class WebSupportTabPanel implements IGuiTab{
         }
 
         TestStepListManager testStepListManager = new TestStepListManager("^Web.*", application);
-        Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
+        Gui.addChangeListenerToListOfAvailableTestSteps(new TestStepList.TestStepListChangeListener() {
             @Override
             public void isAdded(TestStep testStep) {
                 testStepListManager.update();

@@ -12,7 +12,7 @@ import java.util.List;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class PositionBasedIdentificator {
 
-    public static ElementsList fromAllTheElements(ArrayList<? extends PositionBasedGuiElement> elements){
+    public static ElementsList fromAllThePositionBasedElements(List<? extends PositionBasedGuiElement> elements){
         return new ElementsList(elements);
     }
 
@@ -26,7 +26,7 @@ public class PositionBasedIdentificator {
 
 
     public static ElementsList fromAllTheElements(List<Object> elements){
-        ArrayList<PositionBasedGuiElement> returnElements = new ArrayList<>();
+        List<PositionBasedGuiElement> returnElements = new ArrayList<>();
         for(Object element : elements){
             try{
                 returnElements.add((PositionBasedGuiElement)element);

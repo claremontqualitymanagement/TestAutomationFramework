@@ -7,6 +7,7 @@ import se.claremont.autotest.common.gui.guistyle.TafGuiColor;
 import se.claremont.autotest.common.gui.guistyle.TafGuiColorOriginal;
 import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.gui.plugins.IGuiTab;
+import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepList;
 import se.claremont.autotest.common.gui.userpreferences.Preferences;
 import se.claremont.autotest.common.gui.userpreferences.SavePreferencesOnCloseWindowsListener;
@@ -17,6 +18,7 @@ import se.claremont.autotest.common.gui.runtab.RunTestTabPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 
 public class Gui{
 
@@ -25,7 +27,7 @@ public class Gui{
     public static Preferences preferences = new Preferences();
     public static HashMap<String, String> defaultSettings;
     public static TafGuiColor colorTheme;
-    public static TestStepList availableTestSteps = new TestStepList();
+    private static TestStepList availableTestSteps = new TestStepList();
     JTabbedPane tabs = new JTabbedPane();
 
     public Gui() {
@@ -94,6 +96,22 @@ public class Gui{
 
     boolean isStartedFromJar(){
         return (tabs.getTabCount() < 4);
+    }
+
+    public static synchronized List<TestStep> getAvailableTestSteps(){
+        return availableTestSteps.getTestSteps();
+    }
+
+    public static synchronized void addChangeListenerToListOfAvailableTestSteps(TestStepList.TestStepListChangeListener testStepListChangeListener){
+        availableTestSteps.addChangeListener(testStepListChangeListener);
+    }
+
+    public static synchronized void addTestStepToListOfAvailableTestSteps(TestStep testStep){
+        availableTestSteps.add(testStep);
+    }
+
+    public static synchronized void removeTestStepFromListOfAvailableTestSteps(TestStep testStep){
+        availableTestSteps.remove(testStep);
     }
 
     public void activate() {

@@ -29,7 +29,7 @@ public class RecordingMouseListener implements MouseListener {
         scriptArea.append(text);
         scriptArea.revalidate();
         scriptArea.repaint();
-        Gui.availableTestSteps.add(new JavaClictTestStep(new JavaGuiElement(actualComponent)));
+        Gui.addTestStepToListOfAvailableTestSteps(new JavaClictTestStep(new JavaGuiElement(actualComponent)));
     }
 
     @Override

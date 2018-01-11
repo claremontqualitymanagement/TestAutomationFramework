@@ -26,8 +26,8 @@ public class TAF implements Runnable{
         testStep2.setElementName("http://claremont.se/user");
         testStep2.setAssociatedData("{id: 34531}");
 
-        Gui.availableTestSteps.add(testStep1);
-        Gui.availableTestSteps.add(testStep2);
+        Gui.addTestStepToListOfAvailableTestSteps(testStep1);
+        Gui.addTestStepToListOfAvailableTestSteps(testStep2);
         Thread t = new Thread(new TAF(args));
         t.start();
         try {

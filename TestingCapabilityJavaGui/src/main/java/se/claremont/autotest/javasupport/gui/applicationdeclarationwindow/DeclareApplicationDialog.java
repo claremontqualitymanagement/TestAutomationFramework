@@ -23,7 +23,7 @@ import java.util.zip.ZipInputStream;
 
 public class DeclareApplicationDialog {
 
-    TafFrame dialog = new TafFrame();
+    TafFrame dialog = new TafFrame("TAF - Declare application");
     TafLabel headline = new TafLabel("Application declaration for testing");
     TafLabel blankSpace = new TafLabel(" ");
     TafPanel parametersPanel = new TafPanel("ParametersPanel");
@@ -366,7 +366,7 @@ public class DeclareApplicationDialog {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.availableTestSteps.add(new JavaStartApplicationTestStep(JavaSupportTab.applicationUnderTest));
+                Gui.addTestStepToListOfAvailableTestSteps(new JavaStartApplicationTestStep(JavaSupportTab.applicationUnderTest));
                 dialog.setVisible(false);
                 dialog.dispose();
             }

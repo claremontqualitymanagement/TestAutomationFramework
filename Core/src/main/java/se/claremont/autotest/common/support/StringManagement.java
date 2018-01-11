@@ -28,13 +28,27 @@ public class StringManagement {
 
     }
 
+    public static String safeClassName(String instring){
+        String returnString = safeVariableName(instring);
+        return returnString.substring(0,1).toUpperCase() + returnString.substring(1);
+    }
+
     public static String safeVariableName(String instring){
-        StringBuilder returnString = new StringBuilder();
+        instring = stringToCapitalInitialCharacterForEachWordAndNoSpaces(instring);
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < instring.length(); i++) {
-            if (Character.isLetter(instring.charAt(i)) || Character.isDigit(instring.charAt(i))) returnString.append(instring.charAt(i));
+            if (Character.isLetter(instring.charAt(i)) || Character.isDigit(instring.charAt(i))) sb.append(instring.charAt(i));
         }
-        if(returnString.length() > 0 && Character.isDigit(returnString.charAt(0))) return "_" + returnString.toString();
-        return returnString.toString();
+        if(sb.length() > 0 && Character.isDigit(sb.charAt(0))) return "_" + sb.toString();
+        String returnString = sb.toString();
+        if(returnString.length() > 1){
+            returnString = returnString.substring(0,1).toLowerCase() + returnString.substring(1);
+        } else if (returnString.length() == 1){
+            returnString = returnString.toLowerCase();
+        }else{
+            returnString = "anonymous";
+        }
+        return returnString;
     }
 
     /**

@@ -44,12 +44,12 @@ public class PositionBasedTests extends UnitTestClass{
         for(Object object : objects){
            elementsList.add(new JavaGuiElement(object));
         }
-        ElementsList allElementsInPanel = PositionBasedIdentificator.fromAllTheElements(elementsList);
+        ElementsList allElementsInPanel = PositionBasedIdentificator.fromAllThePositionBasedElements(elementsList);
         MethodInvoker m = new MethodInvoker(tempTestCase);
         Assert.assertNotNull(allElementsInPanel);
         //Object textField = allElementsInPanel.atTheSameHeightAs(JavaTestApplication.textField(), 20, 20).theObjectMostToTheRight();
         JavaGuiElement textField = new JavaGuiElement(PositionBasedIdentificator
-                .fromAllTheElements(elementsList)
+                .fromAllThePositionBasedElements(elementsList)
                 .atTheSameHeightAs(JavaTestApplication.textField(), 20, 20)
                 .theObjectMostToTheRight());
         Assert.assertNotNull(textField);
@@ -65,7 +65,7 @@ public class PositionBasedTests extends UnitTestClass{
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
         JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.
-                fromAllTheElements(JavaTestApplication.panel0().getSubElements()).
+                fromAllThePositionBasedElements(JavaTestApplication.panel0().getSubElements()).
                 atTheSameHeightAs(JavaTestApplication.textField(), 10, 10).
                 theObjectMostToTheRight();
         //java.takeScreenshot();
@@ -79,7 +79,7 @@ public class PositionBasedTests extends UnitTestClass{
         TestCase tempTestCase = new TestCase(null, currentTestNameInternal.getMethodName());
         GenericInteractionMethods java = new GenericInteractionMethods(tempTestCase);
         java.wait(500);
-        JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.fromAllTheElements(JavaTestApplication.window().getComponentsAsJavaGuiElements()).elementImmediatelyToTheRightOf(JavaTestApplication.okbutton());
+        JavaGuiElement textField = (JavaGuiElement) PositionBasedIdentificator.fromAllThePositionBasedElements(JavaTestApplication.window().getComponentsAsJavaGuiElements()).elementImmediatelyToTheRightOf(JavaTestApplication.okbutton());
         Assert.assertNotNull(textField);
         Assert.assertTrue(java.getText(textField.getRuntimeComponent()), java.getText(textField.getRuntimeComponent()).equals("Checkbox awt"));
         JavaTestApplicationRunner.hideWindow();

@@ -1,7 +1,10 @@
 package se.claremont.autotest.javasupport.interaction;
 
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.autotest.javasupport.objectstructure.JavaWindow;
 
 import java.awt.*;
@@ -10,15 +13,21 @@ import java.util.List;
 
 public class WindowMapper {
     List<Component> unidentifiedComponents = new ArrayList<>();
-    List<Object> identifiedComponents = new ArrayList<>();
+    List<Component> identifiedComponents = new ArrayList<>();
     StringBuilder sb = new StringBuilder();
     GenericInteractionMethods gim = new GenericInteractionMethods(null);
     JavaWindow javaWindow;
+
+    public static void Map(JavaWindow javaWindow, String outputFilePath){
+        WindowMapper windowMapper = new WindowMapper();
+        windowMapper.createElementDefinitions(javaWindow, outputFilePath);
+    }
 
     private void createElementDefinitions(JavaWindow javaWindow, String outputFilePath){
         this.javaWindow = javaWindow;
         unidentifiedComponents = javaWindow.getComponents();
         addClassHeader();
+        addWindowDeclaration();
         addElementsIdentifiedByName();
         addElementsIdentifiedByUniqueClass();
         addElementsIdentifiedByUniqueText();
@@ -26,8 +35,37 @@ public class WindowMapper {
         //addElementsIdentifiedByClassAndTextCombination();
         //addElementsIdentifiedByNameAndTextCombination();
         //addElementsIdentifiedByAncestorAndAnyCombination();
+        addElementsToTheRightOfIdentifiedElement();
         addUnidentifiedElements();
+        sb.append(System.lineSeparator()).append("}").append(System.lineSeparator());
         SupportMethods.saveToFile(sb.toString(), outputFilePath);
+    }
+
+    private void addElementsToTheRightOfIdentifiedElement() {
+        Integer numberOfUnidentifiedComponents = null;
+        while(numberOfUnidentifiedComponents == null || numberOfUnidentifiedComponents != unidentifiedComponents.size()){
+            numberOfUnidentifiedComponents = unidentifiedComponents.size();
+            ArrayList<PositionBasedGuiElement> javaGuiElements = new ArrayList<>();
+            for(Component c : unidentifiedComponents){
+                javaGuiElements.add(new JavaGuiElement(c));
+            }
+            for(Component potentialRightComponent : unidentifiedComponents){
+                for(Component potentialLeftElement : identifiedComponents){
+                    Component candidateRightComponent = (Component)PositionBasedIdentificator.fromAllThePositionBasedElements(javaGuiElements).elementImmediatelyToTheRightOf(new JavaGuiElement(potentialLeftElement));
+                    if(candidateRightComponent == null) continue;
+                    if(candidateRightComponent.toString().equals(potentialRightComponent.toString())){
+                        System.out.println("Element '" + candidateRightComponent.toString() + "' is immediately to the right of element '" + potentialLeftElement + "'.");
+                        sb.append("   public static JavaGuiElement = new JavaGuiElement((Component)(Component)PositionBasedIdentificator.fromAllThePositionBasedElements(javaGuiElements).elementImmediatelyToTheRightOf(new JavaGuiElement(potentialLeftElement)));").append(System.lineSeparator());
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void addWindowDeclaration() {
+        String title = javaWindow.getTitle();
+        sb.append("   public static JavaWindow window = new JavaWindow(\"" + title + "\");").append(System.lineSeparator()).append(System.lineSeparator());
     }
 
     private void addUnidentifiedElements() {
@@ -42,7 +80,7 @@ public class WindowMapper {
     private void addElementsIdentifiedByUniqueText() {
         List<Object> elementsToRemove = new ArrayList<>();
         for(int i = 0; i < unidentifiedComponents.size(); i++){
-            Object o = unidentifiedComponents.get(i);
+            Component o = unidentifiedComponents.get(i);
             String text = gim.getText(o);
             if(text == null || text.length() == 0) continue;
             if(i == unidentifiedComponents.size()){
@@ -67,9 +105,9 @@ public class WindowMapper {
     }
     
     private void addElementsIdentifiedByName() {
-        List<Object> elementsToRemove = new ArrayList<>();
+        List<Component> elementsToRemove = new ArrayList<>();
         for(int i = 0; i < unidentifiedComponents.size(); i++){
-            Object o = unidentifiedComponents.get(i);
+            Component o = unidentifiedComponents.get(i);
             String name = gim.getName(o);
             if(name == null || name.length() == 0) continue;
             if(i == unidentifiedComponents.size()){
@@ -94,9 +132,9 @@ public class WindowMapper {
     }
 
     private void addElementsIdentifiedByUniqueClass() {
-        List<Object> elementsToRemove = new ArrayList<>();
+        List<Component> elementsToRemove = new ArrayList<>();
         for(int i = 0; i < unidentifiedComponents.size(); i++){
-            Object o = unidentifiedComponents.get(i);
+            Component o = unidentifiedComponents.get(i);
             String className = o.getClass().getSimpleName();
             if(className == null || className.length() == 0) continue;
             if(i == unidentifiedComponents.size()){
@@ -120,11 +158,12 @@ public class WindowMapper {
         unidentifiedComponents.removeAll(elementsToRemove);
     }
 
-    private void addElementDefinition(Object o, String byStatement) {
+    private void addElementDefinition(Component o, String byStatement) {
         identifiedComponents.add(o);
-        sb.append("   public static JavaGuiElement " + identifyElementName(o) + "(){").append(System.lineSeparator());
-        sb.append("        return new JavaGuiElement(By" + System.lineSeparator() + byStatement).append(";").append(System.lineSeparator());
-        sb.append("     }").append(System.lineSeparator());
+        String elementName = identifyElementName(o);
+        sb.append("   public static JavaGuiElement " + elementName + "(){").append(System.lineSeparator());
+        sb.append("        return new JavaGuiElement(window, By").append(System.lineSeparator()).append("   ").append(byStatement).append(",").append(System.lineSeparator() + "            \"" + elementName + "\");").append(System.lineSeparator());
+        sb.append("   }").append(System.lineSeparator());
         sb.append(System.lineSeparator());
     }
 
@@ -133,13 +172,22 @@ public class WindowMapper {
         if(objectName == null || objectName.length() == 0) 
             objectName = (String) MethodInvoker.invokeTheFirstEncounteredMethod(null, o, MethodDeclarations.textGettingMethodsInAttemptOrder);
         if (objectName == null || objectName.length() == 0) objectName = "NoNamedObject";
-        String name = o.getClass().getSimpleName().replace(".", "_").replace(" ", "") + "_" + objectName.replace(" ", "");
-        return name;        
+        objectName = StringManagement.safeVariableName(objectName);
+        String className = o.getClass().getSimpleName();
+        if(!objectName.endsWith(className) || !objectName.startsWith(className)){
+            objectName = objectName + o.getClass().getSimpleName().replace(".", "_").replace(" ", "");
+        }
+        return objectName;
     }
 
     private void addClassHeader() {
         String title = javaWindow.getTitle();
-        sb.append("public class ").append(StringManagement.methodNameWithOnlySafeCharacters(title)).append(" {").append(System.lineSeparator());
+        sb.append("import se.claremont.autotest.javasupport.interaction.elementidentification.By;").append(System.lineSeparator());
+        sb.append("import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;").append(System.lineSeparator());
+        sb.append("import se.claremont.autotest.javasupport.objectstructure.JavaWindow;").append(System.lineSeparator());
+        sb.append(System.lineSeparator());
+        String windowName = StringManagement.safeClassName(title) + "Window";
+        sb.append("public class ").append(windowName).append(" {").append(System.lineSeparator());
         sb.append(System.lineSeparator());
     }
 

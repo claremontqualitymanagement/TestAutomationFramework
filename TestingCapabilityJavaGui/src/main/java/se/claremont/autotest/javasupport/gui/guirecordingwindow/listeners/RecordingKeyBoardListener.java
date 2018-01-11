@@ -48,7 +48,7 @@ public class RecordingKeyBoardListener implements KeyListener{
             if(!Character.isAlphabetic(characterExtendedKeyCode.keyCode))
                 text.append(Character.getName(characterExtendedKeyCode.keyCode));
         }
-        Gui.availableTestSteps.add(new JavaTextTypedTestStep(text.toString(), JavaGuiElementDeclarationManager.createJavaGuiElement(RecordWindow.activeComponent)));
+        Gui.addTestStepToListOfAvailableTestSteps(new JavaTextTypedTestStep(text.toString(), JavaGuiElementDeclarationManager.createJavaGuiElement(RecordWindow.activeComponent)));
         RecordWindow.keysPressedSinceLastWriteCommand.clear();
         String outputText = "<pre>java.type(" +
                 JavaGuiElementDeclarationManager.javaGuiElementAsCodeString(

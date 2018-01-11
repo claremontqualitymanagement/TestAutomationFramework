@@ -23,13 +23,6 @@ public class GuiInstanziationTests extends TestSet {
     }
 
     @Test
-    public void startNoArgumentsSmokeTest(){
-        taf.startApplication();
-        //taf.testApplicationExit(); //Don't do this. it exits the system.
-        taf.closeApplication();
-    }
-
-    @Test
     public void smokeTest(){
         taf.startApplication();
         taf.runPanelInteractionTests();
@@ -42,7 +35,9 @@ public class GuiInstanziationTests extends TestSet {
         java.activateTab(MainWindow.mainWindow, "REST");
         taf.createRestRequestTest();
         java.activateTab(MainWindow.mainWindow, "Web");
-        java.activateTab(MainWindow.mainWindow, "Java");
+        taf.applicationDeclarationTest();
+        taf.javaRecorderTest();
+        taf.guiSpyTest();
         java.activateTab(MainWindow.mainWindow, "Smart");
         taf.aboutTabHelpWindowTests();
         taf.diagnosticTestRunTests();

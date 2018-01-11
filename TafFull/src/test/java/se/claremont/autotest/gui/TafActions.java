@@ -7,6 +7,7 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.gui.appdescription.*;
 import se.claremont.autotest.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
+import se.claremont.autotest.websupport.gui.recorder.RecorderWindow;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -258,6 +259,46 @@ public class TafActions {
         java.verifyWindowIsDisplayed(HelpWindow.helpWindow);
         java.click(HelpWindow.helpWindowCloseButton);
         java.verifyWindowIsNotDisplayed(HelpWindow.helpWindow);
+    }
+
+    public void guiSpyTest() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Java");
+        java.click(MainWindow.JavaPanel.guiSpyButton);
+        java.verifyWindowIsDisplayed(GuiSpyWindow.window);
+        java.hover(GuiSpyWindow.closeButton);
+        //java.verifyElementTextContains(GuiSpyWindow.programaticDescriptionField, "Close");
+        java.click(GuiSpyWindow.closeButton);
+        java.verifyWindowIsNotDisplayed(GuiSpyWindow.window);
+    }
+
+    public void javaRecorderTest() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Java");
+        //java.click(MainWindow.JavaPanel.recordButton);
+    }
+
+    public void applicationDeclarationTest() {
+        java.verifyWindowIsDisplayed(MainWindow.mainWindow);
+        if(!MainWindow.mainWindow.isShown()){
+            java.haltFurtherExecution();
+        }
+        java.activateTab(MainWindow.mainWindow, "Java");
+        java.click(MainWindow.JavaPanel.declareApplicationButton);
+        java.verifyWindowIsDisplayed(ApplicationDeclarationWindow.window);
+        ApplicationDeclarationWindow.window.mapWindowToDescriptionClass("C:\\temp\\declare.txt");
+        java.verifyElementTextIsExactly(ApplicationDeclarationWindow.friendlyNameTextField, "");
+        java.verifyElementIsDisabled(ApplicationDeclarationWindow.saveButton);
+        java.write(ApplicationDeclarationWindow.friendlyNameTextField, "MyTestApplication");
+        java.verifyElementIsEnabled(ApplicationDeclarationWindow.saveButton);
+        java.click(ApplicationDeclarationWindow.cancelButton);
+        java.verifyWindowIsNotDisplayed(ApplicationDeclarationWindow.window);
     }
 
     class TafSecurityManager extends SecurityManager {

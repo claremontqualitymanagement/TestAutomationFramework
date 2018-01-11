@@ -34,8 +34,8 @@ public class JavaGuiElementTest extends UnitTestClass{
         Assert.assertTrue(elementList.size() > 5);
         boolean foundCancelButton = false;
         for(JavaGuiElement element: elementList){
-            if(element.toString().contains("CancelButton")){
-                System.out.println(element.toString());
+            System.out.println(element.toString());
+            if(element.toString().contains("cancelButton")){
                 foundCancelButton = true;
             }
         }
@@ -47,7 +47,7 @@ public class JavaGuiElementTest extends UnitTestClass{
         List<JavaGuiElement> elementList = JavaTestApplication.okbutton().getAllElementsInSameContainer();
         boolean foundCancelButton = false;
         for(JavaGuiElement element: elementList){
-            if(element.toString().contains("CancelButton")){
+            if(element.toString().contains("cancelButton")){
                 System.out.println(element.toString());
                 foundCancelButton = true;
             }

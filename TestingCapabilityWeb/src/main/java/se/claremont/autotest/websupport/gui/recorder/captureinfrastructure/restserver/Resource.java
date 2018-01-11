@@ -66,7 +66,7 @@ public class Resource {
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                 "/tafwebrecorder/v1/click with content: '" + URLDecoder.decode(data) + "'.");
-        Gui.availableTestSteps.add(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
+        Gui.addTestStepToListOfAvailableTestSteps(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
     }
 
     @POST
@@ -76,7 +76,7 @@ public class Resource {
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                 "/tafwebrecorder/v1/checkbox with content: '" + URLDecoder.decode(data) + "'.");
-        Gui.availableTestSteps.add(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
+        Gui.addTestStepToListOfAvailableTestSteps(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
     }
 
     @POST
@@ -99,7 +99,7 @@ public class Resource {
             if(jsonNode.get("text").asText() != null && jsonNode.get("text").asText().length() > 0) {
                 text = jsonNode.get("text").asText();
             }
-            Gui.availableTestSteps.add(new WebInputTestStep(domElement, text));
+            Gui.addTestStepToListOfAvailableTestSteps(new WebInputTestStep(domElement, text));
         }catch (Throwable ignored){
             System.out.println(ignored.getMessage());
         }
@@ -140,7 +140,7 @@ public class Resource {
                     valueForAttributeInJson(jsonNode, "attributeName"),
                     valueForAttributeInJson(jsonNode, "oldValue"),
                     valueForAttributeInJson(jsonNode, "newValue"));
-            Gui.availableTestSteps.add(testStep);
+            Gui.addTestStepToListOfAvailableTestSteps(testStep);
         }
     }
 

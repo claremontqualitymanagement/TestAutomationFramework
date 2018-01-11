@@ -1,6 +1,7 @@
 package se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A list of elements relevant for further evaluation to identify a specific element by its position relative to other elements.
@@ -9,9 +10,9 @@ import java.util.ArrayList;
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class ElementsList {
-    public ArrayList<? extends PositionBasedGuiElement> elements;
+    public List<? extends PositionBasedGuiElement> elements;
 
-    public ElementsList(ArrayList<? extends PositionBasedGuiElement> elements){
+    public ElementsList(List<? extends PositionBasedGuiElement> elements){
         this.elements = elements;
     }
 

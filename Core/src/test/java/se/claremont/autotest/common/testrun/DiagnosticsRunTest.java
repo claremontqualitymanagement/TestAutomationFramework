@@ -22,11 +22,12 @@ public class DiagnosticsRunTest extends UnitTestClass{
         try {
             //SuppressTestOutputFromConsoleOutput.redirectOutputChannel();
             diagnosticsRun.run();
+            String failureDescription = "";
             //SuppressTestOutputFromConsoleOutput.restoreOutputChannel();
             for(Failure testFailure: diagnosticsRun.getResult().getFailures()) {
-                System.out.println(testFailure.toString());
+                failureDescription += "Failure found:" + testFailure.toString() + System.lineSeparator();
             }
-            assertTrue("There should not be any failures from diagnosticsrun: " + diagnosticsRun.getResult().getFailures(), diagnosticsRun.getResult().getFailures().isEmpty());
+            assertTrue("There should not be any failures from diagnosticsrun: " + System.lineSeparator() + failureDescription, diagnosticsRun.getResult().getFailures().isEmpty());
         } catch (Exception e) {
             fail("Should not throw exception: " + e.getMessage());
         }

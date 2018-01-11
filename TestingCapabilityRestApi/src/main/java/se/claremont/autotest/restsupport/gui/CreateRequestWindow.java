@@ -249,7 +249,7 @@ public class CreateRequestWindow {
                 testStep.actionName = sendMethodCombobox.getItemAt(sendMethodCombobox.getSelectedIndex()).toString();
                 testStep.elementName = endPointUrlTextField.getText();
                 testStep.data = sendDataTextArea.getText();
-                Gui.availableTestSteps.add(testStep);
+                Gui.addTestStepToListOfAvailableTestSteps(testStep);
                 window.dispose();
             }
         });

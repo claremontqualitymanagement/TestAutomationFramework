@@ -94,7 +94,7 @@ public class WebRecorder {
                     if (!driver.getCurrentUrl().equals(lastUrl)) {
                         System.out.println("New url detected: '" + driver.getCurrentUrl());
                         lastUrl = driver.getCurrentUrl();
-                        Gui.availableTestSteps.add(new WebNavigationTestStep(lastUrl));
+                        Gui.addTestStepToListOfAvailableTestSteps(new WebNavigationTestStep(lastUrl));
                         invokeJavascriptBasedListeners();
                     }
                 }catch (Exception ignored){} //Sometimes getCurrentUrl fails during page transitions

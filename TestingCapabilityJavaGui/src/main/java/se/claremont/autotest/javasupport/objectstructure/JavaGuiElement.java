@@ -1,5 +1,7 @@
 package se.claremont.autotest.javasupport.objectstructure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -27,12 +29,13 @@ import java.util.Set;
  */
 @SuppressWarnings("WeakerAccess")
 public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
-    String name;
-    JavaWindow window = null;
-    public By by;
-    List<String> recognitionDescription = new ArrayList<>();
-    TestCase testCase;
-    Component cachedElement = null;
+    @JsonProperty String name;
+    @JsonProperty JavaWindow window = null;
+    @JsonProperty public By by;
+    @JsonIgnore private boolean cacheIsEssential = false;
+    @JsonIgnore List<String> recognitionDescription = new ArrayList<>();
+    @JsonIgnore TestCase testCase;
+    @JsonIgnore Component cachedElement = null;
 
     public JavaGuiElement(JavaWindow window, By by, String name, TestCase testCase){
         this.window = window;
@@ -52,17 +55,20 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
 
     public JavaGuiElement(Object object) {
         this(object, null);
+        cacheIsEssential = true;
     }
 
     public JavaGuiElement(PositionBasedGuiElement positionBasedGuiElement){
         if(positionBasedGuiElement.runtimeElement() == null) return;
         cachedElement = (Component)positionBasedGuiElement.runtimeElement();
+        cacheIsEssential = true;
         name = "NoNamed" + cachedElement.getClass().getSimpleName();
     }
 
     public JavaGuiElement(Object object, TestCase testCase) {
         this.testCase = testCase;
         if(object == null)return;
+        cacheIsEssential = true;
         if(By.class.isAssignableFrom(object.getClass())){
                 this.by = (By)object;
                 return;
@@ -233,7 +239,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
         return componentList;
     }
 
-    private ArrayList<? extends PositionBasedGuiElement> getElementFromRelativePositionReferenceIfApplicable(){
+    private List<? extends PositionBasedGuiElement> getElementFromRelativePositionReferenceIfApplicable(){
         for(SearchCondition sc : by.searchConditions){
             if(sc.searchConditionType == null || sc.objects == null || sc.objects[0] == null) continue;
             if(!sc.searchConditionType.equals(SearchConditionType.POSITION_BASED))continue;
@@ -360,6 +366,7 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
     }
 
     public void clearCache(){
+        if(cacheIsEssential) return;
         this.cachedElement = null;
     }
     /**

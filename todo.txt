@@ -1,11 +1,6 @@
 Replace method for converting string to file name with propper IO library method call
 Tags for test cases and test steps
-Implement Java recorder
-Implement web recorder
-Tabbed panel for Declare Java Application. One tab for Java Web Start.
-Implement test step list with drag-n-drop
-Make REST work
+Tabbed panel for Declare Java Application. One tab for Java Web Start, and one for only class.
 Closing SUT should not close TAF
 Implement page object structure for element, for view
 Get waiting symbol working
-Java element identifier for element constructors needs to be implemented

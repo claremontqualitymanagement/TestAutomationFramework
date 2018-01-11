@@ -71,7 +71,7 @@ public class CreateTestTabPanel implements IGuiTab {
             }
         });
 
-        Gui.availableTestSteps.addChangeListener(new TestStepList.TestStepListChangeListener() {
+        Gui.addChangeListenerToListOfAvailableTestSteps(new TestStepList.TestStepListChangeListener() {
             @Override
             public void isAdded(TestStep testStep) {
                 testStepListManager.update();

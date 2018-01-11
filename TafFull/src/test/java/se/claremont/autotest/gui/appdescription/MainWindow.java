@@ -105,17 +105,17 @@ public class MainWindow {
 
     public static class TestStepPanel{
 
-        public static JavaGuiElement tryRunButton = new JavaGuiElement(mainWindow, By.byExactText("Try run"), "TryRunButton");
+        public JavaGuiElement tryRunButton = new JavaGuiElement(mainWindow, By.byExactText("Try run"), "TryRunButton");
 
-        public static JavaGuiElement mergeStepButton = new JavaGuiElement(mainWindow, By.byExactText("Merge"), "TryRunButton");
+        public JavaGuiElement mergeStepButton = new JavaGuiElement(mainWindow, By.byExactText("Merge"), "TryRunButton");
 
-        public static JavaGuiElement cloneStepButton = new JavaGuiElement(mainWindow, By.byExactText("Clone"), "CloneStepButton");
+        public JavaGuiElement cloneStepButton = new JavaGuiElement(mainWindow, By.byExactText("Clone"), "CloneStepButton");
 
-        public static JavaGuiElement generateCodeButton = new JavaGuiElement(mainWindow, By.byExactText("Generate code"), "GenerateCodeButton");
+        public JavaGuiElement generateCodeButton = new JavaGuiElement(mainWindow, By.byExactText("Generate code"), "GenerateCodeButton");
 
-        public static JavaGuiElement splitTestStepButton = new JavaGuiElement(mainWindow, By.byExactText("Split"), "SplitTestStepButton");
+        public JavaGuiElement splitTestStepButton = new JavaGuiElement(mainWindow, By.byExactText("Split"), "SplitTestStepButton");
 
-        public static JavaGuiElement removeTestStepButton = new JavaGuiElement(mainWindow, By.byExactText("Remove"), "RemoveTestStepButton");
+        public JavaGuiElement removeTestStepButton = new JavaGuiElement(mainWindow, By.byExactText("Remove"), "RemoveTestStepButton");
 
 
     }
@@ -125,6 +125,21 @@ public class MainWindow {
         public static JavaGuiElement createStepButton = new JavaGuiElement(mainWindow, By.byExactText("Create request"), "CreateRequestButton");
 
         public static TestStepPanel testStepPanel = new TestStepPanel();
+
+    }
+
+    public static class JavaPanel{
+
+        public static JavaGuiElement guiSpyButton = new JavaGuiElement(mainWindow, By.byExactText("GUI Spy"), "GuiSpyButton");
+
+        public static JavaGuiElement recordButton = new JavaGuiElement(mainWindow, By.byExactText("Record"), "RecordJavaButton");
+
+        public static JavaGuiElement declareApplicationButton = new JavaGuiElement(mainWindow, By.byExactText("Declare application"), "DeclareApplicationButton");
+
+        public static JavaGuiElement startApplicationButton = new JavaGuiElement(mainWindow, By.byExactText("Start application"), "StartApplicationButton");
+
+        public static TestStepPanel testStepPanel = new TestStepPanel();
+
 
     }
 }

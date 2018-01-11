@@ -46,7 +46,7 @@ public class RecordingFocusListener implements FocusListener {
                 RecordingKeyBoardListener.addIdentifiedTypeCommandIfApplicable();
             return;
         }
-        Gui.availableTestSteps.add(new JavaWriteTestStep(new JavaGuiElement(e.getComponent()), keysPressedUponComponent));
+        Gui.addTestStepToListOfAvailableTestSteps(new JavaWriteTestStep(new JavaGuiElement(e.getComponent()), keysPressedUponComponent));
         RecordingKeyBoardListener.addIdentifiedTypeCommandIfApplicable();
         if (e.getComponent() == null) return;
         String text = "<pre>java.write(new JavaGuiElement(By.byName(\"" + actualComponent.getName() + "\")), \"" + keysPressedUponComponent + "\");</pre><br>" + System.lineSeparator();
