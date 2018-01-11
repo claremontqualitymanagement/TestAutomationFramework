@@ -1025,21 +1025,22 @@ public class WebInteractionMethods  {
         while (!clicked && (System.currentTimeMillis() - startTime) <= timeoutInSeconds *1000){
             webElement = getRuntimeElementWithoutLogging(element);
 
-            if(webElement != null)
-                hasBeenIdentified = true;
-            if(webElement.isEnabled())
-                hasBeenEnabled = true;
-            if(webElement.isDisplayed())
-                hasBeenDisplayed = true;
-
             if(webElement == null || !webElement.isEnabled() || !webElement.isDisplayed()){
                 try { Thread.sleep(50); } catch (InterruptedException ignored) { }
                 continue;
             }
 
+            webElement = getRuntimeElementWithLogging(element);
+
+            if(webElement == null) break;
+
+            if(webElement.isEnabled())
+                hasBeenEnabled = true;
+            if(webElement.isDisplayed())
+                hasBeenDisplayed = true;
+
             try{
                 //noinspection ConstantConditions
-                webElement = getRuntimeElementWithLogging(element);
                 webElement.click();
                 clicked = true;
             } catch (Exception e){
