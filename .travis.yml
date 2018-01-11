@@ -13,7 +13,7 @@ jdk:
 #  - oraclejdk7
 #  - openjdk6
 script:
-- mvn clean install
+- mvn clean install -DskipTests
 - mvn javadoc:aggregate-jar
 - mvn source:aggregate
 #- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar antrun:run -DskipTests
@@ -33,7 +33,7 @@ before_deploy:
 #- export TAF_DOC_FILE=$(find . -name *TestAutomationFramework-*-javadoc.jar | grep -v "doc" | grep -v "sources")
 #- export TAF_SRC_FILE=$(find . -name *TestAutomationFramework-*-sources.jar | grep -v "doc" | grep -v "sources")
 #- export TAF_JAR_FILE=$(find ./TafFull/target/ -maxdepth 1 -name *TafFull*.jar)
-- export TAF_JAR_FILE=$(find ./TafFull/target/ ! -name "*sources*" -maxdepth 1 -name *TafFull*.jar)
+- export TAF_JAR_FILE=$(find ./TafFull/target/ ! -name "*sources*" ! -name "*javadoc*" -maxdepth 1 -name *TafFull*.jar)
 - export TAF_DOC_FILE=$(find ./target/ -name TestAutomationFramework*-javadoc.jar)
 - export TAF_SRC_FILE=$(find ./target/ -name TestAutomationFramework*-sources.jar)
 deploy:
