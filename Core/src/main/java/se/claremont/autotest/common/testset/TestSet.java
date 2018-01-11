@@ -13,8 +13,10 @@ import org.junit.runner.Description;
 import se.claremont.autotest.common.junitcustomization.TafParallelTestCaseRunner;
 import se.claremont.autotest.common.logging.KnownError;
 import se.claremont.autotest.common.logging.KnownErrorsList;
+import se.claremont.autotest.common.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.testcase.TestCase;
+import se.claremont.autotest.common.testrun.TestRun;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,7 @@ public abstract class TestSet {
      */
     public TestSet() {
         name = SupportMethods.classNameAtStacktraceLevel(3);
+        TestRun.addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
     }
 
     //Todo: This could not possibly be 100% thread safe...?
