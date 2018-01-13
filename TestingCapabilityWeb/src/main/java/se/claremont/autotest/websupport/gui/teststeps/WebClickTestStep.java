@@ -6,7 +6,9 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebClickTestStep extends TestStep {
+import java.io.Serializable;
+
+public class WebClickTestStep extends TestStep implements Serializable{
 
     public WebClickTestStep(){
         super();

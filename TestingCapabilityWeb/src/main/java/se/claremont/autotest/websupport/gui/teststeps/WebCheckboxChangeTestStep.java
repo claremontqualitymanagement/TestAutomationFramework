@@ -6,7 +6,10 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebCheckboxChangeTestStep extends TestStep {
+import java.io.Serializable;
+
+public class WebCheckboxChangeTestStep extends TestStep implements Serializable{
+
     DomElement domElement;
 
     public WebCheckboxChangeTestStep(){

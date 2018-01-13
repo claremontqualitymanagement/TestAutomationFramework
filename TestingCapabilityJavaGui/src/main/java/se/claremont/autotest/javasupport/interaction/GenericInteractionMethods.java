@@ -744,7 +744,8 @@ public class GenericInteractionMethods {
      * Returns the runtime text of the element.
      *
      * @param guiElement The element to get the text of.
-     * @return Returns the current text of the runtime element
+     * @param timeoutInMilliseconds The timeout to wait for the element to appear
+     * @return Returns the current text of the runtime element.
      */
     public String getText(GuiComponent guiElement, int timeoutInMilliseconds) {
         long startTime = System.currentTimeMillis();
@@ -1592,7 +1593,7 @@ public class GenericInteractionMethods {
     /**
      * Moves the mouse to the given element. Does not work with DPI scaling.
      *
-     * @param guiElement
+     * @param guiElement The element to hover.
      */
     public void hover(GuiComponent guiElement) {
         long startTime = System.currentTimeMillis();

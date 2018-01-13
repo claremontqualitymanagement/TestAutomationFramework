@@ -5,7 +5,9 @@ import se.claremont.autotest.common.gui.teststructure.TestCaseManager;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 
-public class JavaTestStep extends TestStep {
+import java.io.Serializable;
+
+public class JavaTestStep extends TestStep implements Serializable{
 
     public JavaTestStep(){
         super();

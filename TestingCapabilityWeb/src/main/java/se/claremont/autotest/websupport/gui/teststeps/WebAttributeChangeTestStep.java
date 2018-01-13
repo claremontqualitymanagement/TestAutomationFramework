@@ -6,7 +6,9 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebAttributeChangeTestStep extends TestStep {
+import java.io.Serializable;
+
+public class WebAttributeChangeTestStep extends TestStep implements Serializable{
     DomElement domElement;
     String attributeName;
     String oldAttributeValue;

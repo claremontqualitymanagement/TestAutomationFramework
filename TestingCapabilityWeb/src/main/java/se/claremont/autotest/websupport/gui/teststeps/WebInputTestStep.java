@@ -6,7 +6,10 @@ import se.claremont.autotest.common.gui.teststructure.TestStepResult;
 import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.websupport.DomElement;
 
-public class WebInputTestStep extends TestStep {
+import java.io.Serializable;
+
+public class WebInputTestStep extends TestStep implements Serializable{
+
     DomElement domElement;
 
     public WebInputTestStep(){
