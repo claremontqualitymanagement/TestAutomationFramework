@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.testcase.TestCase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertiesManager {
-    @JsonIgnore private final TestCase testCase;
+public class PropertiesManager implements Serializable{
+    @JsonIgnore private final transient TestCase testCase;
     @JsonProperty
     public List<String> appliedProperties = new ArrayList<>();
 

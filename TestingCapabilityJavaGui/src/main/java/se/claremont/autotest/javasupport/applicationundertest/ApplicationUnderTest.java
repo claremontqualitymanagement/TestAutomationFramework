@@ -14,17 +14,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ApplicationUnderTest {
+public class ApplicationUnderTest implements Serializable{
     @JsonProperty public String friendlyName;
     @JsonProperty public ApplicationContextManager context;
     @JsonProperty public ApplicationStartMechanism startMechanism;
-    @JsonIgnore TestCase testCase;
-    @JsonIgnore static ArrayList<Window> windowsStartedBeforeStartingSut = new ArrayList<>();
+    @JsonIgnore transient TestCase testCase;
+    @JsonIgnore static transient ArrayList<Window> windowsStartedBeforeStartingSut = new ArrayList<>();
 
     private ApplicationUnderTest(){ //For JSON parsing to work
         TestCase testCase = new TestCase();

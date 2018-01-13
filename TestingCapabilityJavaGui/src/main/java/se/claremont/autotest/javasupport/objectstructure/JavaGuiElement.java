@@ -17,6 +17,7 @@ import se.claremont.autotest.javasupport.interaction.elementidentification.Searc
 import se.claremont.autotest.javasupport.interaction.elementidentification.SearchConditionType;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.Set;
  * Created by jordam on 2017-02-08.
  */
 @SuppressWarnings("WeakerAccess")
-public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement {
+public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement, Serializable {
     @JsonProperty String name;
     @JsonProperty JavaWindow window = null;
     @JsonProperty public By by;

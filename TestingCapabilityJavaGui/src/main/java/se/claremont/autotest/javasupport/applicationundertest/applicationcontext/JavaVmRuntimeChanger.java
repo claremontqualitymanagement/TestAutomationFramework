@@ -9,12 +9,13 @@ import se.claremont.autotest.common.testcase.TestCase;
 
 import javax.management.ObjectName;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean {
+public class JavaVmRuntimeChanger implements HotSpotDiagnosticMXBean, Serializable {
     @JsonIgnore
-    private TestCase testCase;
+    private transient TestCase testCase;
     @JsonProperty
     public List<String> appliedSetting = new ArrayList<>();
 

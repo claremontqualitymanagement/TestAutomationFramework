@@ -7,9 +7,10 @@ import se.claremont.autotest.common.testcase.TestCaseResult;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
+import java.io.Serializable;
 import java.util.stream.StreamSupport;
 
-public class JavaClictTestStep extends JavaTestStep {
+public class JavaClictTestStep extends JavaTestStep implements Serializable{
 
     JavaGuiElement javaGuiElement;
 

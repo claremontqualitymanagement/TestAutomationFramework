@@ -6,11 +6,12 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.EnvironmentSetupTests;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class EnvironmentVariableManager {
-    @JsonIgnore private TestCase testCase;
+public class EnvironmentVariableManager implements Serializable{
+    @JsonIgnore private transient TestCase testCase;
     @JsonProperty public List<String> appliedVariableChanges = new ArrayList<>();
 
     private EnvironmentVariableManager(){//For JSON parsing to work

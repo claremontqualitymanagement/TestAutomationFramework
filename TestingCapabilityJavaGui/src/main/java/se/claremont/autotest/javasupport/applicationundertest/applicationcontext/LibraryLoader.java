@@ -6,6 +6,7 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -14,11 +15,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryLoader {
-    @JsonIgnore private URLClassLoader tafClassLoader;
+public class LibraryLoader implements Serializable{
+    @JsonIgnore private transient URLClassLoader tafClassLoader;
     @JsonProperty
     public List<String> appliedFiles = new ArrayList<>();
-    @JsonIgnore private TestCase testCase;
+    @JsonIgnore private transient TestCase testCase;
 
     private LibraryLoader(){//For JSON parsing to work
         this.testCase = new TestCase();

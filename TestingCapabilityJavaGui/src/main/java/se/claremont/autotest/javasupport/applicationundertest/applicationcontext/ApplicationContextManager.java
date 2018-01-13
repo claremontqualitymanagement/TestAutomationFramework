@@ -3,7 +3,9 @@ package se.claremont.autotest.javasupport.applicationundertest.applicationcontex
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.testcase.TestCase;
 
-public class ApplicationContextManager {
+import java.io.Serializable;
+
+public class ApplicationContextManager implements Serializable{
     @JsonProperty public LibraryLoader loadedLibraries;
     @JsonProperty public EnvironmentVariableManager environmentVariables;
     @JsonProperty public JavaVmRuntimeChanger jvmSettings;

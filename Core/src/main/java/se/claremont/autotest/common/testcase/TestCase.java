@@ -19,6 +19,7 @@ import se.claremont.autotest.common.support.ValuePair;
 import se.claremont.autotest.common.support.api.Taf;
 import se.claremont.autotest.common.testrun.TestRun;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

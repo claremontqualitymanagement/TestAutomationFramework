@@ -8,7 +8,7 @@ import se.claremont.autotest.javasupport.applicationundertest.applicationstarter
 
 import java.io.Serializable;
 
-public class JavaStartApplicationTestStep extends JavaTestStep {
+public class JavaStartApplicationTestStep extends JavaTestStep implements Serializable {
 
     ApplicationUnderTest applicationUnderTest;
 

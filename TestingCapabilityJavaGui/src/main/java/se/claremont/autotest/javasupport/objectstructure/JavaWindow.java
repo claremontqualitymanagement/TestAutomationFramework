@@ -15,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
  * Created by jordam on 2017-02-14.
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
-public class JavaWindow {
+public class JavaWindow implements Serializable{
     MethodInvoker methodInvoker = new MethodInvoker();
     String titleAsRegularExpression;
     String name;

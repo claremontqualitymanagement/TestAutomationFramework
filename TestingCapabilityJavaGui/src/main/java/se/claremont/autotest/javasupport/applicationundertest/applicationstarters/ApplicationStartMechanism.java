@@ -7,15 +7,16 @@ import se.claremont.autotest.common.testcase.TestCase;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationStartMechanism {
+public class ApplicationStartMechanism implements Serializable{
     @JsonProperty public String startUrlOrPathToJarFile;
     @JsonProperty public String mainClass;
-    @JsonIgnore TestCase testCase;
+    @JsonIgnore transient TestCase testCase;
     @JsonProperty public List<String> arguments = new ArrayList<>();
     @JsonIgnore ClassLoader classLoader;
 

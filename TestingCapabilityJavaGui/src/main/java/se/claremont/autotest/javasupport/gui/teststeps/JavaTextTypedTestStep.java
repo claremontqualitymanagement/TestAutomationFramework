@@ -7,7 +7,9 @@ import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.objectstructure.JavaGuiElement;
 
-public class JavaTextTypedTestStep extends JavaTestStep {
+import java.io.Serializable;
+
+public class JavaTextTypedTestStep extends JavaTestStep implements Serializable{
 
     JavaGuiElement javaGuiElement;
 
