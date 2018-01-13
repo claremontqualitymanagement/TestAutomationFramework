@@ -3,10 +3,11 @@ package se.claremont.autotest.common.gui.teststructure;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.claremont.autotest.common.testcase.TestCase;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SubProcedureTestStep extends TestStep {
+public class SubProcedureTestStep extends TestStep implements Serializable{
 
     @JsonProperty
     public List<TestStep> testSteps = new LinkedList<>();

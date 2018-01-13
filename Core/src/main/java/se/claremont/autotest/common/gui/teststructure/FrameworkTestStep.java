@@ -1,6 +1,8 @@
 package se.claremont.autotest.common.gui.teststructure;
 
-public class FrameworkTestStep extends TestStep {
+import java.io.Serializable;
+
+public class FrameworkTestStep extends TestStep implements Serializable{
 
     public FrameworkTestStep(){}
 
