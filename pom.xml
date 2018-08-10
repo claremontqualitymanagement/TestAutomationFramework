@@ -629,7 +629,6 @@
                 </executions>
             </plugin>
             -->
-
             <!-- AntRun plugin is used to push artifact to build server. -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
