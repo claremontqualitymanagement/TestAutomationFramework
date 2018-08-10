@@ -156,10 +156,11 @@ public class WebDriverManager {
             try {
                 long startTime = System.currentTimeMillis();
                 ChromeDriverManager.getInstance().setup();
-                ChromeDriverService service =
-                        new ChromeDriverService.Builder().withWhitelistedIps("127.0.0.1").withSilent(true).build();
+                //Todo, investigate why withWhitelistedIps fails with new chrome driver.
+                //ChromeDriverService service =
+                  //      new ChromeDriverService.Builder().withWhitelistedIps("127.0.0.1").withSilent(true).build();
                 //noinspection deprecation
-                driver = new ChromeDriver(service);
+                driver = new ChromeDriver();
                 testCase.log(LogLevel.EXECUTED, "Creating a Chrome session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not initializeIfNotInitialized Chrome driver. Error message: " + e.getMessage());
