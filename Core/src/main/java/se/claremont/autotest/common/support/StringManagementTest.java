@@ -49,7 +49,8 @@ public class StringManagementTest extends UnitTestClass{
 
     @Test
     public void stringToCapitalInitialCharacterForEachWordAndNoSpacesTest(){
-        Assert.assertTrue(StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(" id think this woULd Set working agos").equals("IdThinkThisWouldSetWorkingAgos"));
+        String testString = " id think this woULd Set working agos";
+        Assert.assertTrue("'" + StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(testString) + "'", StringManagement.stringToCapitalInitialCharacterForEachWordAndNoSpaces(testString).equals("IdThinkThisWoULdSetWorkingAgos"));
     }
 
 

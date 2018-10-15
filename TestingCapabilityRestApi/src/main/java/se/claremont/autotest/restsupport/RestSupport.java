@@ -6,6 +6,9 @@ import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.json.JsonParser;
 
+import javax.net.ssl.*;
+import java.util.HashMap;
+
 /**
  * Rest support for the framework. Both information vice and communication vice
  *
@@ -14,7 +17,9 @@ import se.claremont.autotest.json.JsonParser;
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class RestSupport {
     private final TestCase testCase;
-    public final OkHttpClient client;
+    public OkHttpClient client;
+    public HashMap<String, String> defaultHeaders;
+    public HashMap<String, String> singleTimeHeaders;
 
     /**
      * Enables support for interaction with a REST service.
@@ -24,6 +29,42 @@ public class RestSupport {
     public RestSupport(TestCase testCase){
         this.client = new OkHttpClient();
         this.testCase = testCase;
+        defaultHeaders = new HashMap<String, String>();
+        singleTimeHeaders = new HashMap<String, String>();
+    }
+
+    public void addDefaultHeader(String headerName, String headerValue){
+        if(defaultHeaders.containsKey(headerName)){
+            defaultHeaders.replace(headerName, headerValue);
+            return;
+        }
+        defaultHeaders.put(headerName, headerValue);
+    }
+
+    public void addSingleTimeHeaderValueForNextRequest(String headerName, String headerValue){
+        if(defaultHeaders.containsKey(headerName)){
+            singleTimeHeaders.replace(headerName, headerValue);
+            return;
+        }
+        singleTimeHeaders.put(headerName, headerValue);
+    }
+
+    public RestResponse execute(RestRequest restRequest){
+        for(String headerName : defaultHeaders.keySet()){
+            restRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
+        RestResponse restResponse = restRequest.execute(client);
+        if(restResponse == null) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST request [" + restRequest.toString() + "'.");
+        } else {
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Response for REST request [" + restRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString(),
+                    "Response for REST request [" + restRequest.toString() + "]:<pre><code>" + System.lineSeparator() + StringManagement.htmlContentToDisplayableHtmlCode(restResponse.toString()) + "</code></pre>");
+        }
+        return restResponse;
     }
 
 
@@ -36,7 +77,14 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromPostRequest(String url, String mediaType, String data) {
-        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
+        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restPostRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restPostRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restPostRequest.execute(client);
         String bodyString = null;
         if(restResponse == null) {
@@ -59,7 +107,14 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public RestResponse responseFromPostRequest(String url, String mediaType, String data) {
-        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data);
+        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restPostRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restPostRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restPostRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST POST request [" + restPostRequest.toString() + "'.");
@@ -80,7 +135,14 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public String responseBodyFromPutRequest(String url, String mediaType, String data) {
-        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
+        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restPutRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restPutRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restPutRequest.execute(client);
         String responseBody = null;
         if(restResponse == null) {
@@ -103,7 +165,14 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public RestResponse responseFromPutRequest(String url, String mediaType, String data) {
-        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data);
+        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restPutRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restPutRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restPutRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST PUT request [" + restPutRequest.toString() + "'.");
@@ -134,7 +203,14 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public String responseBodyFromDeleteRequest(String url) {
-        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
+        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restDeleteRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restDeleteRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restDeleteRequest.execute();
         String responseBodyString = null;
 
@@ -157,7 +233,14 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public RestResponse responseFromDeleteRequest(String url) {
-        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url);
+        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restDeleteRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restDeleteRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restDeleteRequest.execute(client);
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST DELETE request [" + restDeleteRequest.toString() + "'.");
@@ -177,7 +260,14 @@ public class RestSupport {
      */
 
     public String responseCodeFromGetRequest(String url){
-        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restGetRequest.execute(client);
         String responseCode = null;
         if(restResponse == null) {
@@ -198,7 +288,14 @@ public class RestSupport {
      */
 
     public String responseCodeFromGetRequestWithoutLogging(String url){
-        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restGetRequest.execute(client);
         String responseCode = null;
         if(restResponse != null) {
@@ -214,7 +311,15 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromGetRequest(String url) {
-        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
+        singleTimeHeaders.clear();
         RestResponse restResponse = restGetRequest.execute(client);
         String responseBody = null;
         if(restResponse == null) {
@@ -235,7 +340,14 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public RestResponse responseFromGetRequest(String url) {
-        RestGetRequest restGetRequest = new RestGetRequest(url);
+        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        for(String headerName : defaultHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
+        }
+        for(String headerName : singleTimeHeaders.keySet()){
+            restGetRequest.addHeaderValue(headerName, singleTimeHeaders.get(headerName));
+        }
+        singleTimeHeaders.clear();
         RestResponse restResponse = restGetRequest.execute(client);
         if(restResponse == null) {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.",
@@ -245,6 +357,49 @@ public class RestSupport {
                     "Response for REST GET request: <pre><code>" + restGetRequest.toString() + "</code></pre>is:" + System.lineSeparator() + "<pre><code>" + StringManagement.htmlContentToDisplayableHtmlCode(restResponse.toString()) + "</code></pre>");
         }
         return restResponse;
+    }
+
+    /**
+     * Making driver accept unsafe certificates
+     */
+    public void makeDriverAcceptUnsafeCertificates(){
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = client.newBuilder();
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            client = builder.build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

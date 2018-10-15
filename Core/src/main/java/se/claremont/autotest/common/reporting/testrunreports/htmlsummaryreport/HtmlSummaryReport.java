@@ -425,7 +425,7 @@ public class HtmlSummaryReport {
                 .append("          <br>").append(LF)
                 .append("          <table width=\"100%\">").append(LF)
                 .append("            <tr>").append(LF)
-                .append("              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"http://46.101.193.212/TAF/images/claremontlogo.gif\"></a></td>").append(LF)
+                .append("              <td class=\"bottomlogo\" width=\"100%\"><a href=\"http://www.claremont.se\"><img alt=\"Claremont logo\" class=\"bottomlogo\" src=\"https://www.claremont.se/globalassets/bilder/logotyp/logo-long-lightblue.svg\"></a></td>").append(LF)
                 .append("            </tr><tr>").append(LF)
                 .append("              <td width=\"100%\" class=\"").append(HtmlStyleNames.COPYRIGHT.toString()).append("\"><br>TAF is licensed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" class=\"").append(HtmlStyleNames.LICENSE_LINK.toString().toLowerCase()).append("\">Apache 2.0</a> license. &copy; Claremont ").append(new SimpleDateFormat("yyyy").format(new Date())).append(".</td>").append(LF)
                 .append("            </tr>").append(LF)

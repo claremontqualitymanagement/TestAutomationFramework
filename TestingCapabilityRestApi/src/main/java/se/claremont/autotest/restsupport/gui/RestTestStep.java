@@ -1,6 +1,5 @@
 package se.claremont.autotest.restsupport.gui;
 
-import se.claremont.autotest.common.gui.teststructure.SubProcedureTestStep;
 import se.claremont.autotest.common.gui.teststructure.TestCaseManager;
 import se.claremont.autotest.common.gui.teststructure.TestStep;
 import se.claremont.autotest.common.gui.teststructure.TestStepResult;
@@ -77,28 +76,28 @@ public class RestTestStep extends TestStep{
         try {
             switch (actionName) {
                 case "PUT":
-                    restRequest = new RestPutRequest(elementName, mediaType, (String)data);
+                    restRequest = new RestPutRequest(elementName, mediaType, (String)data, getTestCase());
                     for(HeaderValue headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }
                     response = restRequest.execute(restSupport.client);
                     break;
                 case "GET":
-                    restRequest = new RestGetRequest(elementName);
+                    restRequest = new RestGetRequest(elementName, getTestCase());
                     for(HeaderValue headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }
                     response = restRequest.execute(restSupport.client);
                     break;
                 case "POST":
-                    restRequest = new RestPostRequest(elementName, mediaType, (String)data);
+                    restRequest = new RestPostRequest(elementName, mediaType, (String)data, getTestCase());
                     for(HeaderValue headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }
                     response = restRequest.execute(restSupport.client);
                     break;
                 case "DELETE":
-                    restRequest = new RestDeleteRequest(elementName);
+                    restRequest = new RestDeleteRequest(elementName, getTestCase());
                     for(HeaderValue headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }

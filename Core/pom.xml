@@ -55,7 +55,6 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
         </dependency>
-
         <!-- JSON object mapper -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

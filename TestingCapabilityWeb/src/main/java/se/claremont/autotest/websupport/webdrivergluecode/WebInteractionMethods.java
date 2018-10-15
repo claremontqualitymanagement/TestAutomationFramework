@@ -8,7 +8,6 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.autotest.common.guidriverpluginstructure.GuiDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -2007,20 +2006,23 @@ public class WebInteractionMethods  {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             return;
         }
+        List<String> actualTabs = new ArrayList<>();
+        actualTabs.add(initialTitle);
 
         for (String tabId : driver.getWindowHandles())
         {
-            if ( !currentTabId.equals(tabId) )
-            {
-                driver.switchTo().window(tabId);
-                String tabName = driver.getTitle();
-                log(LogLevel.DEBUG, "Identified browser tab with tab title = '" + tabName + " (id='" + tabId + "').");
-                if(driver.getTitle().equals(tabNameForTabToSwitchTo) ){
-                    return;
-                }
+            if ( currentTabId.equals(tabId) ) continue;
+            driver.switchTo().window(tabId);
+            String tabName = driver.getTitle();
+            log(LogLevel.DEBUG, "Identified browser tab with tab title = '" + tabName + " (id='" + tabId + "').");
+            String currentTitle = driver.getTitle();
+            actualTabs.add(currentTitle);
+            if(currentTitle != null && currentTitle.equals(tabNameForTabToSwitchTo) ){
+                log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'.");
+                return;
             }
         }
-        log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'.");
+        log(LogLevel.EXECUTION_PROBLEM, "Could not switch browser tab from tab '" + initialTitle + "' to tab with title '" + tabNameForTabToSwitchTo + "'. Existing titles: '" + String.join("', '", actualTabs) + "'.");
 
     }
 

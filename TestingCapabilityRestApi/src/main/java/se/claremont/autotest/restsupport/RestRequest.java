@@ -3,6 +3,7 @@ package se.claremont.autotest.restsupport;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import se.claremont.autotest.common.testcase.TestCase;
 
 /**
  * Building a REST call and executes a request.
@@ -16,14 +17,16 @@ public class RestRequest {
     final String url;
     String data;
     String mediaType;
+    TestCase testCase;
 
     /**
      * Constructor for requests without data.
      *
      * @param url the url to send the request to (default = GET request).
      */
-    public RestRequest(String url){
+    public RestRequest(String url, TestCase testCase){
         this.url = url;
+        this.testCase = testCase;
         builder = new Request.Builder().url(url);
     }
 
@@ -34,10 +37,11 @@ public class RestRequest {
      * @param mediaType The media type of the data sent.
      * @param data The data sent.
      */
-    public RestRequest(String url, String mediaType, String data){
+    public RestRequest(String url, String mediaType, String data, TestCase testCase){
         this.url = url;
         this.mediaType = mediaType;
         this.data = data;
+        this.testCase = testCase;
         builder = new Request.Builder().url(url);
     }
 
@@ -87,7 +91,7 @@ public class RestRequest {
         request = builder.build();
         try {
             response = client.newCall(request).execute();
-            restResponse = new RestResponse(response.body().string(), response.headers().toString(), Integer.toString(response.code()), response.message(), response, (int) (System.currentTimeMillis() - startTime));
+            restResponse = new RestResponse(response.body().string(), response.headers().toString(), Integer.toString(response.code()), response.message(), response, (int) (System.currentTimeMillis() - startTime), testCase);
         } catch (Exception ignored) {
         }
         return restResponse;

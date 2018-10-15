@@ -6,6 +6,7 @@ import org.junit.Test;
 import se.claremont.autotest.common.testset.TestSet;
 import se.claremont.autotest.gui.appdescription.MainWindow;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
+import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 import java.awt.*;
 
@@ -42,6 +43,14 @@ public class GuiInstanziationTests extends TestSet {
         taf.aboutTabHelpWindowTests();
         taf.diagnosticTestRunTests();
         taf.closeApplication();
+    }
+
+    @Test
+    public void newTest(){
+        WebInteractionMethods web = new WebInteractionMethods(currentTestCase());
+        web.navigate("http://claremont.se");
+        web.wait(100);
+        web.mapCurrentPageWithBy("C:\\temp\\text.txt", true);
     }
 
 

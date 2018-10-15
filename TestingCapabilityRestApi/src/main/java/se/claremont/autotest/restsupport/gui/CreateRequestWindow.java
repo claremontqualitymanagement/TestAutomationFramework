@@ -394,28 +394,28 @@ public class CreateRequestWindow {
         try {
             switch (sendMethod) {
                 case "PUT":
-                    restRequest = new RestPutRequest(endpointUrl, mediaType, sendDataTextArea.getText());
+                    restRequest = new RestPutRequest(endpointUrl, mediaType, sendDataTextArea.getText(), testCase);
                     for(HeaderPair headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }
                     response = restRequest.execute(restSupport.client);
                     break;
                 case "GET":
-                    restRequest = new RestGetRequest(endpointUrl);
+                    restRequest = new RestGetRequest(endpointUrl, testCase);
                     for(HeaderPair headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }
                     response = restRequest.execute(restSupport.client);
                     break;
                 case "POST":
-                    restRequest = new RestPostRequest(endpointUrl, mediaType, sendDataTextArea.getText());
+                    restRequest = new RestPostRequest(endpointUrl, mediaType, sendDataTextArea.getText(), testCase);
                     for(HeaderPair headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }
                     response = restRequest.execute(restSupport.client);
                     break;
                 case "DELETE":
-                    restRequest = new RestDeleteRequest(endpointUrl);
+                    restRequest = new RestDeleteRequest(endpointUrl, testCase);
                     for(HeaderPair headerPair : headerValues){
                         restRequest.addHeaderValue(headerPair.name, headerPair.value);
                     }

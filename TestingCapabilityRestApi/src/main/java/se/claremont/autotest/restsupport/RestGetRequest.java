@@ -1,5 +1,7 @@
 package se.claremont.autotest.restsupport;
 
+import se.claremont.autotest.common.testcase.TestCase;
+
 /**
  * Usage of GET mechanism for REST
  *
@@ -7,8 +9,8 @@ package se.claremont.autotest.restsupport;
  */
 public class RestGetRequest extends RestRequest {
 
-    public RestGetRequest(String url){
-        super(url);
+    public RestGetRequest(String url, TestCase testCase){
+        super(url, testCase);
     }
 
 }
