@@ -60,11 +60,10 @@ public class HtmlSummaryReport {
     }
 
     private void appendTestCaseResultToSummary(TestCase testCase){
-        String link = testCase.pathToHtmlLogFile;
-        if(link.replace("\\", "/").toLowerCase().startsWith("smb://"))
-            link = link.replace("\\", "/").substring(6);
-        testCaseSummary += "            <tr class=\"" + testCase.testCaseResult.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "</td><td><a href=\"" + TestRun.reportLinkPrefix() + "://" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
-        //testCaseSummary += solvedKnownErrorsFromTestCaseLocalKnownErrorsList(testCase);
+        String link = testCase.pathToHtmlLogFile.replace("\\", "/");
+        String[] parts = link.split("/");
+        link = parts[parts.length -1];
+        testCaseSummary += "            <tr class=\"" + testCase.testCaseResult.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "</td><td><a href=\"" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
         switch (testCase.testCaseResult.resultStatus){
             case PASSED:
                 successfulTestCases++;
