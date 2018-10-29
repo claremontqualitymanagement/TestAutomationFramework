@@ -1,16 +1,17 @@
 package se.claremont.autotest.restsupport;
 
+import se.claremont.autotest.common.StringComparisonType;
+import se.claremont.autotest.common.VerificationMethods;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 
-public class RestResponseVerification {
+public class RestResponseVerification extends VerificationMethods{
 
     private RestResponse restResponse;
-    private TestCase testCase;
 
     public RestResponseVerification(RestResponse restResponse, TestCase testCase){
+        super(testCase);
         this.restResponse = restResponse;
-        this.testCase = testCase;
     }
 
     @SuppressWarnings("unused")
@@ -57,12 +58,12 @@ public class RestResponseVerification {
     }
 
     @SuppressWarnings("unused")
-    public RestResponseVerification bodyContent(String searchPattern, StringComparisonMethod stringComparisonMethod){
+    public RestResponseVerification bodyContent(String searchPattern, StringComparisonType stringComparisonMethod){
         if(restResponse == null){
             testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not verify body content of null response.");
             return this;
         }
-        if(StringComparisonMethod.isMatch(stringComparisonMethod, restResponse.body, searchPattern)){
+        if(stringComparisonMethod.match(restResponse.body, searchPattern)){
             testCase.log(LogLevel.VERIFICATION_PASSED, "String '" + searchPattern + "' successfully matched in response body.");
         } else {
             testCase.log(LogLevel.VERIFICATION_FAILED, "Could not match '" + searchPattern + "' in the response body:" + System.lineSeparator() + restResponse.body);
@@ -119,13 +120,13 @@ public class RestResponseVerification {
     }
 
     @SuppressWarnings("unused")
-    public RestResponseVerification headerValue(String headerName, String headerValue, StringComparisonMethod stringComparisonMethod){
+    public RestResponseVerification headerValue(String headerName, String headerValue, StringComparisonType stringComparisonMethod){
         if(restResponse == null){
             testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not verify header value of null response.");
             return this;
         }
         String actualValue = restResponse.getHeaderValue(headerName);
-        if(StringComparisonMethod.isMatch(stringComparisonMethod, headerValue, actualValue)){
+        if(stringComparisonMethod.match(actualValue, headerValue)){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Header value for '" + headerName + "' was '" + headerValue + "' as expected.");
         } else {
             testCase.log(LogLevel.VERIFICATION_FAILED, "Header value for '" + headerName + "' was expected to match '" + headerValue + "' (" + stringComparisonMethod + ") but was '" + actualValue + "'.");

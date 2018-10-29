@@ -1,12 +1,13 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
-import io.github.bonigarcia.wdm.*;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.EdgeDriverManager;
+import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
+import io.github.bonigarcia.wdm.OperaDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-//import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import se.claremont.autotest.common.logging.LogLevel;
@@ -20,6 +21,8 @@ import se.claremont.autotest.filetestingsupport.FileTester;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+//import org.openqa.selenium.firefox.MarionetteDriver;
 
 /**
  * Settings and management of WebDriver browser interfaces.

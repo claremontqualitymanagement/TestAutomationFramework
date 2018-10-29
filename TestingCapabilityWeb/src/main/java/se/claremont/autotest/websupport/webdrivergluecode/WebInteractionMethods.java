@@ -20,6 +20,7 @@ import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
+import se.claremont.autotest.websupport.BrowserVerificationMethods;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
@@ -52,6 +53,10 @@ public class WebInteractionMethods  {
     @SuppressWarnings("CanBeFinal")
 
     private int standardTimeoutInSeconds = 5;
+
+    public int getStandardTimeout() {
+        return standardTimeoutInSeconds;
+    }
 
     private class NavigationError extends Exception{}
     private class TextEnteringError extends Exception{}
@@ -201,6 +206,10 @@ public class WebInteractionMethods  {
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not navigate back in browser." + e.toString());
         }
+    }
+
+    public BrowserVerificationMethods verify(){
+        return new BrowserVerificationMethods(this);
     }
 
     /**
@@ -569,7 +578,9 @@ public class WebInteractionMethods  {
      * @param linkElement The element to check attribute of
      * @param attributeName The name of the attribute to check the value of
      * @param expectedAttributeValue The expected attribute of the element
+     * @deprecated Use VerifiyElement instead.
      */
+    @Deprecated
     public void verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributeValue){
         DomElement domElement = (DomElement) linkElement;
         try{
@@ -590,7 +601,9 @@ public class WebInteractionMethods  {
      * @param linkElement The element to check attribute of
      * @param attributeName The name of the attribute to check the value of
      * @param expectedAttributevalueAsRegex The expected attribute of the element, as regular expression pattern
+     * @deprecated Use verifyElement instead
      */
+    @Deprecated
     public void verifyElementAttributeRegex(GuiElement linkElement, String attributeName, String expectedAttributevalueAsRegex){
         DomElement domElement = (DomElement) linkElement;
         try{
@@ -1129,7 +1142,9 @@ public class WebInteractionMethods  {
      * Checks if the given object exist in the HTML. Compare with verifyObjectIsDisplayed, that also checks if the element is visible in the GUI.
      *
      * @param guiElement The GUI element to find
+     * @deprecated Use verifyElement instead
      */
+    @Deprecated
     public void verifyElementExistence(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         if(getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds) == null){
@@ -1170,7 +1185,9 @@ public class WebInteractionMethods  {
      * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
+     * @deprecated
      */
+    @Deprecated
     public void verifyElementIsNotDisplayed(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         long startTime = System.currentTimeMillis();
@@ -1215,7 +1232,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The GUI element to find
      * @param timeoutInSeconds The time to wait for object disappearance.
+     * @deprecated Use verifyElement() instead
      */
+    @Deprecated
     public void verifyElementIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         DomElement domElement = (DomElement) guiElement;
         long startTime = System.currentTimeMillis();
@@ -1317,7 +1336,9 @@ public class WebInteractionMethods  {
      * Checks if the given object is displayed in the HTML. Compare with {@link #verifyObjectExistence(GuiElement)}, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyElementIsDisplayed(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
@@ -1353,7 +1374,9 @@ public class WebInteractionMethods  {
      * Checks if the given object exist in the GUI
      *
      * @param guiElement The GUI element to find
+     * @deprecated Use verifyElement() instead
      */
+    @Deprecated
     public void verifyElementDoesNotExist(GuiElement guiElement){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
@@ -1385,7 +1408,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The GUI element to find.
      * @param timeoutInSeconds The timeout to wait for object disappearance.
+     * @deprecated Use verifyElement() instead
      */
+    @Deprecated
     public void verifyElementDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
@@ -1418,7 +1443,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to verify
      * @param timeoutInSeconds The number of seconds to keep retrying before calling it a failure
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyElementExistenceWithTimeout(GuiElement guiElement, int timeoutInSeconds){
         DomElement domElement = (DomElement) guiElement;
         if(getRuntimeElementWithTimeout(domElement, timeoutInSeconds) == null){
@@ -1448,7 +1475,9 @@ public class WebInteractionMethods  {
      * Checks if specified text exist in the browser page
      *
      * @param text test string to find
+     * @deprecated Use verify() instead
      */
+    @Deprecated
     public void verifyTextExistOnCurrentPage(String text){
         DomElement domElement = new DomElement("//*[contains(text(),'" + text + "')]", DomElement.IdentificationType.BY_X_PATH);
         //List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + text + "')]"));
@@ -1470,7 +1499,9 @@ public class WebInteractionMethods  {
      * @param text test string to find
      * @param timeoutInSeconds The time to wait
      * @return Returns true if the text can be identified within the time given.
+     * @deprecated Use verify() instead.
      */
+    @Deprecated
     public boolean textExistInPageSourceOfCurrentPageWithinTimeout(String text, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime <= timeoutInSeconds * 1000){
@@ -1533,7 +1564,9 @@ public class WebInteractionMethods  {
      * Checks if specified regular expression text pattern exist in the browser page source code
      *
      * @param textAsRegexPattern test string to find
+     * @deprecated Use verify() instead.
      */
+    @Deprecated
     public void verifyTextAsRegexPatternExistInPageSource(String textAsRegexPattern){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
@@ -1555,8 +1588,10 @@ public class WebInteractionMethods  {
      * Checks the web browser page title against expected result, written as a regular expression
      *
      * @param expectedTitleAsRegexPattern Expected regular expression pattern to match the current title of the web page
+     * @deprecated Use {@link #verify()}.title instead.
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void verifyPageTitleAsRegex(String expectedTitleAsRegexPattern){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
@@ -1579,8 +1614,10 @@ public class WebInteractionMethods  {
      * Checks the web browser page title against expected result
      *
      * @param expectedTitle Expected current title of the web page
+     * @deprecated Use {@link #verify()}.title instead.
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void verifyPageTitle(String expectedTitle){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
@@ -1602,9 +1639,11 @@ public class WebInteractionMethods  {
      * Checks that the web browser page title matches the expected title pattern within specified timeout
      *
      * @param expectedTitleAsRegexPattern Expected title pattern in a regular expression format, for the web page
+     * @deprecated Use {@link #verify()}.title instead.
      * @param timeoutInSeconds Timeout in seconds
      */
     @SuppressWarnings("SameParameterValue")
+    @Deprecated
     public void verifyPageTitleAsRegexWithTimeout(String expectedTitleAsRegexPattern, int timeoutInSeconds){
         double startTime = System.currentTimeMillis();
         if(driver == null){
@@ -1638,9 +1677,11 @@ public class WebInteractionMethods  {
      * Checks that the web browser page title is (or become) the expected title within specified timeout
      *
      * @param expectedTitle Expected title of the web page
+     * @deprecated Use {@link #verify()}.title instead.
      * @param timeoutInSeconds Timeout in seconds
      */
     @SuppressWarnings("SameParameterValue")
+    @Deprecated
     public void verifyPageTitleWithTimeout(String expectedTitle, int timeoutInSeconds){
         double startTime = System.currentTimeMillis();
         if(driver == null){
@@ -1674,7 +1715,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to check the text of
      * @param expectedText The expected text to find
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyElementText(GuiElement guiElement, String expectedText){
         boolean verifiedOk = false;
         String currentText = "";
@@ -1706,7 +1749,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to check the text of
      * @param expectedText The expected text to find
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyElementTextContainsText(GuiElement guiElement, String expectedText){
         boolean verifiedOk = false;
         String currentText = "";
@@ -1738,7 +1783,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to check the text of
      * @param expectedTextAsRegexPattern The expected text to find
+     * @deprecated Use verifyElement instead
      */
+    @Deprecated
     public void verifyElementTextWithRegexPattern(GuiElement guiElement, String expectedTextAsRegexPattern){
         String currentText = "";
         long startTime = System.currentTimeMillis();
@@ -1883,7 +1930,9 @@ public class WebInteractionMethods  {
      * Check the page source for current page with the W3C Validator API for HTML consistency.
      *
      * @param verbose If set to true warning messages will be logged, as well as extra debugging information from the W3C validation service. If set to false only errors will be logged.
+     * @deprecated Use verify() instead.
      */
+    @Deprecated
     public void verifyCurrentPageSourceWithW3validator(boolean verbose){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
@@ -1900,7 +1949,9 @@ public class WebInteractionMethods  {
      * Verifies that an element is enabled for interaction (displayed and enabled).
      *
      * @param guiElement The element to assess.
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyIsEnabled(GuiElement guiElement){
         if(isEnabled(guiElement)){
             log(LogLevel.VERIFICATION_PASSED, "Element " + ((DomElement)guiElement).LogIdentification() + " found to be enabled as expected.");
@@ -2058,6 +2109,10 @@ public class WebInteractionMethods  {
             writeRunningProcessListDeviationsSinceTestCaseStart();
 
         }
+    }
+
+    public ElementVerificationMethods verifiyElement(DomElement domElement){
+        return new ElementVerificationMethods(domElement, this);
     }
 
     /**
@@ -2280,7 +2335,9 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The image to check
      * @param pathToOracleImage The oracle image to compare with
+     * @deprecated Need new implementation
      */
+    @Deprecated
     public void verifyImage(GuiElement guiElement, String pathToOracleImage){
         log(LogLevel.FRAMEWORK_ERROR, "Method 'verifyImage()' is not yet implemented.");
         saveScreenshot(getRuntimeElementWithoutLogging((DomElement)guiElement));
@@ -2477,106 +2534,12 @@ public class WebInteractionMethods  {
         }
     }
 
-
-
-    /**
-     * Checks if a certain row exist in table.
-     *
-     * @param tableElement The table element
-     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
-     * @param regex True if data value pattern is states as a regular expressions. Otherwise a check for cells containing the data value is performed.
-     * @return Returns true if rows matching is found.
-     */
-    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex){
-        if(regex){
-            return tableRowExists(tableElement, headlineColonValueSemicolonSeparatedString, CellMatchingType.REGEX_MATCH);
-        } else {
-            return tableRowExists(tableElement, headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
-        }
-    }
-
-    /**
-     * Checks if a certain row exist in table.
-     *
-     * @param tableElement The table element
-     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
-     * @param cellMatchingType Type of matching performed.
-     * @return Returns true if rows matching is found.
-     */
-    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType) {
-        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
-        TableData tableData = tableDataFromGuiElement(tableElement, false);
-        return tableData != null && tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
-    }
-
-
-    /**
-     * Checks if a certain row exist in table. Gives the GUI table time to load
-     *
-     * @param tableElement The table element
-     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
-     * @param cellMatchingType Type of matching performed.
-     * @return Returns true if rows matching is found.
-     */
-    public boolean tableRowExistsWithTimeout(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType) {
-        boolean doneOk = false;
-        long startTime = System.currentTimeMillis();
-        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
-            TableData tableData = tableDataFromGuiElement(tableElement, false);
-            if(tableData == null ) continue;
-            doneOk = tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
-        }
-        return doneOk;
-    }
-
-    /**
-     * Checks that the expected headlines exist in table
-     *
-     * @param tableElement The table element
-     * @param expectedHeadlines The list of expected headlines
-     */
-    public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
-        DomElement table = (DomElement) tableElement;
-        boolean found = waitForElementToAppear(tableElement);
-        if(!found){
-            log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + table.LogIdentification() + " to verify headlines '" + String.join("', '", expectedHeadlines) + "' in." );
-            return;
-        }
-        TableData tableData = tableDataFromGuiElement(tableElement, false);
-        if(tableData == null) {
-            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + " when trying to verify headlines '" + String.join("', '", expectedHeadlines) + "'.");
-            saveScreenshot(getRuntimeElementWithoutLogging((DomElement)tableElement));
-            saveDesktopScreenshot();
-            saveHtmlContentOfCurrentPage();
-            writeRunningProcessListDeviationsSinceTestCaseStart();
-            return;
-        }
-        if(!tableData.verifyHeadingsExist(expectedHeadlines)){
-            saveScreenshot(getRuntimeElementWithoutLogging(table));
-            saveDesktopScreenshot();
-            saveHtmlContentOfCurrentPage();
-            writeRunningProcessListDeviationsSinceTestCaseStart();
-        }
-    }
-
-    /**
-     * Checks if table data rows are empty/doesn't exist. Headlines does not count as data.
-     *
-     * @param tableElement The table element.
-     * @return Return true if table is empty.
-     */
-    public boolean tableIsEmpty(GuiElement tableElement) {
-        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
-        TableData tableData = tableDataFromGuiElement(tableElement, true);
-        return tableData != null && tableData.tableIsEmpty();
-    }
-
     @SuppressWarnings("ConstantConditions")
-    private TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
+    public TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
         DomElement domElement = (DomElement)guiElement;
         boolean found = waitForElementToAppear(guiElement);
         if(!found) {
-            log(LogLevel.DEBUG, "Could not find " + domElement.LogIdentification() + " within timeout.");
+            testCase.log(LogLevel.DEBUG, "Could not find " + domElement.LogIdentification() + " within timeout.");
             return null;
         }
         StringBuilder tableContent = new StringBuilder();
@@ -2585,7 +2548,7 @@ public class WebInteractionMethods  {
             try {
                 tableElement = tableElement.findElement(By.xpath(".//table"));
             }catch (Exception ignored){
-                log(LogLevel.DEBUG, "The " + domElement.LogIdentification() + " is not of 'table' tag, and it does not seem to have any child element of type 'table' either.");
+                testCase.log(LogLevel.DEBUG, "The " + domElement.LogIdentification() + " is not of 'table' tag, and it does not seem to have any child element of type 'table' either.");
             }
         }
         if(tableElement == null) {
@@ -2672,7 +2635,7 @@ public class WebInteractionMethods  {
                     try{
                         tableContent.append(cell.getText().replace(";", " ").replace(System.lineSeparator(), " ")).append(";");
                     } catch (Exception e) {
-                        log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
+                        testCase.log(LogLevel.DEBUG, "Could not read text from table cell. Replacing with ''.");
                         tableContent.append(";");
                     }
                 }
@@ -2681,6 +2644,103 @@ public class WebInteractionMethods  {
         }
         return new TableData(testCase, domElement.LogIdentification(), tableContent.toString());
     }
+
+
+
+    /**
+     * Checks if a certain row exist in table.
+     *
+     * @param tableElement The table element
+     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
+     * @param regex True if data value pattern is states as a regular expressions. Otherwise a check for cells containing the data value is performed.
+     * @return Returns true if rows matching is found.
+     */
+    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, boolean regex){
+        if(regex){
+            return tableRowExists(tableElement, headlineColonValueSemicolonSeparatedString, CellMatchingType.REGEX_MATCH);
+        } else {
+            return tableRowExists(tableElement, headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
+        }
+    }
+
+    /**
+     * Checks if a certain row exist in table.
+     *
+     * @param tableElement The table element
+     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
+     * @param cellMatchingType Type of matching performed.
+     * @return Returns true if rows matching is found.
+     */
+    public boolean tableRowExists(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType) {
+        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        TableData tableData = tableDataFromGuiElement(tableElement, false);
+        return tableData != null && tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
+    }
+
+
+    /**
+     * Checks if a certain row exist in table. Gives the GUI table time to load
+     *
+     * @param tableElement The table element
+     * @param headlineColonValueSemicolonSeparatedString The pattern to find ('Headline1:CorrespondingDataValueOnRow;Headline2:CorrespondingDataValueForThisHeadline').
+     * @param cellMatchingType Type of matching performed.
+     * @return Returns true if rows matching is found.
+     */
+    public boolean tableRowExistsWithTimeout(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType) {
+        boolean doneOk = false;
+        long startTime = System.currentTimeMillis();
+        while (!doneOk && System.currentTimeMillis() - startTime <= standardTimeoutInSeconds * 1000){
+            TableData tableData = tableDataFromGuiElement(tableElement, false);
+            if(tableData == null ) continue;
+            doneOk = tableData.rowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
+        }
+        return doneOk;
+    }
+
+    /**
+     * Checks that the expected headlines exist in table
+     *
+     * @param tableElement The table element
+     * @param expectedHeadlines The list of expected headlines
+     * @deprecated Use verifyElement() instead.
+     */
+    @Deprecated
+    public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
+        DomElement table = (DomElement) tableElement;
+        boolean found = waitForElementToAppear(tableElement);
+        if(!found){
+            log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + table.LogIdentification() + " to verify headlines '" + String.join("', '", expectedHeadlines) + "' in." );
+            return;
+        }
+        TableData tableData = tableDataFromGuiElement(tableElement, false);
+        if(tableData == null) {
+            testCase.log(LogLevel.FRAMEWORK_ERROR, "Could not construct TableData for HTML table " + ((DomElement)tableElement).LogIdentification() + " when trying to verify headlines '" + String.join("', '", expectedHeadlines) + "'.");
+            saveScreenshot(getRuntimeElementWithoutLogging((DomElement)tableElement));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+            return;
+        }
+        if(!tableData.verifyHeadingsExist(expectedHeadlines)){
+            saveScreenshot(getRuntimeElementWithoutLogging(table));
+            saveDesktopScreenshot();
+            saveHtmlContentOfCurrentPage();
+            writeRunningProcessListDeviationsSinceTestCaseStart();
+        }
+    }
+
+    /**
+     * Checks if table data rows are empty/doesn't exist. Headlines does not count as data.
+     *
+     * @param tableElement The table element.
+     * @return Return true if table is empty.
+     */
+    public boolean tableIsEmpty(GuiElement tableElement) {
+        getRuntimeElementWithTimeout((DomElement)tableElement, standardTimeoutInSeconds);
+        TableData tableData = tableDataFromGuiElement(tableElement, true);
+        return tableData != null && tableData.tableIsEmpty();
+    }
+
 
     /**
      * Navigates to specified url
@@ -3044,7 +3104,7 @@ public class WebInteractionMethods  {
      * @param timeoutInSeconds Number of seconds to wait for element before giving up on it
      * @return WebElement for WebDriver interaction
      */
-    WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
+    public WebElement getRuntimeElementWithTimeout(DomElement element, int timeoutInSeconds){
         double startTickCount = System.currentTimeMillis();
         WebElement returnElement = getRuntimeElementWithoutLogging(element);
         long sleepTime = 50;
@@ -3137,7 +3197,9 @@ public class WebInteractionMethods  {
 
     /**
      * Logs severe entries in browser console, client log, and driver log to test case log. Clears browser console in the process.
+     * @deprecated Use verify() instead.
      */
+    @Deprecated
     public void verifyBrowserConsoleHasNoErrors_AlsoClearsBrowserConsole(){
         List<LogEntry> logEntries = getLogEntriesFromBrowser(Level.SEVERE);
         List<String> logEntriesAsStrings = new ArrayList<>();
@@ -3167,7 +3229,7 @@ public class WebInteractionMethods  {
         }
     }
 
-    private List<LogEntry> getLogEntriesFromBrowser(java.util.logging.Level lowestLogLevel){
+    public List<LogEntry> getLogEntriesFromBrowser(java.util.logging.Level lowestLogLevel){
         List<LogEntry> logPosts = new ArrayList<>();
         Set<String> logTypes = driver.manage().logs().getAvailableLogTypes();
         for(String logType : logTypes){
@@ -3261,7 +3323,7 @@ public class WebInteractionMethods  {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean bufferedImagesAreEqual(BufferedImage img1, BufferedImage img2) {
+    protected boolean bufferedImagesAreEqual(BufferedImage img1, BufferedImage img2) {
         if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
             for (int x = 0; x < img1.getWidth(); x++) {
                 for (int y = 0; y < img1.getHeight(); y++) {
@@ -3275,7 +3337,7 @@ public class WebInteractionMethods  {
         return true;
     }
 
-    private BufferedImage grabElementImage(DomElement domElement){
+    protected BufferedImage grabElementImage(DomElement domElement){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
