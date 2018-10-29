@@ -1,15 +1,12 @@
 package se.claremont.autotest.websupport;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.WrapsDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
-import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.websupport.elementidentification.By;
 import se.claremont.autotest.websupport.elementidentification.WebElementIdentifier;

@@ -16,7 +16,6 @@ import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
@@ -52,7 +51,7 @@ public class WebInteractionMethods  {
     private final TestCase testCase;
     @SuppressWarnings("CanBeFinal")
 
-    private int standardTimeoutInSeconds = 5;
+    private int standardTimeoutInSeconds = 30;
 
     public int getStandardTimeout() {
         return standardTimeoutInSeconds;
@@ -591,7 +590,7 @@ public class WebInteractionMethods  {
      * @param linkElement The element to check attribute of
      * @param attributeName The name of the attribute to check the value of
      * @param expectedAttributeValue The expected attribute of the element
-     * @deprecated Use VerifiyElement instead.
+     * @deprecated Use attribute() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public ActionResult verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributeValue){
@@ -617,7 +616,7 @@ public class WebInteractionMethods  {
      * @param linkElement The element to check attribute of
      * @param attributeName The name of the attribute to check the value of
      * @param expectedAttributevalueAsRegex The expected attribute of the element, as regular expression pattern
-     * @deprecated Use verifyElement instead
+     * @deprecated Use attribute() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public ActionResult verifyElementAttributeRegex(GuiElement linkElement, String attributeName, String expectedAttributevalueAsRegex){
@@ -1186,7 +1185,7 @@ public class WebInteractionMethods  {
      * Checks if the given object exist in the HTML. Compare with verifyObjectIsDisplayed, that also checks if the element is visible in the GUI.
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use verifyElement instead
+     * @deprecated Use exists() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementExistence(GuiElement guiElement){
@@ -1206,7 +1205,7 @@ public class WebInteractionMethods  {
      * Checks if the given object exist in the HTML. Compare with verifyObjectIsDisplayed, that also checks if the element is visible in the GUI.
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use {@link #verifyElementExistence(GuiElement)} ()} instead. Altered for terminology standardization.
+     * @deprecated Use exists() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     @SuppressWarnings("All")
@@ -1218,7 +1217,7 @@ public class WebInteractionMethods  {
      * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use {@link #verifyElementIsNotDisplayed(GuiElement)} ()} instead. Altered for terminology standardization.
+     * @deprecated Use isNotDisplayed() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyObjectIsNotDisplayed(GuiElement guiElement){
@@ -1229,7 +1228,7 @@ public class WebInteractionMethods  {
      * Checks if the given object is not displayed in the HTML. Compare with verifyObjectDoesNotExist, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
-     * @deprecated
+     * @deprecated Use isNotDisplayed() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementIsNotDisplayed(GuiElement guiElement){
@@ -1263,7 +1262,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The GUI element to find
      * @param timeoutInSeconds The time to wait for object disappearance.
-     * @deprecated Use {@link #verifyElementIsNotDisplayedWithTimeout(GuiElement, int)} } instead. Altered for terminology standardization.
+     * @deprecated Use isNotDisplayed() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyObjectIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
@@ -1276,7 +1275,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The GUI element to find
      * @param timeoutInSeconds The time to wait for object disappearance.
-     * @deprecated Use verifyElement() instead
+     * @deprecated Use isNotDisplayed() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementIsNotDisplayedWithTimeout(GuiElement guiElement, int timeoutInSeconds){
@@ -1369,7 +1368,7 @@ public class WebInteractionMethods  {
      * Checks if the given object is displayed in the HTML. Compare with verifyObjectExistence, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use {@link #verifyElementIsDisplayed(GuiElement)} instead. Altered for terminology standardization.
+     * @deprecated Use isDisplayed() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyObjectIsDisplayed(GuiElement guiElement){
@@ -1380,7 +1379,7 @@ public class WebInteractionMethods  {
      * Checks if the given object is displayed in the HTML. Compare with {@link #verifyObjectExistence(GuiElement)}, that checks if the element exist in the html.
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use isDisplayed() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementIsDisplayed(GuiElement guiElement){
@@ -1407,7 +1406,7 @@ public class WebInteractionMethods  {
      * Checks if the given object exist in the GUI
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use {@link #verifyElementDoesNotExist(GuiElement)} instead. Altered for terminology standardization.
+     * @deprecated Use doesNotExist() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyObjectDoesNotExist(GuiElement guiElement){
@@ -1418,7 +1417,7 @@ public class WebInteractionMethods  {
      * Checks if the given object exist in the GUI
      *
      * @param guiElement The GUI element to find
-     * @deprecated Use verifyElement() instead
+     * @deprecated Use doesNotExist() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementDoesNotExist(GuiElement guiElement){
@@ -1440,7 +1439,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The GUI element to find.
      * @param timeoutInSeconds The timeout to wait for object disappearance.
-     * @deprecated Use {@link #verifyElementDoesNotExistWithTimeout(GuiElement, int)} instead. Altered for terminology standardization.
+     * @deprecated Use doesNotExist() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyObjectDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
@@ -1452,7 +1451,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The GUI element to find.
      * @param timeoutInSeconds The timeout to wait for object disappearance.
-     * @deprecated Use verifyElement() instead
+     * @deprecated Use method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementDoesNotExistWithTimeout(GuiElement guiElement, int timeoutInSeconds){
@@ -1475,7 +1474,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to verify
      * @param timeoutInSeconds The number of seconds to keep retrying before calling it a failure
-     * @deprecated Use {@link #verifyElementExistenceWithTimeout(GuiElement, int)} instead. Altered for terminology standardization.
+     * @deprecated Use method exists() under {@link #verifiyElement(DomElement)} instead (and set the timeout).
      */
     @Deprecated
     public void verifyObjectExistenceWithTimeout(GuiElement guiElement, int timeoutInSeconds){
@@ -1487,7 +1486,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to verify
      * @param timeoutInSeconds The number of seconds to keep retrying before calling it a failure
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use exists() method under {@link #verifiyElement(DomElement)} instead.
      */
     @Deprecated
     public void verifyElementExistenceWithTimeout(GuiElement guiElement, int timeoutInSeconds){
@@ -1519,7 +1518,7 @@ public class WebInteractionMethods  {
      * Checks if specified text exist in the browser page
      *
      * @param text test string to find
-     * @deprecated Use verify() instead
+     * @deprecated Use method under {@link #verify()} instead.
      */
     @Deprecated
     public void verifyTextExistOnCurrentPage(String text){
@@ -1543,7 +1542,7 @@ public class WebInteractionMethods  {
      * @param text test string to find
      * @param timeoutInSeconds The time to wait
      * @return Returns true if the text can be identified within the time given.
-     * @deprecated Use verify() instead.
+     * @deprecated Use method under {@link #verify()} instead.
      */
     @Deprecated
     public boolean textExistInPageSourceOfCurrentPageWithinTimeout(String text, int timeoutInSeconds){
@@ -1608,7 +1607,7 @@ public class WebInteractionMethods  {
      * Checks if specified regular expression text pattern exist in the browser page source code
      *
      * @param textAsRegexPattern test string to find
-     * @deprecated Use verify() instead.
+     * @deprecated Use method under {@link #verify()} instead
      */
     @Deprecated
     public void verifyTextAsRegexPatternExistInPageSource(String textAsRegexPattern){
@@ -1632,7 +1631,7 @@ public class WebInteractionMethods  {
      * Checks the web browser page title against expected result, written as a regular expression
      *
      * @param expectedTitleAsRegexPattern Expected regular expression pattern to match the current title of the web page
-     * @deprecated Use {@link #verify()}.title instead.
+     * @deprecated Use {@link #verify()}.title() instead.
      */
     @SuppressWarnings("unused")
     @Deprecated
@@ -1658,7 +1657,7 @@ public class WebInteractionMethods  {
      * Checks the web browser page title against expected result
      *
      * @param expectedTitle Expected current title of the web page
-     * @deprecated Use {@link #verify()}.title instead.
+     * @deprecated Use {@link #verify()}.title() instead.
      */
     @SuppressWarnings("unused")
     @Deprecated
@@ -1683,7 +1682,7 @@ public class WebInteractionMethods  {
      * Checks that the web browser page title matches the expected title pattern within specified timeout
      *
      * @param expectedTitleAsRegexPattern Expected title pattern in a regular expression format, for the web page
-     * @deprecated Use {@link #verify()}.title instead.
+     * @deprecated Use {@link #verify()}.title() instead.
      * @param timeoutInSeconds Timeout in seconds
      */
     @SuppressWarnings("SameParameterValue")
@@ -1721,7 +1720,7 @@ public class WebInteractionMethods  {
      * Checks that the web browser page title is (or become) the expected title within specified timeout
      *
      * @param expectedTitle Expected title of the web page
-     * @deprecated Use {@link #verify()}.title instead.
+     * @deprecated Use {@link #verify()}.title() instead.
      * @param timeoutInSeconds Timeout in seconds
      */
     @SuppressWarnings("SameParameterValue")
@@ -1759,7 +1758,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to check the text of
      * @param expectedText The expected text to find
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyElementText(GuiElement guiElement, String expectedText){
@@ -1793,7 +1792,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to check the text of
      * @param expectedText The expected text to find
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method textContains() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyElementTextContainsText(GuiElement guiElement, String expectedText){
@@ -1827,7 +1826,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to check the text of
      * @param expectedTextAsRegexPattern The expected text to find
-     * @deprecated Use verifyElement instead
+     * @deprecated Use method text() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyElementTextWithRegexPattern(GuiElement guiElement, String expectedTextAsRegexPattern){
@@ -1975,7 +1974,7 @@ public class WebInteractionMethods  {
      * Check the page source for current page with the W3C Validator API for HTML consistency.
      *
      * @param verbose If set to true warning messages will be logged, as well as extra debugging information from the W3C validation service. If set to false only errors will be logged.
-     * @deprecated Use verify() instead.
+     * @deprecated Use method under {@link #verify()} instead
      */
     @Deprecated
     public ActionResult verifyCurrentPageSourceWithW3validator(boolean verbose){
@@ -1995,7 +1994,7 @@ public class WebInteractionMethods  {
      * Verifies that an element is enabled for interaction (displayed and enabled).
      *
      * @param guiElement The element to assess.
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method isEnabled() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyIsEnabled(GuiElement guiElement){
@@ -2490,7 +2489,7 @@ public class WebInteractionMethods  {
      * @param guiElement The table to search
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
      * @param cellMatchingType Type of matching performed.
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method tableRows() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyTableRows(GuiElement guiElement, String[] headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
@@ -2526,7 +2525,7 @@ public class WebInteractionMethods  {
      * @param tableElement The table element.
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
      * @param cellMatchingType Type of matching performed.
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method tableRow() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyTableRow(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
@@ -2587,7 +2586,7 @@ public class WebInteractionMethods  {
      *
      * @param tableElement Table element
      * @param expectedHeadline Headline name, as seen in the table
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method tableHeadlines() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyTableHeadline(GuiElement tableElement, String expectedHeadline){
@@ -2769,7 +2768,7 @@ public class WebInteractionMethods  {
      *
      * @param tableElement The table element
      * @param expectedHeadlines The list of expected headlines
-     * @deprecated Use verifyElement() instead.
+     * @deprecated Use method tableHeadlines() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
@@ -3264,7 +3263,7 @@ public class WebInteractionMethods  {
 
     /**
      * Logs severe entries in browser console, client log, and driver log to test case log. Clears browser console in the process.
-     * @deprecated Use verify() instead.
+     * @deprecated Use method under {@link #verify()}} instead
      */
     @Deprecated
     public void verifyBrowserConsoleHasNoErrors_AlsoClearsBrowserConsole(){
@@ -3362,7 +3361,7 @@ public class WebInteractionMethods  {
      *
      * @param domElement
      * @param timeoutInSeconds
-     * @deprecated Use verifyElement() instead
+     * @deprecated Use isAnimated() under {@link #verifiyElement(DomElement)}} instead
      */
     @Deprecated
     public void verifyElementIsAnimated(DomElement domElement, int timeoutInSeconds) {

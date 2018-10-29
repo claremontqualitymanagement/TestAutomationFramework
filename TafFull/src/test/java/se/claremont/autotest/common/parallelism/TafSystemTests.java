@@ -3,10 +3,8 @@ package se.claremont.autotest.common.parallelism;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testset.TestSet;
@@ -36,7 +34,7 @@ public class TafSystemTests extends TestSet{
     @Test
     public void testIdentifyingWebElementByVisibleText(){
         web.navigate("file://" + getTestFileFromTestResourcesFolder("TestPage.html"));
-        web.verifyElementText(new DomElement("The text", DomElement.IdentificationType.BY_VISIBLE_TEXT), "The text");
+        web.verifiyElement(new DomElement("The text", DomElement.IdentificationType.BY_VISIBLE_TEXT)).textEquals("The text");
     }
 
     @Test

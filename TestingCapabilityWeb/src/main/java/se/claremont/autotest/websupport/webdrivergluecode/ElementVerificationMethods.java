@@ -9,6 +9,7 @@ import se.claremont.autotest.common.support.tableverification.TableData;
 import se.claremont.autotest.websupport.DomElement;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ElementVerificationMethods extends BrowserVerificationMethods{
@@ -250,6 +251,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         return element.isDisplayed();
     }
 
+    public ElementVerificationMethods tableRow(String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
+        return tableRows(new String[]{headlineColonValueSemicolonSeparatedString}, cellMatchingType);
+    }
+
     /**
      * Verifies if html table data holds expected data. Top row expected to hold headlines.
      *
@@ -325,6 +330,13 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
             web.writeRunningProcessListDeviationsSinceTestCaseStart();
         }
         return this;
+    }
+
+
+    public ElementVerificationMethods tableHeadline(String expectedHeadline){
+        List<String> headlines = new ArrayList<>();
+        headlines.add(expectedHeadline);
+        return tableHeadlines(headlines);
     }
 
     /**
