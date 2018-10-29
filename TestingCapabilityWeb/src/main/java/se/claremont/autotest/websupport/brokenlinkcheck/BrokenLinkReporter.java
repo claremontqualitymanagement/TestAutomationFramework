@@ -31,12 +31,13 @@ public class BrokenLinkReporter {
      * @param onlyDisplayedLinks Set to true to filter links for displayed links.
      * TODO: Should also add context path to local links
      */
-    public void reportBrokenLinks(boolean onlyDisplayedLinks){
+    public boolean reportBrokenLinks(boolean onlyDisplayedLinks){
         log(LogLevel.DEBUG, "Initiating a check for broken links on current page (URL: '" + driver.getCurrentUrl() + "').");
         startTime = System.currentTimeMillis();
         linkCheckResults = getLinkCheckResults(onlyDisplayedLinks);
         setLogLevel();
         testCase.logDifferentlyToTextLogAndHtmlLog(logLevel, getReportAsText(), getReportAsHtml());
+        return !logLevel.isFail();
     }
 
     @SuppressWarnings("UnnecessaryContinue")

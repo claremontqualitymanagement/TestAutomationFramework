@@ -38,21 +38,21 @@ public class W3CHtmlValidatorService {
     /**
      * Check the page source for current page with the W3C Validator API for HTML consistency.
      */
-    public void verifyPageSourceWithW3validator(){
+    public boolean verifyPageSourceWithW3validator(){
         reportProblemsIfExist();
-        if(!isRunnable()) return;
+        if(!isRunnable()) return false;
         RestSupport rest = new RestSupport(testCase);
         responseJson = rest.responseBodyFromPostRequest("https://validator.w3.org/nu/?out=json", "text/html; charset=utf-8", pageSource);
         if(responseJson == null){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get any response from HTML validation service.");
             failed = true;
-            return;
+            return false;
         }
         if(JsonParser.childObjects(responseJson, "messages").size() == 0){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Checking of page content against W3C validator passed with no messages.");
-            return;
         }
         reportResults();
+        return !failed;
     }
 
     /**

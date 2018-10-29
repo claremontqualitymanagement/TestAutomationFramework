@@ -20,7 +20,7 @@ import se.claremont.autotest.common.testrun.Settings;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
-import se.claremont.autotest.websupport.BrowserVerificationMethods;
+import se.claremont.autotest.websupport.ActionResult;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
@@ -193,7 +193,7 @@ public class WebInteractionMethods  {
     /**
      * Browser back button
      */
-    public void goBack(){
+    public ActionResult goBack(){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -202,9 +202,10 @@ public class WebInteractionMethods  {
         try{
             driver.navigate().back();
             log(LogLevel.EXECUTED, "Navigating back in browser.");
-
+            return new ActionResult(true, null, this);
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not navigate back in browser." + e.toString());
+            return new ActionResult(false, null, this);
         }
     }
 
@@ -228,12 +229,14 @@ public class WebInteractionMethods  {
      *
      * @param url The string formed url to navigate to
      */
-    public void navigate(String url){
+    public ActionResult navigate(String url){
         try {
             goToUrl(url);
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Navigation performed to url '" + url + "'.", "Navigation performed to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'." );
+            return new ActionResult(true, null, this);
         }catch (NavigationError e){
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not navigate to url '" + url + "'.", "Could not navigate to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'.");
+            return new ActionResult(false, null, this);
         }
     }
 
@@ -244,13 +247,14 @@ public class WebInteractionMethods  {
      * consuming recursive check if elements can be uniquely identified with a sub-element
      * search from any parent.
      */
-    public void mapCurrentPageWithBy(String outputFilePath, boolean quickAndSloppyMode){
+    public ActionResult mapCurrentPageWithBy(String outputFilePath, boolean quickAndSloppyMode){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
         }
         WebPageCodeConstructorWithBy constructor = new WebPageCodeConstructorWithBy(this);
         constructor.createPageObjectFromCurrentPage(outputFilePath, quickAndSloppyMode);
+        return new ActionResult(true, null, this);
     }
 
     /**
@@ -260,7 +264,7 @@ public class WebInteractionMethods  {
      *
      * @param outputFilePath File path to output file
      */
-    public void mapCurrentPage(String outputFilePath){
+    public ActionResult mapCurrentPage(String outputFilePath){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -269,6 +273,7 @@ public class WebInteractionMethods  {
         log(LogLevel.DEBUG, "Starting mapping elements of the current page (" + driver.getCurrentUrl() + ").");
         WebPageCodeConstructor.ConstructWebPageCode(driver, outputFilePath);
         log(LogLevel.EXECUTED, "Mapped the element of the current page ('" + driver.getCurrentUrl() + "') and saved it to the file '" + outputFilePath + "'. Mapping took " + StringManagement.timeDurationAsString(startTime, new Date()) + ".");
+        return new ActionResult(true, null, this);
     }
 
     /**
@@ -281,7 +286,7 @@ public class WebInteractionMethods  {
      */
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated()
-    public void mapCurrentPageThorough(String outputFilePath){
+    public ActionResult mapCurrentPageThorough(String outputFilePath){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -290,16 +295,19 @@ public class WebInteractionMethods  {
         log(LogLevel.DEBUG, "Starting mapping elements of the current page (" + driver.getCurrentUrl() + ").");
         WebPageCodeConstructor.ConstructWebPageCodeThorough(driver, outputFilePath);
         log(LogLevel.EXECUTED, "Mapped the element of the current page ('" + driver.getCurrentUrl() + "') and saved it to the file '" + outputFilePath + "'. Mapping took " + StringManagement.timeDurationAsString(startTime, new Date()) + ".");
+        return new ActionResult(true, null, this);
     }
 
-    public void reportBrokenLinksOnCurrentPage(){
+    public ActionResult reportBrokenLinksOnCurrentPage(){
         BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, driver);
         brokenLinkReporter.reportBrokenLinks(true);
+        return new ActionResult(true, null, this);
     }
 
-    public void reportBrokenLinksOnCurrentPage_IncludeAllLinksAlsoNonDisplayedLinks(){
+    public ActionResult reportBrokenLinksOnCurrentPage_IncludeAllLinksAlsoNonDisplayedLinks(){
         BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, driver);
         brokenLinkReporter.reportBrokenLinks(false);
+        return new ActionResult(true, null, this);
     }
 
     /**
@@ -308,8 +316,8 @@ public class WebInteractionMethods  {
      * @param guiElement The element to wait for.
      * @return Returns true if element successfully appears within the timeout.
      */
-    public boolean waitForElementToAppear(GuiElement guiElement){
-        return waitForElementToAppear(guiElement, standardTimeoutInSeconds);
+    public ActionResult waitForElementToAppear(GuiElement guiElement){
+        return new ActionResult(waitForElementToAppear(guiElement, standardTimeoutInSeconds).wasSuccess, guiElement, this);
     }
 
     /**
@@ -319,7 +327,7 @@ public class WebInteractionMethods  {
      * @param timeoutInSeconds Number of seconds to wait for object being displayed
      * @return Returns true if element appears within timeout.
      */
-    public boolean waitForElementToAppear(GuiElement guiElement, int timeoutInSeconds){
+    public ActionResult waitForElementToAppear(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         WebElement element;
@@ -334,7 +342,7 @@ public class WebInteractionMethods  {
         }
         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to appear. " +
                 "It " + Boolean.toString(elementHasAppeared).toLowerCase().replace("true", "did.").replace("false", "never did."));
-        return elementHasAppeared;
+        return new ActionResult(elementHasAppeared, guiElement, this);
     }
 
     /**
@@ -381,8 +389,8 @@ public class WebInteractionMethods  {
      * @param guiElement The element to wait for disappearance of.
      * @return Return true if element successfully has disappeared within the timeout.
      */
-    public boolean waitForElementToDisappear(GuiElement guiElement){
-        return waitForElementToDisappear(guiElement, standardTimeoutInSeconds);
+    public ActionResult waitForElementToDisappear(GuiElement guiElement){
+        return new ActionResult(waitForElementToDisappear(guiElement, standardTimeoutInSeconds).wasSuccess, guiElement, this);
     }
 
     /**
@@ -392,7 +400,7 @@ public class WebInteractionMethods  {
      * @param timeoutInSeconds Timeout period to wait for element to disappear.
      * @return Returns true if element disappears within timeout.
      */
-    public boolean waitForElementToDisappear(GuiElement guiElement, int timeoutInSeconds){
+    public ActionResult waitForElementToDisappear(GuiElement guiElement, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement) guiElement;
         WebElement element;
@@ -411,14 +419,14 @@ public class WebInteractionMethods  {
         }
         log(LogLevel.DEBUG, "Waited " + (System.currentTimeMillis() - startTime) + " for element " + domElement.LogIdentification() + " to disappear. " +
                 "It " + Boolean.toString(elementIsDisplayed).toLowerCase().replace("true", "never did.").replace("false", "did."));
-        return !elementIsDisplayed;
+        return new ActionResult(!waitForElementToDisappear(guiElement, standardTimeoutInSeconds).wasSuccess, guiElement, this);
     }
 
 
     /**
      * Checks current page for broken links and reports results to log as verifications.
      */
-    public void reportBrokenLinksRecursive(){
+    public ActionResult reportBrokenLinksRecursive(){
         String currentDomain = currentDomain();
         List<WebElement> links = driver.findElements(By.xpath("//a"));
         List<Thread> linkCheckingThreads = new ArrayList<>();
@@ -439,6 +447,7 @@ public class WebInteractionMethods  {
             } catch (InterruptedException e) {
                 log(LogLevel.FRAMEWORK_ERROR, e.getMessage());
             }
+            return new ActionResult(true,null, this);
     }
 
     private String currentDomain(){
@@ -533,7 +542,7 @@ public class WebInteractionMethods  {
     /**
      * Sending accept to popup
      */
-    public void acceptAlert() {
+    public ActionResult acceptAlert() {
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -542,12 +551,14 @@ public class WebInteractionMethods  {
             Alert alert = driver.switchTo().alert();
             alert.accept();
             log(LogLevel.EXECUTED, "Accepted alert dialogue.");
+            return new ActionResult(true, null, this);
         } catch (Exception ignored) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not accept alert dialogue.");
             saveScreenshot(null);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
+            return new ActionResult(false, null, this);
         }
     }
 
@@ -557,7 +568,7 @@ public class WebInteractionMethods  {
      * @param width The new width of the browser window
      * @param height The new height of the browser window
      */
-    public void setBrowserWindowSize(int width, int height) {
+    public ActionResult setBrowserWindowSize(int width, int height) {
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -569,7 +580,9 @@ public class WebInteractionMethods  {
             log(LogLevel.EXECUTED, "Re-sized browser window to width " + width + " pixels and height " + height + " pixels.");
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not re-size browser window to height " + height + " and width " + width + " pixels");
+            return new ActionResult(false, null, this);
         }
+        return new ActionResult(true, null, this);
     }
 
     /**
@@ -581,17 +594,20 @@ public class WebInteractionMethods  {
      * @deprecated Use VerifiyElement instead.
      */
     @Deprecated
-    public void verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributeValue){
+    public ActionResult verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributeValue){
         DomElement domElement = (DomElement) linkElement;
         try{
             WebElement element = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
             if(element.getAttribute("href").equals(expectedAttributeValue)){
                 log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " was found to have the expected attribute value of '" + expectedAttributeValue + "' for attribute '" + attributeName + "'.");
+                return new ActionResult(true, linkElement, this);
             } else {
                 log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " was expected to have the value '" + expectedAttributeValue + "' for attribute '" + attributeName + "' but actually had the value of '" + element.getAttribute(attributeName) + "'.");
+                return new ActionResult(false, linkElement, this);
             }
         } catch (Exception e){
             log(LogLevel.VERIFICATION_PROBLEM, "Could not check the attribute '" + attributeName + "' of element " + domElement.LogIdentification() + " (was expected to have the value '" + expectedAttributeValue + "'." + SupportMethods.LF + e.toString() );
+            return new ActionResult(false, linkElement, this);
         }
     }
 
@@ -604,17 +620,20 @@ public class WebInteractionMethods  {
      * @deprecated Use verifyElement instead
      */
     @Deprecated
-    public void verifyElementAttributeRegex(GuiElement linkElement, String attributeName, String expectedAttributevalueAsRegex){
+    public ActionResult verifyElementAttributeRegex(GuiElement linkElement, String attributeName, String expectedAttributevalueAsRegex){
         DomElement domElement = (DomElement) linkElement;
         try{
             WebElement element = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
             if(SupportMethods.isRegexMatch(element.getAttribute("href"),expectedAttributevalueAsRegex)){
                 log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " was found to have the expected attribute value of '" + expectedAttributevalueAsRegex + "' for attribute '" + attributeName + "'.");
+                return new ActionResult(true, linkElement, this);
             } else {
                 log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " was expected to have the value '" + expectedAttributevalueAsRegex + "' for attribute '" + attributeName + "' but actually had the value of '" + element.getAttribute(attributeName) + "'.");
+                return new ActionResult(false, linkElement, this);
             }
         } catch (Exception e){
             log(LogLevel.VERIFICATION_PROBLEM, "Could not check the attribute '" + attributeName + "' of element " + domElement.LogIdentification() + " (was expected to have the value '" + expectedAttributevalueAsRegex + "'." + SupportMethods.LF + e.toString() );
+            return new ActionResult(false, linkElement, this);
         }
     }
 
@@ -622,8 +641,9 @@ public class WebInteractionMethods  {
      * When a test case object is created a snapshot of running processes is created. This method makes a comparison
      * of what processes that differs at the time of method execution compared to test case start.
      */
-    public void writeRunningProcessListDeviationsSinceTestCaseStart(){
+    public ActionResult writeRunningProcessListDeviationsSinceTestCaseStart(){
         testCase.writeProcessListDeviationsFromSystemStartToLog();
+        return new ActionResult(true, null, this);
     }
 
     /**
@@ -632,7 +652,7 @@ public class WebInteractionMethods  {
      * @param guiElement The element to write to
      * @param textToWrite The text to write
      */
-    public void write(GuiElement guiElement, String textToWrite){
+    public ActionResult write(GuiElement guiElement, String textToWrite){
         DomElement domElement = (DomElement) guiElement;
         long startTime = System.currentTimeMillis();
         WebElement element = null;
@@ -650,6 +670,7 @@ public class WebInteractionMethods  {
         }
         if(success){
             log(LogLevel.EXECUTED, "Wrote '" + textToWrite + "' to " + domElement.LogIdentification() + ".");
+            return new ActionResult(true, guiElement, this);
         } else {
             String text = null;
             String errorMessage = null;
@@ -676,6 +697,7 @@ public class WebInteractionMethods  {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             haltFurtherExecution();
         }
+        return new ActionResult(false, guiElement, this);
     }
 
 
@@ -685,11 +707,12 @@ public class WebInteractionMethods  {
      * @param guiElement The element to write to
      * @param textToWrite The text to write
      */
-    public void writeAfterClear(GuiElement guiElement, String textToWrite){
+    public ActionResult writeAfterClear(GuiElement guiElement, String textToWrite){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
         try {
             enterText(webElement, textToWrite, true);
+            return new ActionResult(true, guiElement, this);
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not enter the text '" + textToWrite + "' to element " + domElement.LogIdentification() + ". ");
             saveScreenshot(webElement);
@@ -697,6 +720,7 @@ public class WebInteractionMethods  {
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
         }
+        return new ActionResult(false, guiElement, this);
     }
 
     /**
@@ -705,7 +729,7 @@ public class WebInteractionMethods  {
      * @param guiElement the element
      * @param text the text to send
      */
-    public void submitText(GuiElement guiElement, String text){
+    public ActionResult submitText(GuiElement guiElement, String text){
         DomElement domElement = (DomElement) guiElement;
         WebElement webElement = null;
         try {
@@ -714,6 +738,7 @@ public class WebInteractionMethods  {
             try{
                 webElement.submit();
                 log(LogLevel.EXECUTED, "Submitted text '" + text + "' to " + domElement.LogIdentification() + ".");
+                return new ActionResult(true, guiElement, this);
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not submit the text entered to " + domElement.LogIdentification() + ".");
                 saveScreenshot(webElement);
@@ -728,6 +753,7 @@ public class WebInteractionMethods  {
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
         }
+        return new ActionResult(false, guiElement, this);
     }
 
     /**
@@ -736,7 +762,7 @@ public class WebInteractionMethods  {
      * @param relevantWebElementToMarkWithBorder relevantWebElementToMarkWithBorder
      */
     @SuppressWarnings("WeakerAccess")
-    public void saveScreenshot(WebElement relevantWebElementToMarkWithBorder){
+    public ActionResult saveScreenshot(WebElement relevantWebElementToMarkWithBorder){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -764,7 +790,7 @@ public class WebInteractionMethods  {
             }catch (Exception jsProblem){
                 log(LogLevel.DEBUG, "Could not reset element highlight frame. Error: " + jsProblem.getMessage());
             }
-            return;
+            return new ActionResult(false, null, this);
         }
         /*
         try {
@@ -800,18 +826,22 @@ public class WebInteractionMethods  {
                             "   </a>");
         } else {
             log(LogLevel.DEBUG, "Could not save screenshot to '" + filePath + "' since the image data was empty.");
+            return new ActionResult(false, null, this);
         }
+        return new ActionResult(true, null, this);
     }
 
     /**
      * Saving desktop of full desktop rather than just the web browser
      */
-    public void saveDesktopScreenshot(){
+    public ActionResult saveDesktopScreenshot(){
         try {
             GenericInteractionMethods robotSwingInteractionMethods = new GenericInteractionMethods(testCase);
             robotSwingInteractionMethods.takeScreenshot();
+            return new ActionResult(true, null, this);
         } catch (Exception e){
             testCase.log(LogLevel.DEBUG, "Could not take desktop screenshot: " + e.toString());
+            return new ActionResult(false, null, this);
         }
     }
 
@@ -821,7 +851,7 @@ public class WebInteractionMethods  {
      * @param domElement The element to capture an image of.
      * @param filePath The file name of the file to write the image to.
      */
-    public void saveDomElementScreenshot(DomElement domElement, String filePath){
+    public ActionResult saveDomElementScreenshot(DomElement domElement, String filePath){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -834,7 +864,7 @@ public class WebInteractionMethods  {
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
-            return;
+            return new ActionResult(false, domElement, this);
         }
         File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         int ImageWidth = webElement.getSize().getWidth();
@@ -848,7 +878,7 @@ public class WebInteractionMethods  {
             img = ImageIO.read(screen);
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not read screenshot of full screenshot when trying to capture an image of " + domElement.LogIdentification() + ".");
-            return;
+            return new ActionResult(false, domElement, this);
         }
 
         //cut Image using height, width and x y coordinates parameters.
@@ -857,7 +887,9 @@ public class WebInteractionMethods  {
             ImageIO.write(destination, "png", new File(filePath));
         } catch (IOException e) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not write image of " + domElement.LogIdentification() + " to file '" + filePath + "'.");
+            return new ActionResult(false, domElement, this);
         }
+        return new ActionResult(true, domElement, this);
     }
 
 
@@ -888,9 +920,10 @@ public class WebInteractionMethods  {
      *
      * @param standardTimeoutInSeconds The new value for standard timeout, in seconds.
      */
-    public void setStandardTimeout(int standardTimeoutInSeconds){
+    public ActionResult setStandardTimeout(int standardTimeoutInSeconds){
         log(LogLevel.DEBUG, "Resetting standard timeout from " + this.standardTimeoutInSeconds + " seconds to " + standardTimeoutInSeconds + " seconds.");
         this.standardTimeoutInSeconds = standardTimeoutInSeconds;
+        return new ActionResult(true, null, this);
     }
 
     /**
@@ -898,7 +931,7 @@ public class WebInteractionMethods  {
      *
      * @param visibleText The visible text of the element to find
      */
-    public void clickOnElementWithTheVisibleText(String visibleText){
+    public ActionResult clickOnElementWithTheVisibleText(String visibleText){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -917,8 +950,10 @@ public class WebInteractionMethods  {
             try {
                 potentialClickObjects.get(0).click();
                 log(LogLevel.EXECUTED, "Clicked the element with visible text '" + visibleText + "'.");
+                return new ActionResult(true, new DomElement(potentialClickObjects.get(0)), this);
             }catch (Exception e){
                 log(LogLevel.EXECUTION_PROBLEM, "Could not click the element with the visible text '" + visibleText + "'. Error message: " + e.getMessage());
+                return new ActionResult(false, new DomElement(potentialClickObjects.get(0)), this);
             }
         }else{
             List<WebElement> trulyClickableElements = new ArrayList<>();
@@ -932,8 +967,10 @@ public class WebInteractionMethods  {
                 try{
                     trulyClickableElements.get(0).click();
                     log(LogLevel.EXECUTED, "Clicked the element with the visible text '" + visibleText + "'.");
+                    return new ActionResult(true, new DomElement(trulyClickableElements.get(0)), this);
                 }catch (Exception e){
                     errorManagementProcedures("Could not click element with visible text '" + visibleText + "'. Error message: " + e.getMessage(), trulyClickableElements.get(0));
+                    return new ActionResult(false, new DomElement(trulyClickableElements.get(0)), this);
                 }
             }else{
                 boolean clicked = false;
@@ -942,6 +979,7 @@ public class WebInteractionMethods  {
                         clicked = true;
                         webElement.click();
                         log(LogLevel.EXECUTED, "Clicked the element with the visible text '" + visibleText + "'.");
+                        return new ActionResult(true, new DomElement(webElement), this);
                     }
                 }
                 if(!clicked){
@@ -949,6 +987,7 @@ public class WebInteractionMethods  {
                 }
             }
         }
+        return new ActionResult(false, null, this); //Should not be reachable
     }
 
     private class Waiter{
@@ -986,12 +1025,12 @@ public class WebInteractionMethods  {
      * @param guiElement the GUI element to click
      * @param timeoutInSeconds The number of seconds to wait and try to click
      */
-    public void clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
+    public ActionResult clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
         waitForElementToAppear(guiElement);
         WebElement webElement = getRuntimeElementWithLogging((DomElement)guiElement);
         if(webElement == null){
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not identify element " + ((DomElement)guiElement).LogIdentification() + " to click blindly at.");
-            return;
+            return new ActionResult(false, guiElement, this);
         }
         Point topLeft = webElement.getLocation();
         Point clickPoint = new Point (topLeft.getX() + webElement.getSize().width/2, topLeft.getY() + webElement.getSize().height/2);
@@ -1002,8 +1041,10 @@ public class WebInteractionMethods  {
             r.mousePress( InputEvent.BUTTON1_MASK );
             r.mouseRelease( InputEvent.BUTTON1_MASK );
             testCase.log(LogLevel.EXECUTED, "Clicked blindly at element position for element " + ((DomElement)guiElement).LogIdentification() + " (at point '" + clickPoint.x + "x" + clickPoint.y + "').");
+            return new ActionResult(true, guiElement, this);
         } catch (AWTException e) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not click blindly at element " + ((DomElement)guiElement).LogIdentification() + " at point '" + clickPoint.x + "x" + clickPoint.y + "'. Error: " + e.toString());
+            return new ActionResult(false, guiElement, this);
         }
     }
 
@@ -1012,8 +1053,8 @@ public class WebInteractionMethods  {
      *
      * @param guiElement the GUI element to click
      */
-    public void click(GuiElement guiElement){
-        click(guiElement, standardTimeoutInSeconds);
+    public ActionResult click(GuiElement guiElement){
+        return new ActionResult(click(guiElement, standardTimeoutInSeconds).wasSuccess, guiElement, this);
     }
 
     /**
@@ -1022,7 +1063,7 @@ public class WebInteractionMethods  {
      * @param guiElement the GUI element to click
      * @param timeoutInSeconds The number of seconds to wait and try to click
      */
-    public void click(GuiElement guiElement, int timeoutInSeconds){
+    public ActionResult click(GuiElement guiElement, int timeoutInSeconds){
         Set<String> errorMessages = new HashSet<>();
         DomElement element    = (DomElement) guiElement;
         long startTime        = System.currentTimeMillis();
@@ -1063,12 +1104,13 @@ public class WebInteractionMethods  {
 
         if(clicked){
             log(LogLevel.EXECUTED, "Clicked the " + element.LogIdentification() + " element after " + String.valueOf(System.currentTimeMillis() - startTime) + " milliseconds.");
+            return new ActionResult(true, guiElement, this);
         } else if(errorMessages.size() > 0){
             for(String errorMessage : errorMessages){
                 if(errorMessages.contains("Other element would receive the click")) {
                     log(LogLevel.EXECUTION_PROBLEM, "It seems something is blocking the possibility to click on " + element.LogIdentification() + ". It could for example be a popup overlaying the element?");
                     errorManagementProcedures("Could not click element " + element.LogIdentification() + ".", webElement);
-                    return;
+                    return new ActionResult(false, guiElement, this);
                 }
             }
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.FRAMEWORK_ERROR,
@@ -1090,6 +1132,7 @@ public class WebInteractionMethods  {
             }
             errorManagementProcedures("Could not successfully click on the " + element.LogIdentification() + " element.", webElement);
         }
+        return new ActionResult(false, guiElement, this);
     }
 
 
@@ -1118,23 +1161,27 @@ public class WebInteractionMethods  {
     /**
      * Closes the web browser.
      */
-    public void closeBrowser(){
+    public ActionResult closeBrowser(){
         try{
             closeBrowserDriver();
             log(LogLevel.INFO, "Closing browser.");
+            return new ActionResult(true, null, this);
         }catch (BrowserClosingError browserClosingError) {
             log(LogLevel.EXECUTION_PROBLEM, "Could not close the browser.");
+            return new ActionResult(false, null, this);
         }
     }
 
     /**
      * Makes sure the driver is closed
      */
-    public void makeSureDriverIsClosed(){
+    public ActionResult makeSureDriverIsClosed(){
         try{
             closeBrowserDriver();
+            return new ActionResult(true, null, this);
         }catch (Exception e) {
             log(LogLevel.DEBUG, "Could not close browser. Was probably already closed.");
+            return new ActionResult(false, null, this);
         }
     }
 
@@ -1818,7 +1865,7 @@ public class WebInteractionMethods  {
      * @param guiTableElement The table element in the gui
      * @param textsToFindOnRow the text strings to find
      */
-    public void pickTableRow(GuiElement guiTableElement, String[] textsToFindOnRow){
+    public ActionResult pickTableRow(GuiElement guiTableElement, String[] textsToFindOnRow){
         boolean doneOk = false;
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement)guiTableElement;
@@ -1885,6 +1932,7 @@ public class WebInteractionMethods  {
             saveHtmlContentOfCurrentPage();
             haltFurtherExecution();
         }
+        return new ActionResult(true, guiTableElement, this);
     }
 
     public Object executeJavascript(String script){
@@ -1933,7 +1981,7 @@ public class WebInteractionMethods  {
      * @deprecated Use verify() instead.
      */
     @Deprecated
-    public void verifyCurrentPageSourceWithW3validator(boolean verbose){
+    public ActionResult verifyCurrentPageSourceWithW3validator(boolean verbose){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -1942,6 +1990,7 @@ public class WebInteractionMethods  {
         W3CHtmlValidatorService w3CHtmlValidatorService = new W3CHtmlValidatorService(testCase, driver.getPageSource(), verbose);
         w3CHtmlValidatorService.verifyPageSourceWithW3validator();
         if(w3CHtmlValidatorService.failed()) saveHtmlContentOfCurrentPage();
+        return new ActionResult(!w3CHtmlValidatorService.failed(), null, this);
     }
 
 
@@ -1991,7 +2040,7 @@ public class WebInteractionMethods  {
      *
      * @param tabNameAsRegexForTabToSwitchTo The name of the tab to switch to.
      */
-    public void switchBrowserTabWithTabNameGivenAsRegexPattern(String tabNameAsRegexForTabToSwitchTo){
+    public ActionResult switchBrowserTabWithTabNameGivenAsRegexPattern(String tabNameAsRegexForTabToSwitchTo){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -2011,7 +2060,7 @@ public class WebInteractionMethods  {
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
-            return;
+            return new ActionResult(false, null, this);
         }
 
         for (String tabId : driver.getWindowHandles())
@@ -2022,11 +2071,12 @@ public class WebInteractionMethods  {
                 String tabName = driver.getTitle();
                 log(LogLevel.DEBUG, "Identified browser tab with tab title = '" + tabName + " (id='" + tabId + "').");
                 if(SupportMethods.isRegexMatch(driver.getTitle(), tabNameAsRegexForTabToSwitchTo) ){
-                    return;
+                    return new ActionResult(true, null, this);
                 }
             }
         }
         log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'. Matched with regular expression pattern '" + tabNameAsRegexForTabToSwitchTo + "'.");
+        return new ActionResult(true, null, this);
     }
 
 
@@ -2035,7 +2085,7 @@ public class WebInteractionMethods  {
      *
      * @param tabNameForTabToSwitchTo The name of the tab to switch to.
      */
-    public void switchBrowserTab(String tabNameForTabToSwitchTo){
+    public ActionResult switchBrowserTab(String tabNameForTabToSwitchTo){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -2055,7 +2105,7 @@ public class WebInteractionMethods  {
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
-            return;
+            return new ActionResult(false, null, this);
         }
         List<String> actualTabs = new ArrayList<>();
         actualTabs.add(initialTitle);
@@ -2070,18 +2120,19 @@ public class WebInteractionMethods  {
             actualTabs.add(currentTitle);
             if(currentTitle != null && currentTitle.equals(tabNameForTabToSwitchTo) ){
                 log(LogLevel.EXECUTED, "Switched browser tab from tab '" + initialTitle + "' to tab with title '" + driver.getTitle() + "'.");
-                return;
+                return new ActionResult(true, null, this);
             }
         }
         log(LogLevel.EXECUTION_PROBLEM, "Could not switch browser tab from tab '" + initialTitle + "' to tab with title '" + tabNameForTabToSwitchTo + "'. Existing titles: '" + String.join("', '", actualTabs) + "'.");
-
+        return new ActionResult(false, null, this);
     }
 
     /**
      * Closes the current browser tab. If it's the last one the browser is closed.
      */
-    public void closeCurrentBrowserTab(){
+    public ActionResult closeCurrentBrowserTab(){
         log(LogLevel.FRAMEWORK_ERROR, "Close current browser tab is not yet implemented.");
+        return new ActionResult(false, null, this);
     }
 
 
@@ -2090,7 +2141,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement Element to hover
      */
-    public void hover(GuiElement guiElement){
+    public ActionResult hover(GuiElement guiElement){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -2101,13 +2152,14 @@ public class WebInteractionMethods  {
         try{
             ((JavascriptExecutor)driver).executeScript(javaScript, getRuntimeElementWithTimeout(((DomElement)guiElement), standardTimeoutInSeconds));
             log(LogLevel.EXECUTED, "Hover over " + ((DomElement)guiElement).LogIdentification() + ".");
+            return new ActionResult(true, guiElement, this);
         }catch (Exception e){
             log(LogLevel.EXECUTION_PROBLEM, "Could not hover over " + ((DomElement)guiElement).LogIdentification() + ".");
             saveScreenshot(getRuntimeElementWithoutLogging((DomElement)guiElement));
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
-
+            return new ActionResult(false, guiElement, this);
         }
     }
 
@@ -2137,8 +2189,8 @@ public class WebInteractionMethods  {
      * @param dropdownElement The element to interact with
      * @param selectedOptions The list of options to select, based on visible text
      */
-    public void selectInMultipleChoiceDropdown(GuiElement dropdownElement, ArrayList<String> selectedOptions){
-        selectInDropdownManager(dropdownElement, selectedOptions);
+    public ActionResult selectInMultipleChoiceDropdown(GuiElement dropdownElement, ArrayList<String> selectedOptions){
+        return new ActionResult(selectInDropdownManager(dropdownElement, selectedOptions).wasSuccess, dropdownElement, this);
     }
 
     /**
@@ -2147,10 +2199,10 @@ public class WebInteractionMethods  {
      * @param guiElement The element to interact with
      * @param selection The visible text of the option to choose
      */
-    public void selectInDropdown(GuiElement guiElement, String selection){
+    public ActionResult selectInDropdown(GuiElement guiElement, String selection){
         ArrayList<String> selectionsList = new ArrayList<>();
         selectionsList.add(selection);
-        selectInDropdownManager(guiElement, selectionsList);
+        return new ActionResult(selectInDropdownManager(guiElement, selectionsList).wasSuccess, guiElement, this);
     }
 
     /**
@@ -2159,11 +2211,11 @@ public class WebInteractionMethods  {
      * @param radioButtonContainer The element to interact with
      * @param text The visible text of the element to choose
      */
-    public void chooseRadioButton(GuiElement radioButtonContainer, String text){
+    public ActionResult chooseRadioButton(GuiElement radioButtonContainer, String text){
         DomElement domElement = (DomElement) radioButtonContainer;
         if(text == null) {
             log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
-            return;
+            return new ActionResult(false, radioButtonContainer, this);
         }
 
         WebElement webElement = getRuntimeElementWithTimeout(domElement, standardTimeoutInSeconds);
@@ -2173,20 +2225,20 @@ public class WebInteractionMethods  {
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
-            return;
+            return new ActionResult(false, domElement, this);
         }
         if(!webElement.getTagName().toLowerCase().equals("form")){
             if(webElement.getTagName().toLowerCase().equals("input") && (webElement.getText().contains(text) || webElement.getAttribute("value").contains(text))){
                 webElement.click();
                 log(LogLevel.EXECUTED, "Clicked the '" + webElement.getAttribute("value") + "' radiobutton element.");
-                return;
+                return new ActionResult(true, domElement, this);
             }
             log(LogLevel.EXECUTION_PROBLEM, "Trying to select '" + text + "' in radio button set " + domElement.LogIdentification() + ". However the tag of the element is not 'form', but '" + webElement.getTagName() + "'.");
             saveScreenshot(webElement);
             saveDesktopScreenshot();
             saveHtmlContentOfCurrentPage();
             writeRunningProcessListDeviationsSinceTestCaseStart();
-            return;
+            return new ActionResult(false, domElement, this);
         }
 
         List<String> optionStrings = new ArrayList<>();
@@ -2199,14 +2251,14 @@ public class WebInteractionMethods  {
                 saveDesktopScreenshot();
                 saveHtmlContentOfCurrentPage();
                 writeRunningProcessListDeviationsSinceTestCaseStart();
-                return;
+                return new ActionResult(false, domElement, this);
             }
             for(WebElement optionButton : optionButtons){
                 if(optionButton.isSelected()){
                     log(LogLevel.DEBUG, "Initial selected value in " + domElement.LogIdentification() + " was '" + optionButton.getText() + "'.");
                     if(optionButton.getText().equals(text)){
                         log(LogLevel.EXECUTED, "Made sure the radiobutton " + domElement.LogIdentification() + " had the value '" + text + "' checked, and it already did.");
-                        return;
+                        return new ActionResult(true, domElement, this);
                     }
                 }
                 if(optionButton.isDisplayed()){
@@ -2219,14 +2271,14 @@ public class WebInteractionMethods  {
                 if(optionButton.getText().equals(text)){
                     optionButton.click();
                     log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
-                    return;
+                    return new ActionResult(true, domElement, this);
                 }
             }
             for (WebElement optionButton : optionButtons){
                 if(optionButton.getAttribute("value").equals(text)){
                     optionButton.click();
                     log(LogLevel.EXECUTED, "Clicked the '" + text + "' radiobutton of " + domElement.LogIdentification() + ".");
-                    return;
+                    return new ActionResult(true, domElement, this);
                 }
             }
             errorManagementProcedures("Could not click the '" + text + "' radiobutton of " + domElement.LogIdentification() + ". Available options are '" + String.join("', '", optionStrings) + "'.", webElement);
@@ -2238,6 +2290,7 @@ public class WebInteractionMethods  {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             haltFurtherExecution();
         }
+        return new ActionResult(false, domElement, this);
     }
 
     /**
@@ -2246,12 +2299,12 @@ public class WebInteractionMethods  {
      * @param checkboxElement The element to interact with
      * @param expectedToBeTicked True if expected to be ticked after procedure, false if expected to be un-ticked after procedure. If null is provided, execution will proceed without interaction.
      */
-    public void manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
+    public ActionResult manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
         long startTime = System.currentTimeMillis();
         DomElement domElement = (DomElement)checkboxElement;
         if (expectedToBeTicked == null){
             log(LogLevel.DEBUG, "Leaving checkbox " + domElement.LogIdentification() + " without interaction since input was null.");
-            return;
+            return new ActionResult(true, checkboxElement, this);
         }
         WebElement webElement = null;
         boolean success = false;
@@ -2292,6 +2345,7 @@ public class WebInteractionMethods  {
                         log(LogLevel.EXECUTED, "Clicked on the " + domElement.LogIdentification() + " checkbox since it was expected to be " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "ticked").replace("false", "unticked") + " but it was not.");
                         success = true;
                     }
+                    return new ActionResult(true, checkboxElement, this);
                 } catch (Exception e){
                     log(LogLevel.FRAMEWORK_ERROR, "Something went wrong while interacting with the " + domElement.LogIdentification() + " checkbox. " + e.getMessage());
                     errorManagementProcedures("This should not happen.", webElement);
@@ -2301,6 +2355,7 @@ public class WebInteractionMethods  {
         if(webElement == null){
             errorManagementProcedures("Could not identify the checkbox " + domElement.LogIdentification() + ". Was supposed to " + String.valueOf(expectedToBeTicked).toLowerCase().replace("true", "tick").replace("false", "untick") + " it.", null);
         }
+        return new ActionResult(false, checkboxElement, this);
     }
 
     public String getSelectedValueFromDropdown(GuiElement guiElement){
@@ -2353,16 +2408,16 @@ public class WebInteractionMethods  {
      * @param dropdownElement The element to interact with
      * @param selections The value(s) to choose
      */
-    private void selectInDropdownManager(GuiElement dropdownElement, List<String> selections){
+    private ActionResult selectInDropdownManager(GuiElement dropdownElement, List<String> selections){
         DomElement domElement = (DomElement) dropdownElement;
         if(selections == null ||selections.size() == 0) {
             log(LogLevel.DEBUG, "Did not choose anything in " + domElement.LogIdentification() + " since there was no input to select.");
-            return;
+            return new ActionResult(true, dropdownElement, this);
         }
         WebElement webElement = waitForElementToBeEnabled(domElement, standardTimeoutInSeconds);
         if(webElement == null) {
             errorManagementProcedures("Could not identify element " + domElement.LogIdentification() + " where '" + String.join("', '", selections) + "' was supposed to be selected. Continuing test case execution nevertheless.", null);
-            return;
+            return new ActionResult(false, dropdownElement, this);
         }
         if(!webElement.getTagName().toLowerCase().equals("select"))
             errorManagementProcedures("Trying to select '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification() + ". However the tag of the element is not 'select', but '" + webElement.getTagName() + "'.", webElement);
@@ -2418,6 +2473,7 @@ public class WebInteractionMethods  {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Found available options in " + domElement.LogIdentification() + ": '" + String.join("', '", optionStrings) + "'.",
                     "Found available options in " + domElement.LogIdentification() + ": '" + String.join("', '", optionStrings) + "'.");
             log(LogLevel.EXECUTED, "Selected '" + String.join("', '", selections) + "' in dropdown " + domElement.LogIdentification());
+            return new ActionResult(true, domElement, this);
         } else {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM,
                     "Could not select '" + String.join("', '", nonSelectedStrings) + "' in element " + domElement.LogIdentification() + " when attempting to select '" + String.join("', '", selections) + "'. Available options are :'" + String.join("', '", optionStrings) + "'.",
@@ -2428,6 +2484,7 @@ public class WebInteractionMethods  {
             writeRunningProcessListDeviationsSinceTestCaseStart();
             haltFurtherExecution();
         }
+        return new ActionResult(false, domElement, this);
     }
 
     /**
@@ -2436,7 +2493,9 @@ public class WebInteractionMethods  {
      * @param guiElement The table to search
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
      * @param cellMatchingType Type of matching performed.
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyTableRows(GuiElement guiElement, String[] headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
         boolean doneOk = false;
         long startTime = System.currentTimeMillis();
@@ -2470,11 +2529,13 @@ public class WebInteractionMethods  {
      * @param tableElement The table element.
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
      * @param cellMatchingType Type of matching performed.
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyTableRow(GuiElement tableElement, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
         DomElement domElement = (DomElement)tableElement;
         long startTime = System.currentTimeMillis();
-        boolean found = waitForElementToAppear(tableElement);
+        boolean found = waitForElementToAppear(tableElement).wasSuccess;
         if(!found) {
             log(LogLevel.VERIFICATION_PROBLEM, "Could not identify " + domElement.LogIdentification() + " within timeout. Could not verify row data '" + headlineColonValueSemicolonSeparatedString + "'.");
             return;
@@ -2513,8 +2574,15 @@ public class WebInteractionMethods  {
     /**
      * Reloads the page. Similar as pressing F5 in the browser to refresh the page.
      */
-    public void reloadPage(){
-        driver.navigate().refresh();
+    public ActionResult reloadPage(){
+        try{
+            driver.navigate().refresh();
+            return new ActionResult(true, null, this);
+        }catch (Exception e){
+            log(LogLevel.EXECUTION_PROBLEM, "Could not reload page. Error: " + e);
+            return new ActionResult(false, null, this);
+        }
+
     }
 
     /**
@@ -2522,7 +2590,9 @@ public class WebInteractionMethods  {
      *
      * @param tableElement Table element
      * @param expectedHeadline Headline name, as seen in the table
+     * @deprecated Use verifyElement() instead.
      */
+    @Deprecated
     public void verifyTableHeadline(GuiElement tableElement, String expectedHeadline){
         TableData tableData = tableDataFromGuiElement(tableElement, true);
         if(tableData == null) return;
@@ -2537,7 +2607,7 @@ public class WebInteractionMethods  {
     @SuppressWarnings("ConstantConditions")
     public TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
         DomElement domElement = (DomElement)guiElement;
-        boolean found = waitForElementToAppear(guiElement);
+        boolean found = waitForElementToAppear(guiElement).wasSuccess;
         if(!found) {
             testCase.log(LogLevel.DEBUG, "Could not find " + domElement.LogIdentification() + " within timeout.");
             return null;
@@ -2707,7 +2777,7 @@ public class WebInteractionMethods  {
     @Deprecated
     public void verifyTableHeadlines(GuiElement tableElement, List<String> expectedHeadlines){
         DomElement table = (DomElement) tableElement;
-        boolean found = waitForElementToAppear(tableElement);
+        boolean found = waitForElementToAppear(tableElement).wasSuccess;
         if(!found){
             log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + table.LogIdentification() + " to verify headlines '" + String.join("', '", expectedHeadlines) + "' in." );
             return;
@@ -2748,11 +2818,13 @@ public class WebInteractionMethods  {
      * @param url String formed url
      * @throws NavigationError Error thrown if Navigation cannot be performed
      */
-    private void goToUrl(String url) throws NavigationError{
+    private ActionResult goToUrl(String url) throws NavigationError{
         try{
             driver.navigate().to(url);
+            return new ActionResult(true, null, this);
         }catch (Exception e){
-            throw new NavigationError();
+            log(LogLevel.EXECUTION_PROBLEM, "Could not go to url '" + url + "'. Error: " + e);
+            return new ActionResult(false, null, this);
         }
     }
 
@@ -2795,7 +2867,7 @@ public class WebInteractionMethods  {
      * Saves the current HTML of the page interacted with to the testCaseLog folder for debugging purposes and write a testCaseLog post about it
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      */
-    public void saveHtmlContentOfCurrentPage(){
+    public ActionResult saveHtmlContentOfCurrentPage(){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
             haltFurtherExecution();
@@ -2832,6 +2904,7 @@ public class WebInteractionMethods  {
         SupportMethods.saveToFile(html, filePath);
 
         logPageSourceSaving(filePath);
+        return new ActionResult(true, null, this);
     }
 
     private void logPageSourceSaving(String filePath){
@@ -3291,6 +3364,13 @@ public class WebInteractionMethods  {
         return !animationDetected;
     }
 
+    /**
+     *
+     * @param domElement
+     * @param timeoutInSeconds
+     * @deprecated Use verifyElement() instead
+     */
+    @Deprecated
     public void verifyElementIsAnimated(DomElement domElement, int timeoutInSeconds) {
         long startTime = System.currentTimeMillis();
         waitForElementToAppear(domElement, timeoutInSeconds);

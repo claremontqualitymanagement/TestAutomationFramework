@@ -1,11 +1,12 @@
-package se.claremont.autotest.websupport;
+package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.openqa.selenium.logging.LogEntry;
 import se.claremont.autotest.common.StringComparisonType;
 import se.claremont.autotest.common.VerificationMethods;
+import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.websupport.W3CHtmlValidatorService;
 import se.claremont.autotest.websupport.brokenlinkcheck.BrokenLinkReporter;
-import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +23,20 @@ public class BrowserVerificationMethods extends VerificationMethods {
 
     public BrowserVerificationMethods noBrokenLinksOnCurrentPage(){
         BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, web.driver);
-        brokenLinkReporter.reportBrokenLinks(true);
+        wasSuccess = brokenLinkReporter.reportBrokenLinks(true);
+        if(!wasSuccess) noFailsInBuilderChain = false;
         return this;
     }
 
     public BrowserVerificationMethods noBrokenLinksOnCurrentPage_IncludeNonDisplayedLinks(){
         BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, web.driver);
-        brokenLinkReporter.reportBrokenLinks(false);
+        wasSuccess = brokenLinkReporter.reportBrokenLinks(false);
+        if(!wasSuccess) noFailsInBuilderChain = false;
         return this;
+    }
+
+    public ElementVerificationMethods verifyElement(GuiElement guiElement){
+        return new ElementVerificationMethods(guiElement, web, noFailsInBuilderChain);
     }
 
     public BrowserVerificationMethods title(String expectedTitlePattern, StringComparisonType stringComparisonType){
@@ -43,7 +50,10 @@ public class BrowserVerificationMethods extends VerificationMethods {
         }
         if(isMatch){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Current title matched '" + expectedTitlePattern + "' as expected.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Expected title to match '" + expectedTitlePattern + "', but it was '" + web.driver.getTitle() + "'.");
             web.saveScreenshot(null);
             web.saveDesktopScreenshot();
@@ -64,7 +74,10 @@ public class BrowserVerificationMethods extends VerificationMethods {
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Pattern '" + pattern + "' successfully matched in page source.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Could not match pattern '" + pattern + "' in page source.");
             web.saveScreenshot(null);
             web.saveDesktopScreenshot();
@@ -87,7 +100,13 @@ public class BrowserVerificationMethods extends VerificationMethods {
 
         W3CHtmlValidatorService w3CHtmlValidatorService = new W3CHtmlValidatorService(testCase, web.driver.getPageSource(), verbose);
         w3CHtmlValidatorService.verifyPageSourceWithW3validator();
-        if(w3CHtmlValidatorService.failed()) web.saveHtmlContentOfCurrentPage();
+        if(w3CHtmlValidatorService.failed()) {
+            web.saveHtmlContentOfCurrentPage();
+            noFailsInBuilderChain = false;
+            wasSuccess = false;
+        } else {
+            wasSuccess = true;
+        }
         return this;
     }
 
@@ -102,8 +121,11 @@ public class BrowserVerificationMethods extends VerificationMethods {
         }
         if(logEntries.size() > 0){
             testCase.log(LogLevel.VERIFICATION_FAILED, "Browser has the following log posts of at least log level 'severe' in console:" + System.lineSeparator() + String.join(System.lineSeparator(), logEntriesAsStrings));
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
         } else {
             testCase.log(LogLevel.VERIFICATION_PASSED, "Browser had no severe log posts in console.");
+            wasSuccess = true;
         }
     }
 }

@@ -2,10 +2,10 @@ package se.claremont.autotest.websupport.webdrivergluecode;
 
 import org.openqa.selenium.WebElement;
 import se.claremont.autotest.common.StringComparisonType;
+import se.claremont.autotest.common.guidriverpluginstructure.GuiElement;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.support.tableverification.CellMatchingType;
 import se.claremont.autotest.common.support.tableverification.TableData;
-import se.claremont.autotest.websupport.BrowserVerificationMethods;
 import se.claremont.autotest.websupport.DomElement;
 
 import java.awt.image.BufferedImage;
@@ -16,10 +16,20 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
     DomElement domElement;
     WebInteractionMethods web;
 
-    public ElementVerificationMethods(DomElement domElement, WebInteractionMethods web){
+    public ElementVerificationMethods(GuiElement domElement, WebInteractionMethods web){
         super(web);
-        this.domElement = domElement;
+        this.domElement = (DomElement)domElement;
         this.web = web;
+        wasSuccess = null;
+        noFailsInBuilderChain = true;
+    }
+
+    ElementVerificationMethods(GuiElement guiElement, WebInteractionMethods web, boolean onlySuccessesSoFar){
+        super(web);
+        this.domElement = (DomElement)guiElement;
+        this.web = web;
+        wasSuccess = null;
+        if(!onlySuccessesSoFar) noFailsInBuilderChain = false;
     }
 
     public ElementVerificationMethods textEquals(String expectedString){
@@ -68,7 +78,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(isMatch){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Text for element '" + domElement.LogIdentification() + "' matched '" + expectedPattern + "'.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             if(web.exists(domElement)){
                 testCase.log(LogLevel.VERIFICATION_FAILED, "Text for element '" + domElement.LogIdentification() + "' was '" + web.getText(domElement) + "' which did not match the expected pattern '" + expectedPattern + "'.");
             } else {
@@ -93,12 +106,15 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + domElement.LogIdentification() + "' was enabled, as expected.");
+            wasSuccess = true;
         } else {
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + domElement.LogIdentification() + "' was expected to be enabled but never became enabled within the timeout.");
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
             web.saveHtmlContentOfCurrentPage();
             web.writeRunningProcessListDeviationsSinceTestCaseStart();
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
         }
         return this;
     }
@@ -119,7 +135,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + domElement.LogIdentification() + "' existed, as expected.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + domElement.LogIdentification() + "' did not exist, but was expected to exist.");
             web.saveScreenshot(null);
             web.saveDesktopScreenshot();
@@ -140,7 +159,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + domElement.LogIdentification() + "' did not exist, as expected.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + domElement.LogIdentification() + "' existed, but was expected not to.");
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
@@ -161,7 +183,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + domElement.LogIdentification() + "' was disabled, as expected.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + domElement.LogIdentification() + "' was expected to be disabled but never became disabled within the timeout.");
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
@@ -182,7 +207,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + domElement.LogIdentification() + "' was displayed, as expected.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + domElement.LogIdentification() + "' was not displayed, but was expected to be.");
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
@@ -203,7 +231,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element '" + domElement.LogIdentification() + "' was displayed, as expected.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element '" + domElement.LogIdentification() + "' was not displayed, but was expected to be.");
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
@@ -237,6 +268,8 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
                 web.saveDesktopScreenshot();
                 web.saveHtmlContentOfCurrentPage();
                 web.writeRunningProcessListDeviationsSinceTestCaseStart();
+                wasSuccess = false;
+                noFailsInBuilderChain = false;
                 return this;
             }
             boolean nonErroneous = true;
@@ -249,7 +282,8 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         TableData tableData = web.tableDataFromGuiElement(domElement, true);
         if(tableData == null) return this;
-        tableData.verifyRows(headlineColonValueSemicolonSeparatedString, cellMatchingType);
+        wasSuccess = tableData.verifyRows(headlineColonValueSemicolonSeparatedString, cellMatchingType);
+        if(!wasSuccess) noFailsInBuilderChain = false;
         return this;
     }
 
@@ -272,7 +306,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(success){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Value for attribute '" + attributeName + "' for element '" + domElement.LogIdentification() + "' was '" + getAttributeValue(attributeName) + ", successfully matching '" + attributeValuePattern + "'.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             if(web.exists(domElement)){
                 if(getAttributeValue(attributeName) == null){
                     testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not find any value for attribute '" + attributeName + "' for element '" + domElement.LogIdentification() + "'.");
@@ -296,7 +333,7 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
      * @param expectedHeadlines The list of expected headlines
      */
     public ElementVerificationMethods tableHeadlines(List<String> expectedHeadlines){
-        boolean found = web.waitForElementToAppear(domElement);
+        boolean found = web.waitForElementToAppear(domElement).wasSuccess;
         if(!found){
             testCase.log(LogLevel.VERIFICATION_PROBLEM, "Could not find " + domElement.LogIdentification() + " to verify headlines '" + String.join("', '", expectedHeadlines) + "' in." );
             return this;
@@ -308,13 +345,19 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
             web.saveDesktopScreenshot();
             web.saveHtmlContentOfCurrentPage();
             web.writeRunningProcessListDeviationsSinceTestCaseStart();
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             return this;
         }
         if(!tableData.verifyHeadingsExist(expectedHeadlines)){
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
             web.saveHtmlContentOfCurrentPage();
             web.writeRunningProcessListDeviationsSinceTestCaseStart();
+        } else {
+            wasSuccess = true;
         }
         return this;
     }
@@ -342,7 +385,10 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
         }
         if(animationHasStarted){
             testCase.log(LogLevel.VERIFICATION_PASSED, "Element " + domElement.LogIdentification() + " is detected to be animated.");
+            wasSuccess = true;
         } else {
+            wasSuccess = false;
+            noFailsInBuilderChain = false;
             testCase.log(LogLevel.VERIFICATION_FAILED, "Element " + domElement.LogIdentification() + " could not be detected to be animated within the timeout of " + web.getStandardTimeout() + " seconds.");
             web.saveScreenshot(web.getRuntimeElementWithoutLogging(domElement));
             web.saveDesktopScreenshot();
