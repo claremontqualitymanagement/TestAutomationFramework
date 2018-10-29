@@ -777,7 +777,9 @@ public class WebInteractionMethods  {
             log(LogLevel.DEBUG, "Could not highlight any element before screenshot. Error: " + e.getMessage());
         }
 
-        String filePath = LogFolder.testRunLogFolder + testCase.testName + TestRun.getFileCounter() + ".png";
+        String fileName = testCase.testName + TestRun.getFileCounter() + ".png";
+
+        String filePath = LogFolder.testRunLogFolder + fileName;
         logger.debug( "Saving screenshot of web browser content to '" + filePath + "'." );
         TestRun.increaseFileCounter();
         byte[] fileImage;
@@ -809,12 +811,7 @@ public class WebInteractionMethods  {
         */
         if(fileImage != null){
             SupportMethods.saveToFile(fileImage, filePath);
-            String htmlFilePath = filePath.replace("\\", "/");
-            if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
-                if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
-                    htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
-                htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
-            }
+            String htmlFilePath = fileName;
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved browser screenshot as '" + filePath + "'.",
                     "Saved browser screenshot as " + System.lineSeparator() +
                             "   <a href=\"" + htmlFilePath + "\" target=\"_blank\">" + System.lineSeparator() +
@@ -2909,11 +2906,8 @@ public class WebInteractionMethods  {
 
     private void logPageSourceSaving(String filePath){
         String htmlFilePath = filePath.replace("\\", "/");
-        if(!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))){
-            if(htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
-                htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
-            htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
-        }
+        String[] parts = htmlFilePath.split("/");
+        htmlFilePath = parts[parts.length -1];
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Page source saved as '" + filePath + "'.",
                 "Page source saved as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
                         "<span class=\"htmlsourcefilepath\">" + filePath + "</span></a>");

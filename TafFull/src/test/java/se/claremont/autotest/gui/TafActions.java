@@ -281,6 +281,7 @@ public class TafActions {
             java.haltFurtherExecution();
         }
         java.activateTab(MainWindow.mainWindow, "Java");
+
         //java.click(MainWindow.JavaPanel.recordButton);
     }
 

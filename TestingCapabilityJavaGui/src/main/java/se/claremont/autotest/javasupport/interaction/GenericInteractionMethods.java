@@ -200,11 +200,8 @@ public class GenericInteractionMethods {
 
     private void logDesktopScreenshot(String filePath) {
         String htmlFilePath = filePath.replace("\\", "/");
-        if (!htmlFilePath.startsWith(TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX))) {
-            if (htmlFilePath.contains("://") && htmlFilePath.indexOf("://") < 7)
-                htmlFilePath = htmlFilePath.substring(htmlFilePath.indexOf("://") + 3);
-            htmlFilePath = TestRun.getSettingsValue(Settings.SettingParameters.HTML_REPORTS_LINK_PREFIX) + "://" + htmlFilePath;
-        }
+        String[] parts = htmlFilePath.split("/");
+        htmlFilePath = parts[parts.length - 1];
         testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.INFO, "Saved desktop screenshot as '" + filePath + "'.",
                 "Saved desktop screenshot as <a href=\"" + htmlFilePath + "\" target=\"_blank\">" +
                         "<span class=\"screenshotfile\">" + filePath + "</span></a><br>" +
