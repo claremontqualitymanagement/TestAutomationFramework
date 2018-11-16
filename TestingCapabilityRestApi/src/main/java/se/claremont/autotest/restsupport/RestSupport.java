@@ -77,7 +77,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromPostRequest(String url, String mediaType, String data) {
-        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data, testCase);
+        RestPostRequest restPostRequest = null;
+        try {
+            restPostRequest = new RestPostRequest(url, mediaType, data, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restPostRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -107,7 +112,12 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public RestResponse responseFromPostRequest(String url, String mediaType, String data) {
-        RestPostRequest restPostRequest = new RestPostRequest(url, mediaType, data, testCase);
+        RestPostRequest restPostRequest = null;
+        try {
+            restPostRequest = new RestPostRequest(url, mediaType, data, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restPostRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -135,7 +145,12 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public String responseBodyFromPutRequest(String url, String mediaType, String data) {
-        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data, testCase);
+        RestPutRequest restPutRequest = null;
+        try {
+            restPutRequest = new RestPutRequest(url, mediaType, data, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restPutRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -165,7 +180,12 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public RestResponse responseFromPutRequest(String url, String mediaType, String data) {
-        RestPutRequest restPutRequest = new RestPutRequest(url, mediaType, data, testCase);
+        RestPutRequest restPutRequest = null;
+        try {
+            restPutRequest =new RestPutRequest(url, mediaType, data, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restPutRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -203,7 +223,12 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public String responseBodyFromDeleteRequest(String url) {
-        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url, testCase);
+        RestDeleteRequest restDeleteRequest = null;
+        try {
+            restDeleteRequest = new RestDeleteRequest(url, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restDeleteRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -233,7 +258,12 @@ public class RestSupport {
      */
     @SuppressWarnings("unused")
     public RestResponse responseFromDeleteRequest(String url) {
-        RestDeleteRequest restDeleteRequest = new RestDeleteRequest(url, testCase);
+        RestDeleteRequest restDeleteRequest = null;
+        try {
+            restDeleteRequest = new RestDeleteRequest(url, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restDeleteRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -260,7 +290,12 @@ public class RestSupport {
      */
 
     public String responseCodeFromGetRequest(String url){
-        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        RestGetRequest restGetRequest = null;
+        try {
+            restGetRequest = new RestGetRequest(url, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -288,7 +323,12 @@ public class RestSupport {
      */
 
     public String responseCodeFromGetRequestWithoutLogging(String url){
-        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        RestGetRequest restGetRequest = null;
+        try {
+            restGetRequest = new RestGetRequest(url, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -311,7 +351,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public String responseBodyFromGetRequest(String url) {
-        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        RestGetRequest restGetRequest = null;
+        try {
+            restGetRequest = new RestGetRequest(url, testCase);
+        } catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
@@ -340,7 +385,12 @@ public class RestSupport {
      * @return Return the response body of the request as a string.
      */
     public RestResponse responseFromGetRequest(String url) {
-        RestGetRequest restGetRequest = new RestGetRequest(url, testCase);
+        RestGetRequest restGetRequest = null;
+        try {
+            restGetRequest = new RestGetRequest(url, testCase);
+        }  catch (Exception e){
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "[rest request failed] " + e.toString());
+        }
         for(String headerName : defaultHeaders.keySet()){
             restGetRequest.addHeaderValue(headerName, defaultHeaders.get(headerName));
         }
