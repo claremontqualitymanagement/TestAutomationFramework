@@ -133,8 +133,6 @@ public class RestResponse {
             }
             JsonManager jsonManager = null;
             jsonManager = new JsonManager(body, testCase);
-            if (!jsonPath.startsWith("$") || !jsonPath.startsWith(".."))
-                testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + jsonPath + "' does not seem to be an JsonPath expression.");
 
             return jsonManager.getObjectByJsonPath(jsonPath);
 

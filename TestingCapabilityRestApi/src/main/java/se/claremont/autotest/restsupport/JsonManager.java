@@ -30,9 +30,14 @@ public class JsonManager {
     }
 
     public String getObjectByJsonPath(String jsonPath){
+        String returnString = null;
         if(content == null) return null;
         DocumentContext jsonContext = JsonPath.parse(content);
-        String returnString = jsonContext.read(jsonPath);
+        try {
+            returnString = jsonContext.read(jsonPath);
+        } catch (Exception e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM,"WARNING: Expression '" + jsonPath + "' does not seem to be an JsonPath expression. [" + e.toString() + "]");
+        }
         testCase.log(LogLevel.DEBUG, "Extracted '" + returnString + "' as result of query '" + jsonPath + "'.");
         return returnString;
     }
