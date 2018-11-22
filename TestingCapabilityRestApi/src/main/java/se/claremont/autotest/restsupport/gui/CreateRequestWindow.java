@@ -437,7 +437,7 @@ public class CreateRequestWindow {
         TafLabel dataLabel = new TafLabel("Data:");
         TafTextArea responseTextPane = new TafTextArea("ResponseTextPanel");
         if(response != null && response.body != null)
-            responseTextPane.setText(response.body);
+            responseTextPane.setText(response.body.toString());
         responseTextPane.setWrapStyleWord(false);
         responseTextPane.setLineWrap(false);
         responseTextPane.setBackground(new TafTextField("dummy").getBackground());

@@ -95,7 +95,7 @@ public class RestSupport {
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST POST request [" + restPostRequest.toString() + "'.");
         } else {
-            bodyString = restResponse.body;
+            bodyString = restResponse.body.toString();
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Response for REST POST request [" + restPostRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString(),
                     "Response for REST POST request [" + restPostRequest.toString() + "]:<pre><code>" + System.lineSeparator() + StringManagement.htmlContentToDisplayableHtmlCode(restResponse.toString()) + "</code></pre>");
         }
@@ -163,7 +163,7 @@ public class RestSupport {
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST PUT request [" + restPutRequest.toString() + "'.");
         } else {
-            responseBody = restResponse.body;
+            responseBody = restResponse.body.toString();
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Response for REST PUT request [" + restPutRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString(),
                     "Response for REST PUT request [" + restPutRequest.toString() + "]:" + System.lineSeparator() + "<pre><code>" + StringManagement.htmlContentToDisplayableHtmlCode(restResponse.toString()) + "</code></pre>");
         }
@@ -242,7 +242,7 @@ public class RestSupport {
         if(restResponse == null) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST DELETE request [" + restDeleteRequest.toString() + "'.");
         } else {
-            responseBodyString = restResponse.body;
+            responseBodyString = restResponse.body.toString();
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Response for REST DELETE request [" + restDeleteRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString(),
                     "Response for REST DELETE request [" + restDeleteRequest.toString() + "]:" + System.lineSeparator() + "<pre><code>" + StringManagement.htmlContentToDisplayableHtmlCode(restResponse.toString()) + "</code></pre>");
         }
@@ -371,7 +371,7 @@ public class RestSupport {
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not get response for REST GET request [" + restGetRequest.toString() + "'.",
                     "Could not get response for REST GET request <pre><code>" + StringManagement.htmlContentToDisplayableHtmlCode(restGetRequest.toString()) + "</code></pre>.");
         } else {
-            responseBody = restResponse.body;
+            responseBody = restResponse.body.toString();
             testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Response for REST GET request [" + restGetRequest.toString() + "]:" + System.lineSeparator() + restResponse.toString(),
                     "Response for REST GET request <pre><code>" + restGetRequest.toString() + "</code></pre>is: " + System.lineSeparator() + "<pre><code>" + StringManagement.htmlContentToDisplayableHtmlCode(restResponse.toString()) + "</code></pre>");
         }

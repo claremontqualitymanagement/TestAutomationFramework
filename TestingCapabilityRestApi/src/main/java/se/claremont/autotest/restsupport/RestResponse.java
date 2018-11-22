@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 @SuppressWarnings("WeakerAccess")
 public class RestResponse {
-    public String body;
+    public RestResponseBody body;
     public String headers;
     public String responseCode;
     public String message;
@@ -23,7 +23,7 @@ public class RestResponse {
     private TestCase testCase;
 
     public RestResponse(String body, String headers, String responseCode, String message, Response response, int responseTimeInMilliseconds, TestCase testCase){
-        this.body = body;
+        this.body = new RestResponseBody(body);
         this.headers = headers;
         this.responseCode = responseCode;
         this.message = message;
@@ -50,106 +50,95 @@ public class RestResponse {
 
     public @Override String toString(){
         return "Header: '" + headers + "'" + System.lineSeparator() +
-                "Body: '" + body + "'" + System.lineSeparator() +
+                "Body: '" + body.toString() + "'" + System.lineSeparator() +
                 "Response code: '" + responseCode + "'" + System.lineSeparator() +
                 "Message: '" + message + "'";
     }
 
-    public boolean isXml() {
-        if(response == null) return false;
-        if(response.body() == null) return false;
-        try {
-            if(response.body().string().trim().startsWith("<") && response.body().string().trim().endsWith(">"))return true;
-        } catch (IOException e) {
-            return false;
-        }
-        return false;
-    }
-
-    public boolean isJson(){
-        if(response == null) return false;
-        if(response.body() == null) return false;
-        try {
-            if(response.body().string().trim().startsWith("{") && response.body().string().trim().endsWith("}"))return true;
-        } catch (IOException e) {
-            return false;
-        }
-        return false;
-    }
-
-
-    public NodeList getXmlObjects(String xPath){
-        if(!isXml()){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract XML object from non-XML content.");
-            return null;
-        }
-        XmlManager xmlManager = null;
-        try {
-            xmlManager = new XmlManager(response.body().string(), testCase);
-        } catch (IOException e) {
-            return null;
-        }
-        if(!xPath.startsWith("/"))
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + xPath + "' does not seem to be an XPath expression.");
-
-        return xmlManager.getObjectsByXPath(xPath);
-    }
-
-    public String getXmlObjectsAsString(String xPath){
-        if(!isXml()){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract XML object from non-XML content.");
-            return null;
-        }
-        XmlManager xmlManager = null;
-        try {
-            xmlManager = new XmlManager(response.body().string(), testCase);
-        } catch (IOException e) {
-            return null;
-        }
-        if(!xPath.startsWith("/"))
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + xPath + "' does not seem to be an XPath expression.");
-
-        return xmlManager.getObjectStringByXPath(xPath);
-    }
-
-    public String getJsonObjectByXPath(String xPath){
-        if(!isJson()){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract JSON object from non-Json content.");
-            return null;
-        }
-        JsonManager jsonManager = null;
-        try {
-            jsonManager = new JsonManager(response.body().string(), testCase);
-        } catch (IOException e) {
-            return null;
-        }
-        if(!xPath.startsWith("/"))
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + xPath + "' does not seem to be an XPath expression.");
-
-        return jsonManager.getObjectBySimpleXPath(xPath);
-
-    }
-
-    public String getJsonObjectByJsonPath(String jsonPath){
-        if(!isJson()){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract JSON object from non-Json content.");
-            return null;
-        }
-        JsonManager jsonManager = null;
-        try {
-            jsonManager = new JsonManager(response.body().string(), testCase);
-        } catch (IOException e) {
-            return null;
-        }
-        if(!jsonPath.startsWith("$") || !jsonPath.startsWith(".."))
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + jsonPath + "' does not seem to be an JsonPath expression.");
-
-        return jsonManager.getObjectByJsonPath(jsonPath);
-
-    }
-
     public RestResponseVerification verify(){
         return new RestResponseVerification(this, testCase);
+    }
+
+    public class RestResponseBody {
+       private String body;
+
+        public RestResponseBody(String body) {
+            this.body = body;
+        }
+
+        public boolean isXml() {
+            if (response == null) return false;
+            if (body == null) return false;
+            if (body.trim().startsWith("<") && body.trim().endsWith(">")) return true;
+            return false;
+        }
+
+        public boolean isJson() {
+            if (response == null) return false;
+            if (body == null) return false;
+            if (body.trim().startsWith("{") && body.trim().endsWith("}")) return true;
+            return false;
+        }
+
+
+        public NodeList getXmlObjects(String xPath) {
+            if (!isXml()) {
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract XML object from non-XML content.");
+                return null;
+            }
+            XmlManager xmlManager = null;
+            xmlManager = new XmlManager(body, testCase);
+            if (!xPath.startsWith("/"))
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + xPath + "' does not seem to be an XPath expression.");
+
+            return xmlManager.getObjectsByXPath(xPath);
+        }
+
+        public String getXmlObjectsAsString(String xPath) {
+            if (!isXml()) {
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract XML object from non-XML content.");
+                return null;
+            }
+            XmlManager xmlManager = null;
+            xmlManager = new XmlManager(body, testCase);
+            if (!xPath.startsWith("/"))
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + xPath + "' does not seem to be an XPath expression.");
+
+            return xmlManager.getObjectStringByXPath(xPath);
+        }
+
+        public String getJsonObjectByXPath(String xPath) {
+            if (!isJson()) {
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract JSON object from non-Json content.");
+                return null;
+            }
+            JsonManager jsonManager = null;
+            jsonManager = new JsonManager(body, testCase);
+            if (!xPath.startsWith("/"))
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + xPath + "' does not seem to be an XPath expression.");
+
+            return jsonManager.getObjectBySimpleXPath(xPath);
+
+        }
+
+        @Override
+        public String toString(){
+            return body;
+        }
+
+        public String getJsonObjectByJsonPath(String jsonPath) {
+            if (!isJson()) {
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not extract JSON object from non-Json content.");
+                return null;
+            }
+            JsonManager jsonManager = null;
+            jsonManager = new JsonManager(body, testCase);
+            if (!jsonPath.startsWith("$") || !jsonPath.startsWith(".."))
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "WARNING: Expression '" + jsonPath + "' does not seem to be an JsonPath expression.");
+
+            return jsonManager.getObjectByJsonPath(jsonPath);
+
+        }
     }
 
 }

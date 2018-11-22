@@ -66,7 +66,7 @@ public class RestSupportTest extends UnitTestClass {
         RestResponse result = restSupport.responseFromPostRequest(url, "application/json", "data");
 
         assertNotNull(result);
-        assertEquals("hello", result.body);
+        assertEquals("hello", result.body.toString());
         assertEquals("200", result.responseCode);
 
         RecordedRequest request = mockServer.takeRequest();
@@ -91,7 +91,7 @@ public class RestSupportTest extends UnitTestClass {
         RestResponse result = restSupport.responseFromPutRequest(url, "application/json", "data");
 
         assertNotNull(result);
-        assertEquals("hello", result.body);
+        assertEquals("hello", result.body.toString());
         assertEquals("200", result.responseCode);
 
         RecordedRequest request = mockServer.takeRequest();
@@ -116,7 +116,7 @@ public class RestSupportTest extends UnitTestClass {
         RestResponse result = restSupport.responseFromDeleteRequest(url);
 
         assertNotNull(result);
-        assertEquals("hello", result.body);
+        assertEquals("hello", result.body.toString());
         assertEquals("200", result.responseCode);
 
         RecordedRequest request = mockServer.takeRequest();
@@ -153,7 +153,7 @@ public class RestSupportTest extends UnitTestClass {
         RestResponse result = restSupport.responseFromGetRequest(url);
 
         assertNotNull(result);
-        assertEquals("hello", result.body);
+        assertEquals("hello", result.body.toString());
         assertEquals("200", result.responseCode);
 
         RecordedRequest request = mockServer.takeRequest();

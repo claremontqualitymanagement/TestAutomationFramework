@@ -79,7 +79,7 @@ public class RestResponseVerification extends VerificationMethods{
             noFailsInBuilderChain = false;
             return this;
         }
-        if(stringComparisonMethod.match(restResponse.body, searchPattern)){
+        if(stringComparisonMethod.match(restResponse.body.toString(), searchPattern)){
             testCase.log(LogLevel.VERIFICATION_PASSED, "String '" + searchPattern + "' successfully matched in response body.");
             wasSuccess = false;
         } else {
@@ -92,7 +92,7 @@ public class RestResponseVerification extends VerificationMethods{
 
     @SuppressWarnings("unused")
     public RestResponseVerification bodyIsJson(){
-        if(restResponse == null || !restResponse.isJson()){
+        if(restResponse == null || !restResponse.body.isJson()){
             testCase.log(LogLevel.VERIFICATION_FAILED, "REST response body was expected to be JSON. It was not. Response:" + System.lineSeparator() + restResponse.body);
             wasSuccess = false;
             noFailsInBuilderChain = false;
@@ -105,7 +105,7 @@ public class RestResponseVerification extends VerificationMethods{
 
     @SuppressWarnings("unused")
     public RestResponseVerification bodyIsXml(){
-        if(restResponse == null || !restResponse.isXml()){
+        if(restResponse == null || !restResponse.body.isXml()){
             testCase.log(LogLevel.VERIFICATION_FAILED, "REST response body was expected to be XML. It was not. Response:" + System.lineSeparator() + restResponse.body);
             wasSuccess = false;
             noFailsInBuilderChain = false;
@@ -128,8 +128,8 @@ public class RestResponseVerification extends VerificationMethods{
             noFailsInBuilderChain = false;
             return this;
         }
-        if(restResponse.isXml()){
-            if(restResponse.getXmlObjects(xPath).getLength() > 0){
+        if(restResponse.body.isXml()){
+            if(restResponse.body.getXmlObjects(xPath).getLength() > 0){
                 testCase.log(LogLevel.VERIFICATION_PASSED, "Search defined by XPath '" + xPath + "' successfully matched in response body.");
                 wasSuccess = true;
             } else {
@@ -137,8 +137,8 @@ public class RestResponseVerification extends VerificationMethods{
                 wasSuccess = false;
                 noFailsInBuilderChain = false;
             }
-        } else if(restResponse.isJson()){
-            if(restResponse.getJsonObjectByXPath(xPath) != null){
+        } else if(restResponse.body.isJson()){
+            if(restResponse.body.getJsonObjectByXPath(xPath) != null){
                 testCase.log(LogLevel.VERIFICATION_PASSED, "Search defined by XPath '" + xPath + "' successfully matched in response body.");
                 wasSuccess = true;
             } else {
