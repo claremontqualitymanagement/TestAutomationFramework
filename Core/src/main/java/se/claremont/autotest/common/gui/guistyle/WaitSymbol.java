@@ -1,6 +1,6 @@
 package se.claremont.autotest.common.gui.guistyle;
 
-import com.sun.javafx.tk.Toolkit;
+//import com.sun.javafx.tk.Toolkit;
 
 import javax.swing.*;
 import java.awt.*;
