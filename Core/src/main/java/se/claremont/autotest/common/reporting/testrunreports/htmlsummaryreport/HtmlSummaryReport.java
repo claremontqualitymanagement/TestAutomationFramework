@@ -63,7 +63,10 @@ public class HtmlSummaryReport {
         String link = testCase.pathToHtmlLogFile.replace("\\", "/");
         String[] parts = link.split("/");
         link = parts[parts.length -1];
-        testCaseSummary += "            <tr class=\"" + testCase.testCaseResult.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "</td><td><a href=\"" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
+        if (testCase.urlToCloudResultStorage!=null) {
+            link = testCase.urlToCloudResultStorage + link;
+        }
+            testCaseSummary += "            <tr class=\"" + testCase.testCaseResult.resultStatus.toString() + "\"><td>" + testCase.testSetName + "</td><td>" + testCase.testName + "</td><td>" + StringManagement.enumCapitalNameToFriendlyString(testCase.testCaseResult.resultStatus.toString()) + "</td><td><a href=\"" + link + "\" target=\"_blank\">Log</a></td></tr>" + LF;
         switch (testCase.testCaseResult.resultStatus){
             case PASSED:
                 successfulTestCases++;
@@ -364,6 +367,9 @@ public class HtmlSummaryReport {
                         String link = testCase.pathToHtmlLogFile.replace("\\", "/");
                         String[] parts = link.split("/");
                         link = parts[parts.length -1];
+                        if (testCase.urlToCloudResultStorage!=null) {
+                            link = testCase.urlToCloudResultStorage + link;
+                        }
                         idsOfTestCases.add(testCase.uid.toString());
                         html.append("                <li class=\"").append(HtmlStyleNames.HOVERABLE.toString()).append("\">").append(testCase.testSetName).append(": ").append(testCase.testName).append(" (<a href=\"").append(link).append("\" target=\"_blank\">Log</a>)</li>").append(LF);
                     }

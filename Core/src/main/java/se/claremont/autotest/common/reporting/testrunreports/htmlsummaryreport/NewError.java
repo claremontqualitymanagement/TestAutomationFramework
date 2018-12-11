@@ -186,6 +186,9 @@ class NewError {
             String link = testCase.pathToHtmlLogFile.replace("\\", "/");
             String[] parts = link.split("/");
             link = parts[parts.length -1];
+            if (testCase.urlToCloudResultStorage!=null) {
+                link = testCase.urlToCloudResultStorage + link;
+            }
             html.append("                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9659; <span class=\"testsetname\">").append(testCase.testSetName).append("</span>: <span class=\"testcasename\">").append(testCase.testName).append("</span> (<a href=\"").append(link).append("\" target=\"_blank\">Log</a>)<br>").append(System.lineSeparator());
         }
         html.append("          <br>").append(System.lineSeparator());

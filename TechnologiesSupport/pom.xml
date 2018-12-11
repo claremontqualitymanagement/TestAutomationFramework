@@ -6,7 +6,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>2.7.43</version>
+        <version>2.7.44</version>
     </parent>
 
     <name>TAF - TechnologiesSupport</name>

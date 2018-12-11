@@ -251,6 +251,12 @@ public class Settings extends HashMap<String, String> {
          * The new folder is named from the execution time and the test sets executed.
          * Sometimes you want to set a specific log folder, then this parameter should be used.
          */
+
+        CLOUD_LOG_URL("Cloud log url"),
+        /**
+         * Sometimes you want to set a specific url to cloud storage, then this parameter should be used.
+         */
+
         TEST_RUN_LOG_FOLDER("Log folder for test run"),
 
         /**

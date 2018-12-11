@@ -20,6 +20,7 @@ public class LogFolder {
     @JsonProperty public static String testRunLogFolder = null;  //Used for test case logging
     @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty private static String baseLogFolder = null;     //Read from Settings
+    @JsonProperty public static String urlToBlobStorage = null;  //Read from Settings
 
     /**
      * Sets the values to run time values.
@@ -42,5 +43,13 @@ public class LogFolder {
                 testRunLogFolder = StringManagement.filePathToCurrentOsAdaptedFormat(baseLogFolder) + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + testSetName + File.separator;
             }
         }
+    }
+
+    /**
+     * Sets the values for cloud storage where the log has been published.
+     * Read from Settings
+     */
+    public static void setCloudLogStorageUrl(){
+        urlToBlobStorage = TestRun.getSettingsValue(Settings.SettingParameters.CLOUD_LOG_URL);
     }
 }
