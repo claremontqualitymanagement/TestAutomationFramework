@@ -51,7 +51,7 @@ public class EnvironmentSetupTests extends UnitTestClass{
             writeFile.createNewFile();
         } catch (Exception e){
             //noinspection ConstantConditions
-            Assert.assertTrue("Could not write file.", false);
+            Assert.assertTrue("Could not write file. Error: " + e, false);
         } finally {
             try {
                 writeFile.delete();

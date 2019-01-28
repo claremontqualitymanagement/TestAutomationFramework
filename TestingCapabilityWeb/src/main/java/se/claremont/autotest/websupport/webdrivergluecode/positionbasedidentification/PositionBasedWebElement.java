@@ -3,7 +3,6 @@ package se.claremont.autotest.websupport.webdrivergluecode.positionbasedidentifi
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsDriver;
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.autotest.websupport.DomElement;
 import se.claremont.autotest.websupport.webdrivergluecode.WebInteractionMethods;
@@ -47,7 +46,7 @@ public class PositionBasedWebElement implements PositionBasedGuiElement {
     private WebDriver getDriver(){
         if(driver == null){
             try{
-                driver = ((WrapsDriver) webElement).getWrappedDriver();
+                driver = ((org.openqa.selenium.WrapsDriver) webElement).getWrappedDriver();
             }catch (Exception ignored){ }
         }
         return driver;

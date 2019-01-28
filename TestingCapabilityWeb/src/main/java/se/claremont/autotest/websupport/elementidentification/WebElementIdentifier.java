@@ -3,7 +3,6 @@ package se.claremont.autotest.websupport.elementidentification;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsDriver;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.testcase.TestCase;
@@ -256,7 +255,7 @@ public class WebElementIdentifier {
     private WebDriver getDriver(WebElement webElement) {
         WebDriver driver = null;
         try {
-            driver = ((WrapsDriver) webElement).getWrappedDriver();
+            driver = ((org.openqa.selenium.WrapsDriver) webElement).getWrappedDriver();
         } catch (Exception ignored) {
         }
         return driver;

@@ -95,6 +95,13 @@
             <version>${capability.jetty.version}</version>
         </dependency>
 
+        <!-- PDF -->
+        <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+        </dependency>
+
         <!-- Jersey HTTP manager -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>

@@ -3,10 +3,7 @@ package se.claremont.autotest.websupport.gui.recorder.captureinfrastructure.rest
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.claremont.autotest.common.gui.Gui;
-import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.websupport.DomElement;
-import se.claremont.autotest.websupport.elementidentification.By;
-import se.claremont.autotest.websupport.gui.recorder.RecorderWindow;
 import se.claremont.autotest.websupport.gui.teststeps.WebAttributeChangeTestStep;
 import se.claremont.autotest.websupport.gui.teststeps.WebClickTestStep;
 import se.claremont.autotest.websupport.gui.teststeps.WebInputTestStep;
@@ -17,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
@@ -63,27 +61,39 @@ public class Resource {
     @Path("v1/click")
     public void clickPerformed(String data){
         data = data.replace("%20", " ");
+        String text = null;
+        try {
+            text = URLDecoder.decode(data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e);
+        }
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
-                "/tafwebrecorder/v1/click with content: '" + URLDecoder.decode(data) + "'.");
-        Gui.addTestStepToListOfAvailableTestSteps(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
+                "/tafwebrecorder/v1/click with content: '" + text + "'.");
+        Gui.addTestStepToListOfAvailableTestSteps(new WebClickTestStep(new DomElement(text)));
     }
 
     @POST
     @Path("v1/checkbox")
     public void checkboxChangePerformed(String data){
         data = data.replace("%20", " ");
+        String text = null;
+        try {
+            text = URLDecoder.decode(data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e);
+        }
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
-                "/tafwebrecorder/v1/checkbox with content: '" + URLDecoder.decode(data) + "'.");
-        Gui.addTestStepToListOfAvailableTestSteps(new WebClickTestStep(new DomElement(URLDecoder.decode(data))));
+                "/tafwebrecorder/v1/checkbox with content: '" + text + "'.");
+        Gui.addTestStepToListOfAvailableTestSteps(new WebClickTestStep(new DomElement(text)));
     }
 
     @POST
     @Path("v1/input")
     public void inputPerformed(String data){
         try{
-            data = URLDecoder.decode(data.substring("webElement=".length()).replace("%20", " "));
+            data = URLDecoder.decode(data.substring("webElement=".length()).replace("%20", " "), "UTF-8");
             System.out.println("Received POST request to http://" +
                     HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                     "/tafwebrecorder/v1/input with content: '" + data + "'.");
@@ -108,7 +118,11 @@ public class Resource {
     @POST
     @Path("v1/domchange")
     public void domChanged(String data){
-        data = URLDecoder.decode(data.substring("mutation=".length()).replace("%20", " "));
+        try {
+            data = URLDecoder.decode(data.substring("mutation=".length()).replace("%20", " "), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e);
+        }
         System.out.println("Received POST request to http://" +
                 HttpServer.getIPAddressesOfLocalMachine() + ":" + Settings.port +
                 "/tafwebrecorder/v1/domchange with content: '" + data + "'.");

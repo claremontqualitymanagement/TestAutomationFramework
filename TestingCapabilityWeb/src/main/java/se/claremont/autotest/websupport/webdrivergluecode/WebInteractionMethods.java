@@ -1,5 +1,8 @@
 package se.claremont.autotest.websupport.webdrivergluecode;
 
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -582,6 +585,62 @@ public class WebInteractionMethods  {
             return new ActionResult(false, null, this);
         }
         return new ActionResult(true, null, this);
+    }
+
+    public boolean verifyPDFContent(String strURL, String reqTextInPDF) {
+        PDFTextStripper pdfStripper = null;
+        PDDocument pdDoc = null;
+        COSDocument cosDoc = null;
+        String parsedText = null;
+        String pdfText;
+
+        try {
+
+            String script = "" +
+                    "window.file_contents = null; " +
+                    "var xhr = new XMLHttpRequest(); " +
+                    "xhr.responseType = 'blob'; " +
+                    "xhr.onload = function() { " +
+                    "   var reader = new FileReader(); " +
+                    "   reader.onloadend = function() { " +
+                    "      window.file_contents = reader.result;" +
+                    "   };" +
+                    "   reader.readAsDataURL(xhr.response);" +
+                    "};" +
+                    "xhr.open('GET', '" + strURL + "');" +
+                    "xhr.send();";
+            executeJavascript(script);
+
+            String theFile = null;
+            long startTime = System.currentTimeMillis();
+            while (theFile == null && System.currentTimeMillis() - startTime < 10000){
+                theFile = (String)executeJavascript("return (window.file_contents !== null ? window.file_contents.split(',')[1] : null);");
+            }
+
+            pdDoc = PDDocument.load(Base64.getDecoder().decode(theFile));
+            pdfText = new PDFTextStripper().getText(pdDoc);
+            pdDoc.close();
+
+            if (!reqTextInPDF.contains(pdfText.replaceAll(" ", "")))
+                log(LogLevel.VERIFICATION_FAILED, "The total salary value is not present in the pdf document expected total Salary = "
+                        + reqTextInPDF);
+            else
+                log(LogLevel.VERIFICATION_PASSED, "Total salary in pdf document is correct");
+
+        } catch (IOException e) {
+            System.err.println("Unable to open PDF Parser. " + e.getMessage());
+            try {
+                if (cosDoc != null)
+                    cosDoc.close();
+                if (pdDoc != null)
+                    pdDoc.close();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        if(SupportMethods.isRegexMatch(parsedText, reqTextInPDF)) return true;
+        return false;
     }
 
     /**
