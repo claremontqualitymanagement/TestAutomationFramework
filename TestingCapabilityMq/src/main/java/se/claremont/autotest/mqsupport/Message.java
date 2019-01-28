@@ -23,7 +23,7 @@ public class Message {
             contentLength = mqMessage.getMessageLength();
             byte[] strData = new byte[contentLength];
             mqMessage.readFully(strData,0,contentLength);
-            messageData = new String(strData, 0);
+            messageData = new String(strData);
         } catch (IOException e) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not read message data. " + e);
         }
