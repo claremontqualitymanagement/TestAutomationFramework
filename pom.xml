@@ -25,6 +25,7 @@
         <capability.smart.image.version>1.0.68</capability.smart.image.version>
         <capability.rest.version>1.0.78</capability.rest.version>
         <capability.json.version>1.0.68</capability.json.version>
+        <capability.mq.version>0.9</capability.mq.version>
         <capability.java.version>2.3.4</capability.java.version>
         <capability.support.version>1.1.68</capability.support.version>
         <jackson.version>2.6.3</jackson.version>
@@ -164,6 +165,13 @@
                 <artifactId>mockito-all</artifactId>
                 <version>1.9.5</version>
                 <scope>test</scope>
+            </dependency>
+
+            <!-- MQ Management -->
+            <dependency>
+                <groupId>com.ibm.mq</groupId>
+                <artifactId>com.ibm.mq.allclient</artifactId>
+                <version>9.1.1.0</version>
             </dependency>
 
             <!-- For Selenium browser driver management -->

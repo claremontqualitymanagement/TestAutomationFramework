@@ -209,6 +209,12 @@
             <artifactId>httpcore</artifactId>
         </dependency>
 
+        <!-- MQ Management -->
+        <dependency>
+            <groupId>com.ibm.mq</groupId>
+            <artifactId>com.ibm.mq.allclient</artifactId>
+        </dependency>
+
         <!-- Selenium driver manager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>

@@ -15,6 +15,10 @@ public class ActionResult {
         this.wasSuccess = status;
         this.domElement = usedElement;
         this.web = web;
+        char s;
+        s = 's';
+        Character.toString(s);
+        String j = String.valueOf(s);
     }
 
     public BrowserVerificationMethods verify(){
