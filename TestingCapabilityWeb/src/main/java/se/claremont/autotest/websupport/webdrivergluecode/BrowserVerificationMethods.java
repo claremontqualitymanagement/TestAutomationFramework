@@ -42,7 +42,7 @@ public class BrowserVerificationMethods extends VerificationMethods {
     public BrowserVerificationMethods title(String expectedTitlePattern, StringComparisonType stringComparisonType){
         boolean isMatch = stringComparisonType.match(web.driver.getTitle(), expectedTitlePattern);
         long timer = System.currentTimeMillis();
-        while (!isMatch && ((System.currentTimeMillis() - timer) < web.getStandardTimeout() * 10000)){
+        while (!isMatch && ((System.currentTimeMillis() - timer) < web.getStandardTimeout() * 1000)){
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ignored) { }

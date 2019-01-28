@@ -45,6 +45,7 @@ public class TestCase {
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
     @JsonProperty public String pathToHtmlLogFile;
+    @JsonProperty public String urlToCloudResultStorage;
 
     public TestCase(){
         this(null, "Nameless test case");
@@ -73,6 +74,7 @@ public class TestCase {
         testSetKnownErrors = knownErrorsList;
         this.testName = testName;
         setLogFolderIfNotAlreadySet();
+        setUrlToCloudResultStorage();
         testCaseResult = new TestCaseResult(this);
         addTestCaseData("Test case name", testName);
         String memoryInfo = "Total memory available to JVM (bytes): " + Runtime.getRuntime().totalMemory() + ". ";
@@ -136,6 +138,14 @@ public class TestCase {
     private void setLogFolderIfNotAlreadySet(){
         LogFolder.setLogFolder(testSetName.replace(".", "_"));
         pathToHtmlLogFile = LogFolder.testRunLogFolder + testName + ".html";
+    }
+
+    /**
+     * Sets the url to result log in cloud storage
+     */
+    private void setUrlToCloudResultStorage(){
+        LogFolder.setCloudLogStorageUrl();
+        urlToCloudResultStorage = LogFolder.urlToBlobStorage;
     }
 
 

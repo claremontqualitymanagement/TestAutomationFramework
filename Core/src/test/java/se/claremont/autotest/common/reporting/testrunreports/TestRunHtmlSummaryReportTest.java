@@ -516,6 +516,7 @@ public class TestRunHtmlSummaryReportTest extends UnitTestClass {
         testCase8.log(LogLevel.VERIFICATION_FAILED, "Nooooooooo7....");
         pause(20);
         testCase8.log(LogLevel.VERIFICATION_FAILED, "Nooooooooo8....");
+        pause(20);
         testCase8.testCaseResult.evaluateResultStatus();
         htmlSummaryReport.evaluateTestCase(testCase8);
         htmlSummaryReport.evaluateTestSet(testSet);

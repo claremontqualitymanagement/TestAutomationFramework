@@ -1,6 +1,6 @@
 package se.claremont.autotest.javasupport.interaction;
 
-import javafx.scene.control.Spinner;
+//import javafx.scene.control.Spinner;
 import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
