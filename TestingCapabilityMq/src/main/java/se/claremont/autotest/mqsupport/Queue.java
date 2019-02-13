@@ -129,7 +129,12 @@ public class Queue {
     }
 
 
+
+
     public void deleteMessageByContentMatchingRegex( String contentPattern){
+
+
+
         MQQueue outputQueue = null;
         testCase.log(LogLevel.DEBUG, "Attempting to delete message(s) with content matching the regular expression pattern '" + contentPattern + "'.");
         int openInputOptions = CMQC.MQOO_FAIL_IF_QUIESCING +
@@ -145,44 +150,41 @@ public class Queue {
         gmo.options = CMQC.MQGMO_WAIT | CMQC.MQGMO_BROWSE_FIRST;
         gmo.matchOptions = CMQC.MQMO_NONE;
         gmo.waitInterval=10000;
-        int c = 0;
-        try {
-            c = outputQueue.getCurrentDepth();
-        } catch (MQException e) {
-            e.printStackTrace();
-        }
 
-        for(int i = 0; i < c ; i++) {
-            testCase.log(LogLevel.EXECUTED, String.valueOf(i));
+        boolean moreMessages = true;
 
-            if(i > 0)
-                gmo.options = CMQC.MQGMO_WAIT | CMQC.MQGMO_BROWSE_NEXT;
+        if (outputQueue == null)
+            return;
 
+        do{
             try {
                 outputQueue.get(retrievedMessage, gmo);
                 String msg = new Message(testCase, retrievedMessage).messageDataAsString();
-                testCase.log(LogLevel.EXECUTED, msg);
                 if(SupportMethods.isRegexMatch(msg, contentPattern)){
-                    testCase.log(LogLevel.EXECUTED, "Deleted messag with content matching pattern '" + contentPattern + "'");
-                    retrievedMessage.clearMessage();
-                    //gmo.options = CMQC.MQGMO_WAIT | CMQC.MQGMO_BROWSE_MSG_UNDER_CURSOR;
-                    //outputQueue.get(retrievedMessage, gmo);
+                    testCase.log(LogLevel.EXECUTED, "Deleted message with content matching pattern '" + contentPattern + "'");
+                    gmo.options = CMQC.MQGMO_MSG_UNDER_CURSOR;
+                    outputQueue.get(retrievedMessage, gmo);
                 }
-            }catch (Exception e){
-                testCase.log(LogLevel.EXECUTION_PROBLEM, "Oups: " + e);
+            }catch (MQException  e){
+                if(e.completionCode == 2 && e.reasonCode == CMQC.MQRC_NO_MSG_AVAILABLE){
+                    moreMessages = false;
+                }else {
+                    testCase.log(LogLevel.EXECUTION_PROBLEM, "Exception encountered: " + e);
+                }
             }
-        }
+            gmo.options = CMQC.MQGMO_WAIT | CMQC.MQGMO_BROWSE_NEXT;
+        }while (moreMessages);
+
         try {
-            if(outputQueue != null) { outputQueue.close(); }
+            outputQueue.close();
         }
         catch (MQException ex) {
-            ex.printStackTrace();
+            testCase.log(LogLevel.EXECUTION_PROBLEM, ex.toString());
         }
 
-        if(getCopyOfMessages().containstMessageThatMatchesRegexPattern(contentPattern)){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Attempted to delete messages matching regular expression '" + contentPattern + "' but messages containing this pattern still seem to exist in queue. These might be new, but should be double checked.");
-        }
     }
+
+
 
     public MessagesList getCopyOfMessages()
     {
