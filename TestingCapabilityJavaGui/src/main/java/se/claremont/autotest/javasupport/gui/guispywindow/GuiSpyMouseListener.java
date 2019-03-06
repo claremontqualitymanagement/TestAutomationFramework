@@ -3,7 +3,6 @@ package se.claremont.autotest.javasupport.gui.guispywindow;
 import se.claremont.autotest.common.gui.guistyle.AppFont;
 import se.claremont.autotest.common.gui.guistyle.TafLabel;
 import se.claremont.autotest.common.gui.guistyle.TafTextField;
-import se.claremont.autotest.javasupport.gui.guirecordingwindow.JavaGuiElementDeclarationManager;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
 import se.claremont.autotest.javasupport.interaction.MethodInvoker;
 
@@ -156,7 +155,8 @@ public class GuiSpyMouseListener implements MouseListener {
         }
         String text = null;
         try {
-            text = (String) se.claremont.autotest.javasupport.interaction.MethodInvoker.invokeMethod(null, c, "getText", null);
+            text = (String) se.claremont.autotest.javasupport.interaction.MethodInvoker.invokeMethod(null, c, "getText", new Object() {
+            });
         } catch (Exception ignored) {
         }
         if (text != null && text.length() > 0) {

@@ -147,7 +147,7 @@ public class LibraryLoader implements Serializable{
     public void addJarFileToClassPath(String filePath){
         try {
             testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
-            addURL(new File(filePath).toURL());
+            addURL(new File(filePath).toURI().toURL());
             appliedFiles.add(filePath);
         } catch (Exception e) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + filePath + "' to classpath. Error: " + e.getMessage());
@@ -160,7 +160,7 @@ public class LibraryLoader implements Serializable{
             if(Files.isDirectory(Paths.get(fileName)) || !fileName.toLowerCase().endsWith(".jar")) continue;
             try {
                 testCase.log(LogLevel.EXECUTED, "Simulating adding file '" + fileName + "' to classpath by loading it in ClassLoader.");
-                addURL(new File(fileName).toURL());
+                addURL(new File(fileName).toURI().toURL());
                 appliedFiles.add(folderPath + File.pathSeparator + "*");
             } catch (Exception e) {
                 testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + fileName + "' to classpath. Error: " + e.getMessage());
@@ -176,6 +176,7 @@ public class LibraryLoader implements Serializable{
         File[] listOfFiles = folder.listFiles();
         List<String> nonJarFiles = new ArrayList<>();
         List<String> subDirectories = new ArrayList<>();
+        if (listOfFiles == null) return filenames;
 
         for (File listOfFile : listOfFiles) {
             if (listOfFile.isFile()){

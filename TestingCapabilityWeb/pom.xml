@@ -89,6 +89,13 @@
             <artifactId>htmlunit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-htmlunit-driver -->
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Jetty (Light weight web server) -->
         <dependency>

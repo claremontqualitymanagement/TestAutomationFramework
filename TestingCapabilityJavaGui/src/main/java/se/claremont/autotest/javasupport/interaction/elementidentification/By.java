@@ -1,8 +1,6 @@
 package se.claremont.autotest.javasupport.interaction.elementidentification;
 
 import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
-import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
-import se.claremont.autotest.common.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.autotest.javasupport.interaction.MethodDeclarations;
@@ -46,19 +44,19 @@ public class By {
         return by;
     }
 
-    public static By byExactText(String... alternativesForElementText) {
+    public static By byExactText(Object... alternativesForElementText) {
         By by = new By();
         by.searchConditions.add(new SearchCondition(SearchConditionType.EXACT_TEXT, alternativesForElementText));
         return by;
     }
 
-    public static By byTextContaining(String... alternativesForElementText) {
+    public static By byTextContaining(Object... alternativesForElementText) {
         By by = new By();
         by.searchConditions.add(new SearchCondition(SearchConditionType.TEXT_CONTAINS, alternativesForElementText));
         return by;
     }
 
-    public static By byTextRegexMatch(String... alternativesForElementTextRegexPatterns) {
+    public static By byTextRegexMatch(Object... alternativesForElementTextRegexPatterns) {
         By by = new By();
         by.searchConditions.add(new SearchCondition(SearchConditionType.TEXT_REGEX_MATCH, alternativesForElementTextRegexPatterns));
         return by;
@@ -80,17 +78,17 @@ public class By {
         return this;
     }
 
-    public By andByExactText(String... alterativesForElementText) {
+    public By andByExactText(Object... alterativesForElementText) {
         searchConditions.add(new SearchCondition(SearchConditionType.EXACT_TEXT, alterativesForElementText));
         return this;
     }
 
-    public By andByTextContains(String... alterativesForElementText) {
+    public By andByTextContains(Object... alterativesForElementText) {
         searchConditions.add(new SearchCondition(SearchConditionType.TEXT_CONTAINS, alterativesForElementText));
         return this;
     }
 
-    public By andByTextRegexMatch(String... alterativesForElementTextRegexPatterns) {
+    public By andByTextRegexMatch(Object... alterativesForElementTextRegexPatterns) {
         searchConditions.add(new SearchCondition(SearchConditionType.TEXT_REGEX_MATCH, alterativesForElementTextRegexPatterns));
         return this;
     }

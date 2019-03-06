@@ -34,7 +34,7 @@ public class JavaWebStartApplicationStarter {
             try {
                 System.out.println("Adding url '" + fileName + "'");
                 //prepareJar(fileName);
-                addURL(new File(fileName).toURL());
+                addURL(new File(fileName).toURI().toURL());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -46,7 +46,7 @@ public class JavaWebStartApplicationStarter {
         List<String> filenames = new ArrayList<>();
         File folder = new File(foldername);
         File[] listOfFiles = folder.listFiles();
-
+        if (listOfFiles == null) return filenames;
         for (File listOfFile : listOfFiles) {
             if (listOfFile.isFile()) {
                 System.out.println("File " + listOfFile.getAbsolutePath());

@@ -7,8 +7,6 @@ import se.claremont.autotest.common.logging.LogFolder;
 import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.LogPost;
 import se.claremont.autotest.common.reporting.HtmlStyles;
-import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
-import se.claremont.autotest.common.support.StringManagement;
 import se.claremont.autotest.common.testcase.TestCase;
 import se.claremont.autotest.common.testrun.TestRun;
 import se.claremont.autotest.javasupport.interaction.GenericInteractionMethods;
@@ -398,7 +396,7 @@ public class EyeAutomateDriver {
     private void addJarFileToClassPath(String filePath){
         try {
             testCase.log(LogLevel.EXECUTED, "Adding file '" + filePath + "' to classpath.");
-            addURL(new File(filePath).toURL());
+            addURL(new File(filePath).toURI().toURL());
         } catch (Exception e) {
             testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not add file '" + filePath + "' to classpath. Error: " + e.getMessage());
         }

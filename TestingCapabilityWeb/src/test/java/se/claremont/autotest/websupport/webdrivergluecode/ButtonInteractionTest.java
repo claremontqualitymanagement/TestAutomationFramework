@@ -29,6 +29,7 @@ public class ButtonInteractionTest extends UnitTestClass {
         web.makeSureDriverIsClosed();
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     /*
       This test case tries clicking a button that at first is not displayed, and then is not enabled.
