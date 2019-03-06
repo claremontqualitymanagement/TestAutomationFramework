@@ -16,6 +16,7 @@ import java.net.URL;
 
 import static org.junit.Assert.assertNotNull;
 
+@SuppressWarnings("deprecation")
 public class TafSystemTests extends TestSet{
     WebInteractionMethods web;
 

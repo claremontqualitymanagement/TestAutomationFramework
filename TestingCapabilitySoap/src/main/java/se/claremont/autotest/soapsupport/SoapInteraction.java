@@ -226,7 +226,7 @@ public class SoapInteraction {
             response.setResponseSoapMessage(soapResponse);
 
             ByteArrayOutputStream newOut = new ByteArrayOutputStream();
-            response.responseSoapMessage.writeTo(newOut);
+            response.getResponseSOAPMessage().writeTo(newOut);
             String responseStrMessage = new String(newOut.toByteArray());
             response.setResponseBody(responseStrMessage);
             System.out.println("SOAP response: " + responseStrMessage);

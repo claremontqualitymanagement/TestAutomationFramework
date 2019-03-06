@@ -19,13 +19,14 @@ import java.io.StringReader;
 /**
  * The request and response for a SOAP call
  */
+@SuppressWarnings("WeakerAccess")
 public class TafSoapResponse {
 
-    SOAPMessage requestSoapMessage;
-    SOAPMessage responseSoapMessage;
-    String requestBody;
-    String responseBody;
-    TestCase testCase;
+    private SOAPMessage requestSoapMessage;
+    private SOAPMessage responseSoapMessage;
+    private String requestBody;
+    private String responseBody;
+    private TestCase testCase;
 
     public TafSoapResponse(TestCase testCase) {
         if (testCase == null) testCase = new TestCase();
