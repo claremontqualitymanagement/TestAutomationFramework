@@ -113,6 +113,14 @@
             <artifactId>jax-rs-ri</artifactId>
             <version>2.0-rc1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityJson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityRestApi</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

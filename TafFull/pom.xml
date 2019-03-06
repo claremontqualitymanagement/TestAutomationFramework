@@ -53,6 +53,10 @@
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilitySoap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilitySmartImageGui</artifactId>
         </dependency>
         <dependency>

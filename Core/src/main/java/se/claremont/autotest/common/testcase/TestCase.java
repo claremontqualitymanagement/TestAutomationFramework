@@ -13,13 +13,13 @@ import se.claremont.autotest.common.logging.LogLevel;
 import se.claremont.autotest.common.logging.logmessage.LogMessage;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterPureTextBasedLogFile;
+import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterToStandardOut;
 import se.claremont.autotest.common.support.ApplicationManager;
 import se.claremont.autotest.common.support.SupportMethods;
 import se.claremont.autotest.common.support.ValuePair;
 import se.claremont.autotest.common.support.api.Taf;
 import se.claremont.autotest.common.testrun.TestRun;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +41,7 @@ public class TestCase {
     @JsonProperty public final KnownErrorsList testSetKnownErrors;
     @JsonProperty public final UUID uid = UUID.randomUUID();
     public final String testCaseMethodName;
-    final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
+    public final ArrayList<TestCaseLogReporter> reporters = new ArrayList<>();
     private boolean reported = false;
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
     @JsonProperty public String pathToHtmlLogFile;
@@ -97,6 +97,7 @@ public class TestCase {
         addTestCaseData("Java version", Taf.tafUserInfon().getJavaVersion());
         reporters.add(new TestCaseLogReporterPureTextBasedLogFile(testCaseResult));
         reporters.add(new TestCaseLogReporterHtmlLogFile(testCaseResult));
+        reporters.add(new TestCaseLogReporterToStandardOut(testCaseResult));
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
     }
