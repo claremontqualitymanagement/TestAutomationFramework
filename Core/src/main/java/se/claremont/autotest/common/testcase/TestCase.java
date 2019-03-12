@@ -6,10 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Assume;
-import se.claremont.autotest.common.logging.KnownError;
-import se.claremont.autotest.common.logging.KnownErrorsList;
-import se.claremont.autotest.common.logging.LogFolder;
-import se.claremont.autotest.common.logging.LogLevel;
+import se.claremont.autotest.common.logging.*;
 import se.claremont.autotest.common.logging.logmessage.LogMessage;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterHtmlLogFile;
 import se.claremont.autotest.common.reporting.testcasereports.TestCaseLogReporterPureTextBasedLogFile;
@@ -46,6 +43,7 @@ public class TestCase {
     List<String> processesRunningAtTestCaseStart = new ArrayList<>();
     @JsonProperty public String pathToHtmlLogFile;
     @JsonProperty public String urlToCloudResultStorage;
+    private boolean debugMode;
 
     public TestCase(){
         this(null, "Nameless test case");
@@ -100,11 +98,32 @@ public class TestCase {
         reporters.add(new TestCaseLogReporterToStandardOut(testCaseResult));
         ApplicationManager applicationManager = new ApplicationManager(this);
         processesRunningAtTestCaseStart = applicationManager.listActiveRunningProcessesOnLocalMachine();
+        debugMode = false;
     }
 
+    /**
+     * Set a custom test case name. Default is test method name.
+     *
+     * @param name Custom name of test case
+     */
     public void setName(String name){
         log(LogLevel.DEBUG, "Resetting name for test case from '" + testName + "' to '" + name + "'.");
         this.testName = name;
+    }
+
+    /**
+     * Writes all log post to System.out while logged. Rather than a prettified log after test case execution.
+     */
+    public void setDebugMode() {
+        debugMode = true;
+        ArrayList<TestCaseLogReporter> temp = new ArrayList<>();
+        for (TestCaseLogReporter reporter : reporters) {
+            if (!reporter.getClass().isAssignableFrom(TestCaseLogReporterToStandardOut.class)) {
+                temp.add(reporter);
+            }
+        }
+        reporters.clear();
+        reporters.addAll(temp);
     }
 
     /**
@@ -157,7 +176,7 @@ public class TestCase {
     }
 
     /**
-     * Interpreting test case results and writing to logs
+     * Interpreting test case results and writing to logs, then halts further test case execution.
      */
     public void report(){
         if(reported) return;
@@ -248,7 +267,8 @@ public class TestCase {
      * @param logLevel Log level for the log post
      * @param message Log message for the log post
      */
-    public void log(LogLevel logLevel, String message){
+    public void log(LogLevel logLevel, String message) {
+        if (debugMode) System.out.println(new LogPost(logLevel, message, null, testName, null, testSetName).toString());
         testCaseResult.testCaseLog.log(logLevel, message);
     }
 
@@ -257,7 +277,9 @@ public class TestCase {
     }
 
     @SuppressWarnings("unused")
-    public void log(LogLevel logLevel, LogMessage logMessage){
+    public void log(LogLevel logLevel, LogMessage logMessage) {
+        if (debugMode)
+            System.out.println(new LogPost(logLevel, logMessage.toString(), null, testName, null, testSetName).toString());
         testCaseResult.testCaseLog.log(logLevel, logMessage);
     }
 
@@ -269,7 +291,9 @@ public class TestCase {
      * @param htmlFormattedLogMessage HTML formatted text string for HTML test case log
      */
     @SuppressWarnings("SameParameterValue")
-    public void logDifferentlyToTextLogAndHtmlLog(LogLevel logLevel, String pureTestLogMessage, String htmlFormattedLogMessage){
+    public void logDifferentlyToTextLogAndHtmlLog(LogLevel logLevel, String pureTestLogMessage, String htmlFormattedLogMessage) {
+        if (debugMode)
+            System.out.println(new LogPost(logLevel, pureTestLogMessage, htmlFormattedLogMessage, testName, null, testSetName).toString());
         testCaseResult.testCaseLog.logDifferentlyToTextLogAndHtmlLog(logLevel, pureTestLogMessage, htmlFormattedLogMessage);
     }
 
@@ -282,6 +306,10 @@ public class TestCase {
         return testName + " in class " + testSetName + " with testCaseLog " + testCaseResult.testCaseLog.toString();
     }
 
+    /**
+     * JSON representation of the test case.
+     * @return JSON representation of the test case
+     */
     public String toJson(){
         ObjectMapper mapper = new ObjectMapper();
         String json = null;

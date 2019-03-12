@@ -45,13 +45,14 @@ public class EnvironmentSetupTests extends UnitTestClass{
         File subDirectory = null;
         File writeFile = null;
         try {
-            subDirectory = new File(reportFolder.getPath() + "checkFileWritePriviligeToBaseReportFolderTestFolder");
-            subDirectory.mkdirs();
-            writeFile = new File(subDirectory.getPath() + "tempFile.txt");
+            subDirectory = new File(reportFolder.getPath() + File.separator + "tempFolder");
+            if (!subDirectory.exists()) subDirectory.mkdirs();
+            writeFile = new File(subDirectory.getPath() + File.separator + "tempFile.txt");
+            if (writeFile.exists()) writeFile.delete();
             writeFile.createNewFile();
         } catch (Exception e){
             //noinspection ConstantConditions
-            Assert.assertTrue("Could not write file. Error: " + e, false);
+            Assert.assertTrue("Could not write '" + subDirectory.getPath() + File.separator + "tempFile.txt" + "' file. Error: " + e, false);
         } finally {
             try {
                 writeFile.delete();
