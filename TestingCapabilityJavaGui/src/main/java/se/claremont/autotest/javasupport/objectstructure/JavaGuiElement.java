@@ -301,7 +301,12 @@ public class JavaGuiElement implements GuiComponent, PositionBasedGuiElement, Se
                         if(toBeRemoved)
                             removeElements.add(o);
                     }
-                    recognitionDescription.add("Removing " + removeElements.size() + " elements not having any of the exact texts '" + String.join("', '", ((String[])searchCondition.objects)) + "'.");
+
+                    List<String> texts = new ArrayList<>();
+                    for(Object returnObject :  searchCondition.objects){
+                        texts.add(returnObject.toString());
+                    }
+                    recognitionDescription.add("Removing " + removeElements.size() + " elements not having any of the exact texts '" + String.join("', '",  texts) + "'.");
                     returnElements.removeAll(removeElements);
                     removeElements.clear();
                     break;

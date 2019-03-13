@@ -22,6 +22,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.bonigarcia.wdm.DriverManagerType.*;
+
 //import org.openqa.selenium.firefox.MarionetteDriver;
 
 /**
@@ -158,7 +160,7 @@ public class WebDriverManager {
             testCase.log(LogLevel.DEBUG, "Attempting to initializeIfNotInitialized Chrome driver.");
             try {
                 long startTime = System.currentTimeMillis();
-                ChromeDriverManager.getInstance().setup();
+                ChromeDriverManager.getInstance(CHROME).setup();
                 //Todo, investigate why withWhitelistedIps fails with new chrome driver.
                 //ChromeDriverService service =
                   //      new ChromeDriverService.Builder().withWhitelistedIps("127.0.0.1").withSilent(true).build();
@@ -201,7 +203,7 @@ public class WebDriverManager {
             testCase.log(LogLevel.DEBUG, "Attempting to get hold of drivers for Internet Explorer.");
             try {
                 long startTime = System.currentTimeMillis();
-                InternetExplorerDriverManager.getInstance().setup();
+                InternetExplorerDriverManager.getInstance(IEXPLORER).setup();
                 driver = new InternetExplorerDriver();
                 testCase.log(LogLevel.EXECUTED, "Creating an Internet Explorer session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {
@@ -219,7 +221,7 @@ public class WebDriverManager {
             testCase.log(LogLevel.DEBUG, "Attempting to get hold of drivers for the Edge browser.");
             try {
                 long startTime = System.currentTimeMillis();
-                EdgeDriverManager.getInstance().setup();
+                EdgeDriverManager.getInstance(EDGE).setup();
                 driver = new EdgeDriver();
                 testCase.log(LogLevel.EXECUTED, "Creating an Edge browser session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {
@@ -237,7 +239,7 @@ public class WebDriverManager {
             testCase.log(LogLevel.DEBUG, "Attempting to get hold of drivers for Internet Explorer.");
             try {
                 long startTime = System.currentTimeMillis();
-                OperaDriverManager.getInstance().setup();
+                OperaDriverManager.getInstance(OPERA).setup();
                 driver = new OperaDriver();
                 testCase.log(LogLevel.EXECUTED, "Creating an Opera session took " + (System.currentTimeMillis() - startTime) + " milliseconds.");
             } catch (Exception e) {

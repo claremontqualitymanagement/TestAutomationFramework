@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>2.8.0</version>
+    <version>2.8.1</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -35,7 +35,7 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>2.8.0</global.version>
+        <global.version>2.8.1</global.version>
         <capability.core.version>2.8.7</capability.core.version>
         <capability.web.version>1.3.28</capability.web.version>
         <capability.smart.image.version>1.0.71</capability.smart.image.version>
@@ -46,7 +46,7 @@
         <capability.java.version>2.3.7</capability.java.version>
         <capability.support.version>1.1.71</capability.support.version>
         <jackson.version>2.9.8</jackson.version>
-        <selenium.version>3.141.59</selenium.version>
+        <selenium.version>3.14.0</selenium.version>
     </properties>
 
     <modules>
@@ -421,7 +421,7 @@
             <dependency> <!-- Resolves and downloads correct drivers for browsers -->
                 <groupId>io.github.bonigarcia</groupId>
                 <artifactId>webdrivermanager</artifactId>
-                <version>2.2.4</version>
+                <version>3.3.0</version>
             </dependency>
             <dependency> <!-- Driver for PhantomJS, the headless browser -->
                 <groupId>com.github.detro.ghostdriver</groupId>
