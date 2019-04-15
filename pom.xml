@@ -614,16 +614,6 @@
             </plugin>
             -->
 
-
-            <plugin>
-                <groupId>eu.stamp-project</groupId>
-                <artifactId>dspot-maven</artifactId>
-                <version>2.0.0</version>
-                <configuration>
-                    <project>C:\Users\kejsa\source\java\TestAutomationFramework_2.7.12</project>
-                </configuration>
-            </plugin>
-
             <!-- Create Javadoc for project -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

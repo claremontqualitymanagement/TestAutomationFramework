@@ -1,7 +1,7 @@
 package se.claremont.autotest;
 
-import se.claremont.autotest.common.gui.guistyle.*;
-import se.claremont.autotest.common.support.SupportMethods;
+import se.claremont.taf.core.gui.guistyle.*;
+import se.claremont.taf.core.support.SupportMethods;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 

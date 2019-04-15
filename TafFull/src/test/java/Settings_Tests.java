@@ -2,10 +2,10 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
-import se.claremont.autotest.common.testrun.CliTestRunner;
-import se.claremont.autotest.common.testrun.Settings;
-import se.claremont.autotest.common.testrun.TestRun;
-import se.claremont.autotest.common.testset.UnitTestClass;
+import se.claremont.taf.core.testrun.CliTestRunner;
+import se.claremont.taf.core.testrun.Settings;
+import se.claremont.taf.core.testrun.TestRun;
+import se.claremont.taf.core.testset.UnitTestClass;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

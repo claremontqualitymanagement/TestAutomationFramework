@@ -1,10 +1,8 @@
 package se.claremont.autotest;
 
-import se.claremont.autotest.common.gui.Gui;
-import se.claremont.autotest.common.gui.createtesttab.CreateTestTabPanel;
-import se.claremont.autotest.common.gui.teststructure.SubProcedureTestStep;
-import se.claremont.autotest.common.testrun.CliTestRunner;
-import se.claremont.autotest.restsupport.gui.RestTestStep;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.testrun.CliTestRunner;
+import se.claremont.taf.restsupport.gui.RestTestStep;
 
 public class TAF implements Runnable{
 

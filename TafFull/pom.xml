@@ -359,6 +359,11 @@
             <artifactId>proguard-base</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>TestingCapabilityWeb</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -391,7 +396,7 @@
                             <appendAssemblyId>false</appendAssemblyId>
                             <archive>
                                 <manifest>
-                                    <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
+                                    <mainClass>se.claremont.taf.core.testrun.CliTestRunner</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>

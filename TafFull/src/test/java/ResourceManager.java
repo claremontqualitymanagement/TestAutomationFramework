@@ -1,9 +1,8 @@
 import org.junit.Assume;
-import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.taf.core.testset.TestSet;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;

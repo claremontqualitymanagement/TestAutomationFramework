@@ -1,8 +1,8 @@
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.common.logging.GenericJavaObjectToHtml;
-import se.claremont.autotest.common.testcase.TestCase;
-import se.claremont.autotest.eyeautomatesupport.EyeAutomateDriver;
+import se.claremont.taf.core.logging.GenericJavaObjectToHtml;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.eyeautomatesupport.EyeAutomateDriver;
 
 import java.io.IOException;
 import java.nio.file.Files;

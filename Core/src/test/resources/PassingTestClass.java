@@ -1,8 +1,8 @@
-package test;
+package testresources;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.autotest.common.testset.TestSet;
+import se.claremont.taf.core.testset.TestSet;
 
 public class PassingTestClass extends TestSet {
 
