@@ -396,7 +396,7 @@
                             <appendAssemblyId>false</appendAssemblyId>
                             <archive>
                                 <manifest>
-                                    <mainClass>se.claremont.taf.core.testrun.CliTestRunner</mainClass>
+                                    <mainClass>se.claremont.taf.testrun.CliTestRunner</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
