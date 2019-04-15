@@ -1,4 +1,4 @@
-package se.claremont.autotest;
+package se.claremont.taf;
 
 import se.claremont.taf.core.gui.Gui;
 import se.claremont.taf.core.testrun.CliTestRunner;
