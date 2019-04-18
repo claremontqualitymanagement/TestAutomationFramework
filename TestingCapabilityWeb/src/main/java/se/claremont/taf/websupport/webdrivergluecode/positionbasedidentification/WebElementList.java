@@ -1,8 +1,8 @@
 package se.claremont.taf.websupport.webdrivergluecode.positionbasedidentification;
 
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
-import se.claremont.taf.logging.LogLevel;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.taf.core.logging.LogLevel;
 import se.claremont.taf.websupport.DomElement;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;
 

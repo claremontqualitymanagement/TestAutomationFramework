@@ -1,8 +1,8 @@
 package se.claremont.taf.restsupport.gui;
 
-import se.claremont.taf.gui.teststructure.TestCaseManager;
-import se.claremont.taf.gui.teststructure.TestStep;
-import se.claremont.taf.gui.teststructure.TestStepResult;
+import se.claremont.taf.core.gui.teststructure.TestCaseManager;
+import se.claremont.taf.core.gui.teststructure.TestStep;
+import se.claremont.taf.core.gui.teststructure.TestStepResult;
 import se.claremont.taf.restsupport.*;
 
 import java.util.ArrayList;

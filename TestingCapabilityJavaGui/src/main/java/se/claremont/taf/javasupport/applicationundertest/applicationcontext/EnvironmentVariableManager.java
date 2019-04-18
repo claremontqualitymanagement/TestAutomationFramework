@@ -2,12 +2,15 @@ package se.claremont.taf.javasupport.applicationundertest.applicationcontext;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class EnvironmentVariableManager implements Serializable{
     @JsonIgnore private transient TestCase testCase;

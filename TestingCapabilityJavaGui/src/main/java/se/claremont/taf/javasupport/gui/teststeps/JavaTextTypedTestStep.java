@@ -1,7 +1,7 @@
 package se.claremont.taf.javasupport.gui.teststeps;
 
-import se.claremont.taf.gui.teststructure.TestCaseManager;
-import se.claremont.taf.gui.teststructure.TestStepResult;
+import se.claremont.taf.core.gui.teststructure.TestCaseManager;
+import se.claremont.taf.core.gui.teststructure.TestStepResult;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.taf.javasupport.objectstructure.JavaGuiElement;
 

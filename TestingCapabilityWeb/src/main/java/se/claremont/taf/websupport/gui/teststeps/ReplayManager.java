@@ -1,6 +1,6 @@
 package se.claremont.taf.websupport.gui.teststeps;
 
-import se.claremont.taf.gui.teststructure.TestCaseManager;
+import se.claremont.taf.core.gui.teststructure.TestCaseManager;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;
 
 public class ReplayManager {

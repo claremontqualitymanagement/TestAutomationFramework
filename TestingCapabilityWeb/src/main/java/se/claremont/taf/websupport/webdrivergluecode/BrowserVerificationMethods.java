@@ -1,10 +1,10 @@
 package se.claremont.taf.websupport.webdrivergluecode;
 
 import org.openqa.selenium.logging.LogEntry;
-import se.claremont.taf.StringComparisonType;
-import se.claremont.taf.VerificationMethods;
-import se.claremont.taf.guidriverpluginstructure.GuiElement;
-import se.claremont.taf.logging.LogLevel;
+import se.claremont.taf.core.StringComparisonType;
+import se.claremont.taf.core.VerificationMethods;
+import se.claremont.taf.core.guidriverpluginstructure.GuiElement;
+import se.claremont.taf.core.logging.LogLevel;
 import se.claremont.taf.websupport.W3CHtmlValidatorService;
 import se.claremont.taf.websupport.brokenlinkcheck.BrokenLinkReporter;
 

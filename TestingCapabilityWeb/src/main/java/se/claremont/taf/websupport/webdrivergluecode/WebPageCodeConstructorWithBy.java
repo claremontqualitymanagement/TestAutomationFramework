@@ -2,8 +2,8 @@ package se.claremont.taf.websupport.webdrivergluecode;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.SupportMethods;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.SupportMethods;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

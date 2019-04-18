@@ -1,11 +1,11 @@
 package se.claremont.taf.websupport.webdrivergluecode;
 
 import org.openqa.selenium.WebElement;
-import se.claremont.taf.StringComparisonType;
-import se.claremont.taf.guidriverpluginstructure.GuiElement;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.tableverification.CellMatchingType;
-import se.claremont.taf.support.tableverification.TableData;
+import se.claremont.taf.core.StringComparisonType;
+import se.claremont.taf.core.guidriverpluginstructure.GuiElement;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.tableverification.CellMatchingType;
+import se.claremont.taf.core.support.tableverification.TableData;
 import se.claremont.taf.websupport.DomElement;
 
 import java.awt.image.BufferedImage;

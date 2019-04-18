@@ -1,7 +1,7 @@
 package se.claremont.taf;
 
-import se.claremont.taf.gui.guistyle.*;
-import se.claremont.taf.support.SupportMethods;
+import se.claremont.taf.core.gui.guistyle.*;
+import se.claremont.taf.core.support.SupportMethods;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package se.claremont.taf.websupport.gui;
 
-import se.claremont.taf.gui.guistyle.TafFrame;
+import se.claremont.taf.core.gui.guistyle.TafFrame;
 
 import javax.swing.*;
 

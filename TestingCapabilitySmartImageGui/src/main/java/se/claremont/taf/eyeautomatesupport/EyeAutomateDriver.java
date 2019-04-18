@@ -2,13 +2,13 @@ package se.claremont.taf.eyeautomatesupport;
 
 import eyeautomate.ScriptRunner;
 import org.junit.Assume;
-import se.claremont.taf.guidriverpluginstructure.GuiElement;
-import se.claremont.taf.logging.LogFolder;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.logging.LogPost;
-import se.claremont.taf.reporting.HtmlStyles;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testrun.TestRun;
+import se.claremont.taf.core.guidriverpluginstructure.GuiElement;
+import se.claremont.taf.core.logging.LogFolder;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.logging.LogPost;
+import se.claremont.taf.core.reporting.HtmlStyles;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testrun.TestRun;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 
 import java.io.File;

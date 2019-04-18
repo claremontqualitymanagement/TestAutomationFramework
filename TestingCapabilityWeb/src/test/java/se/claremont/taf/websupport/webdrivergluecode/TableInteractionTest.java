@@ -3,10 +3,10 @@ package se.claremont.taf.websupport.webdrivergluecode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.taf.support.tableverification.CellMatchingType;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testcase.TestCaseResult;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.support.tableverification.CellMatchingType;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCaseResult;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.websupport.DomElement;
 
 import java.util.ArrayList;

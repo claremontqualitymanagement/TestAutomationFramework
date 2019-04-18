@@ -3,7 +3,7 @@ package se.claremont.taf.websupport.webdrivergluecode;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.websupport.DomElement;
 import se.claremont.taf.websupport.elementidentification.By;
 

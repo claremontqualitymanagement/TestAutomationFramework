@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.management.HotSpotDiagnosticMXBean;
 import com.sun.management.VMOption;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 import javax.management.ObjectName;
 import java.io.IOException;

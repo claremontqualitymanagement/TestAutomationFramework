@@ -3,8 +3,8 @@ package se.claremont.taf.javasupport.interaction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.javasupport.interaction.elementidentification.By;
 import se.claremont.taf.javasupport.objectstructure.JavaGuiElement;
 

@@ -1,7 +1,7 @@
 package se.claremont.taf.mqsupport;
 
 import com.ibm.mq.MQChannelDefinition;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 
 public class Channel {
 

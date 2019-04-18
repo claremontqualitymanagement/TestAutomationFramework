@@ -1,8 +1,8 @@
 package se.claremont.taf.mqsupport;
 
 import com.ibm.mq.MQQueue;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 public class TafQueueVerification {
 

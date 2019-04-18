@@ -1,6 +1,6 @@
 package se.claremont.taf.javasupport.gui.guispywindow;
 
-import se.claremont.taf.gui.guistyle.*;
+import se.claremont.taf.core.gui.guistyle.*;
 import se.claremont.taf.javasupport.gui.JavaSupportTab;
 import se.claremont.taf.javasupport.objectstructure.JavaWindow;
 

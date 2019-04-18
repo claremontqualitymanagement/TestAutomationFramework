@@ -1,6 +1,6 @@
 package se.claremont.taf.javasupport.gui.guispywindow;
 
-import se.claremont.taf.support.SupportMethods;
+import se.claremont.taf.core.support.SupportMethods;
 import se.claremont.taf.javasupport.gui.ObjectToHtmlHelper;
 
 import javax.swing.*;
@@ -9,7 +9,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 public class GuiSpyKeyboardListener implements KeyListener {
 

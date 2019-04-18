@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.websupport.DomElement;
 import se.claremont.taf.websupport.webdrivergluecode.positionbasedidentification.PositionBasedIdentificatorWeb;
 

@@ -1,9 +1,9 @@
 package se.claremont.taf.websupport.gui.teststeps;
 
-import se.claremont.taf.gui.teststructure.TestCaseManager;
-import se.claremont.taf.gui.teststructure.TestStep;
-import se.claremont.taf.gui.teststructure.TestStepResult;
-import se.claremont.taf.testcase.TestCaseResult;
+import se.claremont.taf.core.gui.teststructure.TestCaseManager;
+import se.claremont.taf.core.gui.teststructure.TestStep;
+import se.claremont.taf.core.gui.teststructure.TestStepResult;
+import se.claremont.taf.core.testcase.TestCaseResult;
 
 import java.io.Serializable;
 

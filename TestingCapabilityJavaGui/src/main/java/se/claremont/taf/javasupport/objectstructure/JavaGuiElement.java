@@ -2,12 +2,12 @@ package se.claremont.taf.javasupport.objectstructure;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.taf.javasupport.interaction.MethodDeclarations;

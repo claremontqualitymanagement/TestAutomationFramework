@@ -1,9 +1,9 @@
 package se.claremont.taf.restsupport;
 
 import okhttp3.OkHttpClient;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.json.JsonParser;
 
 import javax.net.ssl.*;

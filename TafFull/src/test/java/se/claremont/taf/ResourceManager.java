@@ -1,7 +1,7 @@
 package se.claremont.taf;
 
 import org.junit.Assume;
-import se.claremont.taf.testset.TestSet;
+import se.claremont.taf.core.testset.TestSet;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;

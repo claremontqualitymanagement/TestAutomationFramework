@@ -1,7 +1,7 @@
 package se.claremont.taf;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.testrun.CliTestRunner;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.testrun.CliTestRunner;
 import se.claremont.taf.restsupport.gui.RestTestStep;
 
 public class TAF implements Runnable{

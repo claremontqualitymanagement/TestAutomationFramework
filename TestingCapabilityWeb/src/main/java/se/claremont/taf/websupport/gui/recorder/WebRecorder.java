@@ -2,7 +2,7 @@ package se.claremont.taf.websupport.gui.recorder;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import se.claremont.taf.gui.Gui;
+import se.claremont.taf.core.gui.Gui;
 import se.claremont.taf.websupport.gui.recorder.captureinfrastructure.Javascripts;
 import se.claremont.taf.websupport.gui.recorder.captureinfrastructure.restserver.HttpServer;
 import se.claremont.taf.websupport.gui.recorder.captureinfrastructure.restserver.Settings;

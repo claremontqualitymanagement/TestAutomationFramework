@@ -2,7 +2,7 @@ package se.claremont.taf.websupport.gui.recorder.captureinfrastructure.restserve
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import se.claremont.taf.gui.Gui;
+import se.claremont.taf.core.gui.Gui;
 import se.claremont.taf.websupport.DomElement;
 import se.claremont.taf.websupport.gui.teststeps.WebAttributeChangeTestStep;
 import se.claremont.taf.websupport.gui.teststeps.WebClickTestStep;

@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 
 import java.io.File;
 import java.util.Arrays;

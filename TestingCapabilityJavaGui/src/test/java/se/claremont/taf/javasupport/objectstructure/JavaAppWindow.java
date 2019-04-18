@@ -2,7 +2,7 @@ package se.claremont.taf.javasupport.objectstructure;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.javasupport.interaction.JavaAwtAppWithSomeSwingComponents;
 
 /**

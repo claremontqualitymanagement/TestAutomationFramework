@@ -2,9 +2,9 @@ package se.claremont.taf.websupport.webdrivergluecode;
 
 import org.junit.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.taf.logging.LogPost;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.logging.LogPost;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.websupport.DomElement;
 
 /**

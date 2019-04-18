@@ -1,7 +1,7 @@
 package se.claremont.taf.javasupport.interaction.elementidentification;
 
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.taf.javasupport.interaction.MethodDeclarations;
 import se.claremont.taf.javasupport.interaction.MethodInvoker;

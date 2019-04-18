@@ -1,11 +1,11 @@
 package se.claremont.taf.eyeautomatesupport.gui;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.gui.guistyle.AppFont;
-import se.claremont.taf.gui.guistyle.TafHeadline;
-import se.claremont.taf.gui.guistyle.TafLabel;
-import se.claremont.taf.gui.guistyle.TafPanel;
-import se.claremont.taf.gui.plugins.IGuiTab;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.gui.guistyle.AppFont;
+import se.claremont.taf.core.gui.guistyle.TafHeadline;
+import se.claremont.taf.core.gui.guistyle.TafLabel;
+import se.claremont.taf.core.gui.guistyle.TafPanel;
+import se.claremont.taf.core.gui.plugins.IGuiTab;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;

@@ -3,7 +3,7 @@ package se.claremont.taf.javasupport.applicationundertest.applicationstarters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.io.File;
 import java.io.IOException;

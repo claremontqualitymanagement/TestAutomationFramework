@@ -1,6 +1,6 @@
 package se.claremont.taf.javasupport.gui.guirecordingwindow;
 
-import se.claremont.taf.gui.guistyle.TafHtmlTextPane;
+import se.claremont.taf.core.gui.guistyle.TafHtmlTextPane;
 import se.claremont.taf.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.taf.javasupport.gui.JavaSupportTab;
 import se.claremont.taf.javasupport.gui.guirecordingwindow.listeners.NewWindowsListener;

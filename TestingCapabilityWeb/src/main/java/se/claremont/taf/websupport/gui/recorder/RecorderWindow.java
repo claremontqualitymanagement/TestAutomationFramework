@@ -1,9 +1,9 @@
 package se.claremont.taf.websupport.gui.recorder;
 
-import se.claremont.taf.gui.guistyle.TafButton;
-import se.claremont.taf.gui.guistyle.TafDialog;
-import se.claremont.taf.gui.guistyle.TafFrame;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.gui.guistyle.TafButton;
+import se.claremont.taf.core.gui.guistyle.TafDialog;
+import se.claremont.taf.core.gui.guistyle.TafFrame;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;
 
 public class RecorderWindow {

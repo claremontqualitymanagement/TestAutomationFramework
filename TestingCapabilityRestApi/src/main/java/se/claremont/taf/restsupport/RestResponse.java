@@ -2,8 +2,8 @@ package se.claremont.taf.restsupport;
 
 import okhttp3.Response;
 import org.w3c.dom.NodeList;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 /**
  * Response from REST request

@@ -1,8 +1,8 @@
 package se.claremont.taf.mqsupport;
 
 import com.ibm.mq.constants.CMQC;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.util.Hashtable;
 

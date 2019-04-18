@@ -3,7 +3,7 @@ package se.claremont.taf.websupport.webdrivergluecode.positionbasedidentificatio
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
 import se.claremont.taf.websupport.DomElement;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;
 

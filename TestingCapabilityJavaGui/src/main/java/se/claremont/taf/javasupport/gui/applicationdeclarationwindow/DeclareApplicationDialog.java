@@ -1,8 +1,8 @@
 package se.claremont.taf.javasupport.gui.applicationdeclarationwindow;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.gui.guistyle.*;
-import se.claremont.taf.gui.runtab.TestClassPickerDialogue;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.gui.guistyle.*;
+import se.claremont.taf.core.gui.runtab.TestClassPickerDialogue;
 import se.claremont.taf.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.taf.javasupport.gui.JavaSupportTab;
 import se.claremont.taf.javasupport.gui.teststeps.JavaStartApplicationTestStep;
@@ -11,7 +11,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;

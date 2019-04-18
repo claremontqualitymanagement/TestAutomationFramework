@@ -1,9 +1,9 @@
 package se.claremont.taf.javasupport.gui;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.gui.guistyle.TafFrame;
-import se.claremont.taf.gui.userpreferences.Preferences;
-import se.claremont.taf.gui.userpreferences.SavePreferencesOnCloseWindowsListener;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.gui.guistyle.TafFrame;
+import se.claremont.taf.core.gui.userpreferences.Preferences;
+import se.claremont.taf.core.gui.userpreferences.SavePreferencesOnCloseWindowsListener;
 
 import javax.swing.*;
 import java.awt.*;

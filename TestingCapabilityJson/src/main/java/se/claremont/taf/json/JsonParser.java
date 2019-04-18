@@ -2,8 +2,8 @@ package se.claremont.taf.json;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;

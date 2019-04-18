@@ -6,9 +6,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.websupport.DomElement;
 
 import java.util.ArrayList;

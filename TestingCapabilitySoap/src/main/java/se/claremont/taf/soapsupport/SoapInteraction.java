@@ -1,8 +1,8 @@
 package se.claremont.taf.soapsupport;
 
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.testcase.TestCase;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;

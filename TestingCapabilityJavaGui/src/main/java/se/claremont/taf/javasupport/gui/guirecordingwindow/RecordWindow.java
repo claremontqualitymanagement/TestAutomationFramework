@@ -1,11 +1,14 @@
 package se.claremont.taf.javasupport.gui.guirecordingwindow;
 
-import se.claremont.taf.gui.guistyle.*;
+import se.claremont.taf.core.gui.guistyle.*;
 import se.claremont.taf.javasupport.gui.guirecordingwindow.listeners.RecordingKeyBoardListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 public class RecordWindow{

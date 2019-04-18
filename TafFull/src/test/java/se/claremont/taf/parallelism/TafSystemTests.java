@@ -5,11 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.TestSet;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.TestSet;
 import se.claremont.taf.websupport.DomElement;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;
+
 import java.io.File;
 import java.net.URL;
 

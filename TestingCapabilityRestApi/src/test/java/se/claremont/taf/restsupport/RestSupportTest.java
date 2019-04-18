@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 
 import java.io.IOException;
 import java.net.URL;

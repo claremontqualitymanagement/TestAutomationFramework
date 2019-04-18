@@ -3,7 +3,8 @@ package se.claremont.taf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import se.claremont.taf.testset.TestSet;
+import se.claremont.taf.core.StringComparisonType;
+import se.claremont.taf.core.testset.TestSet;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;
 
 public class MyFirstWebTestClass extends TestSet {

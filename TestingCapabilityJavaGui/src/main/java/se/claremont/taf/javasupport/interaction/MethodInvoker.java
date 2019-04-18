@@ -1,7 +1,7 @@
 package se.claremont.taf.javasupport.interaction;
 
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -2,12 +2,12 @@ package se.claremont.taf.websupport.webdrivergluecode;
 
 import org.junit.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.restsupport.RestSupport;
 
-import static se.claremont.taf.testcase.TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
-import static se.claremont.taf.testcase.TestCaseResult.ResultStatus.PASSED;
+import static se.claremont.taf.core.testcase.TestCaseResult.ResultStatus.FAILED_WITH_ONLY_NEW_ERRORS;
+import static se.claremont.taf.core.testcase.TestCaseResult.ResultStatus.PASSED;
 
 /**
  * Test class for checkning broken links

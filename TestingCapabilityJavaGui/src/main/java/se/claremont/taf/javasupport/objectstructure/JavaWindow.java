@@ -1,8 +1,8 @@
 package se.claremont.taf.javasupport.objectstructure;
 
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.taf.javasupport.interaction.MethodDeclarations;
@@ -16,8 +16,9 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A JavaWindow is any GUI Window used in automation.

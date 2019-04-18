@@ -1,8 +1,8 @@
 package se.claremont.taf.mqsupport;
 
 import com.ibm.mq.MQMessage;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.io.IOException;
 

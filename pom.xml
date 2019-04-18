@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -35,16 +35,16 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>3.0.2</global.version>
-        <capability.core.version>3.0.2</capability.core.version>
-        <capability.web.version>2.0.2</capability.web.version>
-        <capability.smart.image.version>2.0.2</capability.smart.image.version>
-        <capability.rest.version>2.0.2</capability.rest.version>
-        <capability.json.version>2.0.2</capability.json.version>
-        <capability.mq.version>1.0.2</capability.mq.version>
-        <capability.soap.version>1.0.2</capability.soap.version>
-        <capability.java.version>3.0.2</capability.java.version>
-        <capability.support.version>2.0.2</capability.support.version>
+        <global.version>3.0.3</global.version>
+        <capability.core.version>3.0.3</capability.core.version>
+        <capability.web.version>2.0.3</capability.web.version>
+        <capability.smart.image.version>2.0.3</capability.smart.image.version>
+        <capability.rest.version>2.0.3</capability.rest.version>
+        <capability.json.version>2.0.3</capability.json.version>
+        <capability.mq.version>1.0.3</capability.mq.version>
+        <capability.soap.version>1.0.3</capability.soap.version>
+        <capability.java.version>3.0.3</capability.java.version>
+        <capability.support.version>2.0.3</capability.support.version>
         <jackson.version>2.9.8</jackson.version>
         <selenium.version>3.14.0</selenium.version>
     </properties>

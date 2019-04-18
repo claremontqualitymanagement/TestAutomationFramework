@@ -1,11 +1,11 @@
 package se.claremont.taf.restsupport.gui;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.gui.createtesttab.TestStepListManager;
-import se.claremont.taf.gui.guistyle.*;
-import se.claremont.taf.gui.plugins.IGuiTab;
-import se.claremont.taf.gui.teststructure.TestStep;
-import se.claremont.taf.gui.teststructure.TestStepList;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.gui.createtesttab.TestStepListManager;
+import se.claremont.taf.core.gui.guistyle.*;
+import se.claremont.taf.core.gui.plugins.IGuiTab;
+import se.claremont.taf.core.gui.teststructure.TestStep;
+import se.claremont.taf.core.gui.teststructure.TestStepList;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -1,12 +1,13 @@
 package se.claremont.taf.javasupport.interaction;
 
 //import javafx.scene.control.Spinner;
-import se.claremont.taf.logging.LogFolder;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.logging.LogPost;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testrun.TestRun;
+
+import se.claremont.taf.core.logging.LogFolder;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.logging.LogPost;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testrun.TestRun;
 import se.claremont.taf.javasupport.applicationundertest.ApplicationUnderTest;
 import se.claremont.taf.javasupport.objectstructure.GuiComponent;
 import se.claremont.taf.javasupport.objectstructure.JavaGuiElement;

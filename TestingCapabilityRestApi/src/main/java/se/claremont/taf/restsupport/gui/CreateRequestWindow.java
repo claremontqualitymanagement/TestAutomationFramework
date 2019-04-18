@@ -1,8 +1,8 @@
 package se.claremont.taf.restsupport.gui;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.gui.guistyle.*;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.gui.guistyle.*;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.restsupport.*;
 
 import javax.swing.*;

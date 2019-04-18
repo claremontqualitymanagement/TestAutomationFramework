@@ -1,9 +1,9 @@
 package se.claremont.taf.dbinteraction;
 
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.tableverification.CellMatchingType;
-import se.claremont.taf.support.tableverification.TableData;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.tableverification.CellMatchingType;
+import se.claremont.taf.core.support.tableverification.TableData;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -3,8 +3,8 @@ package se.claremont.taf.dataformats;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.claremont.taf.support.tableverification.TableData;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.support.tableverification.TableData;
+import se.claremont.taf.core.testset.UnitTestClass;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

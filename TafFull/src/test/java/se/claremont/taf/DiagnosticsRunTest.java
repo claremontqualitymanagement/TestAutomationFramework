@@ -3,8 +3,8 @@ package se.claremont.taf;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import se.claremont.taf.testrun.DiagnosticsRun;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.testrun.DiagnosticsRun;
+import se.claremont.taf.core.testset.UnitTestClass;
 
 import static org.junit.Assert.assertTrue;
 

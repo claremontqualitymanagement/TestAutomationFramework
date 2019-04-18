@@ -1,6 +1,6 @@
 package se.claremont.taf.javasupport.gui.applicationdeclarationwindow;
 
-import se.claremont.taf.gui.guistyle.*;
+import se.claremont.taf.core.gui.guistyle.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

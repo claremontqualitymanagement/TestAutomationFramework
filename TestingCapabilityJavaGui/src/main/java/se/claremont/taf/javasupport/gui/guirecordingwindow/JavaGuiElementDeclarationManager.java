@@ -2,8 +2,8 @@ package se.claremont.taf.javasupport.gui.guirecordingwindow;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.taf.javasupport.interaction.MethodDeclarations;
 import se.claremont.taf.javasupport.interaction.MethodInvoker;

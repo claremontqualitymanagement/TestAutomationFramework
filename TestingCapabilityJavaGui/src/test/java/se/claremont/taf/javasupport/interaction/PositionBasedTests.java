@@ -4,12 +4,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.ElementsList;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.javasupport.objectstructure.JavaGuiElement;
 
 import java.util.ArrayList;

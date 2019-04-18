@@ -1,8 +1,8 @@
 package se.claremont.taf.javasupport.gui.guirecordingwindow.listeners;
 
-import se.claremont.taf.gui.Gui;
-import se.claremont.taf.gui.guistyle.TafFrame;
-import se.claremont.taf.gui.guistyle.TafHtmlTextPane;
+import se.claremont.taf.core.gui.Gui;
+import se.claremont.taf.core.gui.guistyle.TafFrame;
+import se.claremont.taf.core.gui.guistyle.TafHtmlTextPane;
 import se.claremont.taf.javasupport.gui.guirecordingwindow.JavaGuiElementDeclarationManager;
 import se.claremont.taf.javasupport.gui.teststeps.JavaClictTestStep;
 import se.claremont.taf.javasupport.objectstructure.JavaGuiElement;

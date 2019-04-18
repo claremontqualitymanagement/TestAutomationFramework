@@ -1,7 +1,7 @@
 package se.claremont.taf.websupport.brokenlinkcheck;
 
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.restsupport.RestSupport;
 
 import java.util.ArrayList;

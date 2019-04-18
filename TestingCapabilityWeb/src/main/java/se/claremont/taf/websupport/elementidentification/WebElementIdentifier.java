@@ -3,9 +3,9 @@ package se.claremont.taf.websupport.elementidentification;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.logging.LogPost;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.logging.LogPost;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.websupport.DomElement;
 
 import java.util.ArrayList;

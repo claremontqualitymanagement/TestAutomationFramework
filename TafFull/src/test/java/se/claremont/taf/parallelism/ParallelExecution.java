@@ -1,8 +1,8 @@
 package se.claremont.taf.parallelism;
 
 import org.junit.Test;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testset.TestSet;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testset.TestSet;
 
 public class ParallelExecution extends TestSet {
 

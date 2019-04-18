@@ -3,8 +3,8 @@ package se.claremont.taf.websupport.webdrivergluecode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.UnitTestClass;
 import se.claremont.taf.websupport.DomElement;
 
 /**

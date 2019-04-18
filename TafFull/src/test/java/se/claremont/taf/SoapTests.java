@@ -2,7 +2,7 @@ package se.claremont.taf;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.soapsupport.SoapInteraction;
 
 public class SoapTests {

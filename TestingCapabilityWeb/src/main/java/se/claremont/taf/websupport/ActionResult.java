@@ -1,6 +1,6 @@
 package se.claremont.taf.websupport;
 
-import se.claremont.taf.guidriverpluginstructure.GuiElement;
+import se.claremont.taf.core.guidriverpluginstructure.GuiElement;
 import se.claremont.taf.websupport.webdrivergluecode.BrowserVerificationMethods;
 import se.claremont.taf.websupport.webdrivergluecode.ElementVerificationMethods;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;

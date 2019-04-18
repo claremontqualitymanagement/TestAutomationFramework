@@ -3,7 +3,7 @@ package se.claremont.taf;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import se.claremont.taf.logging.GenericJavaObjectToHtml;
+import se.claremont.taf.core.logging.GenericJavaObjectToHtml;
 
 import java.io.IOException;
 import java.nio.file.Files;

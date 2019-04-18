@@ -1,9 +1,9 @@
 package se.claremont.taf.javasupport.interaction;
 
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
-import se.claremont.taf.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
-import se.claremont.taf.support.StringManagement;
-import se.claremont.taf.support.SupportMethods;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedGuiElement;
+import se.claremont.taf.core.guidriverpluginstructure.PositionBasedIdentification.PositionBasedIdentificator;
+import se.claremont.taf.core.support.StringManagement;
+import se.claremont.taf.core.support.SupportMethods;
 import se.claremont.taf.javasupport.objectstructure.JavaGuiElement;
 import se.claremont.taf.javasupport.objectstructure.JavaWindow;
 

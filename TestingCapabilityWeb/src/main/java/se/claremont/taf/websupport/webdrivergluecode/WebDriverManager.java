@@ -10,12 +10,12 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.support.Utils;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testrun.Settings;
-import se.claremont.taf.testrun.TestRun;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.support.Utils;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testrun.Settings;
+import se.claremont.taf.core.testrun.TestRun;
 import se.claremont.taf.filetestingsupport.FileTester;
 
 import java.io.File;

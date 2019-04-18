@@ -1,6 +1,6 @@
 package se.claremont.taf.javasupport.applicationundertest.applicationstarters.javawebstart;
 
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.javasupport.applicationundertest.applicationstarters.ApplicationStartMechanism;
 
 public class ApplicationStartMechanismJavaWebStart extends ApplicationStartMechanism {

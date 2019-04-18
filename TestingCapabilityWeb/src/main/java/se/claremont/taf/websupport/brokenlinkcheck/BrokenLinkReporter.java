@@ -3,9 +3,9 @@ package se.claremont.taf.websupport.brokenlinkcheck;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.reporting.UxColors;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.reporting.UxColors;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;

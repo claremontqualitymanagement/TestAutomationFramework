@@ -1,10 +1,10 @@
 package se.claremont.taf.javasupport.applicationundertest;
 
 import org.junit.*;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.logging.LogPost;
-import se.claremont.taf.testcase.TestCase;
-import se.claremont.taf.testset.TestSet;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.logging.LogPost;
+import se.claremont.taf.core.testcase.TestCase;
+import se.claremont.taf.core.testset.TestSet;
 import se.claremont.taf.javasupport.applicationundertest.applicationstarters.ApplicationStarter;
 import se.claremont.taf.javasupport.interaction.GenericInteractionMethods;
 import se.claremont.taf.javasupport.interaction.elementidentification.By;

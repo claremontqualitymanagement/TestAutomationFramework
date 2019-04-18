@@ -1,6 +1,6 @@
 package se.claremont.taf.restsupport;
 
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 
 /**
  * Usage of GET mechanism for REST

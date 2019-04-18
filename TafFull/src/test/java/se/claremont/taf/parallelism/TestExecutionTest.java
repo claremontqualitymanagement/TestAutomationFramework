@@ -4,11 +4,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
-import se.claremont.taf.logging.LogFolder;
-import se.claremont.taf.testrun.CliTestRunner;
-import se.claremont.taf.testrun.Settings;
-import se.claremont.taf.testrun.TestRun;
-import se.claremont.taf.testset.UnitTestClass;
+import se.claremont.taf.core.logging.LogFolder;
+import se.claremont.taf.core.testrun.CliTestRunner;
+import se.claremont.taf.core.testrun.Settings;
+import se.claremont.taf.core.testrun.TestRun;
+import se.claremont.taf.core.testset.UnitTestClass;
 
 import java.io.File;
 import java.io.IOException;

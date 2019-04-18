@@ -1,8 +1,8 @@
 package se.claremont.taf.javasupport.gui.guispywindow;
 
-import se.claremont.taf.gui.guistyle.AppFont;
-import se.claremont.taf.gui.guistyle.TafLabel;
-import se.claremont.taf.gui.guistyle.TafTextField;
+import se.claremont.taf.core.gui.guistyle.AppFont;
+import se.claremont.taf.core.gui.guistyle.TafLabel;
+import se.claremont.taf.core.gui.guistyle.TafTextField;
 import se.claremont.taf.javasupport.interaction.MethodDeclarations;
 import se.claremont.taf.javasupport.interaction.MethodInvoker;
 

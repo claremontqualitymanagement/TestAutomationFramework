@@ -1,7 +1,7 @@
 package se.claremont.taf.restsupport;
 
 import okhttp3.Request;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 
 /**
  * Usage of DELETE mechanism for REST

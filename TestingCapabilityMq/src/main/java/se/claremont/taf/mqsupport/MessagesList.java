@@ -1,8 +1,8 @@
 package se.claremont.taf.mqsupport;
 
 import com.ibm.mq.MQQueue;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.testcase.TestCase;
 
 import java.util.LinkedList;
 

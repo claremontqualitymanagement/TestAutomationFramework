@@ -3,7 +3,7 @@ package se.claremont.taf.restsupport;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 
 /**
  * Building a REST call and executes a request.

@@ -1,7 +1,7 @@
 package se.claremont.taf.websupport.gui.guispy;
 
-import se.claremont.taf.gui.guistyle.*;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.gui.guistyle.*;
+import se.claremont.taf.core.testcase.TestCase;
 import se.claremont.taf.websupport.gui.recorder.captureinfrastructure.restserver.HttpServer;
 import se.claremont.taf.websupport.gui.recorder.captureinfrastructure.restserver.Settings;
 import se.claremont.taf.websupport.webdrivergluecode.WebInteractionMethods;

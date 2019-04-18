@@ -3,7 +3,7 @@ package se.claremont.taf.restsupport;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.testcase.TestCase;
 
 /**
  * Usage of PUT mechanism for REST

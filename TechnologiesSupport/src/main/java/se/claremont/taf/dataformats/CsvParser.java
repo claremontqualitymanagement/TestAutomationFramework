@@ -2,8 +2,8 @@ package se.claremont.taf.dataformats;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.claremont.taf.support.SupportMethods;
-import se.claremont.taf.support.tableverification.TableData;
+import se.claremont.taf.core.support.SupportMethods;
+import se.claremont.taf.core.support.tableverification.TableData;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

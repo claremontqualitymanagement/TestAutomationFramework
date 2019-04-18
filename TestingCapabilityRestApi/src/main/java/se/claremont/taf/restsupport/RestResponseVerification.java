@@ -1,9 +1,9 @@
 package se.claremont.taf.restsupport;
 
-import se.claremont.taf.StringComparisonType;
-import se.claremont.taf.VerificationMethods;
-import se.claremont.taf.logging.LogLevel;
-import se.claremont.taf.testcase.TestCase;
+import se.claremont.taf.core.StringComparisonType;
+import se.claremont.taf.core.VerificationMethods;
+import se.claremont.taf.core.logging.LogLevel;
+import se.claremont.taf.core.testcase.TestCase;
 
 public class RestResponseVerification extends VerificationMethods{
 
