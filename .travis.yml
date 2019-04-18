@@ -45,8 +45,8 @@ deploy:
   skip_cleanup: true
   file:
     - "${TAF_JAR_FILE}"
-    - "${TAF_DOC_FILE}"
-    - "${TAF_SRC_FILE}"
+   # - "${TAF_DOC_FILE}"
+   # - "${TAF_SRC_FILE}"
   overwrite: true
   on:
     tags: true
