@@ -5,7 +5,7 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -134,6 +134,14 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityRestApi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>Core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+            <artifactId>Core</artifactId>
         </dependency>
     </dependencies>
 

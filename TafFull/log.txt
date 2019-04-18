@@ -1,0 +1,775 @@
+Class 'se.claremont.autotest.common.gui.abouttab.AboutTabPanel' is identified as TAF GUI tab but not loaded as plugin since it is loaded with special attention to order.
+Class 'se.claremont.autotest.common.gui.runtab.RunTestTabPanel' is identified as TAF GUI tab but not loaded as plugin since it is loaded with special attention to order.
+Class 'se.claremont.autotest.common.gui.createtesttab.CreateTestTabPanel' is identified as TAF GUI tab but not loaded as plugin since it is loaded with special attention to order.
+Attempting to load plugin 'se.claremont.autotest.javasupport.gui.JavaSupportTab'.
+Loaded panel 'Java'.
+Attempting to load plugin 'se.claremont.autotest.restsupport.gui.RestSupportTabPanel'.
+Loaded panel 'REST'.
+Attempting to load plugin 'se.claremont.autotest.websupport.gui.WebSupportTabPanel'.
+Loaded panel 'Web'.
+Attempting to load plugin 'se.claremont.autotest.eyeautomatesupport.gui.SmartImageRecognitionSupportTabPanel'.
+Loaded panel 'Smart image recognition'.
+
+Starting TAF recording listener REST Server.
+
+0    [AWT-EventQueue-0] INFO  org.eclipse.jetty.util.log  - Logging initialized @4518ms to org.eclipse.jetty.util.log.Slf4jLog
+108  [AWT-EventQueue-0] INFO  org.eclipse.jetty.server.Server  - jetty-9.4.z-SNAPSHOT
+1325 [AWT-EventQueue-0] WARN  org.eclipse.jetty.server.handler.ContextHandler.ROOT  - unavailable
+MultiException stack 1 of 2
+java.lang.NoSuchMethodError: com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor()Lcom/google/common/util/concurrent/ListeningExecutorService;
+	at org.glassfish.jersey.server.ServerExecutorsFactory$2.getRespondingExecutor(ServerExecutorsFactory.java:89)
+	at org.glassfish.jersey.process.internal.ExecutorsFactory.getInitialRespondingExecutor(ExecutorsFactory.java:126)
+	at org.glassfish.jersey.server.ServerExecutorsFactory.<init>(ServerExecutorsFactory.java:85)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at org.glassfish.hk2.utilities.reflection.ReflectionHelper.makeMe(ReflectionHelper.java:1375)
+	at org.jvnet.hk2.internal.ClazzCreator.createMe(ClazzCreator.java:272)
+	at org.jvnet.hk2.internal.ClazzCreator.create(ClazzCreator.java:366)
+	at org.jvnet.hk2.internal.SystemDescriptor.create(SystemDescriptor.java:487)
+	at org.jvnet.hk2.internal.SingletonContext$1.compute(SingletonContext.java:83)
+	at org.jvnet.hk2.internal.SingletonContext$1.compute(SingletonContext.java:71)
+	at org.glassfish.hk2.utilities.cache.Cache$OriginThreadAwareFuture$1.call(Cache.java:97)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at org.glassfish.hk2.utilities.cache.Cache$OriginThreadAwareFuture.run(Cache.java:154)
+	at org.glassfish.hk2.utilities.cache.Cache.compute(Cache.java:199)
+	at org.jvnet.hk2.internal.SingletonContext.findOrCreate(SingletonContext.java:122)
+	at org.jvnet.hk2.internal.Utilities.createService(Utilities.java:2126)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.getService(ServiceLocatorImpl.java:685)
+	at org.jvnet.hk2.internal.ThreeThirtyResolver.resolve(ThreeThirtyResolver.java:78)
+	at org.jvnet.hk2.internal.Utilities.justInject(Utilities.java:1012)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.inject(ServiceLocatorImpl.java:1008)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.createAndInitialize(ServiceLocatorImpl.java:1083)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.createAndInitialize(ServiceLocatorImpl.java:1074)
+	at org.glassfish.jersey.server.ApplicationHandler.initialize(ApplicationHandler.java:421)
+	at org.glassfish.jersey.server.ApplicationHandler.access$500(ApplicationHandler.java:146)
+	at org.glassfish.jersey.server.ApplicationHandler$3.run(ApplicationHandler.java:269)
+	at org.glassfish.jersey.internal.Errors$2.call(Errors.java:249)
+	at org.glassfish.jersey.internal.Errors$2.call(Errors.java:246)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:275)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:257)
+	at org.glassfish.jersey.internal.Errors.processWithException(Errors.java:246)
+	at org.glassfish.jersey.server.ApplicationHandler.<init>(ApplicationHandler.java:266)
+	at org.glassfish.jersey.servlet.WebComponent.<init>(WebComponent.java:256)
+	at org.glassfish.jersey.servlet.ServletContainer.init(ServletContainer.java:167)
+	at org.glassfish.jersey.servlet.ServletContainer.init(ServletContainer.java:349)
+	at javax.servlet.GenericServlet.init(GenericServlet.java:244)
+	at org.eclipse.jetty.servlet.ServletHolder.initServlet(ServletHolder.java:637)
+	at org.eclipse.jetty.servlet.ServletHolder.initialize(ServletHolder.java:421)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:760)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:348)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:785)
+	at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:261)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:131)
+	at org.eclipse.jetty.server.Server.start(Server.java:452)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:105)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+	at org.eclipse.jetty.server.Server.doStart(Server.java:419)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at HttpServer.start(HttpServer.java:37)
+	at se.claremont.autotest.websupport.gui.recorder.RecorderWindow.<init>(RecorderWindow.java:17)
+	at se.claremont.autotest.websupport.gui.WebSupportTabPanel$1.actionPerformed(WebSupportTabPanel.java:32)
+	at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+	at javax.swing.AbstractButton$Handler.actionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Source)
+	at java.awt.Component.processMouseEvent(Unknown Source)
+	at javax.swing.JComponent.processMouseEvent(Unknown Source)
+	at java.awt.Component.processEvent(Unknown Source)
+	at java.awt.Container.processEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Window.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+	at java.awt.EventQueue.access$500(Unknown Source)
+	at java.awt.EventQueue$3.run(Unknown Source)
+	at java.awt.EventQueue$3.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
+	at java.awt.EventQueue$4.run(Unknown Source)
+	at java.awt.EventQueue$4.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
+	at java.awt.EventQueue.dispatchEvent(Unknown Source)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.run(Unknown Source)
+MultiException stack 2 of 2
+java.lang.IllegalStateException: Unable to perform operation: create on org.glassfish.jersey.server.ServerExecutorsFactory
+	at org.jvnet.hk2.internal.ClazzCreator.create(ClazzCreator.java:393)
+	at org.jvnet.hk2.internal.SystemDescriptor.create(SystemDescriptor.java:487)
+	at org.jvnet.hk2.internal.SingletonContext$1.compute(SingletonContext.java:83)
+	at org.jvnet.hk2.internal.SingletonContext$1.compute(SingletonContext.java:71)
+	at org.glassfish.hk2.utilities.cache.Cache$OriginThreadAwareFuture$1.call(Cache.java:97)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at org.glassfish.hk2.utilities.cache.Cache$OriginThreadAwareFuture.run(Cache.java:154)
+	at org.glassfish.hk2.utilities.cache.Cache.compute(Cache.java:199)
+	at org.jvnet.hk2.internal.SingletonContext.findOrCreate(SingletonContext.java:122)
+	at org.jvnet.hk2.internal.Utilities.createService(Utilities.java:2126)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.getService(ServiceLocatorImpl.java:685)
+	at org.jvnet.hk2.internal.ThreeThirtyResolver.resolve(ThreeThirtyResolver.java:78)
+	at org.jvnet.hk2.internal.Utilities.justInject(Utilities.java:1012)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.inject(ServiceLocatorImpl.java:1008)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.createAndInitialize(ServiceLocatorImpl.java:1083)
+	at org.jvnet.hk2.internal.ServiceLocatorImpl.createAndInitialize(ServiceLocatorImpl.java:1074)
+	at org.glassfish.jersey.server.ApplicationHandler.initialize(ApplicationHandler.java:421)
+	at org.glassfish.jersey.server.ApplicationHandler.access$500(ApplicationHandler.java:146)
+	at org.glassfish.jersey.server.ApplicationHandler$3.run(ApplicationHandler.java:269)
+	at org.glassfish.jersey.internal.Errors$2.call(Errors.java:249)
+	at org.glassfish.jersey.internal.Errors$2.call(Errors.java:246)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:275)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:257)
+	at org.glassfish.jersey.internal.Errors.processWithException(Errors.java:246)
+	at org.glassfish.jersey.server.ApplicationHandler.<init>(ApplicationHandler.java:266)
+	at org.glassfish.jersey.servlet.WebComponent.<init>(WebComponent.java:256)
+	at org.glassfish.jersey.servlet.ServletContainer.init(ServletContainer.java:167)
+	at org.glassfish.jersey.servlet.ServletContainer.init(ServletContainer.java:349)
+	at javax.servlet.GenericServlet.init(GenericServlet.java:244)
+	at org.eclipse.jetty.servlet.ServletHolder.initServlet(ServletHolder.java:637)
+	at org.eclipse.jetty.servlet.ServletHolder.initialize(ServletHolder.java:421)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:760)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:348)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:785)
+	at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:261)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:131)
+	at org.eclipse.jetty.server.Server.start(Server.java:452)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:105)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+	at org.eclipse.jetty.server.Server.doStart(Server.java:419)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at HttpServer.start(HttpServer.java:37)
+	at se.claremont.autotest.websupport.gui.recorder.RecorderWindow.<init>(RecorderWindow.java:17)
+	at se.claremont.autotest.websupport.gui.WebSupportTabPanel$1.actionPerformed(WebSupportTabPanel.java:32)
+	at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+	at javax.swing.AbstractButton$Handler.actionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Source)
+	at java.awt.Component.processMouseEvent(Unknown Source)
+	at javax.swing.JComponent.processMouseEvent(Unknown Source)
+	at java.awt.Component.processEvent(Unknown Source)
+	at java.awt.Container.processEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Window.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+	at java.awt.EventQueue.access$500(Unknown Source)
+	at java.awt.EventQueue$3.run(Unknown Source)
+	at java.awt.EventQueue$3.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
+	at java.awt.EventQueue$4.run(Unknown Source)
+	at java.awt.EventQueue$4.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
+	at java.awt.EventQueue.dispatchEvent(Unknown Source)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.run(Unknown Source)
+1351 [AWT-EventQueue-0] INFO  org.eclipse.jetty.server.AbstractConnector  - Started ServerConnector@392acf7a{HTTP/1.1,[http/1.1]}{0.0.0.0:59047}
+
+javax.servlet.ServletException: org.glassfish.jersey.servlet.ServletContainer-10643f74@55a6bdb==org.glassfish.jersey.servlet.ServletContainer,jsp=null,order=-1,inst=false
+
+Could not start REST server.
+
+2401 [AWT-EventQueue-0] INFO  io.github.bonigarcia.wdm.BrowserManager  - Reading https://chromedriver.storage.googleapis.com/ to seek [chromedriver]
+2867 [AWT-EventQueue-0] INFO  io.github.bonigarcia.wdm.BrowserManager  - Latest version of [chromedriver] is 2.34
+2887 [AWT-EventQueue-0] INFO  io.github.bonigarcia.wdm.BrowserManager  - Exporting webdriver.chrome.driver as C:\Users\jordam\.m2\repository\webdriver\chromedriver\win32\2.34\chromedriver.exe
+21:17:52 Executed             Creating a Chrome session took 4167 milliseconds.
+21:17:54 Executed             Navigation performed to url 'http://192.168.0.111:59047/tafwebrecorder/instructions'.
+21:17:54 Executed             Executed the javascript 'function createXPathFromElement(elm) { 
+    var allNodes = document.getElementsByTagName('*'); 
+    for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) 
+    { 
+        if (elm.hasAttribute('id')) { 
+                var uniqueIdCount = 0; 
+                for (var n=0;n < allNodes.length;n++) { 
+                    if (allNodes[n].hasAttribute('id') && allNodes[n].id == elm.id) uniqueIdCount++; 
+                    if (uniqueIdCount > 1) break; 
+                }; 
+                if ( uniqueIdCount == 1) { 
+                    segs.unshift('id("' + elm.getAttribute('id') + '")'); 
+                    return segs.join('/'); 
+                } else { 
+                    segs.unshift(elm.localName.toLowerCase() + '[@id="' + elm.getAttribute('id') + '"]'); 
+                } 
+        } else if (elm.hasAttribute('class')) { 
+            segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]'); 
+        } else { 
+            for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) { 
+                if (sib.localName == elm.localName)  i++; }; 
+                segs.unshift(elm.localName.toLowerCase() + '[' + i + ']'); 
+        }; 
+    }; 
+    return segs.length ? '/' + segs.join('/') : null; 
+};
+
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+document.addEventListener('click', function(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement,
+        text = target.textContent || target.innerText;
+        var elementDescription = { };
+        elementDescription.text = text;
+        elementDescription.className = target.getAttribute("class");
+        elementDescription.tagName = target.tagName;
+        elementDescription.id = target.id;
+        elementDescription.xpath = createXPathFromElement(target);
+        post('http://192.168.0.111:59047/tafwebrecorder/v1/click', {webElement: JSON.stringify(elementDescription)} ); 
+     }, false);
+
+function onInvocation(text){
+   console.log(text);
+}
+
+function stateChangeCheck(elm, text){
+   var textWhenLeaving = elm.textContent || elm.innerText;
+   if(text != textWhenLeaving){
+      console.log('Text changed from ' + text + ' to ' + textWhenLeaving + '.');
+   }
+}
+
+function stateChangedCheckRegistration(elm){
+   var text = elm.textContent || elm.innerText;
+   elm.addEventListener("blur", stateChangeCheck(elm, text));
+}
+
+function addTafElementListener(elm){
+   elm.addEventListener("dblclick", onInvocation('double clicked'));
+   elm.addEventListener("focus", stateChangedCheckRegistration(elm));
+   elm.addEventListener("select", stateChangedCheckRegistration(elm));
+   elm.addEventListener("submit", stateChangedCheckRegistration(elm));
+}
+
+function addTafListeners(){
+   var all = document.getElementsByTagName("*");
+   for (var i=0, max=all.length; i < max; i++) {
+     addTafElementListener(all[i]);
+   }
+}
+addTafListeners();
+
+'.
+59076 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+59076 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+59079 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+59079 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+59082 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+59082 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+61107 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+61107 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+61127 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+61127 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+61147 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+61147 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+61191 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+61191 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+61206 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+61206 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+61222 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+61222 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+63258 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+63258 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+63278 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+63278 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+63299 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+63299 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+63326 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+63326 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+63332 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+63332 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+63338 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+63338 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+65375 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+65375 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+65396 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+65396 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+65416 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+65416 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+65458 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+65458 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+65478 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+65478 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+65499 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+65499 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+67523 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+67523 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+67534 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+67534 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+67552 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+67552 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+67579 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+67579 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+67593 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+67593 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+67608 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+67608 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+69637 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+69637 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+69653 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+69653 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+69669 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+69669 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+69709 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+69709 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+69715 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+69715 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+69730 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+69730 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+71765 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+71765 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+71775 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+71775 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+71796 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+71796 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+71826 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+71826 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+71846 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+71846 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+71866 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+71866 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+73887 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+73887 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+73908 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+73908 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+73919 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+73919 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+73943 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+73943 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+73956 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+73956 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+73970 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+73970 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+76004 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+76004 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+76025 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+76025 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+76047 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+76047 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+76078 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+76078 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+76089 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+76089 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+76103 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+76103 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+78176 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+78177 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+78194 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+78194 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+78219 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+78219 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+78244 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+78244 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+78259 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+78259 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+78274 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+78274 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+80330 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+80330 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+80339 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+80339 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+80357 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+80357 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+82391 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+82391 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+82409 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+82409 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+82427 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+82427 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+82464 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+82464 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+82482 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+82482 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+82491 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+82491 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+84517 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+84517 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+84535 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+84535 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+84554 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+84554 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+84573 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+84573 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+84587 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+84587 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+84601 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+84601 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+86633 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+86633 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+86651 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+86651 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+86666 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+86666 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+86696 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+86696 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+86712 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+86712 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+86727 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+86727 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+88761 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+88761 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+88779 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+88779 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+88794 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+88794 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+88828 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+88828 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+88837 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+88837 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+88846 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+88846 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+90875 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+90875 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+90878 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+90878 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+90881 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+90882 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+90888 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+90888 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+90891 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+90891 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+90895 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+90895 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+92904 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+92904 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+92908 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+92908 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+92912 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+92913 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+92921 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+92921 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+92925 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+92925 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+92929 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+92929 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+94951 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+94951 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+94961 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+94961 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+94971 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+94971 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+94990 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+94990 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+94993 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+94993 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+94995 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+94995 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+97016 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+97016 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+97025 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+97025 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+97044 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+97044 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+97071 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+97071 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+97089 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+97089 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+97107 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+97107 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+99133 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+99133 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+99151 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+99151 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+99169 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+99169 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+99196 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+99196 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+99205 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+99205 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+99214 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+99214 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+101235 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+101235 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+101247 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+101247 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+101260 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+101260 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+101296 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+101296 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+101315 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+101315 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+101324 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+101324 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+103335 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+103335 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+103338 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+103338 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+103340 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+103341 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+103347 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+103347 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+103352 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+103352 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+103358 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+103358 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+105370 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+105370 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+105373 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+105374 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+105386 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+105386 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+105402 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+105402 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+105406 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+105406 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+105419 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+105419 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+107437 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+107437 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+107450 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+107450 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+107462 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+107462 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+107478 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+107478 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+107490 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+107490 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+107503 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+107503 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+109534 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+109534 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+109543 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+109543 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+109561 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+109561 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+109579 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+109579 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+109597 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+109597 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+109606 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+109606 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+111638 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+111638 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+111641 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+111641 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+111653 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+111653 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+111679 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+111679 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+111682 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+111682 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+111695 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+111695 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+113729 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+113729 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+113748 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+113748 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+113766 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+113766 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+113792 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+113792 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+113810 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+113810 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+113828 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+113828 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+115855 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+115855 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+115872 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+115872 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+115890 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+115890 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+115924 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+115924 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+115942 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+115942 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+115961 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+115961 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+117981 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+117981 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+117991 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+117991 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+118011 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+118011 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+118026 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+118026 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+118030 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+118030 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+118042 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+118042 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+120070 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+120070 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+120075 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+120075 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+120081 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+120082 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+120102 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+120102 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+120115 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+120115 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+120127 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+120127 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+122150 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+122150 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+122158 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+122158 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+122176 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+122176 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+122196 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+122196 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+122212 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+122212 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+122229 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+122229 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+124256 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+124256 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+124258 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+124258 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+124261 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+124261 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+124291 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+124291 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+124295 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+124295 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+124308 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+124308 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+New url detected: 'https://github.com/jersey/jersey/issues/3497
+126389 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+126389 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+126393 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+126393 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+126397 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
+126397 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
+21:19:55 Executed             Executed the javascript 'function createXPathFromElement(elm) { 
+    var allNodes = document.getElementsByTagName('*'); 
+    for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) 
+    { 
+        if (elm.hasAttribute('id')) { 
+                var uniqueIdCount = 0; 
+                for (var n=0;n < allNodes.length;n++) { 
+                    if (allNodes[n].hasAttribute('id') && allNodes[n].id == elm.id) uniqueIdCount++; 
+                    if (uniqueIdCount > 1) break; 
+                }; 
+                if ( uniqueIdCount == 1) { 
+                    segs.unshift('id("' + elm.getAttribute('id') + '")'); 
+                    return segs.join('/'); 
+                } else { 
+                    segs.unshift(elm.localName.toLowerCase() + '[@id="' + elm.getAttribute('id') + '"]'); 
+                } 
+        } else if (elm.hasAttribute('class')) { 
+            segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]'); 
+        } else { 
+            for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) { 
+                if (sib.localName == elm.localName)  i++; }; 
+                segs.unshift(elm.localName.toLowerCase() + '[' + i + ']'); 
+        }; 
+    }; 
+    return segs.length ? '/' + segs.join('/') : null; 
+};
+
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+document.addEventListener('click', function(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement,
+        text = target.textContent || target.innerText;
+        var elementDescription = { };
+        elementDescription.text = text;
+        elementDescription.className = target.getAttribute("class");
+        elementDescription.tagName = target.tagName;
+        elementDescription.id = target.id;
+        elementDescription.xpath = createXPathFromElement(target);
+        post('http://192.168.0.111:59047/tafwebrecorder/v1/click', {webElement: JSON.stringify(elementDescription)} ); 
+     }, false);
+
+function onInvocation(text){
+   console.log(text);
+}
+
+function stateChangeCheck(elm, text){
+   var textWhenLeaving = elm.textContent || elm.innerText;
+   if(text != textWhenLeaving){
+      console.log('Text changed from ' + text + ' to ' + textWhenLeaving + '.');
+   }
+}
+
+function stateChangedCheckRegistration(elm){
+   var text = elm.textContent || elm.innerText;
+   elm.addEventListener("blur", stateChangeCheck(elm, text));
+}
+
+function addTafElementListener(elm){
+   elm.addEventListener("dblclick", onInvocation('double clicked'));
+   elm.addEventListener("focus", stateChangedCheckRegistration(elm));
+   elm.addEventListener("select", stateChangedCheckRegistration(elm));
+   elm.addEventListener("submit", stateChangedCheckRegistration(elm));
+}
+
+function addTafListeners(){
+   var all = document.getElementsByTagName("*");
+   for (var i=0, max=all.length; i < max; i++) {
+     addTafElementListener(all[i]);
+   }
+}
+addTafListeners();
+
+'.
+Saving user preferences.

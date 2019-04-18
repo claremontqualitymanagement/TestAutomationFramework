@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>TestAutomationFramework</artifactId>
+        <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+        <version>2.8.0</version>
+    </parent>
+
+    <artifactId>Core</artifactId>
+    <version>${capability.core.version}</version>
+    <packaging>jar</packaging>
+    <name>TAF - Core</name>
+    <description>This is the CORE project from Claremont - TAF</description>
+    <url>http://www.claremont.se</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <TEST_SERVER>46.101.193.212</TEST_SERVER>
+        <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
+        <TEST_USER>taf</TEST_USER>
+        <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- For mail sending of reports -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <!--<version>1.4</version>-->
+        </dependency>
+        <!-- For UNC path writing on Linux -->
+        <dependency>
+            <groupId>jcifs</groupId>
+            <artifactId>jcifs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <!-- JSON object mapper -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <!-- needed for unit 4.12 bug -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant-jsch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+    </dependencies>
+
+<profiles><profile><id>id-descartes-for-dspot</id><build><plugins><plugin><groupId>org.pitest</groupId><artifactId>pitest-maven</artifactId><version>1.4.0</version><configuration><mutationEngine>descartes</mutationEngine><outputFormats><value>CSV</value><value>XML</value></outputFormats><targetClasses>se.claremont.taf.core.support.*</targetClasses><reportsDirectory>target/pit-reports</reportsDirectory><timeoutConstant>10000</timeoutConstant></configuration><dependencies><dependency><groupId>eu.stamp-project</groupId><artifactId>descartes</artifactId><version>1.2.4</version></dependency><dependency><groupId>org.pitest</groupId><artifactId>pitest-junit5-plugin</artifactId><version>0.7</version></dependency></dependencies></plugin></plugins></build></profile></profiles></project>

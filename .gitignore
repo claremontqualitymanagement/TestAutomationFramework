@@ -7,7 +7,6 @@ TestAutomationFramework.iml
 out
 .iml
 TechnologiesSupport/src/main/resources/drivers
-TAF
 *.log*
 .gradle
 build
