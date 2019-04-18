@@ -10,7 +10,6 @@ import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.junit.runner.RunWith;
 import se.claremont.taf.junitcustomization.TafParallelTestCaseRunner;
 import se.claremont.taf.logging.KnownError;
 import se.claremont.taf.logging.KnownErrorsList;
@@ -28,7 +27,6 @@ import java.util.List;
  * Created by jordam on 2016-08-17.
  */
 @JsonIgnoreProperties({"currentTestCase", "currentTestCases"})
-@RunWith(TafRunner.class)
 public abstract class TestSet {
 
     private final List<TestCase> currentTestCases = new ArrayList<>();

@@ -2,17 +2,17 @@ package se.claremont.taf.testrun;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
+import se.claremont.taf.gui.Gui;
 import se.claremont.taf.junitcustomization.TafResult;
 import se.claremont.taf.junitcustomization.TafTestRunner;
 import se.claremont.taf.reporting.testrunreports.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.taf.support.SupportMethods;
 import se.claremont.taf.support.Utils;
 import se.claremont.taf.support.api.Taf;
-import se.claremont.taf.gui.Gui;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * CLI runner class for the test automation framework.
@@ -359,6 +359,7 @@ public class CliTestRunner {
         String[] args = stringListToArray(remainingArguments);
         List<Class<?>> classes = new ArrayList<>();
         TestRun.getReporterFactory().addTestRunReporterIfNotAlreadyRegistered(new TestRunReporterHtmlSummaryReportFile());
+
         int testCount = 0;
         for (String arg : args) {
             try {

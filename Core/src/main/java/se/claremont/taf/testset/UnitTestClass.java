@@ -68,6 +68,7 @@ public abstract class UnitTestClass {
         @Override
         protected void finished(Description description) {
             System.out.print(System.lineSeparator());
+            super.finished(description);
         }
 
     };
