@@ -3,12 +3,12 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>3.0.3</version>
+        <version>3.0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>TestingCapabilitySoap</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilitySoap</name>
 
@@ -24,10 +24,4 @@
             <artifactId>Core</artifactId>
         </dependency>
     </dependencies>
-
-
-
-  <scm>
-    <tag>TestAutomationFramework-3.0.3</tag>
-  </scm>
 </project>
