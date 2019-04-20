@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.3</version>
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -17,7 +15,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        <tag>HEAD</tag>
+        <tag>TestAutomationFramework-3.0.3</tag>
     </scm>
 
     <developers>
@@ -769,18 +767,14 @@
                 <configuration>
                     <tasks>
                         <!--
-                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}"
-                             trust="true" failonerror="false">
-                            <fileset
-                                    file="${project.basedir}/target/${project.artifactId}-${project.version}-jar-with-dependencies.jar"/>
+                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}" trust="true" failonerror="false">
+                            <fileset file="${project.basedir}/target/${project.artifactId}-${project.version}-jar-with-dependencies.jar" />
                         </scp>
                         -->
                         <!-- upload latest documentation -->
                         <echo>UPLOADING...</echo>
-                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}/TAF/documentation/"
-                             trust="true" failonerror="false">
-                            <fileset
-                                    file="${project.basedir}/Core/documentation/*"/>
+                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}/TAF/documentation/" trust="true" failonerror="false">
+                            <fileset file="${project.basedir}/Core/documentation/*" />
                         </scp>
                     </tasks>
                 </configuration>
