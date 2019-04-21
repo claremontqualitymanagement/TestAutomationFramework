@@ -91,6 +91,7 @@ public class BrowserVerificationMethods extends VerificationMethods {
      * Check the page source for current page with the W3C Validator API for HTML consistency.
      *
      * @param verbose If set to true warning messages will be logged, as well as extra debugging information from the W3C validation service. If set to false only errors will be logged.
+     * @return Methods for verifications
      */
     public BrowserVerificationMethods currentPageSourceWithW3validator(boolean verbose){
         if(web.driver == null){

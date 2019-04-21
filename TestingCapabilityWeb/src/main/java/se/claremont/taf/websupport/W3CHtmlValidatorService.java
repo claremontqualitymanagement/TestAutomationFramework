@@ -37,6 +37,8 @@ public class W3CHtmlValidatorService {
 
     /**
      * Check the page source for current page with the W3C Validator API for HTML consistency.
+     *
+     * @return Returns true if successful
      */
     public boolean verifyPageSourceWithW3validator(){
         reportProblemsIfExist();

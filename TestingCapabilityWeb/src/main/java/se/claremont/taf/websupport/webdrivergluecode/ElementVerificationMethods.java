@@ -260,6 +260,7 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
      *
      * @param headlineColonValueSemicolonSeparatedString The data to find, in the pattern example of 'Headline1:ExpectedCorrespondingCellValue1;Headline2:ExpectedCorrespondingCellValue2'. If all values can be matched on the same row the test is passed.
      * @param cellMatchingType Type of matching performed.
+     * @return Methods for verification
      */
     public ElementVerificationMethods tableRows(String[] headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
         boolean doneOk = false;
@@ -333,6 +334,11 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
     }
 
 
+    /**
+     * Verifies a table headline
+     * @param expectedHeadline
+     * @return Methods for further verifications
+     */
     public ElementVerificationMethods tableHeadline(String expectedHeadline){
         List<String> headlines = new ArrayList<>();
         headlines.add(expectedHeadline);
@@ -343,6 +349,7 @@ public class ElementVerificationMethods extends BrowserVerificationMethods{
      * Checks that the expected headlines exist in table
      *
      * @param expectedHeadlines The list of expected headlines
+     * @return Methods for further verifications
      */
     public ElementVerificationMethods tableHeadlines(List<String> expectedHeadlines){
         boolean found = web.waitForElementToAppear(domElement).wasSuccess;

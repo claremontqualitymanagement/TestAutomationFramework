@@ -30,6 +30,7 @@ public class BrokenLinkReporter {
      *
      * @param onlyDisplayedLinks Set to true to filter links for displayed links.
      * TODO: Should also add context path to local links
+     * @return Returns true if successful
      */
     public boolean reportBrokenLinks(boolean onlyDisplayedLinks){
         log(LogLevel.DEBUG, "Initiating a check for broken links on current page (URL: '" + driver.getCurrentUrl() + "').");

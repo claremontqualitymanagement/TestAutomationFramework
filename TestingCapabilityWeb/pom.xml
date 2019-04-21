@@ -77,10 +77,6 @@
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>Core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-            <artifactId>Core</artifactId>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit -->
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
@@ -128,18 +124,6 @@
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
             <artifactId>TestingCapabilityJson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-            <artifactId>TestingCapabilityRestApi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-            <artifactId>Core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-            <artifactId>Core</artifactId>
         </dependency>
     </dependencies>
 </project>

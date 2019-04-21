@@ -194,6 +194,7 @@ public class WebInteractionMethods  {
 
     /**
      * Browser back button
+     * @return Return action result
      */
     public ActionResult goBack(){
         if(driver == null){
@@ -230,6 +231,7 @@ public class WebInteractionMethods  {
      * Navigates to specified url
      *
      * @param url The string formed url to navigate to
+     * @return Action result
      */
     public ActionResult navigate(String url){
         try {
@@ -248,6 +250,7 @@ public class WebInteractionMethods  {
      * @param quickAndSloppyMode The quickAndSloppyMode does not perform the time
      * consuming recursive check if elements can be uniquely identified with a sub-element
      * search from any parent.
+     * @return Action result
      */
     public ActionResult mapCurrentPageWithBy(String outputFilePath, boolean quickAndSloppyMode){
         if(driver == null){
@@ -265,6 +268,7 @@ public class WebInteractionMethods  {
      * the {@link #mapCurrentPageThorough(String) mapCurrentPageThorough() } method.
      *
      * @param outputFilePath File path to output file
+     * @return Action result
      */
     public ActionResult mapCurrentPage(String outputFilePath){
         if(driver == null){
@@ -285,6 +289,7 @@ public class WebInteractionMethods  {
      * @deprecated Still evolving. Still unstable.
      *
      * @param outputFilePath The file to save craft class text to.
+     * @return Action result
      */
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated()
@@ -300,12 +305,20 @@ public class WebInteractionMethods  {
         return new ActionResult(true, null, this);
     }
 
+    /**
+     * Checks page for broken links
+     * @return Action result
+     */
     public ActionResult reportBrokenLinksOnCurrentPage(){
         BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, driver);
         brokenLinkReporter.reportBrokenLinks(true);
         return new ActionResult(true, null, this);
     }
 
+    /**
+     * Checks page for broken links (even hidden ones)
+     * @return Action result
+     */
     public ActionResult reportBrokenLinksOnCurrentPage_IncludeAllLinksAlsoNonDisplayedLinks(){
         BrokenLinkReporter brokenLinkReporter = new BrokenLinkReporter(testCase, driver);
         brokenLinkReporter.reportBrokenLinks(false);
@@ -427,6 +440,7 @@ public class WebInteractionMethods  {
 
     /**
      * Checks current page for broken links and reports results to log as verifications.
+     * @return Action result
      */
     public ActionResult reportBrokenLinksRecursive(){
         String currentDomain = currentDomain();
@@ -543,6 +557,7 @@ public class WebInteractionMethods  {
 
     /**
      * Sending accept to popup
+     * @return Action result
      */
     public ActionResult acceptAlert() {
         if(driver == null){
@@ -569,6 +584,7 @@ public class WebInteractionMethods  {
      *
      * @param width The new width of the browser window
      * @param height The new height of the browser window
+     * @return Action result
      */
     public ActionResult setBrowserWindowSize(int width, int height) {
         if(driver == null){
@@ -587,6 +603,12 @@ public class WebInteractionMethods  {
         return new ActionResult(true, null, this);
     }
 
+    /**
+     * Checks a pdf file for specific string patterns
+     * @param strURL
+     * @param reqTextInPDF
+     * @return Action result
+     */
     public boolean verifyPDFContent(String strURL, String reqTextInPDF) {
         PDFTextStripper pdfStripper = null;
         PDDocument pdDoc = null;
@@ -650,6 +672,7 @@ public class WebInteractionMethods  {
      * @param attributeName The name of the attribute to check the value of
      * @param expectedAttributeValue The expected attribute of the element
      * @deprecated Use attribute() method under {@link #verifiyElement(DomElement)} instead.
+     * @return Action result
      */
     @Deprecated
     public ActionResult verifyElementAttribute(GuiElement linkElement, String attributeName, String expectedAttributeValue){
@@ -676,6 +699,7 @@ public class WebInteractionMethods  {
      * @param attributeName The name of the attribute to check the value of
      * @param expectedAttributevalueAsRegex The expected attribute of the element, as regular expression pattern
      * @deprecated Use attribute() method under {@link #verifiyElement(DomElement)} instead.
+     * @return Action result
      */
     @Deprecated
     public ActionResult verifyElementAttributeRegex(GuiElement linkElement, String attributeName, String expectedAttributevalueAsRegex){
@@ -698,6 +722,7 @@ public class WebInteractionMethods  {
     /**
      * When a test case object is created a snapshot of running processes is created. This method makes a comparison
      * of what processes that differs at the time of method execution compared to test case start.
+     * @return Action result
      */
     public ActionResult writeRunningProcessListDeviationsSinceTestCaseStart(){
         testCase.writeProcessListDeviationsFromSystemStartToLog();
@@ -709,6 +734,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to write to
      * @param textToWrite The text to write
+     * @return Action result
      */
     public ActionResult write(GuiElement guiElement, String textToWrite){
         DomElement domElement = (DomElement) guiElement;
@@ -764,6 +790,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to write to
      * @param textToWrite The text to write
+     * @return Action result
      */
     public ActionResult writeAfterClear(GuiElement guiElement, String textToWrite){
         DomElement domElement = (DomElement) guiElement;
@@ -786,6 +813,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement the element
      * @param text the text to send
+     * @return Action result
      */
     public ActionResult submitText(GuiElement guiElement, String text){
         DomElement domElement = (DomElement) guiElement;
@@ -818,6 +846,7 @@ public class WebInteractionMethods  {
      * Saves a screenshot of the web browser content to the testCaseLog folder and writes a testCaseLog post about it.
      * Used for provide debugging information when execution or verification problems (or errors) occur.
      * @param relevantWebElementToMarkWithBorder relevantWebElementToMarkWithBorder
+     * @return Action result
      */
     @SuppressWarnings("WeakerAccess")
     public ActionResult saveScreenshot(WebElement relevantWebElementToMarkWithBorder){
@@ -888,6 +917,7 @@ public class WebInteractionMethods  {
 
     /**
      * Saving desktop of full desktop rather than just the web browser
+     * @return Action result
      */
     public ActionResult saveDesktopScreenshot(){
         try {
@@ -905,6 +935,7 @@ public class WebInteractionMethods  {
      *
      * @param domElement The element to capture an image of.
      * @param filePath The file name of the file to write the image to.
+     * @return Action result
      */
     public ActionResult saveDomElementScreenshot(DomElement domElement, String filePath){
         if(driver == null){
@@ -974,6 +1005,7 @@ public class WebInteractionMethods  {
      * Changing the standard timeout value for waiting for objects in the GUI for most methods.
      *
      * @param standardTimeoutInSeconds The new value for standard timeout, in seconds.
+     * @return Action result
      */
     public ActionResult setStandardTimeout(int standardTimeoutInSeconds){
         log(LogLevel.DEBUG, "Resetting standard timeout from " + this.standardTimeoutInSeconds + " seconds to " + standardTimeoutInSeconds + " seconds.");
@@ -985,6 +1017,7 @@ public class WebInteractionMethods  {
      * In some cases you might want to click on an element with a visible text without declaring the element itself. Then use this method.
      *
      * @param visibleText The visible text of the element to find
+     * @return Action result
      */
     public ActionResult clickOnElementWithTheVisibleText(String visibleText){
         if(driver == null){
@@ -1079,6 +1112,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement the GUI element to click
      * @param timeoutInSeconds The number of seconds to wait and try to click
+     * @return Action result
      */
     public ActionResult clickEvenIfDisabled(GuiElement guiElement, int timeoutInSeconds){
         waitForElementToAppear(guiElement);
@@ -1107,6 +1141,7 @@ public class WebInteractionMethods  {
      * Performing a click event on an element. Method keeps trying the set standard timeout number of seconds.
      *
      * @param guiElement the GUI element to click
+     * @return Action result
      */
     public ActionResult click(GuiElement guiElement){
         return new ActionResult(click(guiElement, standardTimeoutInSeconds).wasSuccess, guiElement, this);
@@ -1117,6 +1152,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement the GUI element to click
      * @param timeoutInSeconds The number of seconds to wait and try to click
+     * @return Action result
      */
     public ActionResult click(GuiElement guiElement, int timeoutInSeconds){
         Set<String> errorMessages = new HashSet<>();
@@ -1215,6 +1251,7 @@ public class WebInteractionMethods  {
 
     /**
      * Closes the web browser.
+     * @return Action result
      */
     public ActionResult closeBrowser(){
         try{
@@ -1229,6 +1266,7 @@ public class WebInteractionMethods  {
 
     /**
      * Makes sure the driver is closed
+     * @return Action result
      */
     public ActionResult makeSureDriverIsClosed(){
         try{
@@ -1919,6 +1957,7 @@ public class WebInteractionMethods  {
      *
      * @param guiTableElement The table element in the gui
      * @param textsToFindOnRow the text strings to find
+     * @return Action result
      */
     public ActionResult pickTableRow(GuiElement guiTableElement, String[] textsToFindOnRow){
         boolean doneOk = false;
@@ -1990,6 +2029,11 @@ public class WebInteractionMethods  {
         return new ActionResult(true, guiTableElement, this);
     }
 
+    /**
+     * Executes the provided javascript on page
+     * @param script Script to run
+     * @return Returns anything returned by the script, un-casted.
+     */
     public Object executeJavascript(String script){
         if(driver == null){
             log(LogLevel.EXECUTION_PROBLEM, "Driver is null.");
@@ -2034,6 +2078,7 @@ public class WebInteractionMethods  {
      *
      * @param verbose If set to true warning messages will be logged, as well as extra debugging information from the W3C validation service. If set to false only errors will be logged.
      * @deprecated Use method under {@link #verify()} instead
+     * @return Action result
      */
     @Deprecated
     public ActionResult verifyCurrentPageSourceWithW3validator(boolean verbose){
@@ -2094,6 +2139,7 @@ public class WebInteractionMethods  {
      * Changes what browser tab is currently activated.
      *
      * @param tabNameAsRegexForTabToSwitchTo The name of the tab to switch to.
+     * @return Action result
      */
     public ActionResult switchBrowserTabWithTabNameGivenAsRegexPattern(String tabNameAsRegexForTabToSwitchTo){
         if(driver == null){
@@ -2139,6 +2185,7 @@ public class WebInteractionMethods  {
      * Changes what browser tab is currently activated.
      *
      * @param tabNameForTabToSwitchTo The name of the tab to switch to.
+     * @return Action result
      */
     public ActionResult switchBrowserTab(String tabNameForTabToSwitchTo){
         if(driver == null){
@@ -2184,6 +2231,7 @@ public class WebInteractionMethods  {
 
     /**
      * Closes the current browser tab. If it's the last one the browser is closed.
+     * @return Action result
      */
     public ActionResult closeCurrentBrowserTab(){
         log(LogLevel.FRAMEWORK_ERROR, "Close current browser tab is not yet implemented.");
@@ -2195,6 +2243,7 @@ public class WebInteractionMethods  {
      * Holds mouse cursor over given element
      *
      * @param guiElement Element to hover
+     * @return Action result
      */
     public ActionResult hover(GuiElement guiElement){
         if(driver == null){
@@ -2218,6 +2267,11 @@ public class WebInteractionMethods  {
         }
     }
 
+    /**
+     * Returns methods to verify the provided element
+     * @param domElement Element to verify
+     * @return Returns methods to use for verifications of the element
+     */
     public ElementVerificationMethods verifiyElement(DomElement domElement){
         return new ElementVerificationMethods(domElement, this);
     }
@@ -2243,6 +2297,7 @@ public class WebInteractionMethods  {
      *
      * @param dropdownElement The element to interact with
      * @param selectedOptions The list of options to select, based on visible text
+     * @return Action result
      */
     public ActionResult selectInMultipleChoiceDropdown(GuiElement dropdownElement, ArrayList<String> selectedOptions){
         return new ActionResult(selectInDropdownManager(dropdownElement, selectedOptions).wasSuccess, dropdownElement, this);
@@ -2253,6 +2308,7 @@ public class WebInteractionMethods  {
      *
      * @param guiElement The element to interact with
      * @param selection The visible text of the option to choose
+     * @return Action result
      */
     public ActionResult selectInDropdown(GuiElement guiElement, String selection){
         ArrayList<String> selectionsList = new ArrayList<>();
@@ -2265,6 +2321,7 @@ public class WebInteractionMethods  {
      *
      * @param radioButtonContainer The element to interact with
      * @param text The visible text of the element to choose
+     * @return Action result
      */
     public ActionResult chooseRadioButton(GuiElement radioButtonContainer, String text){
         DomElement domElement = (DomElement) radioButtonContainer;
@@ -2353,6 +2410,7 @@ public class WebInteractionMethods  {
      *
      * @param checkboxElement The element to interact with
      * @param expectedToBeTicked True if expected to be ticked after procedure, false if expected to be un-ticked after procedure. If null is provided, execution will proceed without interaction.
+     * @return Action result
      */
     public ActionResult manageCheckbox(GuiElement checkboxElement, Boolean expectedToBeTicked){
         long startTime = System.currentTimeMillis();
@@ -2413,6 +2471,11 @@ public class WebInteractionMethods  {
         return new ActionResult(false, checkboxElement, this);
     }
 
+    /**
+     * Returns the currently selected value from a dropdown
+     * @param guiElement Dropdown element
+     * @return Returns the value as a string
+     */
     public String getSelectedValueFromDropdown(GuiElement guiElement){
         List<String> selectedStrings = new ArrayList<>();
         DomElement domElement = (DomElement) guiElement;
@@ -2462,6 +2525,7 @@ public class WebInteractionMethods  {
      *
      * @param dropdownElement The element to interact with
      * @param selections The value(s) to choose
+     * @return Action result
      */
     private ActionResult selectInDropdownManager(GuiElement dropdownElement, List<String> selections){
         DomElement domElement = (DomElement) dropdownElement;
@@ -2628,6 +2692,7 @@ public class WebInteractionMethods  {
 
     /**
      * Reloads the page. Similar as pressing F5 in the browser to refresh the page.
+     * @return Action result
      */
     public ActionResult reloadPage(){
         try{
@@ -2659,6 +2724,12 @@ public class WebInteractionMethods  {
         }
     }
 
+    /**
+     *
+     * @param guiElement The HTML table element
+     * @param logErrors Set to true to log errors
+     * @return Returns the HTML table data as a TableData element.
+     */
     @SuppressWarnings("ConstantConditions")
     public TableData tableDataFromGuiElement(GuiElement guiElement, boolean logErrors){
         DomElement domElement = (DomElement)guiElement;
@@ -2872,6 +2943,7 @@ public class WebInteractionMethods  {
      *
      * @param url String formed url
      * @throws NavigationError Error thrown if Navigation cannot be performed
+     * @return Action result
      */
     private ActionResult goToUrl(String url) throws NavigationError{
         try{
@@ -2921,6 +2993,7 @@ public class WebInteractionMethods  {
     /**
      * Saves the current HTML of the page interacted with to the testCaseLog folder for debugging purposes and write a testCaseLog post about it
      * Used for provide debugging information when execution or verification problems (or errors) occur.
+     * @return Action result
      */
     public ActionResult saveHtmlContentOfCurrentPage(){
         if(driver == null){
@@ -3249,6 +3322,11 @@ public class WebInteractionMethods  {
         return returnElement;
     }
 
+    /**
+     * Returns the runtime element and performs logging while identifying it.
+     * @param element The element definition to use
+     * @return Returns the WebElement identified to correspond to the provided DomElement
+     */
     WebElement getRuntimeElementWithLogging(DomElement element){
         if(element == null) return null;
         List<WebElement> relevantWebElements = gatherRelevantElements(element, true);
@@ -3284,6 +3362,12 @@ public class WebInteractionMethods  {
         haltFurtherExecution();
     }
 
+    /**
+     * Checks for a page title existence
+     * @param expectedPageTitle Title
+     * @param timeoutInSeconds Timeout
+     * @return Returns true if identified within the timeout
+     */
     public boolean pageTitleExistWithTimeout(String expectedPageTitle, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000 && !driver.getTitle().equals(expectedPageTitle)){
@@ -3302,6 +3386,12 @@ public class WebInteractionMethods  {
         return success;
     }
 
+    /**
+     * Checks for a page title match the provided regular expression pattern within the timeout provided.
+     * @param expectedPageTitleRegEx Regular expression pattern to use to match page title
+     * @param timeoutInSeconds Timeout in full seconds.
+     * @return Returns true if matching title is found within the timeout
+     */
     public boolean pageTitleMatchRegexWithTimeout(String expectedPageTitleRegEx, int timeoutInSeconds){
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < timeoutInSeconds * 1000 && !SupportMethods.isRegexMatch(driver.getTitle(), expectedPageTitleRegEx)){
@@ -3354,6 +3444,11 @@ public class WebInteractionMethods  {
         }
     }
 
+    /**
+     * Fetches the log entries from the browser console
+     * @param lowestLogLevel Filter for log levels to fetch
+     * @return Returns a list of the log entries
+     */
     public List<LogEntry> getLogEntriesFromBrowser(java.util.logging.Level lowestLogLevel){
         List<LogEntry> logPosts = new ArrayList<>();
         Set<String> logTypes = driver.manage().logs().getAvailableLogTypes();
@@ -3503,6 +3598,11 @@ public class WebInteractionMethods  {
         return img.getSubimage(xCoordinate, yCoordinate, ImageWidth, ImageHeight);
     }
 
+    /**
+     * Returns the number of matching element for the identification description of the provided DomElement.
+     * @param domElement The DomElement to use to identify WebElements
+     * @return Returns match count.
+     */
     public Integer getRuntimeElementMatchCount(DomElement domElement) {
         if(domElement == null) return null;
         List<WebElement> relevantWebElements = gatherRelevantElements(domElement, false);
