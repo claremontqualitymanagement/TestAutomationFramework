@@ -34,13 +34,13 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>3.0.3-SNAPSHOT</global.version>
+        <global.version>3.0.4-SNAPSHOT</global.version>
         <capability.core.version>3.0.4-SNAPSHOT</capability.core.version>
         <capability.web.version>2.0.4-SNAPSHOT</capability.web.version>
         <capability.smart.image.version>2.0.4-SNAPSHOT</capability.smart.image.version>
         <capability.rest.version>2.0.4-SNAPSHOT</capability.rest.version>
         <capability.json.version>2.0.4-SNAPSHOT</capability.json.version>
-        <capability.mq.version>1.0.3</capability.mq.version>
+        <capability.mq.version>1.0.4-SNAPSHOT</capability.mq.version>
         <capability.soap.version>1.0.4-SNAPSHOT</capability.soap.version>
         <capability.java.version>3.0.4-SNAPSHOT</capability.java.version>
         <capability.support.version>2.0.4-SNAPSHOT</capability.support.version>
