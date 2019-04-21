@@ -3,14 +3,14 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>3.0.5-SNAPSHOT</version>
+        <version>3.0.5</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestingCapabilityMq</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityMq</name>
 

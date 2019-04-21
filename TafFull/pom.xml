@@ -3,13 +3,13 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>3.0.5-SNAPSHOT</version>
+        <version>3.0.5</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>TafFull</artifactId>
-    <version>3.0.5-SNAPSHOT</version>
+    <version>3.0.5</version>
     <name>TAF - FULL</name>
     <description>All of TAF for Java in one package.</description>
     <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
@@ -27,7 +27,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-      <tag>HEAD</tag>
+      <tag>TestAutomationFramework-3.0.5</tag>
   </scm>
 
     <developers>
@@ -296,14 +296,6 @@
             <artifactId>selenium-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-remote-driver</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-firefox-driver</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
@@ -358,12 +350,6 @@
             <artifactId>proguard-base</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-            <artifactId>TestingCapabilityWeb</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <distributionManagement>
