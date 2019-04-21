@@ -40,7 +40,7 @@
         <capability.smart.image.version>2.0.5-SNAPSHOT</capability.smart.image.version>
         <capability.rest.version>2.0.5-SNAPSHOT</capability.rest.version>
         <capability.json.version>2.0.5-SNAPSHOT</capability.json.version>
-        <capability.mq.version>1.0.4-SNAPSHOT</capability.mq.version>
+        <capability.mq.version>1.0.5-SNAPSHOT</capability.mq.version>
         <capability.soap.version>1.0.5-SNAPSHOT</capability.soap.version>
         <capability.java.version>3.0.5-SNAPSHOT</capability.java.version>
         <capability.support.version>2.0.5-SNAPSHOT</capability.support.version>
@@ -149,18 +149,8 @@
             </dependency>
             <dependency>
                 <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-                <artifactId>TestingCapabilityRestApi</artifactId>
-                <version>${capability.rest.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-                <artifactId>TestingCapabilityWeb</artifactId>
-                <version>${capability.web.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-                <artifactId>TestingCapabilityJson</artifactId>
-                <version>${capability.json.version}</version>
+                <artifactId>TechnologiesSupport</artifactId>
+                <version>${capability.support.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
@@ -169,8 +159,18 @@
             </dependency>
             <dependency>
                 <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-                <artifactId>TestingCapabilitySoap</artifactId>
-                <version>${capability.soap.version}</version>
+                <artifactId>TestingCapabilityJson</artifactId>
+                <version>${capability.json.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityMq</artifactId>
+                <version>${capability.mq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityRestApi</artifactId>
+                <version>${capability.rest.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
@@ -179,8 +179,13 @@
             </dependency>
             <dependency>
                 <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-                <artifactId>TechnologiesSupport</artifactId>
-                <version>${capability.support.version}</version>
+                <artifactId>TestingCapabilitySoap</artifactId>
+                <version>${capability.soap.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
+                <artifactId>TestingCapabilityWeb</artifactId>
+                <version>${capability.web.version}</version>
             </dependency>
 
             <!-- Mocking -->

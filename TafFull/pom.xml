@@ -90,7 +90,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-            <artifactId>TestingCapabilityWeb</artifactId>
+            <artifactId>TestingCapabilityMq</artifactId>
         </dependency>
 
         <dependency>
