@@ -435,7 +435,7 @@
             <dependency> <!-- Resolves and downloads correct drivers for browsers -->
                 <groupId>io.github.bonigarcia</groupId>
                 <artifactId>webdrivermanager</artifactId>
-                <version>3.3.0</version>
+                <version>3.6.0</version>
             </dependency>
             <dependency> <!-- Driver for PhantomJS, the headless browser -->
                 <groupId>com.github.detro.ghostdriver</groupId>
@@ -473,13 +473,6 @@
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>20160810</version>
-            </dependency>
-
-            <!-- DB Access -->
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.6</version>
             </dependency>
 
             <!-- JSON object mapper -->
@@ -555,6 +548,11 @@
             <version>1.2.14</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>7.2.2.jre11</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
         <dependency>
             <groupId>org.mockito</groupId>

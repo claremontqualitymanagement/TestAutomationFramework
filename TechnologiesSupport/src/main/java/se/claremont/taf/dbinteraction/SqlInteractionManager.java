@@ -16,26 +16,71 @@ import java.util.List;
  */
 @SuppressWarnings("WeakerAccess")
 public class SqlInteractionManager {
-    Connection connection = null;
-    TestCase testCase;
-    String dbName;
-    String dbUrl;
+    private TestCase testCase;
+    private DbConnection dbConnection;
 
-    public SqlInteractionManager(TestCase testCase, String dbUrl, String dbName, String username, String password){
+    public SqlInteractionManager(TestCase testCase, DbConnection dbConnection){
         this.testCase = testCase;
-        this.dbName = dbName;
-        this.dbUrl = dbUrl;
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            testCase.log(LogLevel.DEBUG, "Connecting to DB '" + dbUrl + dbName + "'.");
-            connection = DriverManager.getConnection(dbUrl + dbName, username, password);
-            testCase.log(LogLevel.DEBUG, "Connected successfully to DB '" + dbUrl + dbName + "' as '" + username + "'.");
-        } catch(Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not connect to DB '" + dbUrl + dbName + "' as '" + username + "'. Error: " + e.getMessage() );
-        }
+        this.dbConnection = dbConnection;
     }
 
-    private static int getColumnCountFromResultSet(ResultSet resultSet){
+    public String executeAndRetrieveGeneratedKey(String sql){
+        ResultSet resultSet = null;
+        PreparedStatement prepsInsertProduct = null;
+        String generatedKey = null;
+        try {
+            Connection connection = dbConnection.connect();
+            testCase.log(LogLevel.DEBUG, "Executing SQL statement '" + sql + "'.");
+            prepsInsertProduct = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            prepsInsertProduct.execute();
+            resultSet = prepsInsertProduct.getGeneratedKeys();
+            while (resultSet.next()) {
+                generatedKey = resultSet.getString(1);
+                testCase.log(LogLevel.DEBUG, "Retreived generated key '" + generatedKey + "' from executing SQL statement '" + sql + "'.");
+            }
+        } catch (SQLException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not get result set from executing SQL statement '" + sql + "'. " + e.toString());
+            System.out.println(e.toString());
+        } finally {
+            dbConnection.closeConnection();
+        }
+        return  generatedKey;
+    }
+
+    public DbResponse executeQuery(String query){
+        Statement statement = null;
+        ResultSet resultSet = null;
+        DbResponse dbResponse = null;
+        long responseTimeStart = System.currentTimeMillis();
+        try {
+            Connection connection = dbConnection.connect();
+            if(connection == null){
+                testCase.log(LogLevel.EXECUTION_PROBLEM, "Cannot connect to DB. Halting further execution. Check DEBUG log for details.");
+                testCase.report();
+            }
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            if(resultSet == null) return null;
+            StringBuilder sb = new StringBuilder();
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            while(resultSet.next()){
+                for(int i = 1;i<=columnCount;i++){
+                    sb.append(resultSet.getString(i)).append(";");
+                }
+                sb.append(System.lineSeparator());
+            }
+            testCase.log(LogLevel.DEBUG, "Executed query '" + query + "' and received the following result set:" + System.lineSeparator() + sb.toString());
+        } catch (SQLException e) {
+            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not receive result set from query '" + query + "'. " + e.toString());
+            System.out.println(e.toString());
+        } finally {
+            dbConnection.closeConnection();
+            dbResponse = new DbResponse(testCase, resultSet, System.currentTimeMillis() - responseTimeStart);
+        }
+        return dbResponse;
+    }
+
+    public static int getColumnCountFromResultSet(ResultSet resultSet){
         int columnCount = 1;
         boolean continueToNextColumn = true;
         try {
@@ -57,7 +102,7 @@ public class SqlInteractionManager {
         return  columnCount;
     }
 
-    private static String resultSetToString(ResultSet resultSet){
+    public static String resultSetToString(ResultSet resultSet){
         StringBuilder returnString = new StringBuilder();
         if(resultSet == null) return "";
         int columnCount = getColumnCountFromResultSet(resultSet);
@@ -86,72 +131,4 @@ public class SqlInteractionManager {
         return returnString.toString();
     }
 
-    private TableData execute(String sql) {
-        Statement stmt = null;
-        ResultSet resultSet = null;
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            stmt = connection.createStatement();
-
-            testCase.log(LogLevel.DEBUG, "Executing SQL '" + sql + "' to DB '" + dbName + "' at server '" + dbUrl + "'.");
-            boolean success = stmt.execute(sql);
-            testCase.log(LogLevel.EXECUTED, "Executed SQL '" + sql + "' to DB + '" + dbName + "' at server '" + dbUrl + "'.");
-            if(success){
-                resultSet = stmt.getResultSet();
-            }
-        } catch(Exception e){
-            testCase.log(LogLevel.EXECUTION_PROBLEM, "Could not execute SQL '" + sql + "' to DB '" + dbName + "' at server '" + dbUrl + "'. Error: " + e.getMessage());
-        }
-        String returnString = resultSetToString(resultSet);
-        TableData tableData = new TableData(testCase, "SQL query result set", returnString);
-        testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.DEBUG, "Results from query:" + System.lineSeparator() + tableData.toString(), "Results from query:<br>" + tableData.toHtml());
-        return tableData;
-    }
-
-    public void verifyRowExistInResultsFromQuery(String sqlQuery, String headlineColonValueSemicolonSeparatedString, boolean regex){
-        TableData tableData = execute(sqlQuery);
-        if(regex){
-            tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.REGEX_MATCH);
-        }else {
-            tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
-        }
-    }
-
-    public void verifyRowExistInResultsFromQuery(String sqlQuery, String headlineColonValueSemicolonSeparatedString, CellMatchingType cellMatchingType){
-        TableData tableData = execute(sqlQuery);
-        tableData.verifyRowExist(headlineColonValueSemicolonSeparatedString, cellMatchingType);
-    }
-
-    public void verifyRowExistInResultsFromQuery(String tableName, String headlineColonValueSemicolonSeparatedString){
-        String[] pairs = headlineColonValueSemicolonSeparatedString.split(";");
-        List<String> searchString = new ArrayList<>();
-        for(String pair : pairs){
-            if(pair.contains("=")){
-                searchString.add(pair.split("=")[0] + " = '" + pair.split("=")[pair.split("=").length] + "'");
-            }
-        }
-        String sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" AND ", searchString) + ";";
-        TableData td = execute(sql);
-        if(td.dataRowCount() == 0){
-            sql = "SELECT * FROM " + tableName + " WHERE " + String.join(" OR ", searchString) + ";";
-            td = execute(sql);
-            td.verifyRowExist(headlineColonValueSemicolonSeparatedString, CellMatchingType.CONTAINS_MATCH);
-        } else {
-            testCase.log(LogLevel.VERIFICATION_PASSED, "Found '" + headlineColonValueSemicolonSeparatedString + "' in " + tableName + ".");
-        }
-
-    }
-
-    public void closeConnection() {
-        if (connection == null) {
-            return;
-        }
-        try {
-            connection.close();
-            testCase.log(LogLevel.DEBUG, "Closed connection to DB '" + dbName + "' at server '" + dbUrl + "'.");
-        } catch (SQLException e) {
-            testCase.log(LogLevel.DEBUG, "Could not close connection to DB '" + dbName + "' at server '" + dbUrl + "'. Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }

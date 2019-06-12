@@ -310,12 +310,6 @@
             <artifactId>json</artifactId>
         </dependency>
 
-        <!-- MySql DB support -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
         <!-- JSON object mapper -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
