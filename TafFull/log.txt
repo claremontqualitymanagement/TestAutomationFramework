@@ -200,7 +200,7 @@ Could not start REST server.
 2867 [AWT-EventQueue-0] INFO  io.github.bonigarcia.wdm.BrowserManager  - Latest version of [chromedriver] is 2.34
 2887 [AWT-EventQueue-0] INFO  io.github.bonigarcia.wdm.BrowserManager  - Exporting webdriver.chrome.driver as C:\Users\jordam\.m2\repository\webdriver\chromedriver\win32\2.34\chromedriver.exe
 21:17:52 Executed             Creating a Chrome session took 4167 milliseconds.
-21:17:54 Executed             Navigation performed to url 'http://192.168.0.111:59047/tafwebrecorder/instructions'.
+21:17:54 Executed             Navigation performed to dbUrl 'http://192.168.0.111:59047/tafwebrecorder/instructions'.
 21:17:54 Executed             Executed the javascript 'function createXPathFromElement(elm) { 
     var allNodes = document.getElementsByTagName('*'); 
     for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) 
@@ -669,7 +669,7 @@ addTafListeners();
 124295 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
 124308 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
 124308 [Forwarding getCurrentUrl on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
-New url detected: 'https://github.com/jersey/jersey/issues/3497
+New dbUrl detected: 'https://github.com/jersey/jersey/issues/3497
 126389 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect
 126389 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - Retrying request to {}->http://localhost:10584
 126393 [Forwarding executeScript on session 34fa9b1b50e0040092e0e52c8a3850b7 to remote] INFO  org.apache.http.impl.execchain.RetryExec  - I/O exception (java.net.BindException) caught when processing request to {}->http://localhost:10584: Address already in use: connect

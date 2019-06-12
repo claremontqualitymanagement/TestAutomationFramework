@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>
-    <url>http://www.claremont.se</url>
+    <dbUrl>http://www.claremont.se</dbUrl>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,7 +24,7 @@
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <dbUrl>http://www.apache.org/licenses/LICENSE-2.0.txt</dbUrl>
             <distribution>repo</distribution>
         </license>
     </licenses>

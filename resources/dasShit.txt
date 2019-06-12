@@ -131,7 +131,7 @@ Account: 814
 https://sonarqube.com/projects/favorite
 taf_sonarqube
 c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
-mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
+mvn sonar:sonar -Dsonar.host.dbUrl=https://sonarqube.com -Dsonar.login=c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
 https://sonarqube.com/dashboard/index/se.claremont:TestAutomationFramework
 
 

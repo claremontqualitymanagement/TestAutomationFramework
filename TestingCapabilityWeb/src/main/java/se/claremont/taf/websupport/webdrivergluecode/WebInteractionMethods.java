@@ -150,7 +150,7 @@ public class WebInteractionMethods  {
      * Remote WebDriver enabled constructor. Example of usages: BrowserStack.
      *
      * @param testCase The test case to log errors to.
-     * @param url url to remote web driver
+     * @param url URL to remote web driver
      * @param desiredCapabilities The desired capabilities of the browser driver to use.
      */
     /*
@@ -228,18 +228,18 @@ public class WebInteractionMethods  {
     }
 
     /**
-     * Navigates to specified url
+     * Navigates to specified URL
      *
-     * @param url The string formed url to navigate to
+     * @param url The string formed URL to navigate to
      * @return Action result
      */
     public ActionResult navigate(String url){
         try {
             goToUrl(url);
-            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Navigation performed to url '" + url + "'.", "Navigation performed to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'." );
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTED, "Navigation performed to URL '" + url + "'.", "Navigation performed to URL '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'." );
             return new ActionResult(true, null, this);
         }catch (NavigationError e){
-            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not navigate to url '" + url + "'.", "Could not navigate to url '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'.");
+            testCase.logDifferentlyToTextLogAndHtmlLog(LogLevel.EXECUTION_PROBLEM, "Could not navigate to URL '" + url + "'.", "Could not navigate to URL '<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>'.");
             return new ActionResult(false, null, this);
         }
     }
@@ -2939,9 +2939,9 @@ public class WebInteractionMethods  {
 
 
     /**
-     * Navigates to specified url
+     * Navigates to specified URL
      *
-     * @param url String formed url
+     * @param url String formed URL
      * @throws NavigationError Error thrown if Navigation cannot be performed
      * @return Action result
      */
@@ -2950,7 +2950,7 @@ public class WebInteractionMethods  {
             driver.navigate().to(url);
             return new ActionResult(true, null, this);
         }catch (Exception e){
-            log(LogLevel.EXECUTION_PROBLEM, "Could not go to url '" + url + "'. Error: " + e);
+            log(LogLevel.EXECUTION_PROBLEM, "Could not go to URL '" + url + "'. Error: " + e);
             return new ActionResult(false, null, this);
         }
     }

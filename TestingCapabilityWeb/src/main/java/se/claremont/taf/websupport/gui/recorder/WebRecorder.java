@@ -92,7 +92,7 @@ public class WebRecorder {
             while (true) {
                 try{
                     if (!driver.getCurrentUrl().equals(lastUrl)) {
-                        System.out.println("New url detected: '" + driver.getCurrentUrl());
+                        System.out.println("New URL detected: '" + driver.getCurrentUrl());
                         lastUrl = driver.getCurrentUrl();
                         Gui.addTestStepToListOfAvailableTestSteps(new WebNavigationTestStep(lastUrl));
                         invokeJavascriptBasedListeners();
