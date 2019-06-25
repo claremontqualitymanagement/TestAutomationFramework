@@ -3,7 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>3.0.8</version>
+    <version>3.0.9</version>
+    <!-- <version>3.0.4-SNAPSHOT</version> -->
     <packaging>pom</packaging>
 
     <name>TAF - Test Automation Framework</name>
@@ -15,7 +16,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        <tag>HEAD</tag>
+       <!-- <tag>HEAD</tag> -->
     </scm>
 
     <developers>
@@ -34,16 +35,26 @@
         <TEST_USER>taf</TEST_USER>
         <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
         <!-- global version properties -->
-        <global.version>3.0.8</global.version>
-        <capability.core.version>3.0.8</capability.core.version>
+        <!-- <global.version>3.0.3-SNAPSHOT</global.version>
+        <capability.core.version>3.0.9</capability.core.version>
         <capability.web.version>2.0.6-SNAPSHOT</capability.web.version>
         <capability.smart.image.version>2.0.6-SNAPSHOT</capability.smart.image.version>
         <capability.rest.version>2.0.6-SNAPSHOT</capability.rest.version>
         <capability.json.version>2.0.6-SNAPSHOT</capability.json.version>
         <capability.mq.version>1.0.6-SNAPSHOT</capability.mq.version>
         <capability.soap.version>1.0.6-SNAPSHOT</capability.soap.version>
-        <capability.java.version>3.0.8</capability.java.version>
-        <capability.support.version>2.0.6-SNAPSHOT</capability.support.version>
+        <capability.java.version>3.0.9</capability.java.version>
+        <capability.support.version>2.0.6-SNAPSHOT</capability.support.version> -->
+        <global.version>3.0.9</global.version>
+        <capability.core.version>3.0.9</capability.core.version>
+        <capability.web.version>2.0.6</capability.web.version>
+        <capability.smart.image.version>2.0.6</capability.smart.image.version>
+        <capability.rest.version>2.0.6</capability.rest.version>
+        <capability.json.version>2.0.6</capability.json.version>
+        <capability.mq.version>1.0.6</capability.mq.version>
+        <capability.soap.version>1.0.6</capability.soap.version>
+        <capability.java.version>3.0.9</capability.java.version>
+        <capability.support.version>2.0.6</capability.support.version>
         <jackson.version>2.9.8</jackson.version>
         <selenium.version>3.14.0</selenium.version>
     </properties>
@@ -127,7 +138,7 @@
             <name>TestAutomationFramework</name>
             <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
         </repository> -->
-        <snapshotRepository>
+        <!--<snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
@@ -135,7 +146,7 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
             </url>
-        </repository>
+        </repository> -->
     </distributionManagement>
 
     <dependencyManagement>
@@ -504,36 +515,36 @@
 
     <profiles>
         <!-- GPG Signature on release -->
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <!-- <profile>
+        <id>release-sign-artifacts</id>
+        <activation>
+            <property>
+                <name>performRelease</name>
+                <value>true</value>
+            </property>
+        </activation>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile> -->
+</profiles>
 
-    <!--suppress MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection -->
+<!--suppress MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection, MavenDuplicateDependenciesInspection -->
     <dependencies>
 
         <!-- JUnit is used as a test runner for both unit tests and for test execution from command line from built artifact. -->
@@ -671,69 +682,69 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
+            <!--  <plugin>
+                  <groupId>org.sonatype.plugins</groupId>
+                  <artifactId>nexus-staging-maven-plugin</artifactId>
+                  <version>1.6.7</version>
+                  <extensions>true</extensions>
+                  <configuration>
+                      <serverId>ossrh</serverId>
+                      <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                      <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                  </configuration>
+              </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <localCheckout>true</localCheckout>
-                    <pushChanges>false</pushChanges>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                    <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.9.5</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-release-plugin</artifactId>
+                  <version>2.5.3</version>
+                  <configuration>
+                      <localCheckout>true</localCheckout>
+                      <pushChanges>false</pushChanges>
+                      <mavenExecutorId>forked-path</mavenExecutorId>
+                      <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
+                  </configuration>
+                  <dependencies>
+                      <dependency>
+                          <groupId>org.apache.maven.scm</groupId>
+                          <artifactId>maven-scm-provider-gitexe</artifactId>
+                          <version>1.9.5</version>
+                      </dependency>
+                  </dependencies>
+              </plugin> -->
 
-            <!-- Making source available -->
+              <!-- Making source available -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>attach-javadoc</id>
-                    </execution>
-                </executions>
-            </plugin>
+            <!-- <id>attach-sources</id> -->
+            <!-- <goals>
+                 <goal>jar</goal>
+             </goals>
+         </execution>
+         <execution>
+             <id>attach-javadoc</id>
+         </execution>
+     </executions>
+ </plugin>
 
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
+ <plugin>
+     <artifactId>maven-deploy-plugin</artifactId>
+     <version>2.8.2</version>
+     <executions>
+         <execution>
+             <id>default-deploy</id>
+             <phase>deploy</phase>
+             <goals>
+                 <goal>deploy</goal>
+             </goals> -->
+         </execution>
+     </executions>
+ </plugin>
+ <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
             <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

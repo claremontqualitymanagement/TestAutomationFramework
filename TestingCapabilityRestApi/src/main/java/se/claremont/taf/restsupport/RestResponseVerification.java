@@ -81,7 +81,7 @@ public class RestResponseVerification extends VerificationMethods{
         }
         if(stringComparisonMethod.match(restResponse.body.toString(), searchPattern)){
             testCase.log(LogLevel.VERIFICATION_PASSED, "String '" + searchPattern + "' successfully matched in response body.");
-            wasSuccess = false;
+            wasSuccess = true;
         } else {
             testCase.log(LogLevel.VERIFICATION_FAILED, "Could not match '" + searchPattern + "' in the response body:" + System.lineSeparator() + restResponse.body);
             wasSuccess = false;
