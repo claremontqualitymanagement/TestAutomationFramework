@@ -3,12 +3,12 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>3.1.0</version>
+        <version>3.0.7</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>TestingCapabilityJavaGui</artifactId>
-    <version>3.1.0</version>
+    <version>3.0.7</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityJavaGui</name>
 
