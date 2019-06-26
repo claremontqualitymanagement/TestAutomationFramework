@@ -97,6 +97,7 @@ public class CliTestRunner {
         remainingArguments = stringArrayToList(args);
         printErrorMessageUponWrongJavaVersion();// Exits at the end. No need to remove arguments from argument array for not being test classes
         setSystemPropertiesIfStatedWithMinusD();
+        printCurrentVersionUponVersionArgument();
         printHelpTextIfApplicable();
         System.out.println("Argument(s) given:" + System.lineSeparator()  +
                 " * " + String.join("" + System.lineSeparator() + " * ", args) + System.lineSeparator() + System.lineSeparator() +
@@ -108,6 +109,17 @@ public class CliTestRunner {
         runTestClasses();
         pause(1000);
         exitWithExitCode();
+    }
+
+    private static void printCurrentVersionUponVersionArgument() {
+        String[] args = stringListToArray(remainingArguments);
+        for(String arg : args){
+            if(arg.trim().length() > 0 && arg.trim().length() < "version".length() + 2 && arg.trim().toLowerCase().endsWith("version")){
+                    CliTestRunner runner = new CliTestRunner();
+                    System.out.println("Current version of TAF: " + runner.getClass().getPackage().getImplementationVersion());
+                    remainingArguments.remove(arg);
+            }
+        }
     }
 
     private static boolean shouldShowGui(String[] args){
@@ -122,7 +134,7 @@ public class CliTestRunner {
     private static String helpText() {
         return "Usage instructions: " +
                 LF + LF +
-                "java.exe -jar TafFull.jar [help] [diagnostic] [parallel_test_execution_mode=none] [run_settings_alterations...] [RunName=name] [System_property_alterations...] [com.company.packagepath.TestClassName...]" +
+                "java.exe -jar TafFull.jar [help] git[version] [diagnostic] [parallel_test_execution_mode=none] [run_settings_alterations...] [RunName=name] [System_property_alterations...] [com.company.packagepath.TestClassName...]" +
                 LF + LF +
                 "This syntax is explained below. If no arguments are given a short help text pointing to this help text is displayed." +
                 LF + LF +
