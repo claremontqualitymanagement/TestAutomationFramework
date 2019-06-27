@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
     <artifactId>TestAutomationFramework</artifactId>
-    <version>3.0.9</version>
+    <version>3.0.10-SNAPSHOT</version>
     <!-- <version>3.0.4-SNAPSHOT</version> -->
     <packaging>pom</packaging>
 
@@ -16,7 +16,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        <tag>3.0.9</tag>
+        <tag>TestAutomationFramework-3.0.8</tag>
     </scm>
 
     <developers>
@@ -46,15 +46,15 @@
         <capability.java.version>3.0.8</capability.java.version>
         <capability.support.version>2.0.6-SNAPSHOT</capability.support.version> -->
         <global.version>3.0.8</global.version>
-        <capability.core.version>3.0.9</capability.core.version>
-        <capability.web.version>2.0.7</capability.web.version>
-        <capability.smart.image.version>2.0.7</capability.smart.image.version>
-        <capability.rest.version>2.0.7</capability.rest.version>
-        <capability.json.version>2.0.7</capability.json.version>
-        <capability.mq.version>1.0.7</capability.mq.version>
-        <capability.soap.version>1.0.7</capability.soap.version>
-        <capability.java.version>3.0.9</capability.java.version>
-        <capability.support.version>2.0.7</capability.support.version>
+        <capability.core.version>3.0.10-SNAPSHOT</capability.core.version>
+        <capability.web.version>2.0.8-SNAPSHOT</capability.web.version>
+        <capability.smart.image.version>2.0.8-SNAPSHOT</capability.smart.image.version>
+        <capability.rest.version>2.0.8-SNAPSHOT</capability.rest.version>
+        <capability.json.version>2.0.8-SNAPSHOT</capability.json.version>
+        <capability.mq.version>1.0.8-SNAPSHOT</capability.mq.version>
+        <capability.soap.version>1.0.8-SNAPSHOT</capability.soap.version>
+        <capability.java.version>3.0.10-SNAPSHOT</capability.java.version>
+        <capability.support.version>2.0.8-SNAPSHOT</capability.support.version>
         <jackson.version>2.9.8</jackson.version>
         <selenium.version>3.14.0</selenium.version>
     </properties>
