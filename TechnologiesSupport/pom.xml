@@ -9,7 +9,7 @@
 
     <name>TAF - TechnologiesSupport</name>
     <artifactId>TechnologiesSupport</artifactId>
-    <version>2.0.8-SNAPSHOT</version>
+    <version>3.0.10-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>This is the technologies enabling project from Claremont TAF</description>
     <url>http://www.claremont.se</url>

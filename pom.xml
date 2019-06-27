@@ -16,7 +16,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        <tag>TestAutomationFramework-3.0.8</tag>
+        <tag>3.0.10</tag>
     </scm>
 
     <developers>
@@ -30,31 +30,18 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <TEST_SERVER>46.101.193.212</TEST_SERVER>
-        <TEST_SERVER_DEPLOY_PATH>/home/taf</TEST_SERVER_DEPLOY_PATH>
-        <TEST_USER>taf</TEST_USER>
-        <TEST_USER_PASSWORD>Claremont16!</TEST_USER_PASSWORD>
+
         <!-- global version properties -->
-        <!-- <global.version>3.0.3-SNAPSHOT</global.version>
-        <capability.core.version>3.0.8</capability.core.version>
-        <capability.web.version>2.0.6-SNAPSHOT</capability.web.version>
-        <capability.smart.image.version>2.0.6-SNAPSHOT</capability.smart.image.version>
-        <capability.rest.version>2.0.6-SNAPSHOT</capability.rest.version>
-        <capability.json.version>2.0.6-SNAPSHOT</capability.json.version>
-        <capability.mq.version>1.0.6-SNAPSHOT</capability.mq.version>
-        <capability.soap.version>1.0.6-SNAPSHOT</capability.soap.version>
-        <capability.java.version>3.0.8</capability.java.version>
-        <capability.support.version>2.0.6-SNAPSHOT</capability.support.version> -->
-        <global.version>3.0.8</global.version>
+        <global.version>3.0.10</global.version>
         <capability.core.version>3.0.10-SNAPSHOT</capability.core.version>
-        <capability.web.version>2.0.8-SNAPSHOT</capability.web.version>
-        <capability.smart.image.version>2.0.8-SNAPSHOT</capability.smart.image.version>
-        <capability.rest.version>2.0.8-SNAPSHOT</capability.rest.version>
-        <capability.json.version>2.0.8-SNAPSHOT</capability.json.version>
-        <capability.mq.version>1.0.8-SNAPSHOT</capability.mq.version>
-        <capability.soap.version>1.0.8-SNAPSHOT</capability.soap.version>
+        <capability.web.version>3.0.10-SNAPSHOT</capability.web.version>
+        <capability.smart.image.version>3.0.10-SNAPSHOT</capability.smart.image.version>
+        <capability.rest.version>3.0.10-SNAPSHOT</capability.rest.version>
+        <capability.json.version>3.0.10-SNAPSHOT</capability.json.version>
+        <capability.mq.version>3.0.10-SNAPSHOT</capability.mq.version>
+        <capability.soap.version>3.0.10-SNAPSHOT</capability.soap.version>
         <capability.java.version>3.0.10-SNAPSHOT</capability.java.version>
-        <capability.support.version>2.0.8-SNAPSHOT</capability.support.version>
+        <capability.support.version>3.0.10-SNAPSHOT</capability.support.version>
         <jackson.version>2.9.8</jackson.version>
         <selenium.version>3.14.0</selenium.version>
     </properties>
@@ -597,17 +584,7 @@
     </dependencies>
 
     <build>
-        <!--
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>drivers</exclude>
-                    <exclude>images</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        -->
+
         <plugins>
 
             <!-- Compiler plugin makes class files from java files -->
@@ -629,44 +606,12 @@
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                             <addClasspath>true</addClasspath>
                             <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
-            -->
-
-            <!-- Surefire is used to execute tests within modules -->
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <properties>
-                        <property>
-                            <name>listener</name>
-                            <value>TafRunListener</value>
-                        </property>
-                    </properties>
-                </configuration>
-            </plugin>
-            -->
 
             <!-- Create Javadoc for project -->
             <plugin>
@@ -744,67 +689,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Assembly plugin is attempted to be used to create a single jar with all dependencies -->
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>se.claremont.autotest.common.testrun.CliTestRunner</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
 
-            <!-- AntRun plugin is used to push artifact to build server. -->
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <configuration>
-                    <tasks>
-                        <!--
-                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}" trust="true" failonerror="false">
-                            <fileset file="${project.basedir}/target/${project.artifactId}-${project.version}-jar-with-dependencies.jar" />
-                        </scp>
-                        -->
-                        <!-- upload latest documentation -->
-                        <echo>UPLOADING...</echo>
-                        <scp todir="${TEST_USER}:${TEST_USER_PASSWORD}@${TEST_SERVER}:/${TEST_SERVER_DEPLOY_PATH}/TAF/documentation/" trust="true" failonerror="false">
-                            <fileset file="${project.basedir}/Core/documentation/*" />
-                        </scp>
-                    </tasks>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant</groupId>
-                        <artifactId>ant-jsch</artifactId>
-                        <version>1.6.5</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.jcraft</groupId>
-                        <artifactId>jsch</artifactId>
-                        <version>0.1.53</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
 </project>

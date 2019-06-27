@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>TestingCapabilityWeb</artifactId>
-    <version>2.0.8-SNAPSHOT</version>
+    <version>3.0.10-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>TAF - TestingCapabilityWeb</name>
     <properties>
