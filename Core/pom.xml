@@ -4,11 +4,11 @@
     <parent>
         <artifactId>TestAutomationFramework</artifactId>
         <groupId>com.github.claremontqualitymanagement.TestAutomationFramework</groupId>
-        <version>3.0.11</version>
+        <version>3.0.12-SNAPSHOT</version>
     </parent>
 
     <artifactId>Core</artifactId>
-    <version>3.0.11</version>
+    <version>3.0.12-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>TAF - Core</name>
     <description>This is the CORE project from Claremont - TAF</description>
