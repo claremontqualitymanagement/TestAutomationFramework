@@ -27,7 +27,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-      <tag>TestAutomationFramework-3.0.11</tag>
+      <tag>TestAutomationFramework-3.0.12</tag>
   </scm>
 
     <developers>

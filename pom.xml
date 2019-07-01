@@ -16,7 +16,7 @@
         <developerConnection>scm:git://github.com/claremontqualitymanagement/TestAutomationFramework.git
         </developerConnection>
         <url>https://github.com/claremontqualitymanagement/TestAutomationFramework</url>
-        <tag>3.0.10</tag>
+        <tag>3.0.12</tag>
     </scm>
 
     <developers>
@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- global version properties -->
-        <global.version>3.0.10</global.version>
+        <global.version>3.0.12</global.version>
         <capability.core.version>3.0.12-SNAPSHOT</capability.core.version>
         <capability.web.version>3.0.12-SNAPSHOT</capability.web.version>
         <capability.smart.image.version>3.0.12-SNAPSHOT</capability.smart.image.version>
