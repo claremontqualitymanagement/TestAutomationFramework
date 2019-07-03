@@ -9,7 +9,7 @@
 
     <name>TAF - Test Automation Framework</name>
     <description>TAF - Test Automation Framework</description>
-    <url>http://www.claremont.se</url>
+    <url>https://github.com/claremontqualitymanagement/TAF.Core</url>
 
     <scm>
         <connection>scm:git:git://github.com/claremontqualitymanagement/TestAutomationFramework.git</connection>
