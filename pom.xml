@@ -42,7 +42,7 @@
         <capability.soap.version>3.0.13-SNAPSHOT</capability.soap.version>
         <capability.java.version>3.0.13-SNAPSHOT</capability.java.version>
         <capability.support.version>3.0.13-SNAPSHOT</capability.support.version>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>[2.9.9,)</jackson.version>
         <selenium.version>3.14.0</selenium.version>
     </properties>
 

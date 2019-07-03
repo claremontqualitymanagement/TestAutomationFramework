@@ -39,8 +39,7 @@ public class JavaTestApplicationRunner {
 
     public static void hideWindow(){
         if(javaApp == null) return;
-        //noinspection deprecation
-        javaApp.hide();
+        javaApp.setVisible(false);
     }
 
     public static void exitApplication(){
