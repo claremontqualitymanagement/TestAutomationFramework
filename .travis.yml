@@ -9,12 +9,12 @@ addons:
     token:
       secure: c7c28eb7025c0c88b24cf9cfbd77ce9bfe483e31
 #use this instead of oraclejdk8
-  homebrew:
-    taps: homebrew/cask-versions
-    casks: java8
+#  homebrew:
+#    taps: homebrew/cask-versions
+#    casks: java8
 
-#jdk:
-#  - oraclejdk8
+jdk:
+  - oraclejdk8
 #  - oraclejdk7
 #  - openjdk6
 script:
