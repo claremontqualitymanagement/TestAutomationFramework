@@ -1,9 +1,7 @@
 # TestAutomationFramework
 Test Automation Framework - TAF - "Never send a human to do a machine’s job".
 
-An Test Automated Framework brought to you from the [Claremont team](http://www.claremont.se).
-
-![alt this is the cool Claremont TAF logo...](http://46.101.193.212/TAF/images/Taf3_transp.png)
+An Test Automated Framework brought to you from the [Zington team](http://www.zingtongroup.com).
 
 Check out the [documentation on the TAF Wiki](https://github.com/claremontqualitymanagement/TestAutomationFramework/wiki). 
 
@@ -20,4 +18,4 @@ Maybe the easiest way to get going is to clone the [Template project for TAF](ht
 [![SonarQube TechDebt](https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=se.claremont%3ATestAutomationFramework)
 [![Release](https://jitpack.io/v/codebulb/crudlet.svg)](https://jitpack.io/#claremontqualitymanagement/TestAutomationFramework)
 
-© 2019 Claremont AB
+© 2020 Zington AB
